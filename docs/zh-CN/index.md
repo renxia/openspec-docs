@@ -1,5 +1,4 @@
 ---
-# https://vitepress.vuejs.org/guide/home-page
 layout: home
 
 hero:
@@ -32,7 +31,7 @@ features:
 [![Contributors](https://img.shields.io/github/contributors/Fission-AI/OpenSpec?style=flat-square&label=Contributors)](https://github.com/Fission-AI/OpenSpec/graphs/contributors)
 
 </details>
-<p></p>
+
 我们的理念：
 
 ```text
@@ -51,8 +50,6 @@ features:
 <p align="center">
   关注 <a href="https://x.com/0xTab">@0xTab on X</a> 获取更新 · 加入 <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> 获取帮助和提问。
 </p>
-
-<!-- TODO: 添加 /opsx:propose → /opsx:archive 工作流的 GIF 演示 -->
 
 ## 实际演示
 

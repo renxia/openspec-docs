@@ -372,7 +372,9 @@ async function main(opts = options) {
   if (targetLang === 'all') {
     logger.log(`Translating to all languages...`)
     for (const lang of Object.keys(LANGUAGE_NAMES)) {
-      if (lang !== sourceLang) await main({ ...opts, targetLang: lang })
+      if (lang === sourceLang) continue;
+      console.info(''.padEnd(30, '='), `Translating to ${color.green(lang)}`, ''.padEnd(30, '='))
+      await main({ ...opts, targetLang: lang })
     }
     return
   }

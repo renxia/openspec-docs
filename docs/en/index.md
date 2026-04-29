@@ -1,5 +1,4 @@
 ---
-# https://vitepress.vuejs.org/guide/home-page
 layout: home
 
 hero:
@@ -24,15 +23,6 @@ features:
 ---
 
 
-<details>
-<summary><strong>The most loved spec framework.</strong></summary>
-
-[![Stars](https://img.shields.io/github/stars/Fission-AI/OpenSpec?style=flat-square&label=Stars)](https://github.com/Fission-AI/OpenSpec/stargazers)
-[![Downloads](https://img.shields.io/npm/dm/@fission-ai/openspec?style=flat-square&label=Downloads/mo)](https://www.npmjs.com/package/@fission-ai/openspec)
-[![Contributors](https://img.shields.io/github/contributors/Fission-AI/OpenSpec?style=flat-square&label=Contributors)](https://github.com/Fission-AI/OpenSpec/graphs/contributors)
-
-</details>
-<p></p>
 Our philosophy:
 
 ```text
@@ -51,8 +41,6 @@ Our philosophy:
 <p align="center">
   Follow <a href="https://x.com/0xTab">@0xTab on X</a> for updates · Join the <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> for help and questions.
 </p>
-
-<!-- TODO: Add GIF demo of /opsx:propose → /opsx:archive workflow -->
 
 ## See it in action
 
@@ -80,7 +68,6 @@ AI:  Archived to openspec/changes/archive/2025-01-23-add-dark-mode/
 
 <details>
 <summary><strong>OpenSpec Dashboard</strong></summary>
-
 </details>
 
 ## Quick Start
