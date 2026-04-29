@@ -20,20 +20,66 @@ const MAX_CHUNK_SIZE = Number(process.env.TRANSLATE_MAX_CHUNK_SIZE || 8000);
 // Translation records
 const translateRecords: { [filepath: string]: { srcMd5: string; } & { [targetpath: string]: string } } = existsSync(RECORD_FILE) ? JSON.parse(readFileSync(RECORD_FILE, 'utf-8')) : {};
 
+// 语言代码到语言名称的映射
+const LANGUAGE_NAMES: Record<string, { native: string; english: string }> = {
+  'en': { native: 'English', english: 'English' },
+  'zh-CN': { native: '简体中文', english: 'Simplified Chinese' },
+  'zh-TW': { native: '繁體中文', english: 'Traditional Chinese' },
+  'ja': { native: '日本語', english: 'Japanese' },
+  'ko': { native: '한국어', english: 'Korean' },
+  'es': { native: 'Español', english: 'Spanish' },
+  'pt-BR': { native: 'Português (Brasil)', english: 'Brazilian Portuguese' },
+  'pt': { native: 'Português', english: 'Portuguese' },
+  'ru': { native: 'Русский', english: 'Russian' },
+  'fr': { native: 'Français', english: 'French' },
+  'de': { native: 'Deutsch', english: 'German' },
+  'it': { native: 'Italiano', english: 'Italian' },
+  'ar': { native: 'العربية', english: 'Arabic' },
+  'hi': { native: 'हिन्दी', english: 'Hindi' },
+  'id': { native: 'Bahasa Indonesia', english: 'Indonesian' },
+  'vi': { native: 'Tiếng Việt', english: 'Vietnamese' },
+  'th': { native: 'ภาษาไทย', english: 'Thai' },
+  'tr': { native: 'Türkçe', english: 'Turkish' },
+  'pl': { native: 'Polski', english: 'Polish' },
+  'nl': { native: 'Nederlands', english: 'Dutch' },
+  'uk': { native: 'Українська', english: 'Ukrainian' },
+}
+
+// 获取语言显示名称
+function getLanguageDisplayName(langCode: string, forSource = false): string {
+  const lang = LANGUAGE_NAMES[langCode] || { native: langCode, english: langCode }
+  // 对于目标语言，使用本地名称更友好
+  if (!forSource && lang.native !== langCode) {
+    return `${lang.native} (${lang.english})`
+  }
+  return lang.english
+}
+
+// 受支持的语言列表（用于 CLI 选项）
+const SUPPORTED_LANGUAGES = Object.keys(LANGUAGE_NAMES)
+
 program
   .name('translate-docs')
   .description('Translate documentation files using LLM')
   .version('1.0.0')
   .requiredOption('-p, --path <path>', 'Path to file or directory to translate', 'docs/en')
-  // .option('-s, --source-lang <lang>', 'Source language', 'en')
-  .option('-t, --target-lang <lang>', 'Target language', 'zh-CN')
+  .option('-s, --source-lang <lang>', 'Source language (default: en)', 'en')
+  .option('-t, --target-lang <lang>', 'Target language (e.g., zh-CN, ja, es)', 'zh-CN')
   .option('--timeout <ms>', 'Timeout in milliseconds. default: 300_000')
   .option('-c, --concurrency <thread>', 'Concurrency. default: 1', process.env.TRANSLATE_CONCURRENCY || '3')
   .option('-u, --base-url <url>', 'LLM base URL', process.env.OPENAI_BASE_URL || 'http://localhost:11434/v1')
   .option('-m, --model <model>', 'LLM model', process.env.TRANSLATE_OPENAI_MODEL || 'qwen3.5:latest')
   .option('-k, --api-key <key>', 'API key', process.env.OPENAI_API_KEY || '')
   .option('-B, --build', 'Build docs after translation', false)
-  .option('-S, --sync', 'Sync docs from hermes-agent repository before translating', false);
+  .option('-S, --sync', 'Sync docs from hermes-agent repository before translating', false)
+  .addHelpText('after', `
+Supported languages: ${SUPPORTED_LANGUAGES.join(', ')}
+
+Examples:
+  bun translate.ts -p docs/en -t zh-CN       # English to Chinese
+  bun translate.ts -p docs/en -t ja          # English to Japanese
+  bun translate.ts -p docs/zh-CN -t es -s zh-CN  # Chinese to Spanish
+`);
 
 program.parse();
 const options = program.opts();
@@ -114,19 +160,30 @@ function splitByParagraph(text: string): string[] {
 }
 
 // ---- Translation via API ----
-async function translateSingleChunk(content: string, lang: string): Promise<string> {
-  const prompt = `You are a professional technical translator. Translate the following markdown documentation from English to ${lang}.
+async function translateSingleChunk(content: string, sourceLang: string, targetLang: string): Promise<string> {
+  const sourceLangDisplay = getLanguageDisplayName(sourceLang, true)
+  const targetLangDisplay = getLanguageDisplayName(targetLang)
 
-Rules:
-- Preserve all markdown formatting, code blocks, and syntax exactly as-is.
-- Translate only the prose and comments, NOT code examples, variable names, function names, or CLI commands.
-- Keep all links intact.
-- Use clear, natural technical Chinese.
-- Do NOT add any extra text, explanations, or commentary.
-- Preserve YAML frontmatter exactly as-is (do NOT translate frontmatter keys).
-- Output ONLY the translated markdown content, nothing else.
+  const prompt = `You are a professional technical documentation translator.
 
-Text to translate:
+## Task
+Translate the following markdown documentation from **${sourceLangDisplay}** to **${targetLangDisplay}**.
+
+## Language Requirements
+- Use natural, professional technical terminology appropriate for ${targetLangDisplay}.
+- Maintain consistent terminology throughout the document.
+- For code-related terms without local equivalents, keep them in English.
+
+## Rules
+1. **Preserve exactly as-is**: Markdown formatting, code blocks, syntax highlighting, tables, and frontmatter.
+2. **Translate only prose**: Comments in code, descriptions, and explanatory text.
+3. **Do NOT translate**: Code examples, variable names, function names, CLI commands, file paths, URLs, and technical identifiers.
+4. **Keep links intact**: All URLs and internal links must remain unchanged.
+5. **Preserve YAML frontmatter**: Keep frontmatter keys unchanged, only translate their values.
+6. **No extra content**: Do NOT add any explanations, comments, or notes outside the translated content.
+7. **Output format**: Output ONLY the translated markdown content, nothing else.
+
+## Text to translate:
 
 ${content}`
 
@@ -154,7 +211,7 @@ ${content}`
   return json.choices[0].message.content.trim()
 }
 
-async function translateText(text: string, targetLang: string, id = ''): Promise<string> {
+async function translateText(text: string, sourceLang: string, targetLang: string, id = ''): Promise<string> {
   // 如果文本长度超过阈值，先分段
   if (text.length > MAX_CHUNK_SIZE) {
     logger.log(`  Content length (${text.length}) exceeds threshold (${MAX_CHUNK_SIZE}), splitting...`);
@@ -186,7 +243,7 @@ async function translateText(text: string, targetLang: string, id = ''): Promise
       const chunk = finalChunks[i];
       logger.log(`  Translating chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars)... ${color.gray(id)}`);
 
-      const translated = await translateSingleChunk(chunk, targetLang);
+      const translated = await translateSingleChunk(chunk, sourceLang, targetLang);
       translatedChunks.push(translated);
     }
 
@@ -194,13 +251,13 @@ async function translateText(text: string, targetLang: string, id = ''): Promise
     return translatedChunks.join('\n\n');
   }
 
-  return translateSingleChunk(text, targetLang);
+  return translateSingleChunk(text, sourceLang, targetLang);
 }
 
 // ---- File processing ----
-async function translateFile(srcFile: string, targetLang: string, idx: number, total: number) {
+async function translateFile(srcFile: string, sourceLang: string, targetLang: string, idx: number, total: number) {
   const srcFileRelative = relative(ROOT_DIR, srcFile)
-  const destFile = srcFileRelative.replace(`docs${sep}en${sep}`, `docs${sep}${targetLang}${sep}`)
+  const destFile = srcFileRelative.replace(`docs${sep}${sourceLang}${sep}`, `docs${sep}${targetLang}${sep}`)
   const startTime = Date.now();
   const content = readFileSync(srcFile, 'utf-8')
 
@@ -217,14 +274,13 @@ async function translateFile(srcFile: string, targetLang: string, idx: number, t
 
   // 目标文件已存在，根据 translateRecord 判断是否需要更新
   if (existsSync(destFile) && translateRecords[fileCacheKey]?.srcMd5 === srcMd5 && translateRecords[fileCacheKey][targetLang]) {
-    // console.log(`- [${idx}/${total}]${color.gray(destFile)} already exists, skipping...`);
     console.log(`- [${idx}/${total}][${color.gray(srcFile)} -> ${color.cyan(targetLang)}] already exists, skipping...`);
     return;
   }
 
 
-  console.log(`- [${idx}/${total}][${color.yellow(content.length)} chars] Translating ${color.cyan(srcFile)} -> ${color.green(destFile)}`);
-  let translatedContent = await translateText(content, targetLang, srcFileRelative);
+  console.log(`- [${idx}/${total}][${color.yellow(content.length)} chars] Translating ${color.cyan(srcFile)} ${sourceLang} -> ${targetLang}`);
+  let translatedContent = await translateText(content, sourceLang, targetLang, srcFileRelative);
 
   if (!translatedContent) {
     console.log(color.red(`- [${idx}/${total}] Translating ${color.cyan(srcFile)} failed!`));
@@ -310,8 +366,34 @@ function getAllMdFiles(dirPath = 'docs'): string[] {
   return files;
 }
 
-async function main() {
-  const { path: inputPath, sourceLang, targetLang, concurrency: threads = 1, sync } = options;
+async function main(opts = options) {
+  const { path: inputPath, sourceLang, targetLang, concurrency: threads = 1, sync } = opts;
+
+  if (targetLang === 'all') {
+    logger.log(`Translating to all languages...`)
+    for (const lang of Object.keys(LANGUAGE_NAMES)) {
+      if (lang !== sourceLang) await main({ ...opts, targetLang: lang })
+    }
+    return
+  }
+
+  // 验证语言代码
+  if (!LANGUAGE_NAMES[sourceLang]) {
+    logger.error(`Unsupported source language: ${color.red(sourceLang)}. Supported: ${SUPPORTED_LANGUAGES.join(', ')}`);
+    process.exit(1);
+  }
+  if (!LANGUAGE_NAMES[targetLang]) {
+    logger.error(`Unsupported target language: ${color.red(targetLang)}. Supported: ${SUPPORTED_LANGUAGES.join(', ')}`);
+    process.exit(1);
+  }
+  if (sourceLang === targetLang) {
+    logger.error(`Source and target language cannot be the same: ${color.red(sourceLang)}`);
+    process.exit(1);
+  }
+
+  const sourceLangDisplay = getLanguageDisplayName(sourceLang, true);
+  const targetLangDisplay = getLanguageDisplayName(targetLang);
+  logger.log(`Translation: ${color.cyan(sourceLangDisplay)} → ${color.green(targetLangDisplay)}`);
 
   // 前置：同步文档
   if (sync) await syncDocs();
@@ -340,7 +422,7 @@ async function main() {
   let current = 0;
   const total = filesToTranslate.length;
 
-  const tasks = filesToTranslate.map(file => () => translateFile(file, targetLang, ++current, total).catch(error => logger.error(`Error translating ${file}:`, error)));
+  const tasks = filesToTranslate.map(file => () => translateFile(file, sourceLang, targetLang, ++current, total).catch(error => logger.error(`Error translating ${file}:`, error)));
   await concurrency(tasks, Number(threads));
 
   logger.log(color.greenBright('Translation completed!'));
