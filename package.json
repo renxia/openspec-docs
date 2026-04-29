@@ -1,0 +1,20 @@
+{
+  "name": "openspec-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "serve": "vitepress serve docs",
+    "b": "bun scripts/build.ts",
+    "translate": "bun scripts/translate.ts"
+  },
+  "devDependencies": {
+    "@lzwme/fe-utils": "^1.9.2",
+    "@types/node": "^25.6.0",
+    "commander": "^14.0.3",
+    "dotenv": "^17.4.2",
+    "tsx": "^4.19.0",
+    "vitepress": "^1.6.0"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "docs/en/cli.md": {
+    "srcMd5": "1c0c295bea5336aeffc8c943b7e5901c",
+    "zh-CN": "dc034b93d952283573de32a337a78d84"
+  },
+  "docs/en/commands.md": {
+    "srcMd5": "1da8d13ed93b1a4bd283e5b7425a6ab6",
+    "zh-CN": "3adeb5cf4e23916a98b66f0abf249c93"
+  },
+  "docs/en/concepts.md": {
+    "srcMd5": "3cced6b74bcb6555e455a7d67be89291",
+    "zh-CN": "8140f46fd366dfaac03ec12ec72455b6"
+  },
+  "docs/en/customization.md": {
+    "srcMd5": "400faddb71a24b1c6cc3e73c28bc1eea",
+    "zh-CN": "95e454eb58546263021aa7cadd195549"
+  },
+  "docs/en/getting-started.md": {
+    "srcMd5": "609ef8e213e9e9dcaf5de0a508d07b0a",
+    "zh-CN": "26ca7a4c6a861a92def3829734472b0d"
+  },
+  "docs/en/index.md": {
+    "srcMd5": "8ca1b849889313a194fdefe4b26e0938",
+    "zh-CN": "1345e6559cc3a88284b021655d955b46"
+  },
+  "docs/en/installation.md": {
+    "srcMd5": "42aaeb214d798b94ff6012fca8d8c1d8",
+    "zh-CN": "c7220a905b6f6aef64f43027b95aa166"
+  },
+  "docs/en/migration-guide.md": {
+    "srcMd5": "481087c77414e8da6794228a9ef09e65",
+    "zh-CN": "894cad39424a8df0a9a0fd22cce4329f"
+  },
+  "docs/en/multi-language.md": {
+    "srcMd5": "0c0783489ccd6caabc6331ece9b4e22c",
+    "zh-CN": "a1c8086d568173647c94c75557ddb09c"
+  },
+  "docs/en/opsx.md": {
+    "srcMd5": "398ce99598bcb0cab12ecdfc44c2888d",
+    "zh-CN": "3118f310a5fec8c74f2faeea89bad5d5"
+  },
+  "docs/en/supported-tools.md": {
+    "srcMd5": "4f621a5765cd1f74fcba84eb5dc025bf",
+    "zh-CN": "4b95e23415611df7b8ab4dcbc225cec7"
+  },
+  "docs/en/workflows.md": {
+    "srcMd5": "145d7629a25908143e9dcea71dca0383",
+    "zh-CN": "564b9b3162666d989a99385fe0ba2ae2"
+  }
+}
