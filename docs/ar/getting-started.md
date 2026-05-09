@@ -1,247 +1,247 @@
 # البدء
 
-يشرح هذا الدليل كيفية عمل OpenSpec بعد تثبيته وتهيئته. للإرشادات المتعلقة بالتثبيت، راجع [ملف README الرئيسي](index.md#quick-start).
+يشرح هذا الدليل كيفية عمل OpenSpec بعد تثبيتهتهيئته. للحصول على تعليمات التثبيت، راجع [الملف الرئيسي README](index.md#quick-start).
 
 ## كيف يعمل
 
-يساعدك OpenSpec ومساعد البرمجة بالذكاء الاصطناعي على الاتفاق على ما يجب بناؤه قبل كتابة أي كود.
+يساعدك OpenSpec أنت ومساعدك البرمجي بالذكاء الاصطناعي على الاتفاق على ما تريد بناءه قبل كتابة أي كود.
 
-**المسار الافتراضي السريع (الملف الأساسي):**
-
-```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
-```
-
-**المسار الموسّع (اختيار سير عمل مخصص):**
+**المسار السريع الافتراضي (الملف التعريفي الأساسي):**
 
 ```text
-/opsx:new ──► /opsx:ff أو /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-الملف العالمي الافتراضي هو `core`، والذي يتضمن `propose` و `explight` و `apply` و `archive`. يمكنك تمكين أوامر سير العمل الموسّع باستخدام `openspec config profile` ثم `openspec update`.
+**المسار الموسع (اختيار سير عمل مخصص):**
+
+```text
+/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+```
+
+الملف التعريفي العام الافتراضي هو `core`، الذي يتضمن `propose` و `explore` و `apply` و `sync` و `archive`. يمكنك تفعيل أوامر سير العمل الموسع باستخدام `openspec config profile` ثم `openspec update`.
 
 ## ما ينشئه OpenSpec
 
-بعد تشغيل `openspec init`، يحتوي مشروعك على هذه البنية:
+بعد تشغيل `openspec init`، سيحتوي مشروعك على هذا الهيكل:
 
 ```
 openspec/
 ├── specs/              # مصدر الحقيقة (سلوك نظامك)
 │   └── <domain>/
 │       └── spec.md
-├── changes/            # التحديثات المقترحة (مجلد لكل تغيير)
+├── changes/            # التحديثات المقترحة (مجلد واحد لكل تغيير)
 │   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # المواصفات الدلتا (ما يتغير)
+│       └── specs/      # مواصفات التغيير (ما يتغير)
 │           └── <domain>/
 │               └── spec.md
-└── config.yaml         # إعدادات المشروع (اختياري)
+└── config.yaml         # تكوين المشروع (اختياري)
 ```
 
-**مجلدان رئيسيان:**
+**دليلان رئيسيان:**
 
-- **`specs/`** - مصدر الحقيقة. تصف هذه المواصفات كيفية سلوك نظامك الحالي. منظمة حسب المجال (مثل `specs/auth/`، `specs/payments/`).
+- **`specs/`** - مصدر الحقيقة. تصف هذه المواصفات سلوك نظامك الحالي. منظمة حسب المجال (مثل `specs/auth/`، `specs/payments/`).
 
-- **`changes/`** - التعديلات المقترحة. يحصل كل تغيير على مجلد خاص به يحتوي على جميع الملفات ذات الصلة. عند اكتمال التغيير، تندمج مواصفاته في مجلد `specs/` الرئيسي.
+- **`changes/`** - التعديلات المقترحة. يحصل كل تغيير على مجلده الخاص مع جميع المصنفات ذات الصلة. عند اكتمال التغيير، تندمج مواصفاته في دليل `specs/` الرئيسي.
 
-## فهم الملفات
+## فهم المصنفات
 
-يحتوي كل مجلد تغيير على ملفات توجه العمل:
+يحتوي مجلد كل تغيير على مصنفات توجه العمل:
 
-| الملف | الغرض |
+| المصنف | الغرض |
 |----------|---------|
-| `proposal.md` | "لماذا" و "ماذا" - يلتقط النية والنطاق والنهج |
-| `specs/` | مواصفات دلتا تُظهر المتطلبات المُضافة/المُعدّلة/المُزالة |
-| `design.md` | "كيف" - النهج الفني وقرارات الهيكلية |
-| `tasks.md` | قائمة مهام التنفيذ مع خيارات التحقق |
+| `proposal.md` | "لماذا" و "ماذا" - يسجل النطاق والنية والمنهجية |
+| `specs/` | مواصفات التغيير تظهر المتطلبات المُضافة/المُعدّلة/المُزالة |
+| `design.md` | "كيف" - المنهجية التقنية وقرارات البنية التحتية |
+| `tasks.md` | قائمة مهام التنفيذ مع مربعات الاختيار |
 
-**الملفات تبني بعضها البعض:**
+**المصنفات تبني على بعضها البعض:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            التحديث أثناء التعلم
+            تحديث أثناء التعلم
 ```
 
-يمكنك دائمًا العودة وتنقيح الملفات السابقة أثناء تعلمك المزيد أثناء التنفيذ.
+يمكنك دائمًا العودة وتحسين المصنفات السابقة كلما اكتسبت مزيدًا من المعرفة أثناء التنفيذ.
 
-## كيفية عمل المواصفات الدلتا
+## كيف تعمل مواصفات التغيير
 
-المواصفات الدلتا هي المفهوم الرئيسي في OpenSpec. تُظهر ما يتغير مقارنةً بمواصفاتك الحالية.
+مواصفات التغيير هي المفهوم الأساسي في OpenSpec. تظهر ما يتغير بالنسبة لمواصفاتك الحالية.
 
 ### الصيغة
 
-تستخدم المواصفات الدلتا أقسامًا للإشارة إلى نوع التغيير:
+تستخدم مواصفات التغيير أقسامًا لتحديد نوع التغيير:
 
 ```markdown
-# Delta for Auth
+# تغيير للمصادقة (Auth)
 
-## ADDED Requirements
+## متطلبات مُضافة
 
-### Requirement: Two-Factor Authentication
-The system MUST require a second factor during login.
+### المتطلب: المصادقة الثنائية
+يجب على النظام أن يتطلب عاملًا ثانيًا أثناء تسجيل الدخول.
 
-#### Scenario: OTP required
-- GIVEN a user with 2FA enabled
-- WHEN the user submits valid credentials
-- THEN an OTP challenge is presented
+#### السيناريو: مطلوب OTP
+- GIVEN مستخدم لديه المصادقة الثنائية مفعلة
+- WHEN يقدم المستخدم بيانات اعتماد صالحة
+- THEN تظهر مطالبة OTP
 
-## MODIFIED Requirements
+## متطلبات مُعدّلة
 
-### Requirement: Session Timeout
-The system SHALL expire sessions after 30 minutes of inactivity.
-(Previously: 60 minutes)
+### المتطلب: انتهاء مهلة الجلسة
+يجب على النظام أن تنتهي صلاحية الجلسات بعد 30 دقيقة من عدم النشاط.
+(سابقًا: 60 دقيقة)
 
-#### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 30 minutes pass without activity
-- THEN the session is invalidated
+#### السيناريو: انتهاء مهلة الخمول
+- GIVEN جلسة مصادق عليها
+- WHEN تمر 30 دقيقة بدون نشاط
+- THEN تُلغى الجلسة
 
-## REMOVED Requirements
+## متطلبات مُزالة
 
-### Requirement: Remember Me
-(Deprecated in favor of 2FA)
+### المتطلب: تذكرني
+(تم إهماله لصالح المصادقة الثنائية)
 ```
 
 ### ما يحدث عند الأرشفة
 
 عند أرشفة تغيير:
 
-1. تتم إضافة المتطلبات **المُضافة** إلى المواصفات الرئيسية
-2. تتم استبدال المتطلبات **المُعدّلة** بالإصدار الحالي
-3. تتم حذف المتطلبات **المُزالة** من المواصفات الرئيسية
+1. تُلحق المتطلبات **المُضافة** بالمواصفات الرئيسية
+2. تحل المتطلبات **المُعدّلة** محل النسخة الحالية
+3. تُحذف المتطلبات **المُزالة** من المواصفات الرئيسية
 
-يتم نقل مجلد التغيير إلى `openspec/changes/archive/` لسجل التدقيق.
+ينتقل مجلد التغيير إلى `openspec/changes/archive/` للحفاظ على سجل التدقيق.
 
-## مثال: تغييرك الأول
+## مثال: أول تغيير لك
 
-دعنا نمر بإضافة الوضع الداكن إلى تطبيق.
+لنمر عبر إضافة الوضع الداكن إلى تطبيق.
 
 ### 1. بدء التغيير (الافتراضي)
 
 ```text
-You: /opsx:propose add-dark-mode
+أنت: /opsx:propose add-dark-mode
 
-AI:  Created openspec/changes/add-dark-mode/
-     ✓ proposal.md — لماذا نفعل هذا، ما الذي يتغير
+الذكاء الاصطناعي:  تم إنشاء openspec/changes/add-dark-mode/
+     ✓ proposal.md — لماذا نفعل هذا، ماذا يتغير
      ✓ specs/       — المتطلبات والسيناريوهات
-     ✓ design.md    — النهج الفني
+     ✓ design.md    — المنهجية التقنية
      ✓ tasks.md     — قائمة مهام التنفيذ
-     Ready for implementation!
+     جاهز للتنفيذ!
 ```
 
-إذا قمت بتمكين ملف سير العمل الموسّع، يمكنك أيضًا القيام بذلك في خطوتين: `/opsx:new` ثم `/opsx:ff` (أو `/opsx:continue` بشكل تدريجي).
+إذا قمت بتفعيل ملف سير العمل الموسع، يمكنك أيضًا القيام بذلك على خطوتين: `/opsx:new` ثم `/opsx:ff` (أو `/opsx:continue` بشكل تدريجي).
 
 ### 2. ما يتم إنشاؤه
 
-**proposal.md** - يلتقط النية:
+**proposal.md** - يسجل النية:
 
 ```markdown
-# Proposal: Add Dark Mode
+# اقتراح: إضافة الوضع الداكن
 
-## Intent
-Users have requested a dark mode option to reduce eye strain
-during nighttime usage.
+## النية
+طلب المستخدمون خيار الوضع الداكن لتقليل إجهاد العينين
+أثناء الاستخدام الليلي.
 
-## Scope
-- Add theme toggle in settings
-- Support system preference detection
-- Persist preference in localStorage
+## النطاق
+- إضافة مفتاح تبديل السمة في الإعدادات
+- دعم تفضيلات النظام
+- حفظ التفضيل في localStorage
 
-## Approach
-Use CSS custom properties for theming with a React context
-for state management.
+## المنهجية
+استخدام خصائص CSS المخصصة للسمات مع سياق React
+لإدارة الحالة.
 ```
 
-**specs/ui/spec.md** - دلتا تُظهر المتطلبات الجديدة:
+**specs/ui/spec.md** - تغيير يظهر المتطلبات الجديدة:
 
 ```markdown
-# Delta for UI
+# تغيير لواجهة المستخدم (UI)
 
-## ADDED Requirements
+## متطلبات مُضافة
 
-### Requirement: Theme Selection
-The system SHALL allow users to choose between light and dark themes.
+### المتطلب: اختيار السمة
+يجب على النظام أن يسمح للمستخدمين بالاختيار بين السمة الفاتحة والداكنة.
 
-#### Scenario: Manual toggle
-- GIVEN a user on any page
-- WHEN the user clicks the theme toggle
-- THEN the theme switches immediately
-- AND the preference persists across sessions
+#### السيناريو: التبديل اليدوي
+- GIVEN مستخدم على أي صفحة
+- WHEN ينقر المستخدم على مفتاح تبديل السمة
+- THEN تتحول السمة فورًا
+- AND يبقى التفضيل عبر الجلسات
 
-#### Scenario: System preference
-- GIVEN a user with no saved preference
-- WHEN the application loads
-- THEN the system's preferred color scheme is used
+#### السيناريو: تفضيل النظام
+- GIVEN مستخدم بدون تفضيل محفوظ
+- WHEN يتم تحميل التطبيق
+- THEN يُستخدم نظام الألوان المفضل للنظام
 ```
 
 **tasks.md** - قائمة مهام التنفيذ:
 
 ```markdown
-# Tasks
+# المهام
 
-## 1. Theme Infrastructure
-- [ ] 1.1 Create ThemeContext with light/dark state
-- [ ] 1.2 Add CSS custom properties for colors
-- [ ] 1.3 Implement localStorage persistence
+## 1. البنية التحتية للسمة
+- [ ] 1.1 إنشاء ThemeContext مع حالة فاتح/داكن
+- [ ] 1.2 إضافة خصائص CSS مخصصة للألوان
+- [ ] 1.3 تنفيذ الاستمرارية في localStorage
 
-## 2. UI Components
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Add toggle to settings page
-- [ ] 2.3 Update Header to include quick toggle
+## 2. مكونات واجهة المستخدم
+- [ ] 2.1 إنشاء مكون ThemeToggle
+- [ ] 2.2 إضافة مفتاح التبديل إلى صفحة الإعدادات
+- [ ] 2.3 تحديث Header لتضمين مفتاح تبديل سريع
 
-## 3. Styling
-- [ ] 3.1 Define dark theme color palette
-- [ ] 3.2 Update components to use CSS variables
+## 3. التنسيق
+- [ ] 3.1 تحديد لوحة ألوان السمة الداكنة
+- [ ] 3.2 تحديث المكونات لاستخدام متغيرات CSS
 ```
 
 ### 3. التنفيذ
 
 ```
-You: /opsx:apply
+أنت: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ 1.1 Created ThemeContext with light/dark state
-     ✓ 1.2 Added CSS custom properties to globals.css
-     ✓ 1.3 Implemented localStorage persistence
-     ✓ 2.1 Created ThemeToggle component
+الذكاء الاصطناعي:  العمل على المهام...
+     ✓ 1.1 تم إنشاء ThemeContext مع حالة فاتح/داكن
+     ✓ 1.2 تمت إضافة خصائص CSS مخصصة إلى globals.css
+     ✓ 1.3 تم تنفيذ الاستمرارية في localStorage
+     ✓ 2.1 تم إنشاء مكون ThemeToggle
      ...
-     All tasks complete!
+     اكتملت جميع المهام!
 ```
 
-أثناء التنفيذ، إذا اكتشفت أن التصميم يحتاج إلى تعديل، قم بتحديث الملف فقط واستمر.
+أثناء التنفيذ، إذا اكتشفت أن التصميم يحتاج إلى تعديل، قم بتحديث المصنف والمتابعة.
 
 ### 4. الأرشفة
 
 ```
-You: /opsx:archive
+أنت: /opsx:archive
 
-AI:  Archiving add-dark-mode...
-     ✓ Merged specs into openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
-     Done! Ready for the next feature.
+الذكاء الاصطناعي:  أرشفة add-dark-mode...
+     ✓ تم دمج المواصفات في openspec/specs/ui/spec.md
+     ✓ تم النقل إلى openspec/changes/archive/2025-01-24-add-dark-mode/
+     تم! جاهز للميزة التالية.
 ```
 
-أصبحت مواصفات الدلتا الخاصة بك الآن جزءًا من المواصفات الرئيسية، توثيق كيفية عمل نظامك.
+أصبحت مواصفات التغيير الخاصة بك الآن جزءًا من المواصفات الرئيسية، توثق كيفية عمل نظامك.
 
-## التحقق والمراجعة
+## المراجعة والتحقق
 
 استخدم واجهة سطر الأوامر للتحقق من تغييراتك:
 
 ```bash
-# List active changes
+# قائمة التغييرات النشطة
 openspec list
 
-# View change details
+# عرض تفاصيل التغيير
 openspec show add-dark-mode
 
-# Validate spec formatting
+# التحقق من صحة تنسيق المواصفات
 openspec validate add-dark-mode
 
-# Interactive dashboard
+# لوحة معلومات تفاعلية
 openspec view
 ```
 
@@ -250,4 +250,4 @@ openspec view
 - [سير العمل](workflows.md) - الأنماط الشائعة ومتى تستخدم كل أمر
 - [الأوامر](commands.md) - المرجع الكامل لجميع أوامر الشرطة المائلة
 - [المفاهيم](concepts.md) - فهم أعمق للمواصفات والتغييرات والمخططات
-- [التخصيص](customization.md) - اجعل OpenSpec يعمل على طريقتك
+- [التخصيص](customization.md) - اجعل OpenSpec يعمل بالطريقة التي تناسبك

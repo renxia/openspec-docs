@@ -1,26 +1,27 @@
 # Alat yang Didukung
 
-OpenSpec bekerja dengan banyak asisten pemrograman AI. Saat Anda menjalankan `openspec init`, OpenSpec mengonfigurasi alat yang dipilih menggunakan profil/alur kerja aktif yang Anda pilih dan mode pengiriman.
+OpenSpec bekerja dengan banyak asisten pengkodean AI. Saat Anda menjalankan `openspec init`, OpenSpec mengonfigurasi alat yang dipilih menggunakan profil/alur kerja aktif Anda dan mode pengiriman.
 
 ## Cara Kerja
 
 Untuk setiap alat yang dipilih, OpenSpec dapat menginstal:
 
 1. **Keterampilan** (jika pengiriman mencakup keterampilan): `.../skills/openspec-*/SKILL.md`
-2. **Perintah** (jika pengiriman mencakup perintah): berkas perintah khusus alat `opsx-*`
+2. **Perintah** (jika pengiriman mencakup perintah): file perintah `opsx-*` khusus alat
 
 Secara default, OpenSpec menggunakan profil `core`, yang mencakup:
 - `propose`
 - `explore`
 - `apply`
+- `sync`
 - `archive`
 
-Anda dapat mengaktifkan alur kerja yang diperluas (`new`, `continue`, `ff`, `verify`, `sync`, `bulk-archive`, `onboard`) melalui `openspec config profile`, lalu jalankan `openspec update`.
+Anda dapat mengaktifkan alur kerja yang diperluas (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) melalui `openspec config profile`, lalu jalankan `openspec update`.
 
 ## Referensi Direktori Alat
 
 | Alat (ID) | Pola jalur keterampilan | Pola jalur perintah |
-|-----------|-------------------------|----------------------|
+|-----------|-------------------------|---------------------|
 | Amazon Q Developer (`amazon-q`) | `.amazonq/skills/openspec-*/SKILL.md` | `.amazonq/prompts/opsx-<id>.md` |
 | Antigravity (`antigravity`) | `.agent/skills/openspec-*/SKILL.md` | `.agent/workflows/opsx-<id>.md` |
 | Auggie (`auggie`) | `.augment/skills/openspec-*/SKILL.md` | `.augment/commands/opsx-<id>.md` |
@@ -29,7 +30,7 @@ Anda dapat mengaktifkan alur kerja yang diperluas (`new`, `continue`, `ff`, `ver
 | Cline (`cline`) | `.cline/skills/openspec-*/SKILL.md` | `.clinerules/workflows/opsx-<id>.md` |
 | CodeBuddy (`codebuddy`) | `.codebuddy/skills/openspec-*/SKILL.md` | `.codebuddy/commands/opsx/<id>.md` |
 | Codex (`codex`) | `.codex/skills/openspec-*/SKILL.md` | `$CODEX_HOME/prompts/opsx-<id>.md`\* |
-| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | Tidak dihasilkan (tidak ada adaptor perintah; gunakan pemanggilan berbasis keterampilan `/openspec-*`) |
+| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | Tidak dibuat (tidak ada adaptor perintah; gunakan panggilan berbasis keterampilan `/openspec-*`) |
 | Continue (`continue`) | `.continue/skills/openspec-*/SKILL.md` | `.continue/prompts/opsx-<id>.prompt` |
 | CoStrict (`costrict`) | `.cospec/skills/openspec-*/SKILL.md` | `.cospec/openspec/commands/opsx-<id>.md` |
 | Crush (`crush`) | `.crush/skills/openspec-*/SKILL.md` | `.crush/commands/opsx/<id>.md` |
@@ -40,48 +41,50 @@ Anda dapat mengaktifkan alur kerja yang diperluas (`new`, `continue`, `ff`, `ver
 | iFlow (`iflow`) | `.iflow/skills/openspec-*/SKILL.md` | `.iflow/commands/opsx-<id>.md` |
 | Junie (`junie`) | `.junie/skills/openspec-*/SKILL.md` | `.junie/commands/opsx-<id>.md` |
 | Kilo Code (`kilocode`) | `.kilocode/skills/openspec-*/SKILL.md` | `.kilocode/workflows/opsx-<id>.md` |
+| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | Tidak dibuat (tidak ada adaptor perintah; gunakan panggilan berbasis keterampilan `/skill:openspec-*`) |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
+| Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
 | Qwen Code (`qwen`) | `.qwen/skills/openspec-*/SKILL.md` | `.qwen/commands/opsx-<id>.toml` |
 | RooCode (`roocode`) | `.roo/skills/openspec-*/SKILL.md` | `.roo/commands/opsx-<id>.md` |
-| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | Tidak dihasilkan (tidak ada adaptor perintah; gunakan pemanggilan berbasis keterampilan `/openspec-*`) |
+| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | Tidak dibuat (tidak ada adaptor perintah; gunakan panggilan berbasis keterampilan `/openspec-*`) |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* Perintah Codex diinstal di direktori rumah Codex global (`$CODEX_HOME/prompts/` jika diatur, jika tidak `~/.codex/prompts/`), bukan di direktori proyek Anda.
+\* Perintah Codex diinstal di home Codex global (`$CODEX_HOME/prompts/` jika diatur, jika tidak `~/.codex/prompts/`), bukan di direktori proyek Anda.
 
-\*\* Berkas prompt GitHub Copilot dikenali sebagai perintah slash kustom di ekstensi IDE (VS Code, JetBrains, Visual Studio). Copilot CLI saat ini tidak menggunakan `.github/prompts/*.prompt.md` secara langsung.
+\*\* File prompt GitHub Copilot dikenali sebagai perintah slash kustom di ekstensi IDE (VS Code, JetBrains, Visual Studio). Copilot CLI saat ini tidak menggunakan `.github/prompts/*.prompt.md` secara langsung.
 
-## Pengaturan Non-Interaktif
+## Penyiapan Non-Interaktif
 
-Untuk CI/CD atau pengaturan skrip, gunakan `--tools` (dan opsional `--profile`):
+Untuk CI/CD atau penyiapan terotomatisasi, gunakan `--tools` (dan opsional `--profile`):
 
 ```bash
-# Mengonfigurasi alat tertentu
+# Konfigurasi alat tertentu
 openspec init --tools claude,cursor
 
-# Mengonfigurasi semua alat yang didukung
+# Konfigurasi semua alat yang didukung
 openspec init --tools all
 
-# Melewati konfigurasi alat
+# Lewati konfigurasi alat
 openspec init --tools none
 
-# Mengganti profil untuk menjalankan init ini
+# Timpa profil untuk inisialisasi ini
 openspec init --profile core
 ```
 
-**ID alat yang tersedia (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `forgecode`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kiro`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+**ID alat yang tersedia (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
 
 ## Instalasi Bergantung pada Alur Kerja
 
 OpenSpec menginstal artefak alur kerja berdasarkan alur kerja yang dipilih:
 
-- **Profil core (default):** `propose`, `explore`, `apply`, `archive`
-- **Pilihan kustom:** subset dari semua ID alur kerja:
+- **Profil core (default):** `propose`, `explore`, `apply`, `sync`, `archive`
+- **Pilihan kustom:** subset apa pun dari semua ID alur kerja:
   `propose`, `explore`, `new`, `continue`, `apply`, `ff`, `sync`, `archive`, `bulk-archive`, `verify`, `onboard`
 
-Dengan kata lain, jumlah keterampilan/perintah bergantung pada profil dan pengiriman, bukan tetap.
+Dengan kata lain, jumlah keterampilan/perintah bergantung pada profil dan pengiriman, tidak tetap.
 
 ## Nama Keterampilan yang Dihasilkan
 
@@ -105,4 +108,4 @@ Lihat [Perintah](commands.md) untuk perilaku perintah dan [CLI](cli.md) untuk op
 
 - [Referensi CLI](cli.md) — Perintah terminal
 - [Perintah](commands.md) — Perintah slash dan keterampilan
-- [Memulai](getting-started.md) — Pengaturan pertama kali
+- [Memulai](getting-started.md) — Penyiapan pertama kali

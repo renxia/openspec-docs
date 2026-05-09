@@ -1,12 +1,12 @@
 # Anpassung
 
-OpenSpec bietet drei Ebenen der Anpassung:
+OpenSpec bietet drei Anpassungsebenen:
 
-| Ebene | Was es tut | Am besten geeignet für |
-|-------|------------|------------------------|
-| **Projektkonfiguration** | Standardwerte setzen, Kontext/Regeln injizieren | Die meisten Teams |
+| Ebene | Was sie bewirkt | Ideal für |
+|-------|-----------------|-----------|
+| **Projektkonfiguration** | Standardeinstellungen festlegen, Kontext/Regeln injizieren | Die meisten Teams |
 | **Benutzerdefinierte Schemas** | Eigene Workflow-Artefakte definieren | Teams mit einzigartigen Prozessen |
-| **Globale Überschreibungen** | Schemas über alle Projekte hinweg teilen | Fortgeschrittene Benutzer |
+| **Globale Überschreibungen** | Schemas über alle Projekte hinweg teilen | Power-Nutzer |
 
 ---
 
@@ -14,11 +14,11 @@ OpenSpec bietet drei Ebenen der Anpassung:
 
 Die Datei `openspec/config.yaml` ist der einfachste Weg, OpenSpec für Ihr Team anzupassen. Sie ermöglicht es Ihnen:
 
-- **Ein Standardschema festzulegen** - Überspringen Sie `--schema` bei jedem Befehl
-- **Projektkontext zu injizieren** - Die KI sieht Ihren Technologie-Stack, Konventionen usw.
-- **Regeln pro Artefakt hinzuzufügen** - Benutzerdefinierte Regeln für bestimmte Artefakte
+- **Ein Standardschema festzulegen** – `--schema` bei jedem Befehl überspringen
+- **Projektkontext injizieren** – Die KI sieht Ihren Tech-Stack, Konventionen usw.
+- **Regeln pro Artefakt hinzufügen** – Benutzerdefinierte Regeln für bestimmte Artefakte
 
-### Schnelle Einrichtung
+### Schnelleinrichtung
 
 ```bash
 openspec init
@@ -31,18 +31,18 @@ Dies führt Sie interaktiv durch die Erstellung einer Konfiguration. Oder erstel
 schema: spec-driven
 
 context: |
-  Tech stack: TypeScript, React, Node.js, PostgreSQL
-  API style: RESTful, documented in docs/api.md
+  Tech-Stack: TypeScript, React, Node.js, PostgreSQL
+  API-Stil: RESTful, dokumentiert in docs/api.md
   Testing: Jest + React Testing Library
-  We value backwards compatibility for all public APIs
+  Wir legen Wert auf Abwärtskompatibilität für alle öffentlichen APIs
 
 rules:
   proposal:
-    - Include rollback plan
-    - Identify affected teams
+    - Rollback-Plan einbeziehen
+    - Betroffene Teams identifizieren
   specs:
-    - Use Given/When/Then format
-    - Reference existing patterns before inventing new ones
+    - Given/When/Then-Format verwenden
+    - Vorhandene Muster referenzieren, bevor neue erfunden werden
 ```
 
 ### Funktionsweise
@@ -53,27 +53,27 @@ rules:
 # Ohne Konfiguration
 openspec new change my-feature --schema spec-driven
 
-# Mit Konfiguration - Schema ist automatisch
+# Mit Konfiguration – Schema ist automatisch
 openspec new change my-feature
 ```
 
 **Kontext- und Regelinjektion:**
 
-Bei der Erstellung eines beliebigen Artefakts werden Ihr Kontext und Ihre Regeln in den KI-Prompt injiziert:
+Bei der Generierung jedes Artefakts werden Ihr Kontext und Ihre Regeln in den KI-Prompt injiziert:
 
 ```xml
 <context>
-Tech stack: TypeScript, React, Node.js, PostgreSQL
+Tech-Stack: TypeScript, React, Node.js, PostgreSQL
 ...
 </context>
 
 <rules>
-- Include rollback plan
-- Identify affected teams
+- Rollback-Plan einbeziehen
+- Betroffene Teams identifizieren
 </rules>
 
 <template>
-[Schema's built-in template]
+[Eingebaute Vorlage des Schemas]
 </template>
 ```
 
@@ -85,7 +85,7 @@ Tech stack: TypeScript, React, Node.js, PostgreSQL
 Wenn OpenSpec ein Schema benötigt, prüft es in dieser Reihenfolge:
 
 1. CLI-Flag: `--schema <name>`
-2. Änderungs-Metadaten (`.openspec.yaml` im Änderungsordner)
+2. Change-Metadaten (`.openspec.yaml` im Change-Ordner)
 3. Projektkonfiguration (`openspec/config.yaml`)
 4. Standard (`spec-driven`)
 
@@ -93,13 +93,13 @@ Wenn OpenSpec ein Schema benötigt, prüft es in dieser Reihenfolge:
 
 ## Benutzerdefinierte Schemas
 
-Wenn die Projektkonfiguration nicht ausreicht, erstellen Sie Ihr eigenes Schema mit einem völlig benutzerdefinierten Workflow. Benutzerdefinierte Schemas befinden sich im Verzeichnis `openspec/schemas/` Ihres Projekts und werden mit Ihrem Code versioniert.
+Wenn die Projektkonfiguration nicht ausreicht, erstellen Sie Ihr eigenes Schema mit einem völlig benutzerdefinierten Workflow. Benutzerdefinierte Schemas liegen im Verzeichnis `openspec/schemas/` Ihres Projekts und werden zusammen mit Ihrem Code versioniert.
 
 ```text
 your-project/
 ├── openspec/
 │   ├── config.yaml        # Projektkonfiguration
-│   ├── schemas/           # Benutzerdefinierte Schemas befinden sich hier
+│   ├── schemas/           # Benutzerdefinierte Schemas liegen hier
 │   │   └── my-workflow/
 │   │       ├── schema.yaml
 │   │       └── templates/
@@ -107,7 +107,7 @@ your-project/
 └── src/
 ```
 
-### Ein bestehendes Schema forken
+### Ein vorhandenes Schema forken
 
 Der schnellste Weg zur Anpassung ist das Forken eines eingebauten Schemas:
 
@@ -124,9 +124,9 @@ openspec/schemas/my-workflow/
 ├── schema.yaml           # Workflow-Definition
 └── templates/
     ├── proposal.md       # Vorlage für das Proposal-Artefakt
-    ├── spec.md           # Vorlage für Specs
-    ├── design.md         # Vorlage für Design
-    └── tasks.md          # Vorlage für Tasks
+    ├── spec.md           # Vorlage für Spezifikationen
+    ├── design.md         # Vorlage für das Design
+    └── tasks.md          # Vorlage für Aufgaben
 ```
 
 Bearbeiten Sie nun `schema.yaml`, um den Workflow zu ändern, oder bearbeiten Sie die Vorlagen, um zu ändern, was die KI generiert.
@@ -141,12 +141,12 @@ openspec schema init research-first
 
 # Nicht-interaktiv
 openspec schema init rapid \
-  --description "Rapid iteration workflow" \
+  --description "Rapid Iteration Workflow" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
-### Schemastruktur
+### Schema-Struktur
 
 Ein Schema definiert die Artefakte in Ihrem Workflow und wie sie voneinander abhängen:
 
@@ -154,30 +154,30 @@ Ein Schema definiert die Artefakte in Ihrem Workflow und wie sie voneinander abh
 # openspec/schemas/my-workflow/schema.yaml
 name: my-workflow
 version: 1
-description: My team's custom workflow
+description: Der benutzerdefinierte Workflow meines Teams
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Initial proposal document
+    description: Initiales Proposal-Dokument
     template: proposal.md
     instruction: |
-      Create a proposal that explains WHY this change is needed.
-      Focus on the problem, not the solution.
+      Erstellen Sie ein Proposal, das erklärt, WARUM diese Änderung benötigt wird.
+      Konzentrieren Sie sich auf das Problem, nicht auf die Lösung.
     requires: []
 
   - id: design
     generates: design.md
-    description: Technical design
+    description: Technisches Design
     template: design.md
     instruction: |
-      Create a design document explaining HOW to implement.
+      Erstellen Sie ein Design-Dokument, das erklärt, WIE implementiert werden soll.
     requires:
-      - proposal    # Can't create design until proposal exists
+      - proposal    # Design kann nicht erstellt werden, bevor Proposal existiert
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist
+    description: Implementierungs-Checkliste
     template: tasks.md
     requires:
       - design
@@ -187,33 +187,33 @@ apply:
   tracks: tasks.md
 ```
 
-**Wichtige Felder:**
+**Schlüsselfelder:**
 
 | Feld | Zweck |
 |------|-------|
-| `id` | Eindeutige Kennung, verwendet in Befehlen und Regeln |
-| `generates` | Ausgabedateiname (unterstützt Glob-Muster wie `specs/**/*.md`) |
-| `template` | Vorlagendatei im Verzeichnis `templates/` |
+| `id` | Eindeutiger Bezeichner, verwendet in Befehlen und Regeln |
+| `generates` | Ausgabedateiname (unterstützt Globs wie `specs/**/*.md`) |
+| `template` | Vorlagendatei im `templates/`-Verzeichnis |
 | `instruction` | KI-Anweisungen zur Erstellung dieses Artefakts |
-| `requires` | Abhängigkeiten - welche Artefakte müssen zuerst existieren |
+| `requires` | Abhängigkeiten – welche Artefakte zuerst vorhanden sein müssen |
 
 ### Vorlagen
 
-Vorlagen sind Markdown-Dateien, die die KI leiten. Sie werden in den Prompt injiziert, wenn dieses Artefakt erstellt wird.
+Vorlagen sind Markdown-Dateien, die die KI anleiten. Sie werden in den Prompt injiziert, wenn dieses Artefakt erstellt wird.
 
 ```markdown
 <!-- templates/proposal.md -->
-## Why
+## Warum
 
-<!-- Explain the motivation for this change. What problem does this solve? -->
+<!-- Erklären Sie die Motivation für diese Änderung. Welches Problem löst dies? -->
 
-## What Changes
+## Was sich ändert
 
-<!-- Describe what will change. Be specific about new capabilities or modifications. -->
+<!-- Beschreiben Sie, was sich ändern wird. Seien Sie spezifisch bezüglich neuer Fähigkeiten oder Modifikationen. -->
 
-## Impact
+## Auswirkungen
 
-<!-- Affected code, APIs, dependencies, systems -->
+<!-- Betroffener Code, APIs, Abhängigkeiten, Systeme -->
 ```
 
 Vorlagen können enthalten:
@@ -230,7 +230,7 @@ openspec schema validate my-workflow
 ```
 
 Dies prüft:
-- `schema.yaml`-Syntax ist korrekt
+- Die Syntax von `schema.yaml` ist korrekt
 - Alle referenzierten Vorlagen existieren
 - Keine zirkulären Abhängigkeiten
 - Artefakt-IDs sind gültig
@@ -243,7 +243,7 @@ Nach der Erstellung verwenden Sie Ihr Schema mit:
 # Im Befehl angeben
 openspec new change feature --schema my-workflow
 
-# Oder als Standard in config.yaml festlegen
+# Oder in config.yaml als Standard festlegen
 schema: my-workflow
 ```
 
@@ -252,7 +252,7 @@ schema: my-workflow
 Nicht sicher, welches Schema verwendet wird? Prüfen Sie mit:
 
 ```bash
-# Sehen, wo ein bestimmtes Schema aufgelöst wird
+# Sehen Sie, woher ein bestimmtes Schema aufgelöst wird
 openspec schema which my-workflow
 
 # Alle verfügbaren Schemas auflisten
@@ -269,13 +269,13 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 ---
 
-> **Hinweis:** OpenSpec unterstützt auch benutzerdefinierte Schemas auf Benutzerebene unter `~/.local/share/openspec/schemas/` zur Weitergabe über Projekte hinweg, aber projektspezifische Schemas in `openspec/schemas/` werden empfohlen, da sie mit Ihrem Code versioniert werden.
+> **Hinweis:** OpenSpec unterstützt auch Schemas auf Benutzerebene unter `~/.local/share/openspec/schemas/` zum Teilen über Projekte hinweg, aber Schemas auf Projektebene in `openspec/schemas/` werden empfohlen, da sie zusammen mit Ihrem Code versioniert werden.
 
 ---
 
 ## Beispiele
 
-### Schneller Iterations-Workflow
+### Rapid-Iteration-Workflow
 
 Ein minimaler Workflow für schnelle Iterationen:
 
@@ -283,21 +283,21 @@ Ein minimaler Workflow für schnelle Iterationen:
 # openspec/schemas/rapid/schema.yaml
 name: rapid
 version: 1
-description: Fast iteration with minimal overhead
+description: Schnelle Iteration mit minimalem Overhead
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Quick proposal
+    description: Kurzes Proposal
     template: proposal.md
     instruction: |
-      Create a brief proposal for this change.
-      Focus on what and why, skip detailed specs.
+      Erstellen Sie ein kurzes Proposal für diese Änderung.
+      Konzentrieren Sie sich auf das Was und Warum, überspringen Sie detaillierte Spezifikationen.
     requires: []
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist
+    description: Implementierungs-Checkliste
     template: tasks.md
     requires: [proposal]
 
@@ -319,21 +319,35 @@ Bearbeiten Sie dann `schema.yaml`, um Folgendes hinzuzufügen:
 ```yaml
   - id: review
     generates: review.md
-    description: Pre-implementation review checklist
+    description: Vor-Implementierungs-Review-Checkliste
     template: review.md
     instruction: |
-      Create a review checklist based on the design.
-      Include security, performance, and testing considerations.
+      Erstellen Sie eine Review-Checkliste basierend auf dem Design.
+      Beziehen Sie Sicherheits-, Leistungs- und Testaspekte ein.
     requires:
       - design
 
   - id: tasks
-    # ... existing tasks config ...
+    # ... vorhandene tasks-Konfiguration ...
     requires:
       - specs
       - design
-      - review    # Now tasks require review too
+      - review    # Jetzt erfordern tasks auch review
 ```
+
+---
+
+## Community-Schemas
+
+OpenSpec unterstützt auch von der Community gewartete Schemas, die über eigenständige Repositories verteilt werden. Diese bieten meinungsstarke Workflows, die OpenSpec mit anderen Tools oder Systemen integrieren, ähnlich wie [github/spec-kits Community-Erweiterungskatalog](https://github.com/github/spec-kit/tree/main/extensions) für spec-kit funktioniert.
+
+Community-Schemas sind nicht in den OpenSpec-Kern eingebunden – sie leben in ihren eigenen Repositories mit ihrem eigenen Release-Zyklus. Um eines zu verwenden, kopieren Sie das Schema-Bundle in das Verzeichnis `openspec/schemas/<schema-name>/` Ihres Projekts (jedes Repository hat Installationsanweisungen in der README).
+
+| Schema | Betreuer | Repository | Beschreibung |
+|--------|----------|------------|--------------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Integriert OpenSpecs Artefakt-Governance mit [obra/superpowers](https://github.com/obra/superpowers) Ausführungsfähigkeiten (Brainstorming, Planerstellung, TDD über Subagenten, Code-Review, Abschluss). Fügt ein evidenzbasiertes `retrospective`-Artefakt hinzu, das eine Lücke füllt, die Superpowers nicht nativ abdeckt. |
+
+> Möchten Sie ein Community-Schema beitragen? Eröffnen Sie ein Issue mit einem Link zu Ihrem Repository, oder senden Sie eine PR, die eine Zeile zu dieser Tabelle hinzufügt.
 
 ---
 

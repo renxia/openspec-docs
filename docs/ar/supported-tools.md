@@ -7,20 +7,21 @@
 لكل أداة محددة، يمكن لـ OpenSpec تثبيت:
 
 1. **المهارات** (إذا كان التسليم يتضمن مهارات): `.../skills/openspec-*/SKILL.md`
-2. **الأوامر** (إذا كان التسليم يتضمن أوامر): ملفات أوامر خاصة بالأداة `opsx-*`
+2. **الأوامر** (إذا كان التسليم يتضمن أوامر): ملفات أوامر `opsx-*` الخاصة بكل أداة
 
 بشكل افتراضي، يستخدم OpenSpec الملف الشخصي `core`، الذي يتضمن:
 - `propose`
 - `explore`
 - `apply`
+- `sync`
 - `archive`
 
-يمكنك تمكين سير العمل الموسّع (`new`, `continue`, `ff`, `verify`, `sync`, `bulk-archive`, `onboard`) عبر `openspec config profile`، ثم تشغيل `openspec update`.
+يمكنك تمكين سير العمل الموسع (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) عبر `openspec config profile`، ثم تشغيل `openspec update`.
 
 ## مرجع دليل الأدوات
 
 | الأداة (المعرّف) | نمط مسار المهارات | نمط مسار الأوامر |
-|-----------|---------------------|----------------------|
+|-------------------|-------------------|------------------|
 | Amazon Q Developer (`amazon-q`) | `.amazonq/skills/openspec-*/SKILL.md` | `.amazonq/prompts/opsx-<id>.md` |
 | Antigravity (`antigravity`) | `.agent/skills/openspec-*/SKILL.md` | `.agent/workflows/opsx-<id>.md` |
 | Auggie (`auggie`) | `.augment/skills/openspec-*/SKILL.md` | `.augment/commands/opsx-<id>.md` |
@@ -29,7 +30,7 @@
 | Cline (`cline`) | `.cline/skills/openspec-*/SKILL.md` | `.clinerules/workflows/opsx-<id>.md` |
 | CodeBuddy (`codebuddy`) | `.codebuddy/skills/openspec-*/SKILL.md` | `.codebuddy/commands/opsx/<id>.md` |
 | Codex (`codex`) | `.codex/skills/openspec-*/SKILL.md` | `$CODEX_HOME/prompts/opsx-<id>.md`\* |
-| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | غير مولّد (لا يوجد محوّل أوامر؛ استخدم الاستدعاءات القائمة على المهارات `/openspec-*`) |
+| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | لا يتم إنشاؤه (لا يوجد محوّل أوامر؛ استخدم استدعاءات `/openspec-*` القائمة على المهارات) |
 | Continue (`continue`) | `.continue/skills/openspec-*/SKILL.md` | `.continue/prompts/opsx-<id>.prompt` |
 | CoStrict (`costrict`) | `.cospec/skills/openspec-*/SKILL.md` | `.cospec/openspec/commands/opsx-<id>.md` |
 | Crush (`crush`) | `.crush/skills/openspec-*/SKILL.md` | `.crush/commands/opsx/<id>.md` |
@@ -40,22 +41,24 @@
 | iFlow (`iflow`) | `.iflow/skills/openspec-*/SKILL.md` | `.iflow/commands/opsx-<id>.md` |
 | Junie (`junie`) | `.junie/skills/openspec-*/SKILL.md` | `.junie/commands/opsx-<id>.md` |
 | Kilo Code (`kilocode`) | `.kilocode/skills/openspec-*/SKILL.md` | `.kilocode/workflows/opsx-<id>.md` |
+| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | لا يتم إنشاؤه (لا يوجد محوّل أوامر؛ استخدم استدعاءات `/skill:openspec-*` القائمة على المهارات) |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
+| Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
 | Qwen Code (`qwen`) | `.qwen/skills/openspec-*/SKILL.md` | `.qwen/commands/opsx-<id>.toml` |
 | RooCode (`roocode`) | `.roo/skills/openspec-*/SKILL.md` | `.roo/commands/opsx-<id>.md` |
-| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | غير مولّد (لا يوجد محوّل أوامر؛ استخدم الاستدعاءات القائمة على المهارات `/openspec-*`) |
+| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | لا يتم إنشاؤه (لا يوجد محوّل أوامر؛ استخدم استدعاءات `/openspec-*` القائمة على المهارات) |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* يتم تثبيت أوامر Codex في دليل Codex العالمي (`$CODEX_HOME/prompts/` إذا كان مُعيّنًا، وإلا `~/.codex/prompts/`)، وليس في دليل مشروعك.
+\* يتم تثبيت أوامر Codex في الدليل الرئيسي العالمي لـ Codex (`$CODEX_HOME/prompts/` إذا تم تعيينه، وإلا `~/.codex/prompts/`)، وليس في دليل مشروعك.
 
-\*\* يتم التعرف على ملفات مطالبات GitHub Copilot كأوامر شرطة مخصصة في إضافات IDE (VS Code, JetBrains, Visual Studio). لا تستهلك Copilot CLI حاليًا ملفات `.github/prompts/*.prompt.md` مباشرة.
+\*\* يتم التعرف على ملفات موجهات GitHub Copilot كأوامر شرطة مائلة مخصصة في إضافات IDE (VS Code، JetBrains، Visual Studio). لا يستهلك سطر أوامر Copilot حاليًا ملفات `.github/prompts/*.prompt.md` مباشرة.
 
 ## الإعداد غير التفاعلي
 
-لإعداد CI/CD أو السكربتات، استخدم `--tools` (واختياريًا `--profile`):
+لـ CI/CD أو الإعداد المبرمج، استخدم `--tools` (واختياريًا `--profile`):
 
 ```bash
 # تكوين أدوات محددة
@@ -67,25 +70,25 @@ openspec init --tools all
 # تخطي تكوين الأدوات
 openspec init --tools none
 
-# تجاوز الملف الشخصي لهذا التشغيل init
+# تجاوز الملف الشخصي لهذا التشغيل الأولي
 openspec init --profile core
 ```
 
-**معرّفات الأدوات المتاحة (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `forgecode`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kiro`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+**معرّفات الأدوات المتاحة (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
 
 ## التثبيت المعتمد على سير العمل
 
-يثبّت OpenSpec مكونات سير العمل بناءً على سير العمل المحدد:
+يثبّت OpenSpec عناصر سير العمل بناءً على سير العمل المحدد:
 
-- **الملف الشخصي الأساسي (الافتراضي):** `propose`, `explore`, `apply`, `archive`
+- **الملف الشخصي الأساسي (الافتراضي):** `propose`, `explore`, `apply`, `sync`, `archive`
 - **اختيار مخصص:** أي مجموعة فرعية من جميع معرّفات سير العمل:
   `propose`, `explore`, `new`, `continue`, `apply`, `ff`, `sync`, `archive`, `bulk-archive`, `verify`, `onboard`
 
 بمعنى آخر، تعتمد أعداد المهارات/الأوامر على الملف الشخصي وطريقة التسليم، وليست ثابتة.
 
-## أسماء المهارات المولّدة
+## أسماء المهارات المُنشأة
 
-عند تحديدها بواسطة إعداد الملف الشخصي/سير العمل، يولّد OpenSpec هذه المهارات:
+عند تحديدها بواسطة تكوين الملف الشخصي/سير العمل، يُنشئ OpenSpec المهارات التالية:
 
 - `openspec-propose`
 - `openspec-explore`
@@ -99,10 +102,10 @@ openspec init --profile core
 - `openspec-verify-change`
 - `openspec-onboard`
 
-راجع [الأوامر](commands.md) لسلوك الأوامر و[واجهة سطر الأوامر](cli.md) لخيارات `init`/`update`.
+انظر [الأوامر](commands.md) لسلوك الأوامر و[واجهة سطر الأوامر](cli.md) لخيارات `init`/`update`.
 
-## ذات صلة
+## ذات الصلة
 
 - [مرجع واجهة سطر الأوامر](cli.md) — أوامر الطرفية
-- [الأوامر](commands.md) — أوامر الشرطة والمهارات
+- [الأوامر](commands.md) — أوامر الشريط المائل والمهارات
 - [البدء](getting-started.md) — الإعداد الأولي

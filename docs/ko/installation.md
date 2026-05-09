@@ -1,6 +1,6 @@
 # 설치
 
-## 사전 요구사항
+## 사전 요구 사항
 
 - **Node.js 20.19.0 이상** — 버전 확인: `node --version`
 
@@ -26,25 +26,28 @@ yarn global add @fission-ai/openspec@latest
 
 ### bun
 
+Bun은 OpenSpec을 전역적으로 설치할 수 있지만, OpenSpec은 현재 Node.js에서 실행됩니다.
+`PATH`에 Node.js 20.19.0 이상이 여전히 필요합니다.
+
 ```bash
 bun add -g @fission-ai/openspec@latest
 ```
 
 ## Nix
 
-설치하지 않고 OpenSpec을 직접 실행합니다:
+설치 없이 OpenSpec을 직접 실행:
 
 ```bash
 nix run github:Fission-AI/OpenSpec -- init
 ```
 
-또는 프로필에 설치합니다:
+또는 프로필에 설치:
 
 ```bash
 nix profile install github:Fission-AI/OpenSpec
 ```
 
-또는 `flake.nix`에 개발 환경을 추가합니다:
+또는 `flake.nix`의 개발 환경에 추가:
 
 ```nix
 {
@@ -76,4 +79,4 @@ cd your-project
 openspec init
 ```
 
-전체 안내는 [시작하기](getting-started.md)를 참조하세요.
+전체 단계는 [시작하기](getting-started.md)를 참조하세요.

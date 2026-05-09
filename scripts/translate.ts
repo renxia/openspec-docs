@@ -64,7 +64,7 @@ program
   .version('1.0.0')
   .requiredOption('-p, --path <path>', 'Path to file or directory to translate', 'docs/en')
   .option('-s, --source-lang <lang>', 'Source language (default: en)', 'en')
-  .option('-t, --target-lang <lang>', 'Target language (e.g., zh-CN, ja, es)', 'zh-CN')
+  .option('-t, --target-lang <lang>', 'Target language (e.g., zh-CN, ja, es, all)', 'all')
   .option('--timeout <ms>', 'Timeout in milliseconds. default: 300_000')
   .option('-c, --concurrency <thread>', 'Concurrency. default: 1', process.env.TRANSLATE_CONCURRENCY || '3')
   .option('-u, --base-url <url>', 'LLM base URL', process.env.OPENAI_BASE_URL || 'http://localhost:11434/v1')
@@ -369,13 +369,17 @@ function getAllMdFiles(dirPath = 'docs'): string[] {
 async function main(opts = options) {
   const { path: inputPath, sourceLang, targetLang, concurrency: threads = 1, sync } = opts;
 
+  // 前置：同步文档
+  if (sync) await syncDocs();
+
   if (targetLang === 'all') {
     logger.log(`Translating to all languages...`)
     for (const lang of Object.keys(LANGUAGE_NAMES)) {
       if (lang === sourceLang) continue;
       console.info(''.padEnd(30, '='), `Translating to ${color.green(lang)}`, ''.padEnd(30, '='))
-      await main({ ...opts, targetLang: lang })
+      await main({ ...opts, sync: false, build: false, targetLang: lang })
     }
+    if (opts.build) await build();
     return
   }
 
@@ -397,8 +401,6 @@ async function main(opts = options) {
   const targetLangDisplay = getLanguageDisplayName(targetLang);
   logger.log(`Translation: ${color.cyan(sourceLangDisplay)} → ${color.green(targetLangDisplay)}`);
 
-  // 前置：同步文档
-  if (sync) await syncDocs();
 
   if (!existsSync(inputPath)) {
     logger.error(`Path does not exist: ${color.red(inputPath)}`);
@@ -419,7 +421,7 @@ async function main(opts = options) {
   }
 
   logger.log(`Found ${color.yellow(filesToTranslate.length)} files to translate`);
-  logger.log(`Use Model: ${color.green(options.model)}`);
+  logger.log(`Use Model: ${color.green(opts.model)}`);
 
   let current = 0;
   const total = filesToTranslate.length;
@@ -429,7 +431,7 @@ async function main(opts = options) {
 
   logger.log(color.greenBright('Translation completed!'));
 
-  if (options.build) await build();
+  if (opts.build) await build();
 }
 
 main().catch(logger.error);

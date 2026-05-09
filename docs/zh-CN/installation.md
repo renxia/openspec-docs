@@ -1,8 +1,8 @@
-# 安装指南
+# 安装
 
 ## 前提条件
 
-- **Node.js 20.19.0 或更高版本** — 检查您的版本：`node --version`
+- **Node.js 20.19.0 或更高版本** — 检查你的版本：`node --version`
 
 ## 包管理器
 
@@ -26,6 +26,9 @@ yarn global add @fission-ai/openspec@latest
 
 ### bun
 
+Bun 可以全局安装 OpenSpec，但 OpenSpec 目前运行在 Node.js 上。
+你仍然需要在 `PATH` 中可用的 Node.js 20.19.0 或更高版本。
+
 ```bash
 bun add -g @fission-ai/openspec@latest
 ```
@@ -38,13 +41,13 @@ bun add -g @fission-ai/openspec@latest
 nix run github:Fission-AI/OpenSpec -- init
 ```
 
-或将其安装到您的配置文件中：
+或者安装到你的配置文件：
 
 ```bash
 nix profile install github:Fission-AI/OpenSpec
 ```
 
-或在 `flake.nix` 中将其添加到您的开发环境：
+或者在 `flake.nix` 中添加到你的开发环境：
 
 ```nix
 {
@@ -69,11 +72,11 @@ openspec --version
 
 ## 后续步骤
 
-安装完成后，在您的项目中初始化 OpenSpec：
+安装后，在你的项目中初始化 OpenSpec：
 
 ```bash
 cd your-project
 openspec init
 ```
 
-完整操作指南请参阅[入门指南](getting-started.md)。
+请参阅 [快速入门](getting-started.md) 获取完整指南。

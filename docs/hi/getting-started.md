@@ -1,15 +1,15 @@
-# शुरुआत कैसे करें
+# शुरुआत करना
 
-यह मार्गदर्शिका बताती है कि OpenSpec कैसे काम करता है, इसे इंस्टॉल और इनिशियलाइज़ करने के बाद। इंस्टॉलेशन निर्देशों के लिए, [मुख्य README](index.md#quick-start) देखें।
+यह मार्गदर्शिका बताती है कि OpenSpec कैसे काम करता है, इंस्टॉलेशन और इनिशियलाइज़ेशन के बाद। इंस्टॉलेशन निर्देशों के लिए, [मुख्य README](index.md#quick-start) देखें।
 
 ## यह कैसे काम करता है
 
-OpenSpec आपकी और आपके AI कोडिंग सहायक की मदद करता है ताकि कोई भी कोड लिखने से पहले यह तय हो सके कि क्या बनाना है।
+OpenSpec आपको और आपके AI कोडिंग सहायक को किसी भी कोड को लिखने से पहले यह तय करने में मदद करता है कि क्या बनाना है।
 
 **डिफ़ॉल्ट त्वरित मार्ग (कोर प्रोफ़ाइल):**
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
 **विस्तृत मार्ग (कस्टम वर्कफ़्लो चयन):**
@@ -18,7 +18,7 @@ OpenSpec आपकी और आपके AI कोडिंग सहायक 
 /opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-डिफ़ॉल्ट ग्लोबल प्रोफ़ाइल `core` है, जिसमें `propose`, `explore`, `apply`, और `archive` शामिल हैं। आप `openspec config profile` और फिर `openspec update` का उपयोग करके विस्तृत वर्कफ़्लो कमांड सक्षम कर सकते हैं।
+डिफ़ॉल्ट ग्लोबल प्रोफ़ाइल `core` है, जिसमें `propose`, `explore`, `apply`, `sync`, और `archive` शामिल हैं। आप `openspec config profile` और फिर `openspec update` के साथ विस्तृत वर्कफ़्लो कमांड सक्षम कर सकते हैं।
 
 ## OpenSpec क्या बनाता है
 
@@ -29,7 +29,7 @@ openspec/
 ├── specs/              # सत्य का स्रोत (आपके सिस्टम का व्यवहार)
 │   └── <domain>/
 │       └── spec.md
-├── changes/            # प्रस्तावित अपडेट (प्रति परिवर्तन एक फ़ोल्डर)
+├── changes/            # प्रस्तावित अपडेट (प्रत्येक परिवर्तन के लिए एक फ़ोल्डर)
 │   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
@@ -40,212 +40,214 @@ openspec/
 └── config.yaml         # प्रोजेक्ट कॉन्फ़िगरेशन (वैकल्पिक)
 ```
 
-**दो मुख्य निर्देशिकाएँ:**
+**दो प्रमुख निर्देशिकाएँ:**
 
 - **`specs/`** - सत्य का स्रोत। ये स्पेक्स बताते हैं कि आपका सिस्टम वर्तमान में कैसे व्यवहार करता है। डोमेन के अनुसार व्यवस्थित (जैसे, `specs/auth/`, `specs/payments/`)।
 
-- **`changes/`** - प्रस्तावित संशोधन। प्रत्येक परिवर्तन का अपना फ़ोल्डर होता है जिसमें सभी संबंधित कलाकृतियाँ होती हैं। जब कोई परिवर्तन पूरा हो जाता है, तो उसकी स्पेक्स मुख्य `specs/` निर्देशिका में विलीन हो जाती हैं।
+- **`changes/`** - प्रस्तावित संशोधन। प्रत्येक परिवर्तन को अपना फ़ोल्डर मिलता है जिसमें सभी संबंधित आर्टिफ़ैक्ट्स होते हैं। जब कोई परिवर्तन पूरा हो जाता है, तो उसके स्पेक्स मुख्य `specs/` निर्देशिका में विलीन हो जाते हैं।
 
-## कलाकृतियों को समझना
+## आर्टिफ़ैक्ट्स को समझना
 
-प्रत्येक परिवर्तन फ़ोल्डर में कार्य का मार्गदर्शन करने वाली कलाकृतियाँ होती हैं:
+प्रत्येक परिवर्तन फ़ोल्डर में आर्टिफ़ैक्ट्स होते हैं जो कार्य का मार्गदर्शन करते हैं:
 
-| कलाकृति | उद्देश्य |
+| आर्टिफ़ैक्ट | उद्देश्य |
 |----------|---------|
-| `proposal.md` | "क्यों" और "क्या" - इरादे, दायरे और दृष्टिकोण को कैप्चर करता है |
-| `specs/` | जोड़े गए/संशोधित/हटाए गए आवश्यकताओं को दिखाने वाली डेल्टा स्पेक्स |
-| `design.md` | "कैसे" - तकनीकी दृष्टिकोण और वास्तुकला निर्णय |
+| `proposal.md` | "क्यों" और "क्या" - उद्देश्य, दायरा और दृष्टिकोण को कैप्चर करता है |
+| `specs/` | डेल्टा स्पेक्स जो जोड़े गए/संशोधित/हटाए गए आवश्यकताओं को दिखाते हैं |
+| `design.md` | "कैसे" - तकनीकी दृष्टिकोण और आर्किटेक्चर निर्णय |
 | `tasks.md` | चेकबॉक्स के साथ कार्यान्वयन चेकलिस्ट |
 
-**कलाकृतियाँ एक-दूसरे पर बनती हैं:**
+**आर्टिफ़ैक्ट्स एक-दूसरे पर आधारित होते हैं:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            जैसे-जैसे आप सीखते हैं, अपडेट करें
+            जैसे-जैसे आप सीखते हैं अपडेट करें
 ```
 
-आप कार्यान्वयन के दौरान और अधिक जानने पर हमेशा पहले की कलाकृतियों पर वापस जा सकते हैं और उन्हें परिष्कृत कर सकते हैं।
+कार्यान्वयन के दौरान जैसे-जैसे आप अधिक जानते हैं, आप हमेशा पिछले आर्टिफ़ैक्ट्स को परिष्कृत करने के लिए वापस जा सकते हैं।
 
-## डेल्टा स्पेक्स कैसे काम करती हैं
+## डेल्टा स्पेक्स कैसे काम करते हैं
 
-डेल्टा स्पेक्स OpenSpec में मुख्य अवधारणा हैं। ये दिखाती हैं कि आपकी वर्तमान स्पेक्स के सापेक्ष क्या बदल रहा है।
+डेल्टा स्पेक्स OpenSpec में एक प्रमुख अवधारणा हैं। ये दिखाते हैं कि आपके वर्तमान स्पेक्स के सापेक्ष क्या बदल रहा है।
 
 ### प्रारूप
 
-डेल्टा स्पेक्स परिवर्तन के प्रकार को इंगित करने के लिए अनुभागों का उपयोग करती हैं:
+डेल्टा स्पेक्स परिवर्तन के प्रकार को इंगित करने के लिए अनुभागों का उपयोग करते हैं:
 
 ```markdown
-# Auth के लिए डेल्टा
+# Delta for Auth
 
-## जोड़ी गई आवश्यकताएँ
+## ADDED Requirements
 
-### आवश्यकता: दो-कारक प्रमाणीकरण
-सिस्टम को लॉगिन के दौरान दूसरे कारक की आवश्यकता होनी चाहिए।
+### Requirement: Two-Factor Authentication
+The system MUST require a second factor during login.
 
-#### परिदृश्य: OTP आवश्यक
-- दिया गया है कि 2FA सक्षम एक उपयोगकर्ता
-- जब उपयोगकर्ता मान्य क्रेडेंशियल प्रस्तुत करता है
-- तो एक OTP चुनौती प्रस्तुत की जाती है
+#### Scenario: OTP required
+- GIVEN a user with 2FA enabled
+- WHEN the user submits valid credentials
+- THEN an OTP challenge is presented
 
-## संशोधित आवश्यकताएँ
+## MODIFIED Requirements
 
-### आवश्यकता: सत्र समय-सीमा
-सिस्टम को निष्क्रियता के 30 मिनट बाद सत्रों की समय-सीमा समाप्त करनी चाहिए।
-(पहले: 60 मिनट)
+### Requirement: Session Timeout
+The system SHALL expire sessions after 30 minutes of inactivity.
+(Previously: 60 minutes)
 
-#### परिदृश्य: निष्क्रिय समय-सीमा
-- दिया गया है कि एक प्रमाणित सत्र
-- जब गतिविधि के बिना 30 मिनट बीत जाते हैं
-- तो सत्र अमान्य हो जाता है
+#### Scenario: Idle timeout
+- GIVEN an authenticated session
+- WHEN 30 minutes pass without activity
+- THEN the session is invalidated
 
-## हटाई गई आवश्यकताएँ
+## REMOVED Requirements
 
-### आवश्यकता: मुझे याद रखें
-(2FA के पक्ष में पदावनत)
+### Requirement: Remember Me
+(Deprecated in favor of 2FA)
 ```
 
-### संग्रह पर क्या होता है
+### आर्काइव पर क्या होता है
 
-जब आप कोई परिवर्तन संग्रहित करते हैं:
+जब आप किसी परिवर्तन को आर्काइव करते हैं:
 
-1. **जोड़ी गई** आवश्यकताएँ मुख्य स्पेक्स में जोड़ दी जाती हैं
+1. **जोड़ी गई** आवश्यकताएँ मुख्य स्पेक में जोड़ दी जाती हैं
 2. **संशोधित** आवश्यकताएँ मौजूदा संस्करण को प्रतिस्थापित करती हैं
-3. **हटाई गई** आवश्यकताएँ मुख्य स्पेक्स से हटा दी जाती हैं
+3. **हटाई गई** आवश्यकताएँ मुख्य स्पेक से हटा दी जाती हैं
 
-परिवर्तन फ़ोल्डर ऑडिट इतिहास के लिए `openspec/changes/archive/` में चला जाता है।
+ऑडिट इतिहास के लिए परिवर्तन फ़ोल्डर `openspec/changes/archive/` में चला जाता है।
 
 ## उदाहरण: आपका पहला परिवर्तन
 
-आइए एप्लिकेशन में डार्क मोड जोड़ने की प्रक्रिया से गुजरें।
+आइए किसी एप्लिकेशन में डार्क मोड जोड़ने की प्रक्रिया से गुज़रते हैं।
 
 ### 1. परिवर्तन शुरू करें (डिफ़ॉल्ट)
 
 ```text
-आप: /opsx:propose add-dark-mode
+You: /opsx:propose add-dark-mode
 
-AI:  बनाया गया openspec/changes/add-dark-mode/
-     ✓ proposal.md — हम यह क्यों कर रहे हैं, क्या बदल रहा है
-     ✓ specs/       — आवश्यकताएँ और परिदृश्य
-     ✓ design.md    — तकनीकी दृष्टिकोण
-     ✓ tasks.md     — कार्यान्वयन चेकलिस्ट
-     कार्यान्वयन के लिए तैयार!
+AI:  Created openspec/changes/add-dark-mode/
+     ✓ proposal.md — why we're doing this, what's changing
+     ✓ specs/       — requirements and scenarios
+     ✓ design.md    — technical approach
+     ✓ tasks.md     — implementation checklist
+     Ready for implementation!
 ```
 
-यदि आपने विस्तृत वर्कफ़्लो प्रोफ़ाइल सक्षम की है, तो आप इसे दो चरणों में भी कर सकते हैं: `/opsx:new` फिर `/opsx:ff` (या `/opsx:continue` क्रमिक रूप से)।
+यदि आपने विस्तृत वर्कफ़्लो प्रोफ़ाइल सक्षम की है, तो आप यह दो चरणों में भी कर सकते हैं: `/opsx:new` फिर `/opsx:ff` (या क्रमिक रूप से `/opsx:continue`)।
 
 ### 2. क्या बनाया जाता है
 
-**proposal.md** - इरादे को कैप्चर करता है:
+**proposal.md** - उद्देश्य को कैप्चर करता है:
 
 ```markdown
-# प्रस्ताव: डार्क मोड जोड़ें
+# Proposal: Add Dark Mode
 
-## इरादा
-उपयोगकर्ताओं ने रात के उपयोग के दौरान आँखों के तनाव को कम करने के लिए डार्क मोड विकल्प का अनुरोध किया है।
+## Intent
+Users have requested a dark mode option to reduce eye strain
+during nighttime usage.
 
-## दायरा
-- सेटिंग्स में थीम टॉगल जोड़ें
-- सिस्टम प्राथमिकता पहचान का समर्थन करें
-- localStorage में प्राथमिकता संग्रहीत करें
+## Scope
+- Add theme toggle in settings
+- Support system preference detection
+- Persist preference in localStorage
 
-## दृष्टिकोण
-रंग-योजना के लिए CSS कस्टम प्रॉपर्टीज़ का उपयोग करें और राज्य प्रबंधन के लिए React संदर्भ।
+## Approach
+Use CSS custom properties for theming with a React context
+for state management.
 ```
 
-**specs/ui/spec.md** - नई आवश्यकताओं को दिखाने वाली डेल्टा:
+**specs/ui/spec.md** - नई आवश्यकताएँ दिखाने वाला डेल्टा:
 
 ```markdown
-# UI के लिए डेल्टा
+# Delta for UI
 
-## जोड़ी गई आवश्यकताएँ
+## ADDED Requirements
 
-### आवश्यकता: थीम चयन
-सिस्टम को उपयोगकर्ताओं को लाइट और डार्क थीम्स के बीच चयन करने की अनुमति देनी चाहिए।
+### Requirement: Theme Selection
+The system SHALL allow users to choose between light and dark themes.
 
-#### परिदृश्य: मैनुअल टॉगल
-- दिया गया है कि किसी भी पृष्ठ पर एक उपयोगकर्ता
-- जब उपयोगकर्ता थीम टॉगल पर क्लिक करता है
-- तो थीम तुरंत बदल जाती है
-- और प्राथमिकता सत्रों में बनी रहती है
+#### Scenario: Manual toggle
+- GIVEN a user on any page
+- WHEN the user clicks the theme toggle
+- THEN the theme switches immediately
+- AND the preference persists across sessions
 
-#### परिदृश्य: सिस्टम प्राथमिकता
-- दिया गया है कि कोई सहेजी गई प्राथमिकता नहीं है
-- जब एप्लिकेशन लोड होता है
-- तो सिस्टम की पसंदीदा रंग योजना का उपयोग किया जाता है
+#### Scenario: System preference
+- GIVEN a user with no saved preference
+- WHEN the application loads
+- THEN the system's preferred color scheme is used
 ```
 
 **tasks.md** - कार्यान्वयन चेकलिस्ट:
 
 ```markdown
-# कार्य
+# Tasks
 
-## 1. थीम इन्फ्रास्ट्रक्चर
-- [ ] 1.1 लाइट/डार्क राज्य के साथ ThemeContext बनाएँ
-- [ ] 1.2 रंगों के लिए CSS कस्टम प्रॉपर्टीज़ जोड़ें
-- [ ] 1.3 localStorage स्थायित्व लागू करें
+## 1. Theme Infrastructure
+- [ ] 1.1 Create ThemeContext with light/dark state
+- [ ] 1.2 Add CSS custom properties for colors
+- [ ] 1.3 Implement localStorage persistence
 
-## 2. UI घटक
-- [ ] 2.1 ThemeToggle घटक बनाएँ
-- [ ] 2.2 सेटिंग्स पृष्ठ में टॉगल जोड़ें
-- [ ] 2.3 त्वरित टॉगल शामिल करने के लिए Header अपडेट करें
+## 2. UI Components
+- [ ] 2.1 Create ThemeToggle component
+- [ ] 2.2 Add toggle to settings page
+- [ ] 2.3 Update Header to include quick toggle
 
-## 3. स्टाइलिंग
-- [ ] 3.1 डार्क थीम रंग पैलेट परिभाषित करें
-- [ ] 3.2 CSS चर का उपयोग करने के लिए घटक अपडेट करें
+## 3. Styling
+- [ ] 3.1 Define dark theme color palette
+- [ ] 3.2 Update components to use CSS variables
 ```
 
-### 3. कार्यान्वयन करें
+### 3. कार्यान्वयन
 
 ```
-आप: /opsx:apply
+You: /opsx:apply
 
-AI:  कार्यों पर काम कर रहा है...
-     ✓ 1.1 लाइट/डार्क राज्य के साथ ThemeContext बनाया गया
-     ✓ 1.2 globals.css में CSS कस्टम प्रॉपर्टीज़ जोड़ी गईं
-     ✓ 1.3 localStorage स्थायित्व लागू किया गया
-     ✓ 2.1 ThemeToggle घटक बनाया गया
+AI:  Working through tasks...
+     ✓ 1.1 Created ThemeContext with light/dark state
+     ✓ 1.2 Added CSS custom properties to globals.css
+     ✓ 1.3 Implemented localStorage persistence
+     ✓ 2.1 Created ThemeToggle component
      ...
-     सभी कार्य पूरे हुए!
+     All tasks complete!
 ```
 
-कार्यान्वयन के दौरान, यदि आपको पता चलता है कि डिज़ाइन में समायोजन की आवश्यकता है, तो बस कलाकृति अपडेट करें और जारी रखें।
+कार्यान्वयन के दौरान, यदि आपको पता चलता है कि डिज़ाइन में समायोजन की आवश्यकता है, तो बस आर्टिफ़ैक्ट को अपडेट करें और जारी रखें।
 
-### 4. संग्रह करें
+### 4. आर्काइव
 
 ```
-आप: /opsx:archive
+You: /opsx:archive
 
-AI:  add-dark-mode को संग्रहित कर रहा है...
-     ✓ स्पेक्स को openspec/specs/ui/spec.md में विलीन किया गया
-     ✓ openspec/changes/archive/2025-01-24-add-dark-mode/ में ले जाया गया
-     पूर्ण! अगली सुविधा के लिए तैयार।
+AI:  Archiving add-dark-mode...
+     ✓ Merged specs into openspec/specs/ui/spec.md
+     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
+     Done! Ready for the next feature.
 ```
 
-आपकी डेल्टा स्पेक्स अब मुख्य स्पेक्स का हिस्सा हैं, जो दस्तावेज़ करती हैं कि आपका सिस्टम कैसे काम करता है।
+आपके डेल्टा स्पेक्स अब मुख्य स्पेक्स का हिस्सा हैं, जो दस्तावेज़ करते हैं कि आपका सिस्टम कैसे काम करता है।
 
 ## सत्यापन और समीक्षा
 
 अपने परिवर्तनों की जाँच करने के लिए CLI का उपयोग करें:
 
 ```bash
-# सक्रिय परिवर्तन सूचीबद्ध करें
+# List active changes
 openspec list
 
-# परिवर्तन विवरण देखें
+# View change details
 openspec show add-dark-mode
 
-# स्पेक्स प्रारूप मान्य करें
+# Validate spec formatting
 openspec validate add-dark-mode
 
-# इंटरैक्टिव डैशबोर्ड
+# Interactive dashboard
 openspec view
 ```
 
 ## अगले कदम
 
-- [वर्कफ़्लो](workflows.md) - सामान्य पैटर्न और प्रत्येक कमांड का उपयोग कब करें
-- [कमांड](commands.md) - सभी स्लैश कमांड के लिए पूर्ण संदर्भ
-- [अवधारणाएँ](concepts.md) - स्पेक्स, परिवर्तनों और स्कीमा की गहरी समझ
-- [अनुकूलन](customization.md) - OpenSpec को अपने तरीके से काम करें
+- [वर्कफ़्लोज़](workflows.md) - सामान्य पैटर्न और प्रत्येक कमांड का उपयोग कब करें
+- [कमांड्स](commands.md) - सभी स्लैश कमांड्स का पूर्ण संदर्भ
+- [अवधारणाएँ](concepts.md) - स्पेक्स, परिवर्तन और स्कीमास की गहरी समझ
+- [कस्टमाइज़ेशन](customization.md) - OpenSpec को अपने तरीके से काम करें

@@ -1,20 +1,20 @@
-# Migratie naar OPSX
+# Migreren naar OPSX
 
-Deze gids helpt u bij de overgang van de verouderde OpenSpec-werkwijze naar OPSX. De migratie is zo ontworpen dat deze soepel verloopt—uw bestaande werk wordt behouden, en het nieuwe systeem biedt meer flexibiliteit.
+Deze gids helpt u bij de overgang van de verouderde OpenSpec-werkstroom naar OPSX. De migratie is ontworpen om soepel te verlopen—uw bestaande werk wordt behouden, en het nieuwe systeem biedt meer flexibiliteit.
 
 ## Wat verandert er?
 
-OPSX vervangt de oude, gefaseerde werkwijze door een vloeibare, op acties gebenaderde aanpak. Hier is de belangrijkste verschuiving:
+OPSX vervangt de oude fase-gebonden werkstroom door een flexibele, actie-gebaseerde aanpak. Dit is de belangrijkste verschuiving:
 
 | Aspect | Verouderd | OPSX |
 |--------|-----------|------|
-| **Commando's** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | Standaard: `/opsx:propose`, `/opsx:apply`, `/opsx:archive` (uitgebreide werkkommando's optioneel) |
-| **Werkwijze** | Alle artefacten tegelijk aanmaken | Incrementeel of allemaal tegelijk aanmaken—uw keuze |
-| **Teruggaan** | Ongemakkelijke fasemuren | Natuurlijk—werk elk artefact op elk moment bij |
+| **Commando's** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | Standaard: `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, `/opsx:archive` (uitgebreide werkstroomcommando's optioneel) |
+| **Werkstroom** | Maak alle artefacten tegelijk aan | Maak incrementeel of allemaal tegelijk aan—uw keuze |
+| **Teruggaan** | Ongemakkelijke fasepoorten | Natuurlijk—werk elk artefact op elk moment bij |
 | **Aanpassing** | Vaste structuur | Schema-gestuurd, volledig aanpasbaar |
 | **Configuratie** | `CLAUDE.md` met markeringen + `project.md` | Schone configuratie in `openspec/config.yaml` |
 
-**De filosofische verandering:** Werk is niet lineair. OPSX houdt op te doen alsof het dat wel is.
+**De filosofische verandering:** Werk is niet lineair. OPSX doet niet alsof dat wel zo is.
 
 ---
 
@@ -24,22 +24,22 @@ OPSX vervangt de oude, gefaseerde werkwijze door een vloeibare, op acties gebena
 
 Het migratieproces is ontworpen met behoud in gedachten:
 
-- **Actieve wijzigingen in `openspec/changes/`** — Volledig bewaard. U kunt deze voortzetten met OPSX-opdrachten.
-- **Gearchiveerde wijzigingen** — Onaangeroerd. Uw geschiedenis blijft intact.
-- **Hoofdspecificaties in `openspec/specs/`** — Onaangeroerd. Dit zijn uw bron van waarheid.
-- **Uw inhoud in CLAUDE.md, AGENTS.md, enz.** — Bewaard. Alleen de OpenSpec-markeringsblokken worden verwijderd; alles wat u heeft geschreven, blijft.
+- **Actieve wijzigingen in `openspec/changes/`** — Volledig bewaard. U kunt ze voortzetten met OPSX-opdrachten.
+- **Gearchiveerde wijzigingen** — Ongewijzigd. Uw geschiedenis blijft intact.
+- **Hoofdspecificaties in `openspec/specs/`** — Ongewijzigd. Dit zijn uw bron van waarheid.
+- **Uw inhoud in CLAUDE.md, AGENTS.md, etc.** — Bewaard. Alleen de OpenSpec-markerblokken worden verwijderd; alles wat u heeft geschreven blijft behouden.
 
 ### Wat wordt verwijderd
 
-Alleen OpenSpec-beheerde bestanden die worden vervangen:
+Alleen door OpenSpec beheerde bestanden die worden vervangen:
 
 | Wat | Waarom |
-|------|--------|
-| Verouderde slash-commando-mappen/bestanden | Vervangen door het nieuwe vaardighedensysteem |
-| `openspec/AGENTS.md` | Verouderde workflowtrigger |
-| OpenSpec-markeringen in `CLAUDE.md`, `AGENTS.md`, enz. | Niet meer nodig |
+|-----|--------|
+| Verouderde slash-opdrachtmappen/-bestanden | Vervangen door het nieuwe vaardighedensysteem |
+| `openspec/AGENTS.md` | Verouderde workflow-trigger |
+| OpenSpec-markeringen in `CLAUDE.md`, `AGENTS.md`, etc. | Niet langer nodig |
 
-**Verouderde commandolocaties per tool** (voorbeelden—uw tool kan variëren):
+**Verouderde opdrachtlocaties per tool** (voorbeelden—uw tool kan afwijken):
 
 - Claude Code: `.claude/commands/openspec/`
 - Cursor: `.cursor/commands/openspec-*.md`
@@ -47,7 +47,7 @@ Alleen OpenSpec-beheerde bestanden die worden vervangen:
 - Cline: `.clinerules/workflows/openspec-*.md`
 - Roo: `.roo/commands/openspec-*.md`
 - GitHub Copilot: `.github/prompts/openspec-*.prompt.md` (alleen IDE-extensies; niet ondersteund in Copilot CLI)
-- En andere (Augment, Continue, Amazon Q, enz.)
+- En andere (Augment, Continue, Amazon Q, etc.)
 
 De migratie detecteert welke tools u heeft geconfigureerd en ruimt hun verouderde bestanden op.
 
@@ -55,47 +55,47 @@ De verwijderingslijst kan lang lijken, maar dit zijn allemaal bestanden die Open
 
 ### Wat uw aandacht vereist
 
-Een bestand vereist handmatige migratie:
+Eén bestand vereist handmatige migratie:
 
-**`openspec/project.md`** — Dit bestand wordt niet automatisch verwijderd, omdat het projectcontext kan bevatten die u heeft geschreven. U moet:
+**`openspec/project.md`** — Dit bestand wordt niet automatisch verwijderd omdat het projectcontext kan bevatten die u heeft geschreven. U moet:
 
-1. De inhoud ervan bekijken
-2. Nuttige context verplaatsen naar `openspec/config.yaml` (zie onderstaande richtlijnen)
+1. De inhoud beoordelen
+2. Bruikbare context verplaatsen naar `openspec/config.yaml` (zie onderstaande richtlijn)
 3. Het bestand verwijderen wanneer u klaar bent
 
-**Waarom we deze wijziging hebben gemaakt:**
+**Waarom we deze wijziging hebben doorgevoerd:**
 
-Het oude `project.md` was passief—agents konden het lezen, misschien niet, misschien vergeten wat ze lazen. We vonden dat de betrouwbaarheid inconsistent was.
+Het oude `project.md` was passief—agents lazen het misschien, misschien niet, en vergaten misschien wat ze lazen. We constateerden dat de betrouwbaarheid inconsistent was.
 
-De nieuwe `config.yaml`-context wordt **actief geïnjecteerd in elk OpenSpec-planningsverzoek**. Dit betekent dat uw projectconventies, technische stack en regels altijd aanwezig zijn wanneer de AI artefacten aanmaakt. Hogere betrouwbaarheid.
+De nieuwe `config.yaml`-context wordt **actief in elke OpenSpec-planningsaanvraag geïnjecteerd**. Dit betekent dat uw projectconventies, techstack en regels altijd aanwezig zijn wanneer de AI artefacten aanmaakt. Hogere betrouwbaarheid.
 
 **De afweging:**
 
-Omdat context in elk verzoek wordt geïnjecteerd, wilt u beknopt zijn. Focus op wat echt belangrijk is:
-- Technische stack en belangrijke conventies
-- Niet-overduidelijke beperkingen die de AI moet weten
-- Regels die voorheen vaak werden genegeerd
+Omdat context in elke aanvraag wordt geïnjecteerd, wilt u beknopt zijn. Focus op wat echt belangrijk is:
+- Techstack en belangrijke conventies
+- Niet-voor-de-hand-liggende beperkingen die de AI moet weten
+- Regels die eerder vaak werden genegeerd
 
-Maak u geen zorgen over perfectie. We leren nog steeds wat hier het beste werkt, en we zullen verbeteren hoe contextinjectie werkt terwijl we experimenteren.
+Maak u geen zorgen over perfectie. We leren nog steeds wat hier het beste werkt, en we zullen de contextinjectie blijven verbeteren naarmate we experimenteren.
 
 ---
 
-## Het migratieproces uitvoeren
+## De migratie uitvoeren
 
-Zowel `openspec init` als `openspec update` detecteren verouderde bestanden en begeleiden u door hetzelfde opschoningsproces. Gebruik degene die bij uw situatie past:
+Zowel `openspec init` als `openspec update` detecteren verouderde bestanden en begeleiden u door hetzelfde opruimingsproces. Gebruik degene die bij uw situatie past:
 
-- Nieuwe installaties gebruiken standaard profiel `core` (`propose`, `explore`, `apply`, `archive`).
-- Gemigreerde installaties behouden uw eerder geïnstalleerde workflows door indien nodig een `custom` profiel te schrijven.
+- Nieuwe installaties standaard naar profiel `core` (`propose`, `explore`, `apply`, `sync`, `archive`).
+- Gemigreerde installaties behouden uw eerder geïnstalleerde workflows door indien nodig een `custom`-profiel te schrijven.
 
-### Gebruik van `openspec init`
+### `openspec init` gebruiken
 
-Voer dit uit als u nieuwe tools wilt toevoegen of de configuratie van ingestelde tools wilt wijzigen:
+Voer dit uit als u nieuwe tools wilt toevoegen of wilt herconfigureren welke tools zijn ingesteld:
 
 ```bash
 openspec init
 ```
 
-Het init-commando detecteert verouderde bestanden en begeleidt u door de opschoning:
+Het init-commando detecteert verouderde bestanden en begeleidt u bij het opruimen:
 
 ```
 Upgrading to the new OpenSpec
@@ -130,39 +130,39 @@ Needs your attention
 
 **Wat er gebeurt als u ja zegt:**
 
-1. Verouderde slash-commandomappen worden verwijderd
-2. OpenSpec-markeringen worden verwijderd uit `CLAUDE.md`, `AGENTS.md`, enz. (uw inhoud blijft)
+1. Verouderde slash-opdrachtmappen worden verwijderd
+2. OpenSpec-markeringen worden verwijderd uit `CLAUDE.md`, `AGENTS.md`, etc. (uw inhoud blijft behouden)
 3. `openspec/AGENTS.md` wordt verwijderd
 4. Nieuwe vaardigheden worden geïnstalleerd in `.claude/skills/`
 5. `openspec/config.yaml` wordt aangemaakt met een standaardschema
 
-### Gebruik van `openspec update`
+### `openspec update` gebruiken
 
-Voer dit uit als u alleen wilt migreren en uw bestaande tools wilt bijwerken naar de nieuwste versie:
+Voer dit uit als u alleen wilt migreren en uw bestaande tools wilt vernieuwen naar de nieuwste versie:
 
 ```bash
 openspec update
 ```
 
-Het update-commando detecteert en ruimt ook verouderde artefacten op en vernieuwt vervolgens de gegenereerde vaardigheden/commando's om overeen te komen met uw huidige profiel en afleveringsinstellingen.
+Het update-commando detecteert en ruimt ook verouderde artefacten op, en vernieuwt vervolgens gegenereerde vaardigheden/opdrachten om overeen te komen met uw huidige profiel- en leveringsinstellingen.
 
 ### Niet-interactieve / CI-omgevingen
 
-Voor scriptgebaseerde migraties:
+Voor gescripte migraties:
 
 ```bash
 openspec init --force --tools claude
 ```
 
-De `--force`-vlag slaat prompts over en accepteert opschoning automatisch.
+De `--force`-vlag slaat prompts over en accepteert opruiming automatisch.
 
 ---
 
 ## project.md migreren naar config.yaml
 
-Het oude `openspec/project.md` was een vrij markdown-bestand voor projectcontext. Het nieuwe `openspec/config.yaml` is gestructureerd en—belangrijk—**geïnjecteerd in elk planningsverzoek**, zodat uw conventies altijd aanwezig zijn wanneer de AI werkt.
+Het oude `openspec/project.md` was een vrij opgemaakt markdown-bestand voor projectcontext. Het nieuwe `openspec/config.yaml` is gestructureerd en—cruciaal—**wordt in elke planningsaanvraag geïnjecteerd** zodat uw conventies altijd aanwezig zijn wanneer de AI werkt.
 
-### Voor (project.md)
+### Voorheen (project.md)
 
 ```markdown
 # Project Context
@@ -178,7 +178,7 @@ Our API is RESTful and documented in docs/api.md.
 - Use Given/When/Then format for specifications
 ```
 
-### Na (config.yaml)
+### Nadien (config.yaml)
 
 ```yaml
 schema: spec-driven
@@ -203,67 +203,67 @@ rules:
 
 | project.md | config.yaml |
 |------------|-------------|
-| Vrije markdown | Gestрукtureerde YAML |
-| één blok tekst | Gescheiden context en per-artefactregels |
-| Onbekend wanneer het wordt gebruikt | Context verschijnt in ALLE artefacten; regels verschijnen alleen in bijpassende artefacten |
-| Geenselectie van schema | Expliciet `schema:`-veld stelt standaardworkflow in |
+| Vrij opgemaakte markdown | Gestruktureerde YAML |
+| Eén blok tekst | Gescheiden context en per-artefactregels |
+| Onduidelijk wanneer het wordt gebruikt | Context verschijnt in ALLE artefacten; regels verschijnen alleen in overeenkomende artefacten |
+| Geen schemaselectie | Expliciet `schema:`-veld stelt standaardworkflow in |
 
-### Wat te behouden, wat te laten vallen
+### Wat behouden, wat weglaten
 
-Wees selectief bij het migreren. Vraag uzelf af: "Heeft de AI dit nodig voor *elk* planningsverzoek?"
+Wees selectief bij het migreren. Vraag uzelf af: "Heeft de AI dit nodig voor *elke* planningsaanvraag?"
 
 **Goede kandidaten voor `context:`**
-- Technische stack (talen, frameworks, databases)
-- Belangrijke architectuurpatronen (monorepo, microservices, enz.)
-- Niet-overduidelijke beperkingen ("we kunnen library X niet gebruiken omdat...")
+- Techstack (talen, frameworks, databases)
+- Belangrijke architectuurpatronen (monorepo, microservices, etc.)
+- Niet-voor-de-hand-liggende beperkingen ("we kunnen bibliotheek X niet gebruiken omdat...")
 - Kritieke conventies die vaak worden genegeerd
 
-**Verplaats naar `rules:` in plaats daarvan**
-- Artefact-specifieke opmaak ("gebruik Given/When/Then in specificaties")
-- Beoordelingscriteria ("voorstellen moeten een terugdraaiplan bevatten")
-- Deze verschijnen alleen voor het bijpassende artefact, waardoor andere verzoeken lichter blijven
+**Verplaats in plaats daarvan naar `rules:`**
+- Artefactspecifieke opmaak ("gebruik Given/When/Then in specificaties")
+- Beoordelingscriteria ("voorstellen moeten terugdraaiplannen bevatten")
+- Deze verschijnen alleen voor het overeenkomende artefact, waardoor andere aanvragen lichter blijven
 
 **Laat volledig weg**
 - Algemene best practices die de AI al kent
-- Uitgebreide uitleg die kan worden samengevat
-- Historische context die geen invloed heeft op huidig werk
+- Uitgebreide uitleg die samengevat kan worden
+- Historische context die geen invloed heeft op het huidige werk
 
 ### Migratiestappen
 
-1. **Maak config.yaml aan** (indien niet al aangemaakt door init):
+1. **Maak config.yaml aan** (indien nog niet aangemaakt door init):
    ```yaml
    schema: spec-driven
    ```
 
-2. **Voeg uw context toe** (wees beknopt—dit gaat in elk verzoek):
+2. **Voeg uw context toe** (wees beknopt—dit gaat in elke aanvraag):
    ```yaml
    context: |
-     Uw projectachtergrond hier.
-     Focus op wat de AI echt moet weten.
+     Uw projectachtergrond komt hier.
+     Focus op wat de AI daadwerkelijk moet weten.
    ```
 
 3. **Voeg per-artefactregels toe** (optioneel):
    ```yaml
    rules:
      proposal:
-       - Uw voorstel-specifieke richtlijnen
+       - Uw voorstelspecifieke richtlijnen
      specs:
-       - Uw specificatieregels
+       - Uw regels voor het schrijven van specificaties
    ```
 
-4. **Verwijder project.md** zodra u alles nuttigs heeft verplaatst.
+4. **Verwijder project.md** zodra u alles bruikbare heeft verplaatst.
 
-**Denk er niet te lang over na.** Begin met de essentiële zaken en iteratie. Als u merkt dat de AI iets belangrijks mist, voeg het toe. Als de context opgezwollen aanvoelt, trim het. Dit is een levend document.
+**Denk er niet te veel over na.** Begin met de essentie en itereer. Als u merkt dat de AI iets belangrijks mist, voeg het toe. Als de context te uitgebreid aanvoelt, snoei het bij. Dit is een levend document.
 
-### Hulp nodig? Gebruik dit prompt
+### Hulp nodig? Gebruik deze prompt
 
-Als u niet zeker weet hoe u uw project.md kunt distilleren, vraag uw AI-assistent:
+Als u niet zeker weet hoe u uw project.md moet destilleren, vraag het uw AI-assistent:
 
 ```
 I'm migrating from OpenSpec's old project.md to the new config.yaml format.
 
 Here's my current project.md:
-[paste your project.md content]
+[plak hier uw project.md-inhoud]
 
 Please help me create a config.yaml with:
 1. A concise `context:` section (this gets injected into every planning request, so keep it tight—focus on tech stack, key constraints, and conventions that often get ignored)
@@ -272,38 +272,38 @@ Please help me create a config.yaml with:
 Leave out anything generic that AI models already know. Be ruthless about brevity.
 ```
 
-De AI zal u helpen identificeren wat essentieel is versus wat kan worden ingekort.
+De AI helpt u bij het identificeren van wat essentieel is versus wat kan worden gesnoeid.
 
 ---
 
-## De nieuwe commando's
+## De nieuwe opdrachten
 
-Commandobeschikbaarheid is profielafhankelijk:
+Opdrachtbeschikbaarheid is profielafhankelijk:
 
-**Standaard (`core` profiel):**
+**Standaard (`core`-profiel):**
 
-| Commando | Doel |
-|---------|------|
+| Opdracht | Doel |
+|----------|------|
 | `/opsx:propose` | Maak een wijziging aan en genereer planningsartefacten in één stap |
-| `/opsx:explore` | Denk na over ideeën zonder structuur |
+| `/opsx:explore` | Denk ideeën door zonder structuur |
 | `/opsx:apply` | Implementeer taken uit tasks.md |
-| `/opsx:archive` | Finaliseer en archiveer de wijziging |
+| `/opsx:archive` | Rond af en archiveer de wijziging |
 
 **Uitgebreide workflow (aangepaste selectie):**
 
-| Commando | Doel |
-|---------|------|
-| `/opsx:new` | Start een nieuwe wijzigingsscaffold |
-| `/opsx:continue` | Maak het volgende artefact aan (één per keer) |
-| `/opsx:ff` | Snel vooruit—maak planningsartefacten tegelijk aan |
+| Opdracht | Doel |
+|----------|------|
+| `/opsx:new` | Start een nieuw wijzigingsskelet |
+| `/opsx:continue` | Maak het volgende artefact aan (één tegelijk) |
+| `/opsx:ff` | Fast-forward—maak planningsartefacten in één keer aan |
 | `/opsx:verify` | Valideer of implementatie overeenkomt met specificaties |
-| `/opsx:sync` | Voorbeeld/spec-merge zonder archivering |
+| `/opsx:sync` | Voeg deltaspecificaties samen in hoofdspecificaties |
 | `/opsx:bulk-archive` | Archiveer meerdere wijzigingen tegelijk |
 | `/opsx:onboard` | Begeleide end-to-end onboardingworkflow |
 
-Schakel uitgebreide commando's in met `openspec config profile` en voer dan `openspec update` uit.
+Schakel uitgebreide opdrachten in met `openspec config profile`, en voer vervolgens `openspec update` uit.
 
-### Commandomapping vanuit verouderde versie
+### Opdrachtmapping vanuit verouderde versie
 
 | Verouderd | OPSX-equivalent |
 |-----------|-----------------|
@@ -313,27 +313,27 @@ Schakel uitgebreide commando's in met `openspec config profile` en voer dan `ope
 
 ### Nieuwe mogelijkheden
 
-Deze mogelijkheden maken deel uit van de uitgebreide workflowcommandoset.
+Deze mogelijkheden maken deel uit van de uitgebreide workflowopdrachtenset.
 
-**Gefragmenteerde artefactaanmaak:**
+**Gedetailleerde artefactcreatie:**
 ```
 /opsx:continue
 ```
-Maak één artefact per keer aan op basis van afhankelijkheden. Gebruik dit wanneer u elke stap wilt beoordelen.
+Maakt één artefact per keer aan op basis van afhankelijkheden. Gebruik dit wanneer u elke stap wilt beoordelen.
 
 **Verkenningsmodus:**
 ```
 /opsx:explore
-```
-Denk na over ideeën met een partner voordat u zich vastlegt op een wijziging.
+``
+Denk ideeën door met een partner voordat u zich vastlegt op een wijziging.
 
 ---
 
-## Het Nieuwe Architectuur Begrijpen
+## De Nieuwe Architectuur Begrijpen
 
-### Van Fase-Gebonden naar Vloeibaar
+### Van Fase-gebonden Naar Vloeiend
 
-Het verouderde workflow dwong een lineaire voortgang af:
+De verouderde workflow dwong een lineaire voortgang af:
 
 ```
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
@@ -341,8 +341,8 @@ Het verouderde workflow dwong een lineaire voortgang af:
 │    PHASE     │      │    PHASE     │      │    PHASE     │
 └──────────────┘      └──────────────┘      └──────────────┘
 
-Als je in de implementatiefase zit en ontdekt dat het ontwerp verkeerd is?
-Helaas. Fase-poorten laten je niet gemakkelijk teruggaan.
+Als je in de implementatiefase zit en ontdekt dat het ontwerp fout is?
+Helaas. Fasepoorten laten je niet gemakkelijk teruggaan.
 ```
 
 OPSX gebruikt acties, geen fases:
@@ -354,7 +354,7 @@ OPSX gebruikt acties, geen fases:
          │     new ◄──► continue ◄──► apply ◄──► archive │
          │      │          │           │             │   │
          │      └──────────┴───────────┴─────────────┘   │
-         │                    willekeurige volgorde      │
+         │                  willekeurige volgorde         │
          └───────────────────────────────────────────────┘
 ```
 
@@ -364,7 +364,7 @@ Artefacten vormen een gerichte graaf. Afhankelijkheden zijn mogelijkmakers, geen
 
 ```
                         proposal
-                       (hoofdknooppunt)
+                       (knooppunt)
                             │
               ┌─────────────┴─────────────┐
               │                           │
@@ -381,11 +381,11 @@ Artefacten vormen een gerichte graaf. Afhankelijkheden zijn mogelijkmakers, geen
                      specs, design)
 ```
 
-Wanneer je `/opsx:continue` uitvoert, controleert het wat gereed is en biedt het het volgende artefact aan. Je kunt ook meerdere gereede artefacten in willekeurige volgorde aanmaken.
+Wanneer je `/opsx:continue` uitvoert, controleert het systeem wat gereed is en biedt het het volgende artefact aan. Je kunt ook meerdere gereedstaande artefacten in willekeurige volgorde aanmaken.
 
-### Vaardigheden vs. Commando's
+### Vaardigheden vs Commando's
 
-Het verouderde systeem gebruikte specifieke commandobestanden per tool:
+Het verouderde systeem gebruikte tool-specifieke commandobestanden:
 
 ```
 .claude/commands/openspec/
@@ -394,7 +394,7 @@ Het verouderde systeem gebruikte specifieke commandobestanden per tool:
 └── archive.md
 ```
 
-OPSX gebruikt de opkomende **skills**-standaard:
+OPSX gebruikt de opkomende **vaardigheden**-standaard:
 
 ```
 .claude/skills/
@@ -405,15 +405,15 @@ OPSX gebruikt de opkomende **skills**-standaard:
 └── ...
 ```
 
-Vaardigheden worden herkend door meerdere AI-codingtools en bieden rijkere metadata.
+Vaardigheden worden herkend door meerdere AI-codeertools en bieden rijkere metadata.
 
 ---
 
-## Doorgaan met Bestaande Wijzigingen
+## Bestaande Wijzigingen Voortzetten
 
 Je lopende wijzigingen werken naadloos samen met OPSX-commando's.
 
-**Heb je een actieve wijziging uit het verouderde workflow?**
+**Heb je een actieve wijziging uit de verouderde workflow?**
 
 ```
 /opsx:apply add-my-feature
@@ -427,7 +427,7 @@ OPSX leest de bestaande artefacten en gaat verder waar je was gebleven.
 /opsx:continue add-my-feature
 ```
 
-Toont wat er gereed is om aan te maken op basis van wat er al is.
+Toont wat gereed is om aan te maken op basis van wat al bestaat.
 
 **Moet je de status zien?**
 
@@ -455,57 +455,57 @@ context: |
 # Alleen geïnjecteerd in overeenkomende artefacten
 rules:
   proposal:
-    - Inclusief terugdraaiplan
+    - Neem een terugvalplan op
   specs:
-    - Gebruik Given/When/Then-formaat
+    - Gebruik Gegeven/Wanneer/Dan-formaat
   design:
     - Documenteer terugvalstrategieën
   tasks:
-    - Splits in maximaal 2-uur chunks
+    - Opsplitsen in brokken van maximaal 2 uur
 ```
 
-### Schema-oplossing
+### Schemaresolutie
 
-Bij het bepalen welk schema te gebruiken, controleert OPSX in deze volgorde:
+Bij het bepalen welk schema te gebruiken, controleert OPSX in volgorde:
 
 1. **CLI-vlag**: `--schema <naam>` (hoogste prioriteit)
 2. **Wijzigingsmetadata**: `.openspec.yaml` in de wijzigingsmap
 3. **Projectconfiguratie**: `openspec/config.yaml`
 4. **Standaard**: `spec-driven`
 
-### Beschikbare Schema's
+### Beschikbare Schemas
 
-| Schema | Artefacten | Het Beste Voor |
-|--------|------------|----------------|
+| Schema | Artefacten | Geschikt voor |
+|--------|------------|---------------|
 | `spec-driven` | proposal → specs → design → tasks | De meeste projecten |
 
-Lijst alle beschikbare schema's op:
+Alle beschikbare schemas weergeven:
 
 ```bash
 openspec schemas
 ```
 
-### Aangepaste Schema's
+### Aangepaste Schemas
 
-Maak je eigen workflow:
+Maak je eigen workflow aan:
 
 ```bash
 openspec schema init my-workflow
 ```
 
-Of fork een bestaande:
+Of kopieer een bestaand schema:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-Zie [Aanpassing](customization.md) voor details.
+Zie [Aanpassingen](customization.md) voor details.
 
 ---
 
 ## Probleemoplossing
 
-### "Legacy-bestanden gedetecteerd in niet-interactieve modus"
+### "Verouderde bestanden gedetecteerd in niet-interactieve modus"
 
 Je draait in een CI- of niet-interactieve omgeving. Gebruik:
 
@@ -515,7 +515,7 @@ openspec init --force
 
 ### Commando's verschijnen niet na migratie
 
-Herstart je IDE. Vaardigheden worden bij het opstarten gedetecteerd.
+Start je IDE opnieuw op. Vaardigheden worden bij het opstarten gedetecteerd.
 
 ### "Onbekende artefact-ID in regels"
 
@@ -531,21 +531,21 @@ openspec schemas --json
 
 ### Configuratie wordt niet toegepast
 
-1. Zorg ervoor dat het bestand op `openspec/config.yaml` staat (niet `.yml`)
-2. Valideer de YAML-syntax
-3. Configuratieaanpassingen worden onmiddellijk van kracht—geen herstart nodig
+1. Zorg dat het bestand op `openspec/config.yaml` staat (niet `.yml`)
+2. Valideer de YAML-syntaxis
+3. Configuratieveranderingen worden onmiddellijk van kracht—geen herstart nodig
 
 ### project.md niet gemigreerd
 
-Het systeem bewaart `project.md` opzettelijk omdat het je aangepaste inhoud kan bevatten. Bekijk het handmatig, verplaats bruikbare delen naar `config.yaml` en verwijder het dan.
+Het systeem bewaart opzettelijk `project.md` omdat het je aangepaste inhoud kan bevatten. Bekijk het handmatig, verplaats bruikbare delen naar `config.yaml` en verwijder het dan.
 
-### Wil je zien wat er zou worden opgeruimd?
+### Wil je zien wat zou worden opgeruimd?
 
-Voer init uit en weiger de opschoningsprompt—je ziet het volledige detectie-overzicht zonder dat er wijzigingen worden aangebracht.
+Voer init uit en weiger het opruimverzoek—je ziet de volledige detectiesamenvatting zonder dat er wijzigingen worden aangebracht.
 
 ---
 
-## Snelle Referentie
+## Snelle Verwijzing
 
 ### Bestanden Na Migratie
 
@@ -561,19 +561,20 @@ project/
 │       ├── openspec-propose/     # standaard kernprofiel
 │       ├── openspec-explore/
 │       ├── openspec-apply-change/
+│       ├── openspec-sync-specs/
 │       └── ...                   # uitgebreid profiel voegt new/continue/ff/etc. toe
-├── CLAUDE.md                     # OpenSpec-markeringen verwijderd, je inhoud bewaard
-└── AGENTS.md                     # OpenSpec-markeringen verwijderd, je inhoud bewaard
+├── CLAUDE.md                     # OpenSpec-markeringen verwijderd, jouw inhoud bewaard
+└── AGENTS.md                     # OpenSpec-markeringen verwijderd, jouw inhoud bewaard
 ```
 
 ### Wat is Verdwenen
 
 - `.claude/commands/openspec/` — vervangen door `.claude/skills/`
 - `openspec/AGENTS.md` — verouderd
-- `openspec/project.md` — migreer naar `config.yaml` en verwijder het dan
-- OpenSpec-markeringblokken in `CLAUDE.md`, `AGENTS.md`, etc.
+- `openspec/project.md` — migreer naar `config.yaml`, verwijder daarna
+- OpenSpec-markeringsblokken in `CLAUDE.md`, `AGENTS.md`, etc.
 
-### Commando-Spiekbriefje
+### Commando-Overzicht
 
 ```text
 /opsx:propose      Snel starten (standaard kernprofiel)
@@ -582,8 +583,8 @@ project/
 
 # Uitgebreide workflow (indien ingeschakeld):
 /opsx:new          Een wijziging opzetten
-/opsx:continue     Volgend artefact aanmaken
-/opsx:ff           Planning-artefacten aanmaken
+/opsx:continue     Volgende artefact aanmaken
+/opsx:ff           Planningartefacten aanmaken
 ```
 
 ---

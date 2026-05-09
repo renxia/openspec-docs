@@ -1,6 +1,6 @@
 # Kurulum
 
-## Ön Gereksinimler
+## Ön Koşullar
 
 - **Node.js 20.19.0 veya üzeri** — Sürümünüzü kontrol edin: `node --version`
 
@@ -26,25 +26,28 @@ yarn global add @fission-ai/openspec@latest
 
 ### bun
 
+Bun, OpenSpec'i global olarak yükleyebilir, ancak OpenSpec şu anda Node.js üzerinde çalışmaktadır.
+`PATH`'de hâlâ Node.js 20.19.0 veya üzeri sürümün bulunması gerekmektedir.
+
 ```bash
 bun add -g @fission-ai/openspec@latest
 ```
 
 ## Nix
 
-Kurulum yapmadan OpenSpec'i doğrudan çalıştırın:
+OpenSpec'i yüklemeden doğrudan çalıştırın:
 
 ```bash
 nix run github:Fission-AI/OpenSpec -- init
 ```
 
-Veya profilinize kurun:
+Veya profilinize yükleyin:
 
 ```bash
 nix profile install github:Fission-AI/OpenSpec
 ```
 
-Veya `flake.nix` dosyasında geliştirme ortamınıza ekleyin:
+Veya `flake.nix` dosyanızdaki geliştirme ortamınıza ekleyin:
 
 ```nix
 {
@@ -61,7 +64,7 @@ Veya `flake.nix` dosyasında geliştirme ortamınıza ekleyin:
 }
 ```
 
-## Kurulumu Doğrulama
+## Kurulumu Doğrulayın
 
 ```bash
 openspec --version
@@ -76,4 +79,4 @@ cd your-project
 openspec init
 ```
 
-Tam bir kullanım kılavuzu için [Başlangıç](getting-started.md) sayfasına bakın.
+Tam bir kılavuz için [Başlarken](getting-started.md) bölümüne bakın.

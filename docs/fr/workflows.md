@@ -1,63 +1,65 @@
 # Flux de travail
 
-Ce guide présente les principaux modèles de flux de travail pour OpenSpec et indique quand utiliser chacun d'eux. Pour la configuration de base, consultez la section [Démarrage](getting-started.md). Pour la référence des commandes, voir [Commandes](commands.md).
+Ce guide couvre les modèles de flux de travail courants pour OpenSpec et indique quand les utiliser. Pour la configuration de base, consultez [Pour commencer](getting-started.md). Pour la référence des commandes, consultez [Commandes](commands.md).
 
-## Philosophie : Des actions, pas des phases
+## Philosophie : Actions, pas phases
 
-Les flux de travail traditionnels vous imposent des étapes : planification, puis implémentation, puis terminé. Mais le travail réel ne se laisse pas facilement enfermer dans des cases.
+Les flux de travail traditionnels vous imposent des phases : planification, puis implémentation, puis terminé. Mais le travail réel ne s'insère pas dans des cases aussi nettes.
 
 OPSX adopte une approche différente :
 
 ```text
-Traditionnel (phases verrouillées) :
+Traditionnel (verrouillé par phase) :
 
   PLANIFICATION ────────► IMPLÉMENTATION ────────► TERMINÉ
-      │                          │
-      │   "Pas de retour en arrière" │
-      └──────────────────────────┘
+      │                    │
+      │   "Impossible de   │
+      │    revenir en arrière"
+      └────────────────────┘
 
 OPSX (actions fluides) :
 
-  proposition ──► spécifications ──► conception ──► tâches ──► implémentation
+  proposition ──► spécifications ──► conception ──► tâches ──► implémenter
 ```
 
 **Principes clés :**
 
-- **Des actions, pas des phases** - Les commandes sont des choses que vous pouvez faire, pas des étapes dans lesquelles vous êtes bloqué
+- **Actions, pas phases** - Les commandes sont des choses que vous pouvez faire, pas des étapes dans lesquelles vous êtes coincé
 - **Les dépendances sont des facilitateurs** - Elles montrent ce qui est possible, pas ce qui est requis ensuite
 
-> **Personnalisation :** Les flux de travail OPSX sont pilotés par des schémas qui définissent les séquences d'artefacts. Consultez la section [Personnalisation](customization.md) pour plus de détails sur la création de schémas personnalisés.
+> **Personnalisation :** Les flux de travail OPSX sont pilotés par des schémas qui définissent des séquences d'artefacts. Consultez [Personnalisation](customization.md) pour plus de détails sur la création de schémas personnalisés.
 
-## Deux modes
+## Deux Modes
 
-### Chemin rapide par défaut (profil `core`)
+### Chemin Rapide par Défaut (profil `core`)
 
 Les nouvelles installations utilisent par défaut `core`, qui fournit :
 - `/opsx:propose`
 - `/opsx:explore`
 - `/opsx:apply`
+- `/opsx:sync`
 - `/opsx:archive`
 
 Flux typique :
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-### Flux de travail étendu/complet (sélection personnalisée)
+### Workflow Étendu/Complet (sélection personnalisée)
 
-Si vous souhaitez des commandes explicites de scaffolding et de construction (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`), activez-les avec :
+Si vous souhaitez des commandes explicites de scaffolding et de construction (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`), activez-les avec :
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## Modèles de flux de travail (mode étendu)
+## Modèles de Workflow (Mode Étendu)
 
-### Fonctionnalité rapide
+### Fonctionnalité Rapide
 
-Lorsque vous savez ce que vous voulez construire et que vous avez juste besoin d'exécuter :
+Lorsque vous savez ce que vous voulez construire et avez juste besoin d'exécuter :
 
 ```text
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
@@ -83,10 +85,10 @@ IA :  Création de tous les artefacts de planification...
 Vous : /opsx:apply
 
 IA :  Traitement des tâches...
-     ✓ Ajout du bouton de déconnexion à l'en-tête
-     ✓ Implémentation de la déconnexion de session
-     ✓ Ajout de la boîte de dialogue de confirmation
-     Toutes les tâches sont terminées !
+     ✓ Bouton de déconnexion ajouté à l'en-tête
+     ✓ Effacement de session implémenté
+     ✓ Dialogue de confirmation ajouté
+     Toutes les tâches terminées !
 
 Vous : /opsx:archive
 
@@ -94,11 +96,11 @@ IA :  ✓ Spécifications fusionnées
      ✓ Changement archivé
 ```
 
-**Idéal pour :** Fonctionnalités de petite à moyenne taille, corrections de bugs, modifications simples.
+**Idéal pour :** Petites à moyennes fonctionnalités, corrections de bugs, changements simples.
 
 ### Exploratoire
 
-Lorsque les exigences ne sont pas claires ou que vous devez d'abord enquêter :
+Lorsque les exigences ne sont pas claires ou que vous devez d'abord investiguer :
 
 ```text
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
@@ -111,21 +113,21 @@ Vous : /opsx:explore
 
 IA :  Que souhaitez-vous explorer ?
 
-Vous : Je veux améliorer les performances de chargement de la page mais je ne suis pas sûr
-     de savoir où se trouvent les goulots d'étranglement.
+Vous : Je veux améliorer les performances de chargement des pages mais je ne sais pas
+     où sont les goulots d'étranglement.
 
-IA :  Laissez-moi vous aider à enquêter...
-     [Analyse les tailles des bundles, identifie les requêtes lentes, examine
-     les modèles de rendu des composants]
+IA :  Laissez-moi vous aider à investiguer...
+     [Analyse les tailles des bundles, identifie les requêtes lentes, examine les
+     modèles de rendu des composants]
 
      J'ai trouvé trois principaux goulots d'étranglement :
-     1. Images grandes et non optimisées
+     1. Images volumineuses non optimisées
      2. Récupération de données synchrone dans ProductList
-     3. Rendus répétés dus aux changements de contexte
+     3. Re-rendus dus aux changements de contexte
 
-     Lequel souhaitez-vous traiter en premier ?
+     Lequel souhaitez-vous aborder en premier ?
 
-Vous : Attaquons le problème de récupération des données.
+Vous : Attaquons-nous au problème de récupération de données.
 
 Vous : /opsx:new optimize-product-list-fetching
 
@@ -134,9 +136,9 @@ IA :  Changement créé. Prêt à créer : proposition
 Vous : /opsx:continue
 
 IA :  Création de la proposition basée sur notre exploration...
-     [Rédige la proposition en intégrant les résultats de l'enquête]
+     [Rédige la proposition intégrant les insights de l'investigation]
 
-     Prêt à créer : spécifications, conception
+     Prêt à créer : spécifications, design
      Que souhaitez-vous ensuite ?
 
 Vous : /opsx:continue
@@ -144,11 +146,11 @@ Vous : /opsx:continue
 IA :  Création des spécifications...
 ```
 
-**Idéal pour :** Optimisation des performances, débogage, décisions d'architecture, exigences non claires.
+**Idéal pour :** Optimisation des performances, débogage, décisions architecturales, exigences floues.
 
-### Changements parallèles
+### Changements en Parallèle
 
-Travaillez sur plusieurs changements à la fois :
+Travailler sur plusieurs changements simultanément :
 
 ```text
 Changement A : /opsx:new ──► /opsx:ff ──► /opsx:apply (en cours)
@@ -161,7 +163,7 @@ Changement B : /opsx:new ──► /opsx:ff ──────► /opsx:apply
 **Exemple de conversation :**
 
 ```text
-Vous : Je travaille sur add-dark-mode mais j'ai été appelé pour une correction de bug
+Vous : Je travaille sur add-dark-mode mais j'ai été interrompu par une correction de bug
 
 Vous : /opsx:new fix-login-redirect
 
@@ -175,7 +177,7 @@ Vous : /opsx:apply
 
 IA :  Travail sur fix-login-redirect...
      [Implémente la correction]
-     Toutes les tâches sont terminées !
+     Toutes les tâches terminées !
 
 Vous : /opsx:archive
 
@@ -202,9 +204,9 @@ IA :  3 changements terminés trouvés :
      - update-footer (toutes les tâches terminées)
 
      Vérification des conflits de spécifications...
-     ⚠ add-dark-mode et update-footer touchent tous deux specs/ui/
+     ⚠ add-dark-mode et update-footer touchent tous les deux specs/ui/
 
-     Inspection du code source pour résoudre...
+     Inspection de la base de code pour résoudre...
      Les deux changements sont implémentés. Application dans l'ordre chronologique.
 
      Archiver les 3 changements ?
@@ -219,18 +221,18 @@ IA :  ✓ add-dark-mode archivé
 
 L'archivage en masse détecte lorsque plusieurs changements touchent les mêmes spécifications et résout les conflits en vérifiant ce qui est réellement implémenté.
 
-### Finaliser un changement
+### Terminer un Changement
 
-Le flux de finalisation recommandé :
+Le flux de completion recommandé :
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              valide             demande de synchronisation
+              valide              propose de synchroniser
               l'implémentation    si nécessaire
 ```
 
-#### Vérification : Contrôlez votre travail
+#### Vérifier : Votre Travail
 
 `/opsx:verify` valide l'implémentation par rapport à vos artefacts selon trois dimensions :
 
@@ -240,19 +242,19 @@ Vous : /opsx:verify
 IA :  Vérification de add-auth...
 
      COMPLÉTUDE
-     ✓ Les 12 tâches de tasks.md sont cochées
-     ✓ Toutes les exigences de specs ont un code correspondant
-     ⚠ Le scénario "Expiration de session après inactivité" n'est pas testé
+     ✓ Les 12 tâches dans tasks.md sont cochées
+     ✓ Toutes les exigences dans les spécifications ont un code correspondant
+     ⚠ Scénario "Expiration de session après inactivité" non testé
 
-     EXACTITUDE
-     ✓ L'implémentation correspond à l'intention de la spécification
+     CORRECTITUDE
+     ✓ L'implémentation correspond à l'intention des spécifications
      ✓ Les cas limites des scénarios sont gérés
-     ✓ Les états d'erreur correspondent aux définitions de la spécification
+     ✓ Les états d'erreur correspondent aux définitions des spécifications
 
      COHÉRENCE
-     ✓ Les décisions de conception sont reflétées dans la structure du code
+     ✓ Les décisions de design se reflètent dans la structure du code
      ✓ Les conventions de nommage sont cohérentes avec design.md
-     ⚠ La conception mentionne "événementiel" mais l'implémentation utilise le polling
+     ⚠ Le design mentionne "event-driven" mais l'implémentation utilise le polling
 
      RÉSUMÉ
      ─────────────────────────────
@@ -262,35 +264,35 @@ IA :  Vérification de add-auth...
 
      Recommandations :
      1. Ajouter un test pour le scénario d'expiration de session
-     2. Envisager de refactoriser en événementiel comme prévu, ou mettre à jour design.md
+     2. Envisager de refactoriser vers event-driven comme conçu, ou mettre à jour design.md
 ```
 
-**Ce que vérifie la validation :**
+**Ce que la vérification contrôle :**
 
 | Dimension | Ce qu'elle valide |
 |-----------|------------------|
 | Complétude | Toutes les tâches terminées, toutes les exigences implémentées, scénarios couverts |
-| Exactitude | L'implémentation correspond à l'intention de la spécification, cas limites gérés |
-| Cohérence | Décisions de conception reflétées dans le code, modèles cohérents |
+| Correctitude | L'implémentation correspond à l'intention des spécifications, cas limites gérés |
+| Cohérence | Les décisions de design se reflètent dans le code, modèles cohérents |
 
-La validation ne bloquera pas l'archivage, mais elle met en lumière des problèmes que vous pourriez vouloir traiter en premier.
+La vérification ne bloquera pas l'archivage, mais elle met en lumière les problèmes que vous pourriez vouloir résoudre d'abord.
 
-#### Archivage : Finaliser le changement
+#### Archiver : Finaliser le Changement
 
-`/opsx:archive` termine le changement et le déplace dans les archives :
+`/opsx:archive` termine le changement et le déplace vers l'archive :
 
 ```text
 Vous : /opsx:archive
 
 IA :  Archivage de add-auth...
 
-     État des artefacts :
+     Statut des artefacts :
      ✓ proposal.md existe
      ✓ specs/ existe
      ✓ design.md existe
      ✓ tasks.md existe (12/12 tâches terminées)
 
-     Spécifications delta : Pas encore synchronisées avec la branche principale
+     Spécifications delta : Pas encore synchronisées vers main
      → Souhaitez-vous synchroniser maintenant ?
 
 Vous : Oui
@@ -301,39 +303,39 @@ IA :  ✓ Spécifications synchronisées vers openspec/specs/auth/spec.md
      Changement archivé avec succès.
 ```
 
-L'archivage demandera une action si les spécifications ne sont pas synchronisées. Il ne bloquera pas sur des tâches incomplètes, mais il vous avertira.
+L'archivage proposera si les spécifications ne sont pas synchronisées. Il ne bloquera pas sur les tâches incomplètes, mais vous avertira.
 
-## Quand utiliser quoi
+## Quand Utiliser Quoi
 
 ### `/opsx:ff` vs `/opsx:continue`
 
 | Situation | Utiliser |
 |-----------|----------|
 | Exigences claires, prêt à construire | `/opsx:ff` |
-| Exploration, souhaitez revoir chaque étape | `/opsx:continue` |
-| Souhaitez itérer sur la proposition avant les spécifications | `/opsx:continue` |
-| Pression temporelle, besoin d'aller vite | `/opsx:ff` |
-| Changement complexe, souhaitez garder le contrôle | `/opsx:continue` |
+| Exploration, vouloir examiner chaque étape | `/opsx:continue` |
+| Vouloir itérer sur la proposition avant les spécifications | `/opsx:continue` |
+| Pression du temps, besoin d'aller vite | `/opsx:ff` |
+| Changement complexe, vouloir du contrôle | `/opsx:continue` |
 
-**Règle pratique :** Si vous pouvez décrire la portée complète à l'avance, utilisez `/opsx:ff`. Si vous la définissez au fur et à mesure, utilisez `/opsx:continue`.
+**Règle empirique :** Si vous pouvez décrire la portée complète à l'avance, utilisez `/opsx:ff`. Si vous le déterminez au fur et à mesure, utilisez `/opsx:continue`.
 
-### Quand mettre à jour vs recommencer
+### Quand Mettre à Jour vs Recommencer à Zéro
 
-Une question fréquente : quand est-il acceptable de mettre à jour un changement existant, et quand devriez-vous en créer un nouveau ?
+Question courante : quand est-il acceptable de mettre à jour un changement existant, et quand devez-vous en commencer un nouveau ?
 
-**Mettez à jour le changement existant lorsque :**
+**Mettre à jour le changement existant lorsque :**
 
 - Même intention, exécution affinée
-- La portée se réduit (MVP d'abord, le reste ensuite)
-- Corrections basées sur l'apprentissage (le code source n'est pas ce que vous attendiez)
-- Ajustements de conception basés sur les découvertes d'implémentation
+- La portée se réduit (MVP d'abord, le reste plus tard)
+- Corrections basées sur l'apprentissage (la base de code n'est pas ce que vous attendiez)
+- Ajustements de design basés sur les découvertes d'implémentation
 
-**Créez un nouveau changement lorsque :**
+**Commencer un nouveau changement lorsque :**
 
 - L'intention a fondamentalement changé
-- La portée a explosé vers un travail totalement différent
+- La portée a explosé vers un travail entièrement différent
 - Le changement original peut être marqué "terminé" de manière autonome
-- Les correctifs seraient plus confus que clairifiants
+- Les correctifs prêteraient plus à confusion qu'à clarification
 
 ```text
                      ┌─────────────────────────────────────┐
@@ -343,37 +345,37 @@ Une question fréquente : quand est-il acceptable de mettre à jour un changemen
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Même intention ?   >50% de chevauchement ?  Le changement original
-          Même problème ?    Même portée ?            peut-il être "terminé" sans
-                 │                  │                 ces changements ?
-                 │                  │                  │
+          Même intention ?   >50% de chevauchement ?  Le changement
+          Même problème ?    Même portée ?            original peut-il
+                 │                  │                  être "terminé" sans
+                 │                  │                  ces modifications ?
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      OUI               NON OUI           NON NON              OUI
+      OUI               NON OUI          NON NON              OUI
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    METTRE À JOUR    NOUVEAU METTRE À JOUR NOUVEAU METTRE À JOUR NOUVEAU
+    MISE À JOUR       NOUVEAU MISE À JOUR  NOUVEAU MISE À JOUR  NOUVEAU
 ```
 
-**Exemple : « Ajouter le mode sombre »**
+**Exemple : "Ajouter le mode sombre"**
 
-- « Besoin de supporter également les thèmes personnalisés » → Nouveau changement (portée explosée)
-- « La détection des préférences système est plus difficile que prévu » → Mise à jour (même intention)
-- « Livrons d'abord le bouton, ajoutons les préférences plus tard » → Mise à jour puis archivage, puis nouveau changement
+- "Besoin de supporter aussi les thèmes personnalisés" → Nouveau changement (portée explosée)
+- "La détection des préférences système est plus difficile que prévu" → Mise à jour (même intention)
+- "Expédions d'abord le basculement, ajoutons les préférences plus tard" → Mise à jour puis archivage, puis nouveau changement
 
-## Bonnes pratiques
+## Bonnes Pratiques
 
-### Gardez les changements ciblés
+### Garder les Changements Ciblés
 
-Une unité logique de travail par changement. Si vous faites « ajouter la fonctionnalité X et aussi refactoriser Y », envisagez deux changements séparés.
+Une unité logique de travail par changement. Si vous faites "ajouter la fonctionnalité X et aussi refactoriser Y", envisagez deux changements séparés.
 
 **Pourquoi c'est important :**
-- Plus facile à examiner et à comprendre
-- Historique d'archivage plus propre
+- Plus facile à examiner et comprendre
+- Historique d'archive plus propre
 - Peut être livré indépendamment
-- Rollback plus simple si nécessaire
+- Retour en arrière plus simple si nécessaire
 
-### Utilisez `/opsx:explore` pour les exigences non claires
+### Utiliser `/opsx:explore` pour les Exigences Floues
 
 Avant de vous engager dans un changement, explorez l'espace du problème :
 
@@ -384,20 +386,20 @@ IA :  Que souhaitez-vous explorer ?
 
 Vous : Comment devrions-nous gérer la limitation de débit pour notre API ?
 
-IA :  Laissez-moi enquêter sur votre configuration actuelle et les options...
-     [Recherche le code source, considère les modèles]
+IA :  Laissez-moi investiguer votre configuration actuelle et les options...
+     [Recherche la base de code, considère les modèles]
 
-     Je vois trois approches possibles :
-     1. Basée sur le middleware (simple, par point de terminaison)
-     2. Basée sur Redis (évolutive, état partagé)
-     3. Seau de jetons par utilisateur (équitable, complexe)
+     Je vois trois approches que nous pourrions adopter :
+     1. Basée sur le middleware (simple, par endpoint)
+     2. Soutenue par Redis (évolutive, état partagé)
+     3. Seau à jetons par utilisateur (équitable, complexe)
 
      Votre pile actuelle suggère #1 ou #2. Quelle est votre échelle ?
 ```
 
-L'exploration clarifie la réflexion avant que vous ne créiez des artefacts.
+L'exploration clarifie la réflexion avant de créer des artefacts.
 
-### Vérifiez avant d'archiver
+### Vérifier Avant d'Archiver
 
 Utilisez `/opsx:verify` pour vérifier que l'implémentation correspond aux artefacts :
 
@@ -406,16 +408,16 @@ Vous : /opsx:verify
 
 IA :  Vérification de add-dark-mode...
 
-     ✓ Toutes les tâches de tasks.md sont cochées
-     ✓ Les exigences de specs ont un code correspondant
-     ✓ Les décisions de conception sont reflétées dans l'implémentation
+     ✓ Toutes les tâches dans tasks.md sont cochées
+     ✓ Les exigences dans les spécifications ont un code correspondant
+     ✓ Les décisions de design se reflètent dans l'implémentation
 
      Prêt à archiver !
 ```
 
-Détecte les incohérences avant que vous ne fermiez le changement.
+Détecte les incohérences avant de clôturer le changement.
 
-### Nommez les changements clairement
+### Nommer les Changements Clairement
 
 De bons noms rendent `openspec list` utile :
 
@@ -429,23 +431,23 @@ implement-2fa                  wip
 
 ## Référence rapide des commandes
 
-Pour les détails complets des commandes et options, consultez [Commandes](commands.md).
+Pour les détails complets des commandes et leurs options, consultez [Commandes](commands.md).
 
 | Commande | Objectif | Quand l'utiliser |
 |----------|----------|------------------|
-| `/opsx:propose` | Créer un changement + artefacts de planification | Chemin par défaut rapide (profil `core`) |
-| `/opsx:explore` | Réfléchir aux idées | Exigences floues, investigation |
-| `/opsx:new` | Démarrer un squelette de changement | Mode étendu, contrôle explicite des artefacts |
+| `/opsx:propose` | Créer une modification + artefacts de planification | Chemin par défaut rapide (profil `core`) |
+| `/opsx:explore` | Réfléchir à des idées | Exigences floues, investigation |
+| `/opsx:new` | Démarrer une structure de modification | Mode étendu, contrôle explicite des artefacts |
 | `/opsx:continue` | Créer l'artefact suivant | Mode étendu, création d'artefacts étape par étape |
-| `/opsx:ff` | Créer tous les artefacts de planification | Mode étendu, portée claire |
+| `/opsx:ff` | Créer tous les artefacts de planification | Mode étendu, périmètre clair |
 | `/opsx:apply` | Implémenter les tâches | Prêt à écrire du code |
 | `/opsx:verify` | Valider l'implémentation | Mode étendu, avant l'archivage |
 | `/opsx:sync` | Fusionner les spécifications delta | Mode étendu, optionnel |
-| `/opsx:archive` | Finaliser le changement | Tout le travail est terminé |
-| `/opsx:bulk-archive` | Archiver plusieurs changements | Mode étendu, travail en parallèle |
+| `/opsx:archive` | Terminer la modification | Tous les travaux terminés |
+| `/opsx:bulk-archive` | Archiver plusieurs modifications | Mode étendu, travaux parallèles |
 
-## Étapes suivantes
+## Prochaines étapes
 
 - [Commandes](commands.md) - Référence complète des commandes avec options
-- [Concepts](concepts.md) - Plongée approfondie dans les spécifications, artefacts et schémas
-- [Personnalisation](customization.md) - Créer des flux de travail personnalisés
+- [Concepts](concepts.md) - Plongée dans les spécifications, artefacts et schémas
+- [Personnalisation](customization.md) - Créer des workflows personnalisés

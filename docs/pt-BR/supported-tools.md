@@ -1,26 +1,27 @@
 # Ferramentas Suportadas
 
-O OpenSpec funciona com muitos assistentes de codificação por IA. Quando você executa `openspec init`, o OpenSpec configura as ferramentas selecionadas usando seu perfil/workflow ativo e modo de entrega.
+O OpenSpec funciona com muitos assistentes de codificação de IA. Quando você executa `openspec init`, o OpenSpec configura as ferramentas selecionadas usando seu perfil/workflow ativo e modo de entrega.
 
 ## Como Funciona
 
 Para cada ferramenta selecionada, o OpenSpec pode instalar:
 
 1. **Skills** (se a entrega incluir skills): `.../skills/openspec-*/SKILL.md`
-2. **Commands** (se a entrega incluir commands): arquivos de comando específicos da ferramenta `opsx-*`
+2. **Commands** (se a entrega incluir commands): arquivos de comando `opsx-*` específicos da ferramenta
 
 Por padrão, o OpenSpec usa o perfil `core`, que inclui:
 - `propose`
 - `explore`
 - `apply`
+- `sync`
 - `archive`
 
-Você pode habilitar workflows expandidos (`new`, `continue`, `ff`, `verify`, `sync`, `bulk-archive`, `onboard`) via `openspec config profile`, e então executar `openspec update`.
+Você pode ativar workflows expandidos (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) via `openspec config profile`, e então executar `openspec update`.
 
-## Referência do Diretório de Ferramentas
+## Referência de Diretórios de Ferramentas
 
-| Ferramenta (ID) | Padrão do caminho das Skills | Padrão do caminho dos Commands |
-|-----------------|------------------------------|--------------------------------|
+| Ferramenta (ID) | Padrão de caminho das skills | Padrão de caminho dos commands |
+|------------------|------------------------------|--------------------------------|
 | Amazon Q Developer (`amazon-q`) | `.amazonq/skills/openspec-*/SKILL.md` | `.amazonq/prompts/opsx-<id>.md` |
 | Antigravity (`antigravity`) | `.agent/skills/openspec-*/SKILL.md` | `.agent/workflows/opsx-<id>.md` |
 | Auggie (`auggie`) | `.augment/skills/openspec-*/SKILL.md` | `.augment/commands/opsx-<id>.md` |
@@ -40,7 +41,9 @@ Você pode habilitar workflows expandidos (`new`, `continue`, `ff`, `verify`, `s
 | iFlow (`iflow`) | `.iflow/skills/openspec-*/SKILL.md` | `.iflow/commands/opsx-<id>.md` |
 | Junie (`junie`) | `.junie/skills/openspec-*/SKILL.md` | `.junie/commands/opsx-<id>.md` |
 | Kilo Code (`kilocode`) | `.kilocode/skills/openspec-*/SKILL.md` | `.kilocode/workflows/opsx-<id>.md` |
+| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | Não gerado (sem adaptador de comando; use invocações baseadas em skill `/skill:openspec-*`) |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
+| Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
@@ -49,13 +52,13 @@ Você pode habilitar workflows expandidos (`new`, `continue`, `ff`, `verify`, `s
 | Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | Não gerado (sem adaptador de comando; use invocações baseadas em skill `/openspec-*`) |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* Os comandos do Codex são instalados no diretório home global do Codex (`$CODEX_HOME/prompts/` se definido, caso contrário `~/.codex/prompts/`), não no seu diretório de projeto.
+\* Os comandos do Codex são instalados no diretório global do Codex (`$CODEX_HOME/prompts/` se definido, caso contrário `~/.codex/prompts/`), não no diretório do seu projeto.
 
-\*\* Os arquivos de prompt do GitHub Copilot são reconhecidos como comandos de barra personalizados nas extensões de IDE (VS Code, JetBrains, Visual Studio). O Copilot CLI atualmente não consome diretamente os arquivos `.github/prompts/*.prompt.md`.
+\*\* Os arquivos de prompt do GitHub Copilot são reconhecidos como comandos slash personalizados nas extensões de IDE (VS Code, JetBrains, Visual Studio). O CLI do Copilot atualmente não consome diretamente os arquivos `.github/prompts/*.prompt.md`.
 
-## Configuração Não-Interativa
+## Configuração Não Interativa
 
-Para configuração em CI/CD ou scripts, use `--tools` (e opcionalmente `--profile`):
+Para CI/CD ou configuração via script, use `--tools` (e opcionalmente `--profile`):
 
 ```bash
 # Configurar ferramentas específicas
@@ -67,21 +70,21 @@ openspec init --tools all
 # Pular configuração de ferramentas
 openspec init --tools none
 
-# Sobrescrever o perfil para esta execução do init
+# Sobrescrever perfil para esta execução do init
 openspec init --profile core
 ```
 
-**IDs de ferramentas disponíveis (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `forgecode`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kiro`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+**IDs de ferramentas disponíveis (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
 
-## Instalação Dependente do Workflow
+## Instalação Dependente de Workflow
 
 O OpenSpec instala artefatos de workflow com base nos workflows selecionados:
 
-- **Perfil Core (padrão):** `propose`, `explore`, `apply`, `archive`
+- **Perfil core (padrão):** `propose`, `explore`, `apply`, `sync`, `archive`
 - **Seleção personalizada:** qualquer subconjunto de todos os IDs de workflow:
   `propose`, `explore`, `new`, `continue`, `apply`, `ff`, `sync`, `archive`, `bulk-archive`, `verify`, `onboard`
 
-Em outras palavras, a contagem de skills/commands depende do perfil e da entrega, não é fixa.
+Em outras palavras, as contagens de skills/commands são dependentes do perfil e da entrega, não fixas.
 
 ## Nomes de Skills Gerados
 
@@ -99,10 +102,10 @@ Quando selecionados pela configuração de perfil/workflow, o OpenSpec gera esta
 - `openspec-verify-change`
 - `openspec-onboard`
 
-Veja [Comandos](commands.md) para o comportamento dos comandos e [CLI](cli.md) para as opções de `init`/`update`.
+Consulte [Commands](commands.md) para o comportamento dos comandos e [CLI](cli.md) para as opções de `init`/`update`.
 
-## Relacionado
+## Relacionados
 
-- [Referência da CLI](cli.md) — Comandos de terminal
-- [Comandos](commands.md) — Comandos de barra e skills
+- [Referência do CLI](cli.md) — Comandos de terminal
+- [Commands](commands.md) — Comandos slash e skills
 - [Primeiros Passos](getting-started.md) — Configuração inicial

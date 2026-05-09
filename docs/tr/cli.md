@@ -1,27 +1,28 @@
 # CLI Referansı
 
-OpenSpec CLI (`openspec`), proje kurulumu, doğrulama, durum inceleme ve yönetimi için terminal komutları sağlar. Bu komutlar, [Komutlar](commands.md) belgesinde belgelenen AI eğik çizgi komutlarını (örneğin `/opsx:propose`) tamamlar.
+OpenSpec CLI (`openspec`), proje kurulumu, doğrulama, durum incelemesi ve yönetim için terminal komutları sağlar. Bu komutlar, [Komutlar](commands.md) bölümünde belgelenen AI eğik çizgi komutlarını (örneğin `/opsx:propose`) tamamlar.
 
 ## Özet
 
 | Kategori | Komutlar | Amaç |
 |----------|----------|------|
 | **Kurulum** | `init`, `update` | Projenizde OpenSpec'i başlatın ve güncelleyin |
-| **Göz Atma** | `list`, `view`, `show` | Değişiklikleri ve spesifikasyonları keşfedin |
-| **Doğrulama** | `validate` | Değişiklikleri ve spesifikasyonları sorunlar için kontrol edin |
-| **Yaşam Döngüsü** | `archive` | Tamamlanmış değişiklikleri nihai hale getirin |
-| **İş Akışı** | `status`, `instructions`, `templates`, `schemas` | Artefak odaklı iş akışı desteği |
-| **Şemalar** | `schema init`, `schema fork`, `schema validate`, `schema which` | Özel iş akışlarını oluşturun ve yönetin |
+| **Çalışma Alanları (beta)** | `workspace setup`, `workspace list`, `workspace ls`, `workspace link`, `workspace relink`, `workspace doctor`, `workspace open` | Bağlı depolar veya klasörler arasında planlama yapın |
+| **Göz Atma** | `list`, `view`, `show` | Değişiklikleri ve özellikleri keşfedin |
+| **Doğrulama** | `validate` | Değişiklikleri ve özellikleri sorunlara karşı kontrol edin |
+| **Yaşam Döngüsü** | `archive` | Tamamlanan değişiklikleri sonlandırın |
+| **İş Akışı** | `status`, `instructions`, `templates`, `schemas` | Yapıt odaklı iş akışı desteği |
+| **Şemalar** | `schema init`, `schema fork`, `schema validate`, `schema which` | Özel iş akışları oluşturun ve yönetin |
 | **Yapılandırma** | `config` | Ayarları görüntüleyin ve değiştirin |
-| **Yardımcı Programlar** | `feedback`, `completion` | Geri bildirim ve kabuk entegrasyonu |
+| **Yardımcı Araçlar** | `feedback`, `completion` | Geri bildirim ve kabuk entegrasyonu |
 
 ---
 
-## İnsan ve Ajan Komutları
+## İnsan ve Agent Komutları
 
-Çoğu CLI komutu, terminalde **insan kullanımı** için tasarlanmıştır. Bazı komutlar ayrıca JSON çıktısı aracılığıyla **otomatik/script kullanımı** destekler.
+Çoğu CLI komutu terminalde **insan kullanımı** için tasarlanmıştır. Bazı komutlar ayrıca JSON çıktısı aracılığıyla **agent/betik kullanımını** destekler.
 
-### Yalnızca İnsan Kullanımına Yönelik Komutlar
+### Yalnızca İnsan Komutları
 
 Bu komutlar etkileşimlidir ve terminal kullanımı için tasarlanmıştır:
 
@@ -29,27 +30,32 @@ Bu komutlar etkileşimlidir ve terminal kullanımı için tasarlanmıştır:
 |---------|---------|
 | `openspec init` | Projeyi başlat (etkileşimli istemler) |
 | `openspec view` | Etkileşimli kontrol paneli |
-| `openspec config edit` | Yapılandırmayı editörde aç |
-| `openspec feedback` | GitHub aracılığıyla geri bildirim gönder |
-| `openspec completion install` | Shell tamamlamalarını yükle |
+| `openspec config edit` | Yapılandırmayı düzenleyicide aç |
+| `openspec feedback` | GitHub üzerinden geri bildirim gönder |
+| `openspec completion install` | Kabuk tamamlamalarını yükle |
 
-### Ajan Uyumlu Komutlar
+### Agent Uyumlu Komutlar
 
-Bu komutlar, yapay zeka ajanları ve scriptler tarafından programlı kullanım için `--json` çıktısını destekler:
+Bu komutlar, AI agent'lar ve betikler tarafından programatik kullanım için `--json` çıktısını destekler:
 
-| Komut | İnsan Kullanımı | Ajan Kullanımı |
+| Komut | İnsan Kullanımı | Agent Kullanımı |
 |---------|-----------|-----------|
-| `openspec list` | Değişiklikleri/özellikleri gözden geçir | `--json` yapılandırılmış veri için |
-| `openspec show <item>` | İçeriği oku | `--json` ayrıştırma için |
-| `openspec validate` | Sorunları kontrol et | `--all --json` toplu doğrulama için |
-| `openspec status` | Çıkarımların ilerlemesini gör | `--json` yapılandırılmış durum için |
-| `openspec instructions` | Sonraki adımları al | `--json` ajan talimatları için |
-| `openspec templates` | Şablon yollarını bul | `--json` yol çözümleme için |
-| `openspec schemas` | Mevcut şemaları listele | `--json` şema keşfi için |
+| `openspec list` | Değişiklikleri/spec'leri göz at | Yapılandırılmış veri için `--json` |
+| `openspec show <item>` | İçeriği oku | Ayrıştırma için `--json` |
+| `openspec validate` | Sorunları kontrol et | Toplu doğrulama için `--all --json` |
+| `openspec status` | Eser ilerlemesini gör | Yapılandırılmış durum için `--json` |
+| `openspec instructions` | Sonraki adımları al | Agent talimatları için `--json` |
+| `openspec templates` | Şablon yollarını bul | Yol çözümlemesi için `--json` |
+| `openspec schemas` | Mevcut şemaları listele | Şema keşfi için `--json` |
+| `openspec workspace setup --no-interactive` | Açık girdilerle bir çalışma alanı oluştur | Yapılandırılmış kurulum çıktısı için `--json` |
+| `openspec workspace list` | Bilinen çalışma alanlarını göz at | Tipik çalışma alanı nesneleri için `--json` |
+| `openspec workspace link` | Bir depo veya klasörü bağla | Yapılandırılmış bağlantı çıktısı için `--json` |
+| `openspec workspace relink` | Bağlı bir yolu onar | Yapılandırılmış bağlantı çıktısı için `--json` |
+| `openspec workspace doctor` | Bir çalışma alanını kontrol et | Yapılandırılmış durum çıktısı için `--json` |
 
 ---
 
-## Genel Seçenekler
+## Global Seçenekler
 
 Bu seçenekler tüm komutlarla çalışır:
 
@@ -57,7 +63,7 @@ Bu seçenekler tüm komutlarla çalışır:
 |--------|-------------|
 | `--version`, `-V` | Sürüm numarasını göster |
 | `--no-color` | Renkli çıktıyı devre dışı bırak |
-| `--help`, `-h` | Komut için yardımı göster |
+| `--help`, `-h` | Komut için yardımı görüntüle |
 
 ---
 
@@ -65,9 +71,9 @@ Bu seçenekler tüm komutlarla çalışır:
 
 ### `openspec init`
 
-Projenizde OpenSpec'i başlatır. Klasör yapısını oluşturur ve yapay zeka araç entegrasyonlarını yapılandırır.
+Projenizde OpenSpec'i başlatır. Klasör yapısını oluşturur ve AI araç entegrasyonlarını yapılandırır.
 
-Varsayılan davranış, global yapılandırma varsayılanlarını kullanır: profil `core`, teslimat `her ikisi`, iş akışları `propose, explore, apply, archive`.
+Varsayılan davranış, global yapılandırma varsayılanlarını kullanır: profil `core`, teslimat `both`, iş akışları `propose, explore, apply, sync, archive`.
 
 ```
 openspec init [path] [options]
@@ -77,19 +83,19 @@ openspec init [path] [options]
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
-| `path` | Hayır | Hedef dizin (varsayılan: mevcut dizin) |
+| `path` | Hayır | Hedef dizin (varsayılan: geçerli dizin) |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
-| `--tools <list>` | Yapay zeka araçlarını etkileşimli olmadan yapılandır. `all`, `none` veya virgülle ayrılmış liste kullanın |
-| `--force` | Eski dosyaları istemeden otomatik temizle |
+| `--tools <list>` | AI araçlarını etkileşimli olmayan şekilde yapılandır. `all`, `none` veya virgülle ayrılmış liste kullanın |
+| `--force` | Eski dosyaları sormadan otomatik temizle |
 | `--profile <profile>` | Bu başlatma çalışması için global profili geçersiz kıl (`core` veya `custom`) |
 
 `--profile custom`, global yapılandırmada (`openspec config profile`) şu anda seçili olan iş akışlarını kullanır.
 
-**Desteklenen araç kimlikleri (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `claude`, `cline`, `codex`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `kilocode`, `kiro`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+**Desteklenen araç kimlikleri (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
 
 **Örnekler:**
 
@@ -97,32 +103,32 @@ openspec init [path] [options]
 # Etkileşimli başlatma
 openspec init
 
-# Belirli bir dizinde başlat
+# Belirli bir dizinde başlatma
 openspec init ./my-project
 
-# Etkileşimli olmadan: Claude ve Cursor için yapılandır
+# Etkileşimli olmayan: Claude ve Cursor için yapılandırma
 openspec init --tools claude,cursor
 
-# Tüm desteklenen araçlar için yapılandır
+# Tüm desteklenen araçlar için yapılandırma
 openspec init --tools all
 
 # Bu çalışma için profili geçersiz kıl
-openspec init --core
+openspec init --profile core
 
 # İstemleri atla ve eski dosyaları otomatik temizle
 openspec init --force
 ```
 
-**Oluşturulan yapı:**
+**Oluşturdukları:**
 
 ```
 openspec/
-├── specs/              # Özellikleriniz (gerçek kaynağı)
+├── specs/              # Şartnameleriniz (gerçekliğin kaynağı)
 ├── changes/            # Önerilen değişiklikler
 └── config.yaml         # Proje yapılandırması
 
-.claude/skills/         # Claude Code becerileri (claude seçildiyse)
-.cursor/skills/         # Cursor becerileri (cursor seçildiyse)
+.claude/skills/         # Claude Code becerileri (claude seçilmişse)
+.cursor/skills/         # Cursor becerileri (cursor seçilmişse)
 .cursor/commands/       # Cursor OPSX komutları (teslimat komutları içeriyorsa)
 ... (diğer araç yapılandırmaları)
 ```
@@ -131,7 +137,7 @@ openspec/
 
 ### `openspec update`
 
-CLI yükseltildikten sonra OpenSpec talimat dosyalarını günceller. Mevcut global profilinizi, seçili iş akışlarınızı ve teslimat modunuzu kullanarak yapay zeka araç yapılandırma dosyalarını yeniden oluşturur.
+CLI yükseltmesinden sonra OpenSpec talimat dosyalarını günceller. Mevcut global profilinizi, seçili iş akışlarınızı ve teslimat modunuzu kullanarak AI araç yapılandırma dosyalarını yeniden oluşturur.
 
 ```
 openspec update [path] [options]
@@ -141,7 +147,7 @@ openspec update [path] [options]
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
-| `path` | Hayır | Hedef dizin (varsayılan: mevcut dizin) |
+| `path` | Hayır | Hedef dizin (varsayılan: geçerli dizin) |
 
 **Seçenekler:**
 
@@ -159,24 +165,156 @@ openspec update
 
 ---
 
-## Gözden Geçirme Komutları
+## Çalışma Alanı Komutları
 
-### `openspec list`
+Çalışma alanı komutları aktif geliştirme aşamasındadır ve henüz kullanıma hazır değildir. Bu komut yüzeyi üzerine harici otomasyon, entegrasyon veya uzun ömürlü iş akışları oluşturmayın; komut davranışları, durum dosyaları ve JSON çıktısı herhangi bir anda değişebilir.
 
-Projenizdeki değişiklikleri veya özellikleri listeler.
+Koordinasyon çalışma alanları, birden fazla depoyu veya klasörü kapsayan çalışmalar için planlama evleridir. Çalışma alanı görünürlüğü değişiklik taahhüdü değildir: OpenSpec'in bilmesi gereken depoları veya klasörleri bağlayın, ardından belirli bir iş planlamaya hazır olduğunuzda değişiklikler oluşturun.
 
-```
-openspec list [options]
+### `openspec workspace setup`
+
+Standart OpenSpec çalışma alanı konumunda bir çalışma alanı oluşturur ve en az bir mevcut depoyu veya klasörü bağlar.
+
+```bash
+openspec workspace setup [options]
 ```
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
-| `--specs` | Değişiklikler yerine özellikleri listele |
-| `--changes` | Değişiklikleri listele (varsayılan) |
-| `--sort <order>` | `recent` (varsayılan) veya `name` ile sırala |
-| `--json` | JSON olarak çıktı ver |
+| `--name <name>` | Çalışma alanı adı. Adlar kebab-case olmalıdır |
+| `--link <path>` | Mevcut bir depoyu veya klasörü bağla ve bağlantı adını klasör adından çıkar |
+| `--link <name>=<path>` | Açık bir bağlantı adıyla mevcut bir depoyu veya klasörü bağla |
+| `--opener <id>` | Etkileşimli olmayan kurulum sırasında tercih edilen bir açıcı saklayın: `codex`, `claude`, `github-copilot` veya `editor` |
+| `--no-interactive` | İstemleri devre dışı bırak; `--name` ve en az bir `--link` gerektirir |
+| `--json` | JSON çıktısı ver; `--no-interactive` gerektirir |
+
+**Örnekler:**
+
+```bash
+openspec workspace setup
+openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
+openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex
+openspec workspace setup --no-interactive --json --name checkout --link /repos/platform/apps/checkout
+```
+
+Etkileşimli kurulum, tercih edilen bir açıcı ister ve makineye özgü çalışma alanı durumunda saklar. Etkileşimli olmayan kurulum, yalnızca `--opener` sağlandığında tercih edilen bir açıcı saklar; aksi takdirde `workspace open`, desteklenen bir açıcı mevcut olduğunda etkileşimli terminallerde daha sonra ister veya betiklerden `--agent <tool>` veya `--editor` geçirmesini ister.
+
+### `openspec workspace list`
+
+Yerel kayıt defterinden bilinen OpenSpec çalışma alanlarını listeler.
+
+```bash
+openspec workspace list [--json]
+openspec workspace ls [--json]
+```
+
+Liste, her çalışma alanının konumunu ve bağlı depoları veya klasörleri gösterir. Eski kayıt defteri kayıtları rapor edilir ancak değiştirilmez.
+
+### `openspec workspace link`
+
+Bir çalışma alanı için mevcut bir depoyu veya klasörü kaydeder.
+
+```bash
+openspec workspace link [name] <path> [options]
+```
+
+**Seçenekler:**
+
+| Seçenek | Açıklama |
+|--------|-------------|
+| `--workspace <name>` | Yerel kayıt defterinden bilinen bir çalışma alanı seçin |
+| `--json` | JSON çıktısı ver |
+| `--no-interactive` | Çalışma alanı seçici istemlerini devre dışı bırak |
+
+**Örnekler:**
+
+```bash
+openspec workspace link /repos/api
+openspec workspace link api-service /repos/api
+openspec workspace link --workspace platform /repos/platform/apps/checkout
+```
+
+Yol zaten mevcut olmalıdır. Göreceli yollar, OpenSpec doğrulanmış mutlak yolu makineye özgü çalışma alanında saklamadan önce komutun geçerli dizinine göre çözümlenir. Bağlı yollar, depo yerel `openspec/` durumu olmayan tam depolar, paketler, hizmetler, uygulamalar veya klasörler olabilir.
+
+### `openspec workspace relink`
+
+Mevcut bir bağlantının yerel yolunu onarın veya değiştirin.
+
+```bash
+openspec workspace relink <name> <path> [options]
+```
+
+Yol zaten mevcut olmalıdır. Relink, yalnızca kararlı bağlantı adı için makineye özgü yolu günceller.
+
+### `openspec workspace doctor`
+
+Bir çalışma alanının geçerli makinede neleri çözebileceğini kontrol edin.
+
+```bash
+openspec workspace doctor [options]
+```
+
+Doctor, çalışma alanı konumunu, planlama yolunu, bağlı depoları veya klasörleri, eksik yolları, mevcut olduğunda depo yerel spec yollarını ve önerilen düzeltmeleri gösterir. Yalnızca sorunları rapor eder; otomatik olarak onarmaz.
+
+Bir çalışma alanına ihtiyaç duyan komutlar, bir çalışma alanı klasöründen veya alt dizininden çalıştırıldığında geçerli çalışma alanını kullanır. Başka bir yerden, `--workspace <name>` geçin, etkileşimli bir terminalde seçiciyi kullanın veya yalnızca bir tane mevcut olduğunda tek bilinen çalışma alanına güvenin. `--json` veya `--no-interactive` modunda, belirsiz seçim yapılandırılmış bir durum hatasıyla başarısız olur ve `--workspace <name>` önerir.
+
+JSON yanıtları, tipik nesnelerin yanı sıra `status` dizileri kullanır. Birincil veriler `workspace`, `workspaces` veya `link` içinde yaşar; uyarılar ve hatalar `status` içinde yaşar.
+
+### `openspec workspace open`
+
+Saklanan tercih edilen açıcı, tek oturumluk bir agent geçersiz kılması veya VS Code düzenleyici modu aracılığıyla bir çalışma alanı çalışma kümesini açın.
+
+```bash
+openspec workspace open [name] [options]
+```
+
+**Seçenekler:**
+
+| Seçenek | Açıklama |
+|--------|-------------|
+| `--workspace <name>` | Konumsal çalışma alanı adı için takma ad |
+| `--agent <tool>` | Tek oturumluk agent geçersiz kılması: `codex`, `claude` veya `github-copilot` |
+| `--editor` | Bakımlı VS Code çalışma alanı dosyasını normal bir düzenleyici çalışma alanı olarak açın |
+| `--no-interactive` | Çalışma alanı ve açıcı seçici istemlerini devre dışı bırak |
+
+**Örnekler:**
+
+```bash
+openspec workspace open
+openspec workspace open platform
+openspec workspace open platform --agent github-copilot
+openspec workspace open --agent codex
+openspec workspace open --editor
+```
+
+`workspace open`, birinin içinde çalıştırıldığında geçerli çalışma alanını kullanır, başka bir yerde çalıştırıldığında tek bilinen çalışma alanını otomatik seçer ve birden fazla çalışma alanı bilindiğinde kullanıcıdan seçim yapmasını ister. `--agent` ve `--editor`, saklanan tercih edilen açıcıyı değiştirmez. Her iki açıcı geçersiz kılmasını geçirmek bir hatadır; ya `--agent <tool>` ya da `--editor` seçin.
+
+OpenSpec, VS Code düzenleyici ve GitHub Copilot-in-VS-Code açmaları için çalışma alanı kökünde `<workspace-name>.code-workspace` dosyasını korur. Bu dosya makineye özgüdür ve varsayılan olarak belirli bir `<workspace-name>.code-workspace` `.gitignore` girdisiyle yoksayılır, böylece kullanıcı tarafından oluşturulan `*.code-workspace` dosyaları izleme için uygun olmaya devam eder.
+
+Bakımlı VS Code çalışma alanı, koordinasyon kökünü `.` olarak ve geçerli bağlı depoları veya klasörleri ek kökler olarak içerir. VS Code bu girdileri çok köklü bir çalışma alanı olarak görüntüler.
+
+Kök çalışma alanı açma, bağlı depolar veya klasörler genelinde keşif ve planlamayı destekler. Uygulama düzenlemeleri yalnızca açık bir kullanıcı isteği ve normal bir OpenSpec uygulama iş akışından sonra başlamalıdır.
+
+## Tarama Komutları
+
+### `openspec list`
+
+Projenizdeki değişiklikleri veya özellikleri listeler.
+
+```
+openspec list [seçenekler]
+```
+
+**Seçenekler:**
+
+| Seçenek | Açıklama |
+|---------|----------|
+| `--specs` | Değişiklikler yerine özellikleri listeler |
+| `--changes` | Değişiklikleri listeler (varsayılan) |
+| `--sort <sıra>` | `recent` (varsayılan) veya `name` ile sıralar |
+| `--json` | Çıktıyı JSON olarak verir |
 
 **Örnekler:**
 
@@ -195,7 +333,7 @@ openspec list --json
 
 ```
 Aktif değişiklikler:
-  add-dark-mode     UI tema geçiş desteği
+  add-dark-mode     UI tema değiştirme desteği
   fix-login-bug     Oturum zaman aşımı işleme
 ```
 
@@ -203,13 +341,13 @@ Aktif değişiklikler:
 
 ### `openspec view`
 
-Özellikleri ve değişiklikleri keşfetmek için etkileşimli bir kontrol paneli görüntüler.
+Özellikleri ve değişiklikleri keşfetmek için etkileşimli bir gösterge tablosu görüntüler.
 
 ```
 openspec view
 ```
 
-Projenizin özelliklerini ve değişikliklerini gezinmek için terminal tabanlı bir arayüz açar.
+Projenizin spesifikasyonlarında ve değişikliklerinde gezinmek için terminal tabanlı bir arayüz açar.
 
 ---
 
@@ -218,36 +356,36 @@ Projenizin özelliklerini ve değişikliklerini gezinmek için terminal tabanlı
 Bir değişikliğin veya özelliğin ayrıntılarını görüntüler.
 
 ```
-openspec show [item-name] [options]
+openspec show [öğe-adı] [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
-|----------|----------|-------------|
-| `item-name` | Hayır | Değişikliğin veya özelliğin adı (belirtilmezse istemde bulunur) |
+|---------|---------|----------|
+| `öğe-adı` | Hayır | Değişiklik veya özelliğin adı (atlanırsa sorulur) |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
-|--------|-------------|
-| `--type <type>` | Türü belirtin: `change` veya `spec` (belirsizse otomatik algılanır) |
-| `--json` | JSON olarak çıktı ver |
-| `--no-interactive` | İstemleri devre dışı bırak |
+|---------|----------|
+| `--type <tür>` | Türü belirtir: `change` veya `spec` (belirsizlik yoksa otomatik algılanır) |
+| `--json` | Çıktıyı JSON olarak verir |
+| `--no-interactive` | İstemleri devre dışı bırakır |
 
 **Değişikliğe özgü seçenekler:**
 
 | Seçenek | Açıklama |
-|--------|-------------|
-| `--deltas-only` | Yalnızca delta özelliklerini göster (JSON modu) |
+|---------|----------|
+| `--deltas-only` | Yalnızca delta spesifikasyonlarını gösterir (JSON modu) |
 
 **Özelliğe özgü seçenekler:**
 
 | Seçenek | Açıklama |
-|--------|-------------|
-| `--requirements` | Yalnızca gereksinimleri göster, senaryoları hariç tut (JSON modu) |
-| `--no-scenarios` | Senaryo içeriğini hariç tut (JSON modu) |
-| `-r, --requirement <id>` | 1 tabanlı indeksle belirli bir gereksinimi göster (JSON modu) |
+|---------|----------|
+| `--requirements` | Yalnızca gereksinimleri gösterir, senaryoları hariç tutar (JSON modu) |
+| `--no-scenarios` | Senaryo içeriğini hariç tutar (JSON modu) |
+| `-r, --requirement <id>` | 1 tabanlı dizine göre belirli bir gereksinimi gösterir (JSON modu) |
 
 **Örnekler:**
 
@@ -274,27 +412,27 @@ openspec show add-dark-mode --json
 Değişiklikleri ve özellikleri yapısal sorunlar için doğrular.
 
 ```
-openspec validate [item-name] [options]
+openspec validate [öğe-adı] [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
-|----------|----------|-------------|
-| `item-name` | Hayır | Doğrulanacak belirli bir öğe (belirtilmezse istemde bulunur) |
+|---------|---------|----------|
+| `öğe-adı` | Hayır | Doğrulanacak belirli öğe (atlanırsa sorulur) |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
-|--------|-------------|
-| `--all` | Tüm değişiklikleri ve özellikleri doğrula |
-| `--changes` | Tüm değişiklikleri doğrula |
-| `--specs` | Tüm özellikleri doğrula |
-| `--type <type>` | Ad belirsizken türü belirtin: `change` veya `spec` |
-| `--strict` | Sıkı doğrulama modunu etkinleştir |
-| `--json` | JSON olarak çıktı ver |
-| `--concurrency <n>` | Maksimum paralel doğrulama (varsayılan: 6 veya `OPENSPEC_CONCURRENCY` ortam değişkeni) |
-| `--no-interactive` | İstemleri devre dışı bırak |
+|---------|----------|
+| `--all` | Tüm değişiklikleri ve özellikleri doğrular |
+| `--changes` | Tüm değişiklikleri doğrular |
+| `--specs` | Tüm özellikleri doğrular |
+| `--type <tür>` | Ad belirsiz olduğunda türü belirtir: `change` veya `spec` |
+| `--strict` | Katı doğrulama modunu etkinleştirir |
+| `--json` | Çıktıyı JSON olarak verir |
+| `--concurrency <n>` | Maksimum paralel doğrulama sayısı (varsayılan: 6 veya `OPENSPEC_CONCURRENCY` ortam değişkeni) |
+| `--no-interactive` | İstemleri devre dışı bırakır |
 
 **Örnekler:**
 
@@ -311,7 +449,7 @@ openspec validate --changes
 # Her şeyi JSON çıktısıyla doğrula (CI/scriptler için)
 openspec validate --all --json
 
-# Artırılmış paralellikle sıkı doğrulama
+# Artırılmış paralellikle katı doğrulama
 openspec validate --all --strict --concurrency 12
 ```
 
@@ -354,24 +492,24 @@ add-dark-mode doğrulanıyor...
 
 ### `openspec archive`
 
-Tamamlanmış bir değişikliği arşivler ve delta özelliklerini ana özelliklere birleştirir.
+Tamamlanmış bir değişikliği arşivleyin ve delta spesifikasyonlarını ana spesifikasyonlarla birleştirin.
 
 ```
-openspec archive [change-name] [options]
+openspec archive [değişiklik-adı] [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
-| `change-name` | Hayır | Arşivlenecek değişiklik (belirtilmezse istemde bulunur) |
+| `değişiklik-adı` | Hayır | Arşivlenecek değişiklik (atlanırsa kullanıcıya sorulur) |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
 | `-y, --yes` | Onay istemlerini atla |
-| `--skip-specs` | Özellik güncellemelerini atla (yalnızca altyapı/araç/belge değişiklikleri için) |
+| `--skip-specs` | Spesifikasyon güncellemelerini atla (altyapı/araç/dokümantasyon odaklı değişiklikler için) |
 | `--no-validate` | Doğrulamayı atla (onay gerektirir) |
 
 **Örnekler:**
@@ -383,41 +521,41 @@ openspec archive
 # Belirli bir değişikliği arşivle
 openspec archive add-dark-mode
 
-# İstemler olmadan arşivleme (CI/scriptler için)
+# İstemler olmadan arşivle (CI/scripts için)
 openspec archive add-dark-mode --yes
 
-# Özellikleri etkilemeyen bir araç değişikliğini arşivle
+# Spesifikasyonları etkilemeyen bir araç değişikliğini arşivle
 openspec archive update-ci-config --skip-specs
 ```
 
-**Yaptığı şey:**
+**Ne yapar:**
 
-1. Değişikliği doğrular (`--no-validate` yoksa)
-2. Onay ister (`--yes` yoksa)
-3. Delta özelliklerini `openspec/specs/` içine birleştirir
-4. Değişiklik klasörünü `openspec/changes/archive/YYYY-MM-DD-<name>/` konumuna taşır
+1. Değişikliği doğrular (`--no-validate` belirtilmedikçe)
+2. Onay ister (`--yes` belirtilmedikçe)
+3. Delta spesifikasyonlarını `openspec/specs/` diziniyle birleştirir
+4. Değişiklik klasörünü `openspec/changes/archive/YYYY-MM-DD-<ad>/` dizinine taşır
 
 ---
 
 ## İş Akışı Komutları
 
-Bu komutlar, çıkarıma dayalı OPSX iş akışını destekler. Hem ilerlemeyi kontrol eden insanlar hem de sonraki adımları belirleyen ajanlar için faydalıdır.
+Bu komutlar, eser odaklı OPSX iş akışını destekler. Hem ilerlemeyi kontrol eden insanlar hem de sonraki adımları belirleyen ajanlar için kullanışlıdır.
 
 ### `openspec status`
 
-Bir değişiklik için çıkarımların tamamlanma durumunu görüntüler.
+Bir değişiklik için eser tamamlanma durumunu görüntüler.
 
 ```
-openspec status [options]
+openspec status [seçenekler]
 ```
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
-| `--change <id>` | Değişiklik adı (belirtilmezse istemde bulunur) |
-| `--schema <name>` | Şema geçersiz kılma (değişikliğin yapılandırmasından otomatik algılanır) |
-| `--json` | JSON olarak çıktı ver |
+| `--change <id>` | Değişiklik adı (atlanırsa kullanıcıya sorulur) |
+| `--schema <ad>` | Şema geçersiz kılma (değişikliğin yapılandırmasından otomatik algılanır) |
+| `--json` | Çıktıyı JSON olarak ver |
 
 **Örnekler:**
 
@@ -425,7 +563,7 @@ openspec status [options]
 # Etkileşimli durum kontrolü
 openspec status
 
-# Belirli bir değişiklik için durum
+# Belirli bir değişikliğin durumu
 openspec status --change add-dark-mode
 
 # Ajan kullanımı için JSON
@@ -437,12 +575,12 @@ openspec status --change add-dark-mode --json
 ```
 Değişiklik: add-dark-mode
 Şema: spec-driven
-İlerleme: 2/4 çıkarım tamamlandı
+İlerleme: 4 eserden 2'si tamamlandı
 
-[x] proposal
-[ ] design
-[x] specs
-[-] tasks (tasarım tarafından engellendi)
+[x] teklif
+[ ] tasarım
+[x] spesifikasyonlar
+[-] görevler (engellendi: tasarım)
 ```
 
 **Çıktı (JSON):**
@@ -466,35 +604,35 @@ Değişiklik: add-dark-mode
 
 ### `openspec instructions`
 
-Bir çıkarım oluşturmak veya görevleri uygulamak için zenginleştirilmiş talimatlar alır. Yapay zeka ajanları tarafından neyin oluşturulacağını anlamak için kullanılır.
+Bir eser oluşturmak veya görevleri uygulamak için zenginleştirilmiş talimatlar alır. Yapay zeka ajanları tarafından bir sonraki neyin oluşturulacağını anlamak için kullanılır.
 
 ```
-openspec instructions [artifact] [options]
+openspec instructions [eser] [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
-| `artifact` | Hayır | Çıkarım kimliği: `proposal`, `specs`, `design`, `tasks` veya `apply` |
+| `eser` | Hayır | Eser Kimliği: `proposal`, `specs`, `design`, `tasks` veya `apply` |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
-| `--change <id>` | Değişiklik adı (etkileşimli olmayan modda gerekli) |
-| `--schema <name>` | Şema geçersiz kılma |
-| `--json` | JSON olarak çıktı ver |
+| `--change <id>` | Değişiklik adı (etkileşimli olmayan modda zorunludur) |
+| `--schema <ad>` | Şema geçersiz kılma |
+| `--json` | Çıktıyı JSON olarak ver |
 
-**Özel durum:** Görev uygulama talimatlarını almak için `apply` olarak çıkarımı kullanın.
+**Özel durum:** Görev uygulama talimatlarını almak için `apply` eserini kullanın.
 
 **Örnekler:**
 
 ```bash
-# Sonraki çıkarım için talimatları al
+# Bir sonraki eser için talimatları al
 openspec instructions --change add-dark-mode
 
-# Belirli bir çıkarım talimatlarını al
+# Belirli bir eser için talimatları al
 openspec instructions design --change add-dark-mode
 
 # Uygulama/uygulama talimatlarını al
@@ -506,27 +644,27 @@ openspec instructions design --change add-dark-mode --json
 
 **Çıktı şunları içerir:**
 
-- Çıkarım için şablon içeriği
+- Eser için şablon içeriği
 - Yapılandırmadan proje bağlamı
-- Bağımlı çıkarımlardan içerik
-- Yapılandırmadan çıkarıma özgü kurallar
+- Bağımlılık eserlerinden gelen içerik
+- Yapılandırmadan eser başına kurallar
 
 ---
 
 ### `openspec templates`
 
-Bir şemadaki tüm çıkarımlar için çözümlenmiş şablon yollarını gösterir.
+Bir şemadaki tüm eserler için çözümlenmiş şablon yollarını gösterir.
 
 ```
-openspec templates [options]
+openspec templates [seçenekler]
 ```
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
-| `--schema <name>` | İncelenecek şema (varsayılan: `spec-driven`) |
-| `--json` | JSON olarak çıktı ver |
+| `--schema <ad>` | İncelenecek şema (varsayılan: `spec-driven`) |
+| `--json` | Çıktıyı JSON olarak ver |
 
 **Örnekler:**
 
@@ -537,7 +675,7 @@ openspec templates
 # Özel şema için şablonları göster
 openspec templates --schema my-workflow
 
-# Programlı kullanım için JSON
+# Programatik kullanım için JSON
 openspec templates --json
 ```
 
@@ -547,27 +685,27 @@ openspec templates --json
 Şema: spec-driven
 
 Şablonlar:
-  proposal  → ~/.openspec/schemas/spec-driven/templates/proposal.md
-  specs     → ~/.openspec/schemas/spec-driven/templates/specs.md
-  design    → ~/.openspec/schemas/spec-driven/templates/design.md
-  tasks     → ~/.openspec/schemas/spec-driven/templates/tasks.md
+  teklif    → ~/.openspec/schemas/spec-driven/templates/proposal.md
+  spesifikasyonlar → ~/.openspec/schemas/spec-driven/templates/specs.md
+  tasarım   → ~/.openspec/schemas/spec-driven/templates/design.md
+  görevler  → ~/.openspec/schemas/spec-driven/templates/tasks.md
 ```
 
 ---
 
 ### `openspec schemas`
 
-Açıklamaları ve çıkarım akışlarıyla birlikte mevcut iş akışı şemalarını listeler.
+Açıklamaları ve eser akışlarıyla birlikte mevcut iş akışı şemalarını listeler.
 
 ```
-openspec schemas [options]
+openspec schemas [seçenekler]
 ```
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
-| `--json` | JSON olarak çıktı ver |
+| `--json` | Çıktıyı JSON olarak ver |
 
 **Örnek:**
 
@@ -581,44 +719,44 @@ openspec schemas
 Mevcut şemalar:
 
   spec-driven (paket)
-    Varsayılan özellik驱动lı geliştirme iş akışı
-    Akış: proposal → specs → design → tasks
+    Varsayılan spesifikasyon odaklı geliştirme iş akışı
+    Akış: teklif → spesifikasyonlar → tasarım → görevler
 
   my-custom (proje)
     Bu proje için özel iş akışı
-    Akış: research → proposal → tasks
+    Akış: araştırma → teklif → görevler
 ```
 
 ---
 
 ## Şema Komutları
 
-Özel iş akışı şemalarını oluşturmak ve yönetmek için komutlar.
+Özel iş akışı şemaları oluşturmak ve yönetmek için komutlar.
 
 ### `openspec schema init`
 
-Yeni bir projeye özel şema oluşturur.
+Yeni bir proje yerel şeması oluşturun.
 
 ```
-openspec schema init <name> [options]
+openspec schema init <ad> [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
-| `name` | Evet | Şema adı (kebab-case) |
+| `ad` | Evet | Şema adı (kebab-case) |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
-| `--description <text>` | Şema açıklaması |
-| `--artifacts <list>` | Virgülle ayrılmış artifact ID'leri (varsayılan: `proposal,specs,design,tasks`) |
-| `--default` | Proje varsayılan şeması olarak ayarla |
+| `--description <metin>` | Şema açıklaması |
+| `--artifacts <liste>` | Virgülle ayrılmış eser kimlikleri (varsayılan: `proposal,specs,design,tasks`) |
+| `--default` | Projenin varsayılan şeması olarak ayarla |
 | `--no-default` | Varsayılan olarak ayarlamak için sorma |
 | `--force` | Mevcut şemanın üzerine yaz |
-| `--json` | JSON olarak çıktı ver |
+| `--json` | Çıktıyı JSON olarak ver |
 
 **Örnekler:**
 
@@ -626,20 +764,20 @@ openspec schema init <name> [options]
 # Etkileşimli şema oluşturma
 openspec schema init research-first
 
-# Belirli artifact'lerle etkileşim dışı oluşturma
+# Belirli eserlerle etkileşimli olmayan
 openspec schema init rapid \
-  --description "Rapid iteration workflow" \
+  --description "Hızlı yineleme iş akışı" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
-**Oluşturulan yapı:**
+**Ne oluşturur:**
 
 ```
-openspec/schemas/<name>/
+openspec/schemas/<ad>/
 ├── schema.yaml           # Şema tanımı
 └── templates/
-    ├── proposal.md       # Her artifact için şablon
+    ├── proposal.md       # Her eser için şablon
     ├── specs.md
     ├── design.md
     └── tasks.md
@@ -649,30 +787,30 @@ openspec/schemas/<name>/
 
 ### `openspec schema fork`
 
-Mevcut bir şemayı projenize kopyalayarak özelleştirin.
+Özelleştirmek için mevcut bir şemayı projenize kopyalayın.
 
 ```
-openspec schema fork <source> [name] [options]
+openspec schema fork <kaynak> [ad] [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
-| `source` | Evet | Kopyalanacak şema |
-| `name` | Hayır | Yeni şema adı (varsayılan: `<source>-custom`) |
+| `kaynak` | Evet | Kopyalanacak şema |
+| `ad` | Hayır | Yeni şema adı (varsayılan: `<kaynak>-custom`) |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
 | `--force` | Mevcut hedefin üzerine yaz |
-| `--json` | JSON olarak çıktı ver |
+| `--json` | Çıktıyı JSON olarak ver |
 
 **Örnek:**
 
 ```bash
-# Dahili spec-driven şemasını çatallama
+# Dahili spec-driven şemasını dallandır
 openspec schema fork spec-driven my-workflow
 ```
 
@@ -680,32 +818,32 @@ openspec schema fork spec-driven my-workflow
 
 ### `openspec schema validate`
 
-Bir şemanın yapısını ve şablonlarını doğrular.
+Bir şemanın yapısını ve şablonlarını doğrulayın.
 
 ```
-openspec schema validate [name] [options]
+openspec schema validate [ad] [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
-| `name` | Hayır | Doğrulanacak şema (belirtilmezse tümünü doğrular) |
+| `ad` | Hayır | Doğrulanacak şema (atlanırsa tümünü doğrular) |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
 | `--verbose` | Ayrıntılı doğrulama adımlarını göster |
-| `--json` | JSON olarak çıktı ver |
+| `--json` | Çıktıyı JSON olarak ver |
 
 **Örnek:**
 
 ```bash
-# Belirli bir şemayı doğrulama
+# Belirli bir şemayı doğrula
 openspec schema validate my-workflow
 
-# Tüm şemaları doğrulama
+# Tüm şemaları doğrula
 openspec schema validate
 ```
 
@@ -713,43 +851,43 @@ openspec schema validate
 
 ### `openspec schema which`
 
-Bir şemanın nereden çözüldüğünü gösterir (öncelik sırasını hata ayıklamak için yararlıdır).
+Bir şemanın nereden çözümlendiğini gösterir (önceliklendirme için kullanışlıdır).
 
 ```
-openspec schema which [name] [options]
+openspec schema which [ad] [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
 |----------|----------|-------------|
-| `name` | Hayır | Şema adı |
+| `ad` | Hayır | Şema adı |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
 |--------|-------------|
 | `--all` | Tüm şemaları kaynaklarıyla birlikte listele |
-| `--json` | JSON olarak çıktı ver |
+| `--json` | Çıktıyı JSON olarak ver |
 
 **Örnek:**
 
 ```bash
-# Bir şemanın nereden geldiğini kontrol etme
+# Bir şemanın nereden geldiğini kontrol et
 openspec schema which spec-driven
 ```
 
 **Çıktı:**
 
 ```
-spec-driven resolves from: package
-  Source: /usr/local/lib/node_modules/@fission-ai/openspec/schemas/spec-driven
+spec-driven şu kaynaktan çözümleniyor: paket
+  Kaynak: /usr/local/lib/node_modules/@fission-ai/openspec/schemas/spec-driven
 ```
 
-**Şema öncelik sırası:**
+**Şema önceliği:**
 
-1. Proje: `openspec/schemas/<name>/`
-2. Kullanıcı: `~/.local/share/openspec/schemas/<name>/`
+1. Proje: `openspec/schemas/<ad>/`
+2. Kullanıcı: `~/.local/share/openspec/schemas/<ad>/`
 3. Paket: Dahili şemalar
 
 ---
@@ -758,82 +896,82 @@ spec-driven resolves from: package
 
 ### `openspec config`
 
-Genel OpenSpec yapılandırmasını görüntüleyin ve değiştirin.
+Global OpenSpec yapılandırmasını görüntüleyin ve değiştirin.
 
 ```
-openspec config <subcommand> [options]
+openspec config <alt komut> [seçenekler]
 ```
 
-**Alt komutlar:**
+**Alt Komutlar:**
 
-| Alt komut | Açıklama |
-|------------|-------------|
+| Alt Komut | Açıklama |
+|-----------|----------|
 | `path` | Yapılandırma dosyası konumunu göster |
-| `list` | Mevcut tüm ayarları göster |
-| `get <key>` | Belirli bir değeri al |
-| `set <key> <value>` | Bir değer ayarla |
-| `unset <key>` | Bir anahtarı kaldır |
-| `reset` | Varsayılana sıfırla |
-| `edit` | `$EDITOR` içinde aç |
-| `profile [preset]` | İş akışı profilini etkileşimli olarak veya ön ayar aracılığıyla yapılandır |
+| `list` | Tüm mevcut ayarları göster |
+| `get <anahtar>` | Belirli bir değeri al |
+| `set <anahtar> <değer>` | Bir değer ayarla |
+| `unset <anahtar>` | Bir anahtarı kaldır |
+| `reset` | Varsayılanlara sıfırla |
+| `edit` | `$EDITOR`'da aç |
+| `profile [ön ayar]` | İş akışı profilini interaktif olarak veya ön ayar aracılığıyla yapılandır |
 
 **Örnekler:**
 
 ```bash
-# Yapılandırma dosyası yolunu gösterme
+# Yapılandırma dosyası yolunu göster
 openspec config path
 
-# Tüm ayarları listeleme
+# Tüm ayarları listele
 openspec config list
 
-# Belirli bir değeri alma
+# Belirli bir değeri al
 openspec config get telemetry.enabled
 
-# Bir değer ayarlama
+# Bir değer ayarla
 openspec config set telemetry.enabled false
 
-# Bir dize değerini açıkça ayarlama
+# Bir dizi değerini açıkça ayarla
 openspec config set user.name "My Name" --string
 
-# Özel bir ayarı kaldırma
+# Özel bir ayarı kaldır
 openspec config unset user.name
 
-# Tüm yapılandırmayı sıfırlama
+# Tüm yapılandırmayı sıfırla
 openspec config reset --all --yes
 
-# Yapılandırmayı düzenleyicide düzenleme
+# Yapılandırmayı editörünüzde düzenleyin
 openspec config edit
 
-# Eyleme dayalı sihirbazla profili yapılandırma
+# Eylem tabanlı sihirbazla profili yapılandır
 openspec config profile
 
-# Hızlı ön ayar: iş akışlarını core'a değiştir (teslim modunu korur)
+# Hızlı ön ayar: İş akışlarını çekirdeğe geçir (teslim modunu korur)
 openspec config profile core
 ```
 
-`openspec config profile`, mevcut durum özetiyle başlar ve ardından şunları seçmenize olanak tanır:
-- Teslimatı + iş akışlarını değiştir
-- Sadece teslimatı değiştir
-- Sadece iş akışlarını değiştir
-- Mevcut ayarları koru (çık)
+`openspec config profile` mevcut durum özetiyle başlar, ardından şunları seçmenize olanak tanır:
+- Teslimat + iş akışlarını değiştir
+- Yalnızca teslimatı değiştir
+- Yalnızca iş akışlarını değiştir
+- Mevcut ayarları koru (çıkış)
 
 Mevcut ayarları korursanız, hiçbir değişiklik yazılmaz ve güncelleme istemi gösterilmez.
-Yapılandırma değişikliği yoksa ancak mevcut proje dosyaları genel profilinizle/teslimatınızla senkronize değilse, OpenSpec bir uyarı gösterecek ve `openspec update` çalıştırmanızı önerecektir.
-`Ctrl+C` tuşuna basmak da akışı temiz bir şekilde iptal eder (yığın izi göstermez) ve `130` çıkış koduyla çıkar.
-İş akışı kontrol listesinde, `[x]` iş akışının genel yapılandırmada seçili olduğunu belirtir. Bu seçimleri proje dosyalarına uygulamak için `openspec update` çalıştırın (veya bir projenin içinde istendiğinde `Apply changes to this project now?` seçeneğini tercih edin).
+Yapılandırma değişikliği olmasa da mevcut proje dosyaları global profiliniz/teslimatınızla senkronize değilse, OpenSpec bir uyarı gösterecek ve `openspec update` komutunu çalıştırmanızı önerecektir.
+`Ctrl+C`'ye basmak da akışı temizce iptal eder (yığın izi yok) ve `130` koduyla çıkar.
+İş akışı kontrol listesinde `[x]`, iş akışının global yapılandırmada seçili olduğu anlamına gelir. Bu seçimleri proje dosyalarına uygulamak için `openspec update` komutunu çalıştırın (veya bir proje içindeyken istendiğinde `Bu projeye şimdi değişiklikleri uygula?` seçeneğini seçin).
 
-**Etkileşimli örnekler:**
+**İnteraktif örnekler:**
 
 ```bash
-# Sadece teslimat güncellemesi
+# Yalnızca teslimat güncellemesi
 openspec config profile
-# seç: Change delivery only
-# teslimatı seç: Skills only
+# seçin: Yalnızca teslimatı değiştir
+# teslimat seçin: Yalnızca beceriler
 
-# Sadece iş akışı güncellemesi
+# Yalnızca iş akışı güncellemesi
 openspec config profile
-# seç: Change workflows only
-# kontrol listesindeki iş akışlarını açıp kapatın, ardından onaylayın
+# seçin: Yalnızca iş akışlarını değiştir
+# kontrol listesindeki iş akışlarını değiştirin, ardından onaylayın
 ```
 
 ---
@@ -842,25 +980,25 @@ openspec config profile
 
 ### `openspec feedback`
 
-OpenSpec hakkında geri bildirim gönderir. Bir GitHub sorunu oluşturur.
+OpenSpec hakkında geri bildirim gönderin. Bir GitHub sorunu oluşturur.
 
 ```
-openspec feedback <message> [options]
+openspec feedback <mesaj> [seçenekler]
 ```
 
 **Argümanlar:**
 
 | Argüman | Gerekli | Açıklama |
-|----------|----------|-------------|
-| `message` | Evet | Geri bildirim mesajı |
+|---------|---------|----------|
+| `mesaj` | Evet | Geri bildirim mesajı |
 
 **Seçenekler:**
 
 | Seçenek | Açıklama |
-|--------|-------------|
-| `--body <text>` | Detaylı açıklama |
+|---------|----------|
+| `--body <metin>` | Ayrıntılı açıklama |
 
-**Gereksinimler:** GitHub CLI (`gh`) kurulu ve kimlik doğrulanmış olmalıdır.
+**Gereksinimler:** GitHub CLI (`gh`) kurulu ve kimlik doğrulaması yapılmış olmalıdır.
 
 **Örnek:**
 
@@ -876,32 +1014,32 @@ openspec feedback "Add support for custom artifact types" \
 OpenSpec CLI için kabuk tamamlamalarını yönetin.
 
 ```
-openspec completion <subcommand> [shell]
+openspec completion <alt komut> [kabuk]
 ```
 
-**Alt komutlar:**
+**Alt Komutlar:**
 
-| Alt komut | Açıklama |
-|------------|-------------|
-| `generate [shell]` | Tamamlama betiğini stdout'a yazdır |
-| `install [shell]` | Kabuğunuz için tamamlamayı kur |
-| `uninstall [shell]` | Kurulu tamamlamaları kaldır |
+| Alt Komut | Açıklama |
+|-----------|----------|
+| `generate [kabuk]` | Tamamlama betiğini stdout'a çıktıla |
+| `install [kabuk]` | Kabuğunuz için tamamlamayı yükleyin |
+| `uninstall [kabuk]` | Yüklü tamamlamaları kaldırın |
 
 **Desteklenen kabuklar:** `bash`, `zsh`, `fish`, `powershell`
 
-**Örnekler:**
+**Örnekler:`
 
 ```bash
-# Tamamlamaları kurma (kabuğu otomatik algılar)
+# Tamamlamaları yükle (kabuğu otomatik algılar)
 openspec completion install
 
-# Belirli bir kabuk için kurma
+# Belirli bir kabuk için yükle
 openspec completion install zsh
 
-# Manuel kurulum için betik oluşturma
+# Manuel kurulum için betik oluştur
 openspec completion generate bash > ~/.bash_completion.d/openspec
 
-# Kaldırma
+# Kaldır
 openspec completion uninstall
 ```
 
@@ -909,28 +1047,28 @@ openspec completion uninstall
 
 ## Çıkış Kodları
 
-| Kod | Anlam |
-|------|---------|
+| Kod | Anlamı |
+|-----|--------|
 | `0` | Başarılı |
-| `1` | Hata (doğrulama hatası, eksik dosyalar, vb.) |
+| `1` | Hata (doğrulama hatası, eksik dosyalar vb.) |
 
 ---
 
 ## Ortam Değişkenleri
 
 | Değişken | Açıklama |
-|----------|-------------|
+|----------|----------|
 | `OPENSPEC_TELEMETRY` | Telemetriyi devre dışı bırakmak için `0` olarak ayarlayın |
 | `DO_NOT_TRACK` | Telemetriyi devre dışı bırakmak için `1` olarak ayarlayın (standart DNT sinyali) |
 | `OPENSPEC_CONCURRENCY` | Toplu doğrulama için varsayılan eşzamanlılık (varsayılan: 6) |
-| `EDITOR` veya `VISUAL` | `openspec config edit` için düzenleyici |
+| `EDITOR` veya `VISUAL` | `openspec config edit` için editör |
 | `NO_COLOR` | Ayarlandığında renkli çıktıyı devre dışı bırakır |
 
 ---
 
 ## İlgili Belgeler
 
-- [Komutlar](commands.md) - Yapay zeka eğik çizgi komutları (`/opsx:propose`, `/opsx:apply`, vb.)
+- [Komutlar](commands.md) - AI eğik çizgi komutları (`/opsx:propose`, `/opsx:apply`, vb.)
 - [İş Akışları](workflows.md) - Yaygın kalıplar ve her komutun ne zaman kullanılacağı
-- [Özelleştirme](customization.md) - Özel şemalar ve şablonlar oluşturma
-- [Başlangıç](getting-started.md) - İlk kurulum kılavuzu
+- [Özelleştirme](customization.md) - Özel şablonlar ve şemalar oluşturma
+- [Başlarken](getting-started.md) - İlk kurulum rehberi

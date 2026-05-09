@@ -1,21 +1,22 @@
 # 支持的工具
 
-OpenSpec 可与多种 AI 编程助手协同工作。当您运行 `openspec init` 时，OpenSpec 会根据您当前的配置文件/工作流选择及交付模式，对所选工具进行配置。
+OpenSpec 可与众多 AI 编程助手协同工作。当您运行 `openspec init` 时，OpenSpec 会根据您当前的配置文件/工作流选择及交付模式来配置选定的工具。
 
 ## 工作原理
 
 对于每个选定的工具，OpenSpec 可以安装：
 
 1.  **技能**（如果交付内容包含技能）：`.../skills/openspec-*/SKILL.md`
-2.  **命令**（如果交付内容包含命令）：特定于工具的 `opsx-*` 命令文件
+2.  **命令**（如果交付内容包含命令）：工具特定的 `opsx-*` 命令文件
 
 默认情况下，OpenSpec 使用 `core` 配置文件，其中包含：
 - `propose`
 - `explore`
 - `apply`
+- `sync`
 - `archive`
 
-您可以通过 `openspec config profile` 启用扩展的工作流（`new`、`continue`、`ff`、`verify`、`sync`、`bulk-archive`、`onboard`），然后运行 `openspec update`。
+您可以通过 `openspec config profile` 启用扩展工作流（`new`、`continue`、`ff`、`verify`、`bulk-archive`、`onboard`），然后运行 `openspec update`。
 
 ## 工具目录参考
 
@@ -40,7 +41,9 @@ OpenSpec 可与多种 AI 编程助手协同工作。当您运行 `openspec init`
 | iFlow (`iflow`) | `.iflow/skills/openspec-*/SKILL.md` | `.iflow/commands/opsx-<id>.md` |
 | Junie (`junie`) | `.junie/skills/openspec-*/SKILL.md` | `.junie/commands/opsx-<id>.md` |
 | Kilo Code (`kilocode`) | `.kilocode/skills/openspec-*/SKILL.md` | `.kilocode/workflows/opsx-<id>.md` |
+| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | 不生成（无命令适配器；请使用基于技能的 `/skill:openspec-*` 调用） |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
+| Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
@@ -49,9 +52,9 @@ OpenSpec 可与多种 AI 编程助手协同工作。当您运行 `openspec init`
 | Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | 不生成（无命令适配器；请使用基于技能的 `/openspec-*` 调用） |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* Codex 命令安装在全局 Codex 主目录中（如果设置了 `$CODEX_HOME/prompts/`，否则为 `~/.codex/prompts/`），而不是您的项目目录。
+\* Codex 命令安装在全局 Codex 主目录中（如果设置了 `$CODEX_HOME/prompts/`，否则为 `~/.codex/prompts/`），而非您的项目目录。
 
-\*\* GitHub Copilot 提示文件在 IDE 扩展（VS Code、JetBrains、Visual Studio）中被识别为自定义斜杠命令。Copilot CLI 目前不直接使用 `.github/prompts/*.prompt.md`。
+\*\* GitHub Copilot 提示文件在 IDE 扩展（VS Code、JetBrains、Visual Studio）中被识别为自定义斜杠命令。Copilot CLI 目前不直接使用 `.github/prompts/*.prompt.md` 文件。
 
 ## 非交互式设置
 
@@ -71,21 +74,21 @@ openspec init --tools none
 openspec init --profile core
 ```
 
-**可用的工具 ID (`--tools`)：** `amazon-q`、`antigravity`、`auggie`、`bob`、`claude`、`cline`、`codex`、`codebuddy`、`continue`、`costrict`、`crush`、`cursor`、`factory`、`forgecode`、`gemini`、`github-copilot`、`iflow`、`junie`、`kilocode`、`kiro`、`opencode`、`pi`、`qoder`、`qwen`、`roocode`、`trae`、`windsurf`
+**可用工具 ID (`--tools`)：** `amazon-q`、`antigravity`、`auggie`、`bob`、`claude`、`cline`、`codex`、`forgecode`、`codebuddy`、`continue`、`costrict`、`crush`、`cursor`、`factory`、`gemini`、`github-copilot`、`iflow`、`junie`、`kilocode`、`kimi`、`kiro`、`opencode`、`pi`、`qoder`、`lingma`、`qwen`、`roocode`、`trae`、`windsurf`
 
 ## 基于工作流的安装
 
-OpenSpec 根据所选的工作流安装工作流构件：
+OpenSpec 根据选定的工作流安装工作流构件：
 
-- **核心配置文件（默认）：** `propose`、`explore`、`apply`、`archive`
+- **核心配置文件（默认）：** `propose`、`explore`、`apply`、`sync`、`archive`
 - **自定义选择：** 所有工作流 ID 的任意子集：
   `propose`、`explore`、`new`、`continue`、`apply`、`ff`、`sync`、`archive`、`bulk-archive`、`verify`、`onboard`
 
-换句话说，技能/命令的数量取决于配置文件和交付模式，而不是固定的。
+换言之，技能/命令的数量取决于配置文件和交付模式，并非固定不变。
 
 ## 生成的技能名称
 
-当由配置文件/工作流配置选中时，OpenSpec 会生成以下技能：
+当由配置文件/工作流配置选定时，OpenSpec 会生成以下技能：
 
 - `openspec-propose`
 - `openspec-explore`

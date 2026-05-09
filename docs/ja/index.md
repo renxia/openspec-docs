@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "AIアシスタント向け仕様駆動開発"
-  tagline: AIアシスタントプロジェクトを構築・管理するための軽量な仕様フレームワーク。
+  text: "AI アシスタントのための仕様駆動開発"
+  tagline: AI アシスタントプロジェクトを構築・管理するための軽量な仕様。
   actions:
     - theme: brand
       text: はじめに
@@ -14,46 +14,34 @@ hero:
       link: /
 
 features:
-  - title: 仕様ファーストのワークフロー
+  - title: 仕様優先のワークフロー
     details: コードを書く前に要件を定義します。
-  - title: AIネイティブ設計
-    details: Claude Code、Cursor、Windsurfなどに対応。
+  - title: AI ネイティブデザイン
+    details: Claude Code、Cursor、Windsurf などに対応。
   - title: 多言語対応
-    details: 複数の言語でドキュメントを提供。
+    details: 複数言語でドキュメントを提供。
 ---
 
-
-<details>
-<summary><strong>最も愛される仕様フレームワーク。</strong></summary>
-
-[![Stars](https://img.shields.io/github/stars/Fission-AI/OpenSpec?style=flat-square&label=Stars)](https://github.com/Fission-AI/OpenSpec/stargazers)
-[![Downloads](https://img.shields.io/npm/dm/@fission-ai/openspec?style=flat-square&label=Downloads/mo)](https://www.npmjs.com/package/@fission-ai/openspec)
-[![Contributors](https://img.shields.io/github/contributors/Fission-AI/OpenSpec?style=flat-square&label=Contributors)](https://github.com/Fission-AI/OpenSpec/graphs/contributors)
-
-</details>
-<p></p>
 私たちの理念：
 
 ```text
-→ 流動的であり、固定的ではない
-→ 反復的であり、ウォーターフォールではない
-→ 簡単であり、複雑ではない
-→ グリーンフィールドだけでなく、ブラウンフィールド向けに構築
-→ 個人プロジェクトから企業までスケーラブル
+→ 流動的で、固定的ではない
+→ 反復的で、ウォーターフォールではない
+→ 簡単で、複雑ではない
+→ ブラウンフィールド向けに構築、グリーンフィールドだけではない
+→ 個人プロジェクトから企業までスケール可能
 ```
 
 > [!TIP]
-> **新しいワークフローが利用可能になりました！** 新しいアーティファクトガイド型ワークフローでOpenSpecを再構築しました。
+> **新しいワークフローが利用可能になりました！** 新しいアーティファクト主導のワークフローで OpenSpec を再構築しました。
 >
-> `/opsx:propose "your idea"` を実行して始めましょう。→ [詳細はこちら](opsx.md)
+> `/opsx:propose "あなたのアイデア"` を実行して始めましょう。 → [詳細はこちら](opsx.md)
 
 <p align="center">
-  <a href="https://x.com/0xTab">@0xTab on X</a> をフォローして最新情報を入手 · <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> に参加してヘルプや質問を受ける。
+  最新情報は <a href="https://x.com/0xTab">@0xTab on X</a> をフォロー · ヘルプや質問は <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> に参加。
 </p>
 
-<!-- TODO: Add GIF demo of /opsx:propose → /opsx:archive workflow -->
-
-## 実際の動作
+## 実際の使用例
 
 ```text
 You: /opsx:propose add-dark-mode
@@ -78,15 +66,14 @@ AI:  Archived to openspec/changes/archive/2025-01-23-add-dark-mode/
 ```
 
 <details>
-<summary><strong>OpenSpecダッシュボード</strong></summary>
-
+<summary><strong>OpenSpec ダッシュボード</strong></summary>
 </details>
 
 ## クイックスタート
 
-**Node.js 20.19.0以上が必要です。**
+**Node.js 20.19.0 以上が必要です。**
 
-OpenSpecをグローバルにインストール：
+OpenSpec をグローバルにインストール：
 
 ```bash
 npm install -g @fission-ai/openspec@latest
@@ -99,45 +86,45 @@ cd your-project
 openspec init
 ```
 
-これでAIに指示できます：`/opsx:propose <what-you-want-to-build>`
+次に AI に指示：`/opsx:propose <構築したいもの>`
 
-拡張ワークフロー（`/opsx:new`、`/opsx:continue`、`/opsx:ff`、`/opsx:verify`、`/opsx:sync`、`/opsx:bulk-archive`、`/opsx:onboard`）を使用したい場合は、`openspec config profile` で選択し、`openspec update` で適用してください。
+拡張ワークフロー（`/opsx:new`、`/opsx:continue`、`/opsx:ff`、`/opsx:verify`、`/opsx:sync`、`/opsx:bulk-archive`、`/opsx:onboard`）を使用したい場合は、`openspec config profile` で選択し、`openspec update` で適用します。
 
 > [!NOTE]
-> 使用しているツールがサポートされているか不明な場合は、[完全なリストを確認](supported-tools.md)してください。25以上のツールをサポートしており、今後も拡大予定です。
+> お使いのツールがサポートされているか分かりませんか？[完全なリストを表示](supported-tools.md) – 25 以上のツールをサポートし、さらに増加中。
 >
-> pnpm、yarn、bun、nixでも動作します。[インストールオプションを確認](installation.md)。
+> pnpm、yarn、bun、nix でも動作します。[インストールオプションを参照](installation.md)。
 
 ## ドキュメント
 
 → **[はじめに](getting-started.md)**: 最初のステップ<br>
-→ **[ワークフロー](workflows.md)**: 組み合わせとパターン<br>
+→ **[ワークフロー](workflows.md)**: コンボとパターン<br>
 → **[コマンド](commands.md)**: スラッシュコマンドとスキル<br>
 → **[CLI](cli.md)**: ターミナルリファレンス<br>
 → **[サポートツール](supported-tools.md)**: ツール統合とインストールパス<br>
 → **[コンセプト](concepts.md)**: 全体の仕組み<br>
 → **[多言語対応](multi-language.md)**: 多言語サポート<br>
-→ **[カスタマイズ](customization.md)**: 自分好みにカスタマイズ
+→ **[カスタマイズ](customization.md)**: あなた好みに
 
 
-## なぜOpenSpecなのか？
+## なぜ OpenSpec なのか？
 
-AIコーディングアシスタントは強力ですが、要件がチャット履歴にしか存在しない場合、予測不可能になります。OpenSpecは軽量な仕様レイヤーを追加し、コードを書く前に何を構築するかを合意できるようにします。
+AI コーディングアシスタントは強力ですが、要件がチャット履歴だけに存在すると予測不能です。OpenSpec は軽量な仕様レイヤーを追加し、コードが書かれる前に構築内容について合意できるようにします。
 
-- **構築前に合意** — コードを書く前に、人間とAIが仕様を一致させる
-- **整理を維持** — 各変更にはプロポーザル、仕様、設計、タスクが含まれる専用フォルダがある
-- **流動的に作業** — いつでも任意のアーティファクトを更新可能、堅いフェーズゲートなし
-- **ツールを活用** — スラッシュコマンドを通じて20以上のAIアシスタントで動作
+- **構築前に合意する** — コードが書かれる前に、人間と AI が仕様について合意する
+- **整理された状態を保つ** — 各変更には提案、仕様、設計、タスクを含む独自のフォルダが割り当てられる
+- **流動的に作業する** — いつでも任意のアーティファクトを更新、固定的なフェーズゲートなし
+- **お使いのツールを使用** — スラッシュコマンドを通じて 20 以上の AI アシスタントで動作
 
-### 比較
+### 他との比較
 
-**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — 詳細だが重い。堅いフェーズゲート、大量のMarkdown、Pythonセットアップ。OpenSpecはより軽量で、自由に反復可能。
+**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — 徹底的だが重量級。固定的なフェーズゲート、大量のマークダウン、Python セットアップ。OpenSpec はより軽量で、自由に反復できます。
 
-**vs. [Kiro](https://kiro.dev)** (AWS) — 強力だがIDEにロックインされ、Claudeモデルに限定。OpenSpecは既に使用しているツールで動作。
+**vs. [Kiro](https://kiro.dev)** (AWS) — 強力だが、その IDE にロックインされ、Claude モデルに限定されます。OpenSpec は既存のツールで動作します。
 
-**vs. なし** — 仕様なしのAIコーディングは曖昧なプロンプトと予測不可能な結果を意味。OpenSpecは儀式なしで予測可能性を提供。
+**vs. なし** — 仕様なしの AI コーディングは、曖昧なプロンプトと予測不能な結果を意味します。OpenSpec は儀式なしに予測可能性をもたらします。
 
-## OpenSpecの更新
+## OpenSpec の更新
 
 **パッケージをアップグレード**
 
@@ -147,7 +134,7 @@ npm install -g @fission-ai/openspec@latest
 
 **エージェント指示を更新**
 
-各プロジェクト内で以下を実行し、AIガイダンスを再生成し、最新のスラッシュコマンドが有効であることを確認：
+各プロジェクト内で実行して AI ガイダンスを再生成し、最新のスラッシュコマンドが有効であることを確認：
 
 ```bash
 openspec update
@@ -155,36 +142,36 @@ openspec update
 
 ## 使用上の注意
 
-**モデル選択**: OpenSpecは高推論モデルで最も効果的です。計画と実装の両方にOpus 4.5とGPT 5.2を推奨します。
+**モデル選択**: OpenSpec は高推論モデルで最も効果的に動作します。計画と実装の両方に Opus 4.5 と GPT 5.2 を推奨します。
 
-**コンテキスト管理**: OpenSpecはクリーンなコンテキストウィンドウから恩恵を受けます。実装を始める前にコンテキストをクリアし、セッション全体で適切なコンテキスト管理を維持してください。
+**コンテキストの衛生**: OpenSpec はクリーンなコンテキストウィンドウから恩恵を受けます。実装を開始する前にコンテキストをクリアし、セッション全体を通じて良好なコンテキスト衛生を維持してください。
 
-## コントリビューション
+## 貢献
 
-**小規模な修正** — バグ修正、誤字修正、 minorな改善は直接PRとして提出できます。
+**小さな修正** — バグ修正、誤字の修正、軽微な改善は PR として直接提出できます。
 
-**大規模な変更** — 新機能、大規模なリファクタリング、アーキテクチャの変更については、まずOpenSpec変更提案を提出してください。実装開始前に意図と目標を一致させることができます。
+**大きな変更** — 新機能、大幅なリファクタリング、アーキテクチャの変更については、実装が始まる前に意図と目標を合わせるため、まず OpenSpec 変更提案を提出してください。
 
-提案を作成する際は、OpenSpecの理念を念頭に置いてください。私たちは、異なるコーディングエージェント、モデル、ユースケースにまたがる幅広いユーザーにサービスを提供しています。変更はすべてのユーザーにとって適切であるべきです。
+提案を作成する際は、OpenSpec の理念を念頭に置いてください。私たちは、異なるコーディングエージェント、モデル、ユースケースにわたる幅広いユーザーにサービスを提供しています。変更は誰にとってもうまく機能するべきです。
 
-**AI生成コードは歓迎** — テスト済みで検証されている限り。AI生成コードを含むPRには、使用したコーディングエージェントとモデル（例：「Claude Code using claude-opus-4-5-20251101で生成」）を記載してください。
+**AI 生成コード歓迎** — テストと検証が行われている限り。AI 生成コードを含む PR には、使用したコーディングエージェントとモデルを記載してください（例："Generated with Claude Code using claude-opus-4-5-20251101"）。
 
 ### 開発
 
 - 依存関係のインストール: `pnpm install`
 - ビルド: `pnpm run build`
 - テスト: `pnpm test`
-- ローカルでCLIを開発: `pnpm run dev` または `pnpm run dev:cli`
-- 約束されたコミット（1行）: `type(scope): subject`
+- CLI のローカル開発: `pnpm run dev` または `pnpm run dev:cli`
+- 従来のコミット（1 行）: `type(scope): subject`
 
 ## その他
 
 <details>
-<summary><strong>テレメトリ</strong></summary>
+<summary><strong>テレメトリー</strong></summary>
 
-OpenSpecは匿名の使用統計を収集します。
+OpenSpec は匿名の使用統計を収集します。
 
-使用パターンを理解するために、コマンド名とバージョンのみを収集します。引数、パス、内容、個人を特定する情報は収集しません。CI環境では自動的に無効になります。
+使用パターンを理解するために、コマンド名とバージョンのみを収集します。引数、パス、コンテンツ、PII は収集しません。CI では自動的に無効になります。
 
 **オプトアウト:** `export OPENSPEC_TELEMETRY=0` または `export DO_NOT_TRACK=1`
 
@@ -193,7 +180,7 @@ OpenSpecは匿名の使用統計を収集します。
 <details>
 <summary><strong>メンテナーとアドバイザー</strong></summary>
 
-プロジェクトの推進を支援するコアメンテナーとアドバイザーのリストは、[MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) を参照してください。
+プロジェクトの指導に貢献するコアメンテナーとアドバイザーの一覧は [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) を参照してください。
 
 </details>
 

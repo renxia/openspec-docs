@@ -1,63 +1,64 @@
 # Quy trình làm việc
 
-Hướng dẫn này trình bày các mô hình quy trình làm việc phổ biến cho OpenSpec và thời điểm sử dụng từng mô hình. Để biết cách thiết lập cơ bản, xem phần [Bắt đầu](getting-started.md). Để tham khảo lệnh, xem phần [Lệnh](commands.md).
+Hướng dẫn này đề cập đến các mẫu quy trình làm việc phổ biến cho OpenSpec và thời điểm sử dụng từng mẫu. Để thiết lập cơ bản, xem [Bắt đầu](getting-started.md). Để tham khảo lệnh, xem [Các lệnh](commands.md).
 
 ## Triết lý: Hành động, không phải giai đoạn
 
-Các quy trình truyền thống bắt bạn phải tuân theo các giai đoạn: lập kế hoạch, sau đó triển khai, rồi hoàn thành. Nhưng công việc thực tế không phù hợp một cách gọn gàng vào các khuôn khổ như vậy.
+Các quy trình làm việc truyền thống bắt buộc bạn phải tuân theo các giai đoạn: lập kế hoạch, sau đó triển khai, rồi hoàn thành. Nhưng công việc thực tế không phù hợp với những khuôn mẫu cứng nhắc như vậy.
 
 OPSX tiếp cận theo một cách khác:
 
 ```text
-Truyền thống (bị khóa theo giai đoạn):
+Truyền thống (khóa theo giai đoạn):
 
   LẬP KẾ HOẠCH ────────► TRIỂN KHAI ────────► HOÀN THÀNH
       │                    │
       │   "Không thể quay lại"  │
       └────────────────────┘
 
-OPSX (các hành động linh hoạt):
+OPSX (hành động linh hoạt):
 
-  đề xuất ──► thông số kỹ thuật ──► thiết kế ──► nhiệm vụ ──► triển khai
+  đề xuất ──► đặc tả ──► thiết kế ──► tác vụ ──► triển khai
 ```
 
 **Các nguyên tắc chính:**
 
-- **Hành động, không phải giai đoạn** - Các lệnh là những việc bạn có thể làm, không phải những giai đoạn mà bạn bị mắc kẹt
-- **Các phụ thuộc là yếu tố hỗ trợ** - Chúng chỉ ra những gì khả thi, không phải những gì bắt buộc phải làm tiếp theo
+- **Hành động, không phải giai đoạn** - Các lệnh là những việc bạn có thể làm, không phải là các giai đoạn bạn bị mắc kẹt
+- **Các phụ thuộc là yếu tố kích hoạt** - Chúng cho thấy điều gì là khả thi, không phải điều gì là bắt buộc tiếp theo
 
-> **Tùy chỉnh:** Các quy trình OPSX được điều khiển bởi các lược đồ định trình tự các sản phẩm. Xem phần [Tùy chỉnh](customization.md) để biết chi tiết về cách tạo các lược đồ tùy chỉnh.
+> **Tùy chỉnh:** Các quy trình làm việc của OPSX được điều khiển bởi các lược đồ (schemas) xác định trình tự các sản phẩm (artifacts). Xem [Tùy chỉnh](customization.md) để biết chi tiết về việc tạo lược đồ tùy chỉnh.
 
 ## Hai Chế độ
 
-### Đường dẫn nhanh mặc định (hồ sơ `core`)
+### Đường dẫn nhanh mặc định (profile `core`)
 
 Cài đặt mới mặc định sử dụng `core`, cung cấp:
 - `/opsx:propose`
 - `/opsx:explore`
 - `/opsx:apply`
+- `/opsx:sync`
 - `/opsx:archive`
 
-Luồng thông thường:
+Luồng công việc điển hình:
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-### Luồng mở rộng/đầy đủ (lựa chọn tùy chỉnh)
+### Quy trình làm việc Mở rộng/Đầy đủ (tùy chọn tùy chỉnh)
 
-Nếu bạn muốn có các lệnh tạo khung và xây dựng rõ ràng (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`), hãy kích hoạt chúng bằng:
+Nếu bạn muốn các lệnh scaffold-and-build rõ ràng (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`), hãy bật chúng với:
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## Các mẫu luồng (Chế độ Mở rộng)
+## Các Mẫu Quy trình (Chế độ Mở rộng)
 
 ### Tính năng nhanh
 
-Khi bạn biết mình muốn xây dựng gì và chỉ cần thực thi:
+Khi bạn biết rõ mình muốn xây dựng gì và chỉ cần thực thi:
 
 ```text
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
@@ -66,39 +67,39 @@ Khi bạn biết mình muốn xây dựng gì và chỉ cần thực thi:
 **Ví dụ hội thoại:**
 
 ```text
-You: /opsx:new add-logout-button
+Bạn: /opsx:new add-logout-button
 
 AI:  Đã tạo openspec/changes/add-logout-button/
      Sẵn sàng tạo: proposal
 
-You: /opsx:ff
+Bạn: /opsx:ff
 
-AI:  Đang tạo tất cả các artifact lập kế hoạch...
+AI:  Đang tạo tất cả các thành phần quy hoạch...
      ✓ proposal.md
      ✓ specs/
      ✓ design.md
      ✓ tasks.md
-     Sẵn sàng để triển khai!
+     Sẵn sàng cho triển khai!
 
-You: /opsx:apply
+Bạn: /opsx:apply
 
-AI:  Đang thực hiện các nhiệm vụ...
+AI:  Đang thực hiện các công việc...
      ✓ Đã thêm nút đăng xuất vào header
      ✓ Đã triển khai việc xóa session
      ✓ Đã thêm hộp thoại xác nhận
-     Tất cả các nhiệm vụ đã hoàn thành!
+     Tất cả công việc đã hoàn thành!
 
-You: /opsx:archive
+Bạn: /opsx:archive
 
 AI:  ✓ Đã hợp nhất specs
      ✓ Đã lưu trữ thay đổi
 ```
 
-**Tốt nhất cho:** Các tính năng nhỏ đến trung bình, sửa lỗi, thay đổi đơn giản.
+**Phù hợp nhất cho:** Các tính năng nhỏ đến vừa, sửa lỗi, các thay đổi đơn giản.
 
-### Khám phá
+### Thám hiểm
 
-Khi yêu cầu không rõ ràng hoặc bạn cần điều tra trước:
+Khi yêu cầu chưa rõ ràng hoặc bạn cần điều tra trước:
 
 ```text
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
@@ -107,53 +108,53 @@ Khi yêu cầu không rõ ràng hoặc bạn cần điều tra trước:
 **Ví dụ hội thoại:**
 
 ```text
-You: /opsx:explore
+Bạn: /opsx:explore
 
-AI:  Bạn muốn khám phá điều gì?
+AI:  Bạn muốn thám hiểm điều gì?
 
-You: Tôi muốn cải thiện hiệu suất tải trang nhưng không chắc
-     bottleneck ở đâu.
+Bạn: Tôi muốn cải thiện hiệu suất tải trang nhưng không chắc
+     nút thắt cổ chai nằm ở đâu.
 
-AI:  Để tôi giúp điều tra...
+AI:  Hãy để tôi giúp điều tra...
      [Phân tích kích thước bundle, xác định các truy vấn chậm, xem xét
      các mẫu render component]
 
-     Tôi đã tìm thấy ba bottleneck chính:
+     Tôi đã tìm thấy ba nút thắt cổ chai chính:
      1. Hình ảnh lớn chưa được tối ưu hóa
      2. Lấy dữ liệu đồng bộ trong ProductList
      3. Render lại do thay đổi context
 
      Bạn muốn giải quyết vấn đề nào trước?
 
-You: Hãy giải quyết vấn đề lấy dữ liệu trước.
+Bạn: Hãy giải quyết vấn đề lấy dữ liệu.
 
-You: /opsx:new optimize-product-list-fetching
+Bạn: /opsx:new optimize-product-list-fetching
 
 AI:  Đã tạo thay đổi. Sẵn sàng tạo: proposal
 
-You: /opsx:continue
+Bạn: /opsx:continue
 
-AI:  Đang tạo proposal dựa trên khám phá của chúng ta...
-     [Viết proposal kết hợp các phát hiện từ điều tra]
+AI:  Đang tạo proposal dựa trên cuộc thám hiểm của chúng ta...
+     [Viết proposal kết hợp các phát hiện từ cuộc điều tra]
 
      Sẵn sàng tạo: specs, design
-     Bạn muốn tạo cái nào tiếp theo?
+     Bạn muốn cái nào tiếp theo?
 
-You: /opsx:continue
+Bạn: /opsx:continue
 
 AI:  Đang tạo specs...
 ```
 
-**Tốt nhất cho:** Tối ưu hóa hiệu suất, gỡ lỗi, quyết định kiến trúc, yêu cầu không rõ ràng.
+**Phù hợp nhất cho:** Tối ưu hóa hiệu suất, gỡ lỗi, quyết định kiến trúc, yêu cầu chưa rõ ràng.
 
 ### Thay đổi song song
 
 Làm việc trên nhiều thay đổi cùng lúc:
 
 ```text
-Thay đổi A: /opsx:new ──► /opsx:ff ──► /opsx:apply (đang thực hiện)
+Thay đổi A: /opsx:new ──► /opsx:ff ──► /opsx:apply (đang tiến hành)
                                          │
-                                    chuyển ngữ cảnh
+                                    chuyển đổi ngữ cảnh
                                          │
 Thay đổi B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
@@ -161,174 +162,174 @@ Thay đổi B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 **Ví dụ hội thoại:**
 
 ```text
-You: Tôi đang làm add-dark-mode nhưng bị gọi đi sửa lỗi
+Bạn: Tôi đang làm việc trên add-dark-mode nhưng bị kéo vào sửa một lỗi
 
-You: /opsx:new fix-login-redirect
+Bạn: /opsx:new fix-login-redirect
 
 AI:  Đã tạo openspec/changes/fix-login-redirect/
 
-You: /opsx:ff
+Bạn: /opsx:ff
 
-AI:  ✓ Đã tạo các artifact lập kế hoạch
+AI:  ✓ Đã tạo các thành phần quy hoạch
 
-You: /opsx:apply
+Bạn: /opsx:apply
 
-AI:  Đang làm fix-login-redirect...
+AI:  Đang làm việc trên fix-login-redirect...
      [Triển khai bản sửa lỗi]
-     Tất cả các nhiệm vụ đã hoàn thành!
+     Tất cả công việc đã hoàn thành!
 
-You: /opsx:archive
+Bạn: /opsx:archive
 
 AI:  ✓ Đã lưu trữ fix-login-redirect
 
-You: Quay lại làm dark mode thôi
+Bạn: Hãy quay lại chế độ tối
 
-You: /opsx:apply add-dark-mode
+Bạn: /opsx:apply add-dark-mode
 
-AI:  Đang tiếp tục add-dark-mode...
-     Tiếp tục tại nhiệm vụ 2.3: Cập nhật Header...
+AI:  Tiếp tục add-dark-mode...
+     Tiếp tục từ công việc 2.3: Cập nhật Header...
 ```
 
-**Tốt nhất cho:** Các luồng công việc song song, gián đoạn khẩn cấp, cộng tác nhóm.
+**Phù hợp nhất cho:** Các luồng công việc song song, gián đoạn khẩn cấp, cộng tác nhóm.
 
-Khi bạn có nhiều thay đổi đã hoàn thành, sử dụng `/opsx:bulk-archive`:
+Khi bạn có nhiều thay đổi đã hoàn thành, hãy sử dụng `/opsx:bulk-archive`:
 
 ```text
-You: /opsx:bulk-archive
+Bạn: /opsx:bulk-archive
 
 AI:  Tìm thấy 3 thay đổi đã hoàn thành:
-     - add-dark-mode (tất cả nhiệm vụ xong)
-     - fix-login-redirect (tất cả nhiệm vụ xong)
-     - update-footer (tất cả nhiệm vụ xong)
+     - add-dark-mode (tất cả công việc đã xong)
+     - fix-login-redirect (tất cả công việc đã xong)
+     - update-footer (tất cả công việc đã xong)
 
      Kiểm tra xung đột specs...
      ⚠ add-dark-mode và update-footer đều chạm vào specs/ui/
 
-     Đang kiểm tra codebase để giải quyết...
-     Cả hai thay đổi đều đã triển khai. Sẽ áp dụng theo thứ tự thời gian.
+     Kiểm tra codebase để giải quyết...
+     Cả hai thay đổi đều đã được triển khai. Sẽ áp dụng theo thứ tự thời gian.
 
      Lưu trữ tất cả 3 thay đổi?
 
-You: Có
+Bạn: Có
 
 AI:  ✓ Đã lưu trữ add-dark-mode
      ✓ Đã lưu trữ fix-login-redirect
      ✓ Đã lưu trữ update-footer
-     Specs đã hợp nhất theo thứ tự: add-dark-mode → update-footer
+     Specs đã được hợp nhất theo thứ tự: add-dark-mode → update-footer
 ```
 
-Lưu trữ hàng loạt phát hiện khi nhiều thay đổi chạm vào cùng một specs và giải quyết xung đột bằng cách kiểm tra những gì thực sự đã được triển khai.
+Lưu trữ hàng loạt phát hiện khi nhiều thay đổi chạm vào cùng specs và giải quyết xung đột bằng cách kiểm tra những gì thực sự đã được triển khai.
 
-### Hoàn thành một thay đổi
+### Hoàn thành một Thay đổi
 
 Luồng hoàn thành được khuyến nghị:
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              kiểm tra          nhắc nhở đồng bộ
-              triển khai        nếu cần
+              xác thực          nhắc đồng bộ
+              triển khai       nếu cần
 ```
 
-#### Verify: Kiểm tra công việc của bạn
+#### Xác minh: Kiểm tra công việc của bạn
 
-`/opsx:verify` kiểm tra việc triển khai so với các artifact của bạn trên ba chiều:
+`/opsx:verify` xác thực triển khai so với các thành phần của bạn trên ba chiều:
 
 ```text
-You: /opsx:verify
+Bạn: /opsx:verify
 
-AI:  Đang kiểm tra add-auth...
+AI:  Đang xác minh add-auth...
 
-     ĐẦY ĐỦ
-     ✓ Tất cả 12 nhiệm vụ trong tasks.md đã được đánh dấu
-     ✓ Tất cả yêu cầu trong specs đều có code tương ứng
-     ⚠ Kịch bản "Session timeout after inactivity" chưa được kiểm tra
+     TÍNH ĐẦY ĐỦ
+     ✓ Tất cả 12 công việc trong tasks.md đã được đánh dấu
+     ✓ Tất cả yêu cầu trong specs đều có mã tương ứng
+     ⚠ Kịch bản "Hết thời gian session sau khi không hoạt động" chưa được kiểm tra
 
-     CHÍNH XÁC
-     ✓ Triển khai phù hợp với ý định spec
+     TÍNH CHÍNH XÁC
+     ✓ Triển khai khớp với ý định của spec
      ✓ Các trường hợp biên từ kịch bản đã được xử lý
-     ✓ Các trạng thái lỗi khớp với định nghĩa spec
+     ✓ Trạng thái lỗi khớp với định nghĩa spec
 
-     NHẤT QUÁN
-     ✓ Các quyết định thiết kế được phản ánh trong cấu trúc code
-     ✓ Quy tắc đặt tên nhất quán với design.md
+     TÍNH MẠCH LẠC
+     ✓ Các quyết định thiết kế được phản ánh trong cấu trúc mã
+     ✓ Quy ước đặt tên nhất quán với design.md
      ⚠ Thiết kế đề cập "event-driven" nhưng triển khai sử dụng polling
 
      TÓM TẮT
      ─────────────────────────────
      Vấn đề nghiêm trọng: 0
      Cảnh báo: 2
-     Sẵn sàng lưu trữ: Có (với cảnh báo)
+     Sẵn sàng lưu trữ: Có (có cảnh báo)
 
      Khuyến nghị:
-     1. Thêm kiểm tra cho kịch bản session timeout
-     2. Cân nhắc tái cấu trúc thành event-driven như thiết kế, hoặc cập nhật design.md
+     1. Thêm kiểm thử cho kịch bản hết thời gian session
+     2. Cân nhắc tái cấu trúc sang event-driven như đã thiết kế, hoặc cập nhật design.md
 ```
 
-**Những gì verify kiểm tra:**
+**Những gì xác minh kiểm tra:**
 
-| Chiều | Những gì nó kiểm tra |
-|-----------|------------------|
-| Đầy đủ | Tất cả nhiệm vụ hoàn thành, tất cả yêu cầu được triển khai, kịch bản được bao phủ |
-| Chính xác | Triển khai phù hợp với ý định spec, các trường hợp biên được xử lý |
-| Nhất quán | Các quyết định thiết kế được phản ánh trong code, các mẫu nhất quán |
+| Chiều | Những gì nó xác thực |
+|-------|----------------------|
+| Tính đầy đủ | Tất cả công việc đã xong, tất cả yêu cầu đã triển khai, kịch bản được bao phủ |
+| Tính chính xác | Triển khai khớp với ý định spec, các trường hợp biên được xử lý |
+| Tính mạch lạc | Các quyết định thiết kế được phản ánh trong mã, các mẫu nhất quán |
 
-Verify sẽ không chặn việc lưu trữ, nhưng nó hiển thị các vấn đề bạn có thể muốn giải quyết trước.
+Xác minh sẽ không chặn lưu trữ, nhưng nó sẽ nêu ra các vấn đề bạn có thể muốn giải quyết trước.
 
-#### Archive: Hoàn tất thay đổi
+#### Lưu trữ: Hoàn tất Thay đổi
 
-`/opsx:archive` hoàn thành thay đổi và chuyển nó vào lưu trữ:
+`/opsx:archive` hoàn thành thay đổi và di chuyển nó vào kho lưu trữ:
 
 ```text
-You: /opsx:archive
+Bạn: /opsx:archive
 
 AI:  Đang lưu trữ add-auth...
 
-     Trạng thái artifact:
+     Trạng thái thành phần:
      ✓ proposal.md tồn tại
      ✓ specs/ tồn tại
      ✓ design.md tồn tại
-     ✓ tasks.md tồn tại (12/12 nhiệm vụ hoàn thành)
+     ✓ tasks.md tồn tại (12/12 công việc hoàn thành)
 
-     Delta specs: Chưa được đồng bộ với nhánh chính
+     Delta specs: Chưa được đồng bộ vào main
      → Bạn có muốn đồng bộ ngay bây giờ không?
 
-You: Có
+Bạn: Có
 
-AI:  ✓ Đã đồng bộ specs đến openspec/specs/auth/spec.md
-     ✓ Đã chuyển đến openspec/changes/archive/2025-01-24-add-auth/
+AI:  ✓ Đã đồng bộ specs vào openspec/specs/auth/spec.md
+     ✓ Đã di chuyển vào openspec/changes/archive/2025-01-24-add-auth/
 
-     Đã lưu trữ thay đổi thành công.
+     Thay đổi đã được lưu trữ thành công.
 ```
 
-Archive sẽ nhắc nhở nếu specs chưa được đồng bộ. Nó sẽ không chặn vì các nhiệm vụ chưa hoàn thành, nhưng nó sẽ cảnh báo bạn.
+Lưu trữ sẽ nhắc nếu specs chưa được đồng bộ. Nó sẽ không chặn các công việc chưa hoàn thành, nhưng nó sẽ cảnh báo bạn.
 
-## Khi nào sử dụng cái gì
+## Khi nào Sử dụng Cái gì
 
 ### `/opsx:ff` so với `/opsx:continue`
 
 | Tình huống | Sử dụng |
-|-----------|-----|
+|------------|---------|
 | Yêu cầu rõ ràng, sẵn sàng xây dựng | `/opsx:ff` |
-| Đang khám phá, muốn xem xét từng bước | `/opsx:continue` |
-| Muốn lặp lại proposal trước khi tạo specs | `/opsx:continue` |
+| Đang thám hiểm, muốn xem xét từng bước | `/opsx:continue` |
+| Muốn lặp lại trên proposal trước khi tạo specs | `/opsx:continue` |
 | Áp lực thời gian, cần di chuyển nhanh | `/opsx:ff` |
 | Thay đổi phức tạp, muốn kiểm soát | `/opsx:continue` |
 
-**Nguyên tắc chung:** Nếu bạn có thể mô tả toàn bộ phạm vi ngay từ đầu, hãy sử dụng `/opsx:ff`. Nếu bạn đang tìm hiểu dần dần, hãy sử dụng `/opsx:continue`.
+**Quy tắc chung:** Nếu bạn có thể mô tả toàn bộ phạm vi ngay từ đầu, hãy sử dụng `/opsx:ff`. Nếu bạn đang tìm hiểu trong quá trình làm, hãy sử dụng `/opsx:continue`.
 
-### Khi nào cập nhật so với bắt đầu mới
+### Khi nào Cập nhật so với Bắt đầu Mới
 
-Một câu hỏi phổ biến: khi nào việc cập nhật một thay đổi hiện tại là được, và khi nào bạn nên bắt đầu một thay đổi mới?
+Một câu hỏi phổ biến: khi nào cập nhật một thay đổi hiện có là ổn, và khi nào bạn nên bắt đầu một cái mới?
 
-**Cập nhật thay đổi hiện tại khi:**
+**Cập nhật thay đổi hiện có khi:**
 
 - Cùng ý định, thực thi được tinh chỉnh
 - Phạm vi thu hẹp (MVP trước, phần còn lại sau)
-- Sửa đổi dựa trên học hỏi (codebase không như bạn mong đợi)
-- Điều chỉnh thiết kế dựa trên những phát hiện từ triển khai
+- Các sửa đổi dựa trên học hỏi (codebase không như bạn mong đợi)
+- Điều chỉnh thiết kế dựa trên các phát hiện triển khai
 
-**Bắt đầu thay đổi mới khi:**
+**Bắt đầu một thay đổi mới khi:**
 
 - Ý định thay đổi cơ bản
 - Phạm vi bùng nổ thành công việc hoàn toàn khác
@@ -337,77 +338,77 @@ Một câu hỏi phổ biến: khi nào việc cập nhật một thay đổi hi
 
 ```text
                      ┌─────────────────────────────────────┐
-                     │     Đây có phải cùng một công việc? │
+                     │     Đây có phải là cùng một công việc không? │
                      └──────────────┬──────────────────────┘
                                     │
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Cùng ý định?      >50% trùng lặp?      Thay đổi ban đầu
-          Cùng vấn đề?      Cùng phạm vi?        có thể "hoàn thành" mà
-                 │                  │          không cần thay đổi này?
+          Cùng ý định?      >50% trùng lặp?      Có thể đánh dấu
+          Cùng vấn đề?      Cùng phạm vi?        "hoàn thành" mà không
+                 │                  │          có những thay đổi này?
                  │                  │                  │
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      CÓ                KHÔNG CÓ           KHÔNG KHÔNG              CÓ
+      CÓ               KHÔNG CÓ           KHÔNG KHÔNG              CÓ
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    CẬP NHẬT         MỚI CẬP NHẬT       MỚI CẬP NHẬT          MỚI
+    CẬP NHẬT          MỚI  CẬP NHẬT    MỚI  CẬP NHẬT          MỚI
 ```
 
 **Ví dụ: "Thêm chế độ tối"**
 
-- "Cần hỗ trợ thêm theme tùy chỉnh" → Thay đổi mới (phạm vi bùng nổ)
+- "Cũng cần hỗ trợ tùy chỉnh giao diện" → Thay đổi mới (phạm vi bùng nổ)
 - "Phát hiện tùy chọn hệ thống khó hơn dự kiến" → Cập nhật (cùng ý định)
-- "Hãy phát hành nút chuyển đổi trước, thêm tùy chọn sau" → Cập nhật rồi lưu trữ, sau đó tạo thay đổi mới
+- "Hãy xuất bản nút chuyển đổi trước, thêm tùy chọn sau" → Cập nhật rồi lưu trữ, sau đó thay đổi mới
 
-## Các phương pháp hay nhất
+## Các Thực hành Tốt nhất
 
-### Giữ các thay đổi tập trung
+### Giữ các Thay đổi Tập trung
 
-Một đơn vị công việc logic cho mỗi thay đổi. Nếu bạn đang làm "thêm tính năng X và cũng tái cấu trúc Y", hãy cân nhắc hai thay đổi riêng biệt.
+Một đơn vị logic công việc trên mỗi thay đổi. Nếu bạn đang "thêm tính năng X và đồng thời tái cấu trúc Y", hãy cân nhắc hai thay đổi riêng biệt.
 
-**Tại sao điều này quan trọng:**
+**Tại sao nó quan trọng:**
 - Dễ xem xét và hiểu hơn
 - Lịch sử lưu trữ sạch hơn
-- Có thể phát hành độc lập
-- Hoàn nguyên đơn giản hơn nếu cần
+- Có thể xuất bản độc lập
+- Dễ dàng hoàn tác hơn nếu cần
 
-### Sử dụng `/opsx:explore` cho yêu cầu không rõ ràng
+### Sử dụng `/opsx:explore` cho các Yêu cầu Chưa Rõ ràng
 
 Trước khi cam kết với một thay đổi, hãy khám phá không gian vấn đề:
 
 ```text
-You: /opsx:explore
+Bạn: /opsx:explore
 
-AI:  Bạn muốn khám phá điều gì?
+AI:  Bạn muốn thám hiểm điều gì?
 
-You: Chúng ta nên xử lý rate limiting cho API như thế nào?
+Bạn: Chúng ta nên xử lý giới hạn tốc độ cho API của mình như thế nào?
 
-AI:  Để tôi điều tra thiết lập hiện tại và các tùy chọn của bạn...
+AI:  Hãy để tôi điều tra thiết lập hiện tại và các tùy chọn của bạn...
      [Nghiên cứu codebase, xem xét các mẫu]
 
      Tôi thấy ba cách tiếp cận chúng ta có thể thực hiện:
-     1. Dựa trên Middleware (đơn giản, theo endpoint)
-     2. Hỗ trợ Redis (có thể mở rộng, trạng thái chia sẻ)
-     3. Token bucket theo người dùng (công bằng, phức tạp)
+     1. Dựa trên middleware (đơn giản, theo từng endpoint)
+     2. Hỗ trợ bởi Redis (có thể mở rộng, trạng thái dùng chung)
+     3. Token bucket cho mỗi người dùng (công bằng, phức tạp)
 
-     Stack hiện tại của bạn gợi ý #1 hoặc #2. Quy mô của bạn là bao nhiêu?
+     Ngăn xếp công nghệ hiện tại của bạn gợi ý #1 hoặc #2. Quy mô của bạn là bao nhiêu?
 ```
 
-Khám phá làm rõ tư duy trước khi bạn tạo các artifact.
+Thám hiểm làm rõ suy nghĩ trước khi bạn tạo các thành phần.
 
-### Kiểm tra trước khi lưu trữ
+### Xác minh trước khi Lưu trữ
 
-Sử dụng `/opsx:verify` để kiểm tra triển khai có khớp với các artifact không:
+Sử dụng `/opsx:verify` để kiểm tra triển khai khớp với các thành phần:
 
 ```text
-You: /opsx:verify
+Bạn: /opsx:verify
 
-AI:  Đang kiểm tra add-dark-mode...
+AI:  Đang xác minh add-dark-mode...
 
-     ✓ Tất cả nhiệm vụ trong tasks.md đã được đánh dấu
-     ✓ Yêu cầu trong specs đều có code tương ứng
+     ✓ Tất cả công việc trong tasks.md đã được đánh dấu
+     ✓ Các yêu cầu trong specs đều có mã tương ứng
      ✓ Các quyết định thiết kế được phản ánh trong triển khai
 
      Sẵn sàng lưu trữ!
@@ -415,12 +416,12 @@ AI:  Đang kiểm tra add-dark-mode...
 
 Phát hiện sự không khớp trước khi bạn đóng thay đổi.
 
-### Đặt tên thay đổi rõ ràng
+### Đặt tên Thay đổi Rõ ràng
 
-Tên tốt giúp `openspec list` hữu dụng:
+Tên tốt làm cho `openspec list` hữu ích:
 
-```text`
-Tốt:                          Tránh:
+```text
+Tên tốt:                         Tránh:
 add-dark-mode                  feature-1
 fix-login-redirect             update
 optimize-product-query         changes
@@ -429,23 +430,23 @@ implement-2fa                  wip
 
 ## Tham Khảo Nhanh Lệnh
 
-Để xem chi tiết đầy đủ và các tùy chọn của lệnh, vui lòng tham khảo [Lệnh](commands.md).
+Để biết chi tiết đầy đủ về lệnh và các tùy chọn, xem [Lệnh](commands.md).
 
 | Lệnh | Mục đích | Khi nào sử dụng |
 |---------|---------|-------------|
-| `/opsx:propose` | Tạo thay đổi + các biểu mẫu quy hoạch | Con đường mặc định nhanh (hồ sơ `core`) |
-| `/opsx:explore` | Suy ngẫm về các ý tưởng | Yêu cầu chưa rõ ràng, điều tra |
-| `/opsx:new` | Bắt đầu tạo khung thay đổi | Chế độ mở rộng, kiểm soát biểu mẫu rõ ràng |
-| `/opsx:continue` | Tạo biểu mẫu tiếp theo | Chế độ mở rộng, tạo biểu mẫu từng bước |
-| `/opsx:ff` | Tạo tất cả biểu mẫu quy hoạch | Chế độ mở rộng, phạm vi rõ ràng |
-| `/opsx:apply` | Triển khai các nhiệm vụ | Sẵn sàng viết mã |
-| `/opsx:verify` | Xác thực việc triển khai | Chế độ mở rộng, trước khi lưu trữ |
-| `/opsx:sync` | Hợp nhất các đặc tả delta | Chế độ mở rộng, tùy chọn |
-| `/opsx:archive` | Hoàn thành thay đổi | Tất cả công việc đã hoàn tất |
-| `/opsx:bulk-archive` | Lưu trữ nhiều thay đổi | Ch chế độ mở rộng, công việc song song |
+| `/opsx:propose` | Tạo thay đổi + các tài liệu lập kế hoạch | Đường dẫn mặc định nhanh (profile `core`) |
+| `/opsx:explore` | Suy nghĩ về các ý tưởng | Yêu cầu chưa rõ ràng, điều tra |
+| `/opsx:new` | Bắt đầu một khung thay đổi | Chế độ mở rộng, kiểm soát tài liệu rõ ràng |
+| `/opsx:continue` | Tạo tài liệu tiếp theo | Chế độ mở rộng, tạo tài liệu từng bước |
+| `/opsx:ff` | Tạo tất cả tài liệu lập kế hoạch | Chế độ mở rộng, phạm vi rõ ràng |
+| `/opsx:apply` | Triển khai các tác vụ | Sẵn sàng viết mã |
+| `/opsx:verify` | Xác nhận triển khai | Chế độ mở rộng, trước khi lưu trữ |
+| `/opsx:sync` | Hợp nhất các thông số kỹ thuật delta | Chế độ mở rộng, tùy chọn |
+| `/opsx:archive` | Hoàn thành thay đổi | Tất cả công việc đã hoàn thành |
+| `/opsx:bulk-archive` | Lưu trữ nhiều thay đổi | Chế độ mở rộng, công việc song song |
 
 ## Các Bước Tiếp Theo
 
-- [Lệnh](commands.md) - Tham khảo đầy đủ về lệnh với các tùy chọn
-- [Khái niệm](concepts.md) - Tìm hiểu sâu về đặc tả, biểu mẫu và lược đồ
+- [Lệnh](commands.md) - Tham chiếu đầy đủ về lệnh với các tùy chọn
+- [Khái niệm](concepts.md) - Tìm hiểu sâu về thông số kỹ thuật, tài liệu và lược đồ
 - [Tùy chỉnh](customization.md) - Tạo quy trình làm việc tùy chỉnh

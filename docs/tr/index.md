@@ -3,62 +3,51 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "Yapay Zeka Asistanları İçin Belirtme Tabanlı Geliştirme"
-  tagline: Yapay zeka asistanı projelerini oluşturmak ve yönetmek için hafif bir belirtme.
+  text: "Yapay Zeka Asistanları için Spesifikasyon Odaklı Geliştirme"
+  tagline: Yapay zeka asistanı projeleri oluşturmak ve yönetmek için hafif bir spesifikasyon.
   actions:
     - theme: brand
-      text: Başlayın
+      text: Başlarken
       link: ./getting-started
     - theme: alt
       text: Ana Sayfa
       link: /
 
 features:
-  - title: Belirtme-Öncelikli İş Akışı
+  - title: Spesifikasyon Odaklı İş Akışı
     details: Kod yazmadan önce gereksinimleri tanımlayın.
-  - title: Yapay Zeka Yerli Tasarım
+  - title: Yapay Zeka Doğal Tasarım
     details: Claude Code, Cursor, Windsurf ve daha fazlası için oluşturuldu.
   - title: Çoklu Dil
-    details: Dokümantasyon birden fazla dilde mevcuttur.
+    details: Belgeler birden fazla dilde mevcuttur.
 ---
 
 
-<details>
-<summary><strong>En çok sevilen belirtme çerçevesi.</strong></summary>
-
-[![Stars](https://img.shields.io/github/stars/Fission-AI/OpenSpec?style=flat-square&label=Stars)](https://github.com/Fission-AI/OpenSpec/stargazers)
-[![Downloads](https://img.shields.io/npm/dm/@fission-ai/openspec?style=flat-square&label=Downloads/mo)](https://www.npmjs.com/package/@fission-ai/openspec)
-[![Contributors](https://img.shields.io/github/contributors/Fission-AI/OpenSpec?style=flat-square&label=Contributors)](https://github.com/Fission-AI/OpenSpec/graphs/contributors)
-
-</details>
-<p></p>
 Felsefemiz:
 
 ```text
 → akıcı, katı değil
 → yinelemeli, şelale değil
 → kolay, karmaşık değil
-→ sadece yeşil alan için değil, kahverengi alan için de oluşturuldu
-→ kişisel projelerden kurumsal projelere kadar ölçeklenebilir
+→ sadece sıfırdan değil, mevcut projeler için de uygun
+→ kişisel projelerden kurumsal ölçeklere kadar genişletilebilir
 ```
 
 > [!TIP]
-> **Yeni iş akışı artık mevcut!** OpenSpec'i yeni bir eser yönlendirmeli iş akışıyla yeniden oluşturduk.
+> **Yeni iş akışı artık kullanılabilir!** OpenSpec'i yeni bir yapıt odaklı iş akışıyla yeniden oluşturduk.
 >
-> Başlamak için `/opsx:propose "fikriniz"` komutunu çalıştırın. → [Buradan daha fazla bilgi edinin](opsx.md)
+> Başlamak için `/opsx:propose "fikriniz"` komutunu çalıştırın. → [Buradan daha fazlasını öğrenin](opsx.md)
 
 <p align="center">
-  Güncellemeler için <a href="https://x.com/0xTab">@0xTab'ı X'te takip edin</a> · Yardım ve sorular için <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord'una katılın</a>.
+  Güncellemeler için <a href="https://x.com/0xTab">@0xTab'ı X'te</a> takip edin · Yardım ve sorular için <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a>'una katılın.
 </p>
 
-<!-- TODO: /opsx:propose → /opsx:archive iş akışının GIF demosunu ekle -->
-
-## Kullanımını görün
+## Eylem halinde görün
 
 ```text
 Siz: /opsx:propose add-dark-mode
 YZ:  openspec/changes/add-dark-mode/ oluşturuldu
-     ✓ proposal.md — bunu neden yapıyoruz, ne değişiyor
+     ✓ proposal.md — neden bunu yapıyoruz, ne değişiyor
      ✓ specs/       — gereksinimler ve senaryolar
      ✓ design.md    — teknik yaklaşım
      ✓ tasks.md     — uygulama kontrol listesi
@@ -67,75 +56,74 @@ YZ:  openspec/changes/add-dark-mode/ oluşturuldu
 Siz: /opsx:apply
 YZ:  Görevler uygulanıyor...
      ✓ 1.1 Tema bağlam sağlayıcısı ekle
-     ✓ 1.2 Toggle bileşeni oluştur
+     ✓ 1.2 Geçiş bileşeni oluştur
      ✓ 2.1 CSS değişkenleri ekle
      ✓ 2.2 localStorage'ı bağla
      Tüm görevler tamamlandı!
 
 Siz: /opsx:archive
-YZ:  openspec/changes/archive/2025-01-23-add-dark-mode/ arşivlendi
-     Belirtmeler güncellendi. Bir sonraki özellik için hazır.
+YZ:  openspec/changes/archive/2025-01-23-add-dark-mode/ konumuna arşivlendi
+     Spesifikasyonlar güncellendi. Sonraki özellik için hazır.
 ```
 
 <details>
-<summary><strong>OpenSpec Kontrol Paneli</strong></summary>
-
+<summary><strong>OpenSpec Gösterge Paneli</strong></summary>
 </details>
 
 ## Hızlı Başlangıç
 
 **Node.js 20.19.0 veya üzeri gerektirir.**
 
-OpenSpec'i globally yükleyin:
+OpenSpec'i global olarak yükleyin:
 
 ```bash
 npm install -g @fission-ai/openspec@latest
 ```
 
-Ardından proje dizinize gidin ve başlatın:
+Ardından proje dizinine gidin ve başlatın:
 
 ```bash
 cd your-project
 openspec init
 ```
 
-Şimdi yapay zeka asistanınıza şunu söyleyin: `/opsx:propose <ne-inşa-etmek-istediğiniz>`
+Şimdi yapay zekanıza şunu söyleyin: `/opsx:propose <ne-inşa-etmek-istediğiniz>`
 
 Genişletilmiş iş akışını (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`) istiyorsanız, `openspec config profile` ile seçin ve `openspec update` ile uygulayın.
 
 > [!NOTE]
-> Aracınızın desteklenip desteklenmediğinden emin değil misiniz? [Tam listeyi görüntüleyin](supported-tools.md) – 25'ten fazla aracı destekliyoruz ve sayısı artıyor.
+> Aracınızın desteklenip desteklenmediğinden emin değil misiniz? [Tam listeyi görüntüleyin](supported-tools.md) – 25'ten fazla aracı destekliyoruz ve bu sayı artıyor.
 >
-> Ayrıca pnpm, yarn, bun ve nix ile çalışır. [Kurulum seçeneklerini görün](installation.md).
+> Ayrıca pnpm, yarn, bun ve nix ile de çalışır. [Yükleme seçeneklerini görün](installation.md).
 
-## Dokümantasyon
+## Belgeler
 
-→ **[Başlangıç](getting-started.md)**: ilk adımlar<br>
+→ **[Başlarken](getting-started.md)**: ilk adımlar<br>
 → **[İş Akışları](workflows.md)**: kombinasyonlar ve kalıplar<br>
 → **[Komutlar](commands.md)**: eğik çizgi komutları ve beceriler<br>
 → **[CLI](cli.md)**: terminal referansı<br>
-→ **[Desteklenen Araçlar](supported-tools.md)**: araç entegrasyonları ve kurulum yolları<br>
-→ **[Kavramlar](concepts.md)**: her şey nasıl bir araya geliyor<br>
+→ **[Desteklenen Araçlar](supported-tools.md)**: araç entegrasyonları ve yükleme yolları<br>
+→ **[Kavramlar](concepts.md)**: nasıl bir araya geliyor<br>
 → **[Çoklu Dil](multi-language.md)**: çoklu dil desteği<br>
 → **[Özelleştirme](customization.md)**: kendinize göre ayarlayın
 
 
 ## Neden OpenSpec?
 
-Yapay zeka kodlama asistanları güçlüdür, ancak gereksinimler yalnızca sohbet geçmişinde yaşadığında öngörülemez olabilir. OpenSpec, herhangi bir kod yazılmadan önce neyi inşa edeceğiniz konusunda anlaşmanız için hafif bir belirtme katmanı ekler.
+Yapay zeka kodlama asistanları güçlüdür, ancak gereksinimler yalnızca sohbet geçmişinde yaşadığında öngörülemezdir. OpenSpec, herhangi bir kod yazılmadan önce ne inşa edeceğiniz konusunda anlaşmanız için hafif bir spesifikasyon katmanı ekler.
 
-- **İnşa etmeden önce anlaşın** — insan ve yapay zeka, kod yazılmadan önce belirtmeler üzerinde hemfikir olur
-- **Düzenli kalın** — her değişiklik, teklif, belirtme, tasarım ve görevlerle kendi klasörünü alır
-- **Akıcı çalışın** — herhangi bir eseri istediğiniz zaman güncelleyin, katı aşama kapıları yok
+- **İnşa etmeden önce anlaşın** — insan ve yapay zeka, kod yazılmadan önce spesifikasyonlar üzerinde uzlaşır
+- **Düzenli kalın** — her değişiklik kendi klasöründe teklif, spesifikasyonlar, tasarım ve görevlerle birlikte gelir
+- **Akıcı çalışın** — herhangi bir yapiti istediğiniz zaman güncelleyin, katı aşama kapıları yok
 - **Araçlarınızı kullanın** — eğik çizgi komutları aracılığıyla 20'den fazla yapay zeka asistanıyla çalışır
 
-### Nasıl karşılaştırılırız
+### Nasıl karşılaştırıyoruz
 
-**[Spec Kit](https://github.com/github/spec-kit)** (GitHub) ile karşılaştırıldığında — Kapsamlı ama ağır. Katı aşama kapıları, çok fazla Markdown, Python kurulumu. OpenSpec daha hafiftir ve özgürce yinelemenize olanak tanır.
+**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Kapsamlı ama ağır. Katı aşama kapıları, çok fazla Markdown, Python kurulumu. OpenSpec daha hafiftir ve özgürce yineleme yapmanızı sağlar.
 
-**[Kiro](https://kiro.dev)** (AWS) ile karşılaştırıldığında — Güçlü ama kendi IDE'sine kilitlenirsiniz ve yalnızca Claude modelleriyle sınırlıdır. OpenSpec, zaten kullandığınız araçlarla çalışır.
+**vs. [Kiro](https://kiro.dev)** (AWS) — Güçlü ama kendi IDE'lerine kilitleniyorsunuz ve yalnızca Claude modelleriyle sınırlısınız. OpenSpec zaten kullandığınız araçlarla çalışır.
 
-**Hiçbiriyle karşılaştırıldığında** — Belirtmesiz yapay zeka kodlama, belirsiz istemler ve öngörülemeyen sonuçlar demektir. OpenSpec, törensiz bir şekilde öngörülebilirlik getirir.
+**vs. hiçbir şey** — Spesifikasyonlar olmadan yapay zeka kodlama, belirsiz istemler ve öngörülemeyen sonuçlar anlamına gelir. OpenSpec, törensizlikle birlikte öngörülebilirlik getirir.
 
 ## OpenSpec'i Güncelleme
 
@@ -143,10 +131,11 @@ Yapay zeka kodlama asistanları güçlüdür, ancak gereksinimler yalnızca sohb
 
 ```bash
 npm install -g @fission-ai/openspec@latest
+```
 
 **Ajan talimatlarını yenileyin**
 
-Her projenin içinde çalıştırarak yapay zeka rehberliğini yeniden oluşturun ve en son eğik çizgi komutlarının etkin olduğundan emin olun:
+Yapay zeka yönlendirmesini yeniden oluşturmak ve en son eğik çizgi komutlarının aktif olduğundan emin olmak için her projede bunu çalıştırın:
 
 ```bash
 openspec update
@@ -154,27 +143,27 @@ openspec update
 
 ## Kullanım Notları
 
-**Model seçimi**: OpenSpec, yüksek akıl yürütmeli modellerle en iyi şekilde çalışır. Hem planlama hem de uygulama için Opus 4.5 ve GPT 5.2'yi öneriyoruz.
+**Model seçimi**: OpenSpec, yüksek mantık yürütme kapasitesine sahip modellerle en iyi şekilde çalışır. Hem planlama hem de uygulama için Opus 4.5 ve GPT 5.2'yi öneriyoruz.
 
-**Bağlam hijyeni**: OpenSpec, temiz bir bağlam penceresinden faydalanır. Uygulamaya başlamadan önce bağlamınızı temizleyin ve oturumunuz boyunca iyi bağlam hijyeni koruyun.
+**Bağlam hijyeni**: OpenSpec, temiz bir bağlam penceresinden faydalanır. Uygulamaya başlamadan önce bağlamınızı temizleyin ve oturumunuz boyunca iyi bir bağlam hijyeni sağlayın.
 
 ## Katkıda Bulunma
 
-**Küçük düzeltmeler** — Hata düzeltmeleri, yazım hatası düzeltmeleri ve küçük iyileştirmeler doğrudan PR olarak gönderilebilir.
+**Küçük düzeltmeler** — Hata düzeltmeleri, yazım hataları ve küçük iyileştirmeler doğrudan PR olarak gönderilebilir.
 
-**Daha büyük değişiklikler** — Yeni özellikler, önemli yeniden düzenlemeler veya mimari değişiklikler için lütfen önce bir OpenSpec değişiklik teklifi gönderin, böylece uygulama başlamadan önce niyet ve hedefler üzerinde hemfikir olabiliriz.
+**Daha büyük değişiklikler** — Yeni özellikler, önemli yeniden düzenlemeler veya mimari değişiklikler için lütfen önce bir OpenSpec değişiklik teklifi gönderin, böylece uygulamaya başlamadan önce amaç ve hedefler üzerinde uzlaşabiliriz.
 
-Teklif yazarken OpenSpec felsefesini aklınızda bulundurun: farklı kodlama ajanları, modeller ve kullanım durumları genelinde çok çeşitli kullanıcılara hizmet ediyoruz. Değişiklikler herkes için iyi çalışmalıdır.
+Teklifleri yazarken OpenSpec felsefesini aklınızda bulundurun: farklı kodlama ajanları, modeller ve kullanım durumları genelinde çok çeşitli kullanıcılara hizmet ediyoruz. Değişiklikler herkes için iyi çalışmalıdır.
 
-**Yapay zeka tarafından üretilen kod hoştur** — test edilmiş ve doğrulanmış olduğu sürece. Yapay zeka tarafından üretilen kod içeren PR'lar, kullanılan kodlama ajanını ve modeli belirtmelidir (örneğin, "claude-opus-4-5-20251101 kullanılarak Claude Code ile oluşturuldu").
+**Yapay zeka tarafından üretilen kod memnuniyetle karşılanır** — test edildiği ve doğrulandığı sürece. Yapay zeka tarafından üretilen kod içeren PR'ler, kullanılan kodlama ajanını ve modeli belirtmelidir (ör. "claude-opus-4-5-20251101 kullanılarak Claude Code ile oluşturuldu").
 
 ### Geliştirme
 
 - Bağımlılıkları yükleyin: `pnpm install`
 - Derleyin: `pnpm run build`
 - Test edin: `pnpm test`
-- CLI'yı yerel olarak geliştirin: `pnpm run dev` veya `pnpm run dev:cli`
-- Geleneksel提交ler (tek satır): `type(scope): subject`
+- CLI'yi yerel olarak geliştirin: `pnpm run dev` veya `pnpm run dev:cli`
+- Geleneksel commit'ler (tek satır): `type(scope): subject`
 
 ## Diğer
 
@@ -183,16 +172,16 @@ Teklif yazarken OpenSpec felsefesini aklınızda bulundurun: farklı kodlama aja
 
 OpenSpec anonim kullanım istatistikleri toplar.
 
-Yalnızca kullanım kalıplarını anlamak için komut adlarını ve sürümü toplar. Argüman, yol, içerik veya kişisel tanımlanabilir bilgi (PII) toplamaz. CI'da otomatik olarak devre dışıdır.
+Yalnızca kullanım kalıplarını anlamak için komut adlarını ve sürümü topluyoruz. Argümanlar, yollar, içerik veya PII yoktur. CI'da otomatik olarak devre dışı bırakılır.
 
 **Devre dışı bırakma:** `export OPENSPEC_TELEMETRY=0` veya `export DO_NOT_TRACK=1`
 
 </details>
 
 <details>
-<summary><strong>Sorumlular ve Danışmanlar</strong></summary>
+<summary><strong>Bakımcılar ve Danışmanlar</strong></summary>
 
-Projenin yolunu çizmeye yardımcı olan çekirdek sorumlular ve danışmanların listesi için [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) dosyasına bakın.
+Projeye rehberlik eden çekirdek bakımcılar ve danışmanların listesi için [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md)'ye bakın.
 
 </details>
 

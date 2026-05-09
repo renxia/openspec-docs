@@ -1,29 +1,30 @@
-# Referência do CLI
+# Referência da CLI
 
-O OpenSpec CLI (`openspec`) fornece comandos de terminal para configuração do projeto, validação, inspeção de status e gerenciamento. Esses comandos complementam os comandos de IA com barra (como `/opsx:propose`) documentados em [Comandos](commands.md).
+A CLI do OpenSpec (`openspec`) fornece comandos de terminal para configuração do projeto, validação, inspeção de status e gerenciamento. Esses comandos complementam os comandos de barra da IA (como `/opsx:propose`) documentados em [Commands](commands.md).
 
 ## Resumo
 
 | Categoria | Comandos | Finalidade |
-|-----------|----------|------------|
+|----------|----------|---------|
 | **Configuração** | `init`, `update` | Inicializar e atualizar o OpenSpec em seu projeto |
+| **Workspaces (beta)** | `workspace setup`, `workspace list`, `workspace ls`, `workspace link`, `workspace relink`, `workspace doctor`, `workspace open` | Configurar planejamento entre repositórios ou pastas vinculadas |
 | **Navegação** | `list`, `view`, `show` | Explorar alterações e especificações |
 | **Validação** | `validate` | Verificar alterações e especificações em busca de problemas |
-| **Ciclo de Vida** | `archive` | Finalizar alterações concluídas |
-| **Fluxo de Trabalho** | `status`, `instructions`, `templates`, `schemas` | Suporte ao fluxo de trabalho orientado por artefatos |
+| **Ciclo de vida** | `archive` | Finalizar alterações concluídas |
+| **Fluxo de trabalho** | `status`, `instructions`, `templates`, `schemas` | Suporte a fluxo de trabalho orientado por artefatos |
 | **Schemas** | `schema init`, `schema fork`, `schema validate`, `schema which` | Criar e gerenciar fluxos de trabalho personalizados |
 | **Configuração** | `config` | Visualizar e modificar configurações |
 | **Utilitários** | `feedback`, `completion` | Feedback e integração com o shell |
 
 ---
 
-## Comandos para Humanos vs Agentes
+## Comandos Humanos vs. de Agente
 
-A maioria dos comandos CLI é projetada para **uso humano** em um terminal. Alguns comandos também suportam **uso por agentes/scripts** via saída JSON.
+A maioria dos comandos CLI são projetados para **uso humano** em um terminal. Alguns comandos também suportam **uso por agentes/scripts** através de saída JSON.
 
-### Comandos Exclusivos para Humanos
+### Comandos Apenas para Humanos
 
-Estes comandos são interativos e projetados para uso em terminal:
+Esses comandos são interativos e projetados para uso em terminal:
 
 | Comando | Finalidade |
 |---------|------------|
@@ -31,43 +32,48 @@ Estes comandos são interativos e projetados para uso em terminal:
 | `openspec view` | Painel de controle interativo |
 | `openspec config edit` | Abrir configuração no editor |
 | `openspec feedback` | Enviar feedback via GitHub |
-| `openspec completion install` | Instalar conclusões de shell |
+| `openspec completion install` | Instalar completions de shell |
 
 ### Comandos Compatíveis com Agentes
 
-Estes comandos suportam saída `--json` para uso programático por agentes de IA e scripts:
+Esses comandos suportam saída `--json` para uso programático por agentes de IA e scripts:
 
 | Comando | Uso Humano | Uso por Agente |
 |---------|------------|----------------|
 | `openspec list` | Navegar por alterações/especificações | `--json` para dados estruturados |
 | `openspec show <item>` | Ler conteúdo | `--json` para análise |
-| `openspec validate` | Verificar problemas | `--all --json` para validação em lote |
+| `openspec validate` | Verificar problemas | `--all --json` para validação em massa |
 | `openspec status` | Ver progresso dos artefatos | `--json` para status estruturado |
 | `openspec instructions` | Obter próximos passos | `--json` para instruções do agente |
-| `openspec templates` | Encontrar caminhos dos templates | `--json` para resolução de caminhos |
+| `openspec templates` | Encontrar caminhos de templates | `--json` para resolução de caminhos |
 | `openspec schemas` | Listar schemas disponíveis | `--json` para descoberta de schemas |
+| `openspec workspace setup --no-interactive` | Criar um espaço de trabalho com entradas explícitas | `--json` para saída de setup estruturada |
+| `openspec workspace list` | Navegar por espaços de trabalho conhecidos | `--json` para objetos de espaço de trabalho tipados |
+| `openspec workspace link` | Vincular um repositório ou pasta | `--json` para saída de vinculação estruturada |
+| `openspec workspace relink` | Reparar um caminho vinculado | `--json` para saída de vinculação estruturada |
+| `openspec workspace doctor` | Verificar um espaço de trabalho | `--json` para saída de status estruturada |
 
 ---
 
 ## Opções Globais
 
-Estas opções funcionam com todos os comandos:
+Essas opções funcionam com todos os comandos:
 
 | Opção | Descrição |
 |-------|-----------|
 | `--version`, `-V` | Exibir número da versão |
-| `--no-color` | Desativar saída colorida |
+| `--no-color` | Desabilitar saída colorida |
 | `--help`, `-h` | Exibir ajuda para o comando |
 
 ---
 
-## Comandos de Configuração
+## Comandos de Setup
 
 ### `openspec init`
 
-Inicializa o OpenSpec no seu projeto. Cria a estrutura de pastas e configura integrações com ferramentas de IA.
+Inicializar o OpenSpec em seu projeto. Cria a estrutura de pastas e configura as integrações de ferramentas de IA.
 
-O comportamento padrão usa os valores padrão da configuração global: perfil `core`, entrega `both`, fluxos de trabalho `propose, explore, apply, archive`.
+O comportamento padrão usa os padrões da configuração global: perfil `core`, entrega `both`, workflows `propose, explore, apply, sync, archive`.
 
 ```
 openspec init [caminho] [opções]
@@ -77,19 +83,19 @@ openspec init [caminho] [opções]
 
 | Argumento | Obrigatório | Descrição |
 |-----------|-------------|-----------|
-| `caminho` | Não | Diretório alvo (padrão: diretório atual) |
+| `caminho` | Não | Diretório de destino (padrão: diretório atual) |
 
 **Opções:**
 
 | Opção | Descrição |
 |-------|-----------|
-| `--tools <lista>` | Configurar ferramentas de IA de forma não interativa. Use `all`, `none` ou lista separada por vírgulas |
-| `--force` | Limpeza automática de arquivos legados sem confirmação |
-| `--profile <perfil>` | Substituir o perfil global para esta execução de init (`core` ou `custom`) |
+| `--tools <lista>` | Configurar ferramentas de IA de forma não interativa. Use `all`, `none` ou uma lista separada por vírgulas |
+| `--force` | Limpar automaticamente arquivos legados sem solicitar confirmação |
+| `--profile <perfil>` | Sobrescrever o perfil global para esta execução do init (`core` ou `custom`) |
 
-`--profile custom` usa os fluxos de trabalho que estão selecionados na configuração global (`openspec config profile`).
+`--profile custom` usa quaisquer workflows que estejam atualmente selecionados na configuração global (`openspec config profile`).
 
-**IDs de ferramentas suportadas (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `claude`, `cline`, `codex`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `kilocode`, `kiro`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+**IDs de ferramentas suportadas (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
 
 **Exemplos:**
 
@@ -106,14 +112,14 @@ openspec init --tools claude,cursor
 # Configurar para todas as ferramentas suportadas
 openspec init --tools all
 
-# Substituir o perfil para esta execução
+# Sobrescrever perfil para esta execução
 openspec init --profile core
 
 # Pular prompts e limpar automaticamente arquivos legados
 openspec init --force
 ```
 
-**O que é criado:**
+**O que ele cria:**
 
 ```
 openspec/
@@ -123,7 +129,7 @@ openspec/
 
 .claude/skills/         # Habilidades do Claude Code (se claude selecionado)
 .cursor/skills/         # Habilidades do Cursor (se cursor selecionado)
-.cursor/commands/       # Comandos OPSX do Cursor (se entrega inclui comandos)
+.cursor/commands/       # Comandos OPSX do Cursor (se a entrega incluir comandos)
 ... (outras configurações de ferramentas)
 ```
 
@@ -131,7 +137,7 @@ openspec/
 
 ### `openspec update`
 
-Atualiza os arquivos de instrução do OpenSpec após atualizar o CLI. Regenera os arquivos de configuração das ferramentas de IA usando seu perfil global atual, fluxos de trabalho selecionados e modo de entrega.
+Atualizar os arquivos de instrução do OpenSpec após atualizar a CLI. Re-gera os arquivos de configuração das ferramentas de IA usando seu perfil global atual, workflows selecionados e modo de entrega.
 
 ```
 openspec update [caminho] [opções]
@@ -141,7 +147,7 @@ openspec update [caminho] [opções]
 
 | Argumento | Obrigatório | Descrição |
 |-----------|-------------|-----------|
-| `caminho` | Não | Diretório alvo (padrão: diretório atual) |
+| `caminho` | Não | Diretório de destino (padrão: diretório atual) |
 
 **Opções:**
 
@@ -159,6 +165,140 @@ openspec update
 
 ---
 
+## Comandos de Espaço de Trabalho
+
+Os comandos de espaço de trabalho estão em desenvolvimento ativo e ainda não estão prontos para uso. Não construa automações externas, integrações ou workflows de longa duração sobre essa superfície de comandos; o comportamento dos comandos, arquivos de estado e saída JSON podem mudar a qualquer momento.
+
+Espaços de trabalho de coordenação são locais de planejamento para trabalho que abrange múltiplos repositórios ou pastas. A visibilidade do espaço de trabalho não é um compromisso de alteração: vincule os repositórios ou pastas que o OpenSpec deve conhecer, depois crie alterações quando estiver pronto para planejar um trabalho específico.
+
+### `openspec workspace setup`
+
+Criar um espaço de trabalho no local padrão do OpenSpec e vincular pelo menos um repositório ou pasta existente.
+
+```bash
+openspec workspace setup [opções]
+```
+
+**Opções:**
+
+| Opção | Descrição |
+|-------|-----------|
+| `--name <nome>` | Nome do espaço de trabalho. Nomes devem estar em kebab-case |
+| `--link <caminho>` | Vincular um repositório ou pasta existente e inferir o nome do link a partir do nome da pasta |
+| `--link <nome>=<caminho>` | Vincular um repositório ou pasta existente com um nome de link explícito |
+| `--opener <id>` | Armazenar um abridor preferido durante o setup não interativo: `codex`, `claude`, `github-copilot` ou `editor` |
+| `--no-interactive` | Desabilitar prompts; requer `--name` e pelo menos um `--link` |
+| `--json` | Saída JSON; requer `--no-interactive` |
+
+**Exemplos:**
+
+```bash
+openspec workspace setup
+openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
+openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex
+openspec workspace setup --no-interactive --json --name checkout --link /repos/platform/apps/checkout
+```
+
+O setup interativo solicita um abridor preferido e o armazena no estado local da máquina do espaço de trabalho. O setup não interativo armazena um abridor preferido apenas quando `--opener` é fornecido; caso contrário, `workspace open` solicitará mais tarde em terminais interativos quando um abridor suportado estiver disponível, ou pedirá que os scripts passem `--agent <ferramenta>` ou `--editor`.
+
+### `openspec workspace list`
+
+Listar os espaços de trabalho OpenSpec conhecidos a partir do registro local.
+
+```bash
+openspec workspace list [--json]
+openspec workspace ls [--json]
+```
+
+A lista mostra a localização de cada espaço de trabalho e os repositórios ou pastas vinculados. Registros obsoletos no registro são reportados, mas não alterados.
+
+### `openspec workspace link`
+
+Registrar um repositório ou pasta existente para um espaço de trabalho.
+
+```bash
+openspec workspace link [nome] <caminho> [opções]
+```
+
+**Opções:**
+
+| Opção | Descrição |
+|-------|-----------|
+| `--workspace <nome>` | Selecionar um espaço de trabalho conhecido do registro local |
+| `--json` | Saída JSON |
+| `--no-interactive` | Desabilitar prompts de seleção de espaço de trabalho |
+
+**Exemplos:**
+
+```bash
+openspec workspace link /repos/api
+openspec workspace link api-service /repos/api
+openspec workspace link --workspace platform /repos/platform/apps/checkout
+```
+
+O caminho deve já existir. Caminhos relativos são resolvidos em relação ao diretório atual do comando antes que o OpenSpec armazene o caminho absoluto verificado no estado local da máquina do espaço de trabalho. Caminhos vinculados podem ser repositórios completos, pacotes, serviços, aplicativos ou pastas sem estado `openspec/` local no repositório.
+
+### `openspec workspace relink`
+
+Reparar ou alterar o caminho local para um link existente.
+
+```bash
+openspec workspace relink <nome> <caminho> [opções]
+```
+
+O caminho deve já existir. Relink atualiza apenas o caminho local da máquina para o nome de link estável.
+
+### `openspec workspace doctor`
+
+Verificar o que um espaço de trabalho pode resolver na máquina atual.
+
+```bash
+openspec workspace doctor [opções]
+```
+
+Doctor mostra a localização do espaço de trabalho, caminho de planejamento, repositórios ou pastas vinculados, caminhos ausentes, caminhos de especificações locais do repositório quando presentes e correções sugeridas. Ele reporta apenas problemas; não os repara automaticamente.
+
+Comandos que precisam de um espaço de trabalho usam o espaço de trabalho atual quando executados de dentro de uma pasta ou subdiretório do espaço de trabalho. De outro lugar, passe `--workspace <nome>`, selecione a partir do seletor em um terminal interativo, ou confie no único espaço de trabalho conhecido quando exatamente um existir. No modo `--json` ou `--no-interactive`, uma seleção ambígua falha com um erro de status estruturado e sugere `--workspace <nome>`.
+
+Respostas JSON usam objetos tipados mais arrays `status`. Os dados primários ficam em `workspace`, `workspaces` ou `link`; avisos e erros ficam em `status`.
+
+### `openspec workspace open`
+
+Abrir um conjunto de trabalho do espaço de trabalho através do abridor preferido armazenado, uma substituição de agente para uma sessão, ou o modo editor do VS Code.
+
+```bash
+openspec workspace open [nome] [opções]
+```
+
+**Opções:**
+
+| Opção | Descrição |
+|-------|-----------|
+| `--workspace <nome>` | Alias para o nome posicional do espaço de trabalho |
+| `--agent <ferramenta>` | Substituição de agente para uma sessão: `codex`, `claude` ou `github-copilot` |
+| `--editor` | Abrir o arquivo de espaço de trabalho VS Code mantido como um espaço de trabalho de editor normal |
+| `--no-interactive` | Desabilitar prompts de seleção de espaço de trabalho e abridor |
+
+**Exemplos:**
+
+```bash
+openspec workspace open
+openspec workspace open platform
+openspec workspace open platform --agent github-copilot
+openspec workspace open --agent codex
+openspec workspace open --editor
+```
+
+`workspace open` usa o espaço de trabalho atual quando executado dentro de um, seleciona automaticamente o único espaço de trabalho conhecido quando executado em outro lugar, e pede ao usuário para escolher quando múltiplos espaços de trabalho são conhecidos. `--agent` e `--editor` não alteram o abridor preferido armazenado. Passar ambas as substituições de abridor é um erro; escolha `--agent <ferramenta>` ou `--editor`.
+
+O OpenSpec mantém `<nome-do-espaco-de-trabalho>.code-workspace` na raiz do espaço de trabalho para aberturas no editor VS Code e no GitHub Copilot-in-VS-Code. Esse arquivo é local da máquina e ignorado por padrão com uma entrada específica `<nome-do-espaco-de-trabalho>.code-workspace` no `.gitignore`, para que os arquivos `*.code-workspace` criados pelo usuário permaneçam elegíveis para rastreamento.
+
+O espaço de trabalho VS Code mantido inclui a raiz de coordenação como `.` mais repositórios ou pastas vinculados válidos como raízes adicionais. O VS Code exibe essas entradas como um espaço de trabalho multi-raiz.
+
+A abertura do espaço de trabalho raiz suporta exploração e planejamento através dos repositórios ou pastas vinculados. Edições de implementação devem começar apenas após uma solicitação explícita do usuário e um fluxo de trabalho normal de implementação do OpenSpec.
+
+---
+
 ## Comandos de Navegação
 
 ### `openspec list`
@@ -172,19 +312,19 @@ openspec list [opções]
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--specs` | Listar especificações em vez de alterações |
-| `--changes` | Listar alterações (padrão) |
-| `--sort <ordem>` | Ordenar por `recent` (padrão) ou `name` |
-| `--json` | Saída em JSON |
+|--------|-------------|
+| `--specs` | Lista especificações em vez de alterações |
+| `--changes` | Lista alterações (padrão) |
+| `--sort <ordem>` | Ordena por `recent` (padrão) ou `name` |
+| `--json` | Saída em formato JSON |
 
 **Exemplos:**
 
 ```bash
-# Listar todas as alterações ativas
+# Lista todas as alterações ativas
 openspec list
 
-# Listar todas as especificações
+# Lista todas as especificações
 openspec list --specs
 
 # Saída JSON para scripts
@@ -195,7 +335,7 @@ openspec list --json
 
 ```
 Alterações ativas:
-  add-dark-mode     Suporte a alternância de tema da UI
+  add-dark-mode     Suporte a troca de tema da interface
   fix-login-bug     Tratamento de timeout de sessão
 ```
 
@@ -203,7 +343,7 @@ Alterações ativas:
 
 ### `openspec view`
 
-Exibe um painel de controle interativo para explorar especificações e alterações.
+Exibe um painel interativo para explorar especificações e alterações.
 
 ```
 openspec view
@@ -224,30 +364,30 @@ openspec show [nome-do-item] [opções]
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
-|-----------|-------------|-----------|
+|----------|----------|-------------|
 | `nome-do-item` | Não | Nome da alteração ou especificação (solicita se omitido) |
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--type <tipo>` | Especificar tipo: `change` ou `spec` (detectado automaticamente se inequívoco) |
-| `--json` | Saída em JSON |
-| `--no-interactive` | Desativar prompts |
+|--------|-------------|
+| `--type <tipo>` | Especifica o tipo: `change` ou `spec` (detectado automaticamente se não ambíguo) |
+| `--json` | Saída em formato JSON |
+| `--no-interactive` | Desativa prompts |
 
 **Opções específicas para alterações:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--deltas-only` | Mostrar apenas especificações delta (modo JSON) |
+|--------|-------------|
+| `--deltas-only` | Mostra apenas especificações delta (modo JSON) |
 
 **Opções específicas para especificações:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--requirements` | Mostrar apenas requisitos, excluir cenários (modo JSON) |
-| `--no-scenarios` | Excluir conteúdo de cenários (modo JSON) |
-| `-r, --requirement <id>` | Mostrar requisito específico por índice baseado em 1 (modo JSON) |
+|--------|-------------|
+| `--requirements` | Mostra apenas requisitos, exclui cenários (modo JSON) |
+| `--no-scenarios` | Exclui conteúdo de cenários (modo JSON) |
+| `-r, --requirement <id>` | Mostra requisito específico pelo índice baseado em 1 (modo JSON) |
 
 **Exemplos:**
 
@@ -255,10 +395,10 @@ openspec show [nome-do-item] [opções]
 # Seleção interativa
 openspec show
 
-# Mostrar uma alteração específica
+# Mostra uma alteração específica
 openspec show add-dark-mode
 
-# Mostrar uma especificação específica
+# Mostra uma especificação específica
 openspec show auth --type spec
 
 # Saída JSON para análise
@@ -280,21 +420,21 @@ openspec validate [nome-do-item] [opções]
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
-|-----------|-------------|-----------|
+|----------|----------|-------------|
 | `nome-do-item` | Não | Item específico para validar (solicita se omitido) |
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--all` | Validar todas as alterações e especificações |
-| `--changes` | Validar todas as alterações |
-| `--specs` | Validar todas as especificações |
-| `--type <tipo>` | Especificar tipo quando o nome é ambíguo: `change` ou `spec` |
-| `--strict` | Ativar modo de validação estrita |
-| `--json` | Saída em JSON |
+|--------|-------------|
+| `--all` | Valida todas as alterações e especificações |
+| `--changes` | Valida todas as alterações |
+| `--specs` | Valida todas as especificações |
+| `--type <tipo>` | Especifica o tipo quando o nome é ambíguo: `change` ou `spec` |
+| `--strict` | Ativa modo de validação estrita |
+| `--json` | Saída em formato JSON |
 | `--concurrency <n>` | Máximo de validações paralelas (padrão: 6, ou variável de ambiente `OPENSPEC_CONCURRENCY`) |
-| `--no-interactive` | Desativar prompts |
+| `--no-interactive` | Desativa prompts |
 
 **Exemplos:**
 
@@ -302,13 +442,13 @@ openspec validate [nome-do-item] [opções]
 # Validação interativa
 openspec validate
 
-# Validar uma alteração específica
+# Valida uma alteração específica
 openspec validate add-dark-mode
 
-# Validar todas as alterações
+# Valida todas as alterações
 openspec validate --changes
 
-# Validar tudo com saída JSON (para CI/scripts)
+# Valida tudo com saída JSON (para CI/scripts)
 openspec validate --all --json
 
 # Validação estrita com paralelismo aumentado
@@ -357,22 +497,22 @@ Validando add-dark-mode...
 Arquiva uma alteração concluída e mescla as especificações delta nas especificações principais.
 
 ```
-openspec archive [nome-da-alteração] [opções]
+openspec archive [change-name] [options]
 ```
 
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
-|-----------|-------------|-----------|
-| `nome-da-alteração` | Não | Alteração para arquivar (solicita se omitido) |
+|----------|----------|-------------|
+| `change-name` | Não | Alteração a ser arquivada (solicita se omitido) |
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `-y, --yes` | Pular prompts de confirmação |
-| `--skip-specs` | Pular atualizações de especificações (para alterações apenas de infraestrutura/ferramentas/documentação) |
-| `--no-validate` | Pular validação (requer confirmação) |
+|--------|-------------|
+| `-y, --yes` | Pula as confirmações interativas |
+| `--skip-specs` | Pula atualizações de especificações (para alterações apenas de infraestrutura/ferramentas/documentação) |
+| `--no-validate` | Pula a validação (requer confirmação) |
 
 **Exemplos:**
 
@@ -380,13 +520,13 @@ openspec archive [nome-da-alteração] [opções]
 # Arquivamento interativo
 openspec archive
 
-# Arquivar alteração específica
+# Arquiva uma alteração específica
 openspec archive add-dark-mode
 
-# Arquivar sem prompts (CI/scripts)
+# Arquiva sem prompts (CI/scripts)
 openspec archive add-dark-mode --yes
 
-# Arquivar uma alteração de ferramentas que não afeta especificações
+# Arquiva uma alteração de ferramentas que não afeta as especificações
 openspec archive update-ci-config --skip-specs
 ```
 
@@ -401,23 +541,23 @@ openspec archive update-ci-config --skip-specs
 
 ## Comandos de Fluxo de Trabalho
 
-Estes comandos suportam o fluxo de trabalho OPSX orientado a artefatos. São úteis tanto para humanos verificando progresso quanto para agentes determinando os próximos passos.
+Esses comandos suportam o fluxo de trabalho OPSX orientado a artefatos. Eles são úteis tanto para humanos verificando o progresso quanto para agentes determinando os próximos passos.
 
 ### `openspec status`
 
-Exibe o status de conclusão dos artefatos para uma alteração.
+Exibe o status de conclusão dos artefatos de uma alteração.
 
 ```
-openspec status [opções]
+openspec status [options]
 ```
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
+|--------|-------------|
 | `--change <id>` | Nome da alteração (solicita se omitido) |
-| `--schema <nome>` | Substituição de schema (detectado automaticamente da config da alteração) |
-| `--json` | Saída em JSON |
+| `--schema <name>` | Substituição de esquema (detectado automaticamente a partir da config da alteração) |
+| `--json` | Saída como JSON |
 
 **Exemplos:**
 
@@ -425,24 +565,24 @@ openspec status [opções]
 # Verificação de status interativa
 openspec status
 
-# Status para alteração específica
+# Status para uma alteração específica
 openspec status --change add-dark-mode
 
-# JSON para uso por agente
+# JSON para uso por agentes
 openspec status --change add-dark-mode --json
 ```
 
 **Saída (texto):**
 
 ```
-Alteração: add-dark-mode
+Change: add-dark-mode
 Schema: spec-driven
-Progresso: 2/4 artefatos concluídos
+Progress: 2/4 artifacts complete
 
 [x] proposal
 [ ] design
 [x] specs
-[-] tasks (bloqueado por: design)
+[-] tasks (blocked by: design)
 ```
 
 **Saída (JSON):**
@@ -466,76 +606,76 @@ Progresso: 2/4 artefatos concluídos
 
 ### `openspec instructions`
 
-Obtém instruções enriquecidas para criar um artefato ou aplicar tarefas. Usado por agentes de IA para entender o que criar a seguir.
+Obtém instruções enriquecidas para criar um artefato ou aplicar tarefas. Usado por agentes de IA para entender o que criar em seguida.
 
 ```
-openspec instructions [artefato] [opções]
+openspec instructions [artifact] [options]
 ```
 
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
-|-----------|-------------|-----------|
-| `artefato` | Não | ID do artefato: `proposal`, `specs`, `design`, `tasks` ou `apply` |
+|----------|----------|-------------|
+| `artifact` | Não | ID do artefato: `proposal`, `specs`, `design`, `tasks` ou `apply` |
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
+|--------|-------------|
 | `--change <id>` | Nome da alteração (obrigatório no modo não interativo) |
-| `--schema <nome>` | Substituição de schema |
-| `--json` | Saída em JSON |
+| `--schema <name>` | Substituição de esquema |
+| `--json` | Saída como JSON |
 
 **Caso especial:** Use `apply` como artefato para obter instruções de implementação de tarefas.
 
 **Exemplos:**
 
 ```bash
-# Obter instruções para o próximo artefato
+# Obtém instruções para o próximo artefato
 openspec instructions --change add-dark-mode
 
-# Obter instruções para artefato específico
+# Obtém instruções para um artefato específico
 openspec instructions design --change add-dark-mode
 
-# Obter instruções de aplicação/implementação
+# Obtém instruções de aplicação/implementação
 openspec instructions apply --change add-dark-mode
 
-# JSON para consumo por agente
+# JSON para consumo por agentes
 openspec instructions design --change add-dark-mode --json
 ```
 
 **A saída inclui:**
 
-- Conteúdo do template para o artefato
-- Contexto do projeto da configuração
-- Conteúdo dos artefatos dependentes
+- Conteúdo do modelo para o artefato
+- Contexto do projeto a partir da configuração
+- Conteúdo dos artefatos de dependência
 - Regras por artefato da configuração
 
 ---
 
 ### `openspec templates`
 
-Mostra os caminhos resolvidos dos templates para todos os artefatos em um schema.
+Mostra os caminhos resolvidos dos modelos para todos os artefatos em um esquema.
 
 ```
-openspec templates [opções]
+openspec templates [options]
 ```
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--schema <nome>` | Schema a inspecionar (padrão: `spec-driven`) |
-| `--json` | Saída em JSON |
+|--------|-------------|
+| `--schema <name>` | Esquema a ser inspecionado (padrão: `spec-driven`) |
+| `--json` | Saída como JSON |
 
 **Exemplos:**
 
 ```bash
-# Mostrar caminhos dos templates para o schema padrão
+# Mostra caminhos dos modelos para o esquema padrão
 openspec templates
 
-# Mostrar templates para schema personalizado
-openspec templates --schema meu-fluxo-de-trabalho
+# Mostra modelos para um esquema personalizado
+openspec templates --schema my-workflow
 
 # JSON para uso programático
 openspec templates --json
@@ -557,17 +697,17 @@ Templates:
 
 ### `openspec schemas`
 
-Lista os schemas de fluxo de trabalho disponíveis com suas descrições e fluxos de artefatos.
+Lista os esquemas de fluxo de trabalho disponíveis com suas descrições e fluxos de artefatos.
 
 ```
-openspec schemas [opções]
+openspec schemas [options]
 ```
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--json` | Saída em JSON |
+|--------|-------------|
+| `--json` | Saída como JSON |
 
 **Exemplo:**
 
@@ -578,26 +718,26 @@ openspec schemas
 **Saída:**
 
 ```
-Schemas disponíveis:
+Available schemas:
 
-  spec-driven (pacote)
-    O fluxo de trabalho padrão orientado a especificações
-    Fluxo: proposal → specs → design → tasks
+  spec-driven (package)
+    The default spec-driven development workflow
+    Flow: proposal → specs → design → tasks
 
-  meu-custom (projeto)
-    Fluxo de trabalho personalizado para este projeto
-    Fluxo: research → proposal → tasks
+  my-custom (project)
+    Custom workflow for this project
+    Flow: research → proposal → tasks
 ```
 
 ---
 
-## Comandos de Schema
+## Comandos de Esquema
 
-Comandos para criar e gerenciar schemas de fluxo de trabalho personalizados.
+Comandos para criar e gerenciar esquemas de fluxo de trabalho personalizados.
 
 ### `openspec schema init`
 
-Cria um novo schema local ao projeto.
+Cria um novo esquema local do projeto.
 
 ```
 openspec schema init <name> [options]
@@ -606,40 +746,40 @@ openspec schema init <name> [options]
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
-|-----------|-------------|-----------|
-| `name` | Sim | Nome do schema (kebab-case) |
+|----------|----------|-------------|
+| `name` | Sim | Nome do esquema (kebab-case) |
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--description <text>` | Descrição do schema |
-| `--artifacts <list>` | IDs de artefatos separados por vírgula (padrão: `proposal,specs,design,tasks`) |
-| `--default` | Definir como schema padrão do projeto |
-| `--no-default` | Não solicitar definição como padrão |
-| `--force` | Sobrescrever schema existente |
-| `--json` | Saída em formato JSON |
+|--------|-------------|
+| `--description <text>` | Descrição do esquema |
+| `--artifacts <list>` | IDs dos artefatos separados por vírgula (padrão: `proposal,specs,design,tasks`) |
+| `--default` | Define como esquema padrão do projeto |
+| `--no-default` | Não solicita para definir como padrão |
+| `--force` | Sobrescreve um esquema existente |
+| `--json` | Saída como JSON |
 
 **Exemplos:**
 
 ```bash
-# Criação interativa de schema
+# Criação interativa de esquema
 openspec schema init research-first
 
 # Não interativo com artefatos específicos
 openspec schema init rapid \
-  --description "Rapid iteration workflow" \
+  --description "Fluxo de trabalho de iteração rápida" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
-**O que é criado:**
+**O que ele cria:**
 
 ```
-openspec/schemas/<name>/
-├── schema.yaml           # Definição do schema
+openspec/schemas/<nome>/
+├── schema.yaml           # Definição do esquema
 └── templates/
-    ├── proposal.md       # Template para cada artefato
+    ├── proposal.md       # Modelo para cada artefato
     ├── specs.md
     ├── design.md
     └── tasks.md
@@ -649,7 +789,7 @@ openspec/schemas/<name>/
 
 ### `openspec schema fork`
 
-Copia um schema existente para seu projeto para personalização.
+Copia um esquema existente para o seu projeto para personalização.
 
 ```
 openspec schema fork <source> [name] [options]
@@ -658,21 +798,21 @@ openspec schema fork <source> [name] [options]
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
-|-----------|-------------|-----------|
-| `source` | Sim | Schema a ser copiado |
-| `name` | Não | Novo nome do schema (padrão: `<source>-custom`) |
+|----------|----------|-------------|
+| `source` | Sim | Esquema a ser copiado |
+| `name` | Não | Nome do novo esquema (padrão: `<source>-custom`) |
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--force` | Sobrescrever destino existente |
-| `--json` | Saída em formato JSON |
+|--------|-------------|
+| `--force` | Sobrescreve o destino existente |
+| `--json` | Saída como JSON |
 
 **Exemplo:**
 
 ```bash
-# Bifurcar o schema embutido spec-driven
+# Faz um fork do esquema spec-driven integrado
 openspec schema fork spec-driven my-workflow
 ```
 
@@ -680,7 +820,7 @@ openspec schema fork spec-driven my-workflow
 
 ### `openspec schema validate`
 
-Valida a estrutura e os templates de um schema.
+Valida a estrutura e os modelos de um esquema.
 
 ```
 openspec schema validate [name] [options]
@@ -689,23 +829,23 @@ openspec schema validate [name] [options]
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
-|-----------|-------------|-----------|
-| `name` | Não | Schema a ser validado (valida todos se omitido) |
+|----------|----------|-------------|
+| `name` | Não | Esquema a ser validado (valida todos se omitido) |
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--verbose` | Mostrar etapas detalhadas de validação |
-| `--json` | Saída em formato JSON |
+|--------|-------------|
+| `--verbose` | Mostra etapas detalhadas da validação |
+| `--json` | Saída como JSON |
 
 **Exemplo:**
 
 ```bash
-# Validar um schema específico
+# Valida um esquema específico
 openspec schema validate my-workflow
 
-# Validar todos os schemas
+# Valida todos os esquemas
 openspec schema validate
 ```
 
@@ -713,7 +853,7 @@ openspec schema validate
 
 ### `openspec schema which`
 
-Mostra de onde um schema é resolvido (útil para depurar precedência).
+Mostra de onde um esquema é resolvido (útil para depurar precedência).
 
 ```
 openspec schema which [name] [options]
@@ -722,20 +862,20 @@ openspec schema which [name] [options]
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
-|-----------|-------------|-----------|
-| `name` | Não | Nome do schema |
+|----------|----------|-------------|
+| `name` | Não | Nome do esquema |
 
 **Opções:**
 
 | Opção | Descrição |
-|-------|-----------|
-| `--all` | Listar todos os schemas com suas origens |
-| `--json` | Saída em formato JSON |
+|--------|-------------|
+| `--all` | Lista todos os esquemas com suas fontes |
+| `--json` | Saída como JSON |
 
 **Exemplo:**
 
 ```bash
-# Verificar de onde vem um schema
+# Verifica de onde um esquema vem
 openspec schema which spec-driven
 ```
 
@@ -746,11 +886,11 @@ spec-driven resolves from: package
   Source: /usr/local/lib/node_modules/@fission-ai/openspec/schemas/spec-driven
 ```
 
-**Precedência de schemas:**
+**Precedência de esquemas:**
 
-1. Projeto: `openspec/schemas/<name>/`
-2. Usuário: `~/.local/share/openspec/schemas/<name>/`
-3. Pacote: Schemas embutidos
+1. Projeto: `openspec/schemas/<nome>/`
+2. Usuário: `~/.local/share/openspec/schemas/<nome>/`
+3. Pacote: Esquemas integrados
 
 ---
 
@@ -758,82 +898,82 @@ spec-driven resolves from: package
 
 ### `openspec config`
 
-Visualiza e modifica a configuração global do OpenSpec.
+Visualize e modifique a configuração global do OpenSpec.
 
 ```
-openspec config <subcommand> [options]
+openspec config <subcomando> [opções]
 ```
 
 **Subcomandos:**
 
 | Subcomando | Descrição |
 |------------|-----------|
-| `path` | Mostrar localização do arquivo de configuração |
-| `list` | Mostrar todas as configurações atuais |
-| `get <key>` | Obter um valor específico |
-| `set <key> <value>` | Definir um valor |
-| `unset <key>` | Remover uma chave |
-| `reset` | Redefinir para padrões |
-| `edit` | Abrir no `$EDITOR` |
-| `profile [preset]` | Configurar perfil de fluxo de trabalho interativamente ou via predefinição |
+| `path` | Mostra a localização do arquivo de configuração |
+| `list` | Mostra todas as configurações atuais |
+| `get <chave>` | Obtém um valor específico |
+| `set <chave> <valor>` | Define um valor |
+| `unset <chave>` | Remove uma chave |
+| `reset` | Restaura para os padrões |
+| `edit` | Abre no `$EDITOR` |
+| `profile [preset]` | Configura o perfil de workflow interativamente ou via preset |
 
 **Exemplos:**
 
 ```bash
-# Mostrar caminho do arquivo de configuração
+# Mostra o caminho do arquivo de configuração
 openspec config path
 
-# Listar todas as configurações
+# Lista todas as configurações
 openspec config list
 
-# Obter um valor específico
+# Obtém um valor específico
 openspec config get telemetry.enabled
 
-# Definir um valor
+# Define um valor
 openspec config set telemetry.enabled false
 
-# Definir um valor de string explicitamente
-openspec config set user.name "My Name" --string
+# Define explicitamente um valor de string
+openspec config set user.name "Meu Nome" --string
 
-# Remover uma configuração personalizada
+# Remove uma configuração personalizada
 openspec config unset user.name
 
-# Redefinir toda a configuração
+# Restaura toda a configuração
 openspec config reset --all --yes
 
-# Editar configuração no seu editor
+# Edita a configuração no seu editor
 openspec config edit
 
-# Configurar perfil com assistente baseado em ações
+# Configura o perfil com um assistente baseado em ações
 openspec config profile
 
-# Predefinição rápida: mudar fluxos de trabalho para core (mantém modo de entrega)
+# Preset rápido: altera os workflows para core (mantém o modo de entrega)
 openspec config profile core
 ```
 
-`openspec config profile` começa com um resumo do estado atual, depois permite que você escolha:
-- Mudar entrega + fluxos de trabalho
-- Mudar apenas a entrega
-- Mudar apenas os fluxos de trabalho
-- Manter as configurações atuais (sair)
+`openspec config profile` começa com um resumo do estado atual e então permite que você escolha:
+- Alterar entrega + workflows
+- Alterar apenas a entrega
+- Alterar apenas os workflows
+- Manter configurações atuais (sair)
 
-Se você manter as configurações atuais, nenhuma alteração será gravada e nenhum aviso de atualização será exibido.
-Se não houver alterações de configuração, mas os arquivos do projeto atual estiverem dessincronizados com seu perfil/entrega global, o OpenSpec exibirá um aviso e sugerirá executar `openspec update`.
-Pressionar `Ctrl+C` também cancela o fluxo limamente (sem rastreamento de pilha) e sai com o código `130`.
-Na lista de verificação de fluxos de trabalho, `[x]` significa que o fluxo de trabalho está selecionado na configuração global. Para aplicar essas seleções aos arquivos do projeto, execute `openspec update` (ou escolha `Apply changes to this project now?` quando solicitado dentro de um projeto).
+Se você mantiver as configurações atuais, nenhuma alteração será gravada e nenhum prompt de atualização será exibido.
+Se não houver alterações na configuração, mas os arquivos do projeto atual estiverem desatualizados em relação ao seu perfil/entrega global, o OpenSpec mostrará um aviso e sugerirá executar `openspec update`.
+Pressionar `Ctrl+C` também cancela o fluxo de forma limpa (sem rastreamento de pilha) e sai com o código `130`.
+Na lista de verificação de workflows, `[x]` significa que o workflow está selecionado na configuração global. Para aplicar essas seleções aos arquivos do projeto, execute `openspec update` (ou escolha `Aplicar alterações a este projeto agora?` quando solicitado dentro de um projeto).
 
 **Exemplos interativos:**
 
 ```bash
-# Atualização apenas de entrega
+# Atualização apenas da entrega
 openspec config profile
-# escolher: Change delivery only
-# escolher entrega: Skills only
+# escolha: Alterar apenas a entrega
+# escolha a entrega: Somente Skills
 
-# Atualização apenas de fluxos de trabalho
+# Atualização apenas dos workflows
 openspec config profile
-# escolher: Change workflows only
-# alternar fluxos de trabalho na lista de verificação, depois confirmar
+# escolha: Alterar apenas os workflows
+# alterne os workflows na lista de verificação e confirme
 ```
 
 ---
@@ -842,66 +982,66 @@ openspec config profile
 
 ### `openspec feedback`
 
-Envia feedback sobre o OpenSpec. Cria uma issue no GitHub.
+Envie feedback sobre o OpenSpec. Cria uma issue no GitHub.
 
 ```
-openspec feedback <message> [options]
+openspec feedback <mensagem> [opções]
 ```
 
 **Argumentos:**
 
 | Argumento | Obrigatório | Descrição |
 |-----------|-------------|-----------|
-| `message` | Sim | Mensagem de feedback |
+| `mensagem` | Sim | Mensagem de feedback |
 
 **Opções:**
 
 | Opção | Descrição |
 |-------|-----------|
-| `--body <text>` | Descrição detalhada |
+| `--body <texto>` | Descrição detalhada |
 
 **Requisitos:** O GitHub CLI (`gh`) deve estar instalado e autenticado.
 
 **Exemplo:**
 
 ```bash
-openspec feedback "Add support for custom artifact types" \
-  --body "I'd like to define my own artifact types beyond the built-in ones."
+openspec feedback "Adicionar suporte para tipos de artefato personalizados" \
+  --body "Eu gostaria de definir meus próprios tipos de artefato além dos integrados."
 ```
 
 ---
 
 ### `openspec completion`
 
-Gerencia as conclusões de shell para o OpenSpec CLI.
+Gerencia completamentos de shell para o CLI do OpenSpec.
 
 ```
-openspec completion <subcommand> [shell]
+openspec completion <subcomando> [shell]
 ```
 
 **Subcomandos:**
 
 | Subcomando | Descrição |
 |------------|-----------|
-| `generate [shell]` | Gerar script de conclusão para stdout |
-| `install [shell]` | Instalar conclusões para seu shell |
-| `uninstall [shell]` | Remover conclusões instaladas |
+| `generate [shell]` | Gera o script de completamento para stdout |
+| `install [shell]` | Instala o completamento para seu shell |
+| `uninstall [shell]` | Remove os completamentos instalados |
 
 **Shells suportados:** `bash`, `zsh`, `fish`, `powershell`
 
 **Exemplos:**
 
 ```bash
-# Instalar conclusões (detecta shell automaticamente)
+# Instala completamentos (detecta o shell automaticamente)
 openspec completion install
 
-# Instalar para um shell específico
+# Instala para um shell específico
 openspec completion install zsh
 
-# Gerar script para instalação manual
+# Gera o script para instalação manual
 openspec completion generate bash > ~/.bash_completion.d/openspec
 
-# Desinstalar
+# Desinstala
 openspec completion uninstall
 ```
 
@@ -920,17 +1060,17 @@ openspec completion uninstall
 
 | Variável | Descrição |
 |----------|-----------|
-| `OPENSPEC_TELEMETRY` | Defina como `0` para desabilitar telemetria |
-| `DO_NOT_TRACK` | Defina como `1` para desabilitar telemetria (sinal DNT padrão) |
+| `OPENSPEC_TELEMETRY` | Defina como `0` para desabilitar a telemetria |
+| `DO_NOT_TRACK` | Defina como `1` para desabilitar a telemetria (sinal DNT padrão) |
 | `OPENSPEC_CONCURRENCY` | Concorrência padrão para validação em massa (padrão: 6) |
 | `EDITOR` ou `VISUAL` | Editor para `openspec config edit` |
-| `NO_COLOR` | Desabilita saída colorida quando definido |
+| `NO_COLOR` | Desabilita a saída colorida quando definido |
 
 ---
 
 ## Documentação Relacionada
 
-- [Comandos](commands.md) - Comandos de barra de IA (`/opsx:propose`, `/opsx:apply`, etc.)
-- [Fluxos de Trabalho](workflows.md) - Padrões comuns e quando usar cada comando
-- [Personalização](customization.md) - Criar schemas e templates personalizados
+- [Comandos](commands.md) - Comandos slash de IA (`/opsx:propose`, `/opsx:apply`, etc.)
+- [Workflows](workflows.md) - Padrões comuns e quando usar cada comando
+- [Personalização](customization.md) - Crie esquemas e templates personalizados
 - [Primeiros Passos](getting-started.md) - Guia de configuração inicial

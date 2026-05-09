@@ -2,7 +2,7 @@
 
 ## Prerequisiti
 
-- **Node.js 20.19.0 o superiore** — Verifica la tua versione: `node --version`
+- **Node.js 20.19.0 o superiore** — Controlla la tua versione: `node --version`
 
 ## Gestori di pacchetti
 
@@ -25,6 +25,9 @@ yarn global add @fission-ai/openspec@latest
 ```
 
 ### bun
+
+Bun può installare OpenSpec globalmente, ma OpenSpec attualmente funziona su Node.js.
+Hai comunque bisogno di Node.js 20.19.0 o superiore disponibile nel `PATH`.
 
 ```bash
 bun add -g @fission-ai/openspec@latest
@@ -61,13 +64,13 @@ Oppure aggiungi al tuo ambiente di sviluppo in `flake.nix`:
 }
 ```
 
-## Verifica l'installazione
+## Verifica dell'installazione
 
 ```bash
 openspec --version
 ```
 
-## Passaggi successivi
+## Prossimi passi
 
 Dopo l'installazione, inizializza OpenSpec nel tuo progetto:
 
@@ -76,4 +79,4 @@ cd your-project
 openspec init
 ```
 
-Consulta [Inizio](getting-started.md) per una guida completa.
+Consulta [Getting Started](getting-started.md) per una guida completa.

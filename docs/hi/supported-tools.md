@@ -1,25 +1,26 @@
-# समर्थित टूल्स
+# समर्थित उपकरण
 
-OpenSpec कई AI कोडिंग सहायकों के साथ काम करता है। जब आप `openspec init` चलाते हैं, तो OpenSpec आपकी सक्रिय प्रोफ़ाइल/वर्कफ़्लो चयन और डिलीवरी मोड का उपयोग करके चयनित टूल्स को कॉन्फ़िगर करता है।
+OpenSpec कई AI कोडिंग सहायकों के साथ काम करता है। जब आप `openspec init` चलाते हैं, तो OpenSpec आपकी सक्रिय प्रोफ़ाइल/कार्यप्रवाह चयन और वितरण मोड का उपयोग करके चयनित उपकरणों को कॉन्फ़िगर करता है।
 
 ## यह कैसे काम करता है
 
-प्रत्येक चयनित टूल के लिए, OpenSpec इंस्टॉल कर सकता है:
+प्रत्येक चयनित उपकरण के लिए, OpenSpec इंस्टॉल कर सकता है:
 
-1. **स्किल्स** (यदि डिलीवरी में स्किल्स शामिल हैं): `.../skills/openspec-*/SKILL.md`
-2. **कमांड्स** (यदि डिलीवरी में कमांड्स शामिल हैं): टूल-विशिष्ट `opsx-*` कमांड फ़ाइलें
+1. **कौशल** (यदि वितरण में कौशल शामिल हैं): `.../skills/openspec-*/SKILL.md`
+2. **कमांड** (यदि वितरण में कमांड शामिल हैं): उपकरण-विशिष्ट `opsx-*` कमांड फ़ाइलें
 
 डिफ़ॉल्ट रूप से, OpenSpec `core` प्रोफ़ाइल का उपयोग करता है, जिसमें शामिल हैं:
 - `propose`
 - `explore`
 - `apply`
+- `sync`
 - `archive`
 
-आप `openspec config profile` के माध्यम से विस्तारित वर्कफ़्लो (`new`, `continue`, `ff`, `verify`, `sync`, `bulk-archive`, `onboard`) सक्षम कर सकते हैं, फिर `openspec update` चला सकते हैं।
+आप `openspec config profile` के माध्यम से विस्तारित कार्यप्रवाह (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) सक्षम कर सकते हैं, फिर `openspec update` चलाएं।
 
-## टूल निर्देशिका संदर्भ
+## उपकरण निर्देशिका संदर्भ
 
-| टूल (आईडी) | स्किल्स पथ पैटर्न | कमांड पथ पैटर्न |
+| उपकरण (ID) | कौशल पथ पैटर्न | कमांड पथ पैटर्न |
 |-----------|---------------------|----------------------|
 | Amazon Q Developer (`amazon-q`) | `.amazonq/skills/openspec-*/SKILL.md` | `.amazonq/prompts/opsx-<id>.md` |
 | Antigravity (`antigravity`) | `.agent/skills/openspec-*/SKILL.md` | `.agent/workflows/opsx-<id>.md` |
@@ -29,7 +30,7 @@ OpenSpec कई AI कोडिंग सहायकों के साथ क
 | Cline (`cline`) | `.cline/skills/openspec-*/SKILL.md` | `.clinerules/workflows/opsx-<id>.md` |
 | CodeBuddy (`codebuddy`) | `.codebuddy/skills/openspec-*/SKILL.md` | `.codebuddy/commands/opsx/<id>.md` |
 | Codex (`codex`) | `.codex/skills/openspec-*/SKILL.md` | `$CODEX_HOME/prompts/opsx-<id>.md`\* |
-| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | जनरेट नहीं किया गया (कोई कमांड एडाप्टर नहीं; स्किल-आधारित `/openspec-*` इनवोकेशन का उपयोग करें) |
+| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | उत्पन्न नहीं होता (कोई कमांड एडाप्टर नहीं; कौशल-आधारित `/openspec-*` आह्वान का उपयोग करें) |
 | Continue (`continue`) | `.continue/skills/openspec-*/SKILL.md` | `.continue/prompts/opsx-<id>.prompt` |
 | CoStrict (`costrict`) | `.cospec/skills/openspec-*/SKILL.md` | `.cospec/openspec/commands/opsx-<id>.md` |
 | Crush (`crush`) | `.crush/skills/openspec-*/SKILL.md` | `.crush/commands/opsx/<id>.md` |
@@ -40,16 +41,18 @@ OpenSpec कई AI कोडिंग सहायकों के साथ क
 | iFlow (`iflow`) | `.iflow/skills/openspec-*/SKILL.md` | `.iflow/commands/opsx-<id>.md` |
 | Junie (`junie`) | `.junie/skills/openspec-*/SKILL.md` | `.junie/commands/opsx-<id>.md` |
 | Kilo Code (`kilocode`) | `.kilocode/skills/openspec-*/SKILL.md` | `.kilocode/workflows/opsx-<id>.md` |
+| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | उत्पन्न नहीं होता (कोई कमांड एडाप्टर नहीं; कौशल-आधारित `/skill:openspec-*` आह्वान का उपयोग करें) |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
+| Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
 | Qwen Code (`qwen`) | `.qwen/skills/openspec-*/SKILL.md` | `.qwen/commands/opsx-<id>.toml` |
 | RooCode (`roocode`) | `.roo/skills/openspec-*/SKILL.md` | `.roo/commands/opsx-<id>.md` |
-| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | जनरेट नहीं किया गया (कोई कमांड एडाप्टर नहीं; स्किल-आधारित `/openspec-*` इनवोकेशन का उपयोग करें) |
+| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | उत्पन्न नहीं होता (कोई कमांड एडाप्टर नहीं; कौशल-आधारित `/openspec-*` आह्वान का उपयोग करें) |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* Codex कमांड्स वैश्विक Codex होम (`$CODEX_HOME/prompts/` यदि सेट है, अन्यथा `~/.codex/prompts/`) में इंस्टॉल किए जाते हैं, न कि आपकी प्रोजेक्ट निर्देशिका में।
+\* Codex कमांड वैश्विक Codex होम (`$CODEX_HOME/prompts/` यदि सेट है, अन्यथा `~/.codex/prompts/`) में इंस्टॉल होती हैं, आपकी प्रोजेक्ट निर्देशिका में नहीं।
 
 \*\* GitHub Copilot प्रॉम्प्ट फ़ाइलों को IDE एक्सटेंशन (VS Code, JetBrains, Visual Studio) में कस्टम स्लैश कमांड के रूप में पहचाना जाता है। Copilot CLI वर्तमान में `.github/prompts/*.prompt.md` को सीधे उपभोग नहीं करता है।
 
@@ -58,34 +61,34 @@ OpenSpec कई AI कोडिंग सहायकों के साथ क
 CI/CD या स्क्रिप्टेड सेटअप के लिए, `--tools` (और वैकल्पिक रूप से `--profile`) का उपयोग करें:
 
 ```bash
-# विशिष्ट टूल्स कॉन्फ़िगर करें
+# विशिष्ट उपकरण कॉन्फ़िगर करें
 openspec init --tools claude,cursor
 
-# सभी समर्थित टूल्स कॉन्फ़िगर करें
+# सभी समर्थित उपकरण कॉन्फ़िगर करें
 openspec init --tools all
 
-# टूल कॉन्फ़िगरेशन छोड़ें
+# उपकरण कॉन्फ़िगरेशन छोड़ें
 openspec init --tools none
 
 # इस init रन के लिए प्रोफ़ाइल ओवरराइड करें
 openspec init --profile core
 ```
 
-**उपलब्ध टूल आईडी (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `forgecode`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kiro`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+**उपलब्ध उपकरण ID (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
 
-## वर्कफ़्लो-निर्भर इंस्टॉलेशन
+## कार्यप्रवाह-निर्भर इंस्टॉलेशन
 
-OpenSpec चयनित वर्कफ़्लो के आधार पर वर्कफ़्लो आर्टिफैक्ट्स इंस्टॉल करता है:
+OpenSpec चयनित कार्यप्रवाहों के आधार पर कार्यप्रवाह आर्टिफैक्ट्स इंस्टॉल करता है:
 
-- **Core प्रोफ़ाइल (डिफ़ॉल्ट):** `propose`, `explore`, `apply`, `archive`
-- **कस्टम चयन:** सभी वर्कफ़्लो आईडी का कोई भी उपसेट:
+- **कोर प्रोफ़ाइल (डिफ़ॉल्ट):** `propose`, `explore`, `apply`, `sync`, `archive`
+- **कस्टम चयन:** सभी कार्यप्रवाह ID का कोई भी उपसमूह:
   `propose`, `explore`, `new`, `continue`, `apply`, `ff`, `sync`, `archive`, `bulk-archive`, `verify`, `onboard`
 
-दूसरे शब्दों में, स्किल/कमांड गणना प्रोफ़ाइल-निर्भर और डिलीवरी-निर्भर है, न कि निश्चित।
+दूसरे शब्दों में, कौशल/कमांड की संख्या प्रोफ़ाइल-निर्भर और वितरण-निर्भर है, निश्चित नहीं।
 
-## जनरेट की गई स्किल नाम
+## उत्पन्न कौशल नाम
 
-प्रोफ़ाइल/वर्कफ़्लो कॉन्फ़िग द्वारा चयनित होने पर, OpenSpec इन स्किल्स को जनरेट करता है:
+जब प्रोफ़ाइल/कार्यप्रवाह कॉन्फ़िगरेशन द्वारा चयनित किया जाता है, तो OpenSpec ये कौशल उत्पन्न करता है:
 
 - `openspec-propose`
 - `openspec-explore`
@@ -103,6 +106,6 @@ OpenSpec चयनित वर्कफ़्लो के आधार पर 
 
 ## संबंधित
 
-- [CLI संदर्भ](cli.md) — टर्मिनल कमांड्स
-- [Commands](commands.md) — स्लैश कमांड्स और स्किल्स
-- [शुरुआत करना](getting-started.md) — पहली बार सेटअप
+- [CLI संदर्भ](cli.md) — टर्मिनल कमांड
+- [कमांड](commands.md) — स्लैश कमांड और कौशल
+- [शुरू करना](getting-started.md) — पहली बार सेटअप

@@ -1,63 +1,64 @@
 # Przepływy pracy
 
-Ten przewodnik omawia typowe wzorce przepływów pracy w OpenSpec oraz kiedy stosować każdy z nich. Informacje na temat podstawowej konfiguracji znajdziesz w sekcji [Pierwsze kroki](getting-started.md). Odnośnik do poleceń znajduje się w sekcji [Polecenia](commands.md).
+Ten przewodnik opisuje typowe wzorce przepływów pracy dla OpenSpec oraz kiedy z nich korzystać. Podstawową konfigurację znajdziesz w sekcji [Pierwsze kroki](getting-started.md). Referencję poleceń znajdziesz w sekcji [Polecenia](commands.md).
 
-## Filozofia: Działania, nie fazy
+## Filozofia: Czynności, nie fazy
 
-Tradycyjne przepływy pracy wymuszają przejście przez fazy: planowanie, następnie realizacja, a na końcu gotowe. Ale prawdziwa praca nie mieści się w tak sztywnych ramach.
+Tradycyjne przepływy pracy zmuszają do przechodzenia przez fazy: planowanie, potem implementacja, potem koniec. Ale prawdziwa praca nie mieści się w takich sztywnych ramach.
 
 OPSX przyjmuje inne podejście:
 
 ```text
-Tradycyjne (zablokowane fazy):
+Tradycyjne (zablokowane fazami):
 
-  PLANOWANIE ────────► REALIZACJA ────────► GOTOWE
+  PLANOWANIE ────────► IMPLEMENTACJA ────────► GOTOWE
       │                    │
-      │   "Nie można wrócić"  │
+      │   "Nie można wrócić"│
       └────────────────────┘
 
-OPSX (płynne działania):
+OPSX (płynne czynności):
 
-  propozycja ──► specyfikacje ──► projekt ──► zadania ──► realizacja
+  proposal ──► specs ──► design ──► tasks ──► implement
 ```
 
 **Kluczowe zasady:**
 
-- **Działania, nie fazy** - Polecenia to rzeczy, które możesz zrobić, a nie etapy, w których utknąłeś
-- **Zależności to ułatwienia** - Pokazują, co jest możliwe, a nie co jest wymagane dalej
+- **Czynności, nie fazy** - Polecenia to rzeczy, które możesz zrobić, a nie etapy, w których utknąłeś
+- **Zależności jako umożliwiacze** - Pokazują, co jest możliwe, a nie co jest wymagane jako następne
 
-> **Dostosowywanie:** Przepływy pracy OPSX są napędzane przez schematy definiujące sekwencje artefaktów. Szczegóły dotyczące tworzenia niestandardowych schematów znajdziesz w sekcji [Dostosowywanie](customization.md).
+> **Dostosowywanie:** Przepływy pracy OPSX są sterowane przez schematy definiujące sekwencje artefaktów. Szczegóły dotyczące tworzenia niestandardowych schematów znajdziesz w sekcji [Dostosowywanie](customization.md).
 
 ## Dwa tryby
 
-### Domyślna szybka ścieżka (profil `core`)
+### Domyślna ścieżka szybka (profil `core`)
 
-Nowe instalacje domyślnie używają profilu `core`, który zapewnia:
+Nowe instalacje domyślnie korzystają z `core`, który udostępnia:
 - `/opsx:propose`
 - `/opsx:explore`
 - `/opsx:apply`
+- `/opsx:sync`
 - `/opsx:archive`
 
 Typowy przepływ:
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-### Rozszerzony/Pełny przepływ (niestandardowy wybór)
+### Rozszerzony/Pełny przepływ (wybór niestandardowy)
 
-Jeśli chcesz显式使用 explicit scaffold-and-build commands (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`), włącz je za pomocą:
+Jeśli potrzebujesz jawnych poleceń do tworzenia i budowania (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`), włącz je za pomocą:
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## Wzorce przepływu (tryb rozszerzony)
+## Wzorce przepływu pracy (tryb rozszerzony)
 
-### Szybka funkcja
+### Szybka funkcjonalność
 
-Kiedy wiesz, co chcesz zbudować i potrzebujesz tylko wykonać:
+Gdy wiesz, co chcesz zbudować i wystarczy Ci wykonanie:
 
 ```text
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
@@ -94,11 +95,11 @@ AI:  ✓ Merged specs
      ✓ Archived change
 ```
 
-**Najlepsze dla:** Małych do średnich funkcji, poprawek błędów, prostych zmian.
+**Najlepsze do:** Małych i średnich funkcjonalności, poprawek błędów, prostych zmian.
 
-### Eksploracyjne
+### Badawczy
 
-Kiedy wymagania są niejasne lub musisz najpierw zbadać problem:
+Gdy wymagania nie są jasne lub najpierw trzeba zbadać problem:
 
 ```text
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
@@ -144,18 +145,18 @@ You: /opsx:continue
 AI:  Creating specs...
 ```
 
-**Najlepsze dla:** Optymalizacji wydajności, debugowania, decyzji architektonicznych, niejasnych wymagań.
+**Najlepsze do:** Optymalizacji wydajności, debugowania, decyzji architektonicznych, niejasnych wymagań.
 
 ### Zmiany równoległe
 
 Praca nad wieloma zmianami jednocześnie:
 
 ```text
-Change A: /opsx:new ──► /opsx:ff ──► /opsx:apply (in progress)
+Zmiana A: /opsx:new ──► /opsx:ff ──► /opsx:apply (w trakcie)
                                          │
-                                    context switch
+                                    zmiana kontekstu
                                          │
-Change B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
+Zmiana B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
 
 **Przykładowa rozmowa:**
@@ -189,9 +190,9 @@ AI:  Resuming add-dark-mode...
      Picking up at task 2.3: Update Header...
 ```
 
-**Najlepsze dla:** Równoległych strumieni pracy, pilnych przerw, współpracy w zespole.
+**Najlepsze do:** Równoległych strumieni pracy, pilnych przerwań, pracy zespołowej.
 
-Kiedy masz wiele ukończonych zmian, użyj `/opsx:bulk-archive`:
+Gdy masz wiele ukończonych zmian, użyj `/opsx:bulk-archive`:
 
 ```text
 You: /opsx:bulk-archive
@@ -217,22 +218,22 @@ AI:  ✓ Archived add-dark-mode
      Specs merged in order: add-dark-mode → update-footer
 ```
 
-Masowa archiwizacja wykrywa, kiedy wiele zmian dotyczy tych samych specyfikacji i rozwiązuje konflikty, sprawdzając, co faktycznie zostało zaimplementowane.
+Masowe archiwizowanie wykrywa, gdy wiele zmian dotyczy tych samych specyfikacji, i rozwiązuje konflikty, sprawdzając, co faktycznie zostało zaimplementowane.
 
 ### Finalizacja zmiany
 
-Zalecany przepływ finalizacji:
+Rekomendowany przepływ finalizacji:
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              validates          prompts to sync
-              implementation     if needed
+              waliduje           proponuje synchronizację
+              implementację      w razie potrzeby
 ```
 
 #### Weryfikacja: Sprawdź swoją pracę
 
-`/opsx:verify` waliduje implementację względem twoich artefaktów w trzech wymiarach:
+`/opsx:verify` waliduje implementację względem artefaktów w trzech wymiarach:
 
 ```text
 You: /opsx:verify
@@ -268,12 +269,12 @@ AI:  Verifying add-auth...
 **Co sprawdza weryfikacja:**
 
 | Wymiar | Co waliduje |
-|-----------|------------------|
-| Kompletność | Wszystkie zadania wykonane, wszystkie wymagania zaimplementowane, scenariusze uwzględnione |
-| Prawidłowość | Implementacja odpowiada intencji specyfikacji, obsłużone przypadki brzegowe |
-| Spójność | Decyzje projektowe odzwierciedlone w kodzie, wzorce spójne |
+|--------|-------------|
+| Kompletność | Wszystkie zadania wykonane, wszystkie wymagania zaimplementowane, scenariusze pokryte |
+| Poprawność | Implementacja odpowiada intencji specyfikacji, obsłużone przypadki brzegowe |
+| Spójność | Decyzje projektowe odzwierciedlone w kodzie, wzorce konsekwentne |
 
-Weryfikacja nie zablokuje archiwizacji, ale ujawnia problemy, które możesz chcieć najpierw rozwiązać.
+Weryfikacja nie blokuje archiwizacji, ale wskazuje problemy, które warto najpierw rozwiązać.
 
 #### Archiwizacja: Finalizacja zmiany
 
@@ -301,81 +302,81 @@ AI:  ✓ Synced specs to openspec/specs/auth/spec.md
      Change archived successfully.
 ```
 
-Archiwizacja zapyta, jeśli specyfikacje nie są zsynchronizowane. Nie zablokuje niekompletnych zadań, ale cię ostrzeże.
+Archiwizacja zapyta, jeśli specyfikacje nie zostały zsynchronizowane. Nie zablokuje się z powodu nieukończonych zadań, ale wyświetli ostrzeżenie.
 
-## Kiedy używać czego
+## Kiedy czego używać
 
 ### `/opsx:ff` vs `/opsx:continue`
 
 | Sytuacja | Użyj |
-|-----------|-----|
+|----------|------|
 | Jasne wymagania, gotowy do budowania | `/opsx:ff` |
-| Eksploracja, chcesz przeglądać każdy krok | `/opsx:continue` |
-| Chcesz iterować propozycję przed specyfikacjami | `/opsx:continue` |
-| Presja czasu, trzeba działać szybko | `/opsx:ff` |
-| Złożona zmiana, chcesz kontroli | `/opsx:continue` |
+| Badanie, chcesz przejrzeć każdy krok | `/opsx:continue` |
+| Chcesz iterować nad propozycją przed specyfikacjami | `/opsx:continue` |
+| Presja czasowa, trzeba działać szybko | `/opsx:ff` |
+| Złożona zmiana, chcesz mieć kontrolę | `/opsx:continue` |
 
-**Zasada:** Jeśli możesz opisać pełny zakres z góry, użyj `/opsx:ff`. Jeśli odkrywasz go w trakcie, użyj `/opsx:continue`.
+**Zasada ogólna:** Jeśli potrafisz opisać pełny zakres z góry, użyj `/opsx:ff`. Jeśli dopiero to odkrywasz w trakcie pracy, użyj `/opsx:continue`.
 
-### Kiedy aktualizować vs zaczynać od nowa
+### Kiedy aktualizować, a kiedy zaczynać od nowa
 
-Częste pytanie: kiedy aktualizacja istniejącej zmiany jest w porządku, a kiedy powinieneś zacząć nową?
+Częste pytanie: kiedy można zaktualizować istniejącą zmianę, a kiedy lepiej rozpocząć nową?
 
-**Aktualizuj istniejącą zmianę, gdy:**
+**Zaktualizuj istniejącą zmianę, gdy:**
 
-- Ta sama intencja, dopracowane wykonanie
+- Ta sama intencja, doprecyzowane wykonanie
 - Zakres się zawęża (najpierw MVP, reszta później)
-- Korekty wynikające z nauki (kod jest inny niż oczekiwano)
-- Drobne zmiany projektowe na podstawie odkryć implementacyjnych
+- Korekty wynikające z nauki (kod nie jest taki, jak się spodziewano)
+- Dostosowania projektu na podstawie odkryć podczas implementacji
 
-**Zacznij nową zmianę, gdy:**
+**Rozpocznij nową zmianę, gdy:**
 
-- Intencja fundamentalnie się zmieniła
-- Zakres eksplodował na zupełnie inną pracę
-- Oryginalna zmiana może być oznaczona jako "zrobiona" samodzielnie
-- Łatki bardziej mylą niż wyjaśniają
+- Intencja uległa fundamentalnej zmianie
+- Zakres rozrósł się do zupełnie innej pracy
+- Oryginalna zmiana może być oznaczona jako „ukończona" samodzielnie
+- Łatki bardziej by zdezorientowały niż wyjaśniły
 
 ```text
                      ┌─────────────────────────────────────┐
-                     │     Is this the same work?          │
+                     │     Czy to ta sama praca?           │
                      └──────────────┬──────────────────────┘
                                     │
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Same intent?      >50% overlap?      Can original
-          Same problem?     Same scope?        be "done" without
-                 │                  │          these changes?
-                 │                  │                  │
+          Ta sama intencja?  >50% nakładania?   Czy oryginalna
+          Ten sam problem?   Ten sam zakres?     zmiana może być
+                 │                  │          „ukończona" bez
+                 │                  │          tych zmian?
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      YES               NO YES           NO  NO              YES
+      TAK               NIE TAK          NIE NIE             TAK
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    UPDATE            NEW  UPDATE       NEW  UPDATE          NEW
+   AKTUALIZUJ        NOWA AKTUALIZUJ   NOWA AKTUALIZUJ     NOWA
 ```
 
-**Przykład: "Dodaj tryb ciemny"**
+**Przykład: „Dodaj tryb ciemny"**
 
-- "Trzeba też obsługiwać niestandardowe motywy" → Nowa zmiana (eksplozja zakresu)
-- "Wykrywanie preferencji systemowych jest trudniejsze niż oczekiwano" → Aktualizacja (ta sama intencja)
-- "Najpierw włączmy przełącznik, preferencje dodamy później" → Aktualizacja, archiwizacja, potem nowa zmiana
+- „Trzeba też obsługiwać niestandardowe motywy" → Nowa zmiana (zakres się rozszerzył)
+- „Wykrywanie preferencji systemowych jest trudniejsze niż się spodziewałem" → Aktualizacja (ta sama intencja)
+- „Wyślijmy najpierw przełącznik, preferencje dodamy później" → Aktualizacja, potem archiwizacja, potem nowa zmiana
 
 ## Najlepsze praktyki
 
-### Utrzymuj zmiany skupione
+### Utrzymuj zmiany skoncentrowane
 
-Jedna logiczna jednostka pracy na zmianę. Jeśli robisz "dodaj funkcję X i refactoruj Y", rozważ dwie osobne zmiany.
+Jedna logiczna jednostka pracy na zmianę. Jeśli robisz „dodaj funkcję X i jednocześnie refaktoruj Y", rozważ dwie osobne zmiany.
 
 **Dlaczego to ważne:**
-- Łatwiejsza do przeglądania i zrozumienia
+- Łatwiej do przejrzenia i zrozumienia
 - Czystsza historia archiwum
-- Może być wdrożona niezależnie
-- Prostszy rollback w razie potrzeby
+- Można wdrożyć niezależnie
+- Prostsze wycofanie w razie potrzeby
 
 ### Używaj `/opsx:explore` dla niejasnych wymagań
 
-Przed zaangażowaniem się w zmianę, zbadaj przestrzeń problemu:
+Przed podjęciem zmiany, zbadaj przestrzeń problemu:
 
 ```text
 You: /opsx:explore
@@ -395,11 +396,11 @@ AI:  Let me investigate your current setup and options...
      Your current stack suggests #1 or #2. What's your scale?
 ```
 
-Eksploracja澄清思路 zanim stworzysz artefakty.
+Eksploracja porządkuje myślenie przed utworzeniem artefaktów.
 
 ### Weryfikuj przed archiwizacją
 
-Używaj `/opsx:verify`, aby sprawdzić, czy implementacja odpowiada artefaktom:
+Użyj `/opsx:verify`, aby sprawdzić, czy implementacja odpowiada artefaktom:
 
 ```text
 You: /opsx:verify
@@ -413,39 +414,39 @@ AI:  Verifying add-dark-mode...
      Ready to archive!
 ```
 
-Wykrywa rozbieżności przed zamknięciem zmiany.
+Wyłapuje rozbieżności przed zamknięciem zmiany.
 
-### Nazwy zmian powinny być jasne
+### Nazywaj zmiany jasno
 
-Dobre nazwy sprawiają, że `openspec list` jest użyteczne:
+Dobre nazwy sprawiają, że `openspec list` jest użyteczny:
 
 ```text
-Good:                          Avoid:
+Dobrze:                        Unikaj:
 add-dark-mode                  feature-1
 fix-login-redirect             update
 optimize-product-query         changes
 implement-2fa                  wip
 ```
 
-## Szybki przegląd poleceń
+## Szybki odniesienie do poleceń
 
-Szczegółowe informacje o poleceniach i ich opcjach znajdziesz w sekcji [Polecenia](commands.md).
+Pełne szczegóły poleceń i opcje znajdziesz w sekcji [Polecenia](commands.md).
 
 | Polecenie | Cel | Kiedy używać |
 |-----------|-----|--------------|
-| `/opsx:propose` | Tworzenie zmiany i artefaktów planowania | Szybka domyślna ścieżka (profil `core`) |
-| `/opsx:explore` | Przemyślenie pomysłów | Niejasne wymagania, badanie |
-| `/opsx:new` | Rozpoczęcie szkieletu zmiany | Tryb rozszerzony, jawna kontrola artefaktów |
-| `/opsx:continue` | Tworzenie następnego artefaktu | Tryb rozszerzony, tworzenie artefaktów krok po kroku |
-| `/opsx:ff` | Tworzenie wszystkich artefaktów planowania | Tryb rozszerzony, jasny zakres |
-| `/opsx:apply` | Implementacja zadań | Gotowość do pisania kodu |
-| `/opsx:verify` | Walidacja implementacji | Tryb rozszerzony, przed archiwizacją |
-| `/opsx:sync` | Scalanie specyfikacji delta | Tryb rozszerzony, opcjonalne |
-| `/opsx:archive` | Zakończenie zmiany | Cała praca zakończona |
-| `/opsx:bulk-archive` | Archiwizacja wielu zmian | Tryb rozszerzony, praca równoległa |
+| `/opsx:propose` | Utwórz zmianę + artefakty planowania | Szybka domyślna ścieżka (profil `core`) |
+| `/opsx:explore` | Przemyśl pomysły | Niejasne wymagania, zbadanie tematu |
+| `/opsx:nowy` | Rozpocznij szkielet zmiany | Tryb rozszerzony, jawna kontrola artefaktów |
+| `/opsx:continue` | Utwórz następny artefakt | Tryb rozszerzony, tworzenie artefaktów krok po kroku |
+| `/opsx:ff` | Utwórz wszystkie artefakty planowania | Tryb rozszerzony, jasny zakres |
+| `/opsx:apply` | Wdróż zadania | Gotowy do pisania kodu |
+| `/opsx:verify` | Waliduj implementację | Tryb rozszerzony, przed archiwizacją |
+| `/opsx:sync` | Scal specyfikacje delta | Tryb rozszerzony, opcjonalnie |
+| `/opsx:archive` | Zakończ zmianę | Cała praca zakończona |
+| `/opsx:bulk-archive` | Zarchiwizuj wiele zmian | Tryb rozszerzony, praca równoległa |
 
-## Kolejne kroki
+## Następne kroki
 
 - [Polecenia](commands.md) - Pełna referencja poleceń z opcjami
-- [Koncepcje](concepts.md) - Szczegółowe omówienie specyfikacji, artefaktów i schematów
+- [Koncepcje](concepts.md) - Dogłębne omówienie specyfikacji, artefaktów i schematów
 - [Dostosowywanie](customization.md) - Tworzenie niestandardowych przepływów pracy

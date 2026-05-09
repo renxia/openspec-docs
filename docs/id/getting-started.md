@@ -1,28 +1,28 @@
 # Memulai
 
-Panduan ini menjelaskan cara kerja OpenSpec setelah Anda menginstal dan menginisialisasinya. Untuk instruksi instalasi, lihat [README utama](index.md#quick-start).
+Panduan ini menjelaskan cara kerja OpenSpec setelah Anda menginstal dan menginisialisasinya. Untuk petunjuk instalasi, lihat [README utama](index.md#quick-start).
 
-## Cara Kerja
+## Cara Kerjanya
 
-OpenSpec membantu Anda dan asisten pemrograman AI Anda untuk menyepakati apa yang akan dibangun sebelum kode apa pun ditulis.
+OpenSpec membantu Anda dan asisten pengkodean AI Anda menyepakati apa yang akan dibangun sebelum kode apa pun ditulis.
 
 **Jalur cepat default (profil inti):**
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-**Jalur diperluas (pilihan alur kerja kustom):**
+**Jalur diperluas (pemilihan alur kerja kustom):**
 
 ```text
-/opsx:new ──► /opsx:ff atau /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-Profil global default adalah `core`, yang mencakup `propose`, `explore`, `apply`, dan `archive`. Anda dapat mengaktifkan perintah alur kerja yang diperluas dengan `openspec config profile` dan kemudian `openspec update`.
+Profil global default adalah `core`, yang mencakup `propose`, `explore`, `apply`, `sync`, dan `archive`. Anda dapat mengaktifkan perintah alur kerja yang diperluas dengan `openspec config profile` lalu `openspec update`.
 
 ## Apa yang Dibuat OpenSpec
 
-Setelah menjalankan `openspec init`, proyek Anda memiliki struktur berikut:
+Setelah menjalankan `openspec init`, proyek Anda memiliki struktur ini:
 
 ```
 openspec/
@@ -40,11 +40,11 @@ openspec/
 └── config.yaml         # Konfigurasi proyek (opsional)
 ```
 
-**Dua direktori kunci:**
+**Dua direktori utama:**
 
-- **`specs/`** - Sumber kebenaran. Spesifikasi ini mendeskripsikan bagaimana sistem Anda saat ini berperilaku. Diorganisir berdasarkan domain (misalnya, `specs/auth/`, `specs/payments/`).
+- **`specs/`** - Sumber kebenaran. Spesifikasi ini menggambarkan perilaku sistem Anda saat ini. Diorganisir berdasarkan domain (misalnya, `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** - Modifikasi yang diusulkan. Setiap perubahan mendapat folder sendiri dengan semua artefak terkait. Ketika sebuah perubahan selesai, spesifikasinya digabungkan ke direktori `specs/` utama.
+- **`changes/`** - Modifikasi yang diusulkan. Setiap perubahan mendapatkan folder sendiri dengan semua artefak terkait. Ketika sebuah perubahan selesai, spesifikasinya digabungkan ke direktori `specs/` utama.
 
 ## Memahami Artefak
 
@@ -52,25 +52,25 @@ Setiap folder perubahan berisi artefak yang memandu pekerjaan:
 
 | Artefak | Tujuan |
 |----------|---------|
-| `proposal.md` | "Mengapa" dan "apa" - menangkap niat, cakupan, dan pendekatan |
-| `specs/` | Spesifikasi delta yang menunjukkan persyaratan DITAMBAHKAN/DIMODIFIKASI/DIHAPUS |
+| `proposal.md` | "Mengapa" dan "apa" - menangkap niat, ruang lingkup, dan pendekatan |
+| `specs/` | Spesifikasi delta yang menunjukkan persyaratan DITAMBAHKAN/DIUBAH/DIHAPUS |
 | `design.md` | "Bagaimana" - pendekatan teknis dan keputusan arsitektur |
 | `tasks.md` | Daftar periksa implementasi dengan kotak centang |
 
-**Artefak dibangun satu sama lain:**
+**Artefak saling membangun:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            perbarui saat Anda belajar
+            perbarui seiring pembelajaran
 ```
 
-Anda selalu dapat kembali dan menyempurnakan artefak sebelumnya saat Anda mempelajari lebih banyak selama implementasi.
+Anda selalu dapat kembali dan menyempurnakan artefak sebelumnya seiring Anda belajar lebih banyak selama implementasi.
 
 ## Cara Kerja Spesifikasi Delta
 
-Spesifikasi delta adalah konsep kunci dalam OpenSpec. Mereka menunjukkan apa yang berubah relatif terhadap spesifikasi Anda saat ini.
+Spesifikasi delta adalah konsep kunci dalam OpenSpec. Spesifikasi ini menunjukkan apa yang berubah relatif terhadap spesifikasi Anda saat ini.
 
 ### Formatnya
 
@@ -82,43 +82,43 @@ Spesifikasi delta menggunakan bagian untuk menunjukkan jenis perubahan:
 ## Persyaratan DITAMBAHKAN
 
 ### Persyaratan: Autentikasi Dua Faktor
-Sistem WAJIB meminta faktor kedua selama login.
+Sistem WAJIB memerlukan faktor kedua selama login.
 
 #### Skenario: OTP diperlukan
-- DENGAN pengguna yang memiliki 2FA aktif
+- DENGAN pengguna yang memiliki 2FA diaktifkan
 - KETIKA pengguna mengirimkan kredensial yang valid
 - MAKA tantangan OTP disajikan
 
-## Persyaratan DIMODIFIKASI
+## Persyaratan DIUBAH
 
 ### Persyaratan: Batas Waktu Sesi
 Sistem HARUS mengakhiri sesi setelah 30 menit tidak aktif.
 (Sebelumnya: 60 menit)
 
-#### Skenario: Batas waktu idle
-- DENGAN sesi yang terotentikasi
+#### Skenario: Batas waktu menganggur
+- DENGAN sesi yang diautentikasi
 - KETIKA 30 menit berlalu tanpa aktivitas
 - MAKA sesi dibatalkan
 
 ## Persyaratan DIHAPUS
 
 ### Persyaratan: Ingat Saya
-(Dihentikan demi 2FA)
+(Dihapus demi 2FA)
 ```
 
-### Apa yang Terjadi Saat Pengarsipan
+### Apa yang Terjadi pada Pengarsipan
 
 Ketika Anda mengarsipkan sebuah perubahan:
 
 1. Persyaratan **DITAMBAHKAN** ditambahkan ke spesifikasi utama
-2. Persyaratan **DIMODIFIKASI** menggantikan versi yang ada
+2. Persyaratan **DIUBAH** menggantikan versi yang ada
 3. Persyaratan **DIHAPUS** dihapus dari spesifikasi utama
 
 Folder perubahan dipindahkan ke `openspec/changes/archive/` untuk riwayat audit.
 
 ## Contoh: Perubahan Pertama Anda
 
-Mari kita jelaskan proses menambahkan mode gelap ke sebuah aplikasi.
+Mari kita telusuri penambahan mode gelap ke sebuah aplikasi.
 
 ### 1. Memulai Perubahan (Default)
 
@@ -144,16 +144,16 @@ Jika Anda telah mengaktifkan profil alur kerja yang diperluas, Anda juga dapat m
 
 ## Niat
 Pengguna telah meminta opsi mode gelap untuk mengurangi ketegangan mata
-saat digunakan pada malam hari.
+selama penggunaan malam hari.
 
-## Cakupan
+## Ruang Lingkup
 - Tambahkan pengalih tema di pengaturan
 - Dukung deteksi preferensi sistem
 - Pertahankan preferensi di localStorage
 
 ## Pendekatan
-Gunakan properti kustom CSS untuk tema dengan konteks React
-untuk manajemen状态.
+Gunakan properti kustom CSS untuk tema dengan React context
+untuk manajemen state.
 ```
 
 **specs/ui/spec.md** - Delta yang menunjukkan persyaratan baru:
@@ -163,17 +163,17 @@ untuk manajemen状态.
 
 ## Persyaratan DITAMBAHKAN
 
-### Persyaratan: Pilihan Tema
-Sistem HARUS memungkinkan pengguna memilih antara tema terang dan gelap.
+### Persyaratan: Pemilihan Tema
+Sistem HARUS mengizinkan pengguna memilih antara tema terang dan gelap.
 
 #### Skenario: Pengalih manual
 - DENGAN pengguna di halaman mana pun
 - KETIKA pengguna mengklik pengalih tema
-- MAKA tema beralih segera
+- MAKA tema berubah segera
 - DAN preferensi dipertahankan di seluruh sesi
 
 #### Skenario: Preferensi sistem
-- DENGAN pengguna yang tidak memiliki preferensi tersimpan
+- DENGAN pengguna tanpa preferensi tersimpan
 - KETIKA aplikasi dimuat
 - MAKA skema warna yang disukai sistem digunakan
 ```
@@ -184,7 +184,7 @@ Sistem HARUS memungkinkan pengguna memilih antara tema terang dan gelap.
 # Tugas
 
 ## 1. Infrastruktur Tema
-- [ ] 1.1 Buat ThemeContext dengan状态 terang/gelap
+- [ ] 1.1 Buat ThemeContext dengan state terang/gelap
 - [ ] 1.2 Tambahkan properti kustom CSS untuk warna
 - [ ] 1.3 Implementasikan persistensi localStorage
 
@@ -193,7 +193,7 @@ Sistem HARUS memungkinkan pengguna memilih antara tema terang dan gelap.
 - [ ] 2.2 Tambahkan pengalih ke halaman pengaturan
 - [ ] 2.3 Perbarui Header untuk menyertakan pengalih cepat
 
-## 3. Pemrograman
+## 3. Penataan
 - [ ] 3.1 Definisikan palet warna tema gelap
 - [ ] 3.2 Perbarui komponen untuk menggunakan variabel CSS
 ```
@@ -203,8 +203,8 @@ Sistem HARUS memungkinkan pengguna memilih antara tema terang dan gelap.
 ```
 Anda: /opsx:apply
 
-AI:  Mengerjakan tugas...
-     ✓ 1.1 Membuat ThemeContext dengan状态 terang/gelap
+AI:  Bekerja melalui tugas...
+     ✓ 1.1 Membuat ThemeContext dengan state terang/gelap
      ✓ 1.2 Menambahkan properti kustom CSS ke globals.css
      ✓ 1.3 Mengimplementasikan persistensi localStorage
      ✓ 2.1 Membuat komponen ThemeToggle
@@ -212,7 +212,7 @@ AI:  Mengerjakan tugas...
      Semua tugas selesai!
 ```
 
-Selama implementasi, jika Anda menemukan bahwa desain perlu penyesuaian, cukup perbarui artefak dan lanjutkan.
+Selama implementasi, jika Anda menemukan desain perlu penyesuaian, cukup perbarui artefak dan lanjutkan.
 
 ### 4. Pengarsipan
 
@@ -227,7 +227,7 @@ AI:  Mengarsipkan add-dark-mode...
 
 Spesifikasi delta Anda sekarang menjadi bagian dari spesifikasi utama, mendokumentasikan cara kerja sistem Anda.
 
-## Verifikasi dan Tinjauan
+## Memverifikasi dan Meninjau
 
 Gunakan CLI untuk memeriksa perubahan Anda:
 
@@ -249,5 +249,5 @@ openspec view
 
 - [Alur Kerja](workflows.md) - Pola umum dan kapan menggunakan setiap perintah
 - [Perintah](commands.md) - Referensi lengkap untuk semua perintah slash
-- [Konsep](concepts.md) - Pemahaman lebih mendalam tentang spesifikasi, perubahan, dan skema
-- [Kustomisasi](customization.md) - Membuat OpenSpec bekerja sesuai cara Anda
+- [Konsep](concepts.md) - Pemahaman lebih dalam tentang spesifikasi, perubahan, dan skema
+- [Kustomisasi](customization.md) - Buat OpenSpec bekerja sesuai keinginan Anda

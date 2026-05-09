@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "Spesifikasi-Driven Development untuk Asisten AI"
+  text: "Pengembangan Berbasis Spesifikasi untuk Asisten AI"
   tagline: Spesifikasi ringan untuk membangun dan mengelola proyek asisten AI.
   actions:
     - theme: brand
@@ -14,72 +14,60 @@ hero:
       link: /
 
 features:
-  - title: Alur Kerja Spec-First
-    details: Tentukan persyaratan sebelum menulis kode.
-  - title: Desain AI-Native
+  - title: Alur Kerja Utamakan Spesifikasi
+    details: Tentukan kebutuhan sebelum menulis kode.
+  - title: Desain Native AI
     details: Dibangun untuk Claude Code, Cursor, Windsurf, dan lainnya.
   - title: Multi-Bahasa
     details: Dokumentasi tersedia dalam berbagai bahasa.
 ---
 
 
-<details>
-<summary><strong>Framework spesifikasi paling disukai.</strong></summary>
-
-[![Stars](https://img.shields.io/github/stars/Fission-AI/OpenSpec?style=flat-square&label=Stars)](https://github.com/Fission-AI/OpenSpec/stargazers)
-[![Downloads](https://img.shields.io/npm/dm/@fission-ai/openspec?style=flat-square&label=Downloads/mo)](https://www.npmjs.com/package/@fission-ai/openspec)
-[![Contributors](https://img.shields.io/github/contributors/Fission-AI/OpenSpec?style=flat-square&label=Contributors)](https://github.com/Fission-AI/OpenSpec/graphs/contributors)
-
-</details>
-<p></p>
 Filosofi kami:
 
 ```text
-→ fluida bukan kaku
+→ fleksibel bukan kaku
 → iteratif bukan waterfall
 → mudah bukan kompleks
 → dibangun untuk brownfield bukan hanya greenfield
-→ dapat diskalakan dari proyek pribadi hingga enterprise
+→ dapat diskalakan dari proyek pribadi hingga perusahaan
 ```
 
 > [!TIP]
-> **Alur kerja baru tersedia!** Kami telah membangun kembali OpenSpec dengan alur kerja artifact-guided yang baru.
+> **Alur kerja baru kini tersedia!** Kami telah membangun ulang OpenSpec dengan alur kerja baru yang dipandu artefak.
 >
 > Jalankan `/opsx:propose "ide Anda"` untuk memulai. → [Pelajari lebih lanjut di sini](opsx.md)
 
 <p align="center">
-  Ikuti <a href="https://x.com/0xTab">@0xTab di X</a> untuk pembaruan · Bergabunglah dengan <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> untuk bantuan dan pertanyaan.
+  Ikuti <a href="https://x.com/0xTab">@0xTab di X</a> untuk pembaruan · Bergabung dengan <a href="https://discord.gg/YctCnvvshC">Discord OpenSpec</a> untuk bantuan dan pertanyaan.
 </p>
-
-<!-- TODO: Add GIF demo of /opsx:propose → /opsx:archive workflow -->
 
 ## Lihat dalam aksi
 
 ```text
-You: /opsx:propose add-dark-mode
-AI:  Created openspec/changes/add-dark-mode/
-     ✓ proposal.md — why we're doing this, what's changing
-     ✓ specs/       — requirements and scenarios
-     ✓ design.md    — technical approach
-     ✓ tasks.md     — implementation checklist
-     Ready for implementation!
+Anda: /opsx:propose add-dark-mode
+AI:  Membuat openspec/changes/add-dark-mode/
+     ✓ proposal.md — mengapa kami melakukan ini, apa yang berubah
+     ✓ specs/       — kebutuhan dan skenario
+     ✓ design.md    — pendekatan teknis
+     ✓ tasks.md     — daftar periksa implementasi
+     Siap untuk implementasi!
 
-You: /opsx:apply
-AI:  Implementing tasks...
-     ✓ 1.1 Add theme context provider
-     ✓ 1.2 Create toggle component
-     ✓ 2.1 Add CSS variables
-     ✓ 2.2 Wire up localStorage
-     All tasks complete!
+Anda: /opsx:apply
+AI:  Mengimplementasikan tugas...
+     ✓ 1.1 Tambahkan penyedia konteks tema
+     ✓ 1.2 Buat komponen toggle
+     ✓ 2.1 Tambahkan variabel CSS
+     ✓ 2.2 Hubungkan localStorage
+     Semua tugas selesai!
 
-You: /opsx:archive
-AI:  Archived to openspec/changes/archive/2025-01-23-add-dark-mode/
-     Specs updated. Ready for the next feature.
+Anda: /opsx:archive
+AI:  Diarsipkan ke openspec/changes/archive/2025-01-23-add-dark-mode/
+     Spesifikasi diperbarui. Siap untuk fitur berikutnya.
 ```
 
 <details>
-<summary><strong>Dashboard OpenSpec</strong></summary>
-
+<summary><strong>Dasbor OpenSpec</strong></summary>
 </details>
 
 ## Mulai Cepat
@@ -92,7 +80,7 @@ Instal OpenSpec secara global:
 npm install -g @fission-ai/openspec@latest
 ```
 
-Kemudian navigasi ke direktori proyek Anda dan inisialisasi:
+Kemudian navigasikan ke direktori proyek Anda dan inisialisasi:
 
 ```bash
 cd your-project
@@ -115,27 +103,27 @@ Jika Anda menginginkan alur kerja yang diperluas (`/opsx:new`, `/opsx:continue`,
 → **[Perintah](commands.md)**: perintah slash & keterampilan<br>
 → **[CLI](cli.md)**: referensi terminal<br>
 → **[Alat yang Didukung](supported-tools.md)**: integrasi alat & jalur instalasi<br>
-→ **[Konsep](concepts.md)**: bagaimana semuanya terhubung<br>
+→ **[Konsep](concepts.md)**: bagaimana semuanya cocok<br>
 → **[Multi-Bahasa](multi-language.md)**: dukungan multi-bahasa<br>
 → **[Kustomisasi](customization.md)**: buat milik Anda
 
 
 ## Mengapa OpenSpec?
 
-Asisten pemrograman AI sangat kuat tetapi tidak dapat diprediksi ketika persyaratan hanya ada di riwayat obrolan. OpenSpec menambahkan lapisan spesifikasi ringan sehingga Anda setuju tentang apa yang akan dibangun sebelum kode apa pun ditulis.
+Asisten pengkodean AI sangat kuat tetapi tidak dapat diprediksi ketika kebutuhan hanya ada dalam riwayat obrolan. OpenSpec menambahkan lapisan spesifikasi ringan sehingga Anda menyepakati apa yang akan dibangun sebelum kode apa pun ditulis.
 
-- **Sepakati sebelum Anda membangun** — manusia dan AI menyelaraskan spesifikasi sebelum kode ditulis
-- **Tetap terorganisir** — setiap perubahan mendapat folder sendiri dengan proposal, spesifikasi, desain, dan tugas
-- **Bekerja secara fluida** — perbarui artifact kapan saja, tanpa gerbang fase yang kaku
+- **Sepakati sebelum membangun** — manusia dan AI menyelaraskan spesifikasi sebelum kode ditulis
+- **Tetap terorganisir** — setiap perubahan mendapatkan folder sendiri dengan proposal, spesifikasi, desain, dan tugas
+- **Bekerja secara fleksibel** — perbarui artefak kapan saja, tanpa gerbang fase yang kaku
 - **Gunakan alat Anda** — berfungsi dengan 20+ asisten AI melalui perintah slash
 
-### Bagaimana kami dibandingkan
+### Perbandingan kami
 
-**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Menyeluruh tetapi berat. Gerbang fase kaku, banyak Markdown, pengaturan Python. OpenSpec lebih ringan dan memungkinkan Anda ber迭代 secara bebas.
+**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Mendetail tetapi berat. Gerbang fase kaku, banyak Markdown, pengaturan Python. OpenSpec lebih ringan dan memungkinkan Anda beriterasi dengan bebas.
 
-**vs. [Kiro](https://kiro.dev)** (AWS) — Kuat tetapi Anda terkunci di IDE mereka dan terbatas pada model Claude. OpenSpec berfungsi dengan alat yang sudah Anda gunakan.
+**vs. [Kiro](https://kiro.dev)** (AWS) — Kuat tetapi Anda terkunci ke IDE mereka dan terbatas pada model Claude. OpenSpec berfungsi dengan alat yang sudah Anda gunakan.
 
-**vs. tidak ada** — Pemrograman AI tanpa spesifikasi berarti prompt yang samar dan hasil yang tidak dapat diprediksi. OpenSpec membawa prediktabilitas tanpa keributan.
+**vs. tanpa apa-apa** — Pengkodean AI tanpa spesifikasi berarti prompt yang samar dan hasil yang tidak dapat diprediksi. OpenSpec membawa prediktabilitas tanpa birokrasi.
 
 ## Memperbarui OpenSpec
 
@@ -147,7 +135,7 @@ npm install -g @fission-ai/openspec@latest
 
 **Segarkan instruksi agen**
 
-Jalankan ini di dalam setiap proyek untuk menghasilkan kembali panduan AI dan memastikan perintah slash terbaru aktif:
+Jalankan ini di dalam setiap proyek untuk meregenerasi panduan AI dan memastikan perintah slash terbaru aktif:
 
 ```bash
 openspec update
@@ -155,27 +143,27 @@ openspec update
 
 ## Catatan Penggunaan
 
-**Pemilihan model**: OpenSpec bekerja paling baik dengan model dengan penalaran tinggi. Kami merekomendasikan Opus 4.5 dan GPT 5.2 untuk perencanaan dan implementasi.
+**Pemilihan model**: OpenSpec bekerja paling baik dengan model penalaran tinggi. Kami merekomendasikan Opus 4.5 dan GPT 5.2 untuk perencanaan dan implementasi.
 
 **Kebersihan konteks**: OpenSpec mendapat manfaat dari jendela konteks yang bersih. Bersihkan konteks Anda sebelum memulai implementasi dan pertahankan kebersihan konteks yang baik sepanjang sesi Anda.
 
 ## Berkontribusi
 
-**Perbaikan kecil** — Perbaikan bug, koreksi kesalahan ketik, dan perbaikan minor dapat diajukan langsung sebagai PR.
+**Perbaikan kecil** — Perbaikan bug, koreksi kesalahan ketik, dan peningkatan kecil dapat dikirimkan langsung sebagai PR.
 
-**Perubahan lebih besar** — Untuk fitur baru, refactor signifikan, atau perubahan arsitektural, silakan ajukan proposal perubahan OpenSpec terlebih dahulu agar kami dapat menyelaraskan tujuan dan niat sebelum implementasi dimulai.
+**Perubahan lebih besar** — Untuk fitur baru, refaktorisasi signifikan, atau perubahan arsitektur, harap kirimkan proposal perubahan OpenSpec terlebih dahulu sehingga kami dapat menyelaraskan niat dan tujuan sebelum implementasi dimulai.
 
-Saat menulis proposal, ingat filosofi OpenSpec: kami melayani berbagai pengguna di berbagai agen pemrograman, model, dan kasus penggunaan. Perubahan harus berfungsi dengan baik untuk semua orang.
+Saat menulis proposal, ingat filosofi OpenSpec: kami melayani berbagai pengguna di berbagai agen pengkodean, model, dan kasus penggunaan. Perubahan harus berfungsi dengan baik untuk semua orang.
 
-**Kode yang dihasilkan AI diterima** — selama sudah diuji dan diverifikasi. PR yang berisi kode yang dihasilkan AI harus menyebutkan agen pemrograman dan model yang digunakan (misalnya, "Dihasilkan dengan Claude Code menggunakan claude-opus-4-5-20251101").
+**Kode yang dihasilkan AI diterima** — selama telah diuji dan diverifikasi. PR yang berisi kode yang dihasilkan AI harus menyebutkan agen pengkodean dan model yang digunakan (mis., "Dihasilkan dengan Claude Code menggunakan claude-opus-4-5-20251101").
 
 ### Pengembangan
 
 - Instal dependensi: `pnpm install`
-- Bangun: `pnpm run build`
-- Uji: `pnpm test`
+- Build: `pnpm run build`
+- Tes: `pnpm test`
 - Kembangkan CLI secara lokal: `pnpm run dev` atau `pnpm run dev:cli`
-- Komit konvensional (satu baris): `type(scope): subject`
+- Conventional commits (satu baris): `type(scope): subject`
 
 ## Lainnya
 
@@ -184,16 +172,16 @@ Saat menulis proposal, ingat filosofi OpenSpec: kami melayani berbagai pengguna 
 
 OpenSpec mengumpulkan statistik penggunaan anonim.
 
-Kami hanya mengumpulkan nama perintah dan versi untuk memahami pola penggunaan. Tidak ada argumen, jalur, konten, atau PII. Dinonaktifkan secara otomatis di CI.
+Kami hanya mengumpulkan nama perintah dan versi untuk memahami pola penggunaan. Tidak ada argumen, jalur, konten, atau PII. Secara otomatis dinonaktifkan di CI.
 
-**Keluar:** `export OPENSPEC_TELEMETRY=0` atau `export DO_NOT_TRACK=1`
+**Pilih keluar:** `export OPENSPEC_TELEMETRY=0` atau `export DO_NOT_TRACK=1`
 
 </details>
 
 <details>
-<summary><strong>Pemelihara & Penasihat</strong></summary>
+<summary><strong>Pengelola & Penasihat</strong></summary>
 
-Lihat [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) untuk daftar pemelihara inti dan penasihat yang membantu memandu proyek.
+Lihat [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) untuk daftar pengelola inti dan penasihat yang membantu membimbing proyek.
 
 </details>
 

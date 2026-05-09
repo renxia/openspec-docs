@@ -2,19 +2,19 @@
 
 OpenSpec menyediakan tiga tingkat kustomisasi:
 
-| Level | Fungsi | Cocok untuk |
-|-------|--------|-------------|
-| **Konfigurasi Proyek** | Menetapkan default, menyuntikkan konteks/aturan | Sebagian besar tim |
+| Tingkat | Apa yang dilakukan | Cocok untuk |
+|---------|-------------------|-------------|
+| **Konfigurasi Proyek** | Mengatur default, menyuntikkan konteks/aturan | Sebagian besar tim |
 | **Skema Kustom** | Mendefinisikan artefak alur kerja Anda sendiri | Tim dengan proses unik |
-| **Penggantian Global** | Berbagi skema di semua proyek | Pengguna tingkat lanjut |
+| **Override Global** | Berbagi skema di semua proyek | Pengguna tingkat lanjut |
 
 ---
 
 ## Konfigurasi Proyek
 
-File `openspec/config.yaml` adalah cara termudah untuk menyesuaikan OpenSpec untuk tim Anda. File ini memungkinkan Anda untuk:
+File `openspec/config.yaml` adalah cara termudah untuk mengkustomisasi OpenSpec untuk tim Anda. File ini memungkinkan Anda:
 
-- **Menetapkan skema default** - Lewati perintah `--schema` pada setiap perintah
+- **Mengatur skema default** - Lewati `--schema` di setiap perintah
 - **Menyuntikkan konteks proyek** - AI melihat tumpukan teknologi, konvensi, dll.
 - **Menambahkan aturan per artefak** - Aturan kustom untuk artefak tertentu
 
@@ -24,7 +24,7 @@ File `openspec/config.yaml` adalah cara termudah untuk menyesuaikan OpenSpec unt
 openspec init
 ```
 
-Perintah ini akan memandu Anda dalam membuat konfigurasi secara interaktif. Atau buat secara manual:
+Ini akan memandu Anda membuat konfigurasi secara interaktif. Atau buat secara manual:
 
 ```yaml
 # openspec/config.yaml
@@ -45,7 +45,7 @@ rules:
     - Reference existing patterns before inventing new ones
 ```
 
-### Cara Kerja
+### Cara Kerjanya
 
 **Skema default:**
 
@@ -57,7 +57,7 @@ openspec new change my-feature --schema spec-driven
 openspec new change my-feature
 ```
 
-**Penyuntikan konteks dan aturan:**
+**Suntikan konteks dan aturan:**
 
 Saat membuat artefak apa pun, konteks dan aturan Anda disuntikkan ke dalam prompt AI:
 
@@ -73,7 +73,7 @@ Tech stack: TypeScript, React, Node.js, PostgreSQL
 </rules>
 
 <template>
-[Schema's built-in template]
+[Template bawaan skema]
 </template>
 ```
 
@@ -82,9 +82,9 @@ Tech stack: TypeScript, React, Node.js, PostgreSQL
 
 ### Urutan Resolusi Skema
 
-Saat OpenSpec membutuhkan skema, ia memeriksa dalam urutan ini:
+Ketika OpenSpec membutuhkan skema, ia memeriksa dalam urutan ini:
 
-1. Flag CLI: `--schema <nama>`
+1. Flag CLI: `--schema <name>`
 2. Metadata perubahan (`.openspec.yaml` di folder perubahan)
 3. Konfigurasi proyek (`openspec/config.yaml`)
 4. Default (`spec-driven`)
@@ -93,7 +93,7 @@ Saat OpenSpec membutuhkan skema, ia memeriksa dalam urutan ini:
 
 ## Skema Kustom
 
-Saat konfigurasi proyek tidak cukup, buat skema Anda sendiri dengan alur kerja yang sepenuhnya kustom. Skema kustom berada di direktori `openspec/schemas/` proyek Anda dan dikelola versinya bersama kode Anda.
+Ketika konfigurasi proyek tidak cukup, buat skema Anda sendiri dengan alur kerja yang sepenuhnya kustom. Skema kustom berada di direktori `openspec/schemas/` proyek Anda dan dikontrol versi bersama kode Anda.
 
 ```text
 your-project/
@@ -107,17 +107,17 @@ your-project/
 └── src/
 ```
 
-### Fork Skema yang Ada
+### Fork Skema yang Sudah Ada
 
-Cara tercepat untuk menyesuaikan adalah dengan melakukan fork pada skema bawaan:
+Cara tercepat untuk mengkustomisasi adalah melakukan fork skema bawaan:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-Ini akan menyalin seluruh skema `spec-driven` ke `openspec/schemas/my-workflow/` di mana Anda dapat mengeditnya dengan bebas.
+Ini menyalin seluruh skema `spec-driven` ke `openspec/schemas/my-workflow/` di mana Anda dapat mengeditnya secara bebas.
 
-**Yang Anda dapatkan:**
+**Apa yang Anda dapatkan:**
 
 ```text
 openspec/schemas/my-workflow/
@@ -131,7 +131,7 @@ openspec/schemas/my-workflow/
 
 Sekarang edit `schema.yaml` untuk mengubah alur kerja, atau edit template untuk mengubah apa yang dihasilkan AI.
 
-### Buat Skema dari Awal
+### Membuat Skema dari Awal
 
 Untuk alur kerja yang benar-benar baru:
 
@@ -148,7 +148,7 @@ openspec schema init rapid \
 
 ### Struktur Skema
 
-Skema mendefinisikan artefak dalam alur kerja Anda dan bagaimana artefak tersebut bergantung satu sama lain:
+Skema mendefinisikan artefak dalam alur kerja Anda dan bagaimana mereka bergantung satu sama lain:
 
 ```yaml
 # openspec/schemas/my-workflow/schema.yaml
@@ -187,11 +187,11 @@ apply:
   tracks: tasks.md
 ```
 
-**Bidang kunci:**
+**Kolom kunci:**
 
-| Bidang | Tujuan |
-|--------|--------|
-| `id` | Pengenal unik, digunakan dalam perintah dan aturan |
+| Kolom | Tujuan |
+|-------|--------|
+| `id` | Pengidentifikasi unik, digunakan dalam perintah dan aturan |
 | `generates` | Nama file output (mendukung glob seperti `specs/**/*.md`) |
 | `template` | File template di direktori `templates/` |
 | `instruction` | Instruksi AI untuk membuat artefak ini |
@@ -199,7 +199,7 @@ apply:
 
 ### Template
 
-Template adalah file markdown yang memandu AI. Template disuntikkan ke dalam prompt saat membuat artefak tersebut.
+Template adalah file markdown yang memandu AI. Template ini disuntikkan ke dalam prompt saat membuat artefak tersebut.
 
 ```markdown
 <!-- templates/proposal.md -->
@@ -217,9 +217,9 @@ Template adalah file markdown yang memandu AI. Template disuntikkan ke dalam pro
 ```
 
 Template dapat mencakup:
-- Judul bagian yang harus diisi AI
+- Header bagian yang harus diisi AI
 - Komentar HTML dengan panduan untuk AI
-- Contoh format yang menunjukkan struktur yang diharapkan
+- Format contoh yang menunjukkan struktur yang diharapkan
 
 ### Validasi Skema Anda
 
@@ -240,10 +240,10 @@ Ini memeriksa:
 Setelah dibuat, gunakan skema Anda dengan:
 
 ```bash
-# Tentukan pada perintah
+# Tentukan di perintah
 openspec new change feature --schema my-workflow
 
-# Atau tetapkan sebagai default di config.yaml
+# Atau atur sebagai default di config.yaml
 schema: my-workflow
 ```
 
@@ -252,14 +252,14 @@ schema: my-workflow
 Tidak yakin skema mana yang digunakan? Periksa dengan:
 
 ```bash
-# Lihat dari mana skema tertentu berasal
+# Lihat dari mana skema spesifik diselesaikan
 openspec schema which my-workflow
 
 # Daftar semua skema yang tersedia
 openspec schema which --all
 ```
 
-Output menunjukkan apakah skema berasal dari proyek Anda, direktori pengguna, atau paket:
+Output menunjukkan apakah itu dari proyek Anda, direktori pengguna, atau paket:
 
 ```text
 Schema: my-workflow
@@ -269,7 +269,7 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 ---
 
-> **Catatan:** OpenSpec juga mendukung skema tingkat pengguna di `~/.local/share/openspec/schemas/` untuk dibagikan di seluruh proyek, tetapi skema tingkat proyek di `openspec/schemas/` direkomendasikan karena dikelola versinya bersama kode Anda.
+> **Catatan:** OpenSpec juga mendukung skema tingkat pengguna di `~/.local/share/openspec/schemas/` untuk berbagi di seluruh proyek, tetapi skema tingkat proyek di `openspec/schemas/` direkomendasikan karena dikontrol versi bersama kode Anda.
 
 ---
 
@@ -306,9 +306,9 @@ apply:
   tracks: tasks.md
 ```
 
-### Menambahkan Artefak Review
+### Menambahkan Artefak Tinjauan
 
-Fork default dan tambahkan langkah review:
+Lakukan fork default dan tambahkan langkah tinjauan:
 
 ```bash
 openspec schema fork spec-driven with-review
@@ -328,12 +328,26 @@ Kemudian edit `schema.yaml` untuk menambahkan:
       - design
 
   - id: tasks
-    # ... existing tasks config ...
+    # ... konfigurasi tugas yang ada ...
     requires:
       - specs
       - design
-      - review    # Now tasks require review too
+      - review    # Sekarang tugas juga memerlukan tinjauan
 ```
+
+---
+
+## Skema Komunitas
+
+OpenSpec juga mendukung skema yang dikelola komunitas dan didistribusikan melalui repositori mandiri. Ini menyediakan alur kerja yang terstandar yang mengintegrasikan OpenSpec dengan alat atau sistem lain, mirip dengan cara [katalog ekstensi komunitas github/spec-kit](https://github.com/github/spec-kit/tree/main/extensions) bekerja untuk spec-kit.
+
+Skema komunitas tidak disertakan dalam inti OpenSpec — mereka berada di repositori mereka sendiri dengan jadwal rilis mereka sendiri. Untuk menggunakan satu, salin bundel skema ke direktori `openspec/schemas/<schema-name>/` proyek Anda (setiap README repo memiliki instruksi instalasi).
+
+| Skema | Pengelola | Repositori | Deskripsi |
+|-------|-----------|-----------|-----------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Mengintegrasikan tata kelola artefak OpenSpec dengan keterampilan eksekusi [obra/superpowers](https://github.com/obra/superpowers) (brainstorming, rencana penulisan, TDD melalui subagent, tinjauan kode, penyelesaian). Menambahkan artefak `retrospective` berbasis bukti yang mengisi celah yang tidak dicakup secara native oleh Superpowers. |
+
+> Ingin berkontribusi skema komunitas? Buka issue dengan tautan ke repositori Anda, atau kirimkan PR yang menambahkan baris ke tabel ini.
 
 ---
 

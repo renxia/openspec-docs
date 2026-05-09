@@ -1,10 +1,10 @@
 # Alur Kerja
 
-Panduan ini mencakup pola alur kerja umum untuk OpenSpec dan kapan harus menggunakan masing-masing. Untuk pengaturan dasar, lihat [Memulai](getting-started.md). Untuk referensi perintah, lihat [Perintah](commands.md).
+Panduan ini mencakup pola alur kerja umum untuk OpenSpec dan kapan menggunakan masing-masing pola. Untuk pengaturan dasar, lihat [Memulai](getting-started.md). Untuk referensi perintah, lihat [Perintah](commands.md).
 
-## Filosofi: Tindakan, Bukan Fase
+## Filosofi: Aksi, Bukan Fase
 
-Alur kerja tradisional memaksa Anda melalui fase: perencanaan, kemudian implementasi, lalu selesai. Tetapi pekerjaan nyata tidak cocok dengan kotak-kotak yang kaku.
+Alur kerja tradisional memaksa Anda melewati fase: perencanaan, lalu implementasi, lalu selesai. Tetapi pekerjaan nyata tidak pas dengan kotak-kotak tersebut.
 
 OPSX mengambil pendekatan yang berbeda:
 
@@ -16,17 +16,17 @@ Tradisional (terkunci fase):
       │   "Tidak bisa kembali"  │
       └────────────────────┘
 
-OPSX (tindakan fleksibel):
+OPSX (aksi yang mengalir):
 
-  proposal ──► specs ──► design ──► tasks ──► implement
+  proposal ──► spesifikasi ──► desain ──► tugas ──► implementasi
 ```
 
-**Prinsip utama:**
+**Prinsip-prinsip utama:**
 
-- **Tindakan, bukan fase** - Perintah adalah hal yang dapat Anda lakukan, bukan tahapan di mana Anda terjebak
-- **Ketergantungan adalah pemberi kemampuan** - Ketergantungan menunjukkan apa yang mungkin dilakukan, bukan apa yang harus dilakukan selanjutnya
+- **Aksi, bukan fase** - Perintah adalah hal yang dapat Anda lakukan, bukan tahapan yang membuat Anda terjebak
+- **Dependensi adalah pemberdaya** - Mereka menunjukkan apa yang mungkin, bukan apa yang wajib dilakukan selanjutnya
 
-> **Kustomisasi:** Alur kerja OPSX didorong oleh skema yang mendefinisikan urutan artefak. Lihat [Kustomisasi](customization.md) untuk detail tentang membuat skema kustom.
+> **Kustomisasi:** Alur kerja OPSX didorong oleh skema yang mendefinisikan sekuens artefak. Lihat [Kustomisasi](customization.md) untuk detail tentang membuat skema kustom.
 
 ## Dua Mode
 
@@ -36,24 +36,25 @@ Instalasi baru secara default menggunakan `core`, yang menyediakan:
 - `/opsx:propose`
 - `/opsx:explore`
 - `/opsx:apply`
+- `/opsx:sync`
 - `/opsx:archive`
 
-Alur umum:
+Alur kerja umum:
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-### Alur Kerja Lengkap (pilihan kustom)
+### Alur Kerja Diperluas/Lengkap (pilihan kustom)
 
-Jika Anda menginginkan perintah scaffolding-and-build yang eksplisit (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`), aktifkan dengan:
+Jika Anda menginginkan perintah scaffold-and-build eksplisit (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`), aktifkan dengan:
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## Pola Alur Kerja (Mode Lengkap)
+## Pola Alur Kerja (Mode Diperluas)
 
 ### Fitur Cepat
 
@@ -82,9 +83,9 @@ AI:  Membuat semua artefak perencanaan...
 
 Anda: /opsx:apply
 
-AI:  Mengerjakan tugas-tugas...
+AI:  Mengerjakan tugas...
      ✓ Menambahkan tombol logout ke header
-     ✓ Mengimplementasikan pembersihan sesi
+     ✓ Mengimplementasikan penghapusan sesi
      ✓ Menambahkan dialog konfirmasi
      Semua tugas selesai!
 
@@ -94,9 +95,9 @@ AI:  ✓ Menggabungkan spesifikasi
      ✓ Mengarsipkan perubahan
 ```
 
-**Cocok untuk:** Fitur kecil hingga menengah, perbaikan bug, perubahan sederhana.
+**Paling cocok untuk:** Fitur kecil hingga sedang, perbaikan bug, perubahan langsung.
 
-### Eksploratif
+### Eksplorasi
 
 Ketika persyaratan tidak jelas atau Anda perlu menyelidiki terlebih dahulu:
 
@@ -111,25 +112,25 @@ Anda: /opsx:explore
 
 AI:  Apa yang ingin Anda eksplorasi?
 
-Anda: Saya ingin meningkatkan performa pemuatan halaman tetapi tidak yakin
-     di mana bottleneck-nya.
+Anda: Saya ingin meningkatkan performa pemuatan halaman tetapi saya tidak yakin
+     di mana hambatannya.
 
-AI:  Biarkan saya membantu menyelidiki...
-     [Menganalisis ukuran bundle, mengidentifikasi query lambat, meninjau
+AI:  Biarkan saya bantu menyelidiki...
+     [Menganalisis ukuran bundel, mengidentifikasi kueri lambat, meninjau
      pola render komponen]
 
-     Saya menemukan tiga bottleneck utama:
-     1. Gambar besar yang belum dioptimalkan
+     Saya menemukan tiga hambatan utama:
+     1. Gambar besar yang tidak dioptimalkan
      2. Pengambilan data sinkron di ProductList
-     3. Render ulang dari perubahan context
+     3. Render ulang dari perubahan konteks
 
-     Mana yang ingin Anda atasi terlebih dahulu?
+     Mana yang ingin Anda tangani terlebih dahulu?
 
-Anda: Mari kita tangani masalah pengambilan data.
+Anda: Mari kita atasi masalah pengambilan data.
 
 Anda: /opsx:new optimize-product-list-fetching
 
-AI:  Perubahan dibuat. Siap membuat: proposal
+AI:  Membuat perubahan. Siap membuat: proposal
 
 Anda: /opsx:continue
 
@@ -137,14 +138,14 @@ AI:  Membuat proposal berdasarkan eksplorasi kita...
      [Menulis proposal yang menggabungkan wawasan investigasi]
 
      Siap membuat: spesifikasi, desain
-     Mana yang ingin Anda buat selanjutnya?
+     Mana yang Anda inginkan selanjutnya?
 
 Anda: /opsx:continue
 
 AI:  Membuat spesifikasi...
 ```
 
-**Cocok untuk:** Optimasi performa, debugging, keputusan arsitektural, persyaratan yang tidak jelas.
+**Paling cocok untuk:** Optimasi performa, debugging, keputusan arsitektur, persyaratan yang tidak jelas.
 
 ### Perubahan Paralel
 
@@ -153,7 +154,7 @@ Bekerja pada beberapa perubahan sekaligus:
 ```text
 Perubahan A: /opsx:new ──► /opsx:ff ──► /opsx:apply (sedang berlangsung)
                                          │
-                                    pergantian konteks
+                                    beralih konteks
                                          │
 Perubahan B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
@@ -161,7 +162,7 @@ Perubahan B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 **Contoh percakapan:**
 
 ```text
-Anda: Saya sedang mengerjakan add-dark-mode tetapi diminta untuk memperbaiki bug
+Anda: Saya sedang mengerjakan add-dark-mode tetapi tertarik pada perbaikan bug
 
 Anda: /opsx:new fix-login-redirect
 
@@ -181,22 +182,22 @@ Anda: /opsx:archive
 
 AI:  ✓ Mengarsipkan fix-login-redirect
 
-Anda: Mari kita kembali ke dark mode
+Anda: Mari kita kembali ke mode gelap
 
 Anda: /opsx:apply add-dark-mode
 
 AI:  Melanjutkan add-dark-mode...
-     Melanjutkan dari tugas 2.3: Memperbarui Header...
+     Melanjutkan di tugas 2.3: Memperbarui Header...
 ```
 
-**Cocok untuk:** Alur kerja paralel, interupsi mendesak, kolaborasi tim.
+**Paling cocok untuk:** Alur kerja paralel, interupsi mendesak, kolaborasi tim.
 
 Ketika Anda memiliki beberapa perubahan yang selesai, gunakan `/opsx:bulk-archive`:
 
 ```text
 Anda: /opsx:bulk-archive
 
-AI:  Ditemukan 3 perubahan yang selesai:
+AI:  Menemukan 3 perubahan yang selesai:
      - add-dark-mode (semua tugas selesai)
      - fix-login-redirect (semua tugas selesai)
      - update-footer (semua tugas selesai)
@@ -204,8 +205,8 @@ AI:  Ditemukan 3 perubahan yang selesai:
      Memeriksa konflik spesifikasi...
      ⚠ add-dark-mode dan update-footer keduanya menyentuh specs/ui/
 
-     Memeriksa kode sumber untuk menyelesaikan...
-     Kedua perubahan telah diimplementasikan. Akan diterapkan secara kronologis.
+     Memeriksa basis kode untuk menyelesaikan...
+     Kedua perubahan telah diimplementasikan. Akan diterapkan dalam urutan kronologis.
 
      Arsipkan semua 3 perubahan?
 
@@ -217,7 +218,7 @@ AI:  ✓ Mengarsipkan add-dark-mode
      Spesifikasi digabungkan dalam urutan: add-dark-mode → update-footer
 ```
 
-Arsip massal mendeteksi ketika beberapa perubahan menyentuh spesifikasi yang sama dan menyelesaikan konflik dengan memeriksa apa yang sebenarnya diimplementasikan.
+Arsip massal mendeteksi ketika beberapa perubahan menyentuh spesifikasi yang sama dan menyelesaikan konflik dengan memeriksa apa yang benar-benar diimplementasikan.
 
 ### Menyelesaikan Perubahan
 
@@ -226,13 +227,13 @@ Alur penyelesaian yang direkomendasikan:
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              memvalidasi          meminta untuk sync
-              implementasi         jika diperlukan
+              memvalidasi         meminta untuk menyinkronkan
+              implementasi        jika diperlukan
 ```
 
 #### Verifikasi: Periksa Pekerjaan Anda
 
-`/opsx:verify` memvalidasi implementasi terhadap artefak Anda dalam tiga dimensi:
+`/opsx:verify` memvalidasi implementasi terhadap artefak Anda di tiga dimensi:
 
 ```text
 Anda: /opsx:verify
@@ -240,14 +241,14 @@ Anda: /opsx:verify
 AI:  Memverifikasi add-auth...
 
      KELENGKAPAN
-     ✓ Semua 12 tugas di tasks.md telah ditandai
-     ✓ Semua persyaratan di spesifikasi memiliki kode yang sesuai
-     ⚠ Skenario "Sesi timeout setelah tidak aktif" belum diuji
+     ✓ Semua 12 tugas di tasks.md telah diperiksa
+     ✓ Semua persyaratan dalam spesifikasi memiliki kode yang sesuai
+     ⚠ Skenario "Sesi habis setelah tidak aktif" belum diuji
 
      KEBENARAN
-     ✓ Implementasi sesuai dengan tujuan spesifikasi
-     ✓ Kasus batas dari skenario telah ditangani
-     ✓ Status error sesuai dengan definisi spesifikasi
+     ✓ Implementasi sesuai dengan maksud spesifikasi
+     ✓ Kasus ujung dari skenario ditangani
+     ✓ Status kesalahan sesuai dengan definisi spesifikasi
 
      KOHERENSI
      ✓ Keputusan desain tercermin dalam struktur kode
@@ -261,21 +262,21 @@ AI:  Memverifikasi add-auth...
      Siap diarsipkan: Ya (dengan peringatan)
 
      Rekomendasi:
-     1. Tambahkan pengujian untuk skenario timeout sesi
-     2. Pertimbangkan untuk refactor ke event-driven sesuai desain, atau perbarui design.md
+     1. Tambahkan tes untuk skenario sesi habis
+     2. Pertimbangkan untuk memfaktorkan ulang ke event-driven seperti yang dirancang, atau perbarui design.md
 ```
 
-**Apa yang diperiksa oleh verifikasi:**
+**Apa yang diperiksa verifikasi:**
 
 | Dimensi | Apa yang divalidasi |
-|-----------|------------------|
+|---------|---------------------|
 | Kelengkapan | Semua tugas selesai, semua persyaratan diimplementasikan, skenario tercakup |
-| Kebenaran | Implementasi sesuai dengan tujuan spesifikasi, kasus batas ditangani |
+| Kebenaran | Implementasi sesuai dengan maksud spesifikasi, kasus ujung ditangani |
 | Koherensi | Keputusan desain tercermin dalam kode, pola konsisten |
 
-Verifikasi tidak akan memblokir arsip, tetapi akan menampilkan masalah yang mungkin ingin Anda tangani terlebih dahulu.
+Verifikasi tidak akan memblokir pengarsipan, tetapi menyoroti masalah yang mungkin ingin Anda tangani terlebih dahulu.
 
-#### Arsipkan: Finalisasi Perubahan
+#### Arsip: Finalisasi Perubahan
 
 `/opsx:archive` menyelesaikan perubahan dan memindahkannya ke arsip:
 
@@ -295,7 +296,7 @@ AI:  Mengarsipkan add-auth...
 
 Anda: Ya
 
-AI:  ✓ Spesifikasi disinkronkan ke openspec/specs/auth/spec.md
+AI:  ✓ Menyinkronkan spesifikasi ke openspec/specs/auth/spec.md
      ✓ Dipindahkan ke openspec/changes/archive/2025-01-24-add-auth/
 
      Perubahan berhasil diarsipkan.
@@ -308,32 +309,32 @@ Arsip akan meminta jika spesifikasi belum disinkronkan. Ini tidak akan memblokir
 ### `/opsx:ff` vs `/opsx:continue`
 
 | Situasi | Gunakan |
-|-----------|-----|
+|---------|---------|
 | Persyaratan jelas, siap membangun | `/opsx:ff` |
-| Eksplorasi, ingin meninjau setiap langkah | `/opsx:continue` |
-| Ingin iterasi pada proposal sebelum spesifikasi | `/opsx:continue` |
+| Mengeksplorasi, ingin meninjau setiap langkah | `/opsx:continue` |
+| Ingin mengulang proposal sebelum spesifikasi | `/opsx:continue` |
 | Tekanan waktu, perlu bergerak cepat | `/opsx:ff` |
-| Perubahan kompleks, ingin kendali | `/opsx:continue` |
+| Perubahan kompleks, ingin kontrol | `/opsx:continue` |
 
-**Aturan praktis:** Jika Anda dapat mendeskripsikan cakupan penuh di awal, gunakan `/opsx:ff`. Jika Anda menentukannya seiring berjalannya, gunakan `/opsx:continue`.
+**Aturan praktis:** Jika Anda dapat menggambarkan ruang lingkup penuh di muka, gunakan `/opsx:ff`. Jika Anda mengetahuinya saat berjalan, gunakan `/opsx:continue`.
 
-### Kapan Memperbarui vs Memulai Baru
+### Kapan Memperbarui vs Memulai dari Awal
 
-Pertanyaan umum: kapan memperbarui perubahan yang ada itu baik, dan kapan harus memulai yang baru?
+Pertanyaan umum: kapan memperbarui perubahan yang ada itu baik, dan kapan Anda harus memulai yang baru?
 
 **Perbarui perubahan yang ada ketika:**
 
-- Tujuan sama, eksekusi disempurnakan
-- Cakupan menyusut (MVP dulu, sisanya nanti)
-- Koreksi berdasarkan pembelajaran (kode sumber tidak seperti yang Anda harapkan)
+- Maksud yang sama, eksekusi yang disempurnakan
+- Ruang lingkup menyempit (MVP dulu, sisanya nanti)
+- Koreksi berbasis pembelajaran (basis kode tidak seperti yang Anda harapkan)
 - Penyesuaian desain berdasarkan temuan implementasi
 
 **Mulai perubahan baru ketika:**
 
-- Tujuan berubah mendasar
-- Cakupan meledak menjadi pekerjaan yang sama sekali berbeda
+- Maksud berubah secara fundamental
+- Ruang lingkup meledak ke pekerjaan yang sama sekali berbeda
 - Perubahan asli dapat ditandai "selesai" secara mandiri
-- Patch akan lebih membingungkan daripada menjelaskan
+- Patch akan membingungkan lebih dari memperjelas
 
 ```text
                      ┌─────────────────────────────────────┐
@@ -343,35 +344,35 @@ Pertanyaan umum: kapan memperbarui perubahan yang ada itu baik, dan kapan harus 
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Tujuan sama?      Tumpang tindih >50%?   Apakah asli
-          Masalah sama?     Cakupan sama?          bisa "selesai" tanpa
-                 │                  │              perubahan ini?
+          Maksud sama?      >50% tumpang tindih?  Bisakah asli
+          Masalah sama?     Ruang lingkup sama?   "selesai" tanpa
+                 │                  │          perubahan ini?
                  │                  │                  │
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      YA                TIDAK YA          TIDAK TIDAK          YA
+      YA               TIDAK YA         TIDAK TIDAK           YA
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
     PERBARUI          BARU PERBARUI     BARU PERBARUI        BARU
 ```
 
-**Contoh: "Tambahkan dark mode"**
+**Contoh: "Tambahkan mode gelap"**
 
-- "Perlu juga mendukung tema kustom" → Perubahan baru (cakupan meledak)
-- "Deteksi preferensi sistem lebih sulit dari yang diharapkan" → Perbarui (tujuan sama)
-- "Mari kita rilis toggle dulu, tambahkan preferensi nanti" → Perbarui lalu arsipkan, lalu perubahan baru
+- "Perlu juga mendukung tema kustom" → Perubahan baru (ruang lingkup meledak)
+- "Deteksi preferensi sistem lebih sulit dari yang diharapkan" → Perbarui (maksud sama)
+- "Mari kita kirim toggle dulu, tambahkan preferensi nanti" → Perbarui lalu arsipkan, lalu perubahan baru
 
 ## Praktik Terbaik
 
-### Jaga Perubahan Tetap Fokus
+### Pertahankan Perubahan Terfokus
 
-Satu unit logis pekerjaan per perubahan. Jika Anda melakukan "tambahkan fitur X dan juga refactor Y", pertimbangkan dua perubahan terpisah.
+Satu unit logika pekerjaan per perubahan. Jika Anda melakukan "tambahkan fitur X dan juga refaktor Y", pertimbangkan dua perubahan terpisah.
 
 **Mengapa ini penting:**
 - Lebih mudah ditinjau dan dipahami
 - Riwayat arsip lebih bersih
-- Dapat dirilis secara independen
-- Lebih mudah di-rollback jika diperlukan
+- Dapat dikirim secara independen
+- Rollback lebih sederhana jika diperlukan
 
 ### Gunakan `/opsx:explore` untuk Persyaratan yang Tidak Jelas
 
@@ -382,17 +383,17 @@ Anda: /opsx:explore
 
 AI:  Apa yang ingin Anda eksplorasi?
 
-Anda: Bagaimana kita harus menangani rate limiting untuk API kita?
+Anda: Bagaimana kita seharusnya menangani pembatasan laju untuk API kita?
 
 AI:  Biarkan saya menyelidiki pengaturan dan opsi Anda saat ini...
-     [Meneliti kode sumber, mempertimbangkan pola]
+     [Meneliti basis kode, mempertimbangkan pola]
 
      Saya melihat tiga pendekatan yang bisa kita ambil:
      1. Berbasis middleware (sederhana, per-endpoint)
-     2. Berbasis Redis (skalabel, status bersama)
-     3. Token bucket per pengguna (adil, kompleks)
+     2. Didukung Redis (skalabel, status bersama)
+     3. Ember token per pengguna (adil, kompleks)
 
-     Stack Anda saat ini menunjukkan #1 atau #2. Berapa skala Anda?
+     Tumpukan teknologi Anda saat ini menyarankan #1 atau #2. Berapa skala Anda?
 ```
 
 Eksplorasi memperjelas pemikiran sebelum Anda membuat artefak.
@@ -406,20 +407,20 @@ Anda: /opsx:verify
 
 AI:  Memverifikasi add-dark-mode...
 
-     ✓ Semua tugas di tasks.md telah ditandai
-     ✓ Persyaratan di spesifikasi memiliki kode yang sesuai
+     ✓ Semua tugas di tasks.md telah diperiksa
+     ✓ Persyaratan dalam spesifikasi memiliki kode yang sesuai
      ✓ Keputusan desain tercermin dalam implementasi
 
      Siap diarsipkan!
 ```
 
-Mendeteksi ketidakcocokan sebelum Anda menutup perubahan.
+Menangkap ketidakcocokan sebelum Anda menutup perubahan.
 
 ### Beri Nama Perubahan dengan Jelas
 
 Nama yang baik membuat `openspec list` berguna:
 
-```text`
+```text
 Baik:                          Hindari:
 add-dark-mode                  feature-1
 fix-login-redirect             update
@@ -432,20 +433,20 @@ implement-2fa                  wip
 Untuk detail lengkap perintah dan opsi, lihat [Perintah](commands.md).
 
 | Perintah | Tujuan | Kapan Digunakan |
-|---------|--------|-----------------|
-| `/opsx:propose` | Membuat perubahan + artefak perencanaan | Jalur default cepat (profil `core`) |
-| `/opsx:explore` | Merenungkan ide | Persyaratan tidak jelas, investigasi |
-| `/opsx:new` | Memulai kerangka perubahan | Mode yang diperluas, kontrol artefak eksplisit |
-| `/opsx:continue` | Membuat artefak berikutnya | Mode yang diperluas, pembuatan artefak langkah demi langkah |
-| `/opsx:ff` | Membuat semua artefak perencanaan | Mode yang diperluas, cakupan jelas |
-| `/opsx:apply` | Menerapkan tugas | Siap menulis kode |
-| `/opsx:verify` | Memvalidasi implementasi | Mode yang diperluas, sebelum pengarsipan |
-| `/opsx:sync` | Menggabungkan spesifikasi delta | Mode yang diperluas, opsional |
-| `/opsx:archive` | Menyelesaikan perubahan | Semua pekerjaan selesai |
-| `/opsx:bulk-archive` | Mengarsipkan beberapa perubahan | Mode yang diperluas, pekerjaan paralel |
+|----------|--------|-----------------|
+| `/opsx:propose` | Buat perubahan + artefak perencanaan | Jalur default cepat (profil `core`) |
+| `/opsx:explore` | Pikirkan ide-ide | Kebutuhan tidak jelas, investigasi |
+| `/opsx:new` | Mulai kerangka perubahan | Mode diperluas, kontrol artefak eksplisit |
+| `/opsx:continue` | Buat artefak berikutnya | Mode diperluas, pembuatan artefak langkah demi langkah |
+| `/opsx:ff` | Buat semua artefak perencanaan | Mode diperluas, ruang lingkup jelas |
+| `/opsx:apply` | Implementasikan tugas | Siap menulis kode |
+| `/opsx:verify` | Validasi implementasi | Mode diperluas, sebelum pengarsipan |
+| `/opsx:sync` | Gabungkan spesifikasi delta | Mode diperluas, opsional |
+| `/opsx:archive` | Selesaikan perubahan | Semua pekerjaan selesai |
+| `/opsx:bulk-archive` | Arsipkan beberapa perubahan | Mode diperluas, pekerjaan paralel |
 
 ## Langkah Selanjutnya
 
-- [Perintah](commands.md) - Referensi lengkap perintah dengan opsi
-- [Konsep](concepts.md) - Penjelasan mendalam tentang spesifikasi, artefak, dan skema
-- [Kustomisasi](customization.md) - Membuat alur kerja kustom
+- [Perintah](commands.md) - Referensi perintah lengkap dengan opsi
+- [Konsep](concepts.md - Penjelasan mendalam tentang spesifikasi, artefak, dan skema
+- [Kustomisasi](customization.md) - Buat alur kerja kustom

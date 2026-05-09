@@ -1,22 +1,22 @@
 # カスタマイズ
 
-OpenSpecは3つのレベルのカスタマイズを提供します：
+OpenSpec は3つのレベルのカスタマイズを提供します:
 
-| レベル | 機能 | 適しているチーム |
-|-------|------|------------------|
-| **プロジェクト設定** | デフォルト値の設定、コンテキスト/ルールの注入 | ほとんどのチーム |
+| レベル | 概要 | 最適な用途 |
+|--------|------|------------|
+| **プロジェクト設定** | デフォルトを設定し、コンテキスト/ルールを注入 | ほとんどのチーム |
 | **カスタムスキーマ** | 独自のワークフローアーティファクトを定義 | 独自のプロセスを持つチーム |
-| **グローバルオーバーライド** | 全プロジェクトでスキーマを共有 | パワーユーザー |
+| **グローバルオーバーライド** | すべてのプロジェクトでスキーマを共有 | パワーユーザー |
 
 ---
 
 ## プロジェクト設定
 
-`openspec/config.yaml`ファイルは、チーム向けにOpenSpecをカスタマイズする最も簡単な方法です。これにより以下が可能になります：
+`openspec/config.yaml` ファイルは、OpenSpec をチーム向けにカスタマイズする最も簡単な方法です。これにより、以下が可能になります:
 
-- **デフォルトスキーマの設定** - 全コマンドで`--schema`を省略可能
-- **プロジェクトコンテキストの注入** - AIが技術スタック、規約などを認識
-- **アーティファクト別ルールの追加** - 特定アーティファクトに対するカスタムルール
+- **デフォルトスキーマの設定** - 各コマンドで `--schema` を省略可能
+- **プロジェクトコンテキストの注入** - AI が技術スタック、規約などを認識
+- **アーティファクトごとのルール追加** - 特定のアーティファクトに対するカスタムルール
 
 ### クイックセットアップ
 
@@ -24,52 +24,52 @@ OpenSpecは3つのレベルのカスタマイズを提供します：
 openspec init
 ```
 
-このコマンドで対話的に設定を作成できます。または手動で作成：
+これにより、対話形式で設定ファイルの作成がガイドされます。または手動で作成することもできます:
 
 ```yaml
 # openspec/config.yaml
 schema: spec-driven
 
 context: |
-  Tech stack: TypeScript, React, Node.js, PostgreSQL
-  API style: RESTful, documented in docs/api.md
-  Testing: Jest + React Testing Library
-  We value backwards compatibility for all public APIs
+  技術スタック: TypeScript, React, Node.js, PostgreSQL
+  API スタイル: RESTful、docs/api.md で文書化
+  テスト: Jest + React Testing Library
+  すべての公開 API で後方互換性を重視
 
 rules:
   proposal:
-    - Include rollback plan
-    - Identify affected teams
+    - ロールバック計画を含める
+    - 影響を受けるチームを特定する
   specs:
-    - Use Given/When/Then format
-    - Reference existing patterns before inventing new ones
+    - Given/When/Then 形式を使用する
+    - 新しいパターンを考案する前に既存のパターンを参照する
 ```
 
 ### 仕組み
 
-**デフォルトスキーマ：**
+**デフォルトスキーマ:**
 
 ```bash
-# 設定なしの場合
+# 設定なし
 openspec new change my-feature --schema spec-driven
 
-# 設定ありの場合 - スキーマは自動適用
+# 設定あり - スキーマが自動適用
 openspec new change my-feature
 ```
 
-**コンテキストとルールの注入：**
+**コンテキストとルールの注入:**
 
-任意のアーティファクトを生成する際、コンテキストとルールがAIプロンプトに注入されます：
+アーティファクトを生成する際、コンテキストとルールが AI プロンプトに注入されます:
 
 ```xml
 <context>
-Tech stack: TypeScript, React, Node.js, PostgreSQL
+技術スタック: TypeScript, React, Node.js, PostgreSQL
 ...
 </context>
 
 <rules>
-- Include rollback plan
-- Identify affected teams
+- ロールバック計画を含める
+- 影響を受けるチームを特定する
 </rules>
 
 <template>
@@ -77,29 +77,29 @@ Tech stack: TypeScript, React, Node.js, PostgreSQL
 </template>
 ```
 
-- **コンテキスト**は全アーティファクトに表示
-- **ルール**は対応するアーティファクトのみに表示
+- **コンテキスト** はすべてのアーティファクトに表示されます
+- **ルール** は一致するアーティファクトにのみ表示されます
 
 ### スキーマ解決順序
 
-OpenSpecがスキーマを必要とする場合、以下の順序で確認します：
+OpenSpec がスキーマを必要とする場合、以下の順序で確認します:
 
-1. CLIフラグ：`--schema <name>`
-2. 変更メタデータ（変更フォルダ内の`.openspec.yaml`）
-3. プロジェクト設定（`openspec/config.yaml`）
-4. デフォルト（`spec-driven`）
+1. CLI フラグ: `--schema <name>`
+2. 変更メタデータ (変更フォルダ内の `.openspec.yaml`)
+3. プロジェクト設定 (`openspec/config.yaml`)
+4. デフォルト (`spec-driven`)
 
 ---
 
 ## カスタムスキーマ
 
-プロジェクト設定では不十分な場合、完全にカスタムしたワークフローで独自のスキーマを作成できます。カスタムスキーマはプロジェクトの`openspec/schemas/`ディレクトリに配置し、コードとバージョン管理されます。
+プロジェクト設定で十分でない場合は、完全にカスタムなワークフローで独自のスキーマを作成できます。カスタムスキーマはプロジェクトの `openspec/schemas/` ディレクトリに配置され、コードとともにバージョン管理されます。
 
 ```text
 your-project/
 ├── openspec/
 │   ├── config.yaml        # プロジェクト設定
-│   ├── schemas/           # カスタムスキーマ配置場所
+│   ├── schemas/           # カスタムスキーマの配置場所
 │   │   └── my-workflow/
 │   │       ├── schema.yaml
 │   │       └── templates/
@@ -109,75 +109,75 @@ your-project/
 
 ### 既存スキーマのフォーク
 
-カスタマイズの最速方法は、組み込みスキーマをフォークすることです：
+カスタマイズの最も簡単な方法は、組み込みスキーマをフォークすることです:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-これにより`spec-driven`スキーマ全体が`openspec/schemas/my-workflow/`にコピーされ、自由に編集可能になります。
+これにより、`spec-driven` スキーマ全体が `openspec/schemas/my-workflow/` にコピーされ、自由に編集できます。
 
-**作成される構造：**
+**取得できる内容:**
 
 ```text
 openspec/schemas/my-workflow/
 ├── schema.yaml           # ワークフロー定義
 └── templates/
-    ├── proposal.md       # 提案アーティファクト用テンプレート
-    ├── spec.md           # 仕様用テンプレート
-    ├── design.md         # 設計用テンプレート
-    └── tasks.md          # タスク用テンプレート
+    ├── proposal.md       # 提案アーティファクトのテンプレート
+    ├── spec.md           # 仕様のテンプレート
+    ├── design.md         # 設計のテンプレート
+    └── tasks.md          # タスクのテンプレート
 ```
 
-`schema.yaml`を編集してワークフローを変更し、テンプレートを編集してAI生成内容を変更します。
+ここで `schema.yaml` を編集してワークフローを変更するか、テンプレートを編集して AI が生成する内容を変更できます。
 
-### 新規スキーマの作成
+### スキーマをゼロから作成
 
-完全に新しいワークフローを作成する場合：
+完全に新しいワークフローを作成する場合:
 
 ```bash
-# 対話的
+# 対話形式
 openspec schema init research-first
 
-# 非対話的
+# 非対話形式
 openspec schema init rapid \
-  --description "Rapid iteration workflow" \
+  --description "高速イテレーションワークフロー" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
 ### スキーマ構造
 
-スキーマはワークフロー内のアーティファクトとその依存関係を定義します：
+スキーマはワークフロー内のアーティファクトとその依存関係を定義します:
 
 ```yaml
 # openspec/schemas/my-workflow/schema.yaml
 name: my-workflow
 version: 1
-description: My team's custom workflow
+description: チームのカスタムワークフロー
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Initial proposal document
+    description: 初期提案ドキュメント
     template: proposal.md
     instruction: |
-      Create a proposal that explains WHY this change is needed.
-      Focus on the problem, not the solution.
+      この変更が必要な理由を説明する提案を作成してください。
+      解決策ではなく、問題に焦点を当ててください。
     requires: []
 
   - id: design
     generates: design.md
-    description: Technical design
+    description: 技術設計
     template: design.md
     instruction: |
-      Create a design document explaining HOW to implement.
+      実装方法を説明する設計ドキュメントを作成してください。
     requires:
-      - proposal    # 提案が存在するまで設計を作成不可
+      - proposal    # 提案が存在しないと設計を作成できない
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist
+    description: 実装チェックリスト
     template: tasks.md
     requires:
       - design
@@ -187,79 +187,79 @@ apply:
   tracks: tasks.md
 ```
 
-**主要フィールド：**
+**主要フィールド:**
 
-| フィールド | 目的 |
+| フィールド | 用途 |
 |-----------|------|
-| `id` | ユニーク識別子、コマンドとルールで使用 |
-| `generates` | 出力ファイル名（`specs/**/*.md`のようなグロブ対応） |
-| `template` | `templates/`ディレクトリ内のテンプレートファイル |
-| `instruction` | アーティファクト作成時のAI指示 |
+| `id` | 一意識別子。コマンドやルールで使用 |
+| `generates` | 出力ファイル名 (`specs/**/*.md` などのグロブをサポート) |
+| `template` | `templates/` ディレクトリ内のテンプレートファイル |
+| `instruction` | このアーティファクト作成のための AI 指示 |
 | `requires` | 依存関係 - 事前に存在する必要があるアーティファクト |
 
 ### テンプレート
 
-テンプレートはAIをガイドするMarkdownファイルです。アーティファクト作成時にプロンプトに注入されます。
+テンプレートは AI をガイドするマークダウンファイルです。アーティファクト作成時にプロンプトに注入されます。
 
 ```markdown
 <!-- templates/proposal.md -->
-## Why
+## 理由
 
-<!-- この変更が必要な理由を説明。どのような問題を解決するか？ -->
+<!-- この変更の動機を説明してください。これはどのような問題を解決しますか？ -->
 
-## What Changes
+## 変更内容
 
-<!-- 変更内容を記述。新機能や変更点を具体的に記載 -->
+<!-- 何が変わるかを説明してください。新しい機能や変更点について具体的に記述してください。 -->
 
-## Impact
+## 影響
 
 <!-- 影響を受けるコード、API、依存関係、システム -->
 ```
 
-テンプレートには以下を含められます：
-- AIが記入すべきセクション見出し
-- AIへのガイダンスを含むHTMLコメント
-- 期待される構造を示す例示フォーマット
+テンプレートには以下を含めることができます:
+- AI が記入すべきセクション見出し
+- AI へのガイダンスを含む HTML コメント
+- 期待される構造を示す例形式
 
 ### スキーマの検証
 
-カスタムスキーマを使用する前に検証します：
+カスタムスキーマを使用する前に、検証してください:
 
 ```bash
 openspec schema validate my-workflow
 ```
 
-これにより以下を確認：
-- `schema.yaml`の構文が正しい
-- 参照されているテンプレートが全て存在する
-- 循環依存がない
-- アーティファクトIDが有効
+これにより以下をチェックします:
+- `schema.yaml` の構文が正しいこと
+- 参照されているすべてのテンプレートが存在すること
+- 循環依存がないこと
+- アーティファクト ID が有効であること
 
 ### カスタムスキーマの使用
 
-作成後、以下の方法でスキーマを使用：
+作成後、以下の方法でスキーマを使用できます:
 
 ```bash
 # コマンドで指定
 openspec new change feature --schema my-workflow
 
-# またはconfig.yamlでデフォルトに設定
+# または config.yaml でデフォルトとして設定
 schema: my-workflow
 ```
 
 ### スキーマ解決のデバッグ
 
-どのスキーマが使用されているか不明な場合、以下で確認：
+どのスキーマが使用されているか不明な場合、以下で確認できます:
 
 ```bash
-# 特定スキーマの解決元を確認
+# 特定のスキーマの解決元を確認
 openspec schema which my-workflow
 
-# 利用可能なスキーマを一覧表示
+# 利用可能なすべてのスキーマを一覧表示
 openspec schema which --all
 ```
 
-出力でプロジェクト、ユーザーディレクトリ、パッケージのいずれから解決されたかを確認：
+出力には、プロジェクト、ユーザーディレクトリ、またはパッケージのいずれから取得されたかが表示されます:
 
 ```text
 Schema: my-workflow
@@ -269,35 +269,35 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 ---
 
-> **注意：** OpenSpecは`~/.local/share/openspec/schemas/`にユーザーレベルのスキーマもサポートし、プロジェクト間で共有可能ですが、コードとバージョン管理されるプロジェクトレベルのスキーマ（`openspec/schemas/`）を推奨します。
+> **注意:** OpenSpec は `~/.local/share/openspec/schemas/` にあるユーザーレベルのスキーマもサポートしていますが、プロジェクト間で共有する場合は、コードとともにバージョン管理されるプロジェクトレベルのスキーマ (`openspec/schemas/` 内) を推奨します。
 
 ---
 
 ## 例
 
-### 素早い反復ワークフロー
+### 高速イテレーションワークフロー
 
-最小限のオーバーヘッドで高速な反復を行うワークフロー：
+迅速なイテレーションのための最小限のワークフロー:
 
 ```yaml
 # openspec/schemas/rapid/schema.yaml
 name: rapid
 version: 1
-description: Fast iteration with minimal overhead
+description: 最小限のオーバーヘッドで高速イテレーション
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Quick proposal
+    description: 簡易提案
     template: proposal.md
     instruction: |
-      Create a brief proposal for this change.
-      Focus on what and why, skip detailed specs.
+      この変更に関する簡潔な提案を作成してください。
+      何を、なぜ行うかに焦点を当て、詳細な仕様は省略してください。
     requires: []
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist
+    description: 実装チェックリスト
     template: tasks.md
     requires: [proposal]
 
@@ -308,22 +308,22 @@ apply:
 
 ### レビューアーティファクトの追加
 
-デフォルトをフォークしてレビューステップを追加：
+デフォルトをフォークしてレビューステップを追加します:
 
 ```bash
 openspec schema fork spec-driven with-review
 ```
 
-次に`schema.yaml`を編集して追加：
+次に `schema.yaml` を編集して以下を追加します:
 
 ```yaml
   - id: review
     generates: review.md
-    description: Pre-implementation review checklist
+    description: 実装前レビューチェックリスト
     template: review.md
     instruction: |
-      Create a review checklist based on the design.
-      Include security, performance, and testing considerations.
+      設計に基づいてレビューチェックリストを作成してください。
+      セキュリティ、パフォーマンス、テストの考慮事項を含めてください。
     requires:
       - design
 
@@ -332,11 +332,25 @@ openspec schema fork spec-driven with-review
     requires:
       - specs
       - design
-      - review    # タスクにもレビューを要求
+      - review    # タスクにもレビューが必要に
 ```
+
+---
+
+## コミュニティスキーマ
+
+OpenSpec は、独立したリポジトリを通じて配布されるコミュニティ管理のスキーマもサポートしています。これらは、[github/spec-kit のコミュニティ拡張カタログ](https://github.com/github/spec-kit/tree/main/extensions) が spec-kit で行っているのと同様に、OpenSpec を他のツールやシステムと統合する、意見を反映したワークフローを提供します。
+
+コミュニティスキーマは OpenSpec コアに組み込まれていません — 独自のリポジトリとリリースサイクルを持っています。使用するには、スキーマバンドルをプロジェクトの `openspec/schemas/<schema-name>/` ディレクトリにコピーしてください (各リポジトリの README にインストール手順があります)。
+
+| スキーマ | メンテナー | リポジトリ | 説明 |
+|----------|-----------|-----------|------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | OpenSpec のアーティファクトガバナンスを [obra/superpowers](https://github.com/obra/superpowers) の実行スキル (ブレインストーミング、計画作成、サブエージェントによる TDD、コードレビュー、仕上げ) と統合します。Superpowers が本来カバーしないギャップを埋める、エビデンス重視の `retrospective` アーティファクトを追加します。 |
+
+> コミュニティスキーマを貢献したいですか？ リポジトリへのリンクを添えて issue を作成するか、このテーブルに行を追加する PR を送信してください。
 
 ---
 
 ## 関連項目
 
-- [CLIリファレンス：スキーマコマンド](cli.md#schema-commands) - 完全なコマンドドキュメント
+- [CLI リファレンス: スキーマコマンド](cli.md#schema-commands) - 完全なコマンドドキュメント

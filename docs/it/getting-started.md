@@ -4,25 +4,25 @@ Questa guida spiega come funziona OpenSpec dopo averlo installato e inizializzat
 
 ## Come Funziona
 
-OpenSpec ti aiuta, te e il tuo assistente AI per la programmazione, a concordare su cosa costruire prima che venga scritto alcun codice.
+OpenSpec ti aiuta, te e il tuo assistente di programmazione AI, a mettervi d'accordo su cosa costruire prima che venga scritto qualsiasi codice.
 
 **Percorso rapido predefinito (profilo core):**
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-**Percorso esteso (selezione personalizzata del flusso di lavoro):**
+**Percorso esteso (selezione del workflow personalizzato):**
 
 ```text
 /opsx:new ──► /opsx:ff o /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-Il profilo globale predefinito è `core`, che include `propose`, `explore`, `apply` e `archive`. Puoi abilitare i comandi del flusso di lavoro esteso con `openspec config profile` e poi `openspec update`.
+Il profilo globale predefinito è `core`, che include `propose`, `explore`, `apply`, `sync` e `archive`. Puoi abilitare i comandi del workflow esteso con `openspec config profile` e poi `openspec update`.
 
 ## Cosa Crea OpenSpec
 
-Dopo aver eseguito `openspec init`, il tuo progetto ha questa struttura:
+Dopo aver eseguito `openspec init`, il tuo progetto avrà questa struttura:
 
 ```
 openspec/
@@ -34,7 +34,7 @@ openspec/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Specifiche delta (ciò che cambia)
+│       └── specs/      # Specifiche delta (cosa sta cambiando)
 │           └── <dominio>/
 │               └── spec.md
 └── config.yaml         # Configurazione del progetto (opzionale)
@@ -44,20 +44,20 @@ openspec/
 
 - **`specs/`** - La fonte di verità. Queste specifiche descrivono come si comporta attualmente il tuo sistema. Organizzate per dominio (es. `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** - Modifiche proposte. Ogni modifica ha la sua cartella con tutti gli artefatti correlati. Quando una modifica è completa, le sue specifiche vengono fuse nella directory principale `specs/`.
+- **`changes/`** - Modifiche proposte. Ogni modifica ha la sua cartella con tutti gli artefatti correlati. Quando una modifica è completa, le sue specifiche vengono unite nella directory principale `specs/`.
 
-## Comprensione degli Artefatti
+## Comprendere gli Artefatti
 
 Ogni cartella di modifica contiene artefatti che guidano il lavoro:
 
 | Artefatto | Scopo |
-|----------|-------|
-| `proposal.md` | Il "perché" e il "cosa" - cattura intento, portata e approccio |
-| `specs/` | Specifiche delta che mostrano i requisiti AGGIUNTI/MODIFICATI/ELIMINATI |
+|-----------|-------|
+| `proposal.md` | Il "perché" e il "cosa" - cattura intento, ambito e approccio |
+| `specs/` | Specifiche delta che mostrano i requisiti AGGIUNTI/MODIFICATI/RIMOSSI |
 | `design.md` | Il "come" - approccio tecnico e decisioni architetturali |
 | `tasks.md` | Checklist di implementazione con caselle di controllo |
 
-**Gli artefatti si basano gli uni sugli altri:**
+**Gli artefatti si costruiscono l'uno sull'altro:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
@@ -66,11 +66,11 @@ proposal ──► specs ──► design ──► tasks ──► implement
             aggiorna man mano che impari
 ```
 
-Puoi sempre tornare indietro e raffinare gli artefatti precedenti man mano che impari di più durante l'implementazione.
+Puoi sempre tornare indietro e perfezionare gli artefatti precedenti man mano che impari di più durante l'implementazione.
 
 ## Come Funzionano le Specifiche Delta
 
-Le specifiche delta sono il concetto chiave in OpenSpec. Mostrano cosa cambia rispetto alle tue specifiche attuali.
+Le specifiche delta sono il concetto chiave in OpenSpec. Mostrano cosa sta cambiando rispetto alle tue specifiche attuali.
 
 ### Il Formato
 
@@ -92,68 +92,66 @@ Il sistema DEVE richiedere un secondo fattore durante il login.
 ## Requisiti MODIFICATI
 
 ### Requisito: Timeout di Sessione
-Il sistema FARÀ scadere le sessioni dopo 30 minuti di inattività.
+Il sistema DEVE far scadere le sessioni dopo 30 minuti di inattività.
 (Precedentemente: 60 minuti)
 
-#### Scenario: Timeout per inattività
-- DATO una sessione autenticata
+#### Scenario: Timeout di inattività
+- DATA una sessione autenticata
 - QUANDO passano 30 minuti senza attività
 - ALLORA la sessione viene invalidata
 
-## Requisiti ELIMINATI
+## Requisiti RIMOSSI
 
 ### Requisito: Ricordami
-(Deprecato a favore del 2FA)
+(Deprecato a favore di 2FA)
 ```
 
-### Cosa Succede all'Archiviazione
+### Cosa Succede durante l'Archiviazione
 
 Quando archivi una modifica:
 
 1. I requisiti **AGGIUNTI** vengono aggiunti alla specifica principale
 2. I requisiti **MODIFICATI** sostituiscono la versione esistente
-3. I requisiti **ELIMINATI** vengono cancellati dalla specifica principale
+3. I requisiti **RIMOSSI** vengono eliminati dalla specifica principale
 
 La cartella della modifica viene spostata in `openspec/changes/archive/` per la cronologia di audit.
 
 ## Esempio: La Tua Prima Modifica
 
-Esaminiamo l'aggiunta della modalità scura a un'applicazione.
+Procediamo con l'aggiunta della modalità scura a un'applicazione.
 
-### 1. Avvia la Modifica (Predefinito)
+### 1. Avviare la Modifica (Predefinito)
 
 ```text
 Tu: /opsx:propose add-dark-mode
 
-AI:  Creato openspec/changes/add-dark-mode/
-     ✓ proposal.md — perché lo facciamo, cosa cambia
+AI:  Creata openspec/changes/add-dark-mode/
+     ✓ proposal.md — perché lo stiamo facendo, cosa sta cambiando
      ✓ specs/       — requisiti e scenari
      ✓ design.md    — approccio tecnico
      ✓ tasks.md     — checklist di implementazione
      Pronto per l'implementazione!
 ```
 
-Se hai abilitato il profilo del flusso di lavoro esteso, puoi anche farlo in due passaggi: `/opsx:new` poi `/opsx:ff` (o `/opsx:continue` in modo incrementale).
+Se hai abilitato il profilo del workflow esteso, puoi anche farlo in due passaggi: `/opsx:new` poi `/opsx:ff` (o `/opsx:continue` in modo incrementale).
 
 ### 2. Cosa Viene Creato
 
 **proposal.md** - Cattura l'intento:
 
 ```markdown
-# Proposta: Aggiungi Modalità Scura
+# Proposta: Aggiungere Modalità Scura
 
 ## Intento
-Gli utenti hanno richiesto un'opzione di modalità scura per ridurre l'affaticamento visivo
-durante l'uso notturno.
+Gli utenti hanno richiesto un'opzione di modalità scura per ridurre l'affaticamento degli occhi durante l'uso notturno.
 
-## Portata
-- Aggiungere il toggle del tema nelle impostazioni
+## Ambito
+- Aggiungere un interruttore del tema nelle impostazioni
 - Supportare il rilevamento delle preferenze di sistema
-- Persistere la preferenza in localStorage
+- Salvare la preferenza in localStorage
 
 ## Approccio
-Usare proprietà CSS personalizzate per il theming con un contesto React
-per la gestione dello stato.
+Usare le proprietà CSS personalizzate per il theming con un contesto React per la gestione dello stato.
 ```
 
 **specs/ui/spec.md** - Delta che mostra i nuovi requisiti:
@@ -163,19 +161,19 @@ per la gestione dello stato.
 
 ## Requisiti AGGIUNTI
 
-### Requisito: Selezione del Tema
-Il sistema PERMETTERÀ agli utenti di scegliere tra temi chiari e scuri.
+### Requisito: Selezione Tema
+Il sistema DEVE consentire agli utenti di scegliere tra temi chiari e scuri.
 
-#### Scenario: Toggle manuale
+#### Scenario: Interruttore manuale
 - DATO un utente su qualsiasi pagina
-- QUANDO l'utente clicca sul toggle del tema
+- QUANDO l'utente clicca sull'interruttore del tema
 - ALLORA il tema cambia immediatamente
 - E la preferenza persiste tra le sessioni
 
 #### Scenario: Preferenza di sistema
-- DATO un utente senza preferenza salvata
+- DATO un utente senza preferenze salvate
 - QUANDO l'applicazione si carica
-- ALLORA viene usato lo schema di colori preferito del sistema
+- ALLORA viene usato lo schema di colore preferito dal sistema
 ```
 
 **tasks.md** - Checklist di implementazione:
@@ -183,22 +181,22 @@ Il sistema PERMETTERÀ agli utenti di scegliere tra temi chiari e scuri.
 ```markdown
 # Attività
 
-## 1. Infrastruttura del Tema
+## 1. Infrastruttura Tema
 - [ ] 1.1 Creare ThemeContext con stato chiaro/scuro
 - [ ] 1.2 Aggiungere proprietà CSS personalizzate per i colori
 - [ ] 1.3 Implementare la persistenza in localStorage
 
 ## 2. Componenti UI
 - [ ] 2.1 Creare il componente ThemeToggle
-- [ ] 2.2 Aggiungere il toggle alla pagina delle impostazioni
-- [ ] 2.3 Aggiornare l'Header per includere il toggle rapido
+- [ ] 2.2 Aggiungere l'interruttore alla pagina delle impostazioni
+- [ ] 2.3 Aggiornare l'Header per includere un interruttore rapido
 
-## 3. Styling
-- [ ] 3.1 Definire la tavolozza di colori per il tema scuro
+## 3. Stile
+- [ ] 3.1 Definire la tavolozza colori del tema scuro
 - [ ] 3.2 Aggiornare i componenti per usare le variabili CSS
 ```
 
-### 3. Implementa
+### 3. Implementare
 
 ```
 Tu: /opsx:apply
@@ -214,18 +212,18 @@ AI:  Lavorando sulle attività...
 
 Durante l'implementazione, se scopri che il design necessita di aggiustamenti, aggiorna semplicemente l'artefatto e continua.
 
-### 4. Archivia
+### 4. Archiviare
 
 ```
 Tu: /opsx:archive
 
-AI:  Archiviazione di add-dark-mode...
-     ✓ Specifiche fuse in openspec/specs/ui/spec.md
+AI:  Archiviazione di add-dark-mode in corso...
+     ✓ Specifiche unite in openspec/specs/ui/spec.md
      ✓ Spostato in openspec/changes/archive/2025-01-24-add-dark-mode/
      Fatto! Pronto per la prossima funzionalità.
 ```
 
-Le tue specifiche delta fanno ora parte delle specifiche principali, documentando come funziona il tuo sistema.
+Le tue specifiche delta ora fanno parte delle specifiche principali, documentando come funziona il tuo sistema.
 
 ## Verifica e Revisione
 
@@ -238,16 +236,16 @@ openspec list
 # Visualizza i dettagli della modifica
 openspec show add-dark-mode
 
-# Valida la formattazione delle specifiche
+# Valida la formattazione della specifica
 openspec validate add-dark-mode
 
 # Dashboard interattiva
 openspec view
-``
+```
 
 ## Prossimi Passi
 
-- [Flussi di Lavoro](workflows.md) - Pattern comuni e quando usare ogni comando
+- [Workflow](workflows.md) - Pattern comuni e quando usare ogni comando
 - [Comandi](commands.md) - Riferimento completo per tutti i comandi slash
 - [Concetti](concepts.md) - Comprensione più profonda di specifiche, modifiche e schemi
 - [Personalizzazione](customization.md) - Fai funzionare OpenSpec a modo tuo

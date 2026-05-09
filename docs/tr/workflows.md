@@ -1,63 +1,64 @@
 # İş Akışları
 
-Bu kılavuz, OpenSpec için yaygın iş akışı kalıplarını ve her birinin ne zaman kullanılacağını ele almaktadır. Temel kurulum için [Başlangıç](getting-started.md) sayfasına bakın. Komut referansı için [Komutlar](commands.md) sayfasına bakın.
+Bu kılavuz, OpenSpec için yaygın iş akışı kalıplarını ve her birinin ne zaman kullanılacağını kapsar. Temel kurulum için bkz. [Başlarken](getting-started.md). Komut referansı için bkz. [Komutlar](commands.md).
 
 ## Felsefe: Aşamalar Değil, Eylemler
 
-Geleneksel iş akışları sizi aşamalara zorlar: planlama, ardından uygulama ve sonra bitirme. Ancak gerçek çalışma bu kadar düzgün kutulara sığmaz.
+Geleneksel iş akışları sizi aşamalara zorlar: planlama, ardından uygulama, ardından tamamlandı. Ancak gerçek iş düzgün kutulara sığmaz.
 
 OPSX farklı bir yaklaşım benimser:
 
 ```text
 Geleneksel (aşama kilitli):
 
-  PLANLAMA ────────► UYGULAMA ────────► BİTİRME
+  PLANLAMA ────────► UYGULAMA ────────► TAMAMLANDI
       │                    │
-      │   "Geri dönemem"   │
+      │   "Geri dönülemez" │
       └────────────────────┘
 
 OPSX (akıcı eylemler):
 
-  teklif ──► özellikler ──► tasarım ──► görevler ──► uygulama
+  teklif ──► spesifikasyonlar ──► tasarım ──► görevler ──► uygulama
 ```
 
 **Temel ilkeler:**
 
-- **Eylemler, aşamalar değil** - Komutlar yapabileceğiniz şeylerdir, takıldığınız aşamalar değil
-- **Bağımlılıklar birer kolaylaştırıcıdır** - Neyin mümkün olduğunu gösterirler, bir sonraki adımın ne olduğunu değil
+- **Aşamalar değil, eylemler** - Komutlar, sıkışıp kaldığınız aşamalar değil, yapabileceğiniz şeylerdir
+- **Bağımlılıklar kolaylaştırıcılardır** - Sıradaki neyin gerekli olduğunu değil, neyin mümkün olduğunu gösterirler
 
-> **Özelleştirme:** OPSX iş akışları, çıktı sıralarını tanımlayan şemalar tarafından yönlendirilir. Özel şemalar oluşturma hakkında ayrıntılar için [Özelleştirme](customization.md) sayfasına bakın.
+> **Özelleştirme:** OPSX iş akışları, eser dizilerini tanımlayan şemalar tarafından yönlendirilir. Özel şemalar oluşturma hakkında ayrıntılar için bkz. [Özelleştirme](customization.md).
 
 ## İki Mod
 
 ### Varsayılan Hızlı Yol (`core` profili)
 
-Yeni kurulumlar varsayılan olarak `core` profilini kullanır ve şunları sağlar:
+Yeni kurulumlar varsayılan olarak `core` kullanır, şu komutları sağlar:
 - `/opsx:propose`
 - `/opsx:explore`
 - `/opsx:apply`
+- `/opsx:sync`
 - `/opsx:archive`
 
 Tipik akış:
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
 ### Genişletilmiş/Tam İş Akışı (özel seçim)
 
-Açık scaffold-and-build komutlarını (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`) istiyorsanız, bunları şu komutlarla etkinleştirin:
+Açık iskelet oluşturma ve derleme komutlarına (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`) ihtiyacınız varsa, bunları şu şekilde etkinleştirin:
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## İş Akışı Örüntüleri (Genişletilmiş Mod)
+## İş Akışı Desenleri (Genişletilmiş Mod)
 
 ### Hızlı Özellik
 
-Ne inşa etmek istediğinizi biliyorsanız ve sadece uygulamaya ihtiyacınız varsa:
+Ne inşa etmek istediğinizi biliyorsanız ve sadece uygulamaya geçmeniz gerekiyorsa:
 
 ```text
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
@@ -66,35 +67,35 @@ Ne inşa etmek istediğinizi biliyorsanız ve sadece uygulamaya ihtiyacınız va
 **Örnek konuşma:**
 
 ```text
-You: /opsx:new add-logout-button
+Siz: /opsx:new add-logout-button
 
-AI:  Created openspec/changes/add-logout-button/
-     Ready to create: proposal
+YZ:  openspec/changes/add-logout-button/ oluşturuldu
+     Oluşturmaya hazır: proposal
 
-You: /opsx:ff
+Siz: /opsx:ff
 
-AI:  Creating all planning artifacts...
+YZ:  Tüm planlama çıktıları oluşturuluyor...
      ✓ proposal.md
      ✓ specs/
      ✓ design.md
      ✓ tasks.md
-     Ready for implementation!
+     Uygulamaya hazır!
 
-You: /opsx:apply
+Siz: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ Added logout button to header
-     ✓ Implemented session clearing
-     ✓ Added confirmation dialog
-     All tasks complete!
+YZ:  Görevler üzerinde çalışılıyor...
+     ✓ Header'a çıkış butonu eklendi
+     ✓ Oturum temizleme uygulandı
+     ✓ Onay iletişim kutusu eklendi
+     Tüm görevler tamamlandı!
 
-You: /opsx:archive
+Siz: /opsx:archive
 
-AI:  ✓ Merged specs
-     ✓ Archived change
+YZ:  ✓ Spesifikasyonlar birleştirildi
+     ✓ Değişiklik arşivlendi
 ```
 
-**En iyi kullanım alanı:** Küçük ve orta ölçekli özellikler, hata düzeltmeleri, doğrudan değişiklikler.
+**En uygun olduğu durumlar:** Küçük ve orta ölçekli özellikler, hata düzeltmeleri, basit değişiklikler.
 
 ### Keşif Amaçlı
 
@@ -107,117 +108,117 @@ Gereksinimler belirsiz olduğunda veya önce araştırma yapmanız gerektiğinde
 **Örnek konuşma:**
 
 ```text
-You: /opsx:explore
+Siz: /opsx:explore
 
-AI:  What would you like to explore?
+YZ:  Neyi keşfetmek istiyorsunuz?
 
-You: I want to improve page load performance but I'm not sure
-     where the bottlenecks are.
+Siz: Sayfa yükleme performansını iyileştirmek istiyorum ama
+     darboğazların nerede olduğundan emin değilim.
 
-AI:  Let me help investigate...
-     [Analyzes bundle sizes, identifies slow queries, reviews
-     component render patterns]
+YZ:  Araştırmaya yardımcı olayım...
+     [Paket boyutlarını analiz eder, yavaş sorguları belirler,
+     bileşen render desenlerini inceler]
 
-     I found three main bottlenecks:
-     1. Large unoptimized images
-     2. Synchronous data fetching in ProductList
-     3. Re-renders from context changes
+     Üç ana darboğaz buldum:
+     1. Büyük optimize edilmemiş görseller
+     2. ProductList'te eşzamanlı veri çekme
+     3. Context değişikliklerinden kaynaklanan yeniden render'lar
 
-     Which would you like to address first?
+     Hangisini önce ele almak istersiniz?
 
-You: Let's tackle the data fetching issue.
+Siz: Veri çekme sorununu ele alalım.
 
-You: /opsx:new optimize-product-list-fetching
+Siz: /opsx:new optimize-product-list-fetching
 
-AI:  Created change. Ready to create: proposal
+YZ:  Değişiklik oluşturuldu. Oluşturmaya hazır: proposal
 
-You: /opsx:continue
+Siz: /opsx:continue
 
-AI:  Creating proposal based on our exploration...
-     [Writes proposal incorporating investigation insights]
+YZ:  Keşfimize dayanarak öneri oluşturuluyor...
+     [Araştırma bulgularını içeren öneri yazılır]
 
-     Ready to create: specs, design
-     Which would you like next?
+     Oluşturmaya hazır: specs, design
+     Hangisini istersiniz?
 
-You: /opsx:continue
+Siz: /opsx:continue
 
-AI:  Creating specs...
+YZ:  Spesifikasyonlar oluşturuluyor...
 ```
 
-**En iyi kullanım alanı:** Performans optimizasyonu, hata ayıklama, mimari kararlar, belirsiz gereksinimler.
+**En uygun olduğu durumlar:** Performans optimizasyonu, hata ayıklama, mimari kararlar, belirsiz gereksinimler.
 
 ### Paralel Değişiklikler
 
-Birden fazla değişiklik üzerinde aynı anda çalışın:
+Aynı anda birden fazla değişiklik üzerinde çalışın:
 
 ```text
-Change A: /opsx:new ──► /opsx:ff ──► /opsx:apply (devam ediyor)
+Değişiklik A: /opsx:new ──► /opsx:ff ──► /opsx:apply (devam ediyor)
                                          │
                                     bağlam değişimi
                                          │
-Change B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
+Değişiklik B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
 
 **Örnek konuşma:**
 
 ```text
-You: I'm working on add-dark-mode but got pulled into a bug fix
+Siz: add-dark-mode üzerinde çalışıyordum ama bir hata düzeltmesi için çağrıldım
 
-You: /opsx:new fix-login-redirect
+Siz: /opsx:new fix-login-redirect
 
-AI:  Created openspec/changes/fix-login-redirect/
+YZ:  openspec/changes/fix-login-redirect/ oluşturuldu
 
-You: /opsx:ff
+Siz: /opsx:ff
 
-AI:  ✓ Created planning artifacts
+YZ:  ✓ Planlama çıktıları oluşturuldu
 
-You: /opsx:apply
+Siz: /opsx:apply
 
-AI:  Working on fix-login-redirect...
-     [Implements the fix]
-     All tasks complete!
+YZ:  fix-login-redirect üzerinde çalışılıyor...
+     [Düzeltmeyi uygular]
+     Tüm görevler tamamlandı!
 
-You: /opsx:archive
+Siz: /opsx:archive
 
-AI:  ✓ Archived fix-login-redirect
+YZ:  ✓ fix-login-redirect arşivlendi
 
-You: Let's get back to dark mode
+Siz: Karanlık mod'a geri dönelim
 
-You: /opsx:apply add-dark-mode
+Siz: /opsx:apply add-dark-mode
 
-AI:  Resuming add-dark-mode...
-     Picking up at task 2.3: Update Header...
+YZ:  add-dark-mode devam ettiriliyor...
+     Görev 2.3'ten devam ediliyor: Header güncelleme...
 ```
 
-**En iyi kullanım alanı:** Paralel iş akışları, acil kesintiler, ekip işbirliği.
+**En uygun olduğu durumlar:** Paralel iş akışları, acil kesintiler, ekip işbirliği.
 
-Birden fazla tamamlanmış değişikliğiniz olduğunda, `/opsx:bulk-archive` komutunu kullanın:
+Birden fazla tamamlanmış değişikliğiniz olduğunda `/opsx:bulk-archive` kullanın:
 
 ```text
-You: /opsx:bulk-archive
+Siz: /opsx:bulk-archive
 
-AI:  Found 3 completed changes:
-     - add-dark-mode (all tasks done)
-     - fix-login-redirect (all tasks done)
-     - update-footer (all tasks done)
+YZ:  3 tamamlanmış değişiklik bulundu:
+     - add-dark-mode (tüm görevler tamamlandı)
+     - fix-login-redirect (tüm görevler tamamlandı)
+     - update-footer (tüm görevler tamamlandı)
 
-     Checking for spec conflicts...
-     ⚠ add-dark-mode and update-footer both touch specs/ui/
+     Spesifikasyon çakışmaları kontrol ediliyor...
+     ⚠ add-dark-mode ve update-footer ikisi de specs/ui/ dosyalarını etkiliyor
 
-     Inspecting codebase to resolve...
-     Both changes are implemented. Will apply in chronological order.
+     Çözümlemek için kod tabanı inceleniyor...
+     Her iki değişiklik de uygulanmış. Kronolojik sırayla uygulanacak.
 
-     Archive all 3 changes?
+     3 değişiklik de arşivlensin mi?
 
-You: Yes
+Siz: Evet
 
-AI:  ✓ Archived add-dark-mode
-     ✓ Archived fix-login-redirect
-     ✓ Archived update-footer
-     Specs merged in order: add-dark-mode → update-footer
+YZ:  ✓ add-dark-mode arşivlendi
+     ✓ fix-login-redirect arşivlendi
+     ✓ update-footer arşivlendi
+     Spesifikasyonlar sırayla birleştirildi: add-dark-mode → update-footer
 ```
 
-Toplu arşivleme, birden fazla değişikliğin aynı spec'lere dokunduğunu tespit eder ve aslında neyin uygulandığını kontrol ederek çakışmaları çözer.
+Toplu arşivleme, birden fazla değişikliğin aynı spesifikasyonları etkilediğini tespit eder ve aslında neyin uygulandığını kontrol ederek çakışmaları çözer.
 
 ### Bir Değişikliği Tamamlama
 
@@ -226,114 +227,115 @@ Toplu arşivleme, birden fazla değişikliğin aynı spec'lere dokunduğunu tesp
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              doğrulama          senkronize etmeyi
-              uygulamayı        isterse tetikler
+              uygulamayı           gerekirse
+              doğrular             senkronize etmeyi
+                                   önerir
 ```
 
-#### Doğrulama: Çalışmanızı Kontrol Edin
+#### Verify: Çalışmanızı Kontrol Edin
 
-`/opsx:verify`, uygulamanızı üç boyutta artifact'lerinize göre doğrular:
+`/opsx:verify`, uygulamayı üç boyutta çıktılarınızla doğrular:
 
 ```text
-You: /opsx:verify
+Siz: /opsx:verify
 
-AI:  Verifying add-auth...
+YZ:  add-auth doğrulanıyor...
 
-     COMPLETENESS
-     ✓ All 12 tasks in tasks.md are checked
-     ✓ All requirements in specs have corresponding code
-     ⚠ Scenario "Session timeout after inactivity" not tested
+     TAMAMLIK
+     ✓ tasks.md'deki 12 görevin hepsi işaretli
+     ✓ Spesifikasyonlardaki tüm gereksinimlerin karşılık gelen kodu var
+     ⚠ "Hareketsizlik sonrası oturum zaman aşımı" senaryosu test edilmemiş
 
-     CORRECTNESS
-     ✓ Implementation matches spec intent
-     ✓ Edge cases from scenarios are handled
-     ✓ Error states match spec definitions
+     DOĞRULUK
+     ✓ Uygulama spesifikasyon amacına uygun
+     ✓ Senaryolardaki sınır durumları ele alınmış
+     ✓ Hata durumları spesifikasyon tanımlarıyla eşleşiyor
 
-     COHERENCE
-     ✓ Design decisions reflected in code structure
-     ✓ Naming conventions consistent with design.md
-     ⚠ Design mentions "event-driven" but implementation uses polling
+     TUTARLILIK
+     ✓ Tasarım kararları kod yapısına yansımış
+     ✓ Adlandırma kuralları design.md ile tutarlı
+     ⚠ Tasarım "olay odaklı"dan bahsediyor ama uygulama polling kullanıyor
 
-     SUMMARY
+     ÖZET
      ─────────────────────────────
-     Critical issues: 0
-     Warnings: 2
-     Ready to archive: Yes (with warnings)
+     Kritik sorunlar: 0
+     Uyarılar: 2
+     Arşivlemeye hazır: Evet (uyarılarla birlikte)
 
-     Recommendations:
-     1. Add test for session timeout scenario
-     2. Consider refactoring to event-driven as designed, or update design.md
+     Öneriler:
+     1. Oturum zaman aşımı senaryosu için test ekleyin
+     2. Tasarımdaki gibi olay odaklı yapıya geçmeyi düşünün veya design.md'yi güncelleyin
 ```
 
-**Doğrulamanın kontrol ettiği şeyler:**
+**Verify'in kontrol ettikleri:**
 
-| Boyut | Ne doğrulanır |
-|-----------|------------------|
-| Tamamlanma | Tüm görevler yapıldı, tüm gereksinimler uygulandı, senaryolar kapsandı |
-| Doğruluk | Uygulama spec niyetini karşılıyor, uç durumlar ele alındı |
-| Tutarlılık | Tasarım kararları kod yapısına yansıtıldı, örüntüler tutarlı |
+| Boyut | Ne doğrular |
+|-------|-------------|
+| Tamamlık | Tüm görevler yapılmış, tüm gereksinimler uygulanmış, senaryolar kapsanmış |
+| Doğruluk | Uygulama spesifikasyon amacına uygun, sınır durumları ele alınmış |
+| Tutarlılık | Tasarım kararları koda yansımış, desenler tutarlı |
 
-Doğrulama, arşivlemeyi engellemez, ancak önce ele almak isteyebileceğiniz sorunları yüzeye çıkarır.
+Verify arşivlemeyi engellemez, ancak önce ele almak isteyebileceğiniz sorunları ortaya çıkarır.
 
-#### Arşivleme: Değişikliği Tamamlayın
+#### Archive: Değişikliği Sonuçlandırın
 
-`/opsx:archive`, değişikliği tamamlar ve arşive taşır:
+`/opsx:archive` değişikliği tamamlar ve arşive taşır:
 
 ```text
-You: /opsx:archive
+Siz: /opsx:archive
 
-AI:  Archiving add-auth...
+YZ:  add-auth arşivleniyor...
 
-     Artifact status:
-     ✓ proposal.md exists
-     ✓ specs/ exists
-     ✓ design.md exists
-     ✓ tasks.md exists (12/12 tasks complete)
+     Çıktı durumu:
+     ✓ proposal.md mevcut
+     ✓ specs/ mevcut
+     ✓ design.md mevcut
+     ✓ tasks.md mevcut (12/12 görev tamamlandı)
 
-     Delta specs: Not yet synced to main
-     → Would you like to sync now?
+     Delta spesifikasyonları: Henüz main'e senkronize edilmedi
+     → Şimdi senkronize etmek ister misiniz?
 
-You: Yes
+Siz: Evet
 
-AI:  ✓ Synced specs to openspec/specs/auth/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-auth/
+YZ:  ✓ specs/auth/spec.md'ye senkronize edildi
+     ✓ openspec/changes/archive/2025-01-24-add-auth/ konumuna taşındı
 
-     Change archived successfully.
+     Değişiklik başarıyla arşivlendi.
 ```
 
-Arşivleme, spec'ler senkronize edilmemişse bir istemde bulunur. Tamamlanmamış görevlerde engelleme yapmaz, ancak sizi uyarır.
+Arşivleme, spesifikasyonlar senkronize edilmemişse sizi uyarır. Tamamlanmamış görevlerde engellemez, ancak uyarı verir.
 
 ## Ne Zaman Ne Kullanılır
 
 ### `/opsx:ff` vs `/opsx:continue`
 
-| Durum | Kullanım |
-|-----------|-----|
-| Gereksinimler net, inşa etmeye hazırız | `/opsx:ff` |
-| Keşfediyoruz, her adımı incelemek istiyoruz | `/opsx:continue` |
-| Spec'lerden önce teklif üzerinde yineleme yapmak istiyoruz | `/opsx:continue` |
-| Zaman baskısı var, hızlı hareket etmeliyiz | `/opsx:ff` |
-| Karmaşık değişiklik, kontrol istiyoruz | `/opsx:continue` |
+| Durum | Kullanın |
+|-------|----------|
+| Gereksinimler net, inşa etmeye hazır | `/opsx:ff` |
+| Keşif aşamasında, her adımı incelemek istiyorum | `/opsx:continue` |
+| Spesifikasyonlardan önce öneriyi yinelemek istiyorum | `/opsx:continue` |
+| Zaman baskısı var, hızlı ilerlemem gerekiyor | `/opsx:ff` |
+| Karmaşık değişiklik, kontrol istiyorum | `/opsx:continue` |
 
-**Genel kural:** Kapsamı baştan tanımlayabiliyorsanız `/opsx:ff` kullanın. Yolculuk sırasında belirliyorsanız `/opsx:continue` kullanın.
+**Genel kural:** Kapsamı baştan tanımlayabiliyorsanız `/opsx:ff` kullanın. İlerledikçe keşfediyorsanız `/opsx:continue` kullanın.
 
-### Güncelleme vs Yeniden Başlama
+### Güncelleme vs Sıfırdan Başlama
 
-Yaygın bir soru: mevcut bir değişikliği ne zaman güncellemek uygundur ve ne zaman yenisi başlatılmalıdır?
+Sık sorulan bir soru: mevcut bir değişikliği güncellemek ne zaman uygundur ve ne zaman yeni bir tane başlatmalısınız?
 
-**Mevcut değişikliği şu durumlarda güncelleyin:**
+**Mevcut değişikliği güncelleyin:**
 
-- Aynı niyet, daha iyi uygulama
-- Kapsam daralıyor (önce MVP, geri kalanı sonra)
+- Aynı amaç, iyileştirilmiş uygulama
+- Kapsam daralır (önce MVP, geri kalanı sonra)
 - Öğrenmeye dayalı düzeltmeler (kod tabanı beklediğiniz gibi değil)
-- Uygulama keşiflerine dayalı tasarım ayarlamaları
+- Uygulama keşiflerine dayalı tasarım ince ayarları
 
-**Yeni bir değişikliği şu durumlarda başlatın:**
+**Yeni bir değişiklik başlatın:**
 
-- Niyet temelde değişti
+- Amaç temelden değişti
 - Kapsam tamamen farklı bir işe genişledi
 - Orijinal değişiklik tek başına "tamamlandı" olarak işaretlenebilir
-- Yamalar kafa karışıklığı yaratır
+- Yamalar açıklamaktan çok kafa karıştırır
 
 ```text
                      ┌─────────────────────────────────────┐
@@ -343,84 +345,84 @@ Yaygın bir soru: mevcut bir değişikliği ne zaman güncellemek uygundur ve ne
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Aynı niyet mi?     %50'den fazla         Orijinal,
-          Aynı sorun mu?     örtüşme mi?           bu değişiklikler
-                 │                  │               olmadan "tamam"
-                 │                  │               olabilir mi?
+          Aynı amaç mı?    >%50 örtüşme mü?   Orijinal bu
+          Aynı sorun mu?   Aynı kapsam mı?    değişiklikler
+                 │                  │          olmadan "tamam"
+                 │                  │          olabilir mi?
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      EVET              HAYIR EVET        HAYIR HAYIR         EVET
+      EVET              HAYIR EVET       HAYIR HAYIR         EVET
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    GÜNCELLE           YENİ GÜNCELLE    YENİ GÜNCELLE        YENİ
+   GÜNCELLE           YENİ GÜNCELLE    YENİ GÜNCELLE        YENİ
 ```
 
 **Örnek: "Karanlık mod ekle"**
 
-- "Özel temaları da desteklemeliyiz" → Yeni değişiklik (kapsam genişledi)
-- "Sistem tercihi algılama beklenenden zor" → Güncelle (aynı niyet)
-- "Önce geçişi ekleyelim, tercihleri sonra ekleyelim" → Güncelle, arşivle, sonra yeni değişiklik
+- "Ayrıca özel temaları desteklememiz gerekiyor" → Yeni değişiklik (kapsam genişledi)
+- "Sistem tercihi algılama beklediğimden daha zor" → Güncelleme (aynı amaç)
+- "Önce anahtarı gönderelim, tercihleri sonra ekleyelim" → Güncelle, arşivle, sonra yeni değişiklik
 
 ## En İyi Uygulamalar
 
 ### Değişiklikleri Odaklı Tutun
 
-Değişiklik başına bir mantıksal iş birimi. "X özelliğini ekleyelim ve ayrıca Y'yi yeniden yapılandıralım" yapıyorsanız, iki ayrı değişiklik düşünün.
+Değişiklik başına bir mantıksal iş birimi. "X özelliğini ekle ve ayrıca Y'yi yeniden yapılandır" yapıyorsanız, iki ayrı değişiklik düşünün.
 
-**Önemli çünkü:**
-- İncelemesi ve anlaşılması daha kolay
+**Neden önemli:**
+- İncelemesi ve anlaması daha kolay
 - Daha temiz arşiv geçmişi
-- Bağımsız olarak sunulabilir
-- Gerekirse geri alma daha basit
+- Bağımsız olarak gönderilebilir
+- Gerekirse geri alması daha basit
 
 ### Belirsiz Gereksinimler İçin `/opsx:explore` Kullanın
 
-Bir değişiklik için taahhütte bulunmadan önce, problem alanını keşfedin:
+Bir değişikliğe geçmeden önce sorun alanını keşfedin:
 
 ```text
-You: /opsx:explore
+Siz: /opsx:explore
 
-AI:  What would you like to explore?
+YZ:  Neyi keşfetmek istiyorsunuz?
 
-You: How should we handle rate limiting for our API?
+Siz: API'miz için hız sınırlamasını nasıl ele almalıyız?
 
-AI:  Let me investigate your current setup and options...
-     [Researches codebae, considers patterns]
+YZ:  Mevcut kurulumunuzu ve seçeneklerinizi araştırayım...
+     [Kod tabanını araştırır, desenleri değerlendirir]
 
-     I see three approaches we could take:
-     1. Middleware-based (simple, per-endpoint)
-     2. Redis-backed (scalable, shared state)
-     3. Token bucket per user (fair, complex)
+     Üç yaklaşım görebiliriz:
+     1. Middleware tabanlı (basit, uç nokta başına)
+     2. Redis destekli (ölçeklenebilir, paylaşımlı durum)
+     3. Kullanıcı başına token bucket (adil, karmaşık)
 
-     Your current stack suggests #1 or #2. What's your scale?
+     Mevcut teknoloji yığınınız #1 veya #2'yi öneriyor. Ölçeğiniz nedir?
 ```
 
-Keşif, artifact'ler oluşturmadan önce düşünmenizi netleştirir.
+Keşif, çıktılar oluşturmadan önce düşünce sürecinizi netleştirir.
 
 ### Arşivlemeden Önce Doğrulayın
 
-Uygulamanın artifact'lerle eşleştiğini kontrol etmek için `/opsx:verify` kullanın:
+Uygulamanın çıktılarla eşleştiğini kontrol etmek için `/opsx:verify` kullanın:
 
 ```text
-You: /opsx:verify
+Siz: /opsx:verify
 
-AI:  Verifying add-dark-mode...
+YZ:  add-dark-mode doğrulanıyor...
 
-     ✓ All tasks in tasks.md are checked
-     ✓ Requirements in specs have corresponding code
-     ✓ Design decisions are reflected in implementation
+     ✓ tasks.md'deki tüm görevler işaretli
+     ✓ Spesifikasyonlardaki gereksinimlerin karşılık gelen kodu var
+     ✓ Tasarım kararları uygulamaya yansımış
 
-     Ready to archive!
+     Arşivlemeye hazır!
 ```
 
 Değişikliği kapatmadan önce uyumsuzlukları yakalar.
 
-### Değişiklikleri Açık Adlandırın
+### Değişiklikleri Açıkça Adlandırın
 
-İyi isimler `openspec list` komutunu işlevsel kılar:
+İyi isimler `openspec list` komutunu kullanışlı kılar:
 
 ```text
-İyi:                           Kaçınılması gereken:
+İyi:                           Kaçının:
 add-dark-mode                  feature-1
 fix-login-redirect             update
 optimize-product-query         changes
@@ -429,23 +431,23 @@ implement-2fa                  wip
 
 ## Komut Hızlı Referansı
 
-Tüm komut detayları ve seçenekleri için [Komutlar](commands.md) sayfasına bakın.
+Tüm komut detayları ve seçenekleri için bkz. [Komutlar](commands.md).
 
 | Komut | Amaç | Ne Zaman Kullanılır |
-|-------|------|---------------------|
-| `/opsx:propose` | Değişiklik + planlama araçları oluşturur | Hızlı varsayılan yol (`core` profili) |
-| `/opsx:explore` | Fikirleri düşünmek için | Belirsiz gereksinimler, araştırma |
-| `/opsx:new` | Bir değişiklik iskeleti başlatmak için | Genişletilmiş mod, açıkça belirlenmiş araç kontrolü |
-| `/opsx:continue` | Bir sonraki aracı oluşturmak için | Genişletilmiş mod, adım adım araç oluşturma |
-| `/opsx:ff` | Tüm planlama araçlarını oluşturmak için | Genişletilmiş mod, net kapsam |
-| `/opsx:apply` | Görevleri uygulamak için | Kod yazmaya hazır olunduğunda |
-| `/opsx:verify` | Uygulamayı doğrulamak için | Genişletilmiş mod, arşivlemeden önce |
-| `/opsx:sync` | Delta spesifikasyonlarını birleştirmek için | Genişletilmiş mod, isteğe bağlı |
-| `/opsx:archive` | Değişikliği tamamlamak için | Tüm işler bittiğinde |
-| `/opsx:bulk-archive` | Birden fazla değişikliği arşivlemek için | Genişletilmiş mod, paralel çalışma |
+|---------|---------|-------------|
+| `/opsx:propose` | Değişiklik + planlama eserleri oluştur | Hızlı varsayılan yol (`core` profili) |
+| `/opsx:explore` | Fikirleri düşünmek | Belirsiz gereksinimler, araştırma |
+| `/opsx:new` | Bir değişiklik iskelesi başlat | Genişletilmiş mod, açık eser kontrolü |
+| `/opsx:continue` | Sonraki eseri oluştur | Genişletilmiş mod, adım adım eser oluşturma |
+| `/opsx:ff` | Tüm planlama eserlerini oluştur | Genişletilmiş mod, net kapsam |
+| `/opsx:apply` | Görevleri uygula | Kod yazmaya hazır |
+| `/opsx:verify` | Uygulamayı doğrula | Genişletilmiş mod, arşivlemeden önce |
+| `/opsx:sync` | Delta spesifikasyonlarını birleştir | Genişletilmiş mod, isteğe bağlı |
+| `/opsx:archive` | Değişikliği tamamla | Tüm işler bitti |
+| `/opsx:bulk-archive` | Birden fazla değişikliği arşivle | Genişletilmiş mod, paralel çalışma |
 
 ## Sonraki Adımlar
 
 - [Komutlar](commands.md) - Seçeneklerle tam komut referansı
-- [Kavramlar](concepts.md) - Spesifikasyonlar, araçlar ve şemalar hakkında derinlemesine bilgi
-- [Özelleştirme](customization.md) - Özel iş akışları oluşturma
+- [Kavramlar](concepts.md) - Spesifikasyonlar, eserler ve şemalara derinlemesine bakış
+- [Özelleştirme](customization.md) - Özel iş akışları oluşturun

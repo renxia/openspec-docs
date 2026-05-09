@@ -2,9 +2,9 @@
 
 ## المتطلبات الأساسية
 
-- **Node.js 20.19.0 أو أحدث** — تحقق من إصدارك: `node --version`
+- **Node.js 20.19.0 أو أعلى** — تحقق من إصدارك: `node --version`
 
-## مديرو الحزم
+## مدراء الحزم
 
 ### npm
 
@@ -26,13 +26,16 @@ yarn global add @fission-ai/openspec@latest
 
 ### bun
 
+يمكن لـ Bun تثبيت OpenSpec عالميًا، لكن OpenSpec يعمل حاليًا على Node.js.
+لا يزال لديك حاجة إلى Node.js 20.19.0 أو أعلى متاح على `PATH`.
+
 ```bash
 bun add -g @fission-ai/openspec@latest
 ```
 
 ## Nix
 
-قم بتشغيل OpenSpec مباشرة دون تثبيت:
+قم بتشغيل OpenSpec مباشرة بدون تثبيت:
 
 ```bash
 nix run github:Fission-AI/OpenSpec -- init
@@ -44,7 +47,7 @@ nix run github:Fission-AI/OpenSpec -- init
 nix profile install github:Fission-AI/OpenSpec
 ```
 
-أو أضفه إلى بيئة التطوير الخاصة بك في ملف `flake.nix`:
+أو أضفه إلى بيئة التطوير الخاصة بك في `flake.nix`:
 
 ```nix
 {
@@ -76,4 +79,4 @@ cd your-project
 openspec init
 ```
 
-اطلع على [البدء](getting-started.md) للحصول على دليل شامل.
+انظر [البدء](getting-started.md) للحصول على دليل شامل.

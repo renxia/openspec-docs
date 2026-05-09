@@ -1,59 +1,59 @@
-# Workflow OPSX
+# OPSX Workflow
 
-> Accogliamo feedback su [Discord](https://discord.gg/YctCnvvshC).
+> Feedback benvenuti su [Discord](https://discord.gg/YctCnvvshC).
 
 ## Cos'è?
 
 OPSX è ora il workflow standard per OpenSpec.
 
-È un **workflow fluido e iterativo** per le modifiche a OpenSpec. Niente più fasi rigide — solo azioni che puoi intraprendere in qualsiasi momento.
+È un **workflow fluido, iterativo** per le modifiche a OpenSpec. Niente più fasi rigide — solo azioni che puoi intraprendere in qualsiasi momento.
 
-## Perché esiste
+## Perché Esiste
 
-Il vecchio flusso di lavoro OpenSpec funziona, ma è **bloccato**:
+Il flusso di lavoro legacy di OpenSpec funziona, ma è **bloccato**:
 
-- **Le istruzioni sono codificate in modo rigido** — nascoste in TypeScript, non puoi modificarle
-- **Tutto o niente** — un unico grande comando crea tutto, impossibile testare singole parti
-- **Struttura fissa** — stesso flusso per tutti, nessuna personalizzazione
-- **Scatola nera** — quando l'output dell'AI è scadente, non puoi modificare i prompt
+- **Le istruzioni sono hardcoded** — sepolte nel TypeScript, non puoi modificarle
+- **Tutto o niente** — un unico grande comando crea tutto, non puoi testare i singoli pezzi
+- **Struttura fissa** — stesso flusso di lavoro per tutti, nessuna personalizzazione
+- **Scatola nera** — quando l'output dell'IA è scarso, non puoi modificare i prompt
 
 **OPSX lo apre.** Ora chiunque può:
 
-1. **Sperimentare con le istruzioni** — modificare un modello, vedere se l'AI fa meglio
-2. **Testare in modo granulare** — validare le istruzioni di ogni artefatto indipendentemente
-3. **Personalizzare i flussi di lavoro** — definire i propri artefatti e dipendenze
-4. **Iterare rapidamente** — modificare un modello, testare immediatamente, senza ricostruire
+1. **Sperimentare con le istruzioni** — modifica un template, vedi se l'IA fa meglio
+2. **Testare in modo granulare** — valida le istruzioni di ogni artefatto indipendentemente
+3. **Personalizzare i flussi di lavoro** — definisci i tuoi artefatti e le loro dipendenze
+4. **Iterare rapidamente** — modifica un template, testa immediatamente, nessuna ricostruzione
 
 ```
 Flusso di lavoro legacy:                OPSX:
 ┌────────────────────────┐           ┌────────────────────────┐
-│  Codificato nel pacchetto│           │  schema.yaml           │◄── Tu modifichi questo
-│  (non modificabile)    │           │  templates/*.md        │◄── Oppure questo
+│  Hardcoded nel package │           │  schema.yaml           │◄── Modifichi questo
+│  (non modificabile)    │           │  templates/*.md        │◄── O questo
 │        ↓               │           │        ↓               │
-│  Attendi nuova release │           │  Effetto istantaneo    │
+│  Attendi nuova release │           │  Effetto immediato     │
 │        ↓               │           │        ↓               │
-│  Spera che sia migliore│           │  Testalo da solo       │
+│  Spera sia migliore    │           │  Testalo tu stesso     │
 └────────────────────────┘           └────────────────────────┘
 ```
 
 **Questo è per tutti:**
-- **Team** — creare flussi di lavoro che corrispondano a come lavorate realmente
-- **Utenti avanzati** — modificare i prompt per ottenere output AI migliori per il vostro codebase
-- **Contributori di OpenSpec** — sperimentare con nuovi approcci senza release
+- **Team** — crea flussi di lavoro che corrispondono a come lavori realmente
+- **Utenti avanzati** — modifica i prompt per ottenere output IA migliori per il tuo codebase
+- **Contributori OpenSpec** — sperimenta nuovi approcci senza rilasci
 
-Stiamo ancora tutti imparando cosa funziona meglio. OPSX ci permette di imparare insieme.
+Stiamo tutti ancora imparando cosa funziona meglio. OPSX ci permette di imparare insieme.
 
-## L'esperienza utente
+## L'Esperienza Utente
 
 **Il problema dei flussi di lavoro lineari:**
-Sei "in fase di pianificazione", poi "in fase di implementazione", poi "fatto". Ma il lavoro reale non funziona così. Implementi qualcosa, realizzi che il tuo design era sbagliato, devi aggiornare le specifiche, continuare l'implementazione. Le fasi lineari vanno contro il modo in cui il lavoro accade realmente.
+Sei "nella fase di pianificazione", poi "nella fase di implementazione", poi "finito". Ma il lavoro reale non funziona così. Implementi qualcosa, realizzi che il design era sbagliato, devi aggiornare le specifiche, continui a implementare. Le fasi lineari si scontrano con come il lavoro avviene realmente.
 
 **Approccio OPSX:**
-- **Azioni, non fasi** — crea, implementa, aggiorna, archivia — fai qualsiasi di queste in qualsiasi momento
-- **Le dipendenze sono abilitanti** — mostrano cosa è possibile, non cosa è richiesto dopo
+- **Azioni, non fasi** — crea, implementa, aggiorna, archivia — puoi farne qualsiasi in qualsiasi momento
+- **Le dipendenze sono abilitatori** — mostrano cosa è possibile, non cosa è richiesto dopo
 
 ```
-  proposta ──→ specifiche ──→ design ──→ attività ──→ implementa
+  proposal ──→ specs ──→ design ──→ tasks ──→ implement
 ```
 
 ## Configurazione
@@ -63,17 +63,17 @@ Sei "in fase di pianificazione", poi "in fase di implementazione", poi "fatto". 
 openspec init
 ```
 
-Questo crea le skill in `.claude/skills/` (o equivalente) che gli assistenti AI di coding rilevano automaticamente.
+Questo crea le skill in `.claude/skills/` (o equivalente) che gli assistenti di programmazione IA rilevano automaticamente.
 
-Per impostazione predefinita, OpenSpec usa il profilo di flusso di lavoro `core` (`propose`, `explore`, `apply`, `archive`). Se vuoi i comandi del flusso di lavoro esteso (`new`, `continue`, `ff`, `verify`, `sync`, `bulk-archive`, `onboard`), configurali con `openspec config profile` e applicali con `openspec update`.
+Per impostazione predefinita, OpenSpec usa il profilo di flusso di lavoro `core` (`propose`, `explore`, `apply`, `sync`, `archive`). Se vuoi i comandi di flusso di lavoro estesi (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`), configurali con `openspec config profile` e applica con `openspec update`.
 
-Durante la configurazione, ti verrà chiesto di creare una **configurazione del progetto** (`openspec/config.yaml`). Questa è opzionale ma consigliata.
+Durante la configurazione, ti verrà chiesto di creare una **configurazione di progetto** (`openspec/config.yaml`). Questo è opzionale ma consigliato.
 
-## Configurazione del progetto
+## Configurazione del Progetto
 
-La configurazione del progetto ti permette di impostare valori predefiniti e iniettare contesto specifico del progetto in tutti gli artefatti.
+La configurazione del progetto ti permette di impostare i valori predefiniti e iniettare contesto specifico del progetto in tutti gli artefatti.
 
-### Creare la configurazione
+### Creazione della Configurazione
 
 La configurazione viene creata durante `openspec init`, o manualmente:
 
@@ -82,92 +82,92 @@ La configurazione viene creata durante `openspec init`, o manualmente:
 schema: spec-driven
 
 context: |
-  Stack tecnologico: TypeScript, React, Node.js
-  Convenzioni API: RESTful, risposte JSON
-  Testing: Vitest per test unitari, Playwright per e2e
-  Stile: ESLint con Prettier, TypeScript rigoroso
+  Tech stack: TypeScript, React, Node.js
+  API conventions: RESTful, JSON responses
+  Testing: Vitest for unit tests, Playwright for e2e
+  Style: ESLint with Prettier, strict TypeScript
 
 rules:
   proposal:
-    - Includere piano di rollback
-    - Identificare team coinvolti
+    - Include rollback plan
+    - Identify affected teams
   specs:
-    - Usare formato Given/When/Then per gli scenari
+    - Use Given/When/Then format for scenarios
   design:
-    - Includere diagrammi di sequenza per flussi complessi
+    - Include sequence diagrams for complex flows
 ```
 
-### Campi della configurazione
+### Campi della Configurazione
 
 | Campo | Tipo | Descrizione |
 |-------|------|-------------|
-| `schema` | stringa | Schema predefinito per nuove modifiche (es. `spec-driven`) |
-| `context` | stringa | Contesto del progetto iniettato nelle istruzioni di ogni artefatto |
-| `rules` | oggetto | Regole per artefatto, con chiave identificativa dell'artefatto |
+| `schema` | stringa | Schema predefinito per i nuovi cambiamenti (es. `spec-driven`) |
+| `context` | stringa | Contesto del progetto iniettato in tutte le istruzioni degli artefatti |
+| `rules` | oggetto | Regole per artefatto, indicizzate per ID artefatto |
 
-### Come funziona
+### Come Funziona
 
 **Precedenza dello schema** (dalla più alta alla più bassa):
-1. Flag CLI (`--schema <nome>`)
-2. Metadati della modifica (`.openspec.yaml` nella directory della modifica)
+1. Flag CLI (`--schema <name>`)
+2. Metadati del cambiamento (`.openspec.yaml` nella directory del cambiamento)
 3. Configurazione del progetto (`openspec/config.yaml`)
 4. Predefinito (`spec-driven`)
 
 **Iniezione del contesto:**
-- Il contesto viene anteposto a ogni istruzione dell'artefatto
-- Racchiuso nei tag `<context>...</context>`
-- Aiuta l'AI a capire le convenzioni del tuo progetto
+- Il contesto viene anteposto alle istruzioni di ogni artefatto
+- Racchiuso in tag `<context>...</context>`
+- Aiuta l'IA a comprendere le convenzioni del tuo progetto
 
 **Iniezione delle regole:**
 - Le regole vengono iniettate solo per gli artefatti corrispondenti
-- Racchiusi nei tag `<rules>...</rules>`
-- Appaiono dopo il contesto, prima del modello
+- Racchiuse in tag `<rules>...</rules>`
+- Appaiono dopo il contesto, prima del template
 
-### ID degli artefatti per schema
+### ID Artefatti per Schema
 
 **spec-driven** (predefinito):
-- `proposal` — Proposta di modifica
+- `proposal` — Proposta di cambiamento
 - `specs` — Specifiche
 - `design` — Design tecnico
-- `tasks` — Attività di implementazione
+- `tasks` — Task di implementazione
 
-### Validazione della configurazione
+### Validazione della Configurazione
 
-- ID artefatti sconosciuti in `rules` generano avvisi
+- ID artefatti sconosciuti nelle `rules` generano avvisi
 - I nomi degli schemi vengono validati rispetto agli schemi disponibili
 - Il contesto ha un limite di dimensione di 50KB
-- Lo YAML non valido viene riportato con numeri di riga
+- YAML non valido viene segnalato con i numeri di riga
 
-### Risoluzione dei problemi
+### Risoluzione dei Problemi
 
-**"ID artefatto sconosciuto in rules: X"**
-- Verifica che gli ID artefatti corrispondano al tuo schema (vedi lista sopra)
+**"ID artefatto sconosciuto nelle regole: X"**
+- Controlla che gli ID artefatti corrispondano al tuo schema (vedi elenco sopra)
 - Esegui `openspec schemas --json` per vedere gli ID artefatti per ogni schema
 
 **Configurazione non applicata:**
 - Assicurati che il file sia in `openspec/config.yaml` (non `.yml`)
-- Verifica la sintassi YAML con un validatore
+- Controlla la sintassi YAML con un validatore
 - Le modifiche alla configurazione hanno effetto immediato (nessun riavvio necessario)
 
-**Contest troppo grande:**
+**Contesto troppo grande:**
 - Il contesto è limitato a 50KB
-- Riassumi o collega a documentazione esterna invece
+- Riepiloga o collega a documenti esterni invece
 
 ## Comandi
 
 | Comando | Cosa fa |
 |---------|---------|
-| `/opsx:propose` | Crea una modifica e genera gli artefatti di pianificazione in un solo passo (percorso rapido predefinito) |
+| `/opsx:propose` | Crea un cambiamento e genera artefatti di pianificazione in un unico passaggio (percorso rapido predefinito) |
 | `/opsx:explore` | Pensa alle idee, indaga i problemi, chiarisci i requisiti |
-| `/opsx:new` | Inizia una nuova modifica scaffold (flusso di lavoro esteso) |
-| `/opsx:continue` | Crea il prossimo artefatto (flusso di lavoro esteso) |
-| `/opsx:ff` | Avanza rapidamente gli artefatti di pianificazione (flusso di lavoro esteso) |
-| `/opsx:apply` | Implementa le attività, aggiornando gli artefatti se necessario |
+| `/opsx:new` | Inizia un nuovo scaffold di cambiamento (flusso di lavoro esteso) |
+| `/opsx:continue` | Crea l'artefatto successivo (flusso di lavoro esteso) |
+| `/opsx:ff` | Fast-forward degli artefatti di pianificazione (flusso di lavoro esteso) |
+| `/opsx:apply` | Implementa i task, aggiornando gli artefatti se necessario |
 | `/opsx:verify` | Valida l'implementazione rispetto agli artefatti (flusso di lavoro esteso) |
-| `/opsx:sync` | Sincronizza le specifiche delta al principale (flusso di lavoro esteso, opzionale) |
-| `/opsx:archive` | Archivia quando finito |
-| `/opsx:bulk-archive` | Archivia più modifiche completate (flusso di lavoro esteso) |
-| `/opsx:onboard` | Guida passo-passo per una modifica end-to-end (flusso di lavoro esteso) |
+| `/opsx:sync` | Sincronizza le specifiche delta con il main (flusso di lavoro predefinito, opzionale) |
+| `/opsx:archive` | Archivia quando hai finito |
+| `/opsx:bulk-archive` | Archivia più cambiamenti completati (flusso di lavoro esteso) |
+| `/opsx:onboard` | Guida passo-passo di un cambiamento end-to-end (flusso di lavoro esteso) |
 
 ## Utilizzo
 
@@ -175,13 +175,13 @@ rules:
 ```
 /opsx:explore
 ```
-Pensa alle idee, indaga i problemi, confronta le opzioni. Nessuna struttura richiesta - solo un partner di riflessione. Quando gli spunti si cristallizzano, passa a `/opsx:propose` (predefinito) o `/opsx:new`/`/opsx:ff` (esteso).
+Pensa alle idee, indaga i problemi, confronta le opzioni. Nessuna struttura richiesta — solo un partner di riflessione. Quando le intuizioni si cristallizzano, passa a `/opsx:propose` (predefinito) o `/opsx:new`/`/opsx:ff` (esteso).
 
-### Inizia una nuova modifica
+### Inizia un nuovo cambiamento
 ```
 /opsx:propose
 ```
-Crea la modifica e genera gli artefatti di pianificazione necessari prima dell'implementazione.
+Crea il cambiamento e genera gli artefatti di pianificazione necessari prima dell'implementazione.
 
 Se hai abilitato i flussi di lavoro estesi, puoi invece usare:
 
@@ -193,72 +193,72 @@ Se hai abilitato i flussi di lavoro estesi, puoi invece usare:
 
 ### Crea artefatti
 ```
-/opsx:continue`
+/opsx:continue
 ```
-Mostra cosa è pronto da creare in base alle dipendenze, poi crea un artefatto. Usa ripetutamente per costruire la tua modifica in modo incrementale.
+Mostra cosa è pronto per essere creato in base alle dipendenze, poi crea un artefatto. Usa ripetutamente per costruire il tuo cambiamento in modo incrementale.
 
 ```
 /opsx:ff add-dark-mode
 ```
-Crea tutti gli artefatti di pianificazione in una volta. Usa quando hai una chiara visione di cosa stai costruendo.
+Crea tutti gli artefatti di pianificazione in una volta. Usalo quando hai un'idea chiara di cosa stai costruendo.
 
 ### Implementa (la parte fluida)
 ```
 /opsx:apply
 ```
-Lavora attraverso le attività, spuntandole man mano che procedi. Se stai gestendo più modifiche, puoi eseguire `/opsx:apply <nome>`; altrimenti dovrebbe dedurlo dalla conversazione e chiederti di scegliere se non riesce a capire.
+Lavora sui task, segnandoli come completati man mano che procedi. Se stai gestendo più cambiamenti, puoi eseguire `/opsx:apply <nome>`; altrimenti dovrebbe dedurre dalla conversazione e chiederti di scegliere se non riesce a capire.
 
 ### Concludi
 ```
-/opsx:archive   # Sposta in archivio quando finito (chiede di sincronizzare le specifiche se necessario)
+/opsx:archive   # Sposta nell'archivio quando hai finito (ti chiederà di sincronizzare le specifiche se necessario)
 ```
 
-## Quando aggiornare vs. iniziare da zero
+## Quando Aggiornare vs. Ricominciare da Zero
 
-Puoi sempre modificare la tua proposta o specifiche prima dell'implementazione. Ma quando il raffinamento diventa "questo è un lavoro diverso"?
+Puoi sempre modificare la tua proposta o le specifiche prima dell'implementazione. Ma quando il perfezionamento diventa "questo è un lavoro diverso"?
 
-### Cosa cattura una Proposta
+### Cosa Cattura una Proposta
 
 Una proposta definisce tre cose:
-1. **Intenzione** — Quale problema stai risolvendo?
-2. **Ambito** — Cosa è dentro/fuori dai confini?
+1. **Intento** — Quale problema stai risolvendo?
+2. **Ambito** — Cosa è dentro/fuori dai limiti?
 3. **Approccio** — Come lo risolverai?
 
 La domanda è: cosa è cambiato, e di quanto?
 
-### Aggiorna la modifica esistente quando:
+### Aggiorna il Cambiamento Esistente Quando:
 
-**Stessa intenzione, esecuzione raffinata**
+**Stesso intento, esecuzione perfezionata**
 - Scopri casi limite che non avevi considerato
 - L'approccio necessita di aggiustamenti ma l'obiettivo è invariato
-- L'implementazione rivela che il design era leggermente errato
+- L'implementazione rivela che il design era leggermente impreciso
 
-**L'ambito si riduce**
-- Realizzi che l'ambito completo è troppo grande, vuoi rilasciare prima l'MVP
+**L'ambito si restringe**
+- Ti rendi conto che l'ambito completo è troppo grande, vuoi spedire prima la MVP
 - "Aggiungi dark mode" → "Aggiungi toggle dark mode (preferenza di sistema nella v2)"
 
 **Correzioni guidate dall'apprendimento**
 - Il codebase non è strutturato come pensavi
 - Una dipendenza non funziona come previsto
-- "Usa variabili CSS" → "Usa invece il prefisso dark: di Tailwind"
+- "Usa variabili CSS" → "Usa il prefisso dark: di Tailwind invece"
 
-### Inizia una nuova modifica quando:
+### Inizia un Nuovo Cambiamento Quando:
 
-**L'intenzione è cambiata fondamentalmente**
+**L'intentio è fondamentalmente cambiato**
 - Il problema stesso è diverso ora
-- "Aggiungi dark mode" → "Aggiungi un sistema di temi completo con colori, font, spaziatura personalizzati"
+- "Aggiungi dark mode" → "Aggiungi un sistema di temi completo con colori, font, spaziature personalizzati"
 
 **L'ambito è esploso**
-- La modifica è cresciuta così tanto che è essenzialmente lavoro diverso
+- Il cambiamento è cresciuto così tanto che è essenzialmente un lavoro diverso
 - La proposta originale sarebbe irriconoscibile dopo gli aggiornamenti
-- "Correggi bug di login" → "Riscrivi il sistema di autenticazione"
+- "Correggi bug di login" → "Riscrivi sistema di autenticazione"
 
 **L'originale è completabile**
-- La modifica originale può essere contrassegnata come "fatta"
-- Il nuovo lavoro è autonomo, non un raffinamento
-- Completa "Aggiungi dark mode MVP" → Archivia → Nuova modifica "Migliora dark mode"
+- Il cambiamento originale può essere contrassegnato come "finito"
+- Il nuovo lavoro è autonomo, non un perfezionamento
+- Completa "Aggiungi dark mode MVP" → Archivia → Nuovo cambiamento "Migliora dark mode"
 
-### Le euristiche
+### Le Euristiche
 
 ```
                         ┌─────────────────────────────────────┐
@@ -268,84 +268,86 @@ La domanda è: cosa è cambiato, e di quanto?
                     ┌──────────────────┼──────────────────┐
                     │                  │                  │
                     ▼                  ▼                  ▼
-             Stessa intenzione?  >50% sovrapposizione?  L'originale può
-             Stesso problema?    Stesso ambito?         essere "fatto" senza
-                    │                  │                 queste modifiche?
+             Stesso intento?    Sovrapposizione >50%?  L'originale
+             Stesso problema?   Stesso ambito?         può essere "finito"
+                    │                  │          senza questi cambiamenti?
                     │                  │                  │
           ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
           │                 │  │             │   │               │
          SÌ               NO SÌ           NO  NO              SÌ
           │                 │  │             │   │               │
           ▼                 ▼  ▼             ▼   ▼               ▼
-       AGGIORNA          NUOVO AGGIORNA    NUOVO AGGIORNA       NUOVO
+       AGGIORNA         NUOVO AGGIORNA    NUOVO AGGIORNA       NUOVO
 ```
 
-| Testo | Aggiorna | Nuova modifica |
-|------|--------|------------|
-| **Identità** | "Stessa cosa, raffinata" | "Lavoro diverso" |
-| **Sovrapposizione ambito** | >50% sovrapposta | <50% sovrapposta |
-| **Completamento** | Non può essere "fatto" senza modifiche | Può finire l'originale, il nuovo lavoro è autonomo |
+| Test | Aggiornamento | Nuovo Cambiamento |
+|------|---------------|-------------------|
+| **Identità** | "Stessa cosa, perfezionata" | "Lavoro diverso" |
+| **Sovrapposizione ambito** | Sovrapposizioni >50% | Sovrapposizioni <50% |
+| **Completamento** | Non può essere "finito" senza cambiamenti | Può completare l'originale, il nuovo lavoro è autonomo |
 | **Storia** | La catena di aggiornamenti racconta una storia coerente | Le patch confonderebbero più che chiarire |
 
-### Il principio
+### Il Principio
 
-> **Aggiornare preserva il contesto. Nuova modifica fornisce chiarezza.**
+> **L'aggiornamento preserva il contesto. Il nuovo cambiamento fornisce chiarezza.**
 >
-> Scegli aggiorna quando la storia del tuo pensiero è preziosa.
-> Scegli nuovo quando iniziare da zero sarebbe più chiaro che applicare patch.
+> Scegli aggiornamento quando la storia del tuo pensiero è preziosa.
+>
+> Scegli nuovo quando ricominciare da zero sarebbe più chiaro che aggiustare.
 
-Pensalo come i branch git:
+Pensalo come i branch di git:
 - Continua a fare commit mentre lavori sulla stessa funzionalità
-- Inizia un nuovo branch quando è genuinamente lavoro nuovo
-- A volte fai merge di una funzionalità parziale e inizia da zero per la fase 2
+- Inizia un nuovo branch quando è genuinamente un nuovo lavoro
+- A volte unisci una funzionalità parziale e ricomincia da zero per la fase 2
 
-## Cosa cambia?
+## Cosa Cambia?
 
 | | Legacy (`/openspec:proposal`) | OPSX (`/opsx:*`) |
 |---|---|---|
 | **Struttura** | Un unico grande documento di proposta | Artefatti discreti con dipendenze |
-| **Workflow** | Fasi lineari: pianifica → implementa → archivia | Azioni fluide — fai qualsiasi cosa in qualsiasi momento |
+| **Flusso di lavoro** | Fasi lineari: pianifica → implementa → archivia | Azioni fluide — fai qualsiasi cosa in qualsiasi momento |
 | **Iterazione** | Scomodo tornare indietro | Aggiorna gli artefatti man mano che impari |
-| **Personalizzazione** | Struttura fissa | Guidato da schema (definisci i tuoi artefatti) |
+| **Personalizzazione** | Struttura fissa | Guidata dallo schema (definisci i tuoi artefatti) |
 
-**L'idea chiave:** il lavoro non è lineare. OPSX smette di fingere che lo sia.
+**L'intuizione chiave:** il lavoro non è lineare. OPSX smette di fingere che lo sia.
 
-## Analisi approfondita dell'architettura
+## Approfondimento sull'Architettura
 
-Questa sezione spiega come funziona OPSX sotto il confronto e come si confronta con il flusso di lavoro legacy.
-Gli esempi in questa sezione utilizzano il set di comandi esteso (`new`, `continue`, ecc.); gli utenti predefiniti `core` possono mappare lo stesso flusso su `propose → apply → archive`.
+Questa sezione spiega come OPSX funziona sotto il cofano e come si confronta con il flusso di lavoro legacy.
+Gli esempi in questa sezione utilizzano il set di comandi esteso (`new`, `continue`, ecc.); gli utenti `core` predefiniti possono mappare lo stesso flusso su `propose → apply → sync → archive`.
 
 ### Filosofia: Fasi vs Azioni
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         FLUSSO DI LAVORO LEGACY                            │
-│                    (Bloccato per fase, Tutto o Niente)                      │
+│                         FLUSSO DI LAVORO LEGACY                             │
+│                    (A Fasi Bloccate, Tutto-o-Niente)                        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │   ┌──────────────┐      ┌──────────────┐      ┌──────────────┐             │
-│   │   PIANIFICA- │ ───► │  IMPLEMENTA- │ ───► │   ARCHIVIA-  │             │
+│   │    FASE DI   │ ───► │    FASE DI   │ ───► │    FASE DI   │             │
+│   │  PIANIFICA-  │      │ IMPLEMENTA-  │      │  ARCHIVIA-   │             │
 │   │    ZIONE     │      │    ZIONE     │      │    ZIONE     │             │
 │   └──────────────┘      └──────────────┘      └──────────────┘             │
 │         │                     │                     │                       │
 │         ▼                     ▼                     ▼                       │
 │   /openspec:proposal   /openspec:apply      /openspec:archive              │
 │                                                                             │
-│   • Crea TUTTI gli artifact in una volta                                   │
-│   • Non è possibile tornare indietro per aggiornare le specifiche durante  │
-│     l'implementazione                                                      │
-│   • I gate delle fasi impongono una progressione lineare                   │
+│   • Crea TUTTI gli artefatti in una volta                                 │
+│   • Non è possibile tornare indietro per aggiornare le specifiche          │
+│     durante l'implementazione                                              │
+│   • I gate delle fasi forzano una progressione lineare                      │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        FLUSSO DI LAVORO OPSX                                │
+│                            FLUSSO DI LAVORO OPSX                            │
 │                      (Azioni Fluide, Iterativo)                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │              ┌────────────────────────────────────────────┐                 │
-│              │           AZIONI (non fasi)                │                 │
+│              │           AZIONI (non fasi)               │                 │
 │              │                                            │                 │
 │              │   new ◄──► continue ◄──► apply ◄──► archive │                 │
 │              │    │          │           │           │    │                 │
@@ -353,7 +355,7 @@ Gli esempi in questa sezione utilizzano il set di comandi esteso (`new`, `contin
 │              │              in qualsiasi ordine           │                 │
 │              └────────────────────────────────────────────┘                 │
 │                                                                             │
-│   • Crea gli artifact uno alla volta OPPURE vai avanti rapidamente         │
+│   • Crea artefatti uno alla volta OPPURE avanza rapidamente                │
 │   • Aggiorna specifiche/design/task durante l'implementazione              │
 │   • Le dipendenze abilitano il progresso, le fasi non esistono             │
 │                                                                             │
@@ -362,35 +364,35 @@ Gli esempi in questa sezione utilizzano il set di comandi esteso (`new`, `contin
 
 ### Architettura dei Componenti
 
-**Il flusso di lavoro legacy** utilizza template codificati in TypeScript:
+Il **flusso di lavoro legacy** utilizza template hardcoded in TypeScript:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                   COMPONENTI DEL FLUSSO DI LAVORO LEGACY                    │
+│                    COMPONENTI DEL FLUSSO LEGACY                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   Template Codificati (stringhe TypeScript)                                 │
+│   Template Hardcoded (stringhe TypeScript)                                  │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Configuratori/Adattatori specifici per lo strumento                      │
+│   Configuratori/adattatori specifici per lo strumento                       │
 │                    │                                                        │
 │                    ▼                                                        │
 │   File di Comando Generati (.claude/commands/openspec/*.md)                 │
 │                                                                             │
-│   • Struttura fissa, nessuna consapevolezza degli artifact                  │
-│   • Le modifiche richiedono modifica del codice + ricostruzione             │
+│   • Struttura fissa, nessuna consapevolezza degli artefatti                 │
+│   • Le modifiche richiedono modifica del codice + rebuild                   │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**OPSX** utilizza schemi esterni e un motore a grafo delle dipendenze:
+**OPSX** utilizza schema esterni e un motore a grafo delle dipendenze:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        COMPONENTI OPSX                                       │
+│                         COMPONENTI OPSX                                      │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   Definizioni degli Schemi (YAML)                                           │
+│   Definizioni di Schema (YAML)                                              │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
 │   │  name: spec-driven                                                  │   │
 │   │  artifacts:                                                         │   │
@@ -399,22 +401,22 @@ Gli esempi in questa sezione utilizzano il set di comandi esteso (`new`, `contin
 │   │      requires: []              ◄── Dipendenze                       │   │
 │   │    - id: specs                                                      │   │
 │   │      generates: specs/**/*.md  ◄── Pattern glob                     │   │
-│   │      requires: [proposal]      ◄── Abilita dopo proposal           │   │
+│   │      requires: [proposal]      ◄── Abilitato dopo proposal          │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Motore del Grafo degli Artifact                                           │
+│   Motore del Grafo degli Artefatti                                          │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
 │   │  • Ordinamento topologico (ordinamento per dipendenze)              │   │
-│   │  • Rilevamento dello stato (esistenza nel file system)              │   │
+│   │  • Rilevamento dello stato (esistenza nel filesystem)               │   │
 │   │  • Generazione di istruzioni ricche (template + contesto)           │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   File delle Skill (.claude/skills/openspec-*/SKILL.md)                     │
+│   File Skill (.claude/skills/openspec-*/SKILL.md)                           │
 │                                                                             │
-│   • Compatibile con più editor (Claude Code, Cursor, Windsurf)              │
-│   • Le skill interrogano la CLI per dati strutturati                       │
+│   • Compatibile cross-editor (Claude Code, Cursor, Windsurf)               │
+│   • Gli skill interrogano la CLI per dati strutturati                      │
 │   • Completamente personalizzabile tramite file di schema                   │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -422,11 +424,11 @@ Gli esempi in questa sezione utilizzano il set di comandi esteso (`new`, `contin
 
 ### Modello del Grafo delle Dipendenze
 
-Gli artifact formano un grafo aciclico diretto (DAG). Le dipendenze sono **abilitatori**, non gate:
+Gli artefatti formano un grafo aciclico diretto (DAG). Le dipendenze sono **abilitatori**, non gate:
 
 ```
                               proposal
-                             (nodo radice)
+                            (nodo radice)
                                   │
                     ┌─────────────┴─────────────┐
                     │                           │
@@ -444,7 +446,7 @@ Gli artifact formano un grafo aciclico diretto (DAG). Le dipendenze sono **abili
                                   │
                                   ▼
                           ┌──────────────┐
-                          │ FASE APPLY   │
+                          │  FASE APPLY  │
                           │ (richiede:   │
                           │  tasks)      │
                           └──────────────┘
@@ -453,10 +455,11 @@ Gli artifact formano un grafo aciclico diretto (DAG). Le dipendenze sono **abili
 **Transizioni di stato:**
 
 ```
-   BLOCCATO ────────────────► PRONTO ────────────────► FATTO
-      │                        │                       │
-   Mancano                  Tutte le dip.            Il file esiste
-   le dipendenze            sono FATTE               nel file system
+   BLOCCATO ────────────────► PRONTO ────────────────► COMPLETATO
+      │                        │                          │
+   Dipendenze               Tutte le                   Il file esiste
+   mancanti                 dipendenze                 nel filesystem
+                            sono COMPLETATE
 ```
 
 ### Flusso delle Informazioni
@@ -475,22 +478,21 @@ Gli artifact formano un grafo aciclico diretto (DAG). Le dipendenze sono **abili
   │  • Crea specs/<capability>/spec.md      │
   │                                         │
   │  Nessuna consapevolezza di ciò che      │
-  │  esiste o delle dipendenze tra gli      │
-  │  artifact                               │
+  │  esiste o delle dipendenze tra artefatti│
   └─────────────────────────────────────────┘
            │
            ▼
-  L'agente crea TUTTI gli artifact in una volta
+  L'agente crea TUTTI gli artefatti in una volta
 ```
 
-**OPSX** — l'agente interroga per ottenere un contesto ricco:
+**OPSX** — l'agente interroga per un contesto ricco:
 
 ```
   Utente: "/opsx:continue"
            │
            ▼
   ┌──────────────────────────────────────────────────────────────────────────┐
-  │  Passo 1: Interroga lo stato corrente                                   │
+  │  Passo 1: Interroga lo stato corrente                                    │
   │  ┌────────────────────────────────────────────────────────────────────┐  │
   │  │  $ openspec status --change "add-auth" --json                      │  │
   │  │                                                                    │  │
@@ -503,26 +505,25 @@ Gli artifact formano un grafo aciclico diretto (DAG). Le dipendenze sono **abili
   │  │    ]                                                               │  │
   │  │  }                                                                 │  │
   │  └────────────────────────────────────────────────────────────────────┘  │
-  │                                                                          │
-  │  Passo 2: Ottieni istruzioni ricche per l'artifact pronto               │
+│                                                                          │
+  │  Passo 2: Ottieni istruzioni ricche per l'arte pronto                   │
   │  ┌────────────────────────────────────────────────────────────────────┐  │
   │  │  $ openspec instructions specs --change "add-auth" --json          │  │
   │  │                                                                    │  │
   │  │  {                                                                 │  │
-  │  │    "template": "# Specifica\n\n## Requisiti AGGIUNTI...",          │  │
+  │  │    "template": "# Specification\n\n## ADDED Requirements...",      │  │
   │  │    "dependencies": [{"id": "proposal", "path": "...", "done": true}│  │
   │  │    "unlocks": ["tasks"]                                            │  │
   │  │  }                                                                 │  │
   │  └────────────────────────────────────────────────────────────────────┘  │
-  │                                                                          │
-  │  Passo 3: Leggi le dipendenze → Crea UN artifact → Mostra cosa è        │
-  │           sbloccato                                                      │
+│                                                                          │
+  │  Passo 3: Leggi le dipendenze → Crea UN artefatto → Mostra cosa si sblocca│
   └──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Modello di Iterazione
 
-**Flusso di lavoro legacy** — scomodo da iterare:
+**Flusso di lavoro legacy** — iterare è scomodo:
 
 ```
   ┌─────────┐     ┌─────────┐     ┌─────────┐
@@ -533,12 +534,12 @@ Gli artifact formano un grafo aciclico diretto (DAG). Le dipendenze sono **abili
        │               │
        │               ├── Opzioni:
        │               │   • Modifica i file manualmente (rompe il contesto)
-       │               │   • Abbandona e ricomincia da zero
+       │               │   • Abbandona e ricomincia da capo
        │               │   • Prosegui e correggi dopo
        │               │
        │               └── Nessun meccanismo ufficiale per "tornare indietro"
        │
-       └── Crea TUTTI gli artifact in una volta
+       └── Crea TUTTI gli artefatti in una volta
 ```
 
 **OPSX** — iterazione naturale:
@@ -553,33 +554,33 @@ Gli artifact formano un grafo aciclico diretto (DAG). Le dipendenze sono **abili
       │                │            e continuare!
       │                │                  │
       │                │                  ▼
-      │                │         /opsx:apply riprende
-      │                │         da dove eri rimasto
+      │                │         /opsx:apply riprende da
+      │                │         dove avevi lasciato
       │                │
-      │                └── Crea UN artifact, mostra cosa è sbloccato
+      │                └── Crea UN artefatto, mostra cosa si sblocca
       │
-      └── Prepara il cambiamento, attende le direttive
+      └── Imposta il cambio, attende indicazioni
 ```
 
-### Schemi Personalizzati
+### Schema Personalizzati
 
-Crea flussi di lavoro personalizzati utilizzando i comandi di gestione degli schemi:
+Crea flussi di lavoro personalizzati utilizzando i comandi di gestione degli schema:
 
 ```bash
 # Crea un nuovo schema da zero (interattivo)
 openspec schema init my-workflow
 
-# Oppure biforca uno schema esistente come punto di partenza
+# Oppure fai il fork di uno schema esistente come punto di partenza
 openspec schema fork spec-driven my-workflow
 
 # Valida la struttura del tuo schema
 openspec schema validate my-workflow
 
-# Vedi da dove risolve uno schema (utile per il debug)
+# Vedi da dove viene risolto uno schema (utile per il debug)
 openspec schema which my-workflow
 ```
 
-Gli schemi sono memorizzati in `openspec/schemas/` (locale al progetto, controllato con versioning) o `~/.local/share/openspec/schemas/` (globale per l'utente).
+Gli schema sono memorizzati in `openspec/schemas/` (locale al progetto, sotto controllo versione) oppure in `~/.local/share/openspec/schemas/` (globale per l'utente).
 
 **Struttura dello schema:**
 ```
@@ -616,31 +617,31 @@ artifacts:
 ### Riepilogo
 
 | Aspetto | Legacy | OPSX |
-|--------|----------|------|
-| **Template** | TypeScript codificato | YAML esterno + Markdown |
+|---------|----------|------|
+| **Template** | TypeScript hardcoded | YAML esterno + Markdown |
 | **Dipendenze** | Nessuna (tutto in una volta) | DAG con ordinamento topologico |
-| **Stato** | Modello mentale basato su fasi | Esistenza nel file system |
-| **Personalizzazione** | Modifica del sorgente, ricostruzione | Crea schema.yaml |
-| **Iterazione** | Bloccato per fasi | Fluido, modifica qualsiasi cosa |
-| **Supporto Editor** | Configuratori/adattatori specifici per lo strumento | Singola directory delle skill |
+| **Stato** | Modello mentale basato sulle fasi | Esistenza nel filesystem |
+| **Personalizzazione** | Modifica sorgente, rebuild | Crea schema.yaml |
+| **Iterazione** | Bloccata per fase | Fluida, modifica qualsiasi cosa |
+| **Supporto Editor** | Configuratori/adattatori specifici per strumento | Singola directory skill |
 
 ## Schemi
 
 Gli schemi definiscono quali artefatti esistono e le loro dipendenze. Attualmente disponibili:
 
-- **spec-driven** (predefinito): proposta → specifiche → design → attività
+- **spec-driven** (predefinito): proposta → specifiche → progettazione → compiti
 
 ```bash
 # Elenco degli schemi disponibili
 openspec schemas
 
-# Visualizza tutti gli schemi con le loro fonti di risoluzione
+# Visualizza tutti gli schemi con le relative fonti di risoluzione
 openspec schema which --all
 
-# Crea un nuovo schema interattivamente
+# Crea un nuovo schema in modo interattivo
 openspec schema init my-workflow
 
-# Biforca uno schema esistente per la personalizzazione
+# Duplica uno schema esistente per la personalizzazione
 openspec schema fork spec-driven my-workflow
 
 # Valida la struttura dello schema prima dell'uso
@@ -649,14 +650,14 @@ openspec schema validate my-workflow
 
 ## Suggerimenti
 
-- Usa `/opsx:explore` per elaborare un'idea prima di impegnarsi in una modifica
-- `/opsx:ff` quando sai cosa vuoi, `/opsx:continue` quando stai esplorando
+- Usa `/opsx:explore` per riflettere su un'idea prima di impegnarti in una modifica
+- `/opsx:ff` quando sai cosa vuoi, `/opsx:continue` quando esplori
 - Durante `/opsx:apply`, se qualcosa non va — correggi l'artefatto, poi continua
-- Le attività tracciano il progresso tramite caselle di controllo in `tasks.md`
-- Controlla lo stato in qualsiasi momento: `openspec status --change "name"`
+- I compiti tracciano i progressi tramite caselle di controllo in `tasks.md`
+- Controlla lo stato in qualsiasi momento: `openspec status --change "nome"`
 
 ## Feedback
 
-Questo è grezzo. È intenzionale — stiamo imparando cosa funziona.
+Questo è un lavoro grezzo. È intenzionale — stiamo imparando cosa funziona.
 
-Hai trovato un bug? Hai idee? Unisciti a noi su [Discord](https://discord.gg/YctCnvvshC) o apri un issue su [GitHub](https://github.com/Fission-AI/openspec/issues).
+Hai trovato un bug? Hai idee? Unisciti a noi su [Discord](https://discord.gg/YctCnvvshC) o apri un problema su [GitHub](https://github.com/Fission-AI/openspec/issues).

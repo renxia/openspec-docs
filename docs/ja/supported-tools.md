@@ -1,26 +1,27 @@
-# 対応ツール
+# サポートツール
 
-OpenSpecは多くのAIコーディングアシスタントと連携します。`openspec init`を実行すると、OpenSpecはアクティブなプロファイル/ワークフローの選択とデリバリーモードに基づいて、選択されたツールを設定します。
+OpenSpec は多くの AI コーディングアシスタントと連携します。`openspec init` を実行すると、OpenSpec はアクティブなプロファイル/ワークフローの選択と配信モードに基づいて、選択されたツールを設定します。
 
 ## 仕組み
 
-選択された各ツールに対して、OpenSpecは以下をインストールできます：
+選択された各ツールについて、OpenSpec は以下をインストールできます。
 
-1. **スキル**（デリバリーにスキルが含まれる場合）：`.../skills/openspec-*/SKILL.md`
-2. **コマンド**（デリバリーにコマンドが含まれる場合）：ツール固有の`opsx-*`コマンドファイル
+1. **スキル**（配信にスキルが含まれる場合）：`.../skills/openspec-*/SKILL.md`
+2. **コマンド**（配信にコマンドが含まれる場合）：ツール固有の `opsx-*` コマンドファイル
 
-デフォルトでは、OpenSpecは`core`プロファイルを使用します。これには以下が含まれます：
+デフォルトでは、OpenSpec は `core` プロファイルを使用します。これには以下が含まれます。
 - `propose`
 - `explore`
 - `apply`
+- `sync`
 - `archive`
 
-`openspec config profile`で拡張ワークフロー（`new`、`continue`、`ff`、`verify`、`sync`、`bulk-archive`、`onboard`）を有効にし、その後`openspec update`を実行することで、それらを有効にできます。
+`openspec config profile` を使用して拡張ワークフロー（`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`）を有効にし、その後 `openspec update` を実行できます。
 
 ## ツールディレクトリリファレンス
 
 | ツール (ID) | スキルパスパターン | コマンドパスパターン |
-|-----------|---------------------|----------------------|
+|-------------|---------------------|----------------------|
 | Amazon Q Developer (`amazon-q`) | `.amazonq/skills/openspec-*/SKILL.md` | `.amazonq/prompts/opsx-<id>.md` |
 | Antigravity (`antigravity`) | `.agent/skills/openspec-*/SKILL.md` | `.agent/workflows/opsx-<id>.md` |
 | Auggie (`auggie`) | `.augment/skills/openspec-*/SKILL.md` | `.augment/commands/opsx-<id>.md` |
@@ -29,7 +30,7 @@ OpenSpecは多くのAIコーディングアシスタントと連携します。`
 | Cline (`cline`) | `.cline/skills/openspec-*/SKILL.md` | `.clinerules/workflows/opsx-<id>.md` |
 | CodeBuddy (`codebuddy`) | `.codebuddy/skills/openspec-*/SKILL.md` | `.codebuddy/commands/opsx/<id>.md` |
 | Codex (`codex`) | `.codex/skills/openspec-*/SKILL.md` | `$CODEX_HOME/prompts/opsx-<id>.md`\* |
-| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | 生成されません（コマンドアダプターなし；スキルベースの`/openspec-*`呼び出しを使用） |
+| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | 生成されません（コマンドアダプターなし。スキルベースの `/openspec-*` 呼び出しを使用） |
 | Continue (`continue`) | `.continue/skills/openspec-*/SKILL.md` | `.continue/prompts/opsx-<id>.prompt` |
 | CoStrict (`costrict`) | `.cospec/skills/openspec-*/SKILL.md` | `.cospec/openspec/commands/opsx-<id>.md` |
 | Crush (`crush`) | `.crush/skills/openspec-*/SKILL.md` | `.crush/commands/opsx/<id>.md` |
@@ -40,52 +41,54 @@ OpenSpecは多くのAIコーディングアシスタントと連携します。`
 | iFlow (`iflow`) | `.iflow/skills/openspec-*/SKILL.md` | `.iflow/commands/opsx-<id>.md` |
 | Junie (`junie`) | `.junie/skills/openspec-*/SKILL.md` | `.junie/commands/opsx-<id>.md` |
 | Kilo Code (`kilocode`) | `.kilocode/skills/openspec-*/SKILL.md` | `.kilocode/workflows/opsx-<id>.md` |
+| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | 生成されません（コマンドアダプターなし。スキルベースの `/skill:openspec-*` 呼び出しを使用） |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
+| Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
 | Qwen Code (`qwen`) | `.qwen/skills/openspec-*/SKILL.md` | `.qwen/commands/opsx-<id>.toml` |
 | RooCode (`roocode`) | `.roo/skills/openspec-*/SKILL.md` | `.roo/commands/opsx-<id>.md` |
-| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | 生成されません（コマンドアダプターなし；スキルベースの`/openspec-*`呼び出しを使用） |
+| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | 生成されません（コマンドアダプターなし。スキルベースの `/openspec-*` 呼び出しを使用） |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* CodexコマンドはグローバルなCodexホーム（設定されていれば`$CODEX_HOME/prompts/`、そうでなければ`~/.codex/prompts/`）にインストールされ、プロジェクトディレクトリにはインストールされません。
+\* Codex コマンドはプロジェクトディレクトリではなく、グローバルな Codex ホーム（`$CODEX_HOME/prompts/` が設定されている場合、それ以外は `~/.codex/prompts/`）にインストールされます。
 
-\*\* GitHub Copilotプロンプトファイルは、IDE拡張機能（VS Code、JetBrains、Visual Studio）でカスタムスラッシュコマンドとして認識されます。Copilot CLIは現在、`.github/prompts/*.prompt.md`を直接使用しません。
+\*\* GitHub Copilot プロンプトファイルは、IDE 拡張機能（VS Code、JetBrains、Visual Studio）でカスタムスラッシュコマンドとして認識されます。Copilot CLI は現在、`.github/prompts/*.prompt.md` を直接使用しません。
 
 ## 非対話型セットアップ
 
-CI/CDやスクリプト化されたセットアップには、`--tools`（オプションで`--profile`）を使用します：
+CI/CD またはスクリプトによるセットアップには、`--tools`（およびオプションで `--profile`）を使用します。
 
 ```bash
 # 特定のツールを設定
 openspec init --tools claude,cursor
 
-# 対応するすべてのツールを設定
+# サポートされているすべてのツールを設定
 openspec init --tools all
 
 # ツール設定をスキップ
 openspec init --tools none
 
-# このinit実行のプロファイルを上書き
+# この init 実行のプロファイルを上書き
 openspec init --profile core
 ```
 
-**利用可能なツールID（`--tools`）：** `amazon-q`、`antigravity`、`auggie`、`bob`、`claude`、`cline`、`codex`、`codebuddy`、`continue`、`costrict`、`crush`、`cursor`、`factory`、`forgecode`、`gemini`、`github-copilot`、`iflow`、`junie`、`kilocode`、`kiro`、`opencode`、`pi`、`qoder`、`qwen`、`roocode`、`trae`、`windsurf`
+**利用可能なツール ID (`--tools`)：** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
 
-## ワークフローに依存するインストール
+## ワークフロー依存のインストール
 
-OpenSpecは、選択されたワークフローに基づいてワークフローアーティファクトをインストールします：
+OpenSpec は選択されたワークフローに基づいてワークフローアーティファクトをインストールします。
 
-- **コアプロファイル（デフォルト）：** `propose`、`explore`、`apply`、`archive`
-- **カスタム選択：** すべてのワークフローIDのサブセット：
-  `propose`、`explore`、`new`、`continue`、`apply`、`ff`、`sync`、`archive`、`bulk-archive`、`verify`、`onboard`
+- **コアプロファイル（デフォルト）：** `propose`, `explore`, `apply`, `sync`, `archive`
+- **カスタム選択：** すべてのワークフロー ID の任意のサブセット：
+  `propose`, `explore`, `new`, `continue`, `apply`, `ff`, `sync`, `archive`, `bulk-archive`, `verify`, `onboard`
 
-つまり、スキル/コマンドの数はプロファイルとデリバリーに依存し、固定ではありません。
+言い換えれば、スキル/コマンドの数はプロファイルと配信に依存し、固定ではありません。
 
 ## 生成されるスキル名
 
-プロファイル/ワークフローの設定で選択されると、OpenSpecはこれらのスキルを生成します：
+プロファイル/ワークフロー設定で選択されると、OpenSpec はこれらのスキルを生成します。
 
 - `openspec-propose`
 - `openspec-explore`
@@ -99,10 +102,10 @@ OpenSpecは、選択されたワークフローに基づいてワークフロー
 - `openspec-verify-change`
 - `openspec-onboard`
 
-コマンドの動作については[コマンド](commands.md)を、`init`/`update`のオプションについては[CLI](cli.md)を参照してください。
+コマンドの動作については [コマンド](commands.md) を、`init`/`update` オプションについては [CLI](cli.md) を参照してください。
 
-## 関連項目
+## 関連情報
 
-- [CLIリファレンス](cli.md) — ターミナルコマンド
+- [CLI リファレンス](cli.md) — ターミナルコマンド
 - [コマンド](commands.md) — スラッシュコマンドとスキル
-- [はじめに](getting-started.md) — 初期セットアップ
+- [はじめに](getting-started.md) — 初回セットアップ

@@ -2,11 +2,11 @@
 
 OpenSpec предоставляет три уровня настройки:
 
-| Уровень | Что делает | Лучше всего подходит для |
-|---------|------------|--------------------------|
-| **Конфигурация проекта** | Установка значений по умолчанию, внедрение контекста/правил | Большинства команд |
-| **Пользовательские схемы** | Определение собственных артефактов рабочего процесса | Команд с уникальными процессами |
-| **Глобальные переопределения** | Общий доступ к схемам во всех проектах | Продвинутых пользователей |
+| Уровень | Что делает | Для кого подходит |
+|---------|------------|-------------------|
+| **Конфигурация проекта** | Установка значений по умолчанию, добавление контекста/правил | Большинству команд |
+| **Пользовательские схемы** | Определение собственных артефактов рабочего процесса | Командам с уникальными процессами |
+| **Глобальные переопределения** | Общие схемы для всех проектов | Продвинутым пользователям |
 
 ---
 
@@ -14,9 +14,9 @@ OpenSpec предоставляет три уровня настройки:
 
 Файл `openspec/config.yaml` — самый простой способ настроить OpenSpec для вашей команды. Он позволяет:
 
-- **Установить схему по умолчанию** — пропускайте `--schema` в каждой команде
-- **Внедрить контекст проекта** — ИИ будет видеть ваш технологический стек, соглашения и т.д.
-- **Добавить правила для артефактов** — пользовательские правила для определенных артефактов
+- **Установить схему по умолчанию** — не указывать `--schema` в каждой команде
+- **Добавить контекст проекта** — ИИ видит ваш технологический стек, соглашения и т.д.
+- **Добавить правила для артефактов** — специальные правила для конкретных артефактов
 
 ### Быстрая настройка
 
@@ -24,25 +24,25 @@ OpenSpec предоставляет три уровня настройки:
 openspec init
 ```
 
-Эта команда интерактивно проведет вас через создание конфигурации. Или создайте ее вручную:
+Эта команда проведет вас через интерактивное создание конфигурации. Или создайте её вручную:
 
 ```yaml
 # openspec/config.yaml
 schema: spec-driven
 
 context: |
-  Технологический стек: TypeScript, React, Node.js, PostgreSQL
-  Стиль API: RESTful, документирован в docs/api.md
-  Тестирование: Jest + React Testing Library
-  Мы ценим обратную совместимость для всех публичных API
+  Tech stack: TypeScript, React, Node.js, PostgreSQL
+  API style: RESTful, documented in docs/api.md
+  Testing: Jest + React Testing Library
+  We value backwards compatibility for all public APIs
 
 rules:
   proposal:
-    - Включить план отката
-    - Указать затронутые команды
+    - Include rollback plan
+    - Identify affected teams
   specs:
-    - Использовать формат Given/When/Then
-    - Ссылаться на существующие паттерны перед изобретением новых
+    - Use Given/When/Then format
+    - Reference existing patterns before inventing new ones
 ```
 
 ### Как это работает
@@ -53,38 +53,38 @@ rules:
 # Без конфигурации
 openspec new change my-feature --schema spec-driven
 
-# С конфигурацией - схема выбирается автоматически
+# С конфигурацией - схема подставляется автоматически
 openspec new change my-feature
 ```
 
 **Внедрение контекста и правил:**
 
-При генерации любого артефакта ваш контекст и правила внедряются в промпт ИИ:
+При генерации любого артефакта ваш контекст и правила вставляются в запрос к ИИ:
 
 ```xml
 <context>
-Технологический стек: TypeScript, React, Node.js, PostgreSQL
+Tech stack: TypeScript, React, Node.js, PostgreSQL
 ...
 </context>
 
 <rules>
-- Включить план отката
-- Указать затронутые команды
+- Include rollback plan
+- Identify affected teams
 </rules>
 
 <template>
-[Встроенный шаблон схемы]
+[Schema's built-in template]
 </template>
 ```
 
-- **Контекст** появляется во ВСЕХ артефактах
-- **Правила** появляются ТОЛЬКО для соответствующего артефакта
+- **Контекст** отображается во ВСЕХ артефактах
+- **Правила** отображаются ТОЛЬКО для соответствующего артефакта
 
 ### Порядок разрешения схемы
 
-Когда OpenSpec нужна схема, она проверяется в следующем порядке:
+Когда OpenSpec требуется схема, он проверяет в следующем порядке:
 
-1. Флаг CLI: `--schema <имя>`
+1. Флаг CLI: `--schema <name>`
 2. Метаданные изменения (`.openspec.yaml` в папке изменения)
 3. Конфигурация проекта (`openspec/config.yaml`)
 4. Значение по умолчанию (`spec-driven`)
@@ -93,13 +93,13 @@ openspec new change my-feature
 
 ## Пользовательские схемы
 
-Когда конфигурации проекта недостаточно, создайте собственную схему с полностью пользовательским рабочим процессом. Пользовательские схемы находятся в директории `openspec/schemas/` вашего проекта и версионируются вместе с кодом.
+Когда конфигурации проекта недостаточно, создайте собственную схему с полностью настраиваемым рабочим процессом. Пользовательские схемы хранятся в директории `openspec/schemas/` вашего проекта и контролируются версиями вместе с кодом.
 
 ```text
 your-project/
 ├── openspec/
 │   ├── config.yaml        # Конфигурация проекта
-│   ├── schemas/           # Здесь хранятся пользовательские схемы
+│   ├── schemas/           # Пользовательские схемы хранятся здесь
 │   │   └── my-workflow/
 │   │       ├── schema.yaml
 │   │       └── templates/
@@ -107,15 +107,15 @@ your-project/
 └── src/
 ```
 
-### Разветвление существующей схемы
+### Форк существующей схемы
 
-Самый быстрый способ настройки — разветвить встроенную схему:
+Самый быстрый способ настройки — форкнуть встроенную схему:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-Это скопирует всю схему `spec-driven` в `openspec/schemas/my-workflow/`, где вы сможете ее свободно редактировать.
+Эта команда копирует всю схему `spec-driven` в `openspec/schemas/my-workflow/`, где вы можете свободно её редактировать.
 
 **Что вы получите:**
 
@@ -123,13 +123,13 @@ openspec schema fork spec-driven my-workflow
 openspec/schemas/my-workflow/
 ├── schema.yaml           # Определение рабочего процесса
 └── templates/
-    ├── proposal.md       # Шаблон для артефакта proposal
+    ├── proposal.md       # Шаблон для артефакта предложения
     ├── spec.md           # Шаблон для спецификаций
     ├── design.md         # Шаблон для дизайна
     └── tasks.md          # Шаблон для задач
 ```
 
-Теперь отредактируйте `schema.yaml` для изменения рабочего процесса или отредактируйте шаблоны для изменения того, что генерирует ИИ.
+Теперь отредактируйте `schema.yaml`, чтобы изменить рабочий процесс, или отредактируйте шаблоны, чтобы изменить то, что генерирует ИИ.
 
 ### Создание схемы с нуля
 
@@ -141,7 +141,7 @@ openspec schema init research-first
 
 # Неинтерактивно
 openspec schema init rapid \
-  --description "Рабочий процесс быстрой итерации" \
+  --description "Rapid iteration workflow" \
   --artifacts "proposal,tasks" \
   --default
 ```
@@ -154,30 +154,30 @@ openspec schema init rapid \
 # openspec/schemas/my-workflow/schema.yaml
 name: my-workflow
 version: 1
-description: Пользовательский рабочий процесс моей команды
+description: My team's custom workflow
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Начальный документ предложения
+    description: Initial proposal document
     template: proposal.md
     instruction: |
-      Создайте предложение, объясняющее ПОЧЕМУ необходимы эти изменения.
-      Сосредоточьтесь на проблеме, а не на решении.
+      Create a proposal that explains WHY this change is needed.
+      Focus on the problem, not the solution.
     requires: []
 
   - id: design
     generates: design.md
-    description: Технический дизайн
+    description: Technical design
     template: design.md
     instruction: |
-      Создайте документ дизайна, объясняющий КАК реализовать изменения.
+      Create a design document explaining HOW to implement.
     requires:
-      - proposal    # Невозможно создать дизайн, пока не существует proposal
+      - proposal    # Can't create design until proposal exists
 
   - id: tasks
     generates: tasks.md
-    description: Чеклист реализации
+    description: Implementation checklist
     template: tasks.md
     requires:
       - design
@@ -191,29 +191,29 @@ apply:
 
 | Поле | Назначение |
 |------|------------|
-| `id` | Уникальный идентификатор, используемый в командах и правилах |
-| `generates` | Имя выходного файла (поддерживает шаблоны типа `specs/**/*.md`) |
+| `id` | Уникальный идентификатор, используется в командах и правилах |
+| `generates` | Имя выходного файла (поддерживает glob-паттерны, например `specs/**/*.md`) |
 | `template` | Файл шаблона в директории `templates/` |
-| `instruction` | Инструкции ИИ для создания этого артефакта |
-| `requires` | Зависимости — какие артефакты должны существовать первыми |
+| `instruction` | Инструкции для ИИ по созданию этого артефакта |
+| `requires` | Зависимости — какие артефакты должны существовать заранее |
 
 ### Шаблоны
 
-Шаблоны — это файлы markdown, которые направляют ИИ. Они внедряются в промпт при создании соответствующего артефакта.
+Шаблоны — это файлы markdown, которые направляют ИИ. Они вставляются в запрос при создании соответствующего артефакта.
 
 ```markdown
 <!-- templates/proposal.md -->
-## Почему
+## Why
 
-<!-- Объясните мотивацию для этих изменений. Какую проблему они решают? -->
+<!-- Explain the motivation for this change. What problem does this solve? -->
 
-## Что изменится
+## What Changes
 
-<!-- Опишите, что изменится. Будьте конкретны относительно новых возможностей или модификаций. -->
+<!-- Describe what will change. Be specific about new capabilities or modifications. -->
 
-## Влияние
+## Impact
 
-<!-- Затронутый код, API, зависимости, системы -->
+<!-- Affected code, APIs, dependencies, systems -->
 ```
 
 Шаблоны могут включать:
@@ -223,13 +223,13 @@ apply:
 
 ### Валидация вашей схемы
 
-Перед использованием пользовательской схемы проверьте ее:
+Перед использованием пользовательской схемы проверьте её:
 
 ```bash
 openspec schema validate my-workflow
 ```
 
-Это проверит:
+Эта команда проверяет:
 - Синтаксис `schema.yaml` корректен
 - Все указанные шаблоны существуют
 - Нет циклических зависимостей
@@ -237,29 +237,29 @@ openspec schema validate my-workflow
 
 ### Использование вашей пользовательской схемы
 
-После создания используйте вашу схему с помощью:
+После создания используйте вашу схему:
 
 ```bash
-# Укажите в команде
+# Указать в команде
 openspec new change feature --schema my-workflow
 
-# Или установите как схему по умолчанию в config.yaml
+# Или установить по умолчанию в config.yaml
 schema: my-workflow
 ```
 
 ### Отладка разрешения схемы
 
-Не уверены, какая схема используется? Проверьте с помощью:
+Не уверены, какая схема используется? Проверьте:
 
 ```bash
-# Посмотрите, откуда разрешается конкретная схема
+# Посмотреть, откуда разрешается конкретная схема
 openspec schema which my-workflow
 
-# Выведите список всех доступных схем
+# Список всех доступных схем
 openspec schema which --all
 ```
 
-Вывод покажет,来自 ли она из вашего проекта, пользовательской директории или пакета:
+Вывод покажет, из проекта, пользовательской директории или пакета она берется:
 
 ```text
 Schema: my-workflow
@@ -269,7 +269,7 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 ---
 
-> **Примечание:** OpenSpec также поддерживает схемы уровня пользователя в `~/.local/share/openspec/schemas/` для общего доступа между проектами, но рекомендуется использовать схемы уровня проекта в `openspec/schemas/`, так как они версионируются вместе с вашим кодом.
+> **Примечание:** OpenSpec также поддерживает схемы уровня пользователя в `~/.local/share/openspec/schemas/` для использования в разных проектах, но рекомендуется использовать схемы уровня проекта в `openspec/schemas/`, так как они контролируются версиями вместе с вашим кодом.
 
 ---
 
@@ -283,21 +283,21 @@ Path: /path/to/project/openspec/schemas/my-workflow
 # openspec/schemas/rapid/schema.yaml
 name: rapid
 version: 1
-description: Быстрая итерация с минимальными накладными расходами
+description: Fast iteration with minimal overhead
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Быстрое предложение
+    description: Quick proposal
     template: proposal.md
     instruction: |
-      Создайте краткое предложение для этих изменений.
-      Сосредоточьтесь на том, что и почему, пропустите детальные спецификации.
+      Create a brief proposal for this change.
+      Focus on what and why, skip detailed specs.
     requires: []
 
   - id: tasks
     generates: tasks.md
-    description: Чеклист реализации
+    description: Implementation checklist
     template: tasks.md
     requires: [proposal]
 
@@ -306,9 +306,9 @@ apply:
   tracks: tasks.md
 ```
 
-### Добавление артефакта проверки
+### Добавление артефакта ревью
 
-Разветвите схему по умолчанию и добавьте шаг проверки:
+Форкните схему по умолчанию и добавьте шаг ревью:
 
 ```bash
 openspec schema fork spec-driven with-review
@@ -319,24 +319,38 @@ openspec schema fork spec-driven with-review
 ```yaml
   - id: review
     generates: review.md
-    description: Чеклист проверки перед реализацией
+    description: Pre-implementation review checklist
     template: review.md
     instruction: |
-      Создайте чеклист проверки на основе дизайна.
-      Включите соображения по безопасности, производительности и тестированию.
+      Create a review checklist based on the design.
+      Include security, performance, and testing considerations.
     requires:
       - design
 
   - id: tasks
-    # ... существующая конфигурация задач ...
+    # ... existing tasks config ...
     requires:
       - specs
       - design
-      - review    # Теперь задачи также требуют проверки
+      - review    # Now tasks require review too
 ```
+
+---
+
+## Схемы сообщества
+
+OpenSpec также поддерживает схемы, поддерживаемые сообществом, распространяемые через отдельные репозитории. Они предоставляют устоявшиеся рабочие процессы, интегрирующие OpenSpec с другими инструментами или системами, аналогично тому, как работает [каталог расширений сообщества github/spec-kit](https://github.com/github/spec-kit/tree/main/extensions) для spec-kit.
+
+Схемы сообщества не включаются в ядро OpenSpec — они живут в собственных репозиториях со своим ритмом выпуска. Чтобы использовать одну из них, скопируйте пакет схемы в директорию `openspec/schemas/<schema-name>/` вашего проекта (в README каждого репозитория есть инструкции по установке).
+
+| Схема | Сопровождающий | Репозиторий | Описание |
+|-------|----------------|-------------|----------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Интегрирует управление артефактами OpenSpec с навыками исполнения [obra/superpowers](https://github.com/obra/superpowers) (мозговой штурм, написание планов, TDD через подагентов, ревью кода, завершение). Добавляет артефакт `retrospective` с приоритетом доказательств, заполняя пробел, который Superpowers не покрывает нативно. |
+
+> Хотите внести схему сообщества? Откройте issue со ссылкой на ваш репозиторий или отправьте PR с добавлением строки в эту таблицу.
 
 ---
 
 ## Смотрите также
 
-- [Справочник по CLI: Команды схем](cli.md#schema-commands) - Полная документация по командам
+- [Справочник CLI: Команды схем](cli.md#schema-commands) - Полная документация по командам

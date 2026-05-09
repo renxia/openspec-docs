@@ -2,9 +2,9 @@
 
 ## Prasyarat
 
-- **Node.js versi 20.19.0 atau lebih tinggi** — Periksa versi Anda: `node --version`
+- **Node.js 20.19.0 atau lebih tinggi** — Periksa versi Anda: `node --version`
 
-## Pengelola Paket
+## Paket Manajer
 
 ### npm
 
@@ -25,6 +25,9 @@ yarn global add @fission-ai/openspec@latest
 ```
 
 ### bun
+
+Bun dapat menginstal OpenSpec secara global, tetapi OpenSpec saat ini berjalan di Node.js.
+Anda tetap memerlukan Node.js 20.19.0 atau lebih tinggi yang tersedia di `PATH`.
 
 ```bash
 bun add -g @fission-ai/openspec@latest

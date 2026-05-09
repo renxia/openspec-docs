@@ -1,59 +1,60 @@
 # سير العمل
 
-يغطي هذا الدليل أنماط سير العمل الشائعة لـ OpenSpec ومتى يجب استخدام كل منها. للإعداد الأساسي، راجع [البدء](getting-started.md). للمرجع الخاص بالأوامر، راجع [الأوامر](commands.md).
+تغطي هذه الدليل أنماط سير العمل الشائعة لـ OpenSpec ومتى يتم استخدام كل منها. للإعداد الأساسي، انظر [البدء](getting-started.md). للرجوع إلى الأوامر، انظر [الأوامر](commands.md).
 
-## المبدأ: إجراءات، وليس مراحل
+## الفلسفة: الإجراءات، وليس المراحل
 
-تفرض سير العمل التقليدية عليك اتباع مراحل: التخطيط، ثم التنفيذ، ثم الانتهاء. لكن العمل الحقيقي لا يتناسب تمامًا مع هذه الصناديق المحددة.
+تُجبرك سير العمل التقليدية على اجتياز مراحل: التخطيط، ثم التنفيذ، ثم الانتهاء. لكن العمل الحقيقي لا يتناسب تمامًا مع هذه الصناديق.
 
 يتبع OPSX نهجًا مختلفًا:
 
 ```text
-التقليدي (مقيد بالمرحلة):
+Traditional (phase-locked):
 
-  التخطيط ────────► التنفيذ ────────► الانتهاء
+  PLANNING ────────► IMPLEMENTING ────────► DONE
       │                    │
-      │   "لا يمكن الرجوع"  │
+      │   "Can't go back"  │
       └────────────────────┘
 
-OPSX (إجراءات سلسة):
+OPSX (fluid actions):
 
-  اقتراح ──► مواصفات ──► تصميم ──► مهام ──► تنفيذ
+  proposal ──► specs ──► design ──► tasks ──► implement
 ```
 
-**المبادئ الرئيسية:**
+**المبادئ الأساسية:**
 
-- **إجراءات، وليس مراحل** - الأوامر هي أشياء يمكنك القيام بها، وليس مراحل تعلق فيها
-- **التبعيات هي مُمكِّنات** - تُظهر ما هو ممكن، وليس ما هو مطلوب لاحقًا
+- **الإجراءات، وليس المراحل** - الأوامر هي أشياء يمكنك القيام بها، وليست مراحل عالقًا فيها
+- **التبعيات هي مُمَكِّنات** - إنها تُظهر ما هو ممكن، وليس ما هو مطلوب لاحقًا
 
-> **التخصيص:** سير عمل OPSX محرك بواسطة مخططات تحدد تسلسل المخرجات. راجع [التخصيص](customization.md) للتفاصيل حول إنشاء مخططات مخصصة.
+> **التخصيص:** يتم تشغيل سير عمل OPSX بواسطة مخططات تُحدد تسلسل المخرجات. راجع [التخصيص](customization.md) للحصول على تفاصيل حول إنشاء مخططات مخصصة.
 
-## وضعان
+## وضعيان
 
-### المسار السريع الافتراضي (ملف `core`)
+### المسار الافتراضي السريع (`core` profile)
 
-التثبيتات الجديدة تستخدم `core` بشكل افتراضي، والذي يوفر:
+التركيبات الجديدة تستخدم `core` بشكل افتراضي، والذي يوفر:
 - `/opsx:propose`
 - `/opsx:explore`
 - `/opsx:apply`
+- `/opsx:sync`
 - `/opsx:archive`
 
 التدفق النموذجي:
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-### سير العمل الموسّع/الكامل (اختيار مخصص)
+### سير العمل الموسع/الكامل (اختيار مخصص)
 
-إذا كنت ترغب في أوامر البناء والهيكلة الصريحة (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`)، قم بتفعيلها باستخدام:
+إذا كنت تريد أوامر البناء والهيكلة الصريحة (`/opsx:new`، `/opsx:continue`، `/opsx:ff`، `/opsx:verify`، `/opsx:bulk-archive`، `/opsx:onboard`)، قم بتمكينها باستخدام:
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## أنماط سير العمل (الوضع الموسّع)
+## أنماط سير العمل (الوضع الموسع)
 
 ### ميزة سريعة
 
@@ -63,40 +64,40 @@ openspec update
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-**محادثة نموذجية:**
+**مثال محادثة:**
 
 ```text
-You: /opsx:new add-logout-button
+أنت: /opsx:new add-logout-button
 
-AI:  Created openspec/changes/add-logout-button/
-     Ready to create: proposal
+AI:  تم إنشاء openspec/changes/add-logout-button/
+     جاهز لإنشاء: proposal
 
-You: /opsx:ff
+أنت: /opsx:ff
 
-AI:  Creating all planning artifacts...
+AI:  جارٍ إنشاء جميع التخطيطات...
      ✓ proposal.md
      ✓ specs/
      ✓ design.md
      ✓ tasks.md
-     Ready for implementation!
+     جاهز للتنفيذ!
 
-You: /opsx:apply
+أنت: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ Added logout button to header
-     ✓ Implemented session clearing
-     ✓ Added confirmation dialog
-     All tasks complete!
+AI:  جارٍ العمل على المهام...
+     ✓ تمت إضافة زر تسجيل الخروج إلى الرأس
+     ✓ تم تنفيذ مسح الجلسة
+     ✓ تمت إضافة مربع حوار التأكيد
+     اكتملت جميع المهام!
 
-You: /opsx:archive
+أنت: /opsx:archive
 
-AI:  ✓ Merged specs
-     ✓ Archived change
+AI:  ✓ تم دمج المواصفات
+     ✓ تم أرشفة التغيير
 ```
 
-**الأفضل لـ:** الميزات الصغيرة إلى المتوسطة، إصلاح الأخطاء، التغييرات المباشرة.
+**الأفضل لـ:** الميزات الصغيرة إلى المتوسطة، إصلاحات الأخطاء، التغييرات المباشرة.
 
-### استكشافية
+### استكشافي
 
 عندما تكون المتطلبات غير واضحة أو تحتاج إلى التحقيق أولاً:
 
@@ -104,204 +105,204 @@ AI:  ✓ Merged specs
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
 ```
 
-**محادثة نموذجية:**
+**مثال محادثة:**
 
 ```text
-You: /opsx:explore
+أنت: /opsx:explore
 
-AI:  What would you like to explore?
+AI:  ماذا تريد استكشافه؟
 
-You: I want to improve page load performance but I'm not sure
-     where the bottlenecks are.
+أنت: أريد تحسين أداء تحميل الصفحة لكنني لست متأكدًا
+     أين تكمن العوائق.
 
-AI:  Let me help investigate...
-     [Analyzes bundle sizes, identifies slow queries, reviews
-     component render patterns]
+AI:  دعني أساعد في التحقيق...
+     [يحلل أحجام الحزم، يحدد الاستعلامات البطيئة، يراجع
+     أنماط عرض المكونات]
 
-     I found three main bottlenecks:
-     1. Large unoptimized images
-     2. Synchronous data fetching in ProductList
-     3. Re-renders from context changes
+     وجدت ثلاثة عوائق رئيسية:
+     1. صور كبيرة غير محسّنة
+     2. جلب بيانات متزامن في ProductList
+     3. إعادة العرض الناتجة عن تغييرات السياق
 
-     Which would you like to address first?
+     أيها تريد معالجته أولاً؟
 
-You: Let's tackle the data fetching issue.
+أنت: لنعالج مشكلة جلب البيانات.
 
-You: /opsx:new optimize-product-list-fetching
+أنت: /opsx:new optimize-product-list-fetching
 
-AI:  Created change. Ready to create: proposal
+AI:  تم إنشاء التغيير. جاهز لإنشاء: proposal
 
-You: /opsx:continue
+أنت: /opsx:continue
 
-AI:  Creating proposal based on our exploration...
-     [Writes proposal incorporating investigation insights]
+AI:  جارٍ إنشاء الاقتراح بناءً على استكشافنا...
+     [يكتب اقتراحًا يتضمن رؤى التحقيق]
 
-     Ready to create: specs, design
-     Which would you like next?
+     جاهز لإنشاء: specs, design
+     أيهما تريد بعد ذلك؟
 
-You: /opsx:continue
+أنت: /opsx:continue
 
-AI:  Creating specs...
+AI:  جارٍ إنشاء المواصفات...
 ```
 
-**الأفضل لـ:** تحسين الأداء، تصحيح الأخطاء، القرارات المعمارية، المتطلبات غير الواضحة.
+**الأفضل لـ:** تحسين الأداء، التصحيح، القرارات المعمارية، المتطلبات غير الواضحة.
 
 ### تغييرات متوازية
 
-العمل على عدة تغييرات في وقت واحد:
+العمل على تغييرات متعددة في وقت واحد:
 
 ```text
-Change A: /opsx:new ──► /opsx:ff ──► /opsx:apply (in progress)
+التغيير أ: /opsx:new ──► /opsx:ff ──► /opsx:apply (قيد التنفيذ)
                                          │
-                                    context switch
+                                    تبديل السياق
                                          │
-Change B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
+التغيير ب: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
 
-**محادثة نموذجية:**
+**مثال محادثة:**
 
 ```text
-You: I'm working on add-dark-mode but got pulled into a bug fix
+أنت: أنا أعمل على add-dark-mode لكن اضطررت لإصلاح خطأ
 
-You: /opsx:new fix-login-redirect
+أنت: /opsx:new fix-login-redirect
 
-AI:  Created openspec/changes/fix-login-redirect/
+AI:  تم إنشاء openspec/changes/fix-login-redirect/
 
-You: /opsx:ff
+أنت: /opsx:ff
 
-AI:  ✓ Created planning artifacts
+AI:  ✓ تم إنشاء تخطيطات التخطيط
 
-You: /opsx:apply
+أنت: /opsx:apply
 
-AI:  Working on fix-login-redirect...
-     [Implements the fix]
-     All tasks complete!
+AI:  جارٍ العمل على fix-login-redirect...
+     [ينفذ الإصلاح]
+     اكتملت جميع المهام!
 
-You: /opsx:archive
+أنت: /opsx:archive
 
-AI:  ✓ Archived fix-login-redirect
+AI:  ✓ تم أرشفة fix-login-redirect
 
-You: Let's get back to dark mode
+أنت: لنعد إلى الوضع الداكن
 
-You: /opsx:apply add-dark-mode
+أنت: /opsx:apply add-dark-mode
 
-AI:  Resuming add-dark-mode...
-     Picking up at task 2.3: Update Header...
+AI:  جارٍ استئناف add-dark-mode...
+     الاستئناف من المهمة 2.3: تحديث الرأس...
 ```
 
-**الأفضل لـ:** تدفقات العمل المتوازية، المقاطعات العاجلة، التعاون الجماعي.
+**الأفضل لـ:** تدفقات العمل المتوازية، المقاطعات العاجلة، التعاون بين الفريق.
 
-عندما يكون لديك عدة تغييرات مكتملة، استخدم `/opsx:bulk-archive`:
+عندما يكون لديك تغييرات مكتملة متعددة، استخدم `/opsx:bulk-archive`:
 
 ```text
-You: /opsx:bulk-archive
+أنت: /opsx:bulk-archive
 
-AI:  Found 3 completed changes:
-     - add-dark-mode (all tasks done)
-     - fix-login-redirect (all tasks done)
-     - update-footer (all tasks done)
+AI:  تم العثور على 3 تغييرات مكتملة:
+     - add-dark-mode (جميع المهام منجزة)
+     - fix-login-redirect (جميع المهام منجزة)
+     - update-footer (جميع المهام منجزة)
 
-     Checking for spec conflicts...
-     ⚠ add-dark-mode and update-footer both touch specs/ui/
+     جارٍ التحقق من تعارضات المواصفات...
+     ⚠ كلا التغييرين add-dark-mode و update-footer يؤثران على specs/ui/
 
-     Inspecting codebase to resolve...
-     Both changes are implemented. Will apply in chronological order.
+     جارٍ فحص قاعدة الكود للحل...
+     كلا التغييرين منفذان. سيتم التطبيق بالترتيب الزمني.
 
-     Archive all 3 changes?
+     هل تريد أرشفة جميع التغييرات الثلاثة؟
 
-You: Yes
+أنت: نعم
 
-AI:  ✓ Archived add-dark-mode
-     ✓ Archived fix-login-redirect
-     ✓ Archived update-footer
-     Specs merged in order: add-dark-mode → update-footer
+AI:  ✓ تم أرشفة add-dark-mode
+     ✓ تم أرشفة fix-login-redirect
+     ✓ تم أرشفة update-footer
+     تم دمج المواصفات بالترتيب: add-dark-mode → update-footer
 ```
 
-يكتشف الأرشفة الجماعية عندما تلمس عدة تغييرات نفس المواصفات وحل النزاعات عن طريق التحقق مما تم تنفيذه فعلياً.
+الأرشفة المجمعة تكتشف عندما تؤثر تغييرات متعددة على نفس المواصفات وتحل التعارضات بالتحقق مما تم تنفيذه فعليًا.
 
-### إكمال تغيير
+### إكمال التغيير
 
 تدفق الإكمال الموصى به:
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              validates          prompts to sync
-              implementation     if needed
+              يتحقق من          يطلب المزامنة
+              التنفيذ           إذا لزم الأمر
 ```
 
-#### التحقق: فحص عملك
+#### التحقق: تحقق من عملك
 
-يتحقق `/opsx:verify` من التنفيذ مقارنةً بأصولك عبر ثلاثة أبعاد:
+`/opsx:verify` يتحقق من التنفيذ مقابل مستنداتك عبر ثلاثة أبعاد:
 
 ```text
-You: /opsx:verify
+أنت: /opsx:verify
 
-AI:  Verifying add-auth...
+AI:  جارٍ التحقق من add-auth...
 
-     COMPLETENESS
-     ✓ All 12 tasks in tasks.md are checked
-     ✓ All requirements in specs have corresponding code
-     ⚠ Scenario "Session timeout after inactivity" not tested
+     الاكتمال
+     ✓ تم التحقق من جميع المهام الـ 12 في tasks.md
+     ✓ جميع المتطلبات في المواصفات لها كود مقابل
+     ⚠ السيناريو "انتهاء مهلة الجلسة بعد عدم النشاط" غير مختبر
 
-     CORRECTNESS
-     ✓ Implementation matches spec intent
-     ✓ Edge cases from scenarios are handled
-     ✓ Error states match spec definitions
+     الصحة
+     ✓ التنفيذ يطابق نية المواصفات
+     ✓ الحالات الحدية من السيناريوهات معالجة
+     ✓ حالات الخطأ تطابق تعريفات المواصفات
 
-     COHERENCE
-     ✓ Design decisions reflected in code structure
-     ✓ Naming conventions consistent with design.md
-     ⚠ Design mentions "event-driven" but implementation uses polling
+     التماسك
+     ✓ قرارات التصميم منعكسة في هيكل الكود
+     ✓ اصطلاحات التسمية متسقة مع design.md
+     ⚠ التصميم يذكر "مُدار بالأحداث" لكن التنفيذ يستخدم الاستطلاع
 
-     SUMMARY
+     ملخص
      ─────────────────────────────
-     Critical issues: 0
-     Warnings: 2
-     Ready to archive: Yes (with warnings)
+     مشاكل حرجة: 0
+     تحذيرات: 2
+     جاهز للأرشفة: نعم (مع تحذيرات)
 
-     Recommendations:
-     1. Add test for session timeout scenario
-     2. Consider refactoring to event-driven as designed, or update design.md
+     توصيات:
+     1. إضافة اختبار لسيناريو انتهاء مهلة الجلسة
+     2. النظر في إعادة الهيكلة ليكون مُدارًا بالأحداث كما هو مصمم، أو تحديث design.md
 ```
 
 **ما يتحقق منه التحقق:**
 
 | البعد | ما يتحقق منه |
 |-----------|------------------|
-| الاكتمال | اكتمال جميع المهام، تنفيذ جميع المتطلبات، تغطية السيناريوهات |
-| الصحة | مطابقة التنفيذ لنية المواصفات، معالجة الحالات الحدية |
-| التناسق | انعكاس القرارات التصميمية في الكود، اتساق الأنماط |
+| الاكتمال | جميع المهام منجزة، جميع المتطلبات منفذة، السيناريوهات مغطاة |
+| الصحة | التنفيذ يطابق نية المواصفات، الحالات الحدية معالجة |
+| التماسك | قرارات التصميم منعكسة في الكود، الأنماط متسقة |
 
-لن يمنع التحقق الأرشفة، لكنه يظهر مشاكل قد ترغب في معالجتها أولاً.
+التحقق لن يمنع الأرشفة، لكنه يظهر المشاكل التي قد تريد معالجتها أولاً.
 
 #### الأرشفة: إنهاء التغيير
 
-يقوم `/opsx:archive` بإتمام التغيير ونقله إلى الأرشيف:
+`/opsx:archive` يكمل التغيير وينقله إلى الأرشيف:
 
 ```text
-You: /opsx:archive
+أنت: /opsx:archive
 
-AI:  Archiving add-auth...
+AI:  جارٍ أرشفة add-auth...
 
-     Artifact status:
-     ✓ proposal.md exists
-     ✓ specs/ exists
-     ✓ design.md exists
-     ✓ tasks.md exists (12/12 tasks complete)
+     حالة المستندات:
+     ✓ proposal.md موجود
+     ✓ specs/ موجود
+     ✓ design.md موجود
+     ✓ tasks.md موجود (12/12 مهمة مكتملة)
 
-     Delta specs: Not yet synced to main
-     → Would you like to sync now?
+     مواصفات الدلتا: لم تتم مزامنتها بعد إلى الرئيسي
+     → هل تريد المزامنة الآن؟
 
-You: Yes
+أنت: نعم
 
-AI:  ✓ Synced specs to openspec/specs/auth/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-auth/
+AI:  ✓ تمت مزامنة المواصفات إلى openspec/specs/auth/spec.md
+     ✓ تم النقل إلى openspec/changes/archive/2025-01-24-add-auth/
 
-     Change archived successfully.
+     تم أرشفة التغيير بنجاح.
 ```
 
-ستظهر الأرشفة بrompt إذا لم تتم مزامنة المواصفات. لن تمنع المهام غير المكتملة، لكنها ستحذرك.
+الأرشفة ستطلب إذا لم تتم مزامنة المواصفات. لن تمنع بسبب المهام غير المكتملة، لكنها ستتحذرك.
 
 ## متى تستخدم ماذا
 
@@ -311,141 +312,141 @@ AI:  ✓ Synced specs to openspec/specs/auth/spec.md
 |-----------|-----|
 | متطلبات واضحة، جاهز للبناء | `/opsx:ff` |
 | استكشاف، تريد مراجعة كل خطوة | `/opsx:continue` |
-| تريد التكرار على المقترح قبل المواصفات | `/opsx:continue` |
-| ضغط الوقت، تحتاج للتحرك بسرعة | `/opsx:ff` |
-| تغيير معقد، تريد التحكم | `/opsx:continue` |
+| تريد التكرار على الاقتراح قبل المواصفات | `/opsx:continue` |
+| ضغط وقت، تحتاج للتحرك بسرعة | `/opsx:ff` |
+| تغيير معقد، تريد السيطرة | `/opsx:continue` |
 
-**قاعدة عامة:** إذا كنت تستطيع وصف النطاق الكامل مسبقاً، استخدم `/opsx:ff`. إذا كنت تحدده أثناء العمل، استخدم `/opsx:continue`.
+**قاعدة عامة:** إذا كنت تستطيع وصف النطاق الكامل مقدمًا، استخدم `/opsx:ff`. إذا كنت تكتشف أثناء العمل، استخدم `/opsx:continue`.
 
-### متى تحدّث مقابل البدء من جديد
+### متى تحدّث مقابل تبدأ من جديد
 
-سؤال شائع: متى يكون تحديث تغيير موجود مقبولاً، ومتى يجب البدء بجديد؟
+سؤال شائع: متى يكون تحديث تغيير موجود مقبولًا، ومتى يجب أن تبدأ تغييرًا جديدًا؟
 
-**حدّث التغيير الموجود عندما:**
+**حدّث التغيير الحالي عندما:**
 
-- نفس النية، تنفيذ مُحسَّن
-- تضيق النطاق (MVP أولاً، الباقي لاحقاً)
-- تصحيحات مبنية على التعلم (الكود ليس كما توقعت)
-- تعديلات تصميمية بناءً على اكتشافات التنفيذ
+- نفس النية، تنفيذ مُحسّن
+- النطاق يتضيق (الإصدار الأولي أولاً، الباقي لاحقًا)
+- تصحيحات مدفوعة بالتعلم (قاعدة الكود ليست كما توقعتها)
+- تعديلات التصميم بناءً على اكتشافات التنفيذ
 
-**ابدأ تغييراً جديداً عندما:**
+**ابدأ تغييرًا جديدًا عندما:**
 
-- تغيرت النية بشكل جوهري
-- انفجر النطاق إلى عمل مختلف تماماً
-- يمكن وضع علامة "مكتمل" على التغيير الأصلي بمفرده
-- ستسبب الترقيات حيرة أكثر من التوضيح
+- النية تغيرت جذريًا
+- النطاق امتد إلى عمل مختلف تمامًا
+- يمكن تمييز التغيير الأصلي بأنه "منجز" بشكل مستقل
+- التصحيحات ستسبب ارتباكًا أكثر من الوضوح
 
 ```text
                      ┌─────────────────────────────────────┐
-                     │     Is this the same work?          │
+                     │     هل هذا هو العمل نفسه؟          │
                      └──────────────┬──────────────────────┘
                                     │
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Same intent?      >50% overlap?      Can original
-          Same problem?     Same scope?        be "done" without
-                 │                  │          these changes?
+          نفس النية؟      >50% تداخل؟      هل يمكن أن يكون
+          نفس المشكلة؟     نفس النطاق؟      الأصلي "منجزًا" بدون
+                 │                  │          هذه التغييرات؟
                  │                  │                  │
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      YES               NO YES           NO  NO              YES
+      نعم               لا نعم           لا  لا              نعم
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    UPDATE            NEW  UPDATE       NEW  UPDATE          NEW
+    تحديث            جديد تحديث       جديد تحديث          جديد
 ```
 
 **مثال: "إضافة الوضع الداكن"**
 
-- "يجب دعم السمات المخصصة أيضاً" → تغيير جديد (انفجار النطاق)
-- "كشف تفضيلات النظام أصعب مما توقعت" → تحديث (نفس النية)
-- "دعنا نصدر المفتاح أولاً، نضيف التفضيلات لاحقاً" → تحديث ثم أرشفة، ثم تغيير جديد
+- "نحتاج أيضًا لدعم السمات المخصصة" → تغيير جديد (النطاق امتد)
+- "كشف تفضيلات النظام أصعب مما توقعته" → تحديث (نفس النية)
+- "لنرسل المفتاح أولاً، نضيف التفضيلات لاحقًا" → تحديث ثم أرشفة، ثم تغيير جديد
 
 ## أفضل الممارسات
 
-### اجعل التغييرات مركّزة
+### حافظ على التغييرات مركّزة
 
-وحدة عمل منطقية واحدة لكل تغيير. إذا كنت تقوم بـ "إضافة ميزة X وإعادة هيكلة Y"، فكر في تغييرين منفصلين.
+وحدة منطقية واحدة من العمل لكل تغيير. إذا كنت تقوم بـ "إضافة ميزة X وأيضًا إعادة هيكلة Y"، فكر في تغييرين منفصلين.
 
 **لماذا هذا مهم:**
-- أسهل في المراجعة والفهم
+- أسهل للمراجعة والفهم
 - سجل أرشيف أنظف
-- يمكن تسليمه بشكل مستقل
-- أسهل في التراجع إذا لزم الأمر
+- يمكن شحنه بشكل مستقل
+- تراجع أبسط إذا لزم الأمر
 
 ### استخدم `/opsx:explore` للمتطلبات غير الواضحة
 
 قبل الالتزام بتغيير، استكشف مساحة المشكلة:
 
 ```text
-You: /opsx:explore
+أنت: /opsx:explore
 
-AI:  What would you like to explore?
+AI:  ماذا تريد استكشافه؟
 
-You: How should we handle rate limiting for our API?
+أنت: كيف يجب أن نتعامل مع تحديد المعدل لواجهة برمجة التطبيقات الخاصة بنا؟
 
-AI:  Let me investigate your current setup and options...
-     [Researches codebase, considers patterns]
+AI:  دعني أحقق في إعدادك الحالي والخيارات...
+     [يبحث في قاعدة الكود، ي考虑 الأنماط]
 
-     I see three approaches we could take:
-     1. Middleware-based (simple, per-endpoint)
-     2. Redis-backed (scalable, shared state)
-     3. Token bucket per user (fair, complex)
+     أرى ثلاثة نهج يمكننا اتخاذها:
+     1. مبني على الوسيط (بسيط، لكل نقطة نهاية)
+     2. مدعوم بـ Redis (قابل للتوسع، حالة مشتركة)
+     3. دلو رموز لكل مستخدم (عادل، معقد)
 
-     Your current stack suggests #1 or #2. What's your scale?
+     حزمة التكنولوجيا الحالية تشير إلى #1 أو #2. ما هو نطاقك؟
 ```
 
-الاستكشاف يوضح التفكير قبل إنشاء الأصول.
+الاستكشاف يوضح التفكير قبل إنشاء المستندات.
 
 ### تحقق قبل الأرشفة
 
-استخدم `/opsx:verify` للتحقق من مطابقة التنفيذ للأصول:
+استخدم `/opsx:verify` للتحقق من أن التنفيذ يطابق المستندات:
 
 ```text
-You: /opsx:verify
+أنت: /opsx:verify
 
-AI:  Verifying add-dark-mode...
+AI:  جارٍ التحقق من add-dark-mode...
 
-     ✓ All tasks in tasks.md are checked
-     ✓ Requirements in specs have corresponding code
-     ✓ Design decisions are reflected in implementation
+     ✓ جميع المهام في tasks.md محددة
+     ✓ المتطلبات في المواصفات لها كود مقابل
+     ✓ قرارات التصميم منعكسة في التنفيذ
 
-     Ready to archive!
+     جاهز للأرشفة!
 ```
 
 يكتشف عدم التطابق قبل إغلاق التغيير.
 
-### سمّ التغييرات بوضوح
+### سمِّ التغييرات بوضوح
 
-الأسماء الجيدة تجعل `openspec list` مفيداً:
+الأسماء الجيدة تجعل `openspec list` مفيدًا:
 
-```text`
-Good:                          Avoid:
+```text
+جيد:                          تجنب:
 add-dark-mode                  feature-1
 fix-login-redirect             update
 optimize-product-query         changes
 implement-2fa                  wip
 ```
 
-## مرجع سريع للأوامر
+## مرجع الأوامر السريع
 
-للحصول على التفاصيل الكاملة للأوامر والخيارات، راجع [الأوامر](commands.md).
+للحصول على تفاصيل الأوامر والخيارات الكاملة، انظر [الأوامر](commands.md).
 
-| الأمر | الغرض | متى تستخدمه |
+| الأمر | الغرض | متى يُستخدم |
 |---------|---------|-------------|
-| `/opsx:propose` | إنشاء تغيير + أدوات التخطيط | المسار الافتراضي السريع (ملف `core`) |
-| `/opsx:explore` | التفكير في الأفكار | متطلبات غير واضحة، التحقيق |
-| `/opsx:new` | بدء هيكل تغيير | الوضع الموسع، التحكم الصريح في الأدوات |
-| `/opsx:continue` | إنشاء الأداة التالية | الوضع الموسع، إنشاء الأدوات خطوة بخطوة |
-| `/opsx:ff` | إنشاء جميع أدوات التخطيط | الوضع الموسع، النطاق الواضح |
+| `/opsx:propose` | إنشاء تغيير + تخطيط المصنوعات | المسار الافتراضي السريع (الملف الشخصي `core`) |
+| `/opsx:explore` | التفكير في الأفكار | متطلبات غير واضحة، تحقيق |
+| `/opsx:new` | بدء هيكل تغيير | الوضع الموسع، التحكم الصريح في المصنوعات |
+| `/opsx:continue` | إنشاء المصنوع التالي | الوضع الموسع، إنشاء المصنوعات خطوة بخطوة |
+| `/opsx:ff` | إنشاء جميع مصنوعات التخطيط | الوضع الموسع، نطاق واضح |
 | `/opsx:apply` | تنفيذ المهام | جاهز لكتابة الكود |
-| `/opsx:verify` | التحقق من التنفيذ | الوضع الموسع، قبل الأرشفة |
-| `/opsx:sync` | دمج المواصفات التفاضلية | الوضع الموسع، اختياري |
-| `/opsx:archive` | إتمام التغيير | انتهاء جميع الأعمال |
+| `/opsx:verify` | التحقق من صحة التنفيذ | الوضع الموسع، قبل الأرشفة |
+| `/opsx:sync` | دمج مواصفات الدلتا | الوضع الموسع، اختياري |
+| `/opsx:archive` | إتمام التغيير | اكتملت جميع الأعمال |
 | `/opsx:bulk-archive` | أرشفة تغييرات متعددة | الوضع الموسع، العمل المتوازي |
 
 ## الخطوات التالية
 
-- [الأوامر](commands.md) - مرجع كامل للأوامر مع الخيارات
-- [المفاهيم](concepts.md) - استكشاف معمّق للمواصفات والأدوات والمخططات
+- [الأوامر](commands.md) - مرجع الأوامر الكامل مع الخيارات
+- [المفاهيم](concepts.md) - نظرة معمقة في المواصفات والمصنوعات والمخططات
 - [التخصيص](customization.md) - إنشاء سير عمل مخصص

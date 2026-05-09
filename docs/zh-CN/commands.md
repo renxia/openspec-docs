@@ -1,33 +1,33 @@
-# 命令参考
+# 命令
 
 这是 OpenSpec 斜杠命令的参考文档。这些命令在您的 AI 编程助手聊天界面中调用（例如 Claude Code、Cursor、Windsurf）。
 
-有关工作流模式及各命令的使用场景，请参阅[工作流](workflows.md)。有关 CLI 命令，请参阅 [CLI](cli.md)。
+有关工作流模式以及何时使用每个命令，请参阅[工作流](workflows.md)。有关 CLI 命令，请参阅 [CLI](cli.md)。
 
 ## 快速参考
 
-### 默认快捷路径（`core` 配置）
+### 默认快速路径（`core` 配置）
 
 | 命令 | 用途 |
-|------|------|
-| `/opsx:propose` | 一步完成变更创建与规划产物生成 |
-| `/opsx:explore` | 在确定变更前深入思考构想 |
-| `/opsx:apply` | 执行变更中的具体任务 |
+|---------|---------|
+| `/opsx:propose` | 一步创建变更并生成规划产物 |
+| `/opsx:explore` | 在提交变更前深入思考想法 |
+| `/opsx:apply` | 实施变更中的任务 |
+| `/opsx:sync` | 将增量规范合并到主规范中 |
 | `/opsx:archive` | 归档已完成的变更 |
 
 ### 扩展工作流命令（自定义工作流选择）
 
 | 命令 | 用途 |
-|------|------|
-| `/opsx:new` | 启动新的变更框架 |
+|---------|---------|
+| `/opsx:new` | 开始新的变更脚手架 |
 | `/opsx:continue` | 基于依赖关系创建下一个产物 |
-| `/opsx:ff` | 快进：一次性生成所有规划产物 |
-| `/opsx:verify` | 验证实现与产物的一致性 |
-| `/opsx:sync` | 将增量规范合并至主规范 |
-| `/opsx:bulk-archive` | 批量归档多个变更 |
-| `/opsx:onboard` | 引导式完整工作流教程 |
+| `/opsx:ff` | 快进：一次性创建所有规划产物 |
+| `/opsx:verify` | 验证实现是否与产物匹配 |
+| `/opsx:bulk-archive` | 一次性归档多个变更 |
+| `/opsx:onboard` | 完整工作流的引导式教程 |
 
-默认全局配置为 `core`。要启用扩展工作流命令，请运行 `openspec config profile`，选择工作流，然后在项目中运行 `openspec update`。
+默认全局配置为 `core`。要启用扩展工作流命令，请运行 `openspec config profile`，选择工作流，然后在您的项目中运行 `openspec update`。
 
 ---
 
@@ -35,7 +35,7 @@
 
 ### `/opsx:propose`
 
-一步创建新变更并生成规划工件。这是 `core` 配置文件中的默认起始命令。
+一步创建新变更并生成规划工件。这是 `core` 配置文件中的默认启动命令。
 
 **语法：**
 ```text
@@ -54,25 +54,25 @@
 
 **示例：**
 ```text
-You: /opsx:propose add-dark-mode
+你: /opsx:propose add-dark-mode
 
-AI:  Created openspec/changes/add-dark-mode/
+AI:  已创建 openspec/changes/add-dark-mode/
      ✓ proposal.md
      ✓ specs/ui/spec.md
      ✓ design.md
      ✓ tasks.md
-     Ready for implementation. Run /opsx:apply.
+     准备就绪，可以实施。运行 /opsx:apply。
 ```
 
 **提示：**
 - 用于最快的端到端流程
-- 如果希望逐步控制工件生成，请启用扩展工作流并使用 `/opsx:new` + `/opsx:continue`
+- 如果需要逐步控制工件，请启用扩展工作流并使用 `/opsx:new` + `/opsx:continue`
 
 ---
 
 ### `/opsx:explore`
 
-在确定变更前，梳理思路、调查问题并明确需求。
+在提交变更之前，梳理思路、调查问题并明确需求。
 
 **语法：**
 ```
@@ -82,38 +82,38 @@ AI:  Created openspec/changes/add-dark-mode/
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `topic` | 否 | 您希望探索或调查的内容 |
+| `topic` | 否 | 你想要探索或调查的主题 |
 
 **功能说明：**
-- 开启一个无需结构的探索性对话
+- 开启一个无需固定结构的探索性对话
 - 调查代码库以回答问题
-- 比较不同选项和方法
-- 创建可视化图表以厘清思路
-- 当思路清晰后，可过渡到 `/opsx:propose`（默认）或 `/opsx:new`（扩展工作流）
+- 比较各种选项和方案
+- 创建可视化图表以理清思路
+- 当思路清晰时，可以过渡到 `/opsx:propose`（默认）或 `/opsx:new`（扩展工作流）
 
 **示例：**
 ```text
-You: /opsx:explore
+你: /opsx:explore
 
-AI:  What would you like to explore?
+AI:  你想探索什么？
 
-You: How should we handle authentication for the mobile app?
+你: 我们应该如何为移动应用处理身份验证？
 
-AI:  Let me investigate your current auth setup...
-     [Analyzes codebase]
+AI:  让我调查一下你当前的身份验证设置...
+     [分析代码库]
 
-     I see you're using session-based auth for the web app.
-     For mobile, we have three main options:
+     我看到你为 Web 应用使用了基于会话的身份验证。
+     对于移动端，我们主要有三个选项：
 
-     1. JWT tokens (stateless, works offline)
-     2. OAuth2 (if you need third-party login)
-     3. Extend current sessions (simpler, but requires connectivity)
+     1. JWT 令牌（无状态，支持离线）
+     2. OAuth2（如果你需要第三方登录）
+     3. 扩展当前会话（更简单，但需要连接）
 
-     Your API already has CORS configured. Which direction interests you?
+     你的 API 已经配置了 CORS。你对哪个方向感兴趣？
 
-You: Let's go with JWT. Can we start a change for that?
+你: 我们选择 JWT。可以为此开始一个变更吗？
 
-AI:  Ready when you are. Run /opsx:propose add-jwt-auth to begin.
+AI:  随时可以。运行 /opsx:propose add-jwt-auth 开始。
 ```
 
 **提示：**
@@ -126,7 +126,7 @@ AI:  Ready when you are. Run /opsx:propose add-jwt-auth to begin.
 
 ### `/opsx:new`
 
-启动一个新的变更脚手架。创建变更文件夹，并等待您使用 `/opsx:continue` 或 `/opsx:ff` 生成工件。
+启动一个新的变更脚手架。创建变更文件夹，并等待你使用 `/opsx:continue` 或 `/opsx:ff` 生成工件。
 
 此命令是扩展工作流集的一部分（不包含在默认的 `core` 配置文件中）。
 
@@ -138,14 +138,14 @@ AI:  Ready when you are. Run /opsx:propose add-jwt-auth to begin.
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `change-name` | 否 | 变更文件夹的名称（如未提供则会提示） |
+| `change-name` | 否 | 变更文件夹的名称（如果未提供则会提示） |
 | `--schema` | 否 | 要使用的工作流模式（默认：来自配置或 `spec-driven`） |
 
 **功能说明：**
 - 创建 `openspec/changes/<change-name>/` 目录
 - 在变更文件夹中创建 `.openspec.yaml` 元数据文件
 - 显示准备好创建的第一个工件模板
-- 如未提供变更名称和模式，则进行提示
+- 如果未提供变更名称和模式，则进行提示
 
 **创建内容：**
 ```
@@ -155,13 +155,13 @@ openspec/changes/<change-name>/
 
 **示例：**
 ```
-You: /opsx:new add-dark-mode
+你: /opsx:new add-dark-mode
 
-AI:  Created openspec/changes/add-dark-mode/
-     Schema: spec-driven
+AI:  已创建 openspec/changes/add-dark-mode/
+     模式: spec-driven
 
-     Ready to create: proposal
-     Use /opsx:continue to create it, or /opsx:ff to create all artifacts.
+     准备创建: 提案
+     使用 /opsx:continue 创建它，或使用 /opsx:ff 创建所有工件。
 ```
 
 **提示：**
@@ -183,10 +183,10 @@ AI:  Created openspec/changes/add-dark-mode/
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `change-name` | 否 | 要继续哪个变更（如未提供则从上下文推断） |
+| `change-name` | 否 | 要继续的变更（如果未提供则从上下文推断） |
 
 **功能说明：**
-- 查询工件依赖关系图
+- 查询工件依赖图
 - 显示哪些工件已就绪，哪些被阻塞
 - 创建第一个就绪的工件
 - 读取依赖文件以获取上下文
@@ -194,31 +194,31 @@ AI:  Created openspec/changes/add-dark-mode/
 
 **示例：**
 ```
-You: /opsx:continue
+你: /opsx:continue
 
-AI:  Change: add-dark-mode
+AI:  变更: add-dark-mode
 
-     Artifact status:
-     ✓ proposal    (done)
-     ◆ specs       (ready)
-     ◆ design      (ready)
-     ○ tasks       (blocked - needs: specs)
+     工件状态:
+     ✓ 提案    (完成)
+     ◆ 规范    (就绪)
+     ◆ 设计    (就绪)
+     ○ 任务    (阻塞 - 需要: 规范)
 
-     Creating specs...
+     正在创建规范...
 
-     [Reads proposal.md, creates specs based on requirements]
+     [读取 proposal.md，根据需求创建规范]
 
-     ✓ Created openspec/changes/add-dark-mode/specs/ui/spec.md
+     ✓ 已创建 openspec/changes/add-dark-mode/specs/ui/spec.md
 
-     Now available: tasks
-     Run /opsx:continue to create the next artifact.
+     现在可用: 任务
+     运行 /opsx:continue 创建下一个工件。
 ```
 
 **提示：**
-- 当您希望在继续前审查每个工件时使用
-- 适合需要控制权的复杂变更
+- 当你想在继续前审查每个工件时使用
+- 适合需要控制的复杂变更
 - 多个工件可能同时就绪
-- 您可以在继续前编辑已创建的工件
+- 你可以在继续前编辑已创建的工件
 
 ---
 
@@ -234,7 +234,7 @@ AI:  Change: add-dark-mode
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `change-name` | 否 | 要快速推进哪个变更（如未提供则从上下文推断） |
+| `change-name` | 否 | 要快速推进的变更（如果未提供则从上下文推断） |
 
 **功能说明：**
 - 按依赖顺序创建所有工件
@@ -244,30 +244,30 @@ AI:  Change: add-dark-mode
 
 **示例：**
 ```
-You: /opsx:ff add-dark-mode
+你: /opsx:ff add-dark-mode
 
-AI:  Fast-forwarding add-dark-mode...
+AI:  快速推进 add-dark-mode...
 
-     ✓ Creating proposal.md
-     ✓ Creating specs/ui/spec.md
-     ✓ Creating design.md
-     ✓ Creating tasks.md
+     ✓ 正在创建 proposal.md
+     ✓ 正在创建 specs/ui/spec.md
+     ✓ 正在创建 design.md
+     ✓ 正在创建 tasks.md
 
-     All planning artifacts complete!
-     Ready for implementation. Run /opsx:apply to begin.
+     所有规划工件完成！
+     准备就绪，可以实施。运行 /opsx:apply 开始。
 ```
 
 **提示：**
-- 当您对要构建的内容有清晰认识时使用
-- 对于直接明了的变更，比 `/opsx:continue` 更快
-- 您仍然可以在事后编辑工件
+- 当你对要构建的内容有清晰构想时使用
+- 对于直接的变更，比 `/opsx:continue` 更快
+- 你仍然可以在之后编辑工件
 - 适合中小型功能
 
 ---
 
 ### `/opsx:apply`
 
-实施变更中的任务。处理任务列表，编写代码并勾选完成项。
+实施变更中的任务。按任务列表工作，编写代码并勾选完成项。
 
 **语法：**
 ```
@@ -277,47 +277,47 @@ AI:  Fast-forwarding add-dark-mode...
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `change-name` | 否 | 要实施哪个变更（如未提供则从上下文推断） |
+| `change-name` | 否 | 要实施的变更（如果未提供则从上下文推断） |
 
 **功能说明：**
 - 读取 `tasks.md` 并识别未完成的任务
-- 逐一处理任务
+- 逐个处理任务
 - 根据需要编写代码、创建文件、运行测试
 - 使用复选框 `[x]` 标记任务完成
 
 **示例：**
 ```
-You: /opsx:apply
+你: /opsx:apply
 
-AI:  Implementing add-dark-mode...
+AI:  正在实施 add-dark-mode...
 
-     Reading tasks.md:
-     - [ ] 1.1 Create ThemeContext
-     - [ ] 1.2 Add CSS custom properties
-     - [ ] 1.3 Implement localStorage persistence
+     读取 tasks.md:
+     - [ ] 1.1 创建 ThemeContext
+     - [ ] 1.2 添加 CSS 自定义属性
+     - [ ] 1.3 实现 localStorage 持久化
 
-     Working on 1.1: Create ThemeContext...
-     [Creates src/context/ThemeContext.tsx]
+     正在处理 1.1: 创建 ThemeContext...
+     [创建 src/context/ThemeContext.tsx]
 
-     ✓ 1.1 Complete
+     ✓ 1.1 完成
 
-     Working on 1.2: Add CSS custom properties...
-     [Updates src/styles/globals.css]
+     正在处理 1.2: 添加 CSS 自定义属性...
+     [更新 src/styles/globals.css]
 
-     ✓ 1.2 Complete
+     ✓ 1.2 完成
      ...
 ```
 
 **提示：**
-- 如果中断，可以从上次停止的地方继续
-- 通过指定变更名称，可用于并行处理变更
+- 如果中断，可以从中断处继续
+- 通过指定变更名称，可用于并行变更
 - 完成状态在 `tasks.md` 的复选框中跟踪
 
 ---
 
 ### `/opsx:verify`
 
-验证实施是否符合您的变更工件。检查完整性、正确性和一致性。
+验证实现是否与你的变更工件匹配。检查完整性、正确性和一致性。
 
 **语法：**
 ```
@@ -327,65 +327,65 @@ AI:  Implementing add-dark-mode...
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `change-name` | 否 | 要验证哪个变更（如未提供则从上下文推断） |
+| `change-name` | 否 | 要验证的变更（如果未提供则从上下文推断） |
 
 **功能说明：**
-- 检查实施质量的三个维度
-- 在代码库中搜索实施证据
-- 报告问题，分为 CRITICAL（严重）、WARNING（警告）或 SUGGESTION（建议）
+- 检查实现质量的三个维度
+- 在代码库中搜索实现证据
+- 报告问题，分为严重、警告或建议类别
 - 不会阻止归档，但会指出问题
 
 **验证维度：**
 
 | 维度 | 验证内容 |
 |-----------|-------------------|
-| **完整性** | 所有任务完成，所有需求已实施，场景已覆盖 |
-| **正确性** | 实施符合规范意图，边界情况已处理 |
-| **一致性** | 设计决策体现在代码中，模式保持一致 |
+| **完整性** | 所有任务完成，所有需求已实现，场景已覆盖 |
+| **正确性** | 实现符合规范意图，边界情况已处理 |
+| **一致性** | 设计决策反映在代码中，模式保持一致 |
 
 **示例：**
 ```
-You: /opsx:verify
+你: /opsx:verify
 
-AI:  Verifying add-dark-mode...
+AI:  正在验证 add-dark-mode...
 
-     COMPLETENESS
-     ✓ All 8 tasks in tasks.md are checked
-     ✓ All requirements in specs have corresponding code
-     ⚠ Scenario "System preference detection" has no test coverage
+     完整性
+     ✓ tasks.md 中所有 8 个任务已勾选
+     ✓ 规范中的所有需求都有对应代码
+     ⚠ 场景“系统偏好检测”没有测试覆盖
 
-     CORRECTNESS
-     ✓ Implementation matches spec intent
-     ✓ Edge cases from scenarios are handled
-     ✓ Error states match spec definitions
+     正确性
+     ✓ 实现符合规范意图
+     ✓ 场景中的边界情况已处理
+     ✓ 错误状态符合规范定义
 
-     COHERENCE
-     ✓ Design decisions reflected in code structure
-     ✓ Naming conventions consistent with design.md
-     ⚠ Design mentions "CSS variables" but implementation uses Tailwind classes
+     一致性
+     ✓ 设计决策反映在代码结构中
+     ✓ 命名约定与 design.md 一致
+     ⚠ 设计提到“CSS 变量”但实现使用了 Tailwind 类
 
-     SUMMARY
+     总结
      ─────────────────────────────
-     Critical issues: 0
-     Warnings: 2
-     Ready to archive: Yes (with warnings)
+     严重问题: 0
+     警告: 2
+     可以归档: 是（有警告）
 
-     Recommendations:
-     1. Add test for system preference detection
-     2. Update design.md to reflect Tailwind usage, or refactor to use CSS variables
+     建议:
+     1. 为系统偏好检测添加测试
+     2. 更新 design.md 以反映 Tailwind 的使用，或重构为使用 CSS 变量
 ```
 
 **提示：**
-- 在归档前运行，以便尽早发现不匹配之处
-- 警告不会阻止归档，但表明存在潜在问题
+- 在归档前运行，以尽早发现不匹配
+- 警告不会阻止归档，但表明潜在问题
 - 适合在提交前审查 AI 的工作
-- 可以揭示工件与实施之间的偏差
+- 可以揭示工件与实现之间的偏差
 
 ---
 
 ### `/opsx:sync`
 
-**可选命令。** 将变更中的增量规范合并到主规范中。归档时如果需要会提示同步，因此您通常不需要手动运行此命令。
+**可选命令。** 将变更中的增量规范合并到主规范中。如果需要，归档操作会提示进行同步，因此通常你不需要手动运行此命令。
 
 **语法：**
 ```
@@ -395,7 +395,7 @@ AI:  Verifying add-dark-mode...
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `change-name` | 否 | 要同步哪个变更（如未提供则从上下文推断） |
+| `change-name` | 否 | 要同步的变更（如果未提供则从上下文推断） |
 
 **功能说明：**
 - 从变更文件夹读取增量规范
@@ -406,37 +406,37 @@ AI:  Verifying add-dark-mode...
 
 **示例：**
 ```text
-You: /opsx:sync
+你: /opsx:sync
 
-AI:  Syncing add-dark-mode delta specs...
+AI:  正在同步 add-dark-mode 增量规范...
 
-     Reading: openspec/changes/add-dark-mode/specs/ui/spec.md
-     Target:  openspec/specs/ui/spec.md
+     读取: openspec/changes/add-dark-mode/specs/ui/spec.md
+     目标:  openspec/specs/ui/spec.md
 
-     Changes to apply:
-     ✓ ADDED: Theme Selection requirement (2 scenarios)
-     ✓ ADDED: Accessibility requirement (1 scenario)
+     要应用的更改:
+     ✓ 已添加: 主题选择需求（2 个场景）
+     ✓ 已添加: 无障碍需求（1 个场景）
 
-     Merging...
-     ✓ openspec/specs/ui/spec.md updated
+     合并中...
+     ✓ openspec/specs/ui/spec.md 已更新
 
-     Change remains active. Run /opsx:archive when ready to complete.
+     变更保持活动状态。准备好时运行 /opsx:archive 完成。
 ```
 
 **何时手动使用：**
 
 | 场景 | 使用同步？ |
 |----------|-----------|
-| 长期运行的变更，希望在归档前将规范放入主规范 | 是 |
+| 长期运行的变更，希望在归档前将规范放入主目录 | 是 |
 | 多个并行变更需要更新的基础规范 | 是 |
-| 希望单独预览/审查合并结果 | 是 |
+| 希望单独预览/审查合并 | 是 |
 | 快速变更，直接归档 | 否（归档会处理） |
 
 **提示：**
 - 同步是智能的，不是简单的复制粘贴
 - 可以向现有需求添加场景而不会重复
 - 同步后变更保持活动状态（未归档）
-- 大多数用户永远不需要直接调用此命令——归档时如果需要会提示
+- 大多数用户永远不需要直接调用此命令——如果需要，归档操作会提示
 
 ---
 
@@ -452,7 +452,7 @@ AI:  Syncing add-dark-mode delta specs...
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `change-name` | 否 | 要归档哪个变更（如未提供则从上下文推断） |
+| `change-name` | 否 | 要归档的变更（如果未提供则从上下文推断） |
 
 **功能说明：**
 - 检查工件完成状态
@@ -463,25 +463,25 @@ AI:  Syncing add-dark-mode delta specs...
 
 **示例：**
 ```text
-You: /opsx:archive
+你: /opsx:archive
 
-AI:  Archiving add-dark-mode...
+AI:  正在归档 add-dark-mode...
 
-     Artifact status:
-     ✓ proposal.md exists
-     ✓ specs/ exists
-     ✓ design.md exists
-     ✓ tasks.md exists (8/8 tasks complete)
+     工件状态:
+     ✓ proposal.md 存在
+     ✓ specs/ 存在
+     ✓ design.md 存在
+     ✓ tasks.md 存在（8/8 任务完成）
 
-     Delta specs: Not yet synced
-     → Sync now? (recommended)
+     增量规范: 尚未同步
+     → 立即同步？（推荐）
 
-You: Yes
+你: 是
 
-AI:  ✓ Synced specs to openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
+AI:  ✓ 已将规范同步到 openspec/specs/ui/spec.md
+     ✓ 已移动到 openspec/changes/archive/2025-01-24-add-dark-mode/
 
-     Change archived successfully.
+     变更归档成功。
 ```
 
 **提示：**
@@ -504,53 +504,53 @@ AI:  ✓ Synced specs to openspec/specs/ui/spec.md
 **参数：**
 | 参数 | 必需 | 描述 |
 |----------|----------|-------------|
-| `change-names` | 否 | 要归档的特定变更（如未提供则提示选择） |
+| `change-names` | 否 | 要归档的特定变更（如果未提供则提示选择） |
 
 **功能说明：**
 - 列出所有已完成的变更
 - 在归档前验证每个变更
-- 检测变更间的规范冲突
-- 通过检查实际实施情况来解决冲突
+- 检测变更之间的规范冲突
+- 通过检查实际实现来解决冲突
 - 按时间顺序归档
 
 **示例：**
 ```
-You: /opsx:bulk-archive
+你: /opsx:bulk-archive
 
-AI:  Found 3 completed changes:
-     - add-dark-mode (8/8 tasks complete)
-     - fix-login-bug (3/3 tasks complete)
-     - update-footer (2/2 tasks complete)
+AI:  找到 3 个已完成的变更:
+     - add-dark-mode (8/8 任务完成)
+     - fix-login-bug (3/3 任务完成)
+     - update-footer (2/2 任务完成)
 
-     Checking for spec conflicts...
-     ⚠ add-dark-mode and update-footer both touch specs/ui/
+     检查规范冲突...
+     ⚠ add-dark-mode 和 update-footer 都涉及 specs/ui/
 
-     Inspecting codebase to resolve...
-     Both changes are implemented. Will merge in chronological order:
-     1. add-dark-mode (created Jan 20)
-     2. update-footer (created Jan 22)
+     检查代码库以解决...
+     两个变更都已实现。将按时间顺序合并:
+     1. add-dark-mode (创建于 1月20日)
+     2. update-footer (创建于 1月22日)
 
-     Archive all 3 changes?
+     归档所有 3 个变更？
 
-You: Yes
+你: 是
 
-AI:  ✓ Archived add-dark-mode
-     ✓ Archived fix-login-bug
-     ✓ Archived update-footer
-     Specs merged: add-dark-mode → update-footer
+AI:  ✓ 已归档 add-dark-mode
+     ✓ 已归档 fix-login-bug
+     ✓ 已归档 update-footer
+     规范已合并: add-dark-mode → update-footer
 ```
 
 **提示：**
 - 适合并行工作流
 - 冲突解决是智能的（检查代码库）
 - 变更按创建顺序归档
-- 覆盖规范内容前会提示
+- 在覆盖规范内容前会提示
 
 ---
 
 ### `/opsx:onboard`
 
-引导式入门，贯穿完整的 OpenSpec 工作流。一个使用您实际代码库的交互式教程。
+引导式入门，贯穿完整的 OpenSpec 工作流。一个使用你实际代码库的交互式教程。
 
 **语法：**
 ```
@@ -559,9 +559,9 @@ AI:  ✓ Archived add-dark-mode
 
 **功能说明：**
 - 带讲解地走完一个完整的工作流周期
-- 扫描您的代码库以寻找真实的改进机会
-- 使用真实工件创建一个实际的变更
-- 实施实际工作（小型、安全的更改）
+- 扫描你的代码库以寻找真实的改进机会
+- 创建一个带有真实工件的实际变更
+- 实施实际工作（小而安全的更改）
 - 归档已完成的变更
 - 在每一步发生时进行解释
 
@@ -574,43 +574,43 @@ AI:  ✓ Archived add-dark-mode
 6. 编写设计
 7. 创建任务
 8. 实施任务 (`/opsx:apply`)
-9. 验证实施
+9. 验证实现
 10. 归档变更
 11. 总结与后续步骤
 
 **示例：**
 ```
-You: /opsx:onboard
+你: /opsx:onboard
 
-AI:  Welcome to OpenSpec!
+AI:  欢迎使用 OpenSpec！
 
-     I'll walk you through the complete workflow using your actual codebase.
-     We'll find something small to improve, create a proper change for it,
-     implement it, and archive it.
+     我将使用你实际的代码库，带你走完整个工作流程。
+     我们将找到一些小的改进点，为其创建一个正式的变更，
+     实施它，然后归档它。
 
-     Let me scan your codebase for opportunities...
+     让我扫描你的代码库寻找机会...
 
-     [Analyzes codebase]
+     [分析代码库]
 
-     I found a few things we could work on:
-     1. Add input validation to the contact form
-     2. Improve error messages in the auth flow
-     3. Add loading states to async buttons
+     我找到了一些我们可以着手的事情:
+     1. 为联系表单添加输入验证
+     2. 改进身份验证流程中的错误消息
+     3. 为异步按钮添加加载状态
 
-     Which interests you? (or suggest something else)
+     你对哪个感兴趣？（或建议其他内容）
 ```
 
 **提示：**
 - 最适合学习工作流的新用户
 - 使用真实代码，而非玩具示例
-- 创建一个您可以保留或丢弃的真实变更
+- 创建一个你可以保留或丢弃的真实变更
 - 完成需要 15-30 分钟
 
 ---
 
-## AI 工具命令语法
+## 各 AI 工具的命令语法
 
-不同 AI 工具使用略有差异的命令语法。请使用与您工具匹配的格式：
+不同的 AI 工具使用略有不同的命令语法。请使用与您工具匹配的格式：
 
 | 工具 | 语法示例 |
 |------|----------------|
@@ -618,6 +618,7 @@ AI:  Welcome to OpenSpec!
 | Cursor | `/opsx-propose`, `/opsx-apply` |
 | Windsurf | `/opsx-propose`, `/opsx-apply` |
 | Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
+| Kimi CLI | 基于技能的调用，例如 `/skill:openspec-propose`, `/skill:openspec-apply-change`（不生成 `opsx-*` 命令文件） |
 | Trae | 基于技能的调用，例如 `/openspec-propose`, `/openspec-apply-change`（不生成 `opsx-*` 命令文件） |
 
 各工具的意图相同，但命令的呈现方式可能因集成方式而异。
@@ -638,8 +639,8 @@ AI:  Welcome to OpenSpec!
 
 **何时使用旧版命令：**
 - 使用旧工作流的现有项目
-- 不需要增量工件创建的简单变更
-- 偏好全有或全无的方式
+- 不需要增量创建工件的简单变更
+- 偏好“全有或全无”的方式
 
 **迁移到 OPSX：**
 旧版变更可以使用 OPSX 命令继续。工件结构是兼容的。
@@ -666,14 +667,14 @@ AI:  Welcome to OpenSpec!
 - 检查所需工件是否存在
 - 首先创建缺失的依赖工件
 
-### “未找到架构”
+### “未找到模式”
 
-指定的架构不存在。
+指定的模式不存在。
 
 **解决方案：**
-- 列出可用架构：`openspec schemas`
-- 检查架构名称的拼写
-- 如果是自定义架构，请创建：`openspec schema init <name>`
+- 列出可用模式：`openspec schemas`
+- 检查模式名称的拼写
+- 如果是自定义模式，请创建它：`openspec schema init <name>`
 
 ### 命令未被识别
 
@@ -682,18 +683,18 @@ AI 工具无法识别 OpenSpec 命令。
 **解决方案：**
 - 确保 OpenSpec 已初始化：`openspec init`
 - 重新生成技能：`openspec update`
-- 检查 `.claude/skills/` 目录是否存在（适用于 Claude Code）
+- 检查 `.claude/skills/` 目录是否存在（针对 Claude Code）
 - 重启您的 AI 工具以加载新技能
 
 ### 工件生成不正确
 
-AI 创建的工件不完整或不正确。
+AI 创建了不完整或不正确的工件。
 
 **解决方案：**
 - 在 `openspec/config.yaml` 中添加项目上下文
 - 为特定指导添加每工件规则
 - 在变更描述中提供更多细节
-- 使用 `/opsx:continue` 代替 `/opsx:ff` 以获得更多控制
+- 使用 `/opsx:continue` 而不是 `/opsx:ff` 以获得更多控制
 
 ---
 
@@ -701,4 +702,4 @@ AI 创建的工件不完整或不正确。
 
 - [工作流](workflows.md) - 常见模式及何时使用每个命令
 - [CLI](cli.md) - 用于管理和验证的终端命令
-- [自定义](customization.md) - 创建自定义架构和工作流
+- [自定义](customization.md) - 创建自定义模式和工作流

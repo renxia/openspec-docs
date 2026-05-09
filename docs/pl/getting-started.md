@@ -1,250 +1,253 @@
 # Pierwsze kroki
 
-Ten przewodnik wyjaśnia, jak działa OpenSpec po jego zainstalowaniu i zainicjalizowaniu. Instrukcje instalacji znajdziesz w [głównym pliku README](index.md#quick-start).
+Ten przewodnik wyjaśnia, jak działa OpenSpec po zainicjalizowaniu i skonfigurowaniu. Instrukcje instalacji znajdziesz w [głównym pliku README](index.md#quick-start).
 
 ## Jak to działa
 
-OpenSpec pomaga Tobie i Twojemu asystentowi programującemu AI uzgodnić, co należy zbudować, zanim zostanie napisany jakikolwiek kod.
+OpenSpec pomaga Tobie i Twojemu asystentowi AI do programowania ustalić, co zbudować, zanim zostanie napisany jakikolwiek kod.
 
-**Domyślna krótka ścieżka (profil podstawowy):**
-
-```text
-/opsx:propose ──► /opsx:apply ──► /opsx:archive
-```
-
-**Rozszerzona ścieżka (niestandardowy wybór przepływu pracy):**
+**Domyślna ścieżka szybka (profil rdzeniowy):**
 
 ```text
-/opsx:new ──► /opsx:ff lub /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
 ```
 
-Domyślnym globalnym profilem jest `core`, który obejmuje `propose`, `explore`, `apply` i `archive`. Możesz włączyć rozszerzone komendy przepływu pracy za pomocą `openspec config profile`, a następnie `openspec update`.
+**Ścieżka rozszerzona (wybór niestandardowego przepływu pracy):**
+
+```text
+/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+```
+
+Domyślny profil globalny to `core`, który zawiera `propose`, `explore`, `apply`, `sync` i `archive`. Możesz włączyć rozszerzone polecenia przepływu pracy za pomocą `openspec config profile`, a następnie `openspec update`.
 
 ## Co tworzy OpenSpec
 
-Po uruchomieniu `openspec init` Twój projekt ma następującą strukturę:
+Po uruchomieniu `openspec init` Twój projekt zyskuje następującą strukturę:
 
 ```
 openspec/
-├── specs/              # Prawda źródłowa (zachowanie Twojego systemu)
-│   └── <domena>/
+├── specs/              # Źródło prawdy (zachowanie Twojego systemu)
+│   └── <domain>/
 │       └── spec.md
-├── changes/            # Proponowane zmiany (jeden folder na zmianę)
-│   └── <nazwa-zmiany>/
+├── changes/            # Proponowane aktualizacje (jeden folder na zmianę)
+│   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
 │       └── specs/      # Specyfikacje delta (co się zmienia)
-│           └── <domena>/
+│           └── <domain>/
 │               └── spec.md
 └── config.yaml         # Konfiguracja projektu (opcjonalna)
 ```
 
 **Dwa kluczowe katalogi:**
 
-- **`specs/`** - Prawda źródłowa. Te specyfikacje opisują, jak Twój system obecnie się zachowuje. Są zorganizowane według domen (np. `specs/auth/`, `specs/payments/`).
+- **`specs/`** - Źródło prawdy. Te specyfikacje opisują aktualne zachowanie Twojego systemu. Uporządkowane według domen (np. `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** - Proponowane modyfikacje. Każda zmiana otrzymuje własny folder ze wszystkimi powiązanymi artefaktami. Gdy zmiana jest kompletna, jej specyfikacje są scalane z głównym katalogiem `specs/`.
+- **`changes/`** - Proponowane modyfikacje. Każda zmiana ma własny folder ze wszystkimi powiązanymi artefaktami. Po zakończeniu zmiany jej specyfikacje scalane są z głównym katalogiem `specs/`.
 
 ## Zrozumienie artefaktów
 
-Każdy folder zmiany zawiera artefakty kierujące pracą:
+Każdy folder zmiany zawiera artefakty, które prowadzą prace:
 
-| Artefakt | Cel |
-|----------|-----|
-| `proposal.md` | "Dlaczego" i "co" - uchwytuje intencję, zakres i podejście |
-| `specs/` | Specyfikacje delta pokazujące wymagania DODANE/ZMODYFIKOWANE/USUNIĘTE |
-| `design.md` | "Jak" - podejście techniczne i decyzje architektoniczne |
+| Artefakt | Przeznaczenie |
+|----------|---------------|
+| `proposal.md` | „Dlaczego" i „co" — uchwytuje intencję, zakres i podejście |
+| `specs/` | Specyfikacje delta pokazujące DODANE/ZMODYFIKOWANE/USUNIĘTE wymagania |
+| `design.md` | „Jak" — podejście techniczne i decyzje architektoniczne |
 | `tasks.md` | Lista kontrolna implementacji z polami wyboru |
 
-**Artefakty budują się na sobie nawzajem:**
+**Artefakty budują na sobie nawzajem:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            aktualizuj w miarę zdobywania wiedzy
-Zawsze możesz wrócić i dopracować wcześniejsze artefakty, gdy w trakcie implementacji zdobędziesz więcej informacji.
+            aktualizuj w miarę postępu prac
 ```
+
+Zawsze możesz wrócić i udoskonalić wcześniejsze artefakty, gdy dowiesz się więcej w trakcie implementacji.
 
 ## Jak działają specyfikacje delta
 
-Specyfikacje delta są kluczowym konceptem w OpenSpec. Pokazują, co się zmienia w stosunku do Twoich obecnych specyfikacji.
+Specyfikacje delta to kluczowy koncept w OpenSpec. Pokazują, co się zmienia w odniesieniu do Twoich aktualnych specyfikacji.
 
 ### Format
 
-Specyfikacje delta używają sekcji, aby wskazać typ zmiany:
+Specyfikacje delta używają sekcji do oznaczenia typu zmiany:
 
 ```markdown
-# Delta dla Auth
+# Delta for Auth
 
-## DODANE Wymagania
+## ADDED Requirements
 
-### Wymaganie: Uwierzytelnianie dwuskładnikowe
-System MUSI wymagać drugiego składnika podczas logowania.
+### Requirement: Two-Factor Authentication
+The system MUST require a second factor during login.
 
-#### Scenariusz: Wymagany OTP
-- ZAKŁADAJĄC użytkownika z włączonym 2FA
-- GDY użytkownik przesyła prawidłowe dane logowania
-- WTEDY prezentowane jest wyzwanie OTP
+#### Scenario: OTP required
+- GIVEN a user with 2FA enabled
+- WHEN the user submits valid credentials
+- THEN an OTP challenge is presented
 
-## ZMODYFIKOWANE Wymagania
+## MODIFIED Requirements
 
-### Wymaganie: Limit czasu sesji
-System POWINIEN wygaszać sesje po 30 minutach nieaktywności.
-(Wcześniej: 60 minut)
+### Requirement: Session Timeout
+The system SHALL expire sessions after 30 minutes of inactivity.
+(Previously: 60 minutes)
 
-#### Scenariusz: Limit czasu bezczynności
-- ZAKŁADAJĄC uwierzytelnioną sesję
-- GDY mija 30 minut bez aktywności
-- WTEDY sesja jest unieważniana
+#### Scenario: Idle timeout
+- GIVEN an authenticated session
+- WHEN 30 minutes pass without activity
+- THEN the session is invalidated
 
-## USUNIĘTE Wymagania
+## REMOVED Requirements
 
-### Wymaganie: Zapamiętaj mnie
-(Przestarzałe na rzecz 2FA)
+### Requirement: Remember Me
+(Deprecated in favor of 2FA)
 ```
 
-### Co się dzieje przy archiwizacji
+### Co się dzieje podczas archiwizacji
 
 Gdy archiwizujesz zmianę:
 
-1. Wymagania **DODANE** są dołączane do głównej specyfikacji
-2. Wymagania **ZMODYFIKOWANE** zastępują istniejącą wersję
-3. Wymagania **USUNIĘTE** są usuwane z głównej specyfikacji
+1. **DODANE** wymagania są dołączane do głównej specyfikacji
+2. **ZMODYFIKOWANE** wymagania zastępują istniejącą wersję
+3. **USUNIĘTE** wymagania są usuwane z głównej specyfikacji
 
-Folder zmiany jest przenoszony do `openspec/changes/archive/` w celu zachowania historii audytu.
+Folder zmiany przenoszony jest do `openspec/changes/archive/` na potrzeby historii audytu.
 
 ## Przykład: Twoja pierwsza zmiana
 
-Przejdźmy przez dodanie trybu ciemnego do aplikacji.
+Przejdźmy przez proces dodawania trybu ciemnego do aplikacji.
 
 ### 1. Rozpocznij zmianę (domyślnie)
 
 ```text
-Ty: /opsx:propose add-dark-mode
+You: /opsx:propose add-dark-mode
 
-AI:  Utworzono openspec/changes/add-dark-mode/
-     ✓ proposal.md — dlaczego to robimy, co się zmienia
-     ✓ specs/       — wymagania i scenariusze
-     ✓ design.md    — podejście techniczne
-     ✓ tasks.md     — lista kontrolna implementacji
-     Gotowe do implementacji!
+AI:  Created openspec/changes/add-dark-mode/
+     ✓ proposal.md — why we're doing this, what's changing
+     ✓ specs/       — requirements and scenarios
+     ✓ design.md    — technical approach
+     ✓ tasks.md     — implementation checklist
+     Ready for implementation!
 ```
 
-Jeśli włączyłeś rozszerzony profil przepływu pracy, możesz to również zrobić w dwóch krokach: `/opsx:new`, a następnie `/opsx:ff` (lub `/opsx:continue` stopniowo).
+Jeśli włączyłeś rozszerzony profil przepływu pracy, możesz to zrobić w dwóch krokach: `/opsx:new`, a następnie `/opsx:ff` (lub `/opsx:continue` przyrostowo).
 
 ### 2. Co zostaje utworzone
 
-**proposal.md** - Uchwytuje intencję:
+**proposal.md** — Uchwytuje intencję:
 
 ```markdown
-# Propozycja: Dodanie trybu ciemnego
+# Proposal: Add Dark Mode
 
-## Intencja
-Użytkownicy prosili o opcję trybu ciemnego, aby zmniejszyć zmęczenie oczu podczas nocnego korzystania.
+## Intent
+Users have requested a dark mode option to reduce eye strain
+during nighttime usage.
 
-## Zakres
-- Dodanie przełącznika motywu w ustawieniach
-- Obsługa wykrywania preferencji systemowych
-- Trwałe zapisywanie preferencji w localStorage
+## Scope
+- Add theme toggle in settings
+- Support system preference detection
+- Persist preference in localStorage
 
-## Podejście
-Użycie niestandardowych właściwości CSS do motywów z kontekstem React do zarządzania stanem.
+## Approach
+Use CSS custom properties for theming with a React context
+for state management.
 ```
 
-**specs/ui/spec.md** - Delta pokazująca nowe wymagania:
+**specs/ui/spec.md** — Delta pokazująca nowe wymagania:
 
 ```markdown
-# Delta dla UI
+# Delta for UI
 
-## DODANE Wymagania
+## ADDED Requirements
 
-### Wymaganie: Wybór motywu
-System POWINIEN pozwalać użytkownikom na wybór między motywami jasnym i ciemnym.
+### Requirement: Theme Selection
+The system SHALL allow users to choose between light and dark themes.
 
-#### Scenariusz: Ręczny przełącznik
-- ZAKŁADAJĄC użytkownika na dowolnej stronie
-- GDY użytkownik kliknie przełącznik motywu
-- WTEDY motyw przełącza się natychmiast
-- I preferencja jest zachowywana między sesjami
+#### Scenario: Manual toggle
+- GIVEN a user on any page
+- WHEN the user clicks the theme toggle
+- THEN the theme switches immediately
+- AND the preference persists across sessions
 
-#### Scenariusz: Preferencja systemowa
-- ZAKŁADAJĄC użytkownika bez zapisanej preferencji
-- GDY aplikacja się uruchamia
-- WTEDY używana jest preferowana kolorystyka systemu
+#### Scenario: System preference
+- GIVEN a user with no saved preference
+- WHEN the application loads
+- THEN the system's preferred color scheme is used
 ```
 
-**tasks.md** - Lista kontrolna implementacji:
+**tasks.md** — Lista kontrolna implementacji:
 
 ```markdown
-# Zadania
+# Tasks
 
-## 1. Infrastruktura motywów
-- [ ] 1.1 Utworzenie ThemeContext ze stanem jasny/ciemny
-- [ ] 1.2 Dodanie niestandardowych właściwości CSS dla kolorów
-- [ ] 1.3 Implementacja trwałego zapisywania w localStorage
+## 1. Theme Infrastructure
+- [ ] 1.1 Create ThemeContext with light/dark state
+- [ ] 1.2 Add CSS custom properties for colors
+- [ ] 1.3 Implement localStorage persistence
 
-## 2. Komponenty UI
-- [ ] 2.1 Utworzenie komponentu ThemeToggle
-- [ ] 2.2 Dodanie przełącznika do strony ustawień
-- [ ] 2.3 Aktualizacja Header, aby zawierał szybki przełącznik
+## 2. UI Components
+- [ ] 2.1 Create ThemeToggle component
+- [ ] 2.2 Add toggle to settings page
+- [ ] 2.3 Update Header to include quick toggle
 
-## 3. Style
-- [ ] 3.1 Zdefiniowanie palety kolorów motywu ciemnego
-- [ ] 3.2 Aktualizacja komponentów, aby używały zmiennych CSS
+## 3. Styling
+- [ ] 3.1 Define dark theme color palette
+- [ ] 3.2 Update components to use CSS variables
 ```
 
-### 3. Zaimplementuj
+### 3. Implementacja
 
 ```
-Ty: /opsx:apply
+You: /opsx:apply
 
-AI:  Pracuję nad zadaniami...
-     ✓ 1.1 Utworzono ThemeContext ze stanem jasny/ciemny
-     ✓ 1.2 Dodano niestandardowe właściwości CSS do globals.css
-     ✓ 1.3 Zaimplementowano trwałe zapisywanie w localStorage
-     ✓ 2.1 Utworzono komponent ThemeToggle
+AI:  Working through tasks...
+     ✓ 1.1 Created ThemeContext with light/dark state
+     ✓ 1.2 Added CSS custom properties to globals.css
+     ✓ 1.3 Implemented localStorage persistence
+     ✓ 2.1 Created ThemeToggle component
      ...
-     Wszystkie zadania zakończone!
+     All tasks complete!
 ```
 
-Podczas implementacji, jeśli odkryjesz, że projekt wymaga dostosowania, po prostu zaktualizuj artefakt i kontynuuj.
+W trakcie implementacji, jeśli odkryjesz, że projekt wymaga dostosowania, po prostu zaktualizuj artefakt i kontynuuj.
 
-### 4. Archiwizuj
+### 4. Archiwizacja
 
 ```
-Ty: /opsx:archive
+You: /opsx:archive
 
-AI:  Archiwizuję add-dark-mode...
-     ✓ Scalono specyfikacje do openspec/specs/ui/spec.md
-     ✓ Przeniesiono do openspec/changes/archive/2025-01-24-add-dark-mode/
-     Gotowe! Gotowy na następną funkcję.
+AI:  Archiving add-dark-mode...
+     ✓ Merged specs into openspec/specs/ui/spec.md
+     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
+     Done! Ready for the next feature.
 ```
 
-Twoje specyfikacje delta są teraz częścią głównych specyfikacji, dokumentujących, jak działa Twój system.
+Twoje specyfikacje delta są teraz częścią głównych specyfikacji, dokumentując działanie Twojego systemu.
 
 ## Weryfikacja i przeglądanie
 
-Użyj CLI, aby sprawdzić swoje zmiany:
+Użyj interfejsu CLI, aby sprawdzić swoje zmiany:
 
 ```bash
-# Wylistuj aktywne zmiany
+# List active changes
 openspec list
 
-# Wyświetl szczegóły zmiany
+# View change details
 openspec show add-dark-mode
 
-# Waliduj format specyfikacji
+# Validate spec formatting
 openspec validate add-dark-mode
 
-# Interaktywny panel sterowania
+# Interactive dashboard
 openspec view
 ```
 
-## Kolejne kroki
+## Następne kroki
 
-- [Przepływy pracy](workflows.md) - Popularne wzorce i kiedy używać każdej komendy
-- [Komendy](commands.md) - Pełna referencja wszystkich komend ukośnika
-- [Koncepty](concepts.md) - Głębsze zrozumienie specyfikacji, zmian i schematów
-- [Dostosowywanie](customization.md) - Spraw, aby OpenSpec działał po Twojemu
+- [Przepływy pracy](workflows.md) — Typowe wzorce i kiedy używać poszczególnych poleceń
+- [Polecenia](commands.md) — Pełny opis wszystkich poleceń ukośnikowych
+- [Koncepty](concepts.md) — Głębsze zrozumienie specyfikacji, zmian i schematów
+- [Dostosowywanie](customization.md) — Dostosuj OpenSpec do swoich potrzeb

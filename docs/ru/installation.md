@@ -2,9 +2,9 @@
 
 ## Предварительные требования
 
-- **Node.js версии 20.19.0 или выше** — Проверьте вашу версию: `node --version`
+- **Node.js 20.19.0 или выше** — Проверьте вашу версию: `node --version`
 
-## Менеджеры пакетов
+## Пакетные менеджеры
 
 ### npm
 
@@ -26,6 +26,9 @@ yarn global add @fission-ai/openspec@latest
 
 ### bun
 
+Bun может установить OpenSpec глобально, но OpenSpec в настоящее время работает на Node.js.
+Вам по-прежнему необходим Node.js 20.19.0 или выше, доступный в `PATH`.
+
 ```bash
 bun add -g @fission-ai/openspec@latest
 ```
@@ -44,7 +47,7 @@ nix run github:Fission-AI/OpenSpec -- init
 nix profile install github:Fission-AI/OpenSpec
 ```
 
-Или добавьте в ваше среду разработки в файле `flake.nix`:
+Или добавьте в вашу среду разработки в `flake.nix`:
 
 ```nix
 {
@@ -76,4 +79,4 @@ cd your-project
 openspec init
 ```
 
-Смотрите [Начало работы](getting-started.md) для полного руководства.
+Подробное руководство см. в разделе [Начало работы](getting-started.md).

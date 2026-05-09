@@ -1,29 +1,29 @@
 # Concepten
 
-Deze gids legt de kernideeën achter OpenSpec uit en hoe ze samenwerken. Voor praktisch gebruik zie [Aan de slag](getting-started.md) en [Workflows](workflows.md).
+Deze gids legt de kernideeën achter OpenSpec uit en hoe ze samenwerken. Voor praktisch gebruik, zie [Aan de slag](getting-started.md) en [Workflows](workflows.md).
 
 ## Filosofie
 
 OpenSpec is gebouwd rond vier principes:
 
 ```
-vloeibaar niet rigide       — geen fasepoorten, werk aan wat zinvol is
-iteratief niet waterval     — leer terwijl je bouwt, verfijn gaandeweg
-eenvoudig niet complex      — lichtgewicht opzet, minimale ceremonie
-brownfield-first            — werkt met bestaande codebases, niet alleen greenfield
+vloeiend niet rigide         — geen fasepoorten, werk aan wat logisch is
+iteratief niet waterval — leer terwijl je bouwt, verfijn onderweg
+eenvoudig niet complex        — lichtgewicht setup, minimale ceremonie
+brownfield-first        — werkt met bestaande codebases, niet alleen greenfield
 ```
 
-### Waarom deze principes belangrijk zijn
+### Waarom Deze Principes Belangrijk Zijn
 
-**Vloeibaar niet rigide.** Traditionele specificatiesystemen dwingen je in fases: eerst plan je, dan implementeer je, dan ben je klaar. OpenSpec is flexibeler — je kunt artefacten in elke volgorde aanmaken die voor jouw werk zinvol is.
+**Vloeiend niet rigide.** Traditionele specificatiesystemen beperken je tot fasen: eerst plan je, dan implementeer je, dan ben je klaar. OpenSpec is flexibeler — je kunt artefacten in elke logische volgorde voor je werk aanmaken.
 
-**Iteratief niet waterval.** Vereisten veranderen. Inzicht verdiept zich. Wat aanvankelijk een goede aanpak leek, blijkt misschien niet stand te houden nadat je de codebase hebt gezien. OpenSpec omarmt deze realiteit.
+**Iteratief niet waterval.** Vereisten veranderen. Inzicht verdiept. Wat aanvankelijk een goede aanpak leek, houdt misschien geen stand nadat je de codebase hebt gezien. OpenSpec omarmt deze realiteit.
 
-**Eenvoudig niet complex.** Sommige specificatiekaders vereisen uitgebreide opzet, rigide formaten of zware processen. OpenSpec staat niet in de weg. Initialiseer in seconden, begin direct met werken, pas alleen aan als dat nodig is.
+**Eenvoudig niet complex.** Sommige specificatiekaders vereisen uitgebreide setup, rigide formaten of zware processen. OpenSpec staat niet in de weg. Initialiseer in seconden, begin direct met werken, pas alleen aan als dat nodig is.
 
-**Brownfield-first.** Het meeste softwarewerk is niet vanaf nul bouwen — het is het aanpassen van bestaande systemen. De delta-gebaseerde aanpak van OpenSpec maakt het gemakkelijk om wijzigingen aan bestaand gedrag te specificeren, niet alleen om nieuwe systemen te beschrijven.
+**Brownfield-first.** Het meeste softwarewerk is niet vanaf nul bouwen — het is bestaande systemen aanpassen. De op delta's gebaseerde aanpak van OpenSpec maakt het eenvoudig om wijzigingen in bestaand gedrag te specificeren, in plaats van alleen nieuwe systemen te beschrijven.
 
-## Het Grote Geheel
+## Het Overzicht
 
 OpenSpec organiseert je werk in twee hoofdgebieden:
 
@@ -34,20 +34,151 @@ OpenSpec organiseert je werk in twee hoofdgebieden:
 │   ┌─────────────────────┐      ┌───────────────────────────────┐   │
 │   │       specs/        │      │         changes/              │   │
 │   │                     │      │                               │   │
-│   │  Bron van de waarheid│◄─────│  Voorgestelde aanpassingen    │   │
+│   │  Bron van waarheid  │◄─────│  Voorgestelde wijzigingen     │   │
 │   │  Hoe je systeem     │ merge│  Elke wijziging = één map     │   │
-│   │  momenteel werkt    │      │  Bevat artefacten + deltas    │   │
+│   │  nu werkt           │      │  Bevat artefacten + deltas    │   │
 │   │                     │      │                               │   │
 │   └─────────────────────┘      └───────────────────────────────┘   │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs** zijn de bron van de waarheid — ze beschrijven hoe je systeem zich momenteel gedraagt.
+**Specs** zijn de bron van waarheid — ze beschrijven hoe je systeem zich momenteel gedraagt.
 
-**Wijzigingen** zijn voorgestelde aanpassingen — ze bevinden zich in aparte mappen totdat je klaar bent om ze samen te voegen.
+**Changes** zijn voorgestelde wijzigingen — ze bevinden zich in afzonderlijke mappen totdat je klaar bent om ze samen te voegen.
 
-Deze scheiding is essentieel. Je kunt parallel aan meerdere wijzigingen werken zonder conflicten. Je kunt een wijziging beoordelen voordat deze de hoofdspecs beïnvloedt. En wanneer je een wijziging archiveert, voegen de deltas zich schoon samen met de bron van de waarheid.
+Deze scheiding is essentieel. Je kunt parallel aan meerdere wijzigingen werken zonder conflicten. Je kunt een wijziging beoordelen voordat deze de hoofdspecs beïnvloedt. En wanneer je een wijziging archiveert, worden de deltas netjes samengevoegd met de bron van waarheid.
+
+## Coördinatiewerkruimtes
+
+Werkruimte-ondersteuning is momenteel in actieve ontwikkeling en nog niet klaar voor gebruik. Bouw geen externe automatisering, integraties of langlopende workflows op basis van het gedrag van werkruimtes; de commando's, statusbestanden en JSON-uitvoer kunnen op elk moment veranderen.
+
+De onderstaande commando's bieden de eerste opzetstroom voor planning over gekoppelde repositories of mappen.
+
+Repo-lokale OpenSpec-projecten zijn de juiste standaard wanneer één repository de planning, implementatie en archiveringsstroom beheert. Sommig werk overschrijdt meerdere repositories of mappen. Voor dat geval is een OpenSpec-coördinatiewerkruimte de duurzame planningsbasis.
+
+Het mentale model van de werkruimte is:
+
+```text
+workspace = waar gerelateerde cross-repo wijzigingen leven
+link      = een stabiele naam voor een repo of map waar de werkruimte tegen kan plannen
+change    = één functie, fix, project of ander gepland stuk werk
+```
+
+Een werkruimte heeft een andere structuur dan een repo-lokaal project:
+
+```text
+workspace-folder/
+├── changes/                       # Planning op werkruimteniveau
+└── .openspec-workspace/
+    ├── workspace.yaml             # Gedeelde werkruimte-identiteit en linknamen
+    └── local.yaml                 # Lokale paden van deze machine
+```
+
+Repo-lokale OpenSpec-status behoudt de bestaande structuur:
+
+```text
+repo-root/
+└── openspec/
+    ├── specs/
+    └── changes/
+```
+
+Dat onderscheid is belangrijk. De werkruimapmap is een coördinatieoppervlak voor planning over gekoppelde repositories of mappen. De `openspec/`-map van elke repository blijft de thuisbasis voor repo-eigen specs, repo-lokale wijzigingen en implementatieplanning. Gebruikers hoeven geen repo-lokaal `openspec init` uit te voeren in een werkruimapmap.
+
+Stabiele linknamen zijn de manier waarop werkruimteplanning verwijst naar repositories en mappen. De gedeelde werkruimtestatus bewaart namen zoals `api`, `web` of `checkout`; elke machine koppelt die namen aan zijn eigen lokale paden in `.openspec-workspace/local.yaml`.
+
+```yaml
+# .openspec-workspace/workspace.yaml
+version: 1
+name: platform
+links:
+  api: {}
+  web: {}
+```
+
+```yaml
+# .openspec-workspace/local.yaml
+version: 1
+paths:
+  api: /repos/api
+  web: /repos/web
+```
+
+Door OpenSpec aangemaakte werkruimtes sluiten `.openspec-workspace/local.yaml` standaard uit van de draagbare samenwerkingsstatus. `.openspec-workspace/workspace.yaml` blijft draagbaar omdat het de werkruimtenaam en stabiele linknamen opslaat, niet de absolute checkoutpaden van een gebruiker.
+
+Gekoppelde paden kunnen volledige repositories, mappen in een grote monorepo of andere bestaande mappen zijn. Ze hebben geen repo-lokale `openspec/`-status nodig voordat ze kunnen deelnemen aan werkruimteplanning. Latere implementatie-, verificatie- of archiveringsworkflows kunnen meer repo-gereedheid vereisen, maar de zichtbaarheid van de planning begint met de link.
+
+```text
+multi-repo:
+  api      -> /repos/api
+  web      -> /repos/web
+
+large monorepo:
+  billing  -> /repos/platform/services/billing
+  checkout -> /repos/platform/apps/checkout
+```
+
+Beheerde werkruimtes bevinden zich onder de standaard OpenSpec-gegevensmap:
+
+```text
+getGlobalDataDir()/workspaces
+```
+
+Dat betekent `$XDG_DATA_HOME/openspec/workspaces` wanneer `XDG_DATA_HOME` is ingesteld, `~/.local/share/openspec/workspaces` als Unix-stijl terugvaloptie, en `%LOCALAPPDATA%\openspec\workspaces` als native Windows-terugvaloptie. Native Windows-shells, PowerShell en WSL2 bewaren elk de padtekenreeksen voor de runtime die OpenSpec uitvoert. Deze basis vertaalt niet tussen `D:\repo`, `/mnt/d/repo` en UNC WSL-paden.
+
+OpenSpec houdt ook een machine-lokaal register bij op:
+
+```text
+getGlobalDataDir()/workspaces/registry.yaml
+```
+
+Het register koppelt werkruimtenamen aan werkruimtelocaties zodat latere globale commando's bekende werkruimtes van overal kunnen weergeven of selecteren. Het is alleen een index. Elke werkruimapmap blijft gezaghebbend voor zijn eigen `.openspec-workspace/workspace.yaml` en `.openspec-workspace/local.yaml`, dus verouderde registerrecords kunnen worden gerapporteerd en hersteld zonder de werkruimte zelf te herdefiniëren.
+
+Werkruimtezichtbaarheid is geen wijzigingstoewijzing. Stel een werkruimte in wanneer OpenSpec moet weten welke repositories of mappen relevant zijn; maak later een wijziging aan wanneer je klaar bent om een functie, fix, project of ander stuk werk te plannen.
+
+Handige commando's:
+
+```bash
+# Begeleide setup
+openspec workspace setup
+
+# Automatiseringsvriendelijke setup
+openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
+openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex
+
+# Bekijk bekende werkruimtes vanuit het lokale register
+openspec workspace list
+openspec workspace ls
+
+# Voeg links toe of herstel ze voor de geselecteerde werkruimte
+openspec workspace link /repos/api
+openspec workspace link api-service /repos/api
+openspec workspace relink api-service /new/path/to/api
+
+# Controleer wat deze machine kan oplossen
+openspec workspace doctor
+openspec workspace doctor --workspace platform
+
+# Open de gekoppelde werkset
+openspec workspace open
+openspec workspace open platform --agent github-copilot
+openspec workspace open --editor
+```
+
+`workspace setup` maakt altijd de werkruimte aan op de standaard werkruimtelocatie, registreert deze in het lokale register, toont de werkruimtelocatie en vereist ten minste één gekoppelde repository of map. Interactieve setup vraagt om een voorkeursopener. Niet-interactieve setup slaat er slechts één op wanneer `--opener codex`, `--opener claude`, `--opener github-copilot` of `--opener editor` is opgegeven.
+
+OpenSpec onderhoudt ook rootwerkruimte-openbestanden: een door OpenSpec beheerd guidance-blok in `AGENTS.md`, een machine-lokaal `<workspace-name>.code-workspace`-bestand voor VS Code en GitHub Copilot-in-VS-Code-opens, en een specifiek negeerregel voor dat onderhouden `.code-workspace`-bestand. Door gebruikers gemaakte `*.code-workspace`-bestanden blijven traceerbaar omdat de negeerregel alleen het onderhouden bestand target.
+
+Het onderhouden VS Code-werkruimtebestand bevat de coördinatieroot als `.` plus geldige gekoppelde repositories of mappen als extra roots. VS Code geeft die items weer als een multi-root werkruimte.
+
+`workspace open` opent de gekoppelde werkset met de opgeslagen voorkeursopener tenzij `--agent <tool>` of `--editor` is doorgegeven voor die ene sessie. Beide opener-overrides doorgeven is een fout. Rootwerkruimte-open maakt gekoppelde repositories en mappen zichtbaar voor verkenning en planning; implementatie begint nadat de gebruiker expliciet om implementatiewerk vraagt.
+
+`workspace link` en `workspace relink` registreren alleen bestaande mappen; ze maken, kopiëren, verplaatsen, initialiseren of bewerken de gekoppelde repository of map niet. Na een succesvolle link of relink ververst OpenSpec het beheerde guidance, het VS Code-werkruimtebestand en de negeerregel.
+
+Werkruimtecommando's die één werkruimte nodig hebben, kunnen van overal worden uitgevoerd met `--workspace <name>`. Als je ze uitvoert in een werkruimapmap of submap, gebruikt OpenSpec de huidige werkruimte. Als er meerdere bekende werkruimtes beschikbaar zijn en je geen `--workspace <name>` doorgeeft, tonen menselijke commando's een kiezer; `--json` en `--no-interactive` mislukken met een gestructureerde statusfout in plaats van een prompt.
+
+Directe werkruimtecommando's ondersteunen JSON-uitvoer voor scripts. JSON-reacties bewaren primaire gegevens in `workspace`, `workspaces` of `link`-objecten en rapporteren waarschuwingen of fouten in `status`-arrays. Gezonde objecten gebruiken `status: []`.
 
 ## Specs
 
@@ -62,128 +193,129 @@ openspec/specs/
 ├── payments/
 │   └── spec.md           # Betalingsverwerking
 ├── notifications/
-│   └── spec.md           # Meldingensysteem
+│   └── spec.md           # Meldingssysteem
 └── ui/
     └── spec.md           # UI-gedrag en thema's
 ```
 
-Organiseer specs op domein — logische groeperingen die zinvol zijn voor je systeem. Veelgebruikte patronen:
+Organiseer specs per domein — logische groeperingen die zinvol zijn voor je systeem. Veelgebruikte patronen:
 
-- **Op functiegebied**: `auth/`, `payments/`, `search/`
-- **Op component**: `api/`, `frontend/`, `workers/`
-- **Op begrensde context**: `ordering/`, `fulfillment/`, `inventory/`
+- **Per functiegebied**: `auth/`, `payments/`, `search/`
+- **Per component**: `api/`, `frontend/`, `workers/`
+- **Per begrensde context**: `ordering/`, `fulfillment/`, `inventory/`
 
-### Specformaat
+### Spec-formaat
 
 Een spec bevat vereisten, en elke vereiste heeft scenario's:
 
 ```markdown
-# Auth Specificatie
+# Auth Specification
+```
 
 ## Doel
 Authenticatie en sessiebeheer voor de applicatie.
 
-## Vereisten
+## Eisen
 
-### Vereiste: Gebruikersauthenticatie
-Het systeem ZAL een JWT-token uitgeven bij succesvolle aanmelding.
+### Eisen: Gebruikersauthenticatie
+Het systeem MOET een JWT-token uitgeven bij een succesvolle aanmelding.
 
-#### Scenario: Geldige referenties
-- GEGEVEN een gebruiker met geldige referenties
-- WANNEER de gebruiker het aanmeldingsformulier indient
+#### Scenario: Geldige inloggegevens
+- GEGEVEN een gebruiker met geldige inloggegevens
+- WANNEER de gebruiker het aanmeldformulier indient
 - DAN wordt een JWT-token geretourneerd
 - EN wordt de gebruiker doorgestuurd naar het dashboard
 
-#### Scenario: Ongeldige referenties
-- GEGEVEN ongeldige referenties
-- WANNEER de gebruiker het aanmeldingsformulier indient
+#### Scenario: Ongeldige inloggegevens
+- GEGEVEN ongeldige inloggegevens
+- WANNEER de gebruiker het aanmeldformulier indient
 - DAN wordt een foutmelding weergegeven
 - EN wordt er geen token uitgegeven
 
-### Vereiste: Sessieverloop
+### Eisen: Sessieverval
 Het systeem MOET sessies laten verlopen na 30 minuten inactiviteit.
 
-#### Scenario: Inactieve time-out
+#### Scenario: Inactiviteits-timeout
 - GEGEVEN een geauthenticeerde sessie
-- WANNEER 30 minuten verstrijken zonder activiteit
-- DAN wordt de sessie ongeldig verklaard
-- EN moet de gebruiker opnieuw authenticeren
+- WANNEER er 30 minuten verstrijken zonder activiteit
+- DAN wordt de sessie ongeldig gemaakt
+- EN moet de gebruiker zich opnieuw authenticeren
 ```
 
-**Belangrijke elementen:**
+**Kernelementen:**
 
 | Element | Doel |
 |---------|------|
-| `## Doel` | Beschrijving op hoog niveau van het domein van deze spec |
-| `### Vereiste:` | Een specifiek gedrag dat het systeem moet hebben |
-| `#### Scenario:` | Een concreet voorbeeld van de vereiste in de praktijk |
-| SHALL/MUST/SHOULD | RFC 2119-trefwoorden die de sterkte van de vereiste aangeven |
+| `## Purpose` | Overkoepelende beschrijving van het domein van deze specificatie |
+| `### Requirement:` | Een specifiek gedrag dat het systeem moet vertonen |
+| `#### Scenario:` | Een concreet voorbeeld van de eis in actie |
+| SHALL/MUST/SHOULD | RFC 2119-sleutelwoorden die de sterkte van de eis aangeven |
 
-### Waarom Specs Op Deze Manier Gestructureerd Zijn
+### Waarom Specificaties op Deze Manier Structureren
 
-**Vereisten zijn het "wat"** — ze stellen vast wat het systeem moet doen zonder de implementatie te specificeren.
+**Eisen zijn het "wat"** — ze geven aan wat het systeem moet doen zonder de implementatie te specificeren.
 
 **Scenario's zijn het "wanneer"** — ze bieden concrete voorbeelden die geverifieerd kunnen worden. Goede scenario's:
 - Zijn testbaar (je zou er een geautomatiseerde test voor kunnen schrijven)
-- Bestrijken zowel het happy path als randgevallen
-- Gebruiken Given/When/Then of een vergelijkbaar gestructureerd formaat
+- Dekken zowel het happy path als randgevallen
+- Gebruiken Gegeven/Wanneer/Dan of een vergelijkbaar gestructureerd formaat
 
-**RFC 2119-trefwoorden** (SHALL, MUST, SHOULD, MAY) communiceren de intentie:
-- **MUST/SHALL** — absolute vereiste
-- **SHOULD** — aanbevolen, maar uitzonderingen bestaan
+**RFC 2119-sleutelwoorden** (SHALL, MUST, SHOULD, MAY) communiceren intentie:
+- **MUST/SHALL** — absolute eis
+- **SHOULD** — aanbevolen, maar er zijn uitzonderingen mogelijk
 - **MAY** — optioneel
 
-### Wat een Spec Is (en Niet Is)
+### Wat een Specificatie Is (en Niet Is)
 
-Een spec is een **gedragscontract**, geen implementatieplan.
+Een specificatie is een **gedragscontract**, geen implementatieplan.
 
-Goede specinhoud:
-- Observeerbaar gedrag waar gebruikers of downstream-systemen op vertrouwen
+Goede specificatie-inhoud:
+- Waarneembaar gedrag waar gebruikers of downstream-systemen op vertrouwen
 - Invoer, uitvoer en foutcondities
 - Externe beperkingen (beveiliging, privacy, betrouwbaarheid, compatibiliteit)
 - Scenario's die getest of expliciet gevalideerd kunnen worden
 
-Vermijd in specs:
-- Interne class-/functienamen
+Vermijd in specificaties:
+- Interne klasse-/functienamen
 - Bibliotheek- of frameworkkeuzes
-- Stap-voor-stap implementatiedetails
+- Stapsgewijze implementatiedetails
 - Gedetailleerde uitvoeringsplannen (die horen thuis in `design.md` of `tasks.md`)
 
 Snelle test:
-- Als de implementatie kan veranderen zonder het extern zichtbare gedrag te wijzigen, hoort het waarschijnlijk niet in de spec.
+- Als de implementatie kan veranderen zonder het extern zichtbare gedrag te veranderen, hoort het waarschijnlijk niet in de specificatie thuis.
 
-### Houd Het Licht: Progressieve Nauwkeurigheid
+### Houd het Lichtgewicht: Progressieve Nauwgezetheid
 
-OpenSpec streeft naar het vermijden van bureaucratie. Gebruik het lichtste niveau dat de wijziging nog steeds verifieerbaar maakt.
+OpenSpec streeft ernaar bureaucratie te vermijden. Gebruik het lichtste niveau dat de verandering nog steeds verifieerbaar maakt.
 
-**Lite spec (standaard):**
-- Korte, gedragsgerichte vereisten
-- Duidelijke scope en niet-doelen
-- Een paar concrete acceptatiechecks
+**Lite-specificatie (standaard):**
+- Korte, gedrag-gerichte eisen
+- Duidelijke scope en non-goals
+- Enkele concrete acceptatiecontroles
 
-**Volledige spec (voor hoger risico):**
-- Wijzigingen over meerdere teams of repositories
+**Volledige specificatie (voor hoger risico):**
+- Wijzigingen over teams of repositories heen
 - API-/contractwijzigingen, migraties, beveiligings-/privacykwesties
-- Wijzigingen waarbij ambiguïteit waarschijnlijk leidt tot kostbare herwerking
+- Wijzigingen waarbij ambiguïteit waarschijnlijk kostbare herwerking veroorzaakt
 
 De meeste wijzigingen moeten in de Lite-modus blijven.
 
 ### Samenwerking Mens + Agent
 
-In veel teams verkennen mensen en maken artefacten aan agents. De bedoelde cyclus is:
+In veel teams onderzoeken mensen en stellen agenten artefacten op. De beoogde cyclus is:
 
-1. De mens verschaft intentie, context en beperkingen.
-2. De agent vertaalt dit naar gedragsgerichte vereisten en scenario's.
-3. De agent houdt implementatiedetails in `design.md` en `tasks.md`, niet in `spec.md`.
+1. Mens levert intentie, context en beperkingen.
+2. Agent zet dit om in gedrag-gerichte eisen en scenario's.
+3. Agent houdt implementatiedetails in `design.md` en `tasks.md`, niet in `spec.md`.
 4. Validatie bevestigt structuur en duidelijkheid vóór implementatie.
 
-Dit houdt specs leesbaar voor mensen en consistent voor agents.
+Dit houdt specificaties leesbaar voor mensen en consistent voor agenten.
 
 ## Wijzigingen
 
-Een wijziging is een voorgestelde aanpassing van je systeem, verpakt als een map met alles wat nodig is om deze te begrijpen en te implementeren.
+Een wijziging is een voorgestelde aanpassing aan uw systeem, verpakt als een map met alles wat nodig is om het te begrijpen en te implementeren.
 
-### Wijzigingsstructuur
+### Structuur van een Wijziging
 
 ```
 openspec/changes/add-dark-mode/
@@ -191,39 +323,39 @@ openspec/changes/add-dark-mode/
 ├── design.md             # Hoe (technische aanpak)
 ├── tasks.md              # Implementatiechecklist
 ├── .openspec.yaml        # Wijzigingsmetadata (optioneel)
-└── specs/                # Delta-specs
+└── specs/                # Delta-specificaties
     └── ui/
         └── spec.md       # Wat er verandert in ui/spec.md
 ```
 
-Elke wijziging is zelfvoorzienend. Het bevat:
-- **Artefacten** — documenten die intentie, ontwerp en taken vastleggen
-- **Delta-specs** — specificaties voor wat wordt toegevoegd, gewijzigd of verwijderd
+Elke wijziging is zelfstandig. Het bevat:
+- **Artefacten** — documenten die de intentie, het ontwerp en de taken vastleggen
+- **Delta-specificaties** — specificaties voor wat wordt toegevoegd, gewijzigd of verwijderd
 - **Metadata** — optionele configuratie voor deze specifieke wijziging
 
 ### Waarom Wijzigingen Mappen Zijn
 
-Het verpakken van een wijziging als een map heeft verschillende voordelen:
+Het verpakken van een wijziging als map heeft verschillende voordelen:
 
-1. **Alles bij elkaar.** Voorstel, ontwerp, taken en specs bevinden zich op één plek. Geen zoeken op verschillende locaties.
+1. **Alles bij elkaar.** Voorstel, ontwerp, taken en specificaties staan op één plek. Niet zoeken naar verschillende locaties.
 
-2. **Parallel werk.** Meerdere wijzigingen kunnen tegelijk bestaan zonder conflicten. Werk aan `add-dark-mode` terwijl `fix-auth-bug` ook in uitvoering is.
+2. **Parallel werk.** Meerdere wijzigingen kunnen tegelijkertijd bestaan zonder conflicten. Werk aan `add-dark-mode` terwijl `fix-auth-bug` ook in uitvoering is.
 
-3. **Schone geschiedenis.** Wanneer gearchiveerd, verhuizen wijzigingen naar `changes/archive/` met hun volledige context behouden. Je kunt terugkijken en begrijpen niet alleen wat er veranderde, maar ook waarom.
+3. **Schone geschiedenis.** Bij archivering verplaatsen wijzigingen naar `changes/archive/` met hun volledige context bewaard. U kunt terugkijken en begrijpen niet alleen wat er veranderde, maar ook waarom.
 
-4. **Beoordelingsvriendelijk.** Een wijzigingsmap is eenvoudig te beoordelen — open het, lees het voorstel, bekijk het ontwerp, bekijk de delta-specs.
+4. **Review-vriendelijk.** Een wijzigingsmap is eenvoudig te beoordelen — open het, lees het voorstel, controleer het ontwerp, bekijk de specificatiedelta's.
 
 ## Artefacten
 
-Artefacten zijn de documenten binnen een wijziging die het werk sturen.
+Artefacten zijn de documenten binnen een wijziging die het werk begeleiden.
 
-### De Artefactenstroom
+### De Artefactstroom
 
 ```
 proposal ──────► specs ──────► design ──────► tasks ──────► implement
     │               │             │              │
    waarom          wat           hoe          stappen
- + scope        wijzigingen   aanpak        om te nemen
+ + scope        veranderingen   aanpak      om te nemen
 ```
 
 Artefacten bouwen op elkaar voort. Elk artefact biedt context voor het volgende.
@@ -232,39 +364,39 @@ Artefacten bouwen op elkaar voort. Elk artefact biedt context voor het volgende.
 
 #### Voorstel (`proposal.md`)
 
-Het voorstel legt **intentie**, **scope** en **aanpak** vast op een hoog niveau.
+Het voorstel legt op hoog niveau de **intentie**, **scope** en **aanpak** vast.
 
 ```markdown
 # Voorstel: Donkere Modus Toevoegen
 
 ## Intentie
-Gebruikers hebben gevraagd om een donkere modus-optie om oogvermoeidheid te verminderen
-tijdens nachtelijk gebruik en om systeemvoorkeuren te matchen.
+Gebruikers hebben een optie voor donkere modus gevraagd om oogvermoeidheid
+te verminderen tijdens gebruik 's nachts en om systeemvoorkeuren te volgen.
 
 ## Scope
-In scope:
+Binnen scope:
 - Thema-schakelaar in instellingen
 - Detectie van systeemvoorkeur
 - Voorkeur opslaan in localStorage
 
 Buiten scope:
 - Aangepaste kleurthema's (toekomstig werk)
-- Per-pagina thema-overschrijvingen
+- Pagina-specifieke thema-overrides
 
 ## Aanpak
-Gebruik CSS-aangepaste eigenschappen voor thematisering met een React-context
-voor staatsbeheer. Detecteer systeemvoorkeur bij eerste belasting,
-staat handmatige overschrijving toe.
+Gebruik CSS custom properties voor theming met een React context
+voor statusbeheer. Detecteer systeemvoorkeur bij eerste laden,
+sta handmatige overschrijving toe.
 ```
 
 **Wanneer het voorstel bijwerken:**
-- Scope verandert (verkleinen of uitbreiden)
+- Scope verandert (verkleint of vergroot)
 - Intentie wordt verduidelijkt (beter begrip van het probleem)
-- Aanpak verschuift fundamenteel
+- Aanpak verandert fundamenteel
 
-#### Specs (delta-specs in `specs/`)
+#### Specificaties (delta-specificaties in `specs/`)
 
-Delta-specs beschrijven **wat er verandert** ten opzichte van de huidige specs. Zie [Delta-specs](#delta-specs) hieronder.
+Delta-specificaties beschrijven **wat er verandert** ten opzichte van de huidige specificaties. Zie [Delta-specificaties](#delta-specificaties) hieronder.
 
 #### Ontwerp (`design.md`)
 
@@ -274,20 +406,20 @@ Het ontwerp legt de **technische aanpak** en **architectuurbeslissingen** vast.
 # Ontwerp: Donkere Modus Toevoegen
 
 ## Technische Aanpak
-Thema-stand beheerd via React Context om prop drilling te vermijden.
-CSS-aangepaste eigenschappen maken runtime-schakeling mogelijk zonder class-toggling.
+Thema-status beheerd via React Context om prop drilling te voorkomen.
+CSS custom properties maken runtime-schakeling mogelijk zonder class-toggling.
 
 ## Architectuurbeslissingen
 
 ### Beslissing: Context boven Redux
-Gebruik van React Context voor themastatus, omdat:
+Gebruik van React Context voor thema-status omdat:
 - Eenvoudige binaire status (licht/donker)
-- Geen complexe statustransities
-- Voorkomt het toevoegen van een Redux-afhankelijkheid
+- Geen complexe statusovergangen
+- Voorkomt toevoegen van Redux-afhankelijkheid
 
-### Beslissing: CSS-aangepaste eigenschappen
-Gebruik van CSS-variabelen in plaats van CSS-in-JS, omdat:
-- Werkt met het bestaande stylesheet
+### Beslissing: CSS Custom Properties
+Gebruik van CSS-variabelen in plaats van CSS-in-JS omdat:
+- Werkt met bestaand stylesheet
 - Geen runtime-overhead
 - Browser-native oplossing
 
@@ -299,7 +431,7 @@ ThemeProvider (context)
 ThemeToggle ◄──► localStorage
        │
        ▼
-CSS-variabelen (toegepast op :root)
+CSS Variabelen (toegepast op :root)
 ```
 
 ## Bestandswijzigingen
@@ -308,21 +440,21 @@ CSS-variabelen (toegepast op :root)
 - `src/styles/globals.css` (gewijzigd)
 ````
 
-**Wanneer het ontwerp moet worden bijgewerkt:**
-- De implementatie onthult dat de aanpak niet werkt
-- Een betere oplossing wordt ontdekt
+**Wanneer het ontwerp bijwerken:**
+- Implementatie onthult dat de aanpak niet werkt
+- Beter oplossing ontdekt
 - Afhankelijkheden of beperkingen veranderen
 
 #### Taken (`tasks.md`)
 
-Taken zijn de **implementatiechecklijst** — concrete stappen met selectievakjes.
+Taken zijn de **implementatiechecklist** — concrete stappen met selectievakjes.
 
 ```markdown
 # Taken
 
-## 1. Thema-infrastructuur
-- [ ] 1.1 Maak ThemeContext met light/dark status
-- [ ] 1.2 Voeg CSS-aangepaste eigenschappen voor kleuren toe
+## 1. Themainfrastructuur
+- [ ] 1.1 Maak ThemeContext met licht/donker-status
+- [ ] 1.2 Voeg CSS custom properties toe voor kleuren
 - [ ] 1.3 Implementeer localStorage-persistentie
 - [ ] 1.4 Voeg systeemvoorkeurdetectie toe
 
@@ -331,21 +463,21 @@ Taken zijn de **implementatiechecklijst** — concrete stappen met selectievakje
 - [ ] 2.2 Voeg schakelaar toe aan instellingenpagina
 - [ ] 2.3 Werk Header bij om snelle schakelaar op te nemen
 
-## 3. Styling
-- [ ] 3.1 Definieer donker thema-kleurenpalet
+## 3. Opmaak
+- [ ] 3.1 Definieer donker thema kleurenpalet
 - [ ] 3.2 Werk componenten bij om CSS-variabelen te gebruiken
 - [ ] 3.3 Test contrastverhoudingen voor toegankelijkheid
 ```
 
 **Best practices voor taken:**
-- Groepeer gerelateerde taken onder kopjes
-- Gebruik hiërarchische nummering (1.1, 1.2, enz.)
-- Houd taken klein genoeg om in één sessie af te ronden
-- Markeer taken als voltooid naarmate je ze afwerkt
+- Groep gerelateerde taken onder kopjes
+- Gebruik hiërarchische nummering (1.1, 1.2, etc.)
+- Houd taken klein genoeg om in één sessie te voltooien
+- Vink taken af naarmate u ze voltooit
 
 ## Delta-specificaties
 
-Delta-specificaties zijn het sleutelconcept dat OpenSpec geschikt maakt voor brownfield-ontwikkeling. Ze beschrijven **wat er verandert** in plaats van de volledige specificatie opnieuw te vermelden.
+Delta-specificaties zijn het sleutelconcept dat OpenSpec bruikbaar maakt voor brownfield-ontwikkeling. Ze beschrijven **wat er verandert** in plaats van de volledige specificatie te herhalen.
 
 ### Het Formaat
 
@@ -354,61 +486,61 @@ Delta-specificaties zijn het sleutelconcept dat OpenSpec geschikt maakt voor bro
 
 ## TOEGEVOEGDE Vereisten
 
-### Vereiste: Tweefactorauthenticatie
-Het systeem MOET TOTP-gebaseerde tweefactorauthenticatie ondersteunen.
+### Vereist: Twee-factor Authenticatie
+Het systeem MOET TOTP-gebaseerde twee-factor authenticatie ondersteunen.
 
 #### Scenario: 2FA-inschrijving
-- GEGEVEN een gebruiker zonder 2FA ingeschakeld
-- WANNEER de gebruiker 2FA inschakelt in de instellingen
-- DAN wordt een QR-code weergegeven voor de authenticator-app-installatie
+- GEGEVEN een gebruiker zonder ingeschakelde 2FA
+- WANNEER de gebruiker 2FA inschakelt in instellingen
+- DAN wordt een QR-code weergegeven voor authenticator-app-setup
 - EN de gebruiker moet verifiëren met een code vóór activering
 
-#### Scenario: 2FA-aanmelding
-- GEGEVEN een gebruiker met 2FA ingeschakeld
-- WANNEER de gebruiker geldige referenties indient
+#### Scenario: 2FA-login
+- GEGEVEN een gebruiker met ingeschakelde 2FA
+- WANNEER de gebruiker geldige inloggegevens indient
 - DAN wordt een OTP-uitdaging gepresenteerd
-- EN aanmelding is pas voltooid na een geldige OTP
+- EN login wordt pas voltooid na geldige OTP
 
 ## GEWIJZIGDE Vereisten
 
-### Vereiste: Sessie-verloop
-Het systeem MOET sessies verlaten na 15 minuten inactiviteit.
+### Vereist: Sessieverval
+Het systeem MOET sessies laten verlopen na 15 minuten inactiviteit.
 (Eerder: 30 minuten)
 
-#### Scenario: Inactieve time-out
+#### Scenario: Inactieve timeout
 - GEGEVEN een geauthenticeerde sessie
 - WANNEER 15 minuten verstrijken zonder activiteit
 - DAN wordt de sessie ongeldig gemaakt
 
 ## VERWIJDERDE Vereisten
 
-### Vereiste: Onthoud mij
-(Gedeprecieerd ten gunste van 2FA. Gebruikers moeten zich bij elke sessie opnieuw authenticeren.)
+### Vereist: Onthoud Mij
+(Vervallen ten gunste van 2FA. Gebruikers moeten elke sessie opnieuw authenticeren.)
 ```
 
 ### Delta-secties
 
-| Sectie | Betekenis | Wat er bij archivering gebeurt |
-|---------|---------|------------------------|
+| Sectie | Betekenis | Wat gebeurt er bij archivering |
+|--------|-----------|-------------------------------|
 | `## TOEGEVOEGDE Vereisten` | Nieuw gedrag | Toegevoegd aan hoofdspecificatie |
 | `## GEWIJZIGDE Vereisten` | Gewijzigd gedrag | Vervangt bestaande vereiste |
-| `## VERWIJDERDE Vereisten` | Gedeprecieerd gedrag | Verwijderd uit hoofdspecificatie |
+| `## VERWIJDERDE Vereisten` | Verouderd gedrag | Verwijderd uit hoofdspecificatie |
 
-### Waarom deltas in plaats van volledige specificaties
+### Waarom Delta's in Plaats van Volledige Specificaties
 
-**Duidelijkheid.** Een delta toont precies wat er verandert. Bij het lezen van een volledige specificatie moet je deze mentaal vergelijken met de huidige versie.
+**Duidelijkheid.** Een delta laat precies zien wat er verandert. Bij het lezen van een volledige specificatie zou u het mentaal moeten vergelijken met de huidige versie.
 
-**Conflicten vermijden.** Twee wijzigingen kunnen hetzelfde specificatiebestand aanraken zonder conflicten, zolang ze verschillende vereisten wijzigen.
+**Conflicten voorkomen.** Twee wijzigingen kunnen hetzelfde specificatiebestand aanraken zonder conflicten, zolang ze verschillende vereisten wijzigen.
 
-**Efficiënte beoordeling.** Beoordelaars zien de wijziging, niet de ongewijzigde context. Focus op wat belangrijk is.
+**Review-efficiëntie.** Reviewers zien de wijziging, niet de ongewijzigde context. Focus op wat belangrijk is.
 
-**Brownfield-geschiktheid.** Het meeste werk wijzigt bestaand gedrag. Deltas maken modificaties tot een primaire functie, niet tot een bijzaak.
+**Brownfield-compatibiliteit.** Het meeste werk wijzigt bestaand gedrag. Delta's maken modificaties eersteklas, geen bijzaak.
 
-## Schemas
+## Schema's
 
-Schemas definiëren de artifacttypen en hun afhankelijkheden voor een workflow.
+Schema's definiëren de artefacttypen en hun afhankelijkheden voor een werkstroom.
 
-### Hoe schemas werken
+### Hoe Schema's Werken
 
 ```yaml
 # openspec/schemas/spec-driven/schema.yaml
@@ -420,65 +552,65 @@ artifacts:
 
   - id: specs
     generates: specs/**/*.md
-    requires: [proposal]      # Heeft proposal nodig voordat het wordt aangemaakt
+    requires: [proposal]      # Heeft proposal nodig voordat het kan worden aangemaakt
 
   - id: design
     generates: design.md
-    requires: [proposal]      # Kan parallel met specs worden aangemaakt
+    requires: [proposal]      # Kan parallel aan specs worden aangemaakt
 
   - id: tasks
     generates: tasks.md
     requires: [specs, design] # Heeft zowel specs als design nodig
 ```
 
-**Artifacts vormen een afhankelijkheidsgraaf:**
+**Artefacten vormen een afhankelijkheidsgrafiek:**
 
 ```
                     proposal
-                   (hoofdknooppunt)
+                   (root node)
                        │
          ┌─────────────┴─────────────┐
          │                           │
          ▼                           ▼
       specs                       design
-   (vereist:                  (vereist:
+   (requires:                  (requires:
     proposal)                   proposal)
          │                           │
          └─────────────┬─────────────┘
                        │
                        ▼
                     tasks
-                (vereist:
+                (requires:
                 specs, design)
 ```
 
-**Afhankelijkheden zijn mogelijkheden, geen poorten.** Ze tonen wat er mogelijk is om aan te maken, niet wat je als volgende moet aanmaken. Je kunt design overslaan als je het niet nodig hebt. Je kunt specs voor of na design aanmaken — beide zijn alleen afhankelijk van proposal.
+**Afhankelijkheden zijn mogelijkmakers, geen poorten.** Ze tonen wat mogelijk is om aan te maken, niet wat je vervolgens moet aanmaken. Je kunt design overslaan als je het niet nodig hebt. Je kunt specs voor of na design aanmaken — beide zijn alleen afhankelijk van proposal.
 
-### Ingebouwde schemas
+### Ingebouwde Schema's
 
 **spec-driven** (standaard)
 
-De standaardworkflow voor specificatiegestuurde ontwikkeling:
+De standaard werkstroom voor spec-driven ontwikkeling:
 
 ```
 proposal → specs → design → tasks → implement
 ```
 
-Het beste voor: De meeste functiewerkzaamheden waarbij je het eens wilt worden over specificaties voordat je implementeert.
+Het meest geschikt voor: De meeste functiewerkzaamheden waarbij je het eerst over specificaties eens wilt zijn vóór de implementatie.
 
-### Aangepaste schemas
+### Aangepaste Schema's
 
-Maak aangepaste schemas voor de workflow van je team:
+Maak aangepaste schema's voor de werkstroom van je team:
 
 ```bash
-# Vanaf nul aanmaken
+# Maak vanuit het niets aan
 openspec schema init research-first
 
-# Of een bestaande forken
+# Of splits een bestaand schema
 openspec schema fork spec-driven research-first
 ```
 
-**Voorbeeld aangepast schema:**
+**Voorbeeld van een aangepast schema:**
 
 ```yaml
 # openspec/schemas/research-first/schema.yaml
@@ -497,16 +629,16 @@ artifacts:
     requires: [proposal]   # Sla specs/design over, ga direct naar taken
 ```
 
-Zie [Aanpassing](customization.md) voor volledige details over het aanmaken en gebruiken van aangepaste schemas.
+Zie [Aanpassing](customization.md) voor volledige details over het aanmaken en gebruiken van aangepaste schema's.
 
-## Archief
+## Archiveren
 
-Archivering voltooit een wijziging door de delta-specificaties samen te voegen met de hoofdspecificaties en de wijziging te bewaren voor de geschiedenis.
+Archiveren voltooit een wijziging door de delta-specificaties samen te voegen met de hoofdspecificaties en de wijziging voor de geschiedenis te bewaren.
 
-### Wat er gebeurt bij archivering
+### Wat Er Gebeurt Bij Het Archiveren
 
 ```
-Voor archivering:
+Voor archiveren:
 
 openspec/
 ├── specs/
@@ -522,7 +654,7 @@ openspec/
                 └── spec.md ─────────┘
 
 
-Na archivering:
+Na archiveren:
 
 openspec/
 ├── specs/
@@ -530,7 +662,7 @@ openspec/
 │       └── spec.md        # Bevat nu 2FA-vereisten
 └── changes/
     └── archive/
-        └── 2025-01-24-add-2fa/    # Bewaard voor de geschiedenis
+        └── 2025-01-24-add-2fa/    # Bewaard voor geschiedenis
             ├── proposal.md
             ├── design.md
             ├── tasks.md
@@ -539,91 +671,92 @@ openspec/
                     └── spec.md
 ```
 
-### Het archiveringsproces
+### Het Archiveringsproces
 
-1. **Deltas samenvoegen.** Elke delta-specsectie (TOEGEVOEGD/GEWIJZIGD/VERWIJDERD) wordt toegepast op de bijbehorende hoofdspecificatie.
+1. **Delt's samenvoegen.** Elke delta-specificatiesectie (ADDED/MODIFIED/REMOVED) wordt toegepast op de overeenkomstige hoofdspecificatie.
 
-2. **Verplaatsen naar archief.** De wijzigingsmap wordt verplaatst naar `changes/archive/` met een datumprefix voor chronologische volgorde.
+2. **Naar archief verplaatsen.** De wijzigingsmap wordt verplaatst naar `changes/archive/` met een datumprefix voor chronologische ordening.
 
-3. **Context bewaren.** Alle artifacts blijven intact in het archief. Je kunt altijd terugkijken om te begrijpen waarom een wijziging is gemaakt.
+3. **Context bewaren.** Alle artefacten blijven intact in het archief. Je kunt altijd teruggaan om te begrijpen waarom een wijziging is doorgevoerd.
 
-### Waarom archivering belangrijk is
+### Waarom Archiveren Belangrijk Is
 
-**Schone staat.** Actieve wijzigingen (`changes/`) tonen alleen lopend werk. Voltooid werk wordt uit de weg geruimd.
+**Schone status.** Actieve wijzigingen (`changes/`) tonen alleen werk in uitvoering. Voltooid werk wordt uit de weg geruimd.
 
-**Auditspoor.** Het archief bewaart de volledige context van elke wijziging — niet alleen wat er veranderde, maar ook de proposal die uitlegt waarom, de design die uitlegt hoe, en de taken die het uitgevoerde werk tonen.
+**Audittrail.** Het archief bewaart de volledige context van elke wijziging — niet alleen wat er is veranderd, maar ook het proposal dat uitlegt waarom, het design dat uitlegt hoe, en de taken die het uitgevoerde werk tonen.
 
-**Specificatie-evolutie.** Specificaties groeien organisch naarmate wijzigingen worden gearchiveerd. Elke archivering voegt de deltas samen, waardoor in de loop van de tijd een uitgebreide specificatie wordt opgebouwd.
+**Specificatie-evolutie.** Specificaties groeien organisch naarmate wijzigingen worden gearchiveerd. Elk archief voegt zijn delta's samen, waardoor in de loop van de tijd een uitgebreide specificatie wordt opgebouwd.
 
-## Hoe het allemaal samenkomt
+## Hoe Het Allemaal Samenkomt
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              OPENSPEC WORKFLOW                               │
+│                              OPENSPEC FLOW                                   │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. START      │  /opsx:propose (core) of /opsx:new (uitgebreid)         │
+│   │  1. START      │  /opsx:propose (kern) of /opsx:new (uitgebreid)         │
 │   │     WIJZIGING  │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. ARTIFACTS  │  /opsx:ff of /opsx:continue (uitgebreide workflow)      │
-│   │     AANMAKEN   │  Maakt proposal → specs → design → tasks aan            │
-│   │                │  (gebaseerd op schema-afhankelijkheden)                 │
+│   │  2. MAAK       │  /opsx:ff of /opsx:continue (uitgebreide werkstroom)    │
+│   │     ARTEFACTEN │  Maakt proposal → specs → design → tasks                │
+│   │                │  (gebaseerd op schema-afhankelijkheden)                  │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  3. TAKEN      │  /opsx:apply                                            │
-│   │     UITVOEREN  │  Werk taken af, markeer ze als voltooid                 │
-│   │                │◄──── Werk artifacts bij naarmate je leert                │
+│   │  3. IMPLEMENTEER│  /opsx:apply                                           │
+│   │     TAKEN      │  Werk de taken af, vink ze af                           │
+│   │                │◄──── Werk artefacten bij naarmate je leert               │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. WERK       │  /opsx:verify (optioneel)                               │
-│   │     VERIFIËREN │  Controleer of implementatie overeenkomt met specs      │
+│   │  4. VERIFIEER  │  /opsx:verify (optioneel)                               │
+│   │     WERK       │  Controleer of implementatie overeenkomt met specs      │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. WIJZIGING  │────►│  Delta-specificaties samenvoegen met         │    │
-│   │     ARCHIVEREN │     │  hoofdspecificaties                          │    │
-│   └────────────────┘     │  Wijzigingsmap verplaatsen naar archive/     │    │
-│                          │  Specificaties zijn nu de bijgewerkte bron   │    │
+│   │  5. ARCHIVEER  │────►│  Delta-specificaties worden samengevoegd     │    │
+│   │     WIJZIGING  │     │  met hoofdspecificaties                      │    │
+│   └────────────────┘     │  Wijzigingsmap verplaatst naar archief/      │    │
+│                          │  Specificaties zijn nu de bijgewerkte        │    │
+│                          │  bron van waarheid                           │    │
 │                          └──────────────────────────────────────────────┘    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**De positieve cirkel:**
+**De deugdzame cyclus:**
 
-1. Specificaties beschrijven huidig gedrag
-2. Wijzigingen stellen modificaties voor (als deltas)
+1. Specificaties beschrijven het huidige gedrag
+2. Wijzigingen stellen modificaties voor (als delta's)
 3. Implementatie maakt de wijzigingen werkelijk
-4. Archivering voegt deltas samen met specificaties
+4. Archiveren voegt delta's samen in specificaties
 5. Specificaties beschrijven nu het nieuwe gedrag
-6. De volgende wijziging bouwt voort op bijgewerkte specificaties
+6. De volgende wijziging bouwt voort op de bijgewerkte specificaties
 
 ## Woordenlijst
 
 | Term | Definitie |
-|------|------------|
-| **Artifact** | Een document binnen een wijziging (voorstel, ontwerp, taken of delta-specificaties) |
-| **Archive** | Het proces van het voltooien van een wijziging en het samenvoegen van de deltas in de hoofdspecificaties |
-| **Change** | Een voorgestelde aanpassing van het systeem, verpakt als een map met artifacts |
-| **Delta spec** | Een specificatie die wijzigingen (TOEGEVOEGD/GEWIJZIGD/VERWIJDERD) beschrijft ten opzichte van de huidige specificaties |
-| **Domain** | Een logische groepering voor specificaties (bijv. `auth/`, `payments/`) |
-| **Requirement** | Een specifiek gedrag dat het systeem moet hebben |
-| **Scenario** | Een concreet voorbeeld van een vereiste, doorgaans in Given/When/Then-formaat |
-| **Schema** | Een definitie van artifacttypen en hun afhankelijkheden |
-| **Spec** | Een specificatie die het systeemgedrag beschrijft, met vereisten en scenario's |
-| **Source of truth** | De `openspec/specs/` map, met het huidige overeengekomen gedrag |
+|------|-----------|
+| **Artefact** | Een document binnen een wijziging (proposal, design, taken of delta-specificaties) |
+| **Archiveren** | Het proces van het voltooien van een wijziging en het samenvoegen van de delta's met de hoofdspecificaties |
+| **Wijziging** | Een voorgestelde modificatie aan het systeem, verpakt als een map met artefacten |
+| **Delta-specificatie** | Een specificatie die wijzigingen (ADDED/MODIFIED/REMOVED) ten opzichte van de huidige specificaties beschrijft |
+| **Domein** | Een logische groepering voor specificaties (bijv. `auth/`, `payments/`) |
+| **Vereiste** | Een specifiek gedrag dat het systeem moet hebben |
+| **Scenario** | Een concreet voorbeeld van een vereiste, typisch in Gegeven/Wanneer/Dan-formaat |
+| **Schema** | Een definitie van artefacttypen en hun afhankelijkheden |
+| **Specificatie** | Een specificatie die het systeemgedrag beschrijft, met vereisten en scenario's |
+| **Bron van waarheid** | De map `openspec/specs/`, die het huidige overeengekomen gedrag bevat |
 
-## Volgende stappen
+## Volgende Stappen
 
 - [Aan de slag](getting-started.md) - Praktische eerste stappen
-- [Workflows](workflows.md) - Veelgebruikte patronen en wanneer elk te gebruiken
+- [Werkstromen](workflows.md) - Veelvoorkomende patronen en wanneer elk te gebruiken
 - [Commando's](commands.md) - Volledige commandoreferentie
-- [Aanpassing](customization.md) - Maak aangepaste schema's en configureer uw project
+- [Aanpassing](customization.md) - Maak aangepaste schema's en configureer je project
