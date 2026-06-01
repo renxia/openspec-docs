@@ -1,6 +1,6 @@
-# Ondersteunde Tools
+# Ondersteunde tools
 
-OpenSpec werkt met veel AI-codingassistenten. Wanneer je `openspec init` uitvoert, configureert OpenSpec geselecteerde tools op basis van je actieve profiel/workflowselectie en leveringsmodus.
+OpenSpec werkt met veel AI-codeerassistenten. Wanneer u `openspec init` uitvoert, configureert OpenSpec geselecteerde tools met uw actieve profiel/workflow-selectie en leveringsmodus.
 
 ## Hoe het werkt
 
@@ -16,11 +16,11 @@ Standaard gebruikt OpenSpec het `core`-profiel, dat het volgende bevat:
 - `sync`
 - `archive`
 
-Je kunt uitgebreide workflows inschakelen (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) via `openspec config profile`, en vervolgens `openspec update` uitvoeren.
+U kunt uitgebreide workflows inschakelen (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) via `openspec config profile`, en vervolgens `openspec update` uitvoeren.
 
-## Tool Directory Referentie
+## Toolmapreferentie
 
-| Tool (ID) | Skills padpatroon | Command padpatroon |
+| Tool (ID) | Skillspadpatroon | Commandopadpatroon |
 |-----------|---------------------|----------------------|
 | Amazon Q Developer (`amazon-q`) | `.amazonq/skills/openspec-*/SKILL.md` | `.amazonq/prompts/opsx-<id>.md` |
 | Antigravity (`antigravity`) | `.agent/skills/openspec-*/SKILL.md` | `.agent/workflows/opsx-<id>.md` |
@@ -30,7 +30,7 @@ Je kunt uitgebreide workflows inschakelen (`new`, `continue`, `ff`, `verify`, `b
 | Cline (`cline`) | `.cline/skills/openspec-*/SKILL.md` | `.clinerules/workflows/opsx-<id>.md` |
 | CodeBuddy (`codebuddy`) | `.codebuddy/skills/openspec-*/SKILL.md` | `.codebuddy/commands/opsx/<id>.md` |
 | Codex (`codex`) | `.codex/skills/openspec-*/SKILL.md` | `$CODEX_HOME/prompts/opsx-<id>.md`\* |
-| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | Niet gegenereerd (geen commando-adapter; gebruik skill-gebaseerde `/openspec-*` aanroepen) |
+| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | Niet gegenereerd (geen commandadapter; gebruik skillgebaseerde `/openspec-*` aanroepen) |
 | Continue (`continue`) | `.continue/skills/openspec-*/SKILL.md` | `.continue/prompts/opsx-<id>.prompt` |
 | CoStrict (`costrict`) | `.cospec/skills/openspec-*/SKILL.md` | `.cospec/openspec/commands/opsx-<id>.md` |
 | Crush (`crush`) | `.crush/skills/openspec-*/SKILL.md` | `.crush/commands/opsx/<id>.md` |
@@ -41,54 +41,55 @@ Je kunt uitgebreide workflows inschakelen (`new`, `continue`, `ff`, `verify`, `b
 | iFlow (`iflow`) | `.iflow/skills/openspec-*/SKILL.md` | `.iflow/commands/opsx-<id>.md` |
 | Junie (`junie`) | `.junie/skills/openspec-*/SKILL.md` | `.junie/commands/opsx-<id>.md` |
 | Kilo Code (`kilocode`) | `.kilocode/skills/openspec-*/SKILL.md` | `.kilocode/workflows/opsx-<id>.md` |
-| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | Niet gegenereerd (geen commando-adapter; gebruik skill-gebaseerde `/skill:openspec-*` aanroepen) |
+| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | Niet gegenereerd (geen commandadapter; gebruik skillgebaseerde `/skill:openspec-*` aanroepen) |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
 | Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
+| Mistral Vibe (`vibe`) | `.vibe/skills/openspec-*/SKILL.md` | Niet gegenereerd (geen commandadapter; gebruik skillgebaseerde `/openspec-*` aanroepen) |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
 | Qwen Code (`qwen`) | `.qwen/skills/openspec-*/SKILL.md` | `.qwen/commands/opsx-<id>.toml` |
 | RooCode (`roocode`) | `.roo/skills/openspec-*/SKILL.md` | `.roo/commands/opsx-<id>.md` |
-| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | Niet gegenereerd (geen commando-adapter; gebruik skill-gebaseerde `/openspec-*` aanroepen) |
+| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | Niet gegenereerd (geen commandadapter; gebruik skillgebaseerde `/openspec-*` aanroepen) |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* Codex-commando's worden geïnstalleerd in de globale Codex-home (`$CODEX_HOME/prompts/` indien ingesteld, anders `~/.codex/prompts/`), niet in je projectmap.
+\* Codex-commands worden geïnstalleerd in de globale Codex-home (`$CODEX_HOME/prompts/` indien ingesteld, anders `~/.codex/prompts/`), niet in uw projectmap.
 
-\*\* GitHub Copilot-promptbestanden worden herkend als aangepaste slashcommando's in IDE-extensies (VS Code, JetBrains, Visual Studio). Copilot CLI verwerkt momenteel geen `.github/prompts/*.prompt.md` direct.
+\*\* GitHub Copilot-promptbestanden worden herkend als aangepaste slash-commando's in IDE-extensies (VS Code, JetBrains, Visual Studio). Copilot CLI verwerkt momenteel niet direct `.github/prompts/*.prompt.md`.
 
 ## Niet-interactieve installatie
 
-Voor CI/CD of gescripte installatie, gebruik `--tools` (en optioneel `--profile`):
+Voor CI/CD of scriptgebaseerde installatie gebruikt u `--tools` (en optioneel `--profile`):
 
 ```bash
-# Configureer specifieke tools
+# Specifieke tools configureren
 openspec init --tools claude,cursor
 
-# Configureer alle ondersteunde tools
+# Alle ondersteunde tools configureren
 openspec init --tools all
 
-# Sla toolconfiguratie over
+# Toolconfiguratie overslaan
 openspec init --tools none
 
-# Overschrijf profiel voor deze init-run
+# Profiel overschrijven voor deze init-run
 openspec init --profile core
 ```
 
-**Beschikbare tool-ID's (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
+**Beschikbare tool-ID's (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `vibe`, `windsurf`
 
-## Workflow-afhankelijke installatie
+## Workflowafhankelijke installatie
 
-OpenSpec installeert workflow-artefacten op basis van geselecteerde workflows:
+OpenSpec installeert workflowartefacten op basis van geselecteerde workflows:
 
 - **Core-profiel (standaard):** `propose`, `explore`, `apply`, `sync`, `archive`
-- **Aangepaste selectie:** een subset van alle workflow-ID's:
+- **Aangepaste selectie:** elke subset van alle workflow-ID's:
   `propose`, `explore`, `new`, `continue`, `apply`, `ff`, `sync`, `archive`, `bulk-archive`, `verify`, `onboard`
 
-Met andere woorden, het aantal skills/commando's is profiel- en leveringsafhankelijk, niet vast.
+Met andere woorden, het aantal skills/commands is profielafhankelijk en leveringsafhankelijk, niet vast.
 
 ## Gegenereerde skillnamen
 
-Wanneer geselecteerd door profiel/workflowconfiguratie, genereert OpenSpec de volgende skills:
+Wanneer geselecteerd door profiel/workflow-configuratie, genereert OpenSpec deze skills:
 
 - `openspec-propose`
 - `openspec-explore`
@@ -102,10 +103,10 @@ Wanneer geselecteerd door profiel/workflowconfiguratie, genereert OpenSpec de vo
 - `openspec-verify-change`
 - `openspec-onboard`
 
-Zie [Commando's](commands.md) voor commandogedrag en [CLI](cli.md) voor `init`/`update`-opties.
+Zie [Commands](commands.md) voor commandogedrag en [CLI](cli.md) voor `init`/`update`-opties.
 
 ## Gerelateerd
 
 - [CLI-referentie](cli.md) — Terminalcommando's
-- [Commando's](commands.md) — Slashcommando's en skills
+- [Commands](commands.md) — Slash-commando's en skills
 - [Aan de slag](getting-started.md) — Eerste installatie

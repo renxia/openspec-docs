@@ -1,30 +1,31 @@
 # Referensi CLI
 
-OpenSpec CLI (`openspec`) menyediakan perintah terminal untuk pengaturan proyek, validasi, inspeksi status, dan manajemen. Perintah-perintah ini melengkapi perintah slash AI (seperti `/opsx:propose`) yang didokumentasikan di [Commands](commands.md).
+OpenSpec CLI (`openspec`) menyediakan perintah terminal untuk pengaturan proyek, validasi, inspeksi status, dan manajemen. Perintah-perintah ini melengkapi perintah slash AI (seperti `/opsx:propose`) yang didokumentasikan di [Perintah](commands.md).
 
 ## Ringkasan
 
 | Kategori | Perintah | Tujuan |
-|----------|----------|---------|
-| **Pengaturan** | `init`, `update` | Inisialisasi dan perbarui OpenSpec di proyek Anda |
-| **Workspace (beta)** | `workspace setup`, `workspace list`, `workspace ls`, `workspace link`, `workspace relink`, `workspace doctor`, `workspace open` | Atur perencanaan di seluruh repositori atau folder yang tertaut |
-| **Penelusuran** | `list`, `view`, `show` | Jelajahi perubahan dan spesifikasi |
+|----------|----------|--------|
+| **Setup** | `init`, `update` | Inisialisasi dan perbarui OpenSpec di proyek Anda |
+| **Workspaces (beta)** | `workspace setup`, `workspace list`, `workspace ls`, `workspace link`, `workspace relink`, `workspace doctor`, `workspace update`, `workspace open` | Siapkan tampilan lokal di atas repositori atau folder yang ditautkan |
+| **Shared context (beta)** | `context-store setup`, `context-store register`, `context-store unregister`, `context-store remove`, `context-store list`, `context-store doctor`, `initiative create`, `initiative show`, `initiative list` | Kelola pendaftaran context-store lokal dan konteks inisiatif yang persisten |
+| **Browsing** | `list`, `view`, `show` | Jelajahi perubahan dan spesifikasi |
 | **Validasi** | `validate` | Periksa perubahan dan spesifikasi untuk masalah |
-| **Siklus Hidup** | `archive` | Finalisasi perubahan yang telah selesai |
-| **Alur Kerja** | `status`, `instructions`, `templates`, `schemas` | Dukungan alur kerja berbasis artefak |
-| **Skema** | `schema init`, `schema fork`, `schema validate`, `schema which` | Buat dan kelola alur kerja kustom |
-| **Konfigurasi** | `config` | Lihat dan modifikasi pengaturan |
-| **Utilitas** | `feedback`, `completion` | Umpan balik dan integrasi shell |
+| **Lifecycle** | `archive` | Selesaikan perubahan yang telah selesai |
+| **Workflow** | `new change`, `set change`, `status`, `instructions`, `templates`, `schemas` | Dukungan alur kerja berbasis artefak |
+| **Schemas** | `schema init`, `schema fork`, `schema validate`, `schema which` | Buat dan kelola alur kerja kustom |
+| **Config** | `config` | Lihat dan ubah pengaturan |
+| **Utility** | `feedback`, `completion` | Umpan balik dan integrasi shell |
 
 ---
 
-## Perintah Human vs Agent
+## Perintah Manusia vs Agen
 
-Sebagian besar perintah CLI dirancang untuk **penggunaan manusia** di terminal. Beberapa perintah juga mendukung **penggunaan agent/skrip** melalui output JSON.
+Sebagian besar perintah CLI dirancang untuk **penggunaan manusia** di terminal. Beberapa perintah juga mendukung **penggunaan agen/skrip** melalui output JSON.
 
 ### Perintah Khusus Manusia
 
-Perintah-perintah ini bersifat interaktif dan dirancang untuk penggunaan terminal:
+Perintah-perintah ini bersifat interaktif dan dirancang untuk penggunaan di terminal:
 
 | Perintah | Tujuan |
 |----------|--------|
@@ -34,24 +35,35 @@ Perintah-perintah ini bersifat interaktif dan dirancang untuk penggunaan termina
 | `openspec feedback` | Kirim umpan balik melalui GitHub |
 | `openspec completion install` | Instal pelengkapan shell |
 
-### Perintah Kompatibel Agent
+### Perintah Kompatibel Agen
 
-Perintah-perintah ini mendukung output `--json` untuk penggunaan terprogram oleh AI agent dan skrip:
+Perintah-perintah ini mendukung output `--json` untuk penggunaan terprogram oleh agen AI dan skrip:
 
-| Perintah | Penggunaan Manusia | Penggunaan Agent |
-|----------|-------------------|------------------|
+| Perintah | Penggunaan Manusia | Penggunaan Agen |
+|----------|-------------------|-----------------|
 | `openspec list` | Jelajahi perubahan/spesifikasi | `--json` untuk data terstruktur |
 | `openspec show <item>` | Baca konten | `--json` untuk parsing |
 | `openspec validate` | Periksa masalah | `--all --json` untuk validasi massal |
 | `openspec status` | Lihat progres artefak | `--json` untuk status terstruktur |
-| `openspec instructions` | Dapatkan langkah selanjutnya | `--json` untuk instruksi agent |
-| `openspec templates` | Temukan path template | `--json` untuk resolusi path |
+| `openspec instructions` | Dapatkan langkah selanjutnya | `--json` untuk instruksi agen |
+| `openspec templates` | Temukan jalur templat | `--json` untuk resolusi jalur |
 | `openspec schemas` | Daftar skema yang tersedia | `--json` untuk penemuan skema |
-| `openspec workspace setup --no-interactive` | Buat ruang kerja dengan input eksplisit | `--json` untuk output pengaturan terstruktur |
-| `openspec workspace list` | Jelajahi ruang kerja yang diketahui | `--json` untuk objek ruang kerja bertipe |
+| `openspec workspace setup --no-interactive` | Buat workspace dengan input eksplisit | `--json` untuk output pengaturan terstruktur |
+| `openspec workspace list` | Jelajahi workspace yang diketahui | `--json` untuk objek workspace bertipe |
 | `openspec workspace link` | Tautkan repo atau folder | `--json` untuk output tautan terstruktur |
-| `openspec workspace relink` | Perbaiki path yang ditautkan | `--json` untuk output tautan terstruktur |
-| `openspec workspace doctor` | Periksa satu ruang kerja | `--json` untuk output status terstruktur |
+| `openspec workspace relink` | Perbaiki jalur tertaut | `--json` untuk output tautan terstruktur |
+| `openspec workspace doctor` | Periksa satu workspace | `--json` untuk output status terstruktur |
+| `openspec workspace update` | Perbarui panduan lokal workspace dan keterampilan agen | `--tools` memilih agen; profil memilih alur kerja |
+| `openspec context-store setup <id>` | Buat penyimpanan konteks lokal | `--json` dengan input eksplisit untuk output pengaturan terstruktur |
+| `openspec context-store register <path>` | Daftarkan penyimpanan konteks yang ada | `--json` untuk output pendaftaran terstruktur |
+| `openspec context-store unregister <id>` | Lupakan pendaftaran penyimpanan konteks lokal | `--json` untuk output pembersihan terstruktur |
+| `openspec context-store remove <id>` | Hapus folder penyimpanan konteks lokal yang terdaftar | `--yes --json` untuk penghapusan non-interaktif |
+| `openspec context-store list` | Jelajahi penyimpanan konteks yang terdaftar | `--json` untuk pendaftaran terstruktur |
+| `openspec context-store doctor` | Periksa pengaturan penyimpanan lokal | `--json` untuk diagnostik terstruktur |
+| `openspec initiative list` | Jelajahi inisiatif bersama | `--json` untuk catatan inisiatif terstruktur |
+| `openspec initiative show <id>` | Selesaikan inisiatif | `--json` untuk jalur kanonik dan metadata |
+| `openspec new change <id>` | Buat kerangka perubahan repo-lokal | `--json`, plus `--initiative` untuk tautan koordinasi bersama |
+| `openspec set change <id>` | Perbarui metadata perubahan yang tercatat | `--json`, plus `--initiative` untuk tautan koordinasi bersama |
 
 ---
 
@@ -73,7 +85,7 @@ Opsi-opsi ini berfungsi dengan semua perintah:
 
 Inisialisasi OpenSpec di proyek Anda. Membuat struktur folder dan mengonfigurasi integrasi alat AI.
 
-Perilaku default menggunakan konfigurasi global default: profil `core`, pengiriman `both`, alur kerja `propose, explore, apply, sync, archive`.
+Perilaku default menggunakan default konfigurasi global: profil `core`, pengiriman `both`, alur kerja `propose, explore, apply, sync, archive`.
 
 ```
 openspec init [path] [options]
@@ -81,17 +93,17 @@ openspec init [path] [options]
 
 **Argumen:**
 
-| Argumen | Wajib | Deskripsi |
-|---------|-------|-----------|
+| Argumen | Diperlukan | Deskripsi |
+|---------|------------|-----------|
 | `path` | Tidak | Direktori target (default: direktori saat ini) |
 
 **Opsi:**
 
 | Opsi | Deskripsi |
 |------|-----------|
-| `--tools <list>` | Konfigurasi alat AI secara non-interaktif. Gunakan `all`, `none`, atau daftar yang dipisahkan koma |
-| `--force` | Pembersihan otomatis file warisan tanpa konfirmasi |
-| `--profile <profile>` | Timpa profil global untuk inisialisasi ini (`core` atau `custom`) |
+| `--tools <list>` | Konfigurasi alat AI secara non-interaktif. Gunakan `all`, `none`, atau daftar dipisahkan koma |
+| `--force` | Otomatis membersihkan file lama tanpa prompt |
+| `--profile <profile>` | Ganti profil global untuk menjalankan init ini (`core` atau `custom`) |
 
 `--profile custom` menggunakan alur kerja apa pun yang saat ini dipilih dalam konfigurasi global (`openspec config profile`).
 
@@ -112,10 +124,10 @@ openspec init --tools claude,cursor
 # Konfigurasi untuk semua alat yang didukung
 openspec init --tools all
 
-# Timpa profil untuk inisialisasi ini
+# Ganti profil untuk menjalankan ini
 openspec init --profile core
 
-# Lewati prompt dan bersihkan otomatis file warisan
+# Lewati prompt dan otomatis bersihkan file lama
 openspec init --force
 ```
 
@@ -130,14 +142,14 @@ openspec/
 .claude/skills/         # Keterampilan Claude Code (jika claude dipilih)
 .cursor/skills/         # Keterampilan Cursor (jika cursor dipilih)
 .cursor/commands/       # Perintah OPSX Cursor (jika pengiriman mencakup perintah)
-... (konfigurasi alat lainnya)
+... (konfigurasi alat lain)
 ```
 
 ---
 
 ### `openspec update`
 
-Perbarui file instruksi OpenSpec setelah meningkatkan CLI. Membuat ulang file konfigurasi alat AI menggunakan profil global saat ini, alur kerja yang dipilih, dan mode pengiriman.
+Perbarui file instruksi OpenSpec setelah memutakhirkan CLI. Menghasilkan ulang file konfigurasi alat AI menggunakan profil global Anda saat ini, alur kerja yang dipilih, dan mode pengiriman.
 
 ```
 openspec update [path] [options]
@@ -145,35 +157,35 @@ openspec update [path] [options]
 
 **Argumen:**
 
-| Argumen | Wajib | Deskripsi |
-|---------|-------|-----------|
+| Argumen | Diperlukan | Deskripsi |
+|---------|------------|-----------|
 | `path` | Tidak | Direktori target (default: direktori saat ini) |
 
 **Opsi:**
 
 | Opsi | Deskripsi |
 |------|-----------|
-| `--force` | Paksa pembaruan bahkan saat file sudah terbaru |
+| `--force` | Paksa pembaruan bahkan ketika file sudah terbaru |
 
 **Contoh:**
 
 ```bash
-# Perbarui file instruksi setelah peningkatan npm
+# Perbarui file instruksi setelah pemutakhiran npm
 npm update @fission-ai/openspec
 openspec update
 ```
 
 ---
 
-## Perintah Ruang Kerja
+## Perintah Workspace
 
-Perintah ruang kerja sedang dalam pengembangan aktif dan belum siap digunakan. Jangan bangun otomatisasi eksternal, integrasi, atau alur kerja jangka panjang di atas permukaan perintah ini; perilaku perintah, file status, dan output JSON dapat berubah sewaktu-waktu.
+Perintah workspace dalam versi beta. Model tampilan lokal di bawah ini adalah arah saat ini, namun otomatisasi eksternal, integrasi, dan alur kerja yang berjalan lama masih harus memperlakukan perilaku perintah, file status, dan output JSON sebagai yang sedang berkembang.
 
-Ruang kerja koordinasi adalah rumah perencanaan untuk pekerjaan yang mencakup beberapa repo atau folder. Visibilitas ruang kerja bukan komitmen perubahan: tautkan repo atau folder yang perlu diketahui OpenSpec, lalu buat perubahan saat Anda siap merencanakan pekerjaan spesifik.
+Workspace koordinasi adalah tampilan lokal mesin di atas repo atau folder yang ditautkan. Visibilitas workspace bukan komitmen perubahan: tautkan repo atau folder yang seharusnya diketahui OpenSpec, lalu buat perubahan ketika Anda siap merencanakan pekerjaan spesifik.
 
 ### `openspec workspace setup`
 
-Buat ruang kerja di lokasi ruang kerja OpenSpec standar dan tautkan setidaknya satu repo atau folder yang ada.
+Buat workspace di lokasi workspace OpenSpec standar dan tautkan setidaknya satu repo atau folder yang ada.
 
 ```bash
 openspec workspace setup [options]
@@ -183,10 +195,11 @@ openspec workspace setup [options]
 
 | Opsi | Deskripsi |
 |------|-----------|
-| `--name <name>` | Nama ruang kerja. Nama harus dalam format kebab-case |
+| `--name <name>` | Nama workspace. Nama harus dalam format kebab-case |
 | `--link <path>` | Tautkan repo atau folder yang ada dan inferensi nama tautan dari nama folder |
 | `--link <name>=<path>` | Tautkan repo atau folder yang ada dengan nama tautan eksplisit |
-| `--opener <id>` | Simpan pembuka pilihan selama pengaturan non-interaktif: `codex`, `claude`, `github-copilot`, atau `editor` |
+| `--opener <id>` | Simpan pembuka pilihan selama pengaturan non-interaktif: `codex-cli`, `claude`, `github-copilot`, atau `editor` |
+| `--tools <tools>` | Instal keterampilan OpenSpec lokal workspace untuk agen. Gunakan `all`, `none`, atau ID alat dipisahkan koma |
 | `--no-interactive` | Nonaktifkan prompt; memerlukan `--name` dan setidaknya satu `--link` |
 | `--json` | Output JSON; memerlukan `--no-interactive` |
 
@@ -195,26 +208,29 @@ openspec workspace setup [options]
 ```bash
 openspec workspace setup
 openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex
+openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
+openspec workspace setup --no-interactive --name platform --link /repos/api --tools codex,claude
 openspec workspace setup --no-interactive --json --name checkout --link /repos/platform/apps/checkout
 ```
 
-Pengaturan interaktif menanyakan pembuka pilihan dan menyimpannya dalam status ruang kerja lokal mesin. Pengaturan non-interaktif menyimpan pembuka pilihan hanya ketika `--opener` disediakan; jika tidak, `workspace open` akan meminta nanti di terminal interaktif saat pembuka yang didukung tersedia, atau meminta skrip untuk meneruskan `--agent <tool>` atau `--editor`.
+Pengaturan interaktif menanyakan pembuka pilihan dan dapat menginstal keterampilan OpenSpec lokal workspace untuk agen yang dipilih. Pengaturan non-interaktif menyimpan pembuka pilihan hanya ketika `--opener` disediakan; jika tidak, `workspace open` akan meminta nanti di terminal interaktif ketika pembuka yang didukung tersedia, atau meminta skrip untuk meneruskan `--agent <tool>` atau `--editor`.
+
+Instalasi keterampilan workspace hanya keterampilan dalam potongan beta ini: bahkan jika pengiriman global adalah `commands` atau `both`, pengaturan workspace menulis folder keterampilan agen di akar workspace dan tidak membuat file perintah slash. Profil global aktif memilih keterampilan alur kerja mana yang diinstal; `--tools` memilih agen mana yang menerimanya. Jika `--tools` dihilangkan dalam pengaturan non-interaktif, tidak ada keterampilan yang diinstal dan `workspace update --tools <ids>` dapat menambahkannya nanti.
 
 ### `openspec workspace list`
 
-Daftar ruang kerja OpenSpec yang diketahui dari registri lokal.
+Daftar workspace OpenSpec yang diketahui dari registri lokal.
 
 ```bash
 openspec workspace list [--json]
 openspec workspace ls [--json]
 ```
 
-Daftar menunjukkan lokasi setiap ruang kerja dan repo atau folder yang ditautkan. Catatan registri yang usang dilaporkan tetapi tidak diubah.
+Daftar menunjukkan lokasi setiap workspace dan repo atau folder yang ditautkan. Catatan registri yang usang dilaporkan tetapi tidak diubah.
 
 ### `openspec workspace link`
 
-Catat repo atau folder yang ada untuk satu ruang kerja.
+Catat repo atau folder yang ada untuk satu workspace.
 
 ```bash
 openspec workspace link [name] <path> [options]
@@ -224,9 +240,9 @@ openspec workspace link [name] <path> [options]
 
 | Opsi | Deskripsi |
 |------|-----------|
-| `--workspace <name>` | Pilih ruang kerja yang diketahui dari registri lokal |
+| `--workspace <name>` | Pilih workspace yang diketahui dari registri lokal |
 | `--json` | Output JSON |
-| `--no-interactive` | Nonaktifkan prompt pemilih ruang kerja |
+| `--no-interactive` | Nonaktifkan prompt pemilih workspace |
 
 **Contoh:**
 
@@ -236,35 +252,65 @@ openspec workspace link api-service /repos/api
 openspec workspace link --workspace platform /repos/platform/apps/checkout
 ```
 
-Path harus sudah ada. Path relatif diselesaikan terhadap direktori saat ini perintah sebelum OpenSpec menyimpan path absolut yang diverifikasi dalam status ruang kerja lokal mesin. Path yang ditautkan bisa berupa repo, paket, layanan, aplikasi, atau folder penuh tanpa status `openspec/` lokal repo.
+Jalur harus sudah ada. Jalur relatif diselesaikan terhadap direktori saat ini perintah sebelum OpenSpec menyimpan jalur absolut yang diverifikasi dalam status workspace lokal mesin. Jalur yang ditautkan dapat berupa repo, paket, layanan, aplikasi, atau folder penuh tanpa status `openspec/` lokal repo.
 
 ### `openspec workspace relink`
 
-Perbaiki atau ubah path lokal untuk tautan yang ada.
+Perbaiki atau ubah jalur lokal untuk tautan yang ada.
 
 ```bash
 openspec workspace relink <name> <path> [options]
 ```
 
-Path harus sudah ada. Relink hanya memperbarui path lokal mesin untuk nama tautan yang stabil.
+Jalur harus sudah ada. Relink hanya memperbarui jalur lokal mesin untuk nama tautan yang stabil.
 
 ### `openspec workspace doctor`
 
-Periksa apa yang dapat diselesaikan oleh satu ruang kerja di mesin saat ini.
+Periksa apa yang dapat diselesaikan satu workspace di mesin saat ini.
 
 ```bash
 openspec workspace doctor [options]
 ```
 
-Doctor menunjukkan lokasi ruang kerja, path perencanaan, repo atau folder yang ditautkan, path yang hilang, path spesifikasi lokal repo saat ada, dan perbaikan yang disarankan. Hanya melaporkan masalah; tidak memperbaikinya secara otomatis.
+Doctor menunjukkan lokasi workspace, repo atau folder yang ditautkan, jalur yang hilang, jalur spesifikasi lokal repo ketika ada, dan perbaikan yang disarankan. Output JSON juga mencakup jalur perencanaan workspace untuk kompatibilitas. Ia hanya melaporkan masalah; ia tidak memperbaikinya secara otomatis.
 
-Perintah yang memerlukan satu ruang kerja menggunakan ruang kerja saat ini ketika dijalankan dari dalam folder atau subdirektori ruang kerja. Dari tempat lain, teruskan `--workspace <name>`, pilih dari pemilih di terminal interaktif, atau andalkan satu-satunya ruang kerja yang diketahui ketika hanya ada satu. Dalam mode `--json` atau `--no-interactive`, pemilihan ambigu gagal dengan error status terstruktur dan menyarankan `--workspace <name>`.
+Perintah yang membutuhkan satu workspace menggunakan workspace saat ini ketika dijalankan dari dalam folder atau subdirektori workspace. Dari tempat lain, teruskan `--workspace <name>`, pilih dari pemilih di terminal interaktif, atau andalkan satu-satunya workspace yang diketahui ketika tepat satu ada. Dalam mode `--json` atau `--no-interactive`, pilihan ambigu gagal dengan status error terstruktur dan menyarankan `--workspace <name>`.
 
-Respons JSON menggunakan objek bertipe plus array `status`. Data utama ada di `workspace`, `workspaces`, atau `link`; peringatan dan error ada di `status`.
+Respons JSON menggunakan objek bertipe plus array `status`. Data utama berada di `workspace`, `workspaces`, atau `link`; peringatan dan error berada di `status`.
+
+### `openspec workspace update`
+
+Segarkan panduan OpenSpec lokal workspace dan keterampilan agen.
+
+```bash
+openspec workspace update [name] [options]
+```
+
+**Opsi:**
+
+| Opsi | Deskripsi |
+|------|-----------|
+| `--workspace <name>` | Pilih workspace yang diketahui dari registri lokal |
+| `--tools <tools>` | Pilih agen untuk keterampilan workspace. Gunakan `all`, `none`, atau ID alat dipisahkan koma |
+| `--json` | Output JSON |
+| `--no-interactive` | Nonaktifkan prompt pemilih workspace |
+
+**Contoh:**
+
+```bash
+openspec workspace update
+openspec workspace update platform
+openspec workspace update --workspace platform --tools codex,claude
+openspec workspace update --workspace platform --tools none
+```
+
+`workspace update` menyegarkan blok panduan workspace yang dihasilkan dan permukaan terbuka lokal. Untuk keterampilan agen, ia menggunakan ulang pilihan agen keterampilan workspace yang disimpan ketika `--tools` dihilangkan. Meneruskan `--tools` mengganti pilihan yang disimpan itu. Ia hanya menyegarkan direktori keterampilan alur kerja yang dikelola OpenSpec di akar workspace, menghapus keterampilan alur kerja terkelola yang tidak dipilih, dan membiarkan repo dan folder yang ditautkan tidak tersentuh.
+
+Menjalankan `openspec update` dari dalam workspace mengarahkan ulang ke `openspec workspace update`; jalankan `openspec update` di dalam proyek lokal repo ketika Anda ingin file alat milik repo diperbarui.
 
 ### `openspec workspace open`
 
-Buka set kerja ruang kerja melalui pembuka pilihan yang disimpan, override agent satu sesi, atau mode editor VS Code.
+Buka kumpulan kerja workspace melalui pembuka pilihan yang disimpan, penggantian agen satu sesi, atau mode editor VS Code.
 
 ```bash
 openspec workspace open [name] [options]
@@ -274,10 +320,13 @@ openspec workspace open [name] [options]
 
 | Opsi | Deskripsi |
 |------|-----------|
-| `--workspace <name>` | Alias untuk nama ruang kerja posisional |
-| `--agent <tool>` | Override agent satu sesi: `codex`, `claude`, atau `github-copilot` |
-| `--editor` | Buka file ruang kerja VS Code yang dipelihara sebagai ruang kerja editor normal |
-| `--no-interactive` | Nonaktifkan prompt pemilih ruang kerja dan pembuka |
+| `--workspace <name>` | Alias untuk nama workspace posisional |
+| `--initiative <id>` | Buka inisiatif sebagai tampilan workspace lokal. Menerima `<id>` atau `<store>/<id>` |
+| `--store <id>` | ID penyimpanan konteks terdaftar untuk `--initiative` |
+| `--store-path <path>` | Akar penyimpanan konteks lokal yang ada untuk `--initiative` |
+| `--agent <tool>` | Penggantian agen satu sesi: `codex-cli`, `claude`, atau `github-copilot` |
+| `--editor` | Buka file workspace VS Code yang dipelihara sebagai workspace editor normal |
+| `--no-interactive` | Nonaktifkan prompt pemilih workspace dan pembuka |
 
 **Contoh:**
 
@@ -285,21 +334,165 @@ openspec workspace open [name] [options]
 openspec workspace open
 openspec workspace open platform
 openspec workspace open platform --agent github-copilot
-openspec workspace open --agent codex
+openspec workspace open --agent codex-cli
 openspec workspace open --editor
+openspec workspace open --initiative billing-launch --store platform
+openspec workspace open --initiative platform/billing-launch
 ```
 
-`workspace open` menggunakan ruang kerja saat ini ketika dijalankan di dalamnya, secara otomatis memilih satu-satunya ruang kerja yang diketahui ketika dijalankan di tempat lain, dan meminta pengguna untuk memilih ketika beberapa ruang kerja diketahui. `--agent` dan `--editor` tidak mengubah pembuka pilihan yang disimpan. Meneruskan kedua override pembuka adalah error; pilih salah satu `--agent <tool>` atau `--editor`.
+`workspace open` menggunakan workspace saat ini ketika dijalankan di dalam satu, otomatis memilih satu-satunya workspace yang diketahui ketika dijalankan di tempat lain, dan meminta pengguna untuk memilih ketika beberapa workspace diketahui. `--agent` dan `--editor` tidak mengubah pembuka pilihan yang disimpan. Meneruskan kedua penggantian pembuka adalah error; pilih salah satu `--agent <tool>` atau `--editor`.
 
-OpenSpec memelihara `<workspace-name>.code-workspace` di root ruang kerja untuk pembuka VS Code dan GitHub Copilot-in-VS-Code. File tersebut bersifat lokal mesin dan diabaikan secara default dengan entri `.gitignore` `<workspace-name>.code-workspace` tertentu, sehingga file `*.code-workspace` buatan pengguna tetap memenuhi syarat untuk dilacak.
+Ketika `--initiative` digunakan, OpenSpec mempersiapkan atau memilih tampilan workspace lokal privat untuk inisiatif itu. Penyimpanan yang dipilih registri disimpan berdasarkan id; `--store-path` menyimpan pemilih jalur lokal waktu proses karena tampilan workspace adalah status lokal privat.
 
-Ruang kerja VS Code yang dipelihara mencakup root koordinasi sebagai `.` plus repo atau folder yang ditautkan valid sebagai root tambahan. VS Code menampilkan entri tersebut sebagai ruang kerja multi-root.
+OpenSpec memelihara `<workspace-name>.code-workspace` di akar workspace untuk pembuka VS Code dan GitHub Copilot-in-VS-Code. File tersebut adalah status tampilan workspace lokal mesin.
 
-Pembuka ruang kerja root mendukung eksplorasi dan perencanaan lintas repo atau folder yang ditautkan. Edit implementasi harus dimulai hanya setelah permintaan eksplisit pengguna dan alur kerja implementasi OpenSpec normal.
+Workspace VS Code yang dipelihara mendaftarkan repo atau folder yang ditautkan valid terlebih dahulu, lalu konteks inisiatif ketika dilampirkan, lalu file workspace OpenSpec. VS Code menampilkan entri-entri tersebut sebagai workspace multi-root.
+
+Pembukaan workspace akar membuat repo atau folder yang ditautkan terlihat untuk eksplorasi dan konteks. Edit implementasi harus dimulai hanya setelah permintaan eksplisit pengguna dan alur kerja implementasi OpenSpec normal.
 
 ---
 
-## Perintah Penelusuran
+## Perintah Kontek Bersama
+
+Penyimpanan dan prakarsa konteks adalah permukaan koordinasi beta. Penyimpanan konteks adalah pendaftaran lokal untuk kontek bersama yang tahan lama, biasanya folder yang didukung Git atau klon. Prakarsa adalah kontek koordinasi bersama di dalam penyimpanan konteks; perubahan lokal repo dapat ditautkan tanpa menyalin rencana bersama ke setiap repo.
+
+### `openspec context-store setup`
+
+Buat dan daftarkan penyimpanan konteks lokal. Tanpa argumen di terminal,
+OpenSpec memandu pengguna melalui pengaturan. Agen dan skrip harus memberikan
+input eksplisit dan menggunakan `--json`.
+
+```bash
+openspec context-store setup [id] [options]
+```
+
+**Opsi:**
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--path <path>` | Jalur folder penyimpanan konteks; default ke direktori data lokal yang dikelola OpenSpec |
+| `--init-git` | Inisialisasi repositori Git di penyimpanan konteks |
+| `--no-init-git` | Jangan inisialisasi repositori Git |
+| `--json` | Keluarkan JSON |
+
+Ketika `--path` dihilangkan, pengaturan membuat penyimpanan di bawah `getGlobalDataDir()/context-stores/<id>`: `$XDG_DATA_HOME/openspec/context-stores/<id>` ketika `XDG_DATA_HOME` diatur, atau `~/.local/share/openspec/context-stores/<id>` pada fallback gaya Unix. Berikan `--path` ketika Anda ingin penyimpanan berada di klon yang terlihat atau folder khusus tim.
+
+Contoh:
+
+```bash
+openspec context-store setup
+openspec context-store setup team-context
+openspec context-store setup team-context --path /repos/team-context --no-init-git
+openspec context-store setup team-context --json --no-init-git
+```
+
+### `openspec context-store register`
+
+Daftarkan folder penyimpanan konteks lokal yang sudah ada.
+
+```bash
+openspec context-store register [path] [options]
+```
+
+**Opsi:**
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--id <id>` | ID penyimpanan konteks; default ke metadata penyimpanan atau nama folder |
+| `--json` | Keluarkan JSON |
+
+### `openspec context-store unregister`
+
+Lupakan pendaftaran penyimpanan konteks lokal tanpa menghapus file.
+
+```bash
+openspec context-store unregister <id> [--json]
+```
+
+Gunakan ini ketika penyimpanan dipindahkan, diklon ke tempat lain, atau seharusnya tidak lagi
+ditampilkan oleh OpenSpec di mesin ini.
+
+### `openspec context-store remove`
+
+Lupakan pendaftaran penyimpanan konteks lokal dan hapus folder lokalnya.
+
+```bash
+openspec context-store remove <id> [--yes] [--json]
+```
+
+`remove` menampilkan folder yang tepat sebelum menghapus di terminal interaktif.
+Agen, skrip, dan pemanggil JSON harus memberikan `--yes` untuk konfirmasi penghapusan.
+OpenSpec menolak menghapus folder yang tidak berisi metadata
+penyimpanan konteks yang cocok.
+
+### `openspec context-store list`
+
+Daftar penyimpanan konteks yang terdaftar secara lokal.
+
+```bash
+openspec context-store list [--json]
+openspec context-store ls [--json]
+```
+
+### `openspec context-store doctor`
+
+Periksa pendaftaran penyimpanan konteks lokal, metadata, dan keberadaan Git.
+
+```bash
+openspec context-store doctor [id] [--json]
+```
+
+Doctor hanya diagnostik; ia melaporkan akar yang hilang, ketidakcocokan metadata, dan status registri lokal yang tidak valid tanpa memodifikasi penyimpanan.
+
+### `openspec initiative create`
+
+Buat prakarsa di penyimpanan konteks.
+
+```bash
+openspec initiative create <id> --title <title> --summary <summary> [options]
+```
+
+**Opsi:**
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--store <id>` | ID penyimpanan konteks dari registri lokal |
+| `--store-path <path>` | Akar penyimpanan konteks lokal yang sudah ada |
+| `--title <title>` | Judul prakarsa |
+| `--summary <summary>` | Ringkasan prakarsa |
+| `--json` | Keluarkan JSON |
+
+### `openspec initiative list`
+
+Daftar prakarsa. Tanpa pemilih, ini mencari semua penyimpanan konteks yang terdaftar dan melaporkan peringatan baca sebagian di `status`.
+
+```bash
+openspec initiative list [options]
+openspec initiative ls [options]
+```
+
+**Opsi:**
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--store <id>` | Daftar satu penyimpanan konteks yang terdaftar |
+| `--store-path <path>` | Daftar satu akar penyimpanan konteks lokal yang sudah ada |
+| `--json` | Keluarkan JSON |
+
+### `openspec initiative show`
+
+Selesaikan prakarsa dan cetak lokasi kanoniknya.
+
+```bash
+openspec initiative show <id> [options]
+openspec initiative show <store>/<id> [options]
+```
+
+Tanpa `--store`, OpenSpec mencari penyimpanan konteks yang terdaftar. Jika ID prakarsa yang sama ada di beberapa penyimpanan, berikan `--store <id>` atau gunakan formulir `<store>/<id>`.
+
+---
+
+## Perintah Penjelajahan
 
 ### `openspec list`
 
@@ -313,10 +506,10 @@ openspec list [options]
 
 | Opsi | Deskripsi |
 |--------|-------------|
-| `--specs` | Daftar spesifikasi alih-alih perubahan |
-| `--changes` | Daftar perubahan (default) |
+| `--specs` | Daftarkan spesifikasi alih-alih perubahan |
+| `--changes` | Daftarkan perubahan (default) |
 | `--sort <order>` | Urutkan berdasarkan `recent` (default) atau `name` |
-| `--json` | Keluaran dalam format JSON |
+| `--json` | Output dalam format JSON |
 
 **Contoh:**
 
@@ -327,11 +520,11 @@ openspec list
 # Daftar semua spesifikasi
 openspec list --specs
 
-# Keluaran JSON untuk skrip
+# Output JSON untuk skrip
 openspec list --json
 ```
 
-**Keluaran (teks):**
+**Output (teks):**
 
 ```
 Active changes:
@@ -343,7 +536,7 @@ Active changes:
 
 ### `openspec view`
 
-Tampilkan dasbor interaktif untuk menjelajahi spesifikasi dan perubahan.
+Tampilkan dashboard interaktif untuk menjelajahi spesifikasi dan perubahan.
 
 ```
 openspec view
@@ -355,7 +548,7 @@ Membuka antarmuka berbasis terminal untuk menavigasi spesifikasi dan perubahan p
 
 ### `openspec show`
 
-Tampilkan detail dari sebuah perubahan atau spesifikasi.
+Tampilkan detail perubahan atau spesifikasi.
 
 ```
 openspec show [item-name] [options]
@@ -363,23 +556,23 @@ openspec show [item-name] [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `item-name` | Tidak | Nama perubahan atau spesifikasi (akan diminta jika dihilangkan) |
+| `item-name` | Tidak | Nama perubahan atau spesifikasi (diminta jika tidak disertakan) |
 
 **Opsi:**
 
 | Opsi | Deskripsi |
 |--------|-------------|
 | `--type <type>` | Tentukan tipe: `change` atau `spec` (terdeteksi otomatis jika tidak ambigu) |
-| `--json` | Keluaran dalam format JSON |
+| `--json` | Output dalam format JSON |
 | `--no-interactive` | Nonaktifkan prompt |
 
 **Opsi khusus perubahan:**
 
 | Opsi | Deskripsi |
 |--------|-------------|
-| `--deltas-only` | Tampilkan hanya spesifikasi delta (mode JSON) |
+| `--deltas-only` | Tampilkan hanya delta spec (mode JSON) |
 
 **Opsi khusus spesifikasi:**
 
@@ -387,7 +580,7 @@ openspec show [item-name] [options]
 |--------|-------------|
 | `--requirements` | Tampilkan hanya persyaratan, kecualikan skenario (mode JSON) |
 | `--no-scenarios` | Kecualikan konten skenario (mode JSON) |
-| `-r, --requirement <id>` | Tampilkan persyaratan spesifik berdasarkan indeks berbasis 1 (mode JSON) |
+| `-r, --requirement <id>` | Tampilkan persyaratan tertentu berdasarkan indeks mulai dari 1 (mode JSON) |
 
 **Contoh:**
 
@@ -395,13 +588,13 @@ openspec show [item-name] [options]
 # Pemilihan interaktif
 openspec show
 
-# Tampilkan perubahan spesifik
+# Tampilkan perubahan tertentu
 openspec show add-dark-mode
 
-# Tampilkan spesifikasi spesifik
+# Tampilkan spesifikasi tertentu
 openspec show auth --type spec
 
-# Keluaran JSON untuk parsing
+# Output JSON untuk parsing
 openspec show add-dark-mode --json
 ```
 
@@ -419,9 +612,9 @@ openspec validate [item-name] [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `item-name` | Tidak | Item spesifik untuk divalidasi (akan diminta jika dihilangkan) |
+| `item-name` | Tidak | Item spesifik yang akan divalidasi (diminta jika tidak disertakan) |
 
 **Opsi:**
 
@@ -430,10 +623,10 @@ openspec validate [item-name] [options]
 | `--all` | Validasi semua perubahan dan spesifikasi |
 | `--changes` | Validasi semua perubahan |
 | `--specs` | Validasi semua spesifikasi |
-| `--type <type>` | Tentukan tipe ketika nama ambigu: `change` atau `spec` |
+| `--type <type>` | Tentukan tipe saat nama ambigu: `change` atau `spec` |
 | `--strict` | Aktifkan mode validasi ketat |
-| `--json` | Keluaran dalam format JSON |
-| `--concurrency <n>` | Validasi paralel maksimum (default: 6, atau env `OPENSPEC_CONCURRENCY`) |
+| `--json` | Output dalam format JSON |
+| `--concurrency <n>` | Maksimal validasi paralel (default: 6, atau env `OPENSPEC_CONCURRENCY`) |
 | `--no-interactive` | Nonaktifkan prompt |
 
 **Contoh:**
@@ -442,20 +635,20 @@ openspec validate [item-name] [options]
 # Validasi interaktif
 openspec validate
 
-# Validasi perubahan spesifik
+# Validasi perubahan tertentu
 openspec validate add-dark-mode
 
 # Validasi semua perubahan
 openspec validate --changes
 
-# Validasi semua dengan keluaran JSON (untuk CI/skrip)
+# Validasi semua dengan output JSON (untuk CI/skrip)
 openspec validate --all --json
 
 # Validasi ketat dengan peningkatan paralelisme
 openspec validate --all --strict --concurrency 12
 ```
 
-**Keluaran (teks):**
+**Output (teks):**
 
 ```
 Validating add-dark-mode...
@@ -466,7 +659,7 @@ Validating add-dark-mode...
 1 warning found
 ```
 
-**Keluaran (JSON):**
+**Output (JSON):**
 
 ```json
 {
@@ -490,11 +683,11 @@ Validating add-dark-mode...
 
 ---
 
-## Perintah Lifecycle
+## Perintah Siklus Hidup
 
 ### `openspec archive`
 
-Arsipkan perubahan yang telah selesai dan gabungkan spesifikasi delta ke dalam spesifikasi utama.
+Arsipkan perubahan yang telah selesai dan gabungkan delta spec ke spesifikasi utama.
 
 ```
 openspec archive [change-name] [options]
@@ -502,28 +695,28 @@ openspec archive [change-name] [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name` | Tidak | Perubahan yang akan diarsipkan (akan diminta jika tidak disertakan) |
+| `change-name` | Tidak | Perubahan yang akan diarsipkan (diminta jika tidak disertakan) |
 
 **Opsi:**
 
 | Opsi | Deskripsi |
 |--------|-------------|
-| `-y, --yes` | Lewati konfirmasi |
+| `-y, --yes` | Lewati prompt konfirmasi |
 | `--skip-specs` | Lewati pembaruan spesifikasi (untuk perubahan infrastruktur/peralatan/dokumentasi saja) |
 | `--no-validate` | Lewati validasi (memerlukan konfirmasi) |
 
 **Contoh:**
 
 ```bash
-# Arsipkan secara interaktif
+# Arsip interaktif
 openspec archive
 
-# Arsipkan perubahan spesifik
+# Arsipkan perubahan tertentu
 openspec archive add-dark-mode
 
-# Arsipkan tanpa konfirmasi (untuk CI/skrip)
+# Arsip tanpa prompt (CI/skrip)
 openspec archive add-dark-mode --yes
 
 # Arsipkan perubahan peralatan yang tidak memengaruhi spesifikasi
@@ -534,14 +727,61 @@ openspec archive update-ci-config --skip-specs
 
 1. Memvalidasi perubahan (kecuali `--no-validate`)
 2. Meminta konfirmasi (kecuali `--yes`)
-3. Menggabungkan spesifikasi delta ke dalam `openspec/specs/`
+3. Menggabungkan delta spec ke `openspec/specs/`
 4. Memindahkan folder perubahan ke `openspec/changes/archive/YYYY-MM-DD-<name>/`
 
 ---
 
 ## Perintah Alur Kerja
 
-Perintah-perintah ini mendukung alur kerja OPSX berbasis artefak. Berguna baik bagi manusia yang memeriksa progres maupun agen yang menentukan langkah selanjutnya.
+Perintah-perintah ini mendukung alur kerja OPSX berbasis artefak. Berguna baik untuk manusia yang memeriksa progres maupun agen yang menentukan langkah selanjutnya.
+
+### `openspec new change`
+
+Buat direktori perubahan lokal repo dan metadata opsional yang di-commit.
+
+```bash
+openspec new change <name> [options]
+```
+
+**Opsi:**
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--description <text>` | Deskripsi untuk ditambahkan ke `README.md` |
+| `--goal <text>` | Tujuan produk workspace yang disimpan bersama perubahan |
+| `--areas <names>` | Nama tautan workspace yang terpengaruh, dipisahkan koma |
+| `--initiative <id>` | Tautkan perubahan lokal repo ke sebuah inisiatif |
+| `--store <id>` | ID penyimpanan konteks untuk `--initiative` |
+| `--store-path <path>` | Root penyimpanan konteks lokal yang sudah ada untuk `--initiative` |
+| `--schema <name>` | Skema alur kerja yang digunakan |
+| `--json` | Output JSON |
+
+Contoh:
+
+```bash
+openspec new change add-billing-api --initiative billing-launch --store platform
+openspec new change add-billing-api --initiative platform/billing-launch --json
+```
+
+### `openspec set change`
+
+Perbarui metadata perubahan lokal repo yang di-commit tanpa membuat ulang perubahan.
+
+```bash
+openspec set change <name> [options]
+```
+
+**Opsi:**
+
+| Opsi | Deskripsi |
+|--------|-------------|
+| `--initiative <id>` | Tautkan perubahan lokal repo ke sebuah inisiatif |
+| `--store <id>` | ID penyimpanan konteks untuk `--initiative` |
+| `--store-path <path>` | Root penyimpanan konteks lokal yang sudah ada untuk `--initiative` |
+| `--json` | Output JSON |
+
+`set change --initiative` bersifat idempoten ketika tautan yang diminta sudah ada dan menolak untuk menggantikan tautan inisiatif yang sudah ada dan berbeda.
 
 ### `openspec status`
 
@@ -555,17 +795,17 @@ openspec status [options]
 
 | Opsi | Deskripsi |
 |--------|-------------|
-| `--change <id>` | Nama perubahan (akan diminta jika tidak disertakan) |
-| `--schema <name>` | Timpa skema (terdeteksi otomatis dari konfigurasi perubahan) |
-| `--json` | Keluarkan sebagai JSON |
+| `--change <id>` | Nama perubahan (diminta jika tidak disertakan) |
+| `--schema <name>` | Override skema (terdeteksi otomatis dari konfigurasi perubahan) |
+| `--json` | Output dalam format JSON |
 
 **Contoh:**
 
 ```bash
-# Periksa status secara interaktif
+# Pemeriksaan status interaktif
 openspec status
 
-# Status untuk perubahan spesifik
+# Status untuk perubahan tertentu
 openspec status --change add-dark-mode
 
 # JSON untuk penggunaan agen
@@ -614,7 +854,7 @@ openspec instructions [artifact] [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
 | `artifact` | Tidak | ID artefak: `proposal`, `specs`, `design`, `tasks`, atau `apply` |
 
@@ -623,8 +863,8 @@ openspec instructions [artifact] [options]
 | Opsi | Deskripsi |
 |--------|-------------|
 | `--change <id>` | Nama perubahan (wajib dalam mode non-interaktif) |
-| `--schema <name>` | Timpa skema |
-| `--json` | Keluarkan sebagai JSON |
+| `--schema <name>` | Override skema |
+| `--json` | Output dalam format JSON |
 
 **Kasus khusus:** Gunakan `apply` sebagai artefak untuk mendapatkan instruksi implementasi tugas.
 
@@ -634,7 +874,7 @@ openspec instructions [artifact] [options]
 # Dapatkan instruksi untuk artefak berikutnya
 openspec instructions --change add-dark-mode
 
-# Dapatkan instruksi artefak spesifik
+# Dapatkan instruksi artefak tertentu
 openspec instructions design --change add-dark-mode
 
 # Dapatkan instruksi penerapan/implementasi
@@ -655,7 +895,7 @@ openspec instructions design --change add-dark-mode --json
 
 ### `openspec templates`
 
-Tampilkan path template yang telah diselesaikan untuk semua artefak dalam sebuah skema.
+Tampilkan jalur template yang telah diselesaikan untuk semua artefak dalam sebuah skema.
 
 ```
 openspec templates [options]
@@ -666,18 +906,18 @@ openspec templates [options]
 | Opsi | Deskripsi |
 |--------|-------------|
 | `--schema <name>` | Skema yang akan diperiksa (default: `spec-driven`) |
-| `--json` | Keluarkan sebagai JSON |
+| `--json` | Output dalam format JSON |
 
 **Contoh:**
 
 ```bash
-# Tampilkan path template untuk skema default
+# Tampilkan jalur template untuk skema default
 openspec templates
 
 # Tampilkan template untuk skema kustom
 openspec templates --schema my-workflow
 
-# JSON untuk penggunaan programatik
+# JSON untuk penggunaan terprogram
 openspec templates --json
 ```
 
@@ -707,7 +947,7 @@ openspec schemas [options]
 
 | Opsi | Deskripsi |
 |--------|-------------|
-| `--json` | Keluarkan sebagai JSON |
+| `--json` | Output dalam format JSON |
 
 **Contoh:**
 
@@ -745,7 +985,7 @@ openspec schema init <name> [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
 | `name` | Ya | Nama skema (kebab-case) |
 
@@ -756,14 +996,14 @@ openspec schema init <name> [options]
 | `--description <text>` | Deskripsi skema |
 | `--artifacts <list>` | ID artefak yang dipisahkan koma (default: `proposal,specs,design,tasks`) |
 | `--default` | Atur sebagai skema default proyek |
-| `--no-default` | Jangan tawarkan untuk mengatur sebagai default |
+| `--no-default` | Jangan minta untuk diatur sebagai default |
 | `--force` | Timpa skema yang sudah ada |
-| `--json` | Keluarkan sebagai JSON |
+| `--json` | Output sebagai JSON |
 
 **Contoh:**
 
 ```bash
-# Buat skema secara interaktif
+# Pembuatan skema interaktif
 openspec schema init research-first
 
 # Non-interaktif dengan artefak spesifik
@@ -789,7 +1029,7 @@ openspec/schemas/<name>/
 
 ### `openspec schema fork`
 
-Salin skema yang sudah ada ke proyek Anda untuk kustomisasi.
+Salin skema yang ada ke proyek Anda untuk kustomisasi.
 
 ```
 openspec schema fork <source> [name] [options]
@@ -797,9 +1037,9 @@ openspec schema fork <source> [name] [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `source` | Ya | Skema yang akan disalin |
+| `source` | Ya | Skema untuk disalin |
 | `name` | Tidak | Nama skema baru (default: `<source>-custom`) |
 
 **Opsi:**
@@ -807,7 +1047,7 @@ openspec schema fork <source> [name] [options]
 | Opsi | Deskripsi |
 |--------|-------------|
 | `--force` | Timpa tujuan yang sudah ada |
-| `--json` | Keluarkan sebagai JSON |
+| `--json` | Output sebagai JSON |
 
 **Contoh:**
 
@@ -820,7 +1060,7 @@ openspec schema fork spec-driven my-workflow
 
 ### `openspec schema validate`
 
-Validasi struktur dan template sebuah skema.
+Validasi struktur dan template skema.
 
 ```
 openspec schema validate [name] [options]
@@ -828,16 +1068,16 @@ openspec schema validate [name] [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `name` | Tidak | Skema yang akan divalidasi (validasi semua jika tidak disertakan) |
+| `name` | Tidak | Skema untuk divalidasi (validasi semua jika dihilangkan) |
 
 **Opsi:**
 
 | Opsi | Deskripsi |
 |--------|-------------|
-| `--verbose` | Tampilkan langkah validasi secara detail |
-| `--json` | Keluarkan sebagai JSON |
+| `--verbose` | Tampilkan langkah validasi detail |
+| `--json` | Output sebagai JSON |
 
 **Contoh:**
 
@@ -853,7 +1093,7 @@ openspec schema validate
 
 ### `openspec schema which`
 
-Tampilkan dari mana sebuah skema diselesaikan (berguna untuk debugging prioritas).
+Tunjukkan dari mana skema di-resolve (berguna untuk debugging prioritas).
 
 ```
 openspec schema which [name] [options]
@@ -861,7 +1101,7 @@ openspec schema which [name] [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
 | `name` | Tidak | Nama skema |
 
@@ -869,13 +1109,13 @@ openspec schema which [name] [options]
 
 | Opsi | Deskripsi |
 |--------|-------------|
-| `--all` | Daftarkan semua skema beserta sumbernya |
-| `--json` | Keluarkan sebagai JSON |
+| `--all` | Daftar semua skema dengan sumbernya |
+| `--json` | Output sebagai JSON |
 
 **Contoh:**
 
 ```bash
-# Periksa dari mana sebuah skema berasal
+# Periksa dari mana skema berasal
 openspec schema which spec-driven
 ```
 
@@ -898,7 +1138,7 @@ spec-driven resolves from: package
 
 ### `openspec config`
 
-Melihat dan memodifikasi konfigurasi global OpenSpec.
+Lihat dan modifikasi konfigurasi global OpenSpec.
 
 ```
 openspec config <subcommand> [options]
@@ -915,7 +1155,7 @@ openspec config <subcommand> [options]
 | `unset <key>` | Hapus kunci |
 | `reset` | Atur ulang ke default |
 | `edit` | Buka di `$EDITOR` |
-| `profile [preset]` | Konfigurasi profil alur kerja secara interaktif atau melalui preset |
+| `profile [preset]` | Konfigurasikan profil alur kerja secara interaktif atau melalui preset |
 
 **Contoh:**
 
@@ -944,36 +1184,36 @@ openspec config reset --all --yes
 # Edit konfigurasi di editor Anda
 openspec config edit
 
-# Konfigurasi profil dengan wizard berbasis aksi
+# Konfigurasikan profil dengan wizard berbasis aksi
 openspec config profile
 
-# Preset cepat: beralih alur kerja ke inti (mempertahankan mode pengiriman)
+# Preset cepat: alihkan alur kerja ke inti (pertahankan mode pengiriman)
 openspec config profile core
 ```
 
-`openspec config profile` dimulai dengan ringkasan kondisi saat ini, lalu memungkinkan Anda memilih:
+`openspec config profile` dimulai dengan ringkasan keadaan saat ini, lalu memungkinkan Anda memilih:
 - Ubah pengiriman + alur kerja
-- Ubah hanya pengiriman
-- Ubah hanya alur kerja
+- Hanya ubah pengiriman
+- Hanya ubah alur kerja
 - Pertahankan pengaturan saat ini (keluar)
 
 Jika Anda mempertahankan pengaturan saat ini, tidak ada perubahan yang ditulis dan tidak ada prompt pembaruan yang ditampilkan.
-Jika tidak ada perubahan konfigurasi tetapi file proyek saat ini tidak sinkron dengan profil/pengiriman global Anda, OpenSpec akan menampilkan peringatan dan menyarankan untuk menjalankan `openspec update`.
-Menekan `Ctrl+C` juga membatalkan alur dengan bersih (tanpa jejak tumpukan) dan keluar dengan kode `130`.
-Dalam daftar periksa alur kerja, `[x]` berarti alur kerja dipilih dalam konfigurasi global. Untuk menerapkan pilihan tersebut ke file proyek, jalankan `openspec update` (atau pilih `Terapkan perubahan ke proyek ini sekarang?` saat diminta di dalam proyek).
+Jika tidak ada perubahan konfigurasi tetapi file proyek atau ruang kerja saat ini tidak sinkron dengan profil/pengiriman global Anda, OpenSpec akan menampilkan peringatan dan menyarankan `openspec update` untuk proyek lokal repo atau `openspec workspace update` untuk panduan dan keterampilan ruang kerja lokal.
+Menekan `Ctrl+C` juga membatalkan alur dengan bersih (tanpa stack trace) dan keluar dengan kode `130`.
+Dalam daftar periksa alur kerja, `[x]` berarti alur kerja dipilih dalam konfigurasi global. Untuk menerapkan pilihan tersebut ke file proyek, jalankan `openspec update` (atau pilih `Terapkan perubahan ke proyek ini sekarang?` saat diminta di dalam proyek). Dari dalam ruang kerja, gunakan `openspec workspace update` untuk menyegarkan panduan dan keterampilan ruang kerja lokal; ini tetap hanya keterampilan untuk file alur kerja agen yang dihasilkan dan tidak menghasilkan perintah slash ruang kerja.
 
 **Contoh interaktif:**
 
 ```bash
 # Pembaruan hanya pengiriman
 openspec config profile
-# pilih: Ubah hanya pengiriman
+# pilih: Ubah pengiriman saja
 # pilih pengiriman: Hanya keterampilan
 
 # Pembaruan hanya alur kerja
 openspec config profile
-# pilih: Ubah hanya alur kerja
-# alihkan alur kerja dalam daftar periksa, lalu konfirmasi
+# pilih: Hanya ubah alur kerja
+# toggle alur kerja dalam daftar periksa, lalu konfirmasi
 ```
 
 ---
@@ -990,7 +1230,7 @@ openspec feedback <message> [options]
 
 **Argumen:**
 
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
 | `message` | Ya | Pesan umpan balik |
 
@@ -998,7 +1238,7 @@ openspec feedback <message> [options]
 
 | Opsi | Deskripsi |
 |--------|-------------|
-| `--body <text>` | Deskripsi rinci |
+| `--body <text>` | Deskripsi detail |
 
 **Persyaratan:** GitHub CLI (`gh`) harus terinstal dan terotentikasi.
 
@@ -1038,10 +1278,10 @@ openspec completion install
 # Instal untuk shell spesifik
 openspec completion install zsh
 
-# Hasilkan skrip untuk instalasi manual
+# Generate skrip untuk instalasi manual
 openspec completion generate bash > ~/.bash_completion.d/openspec
 
-# Hapus instalasi
+# Uninstall
 openspec completion uninstall
 ```
 
@@ -1064,7 +1304,7 @@ openspec completion uninstall
 | `DO_NOT_TRACK` | Atur ke `1` untuk menonaktifkan telemetri (sinyal DNT standar) |
 | `OPENSPEC_CONCURRENCY` | Konkurensi default untuk validasi massal (default: 6) |
 | `EDITOR` atau `VISUAL` | Editor untuk `openspec config edit` |
-| `NO_COLOR` | Nonaktifkan output warna saat diatur |
+| `NO_COLOR` | Nonaktifkan output berwarna saat diatur |
 
 ---
 
@@ -1072,5 +1312,5 @@ openspec completion uninstall
 
 - [Perintah](commands.md) - Perintah slash AI (`/opsx:propose`, `/opsx:apply`, dll.)
 - [Alur Kerja](workflows.md) - Pola umum dan kapan menggunakan setiap perintah
-- [Kustomisasi](customization.md) - Buat skema dan templat kustom
+- [Kustomisasi](customization.md) - Buat skema dan template kustom
 - [Memulai](getting-started.md) - Panduan pengaturan pertama kali

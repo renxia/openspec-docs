@@ -1,31 +1,31 @@
 # Kavramlar
 
-Bu kılavuz, OpenSpec'in temel fikirlerini ve bunların nasıl bir araya geldiğini açıklar. Pratik kullanım için bkz. [Başlarken](getting-started.md) ve [İş Akışları](workflows.md).
+Bu kılavuz, OpenSpec'in arkasındaki temel fikirleri ve bunların nasıl bir araya geldiğini açıklar. Pratik kullanım için bkz. [Başlarken](getting-started.md) ve [İş Akışları](workflows.md).
 
 ## Felsefe
 
-OpenSpec dört ilke üzerine kurulmuştur:
+OpenSpec, dört temel ilke üzerine kurulmuştur:
 
 ```
-akıcı, katı değil         — aşama kapıları yok, mantıklı olan üzerinde çalışın
-yinelemeli, şelale değil  — inşa ederken öğrenin, ilerledikçe iyileştirin
-kolay, karmaşık değil     — hafif kurulum, minimum formalite
-mevcut kod tabanlı öncelikli — sadece sıfırdan değil, mevcut kod tabanlarıyla çalışır
+katı değil akıcı         — faz kapıları yok, mantıklı olan üzerinde çalışın
+şelale değil yinelemeli — oluştururken öğren, ilerledikçe geliştir
+karmaşık değil kolay     — hafif kurulum, minimal formalite
+önce brownfield          — sadece sıfırdan değil, mevcut kod tabanlarıyla çalışır
 ```
 
 ### Bu İlkeler Neden Önemlidir
 
-**Akıcı, katı değil.** Geleneksel spesifikasyon sistemleri sizi aşamalara kilitler: önce planlarsınız, sonra uygularsınız, sonra biter. OpenSpec daha esnektir — işiniz için mantıklı olan herhangi bir sırayla eserler oluşturabilirsiniz.
+**Katı değil akıcı.** Geleneksel belirtim sistemleri sizi fazlara kilitler: önce planlar, sonra uygular, sonra biter. OpenSpec daha esnektir — çalışmalarınız için mantıklı olan herhangi bir sırada yapıtlar oluşturabilirsiniz.
 
-**Yinelemeli, şelale değil.** Gereksinimler değişir. Anlayış derinleşir. Başlangıçta iyi bir yaklaşım gibi görünen şey, kod tabanını gördükten sonra geçerliliğini yitirebilir. OpenSpec bu gerçeği benimser.
+**Şelale değil yinelemeli.** Gereksinimler değişir. Anlayış derinleşir. Başlangıçta iyi görünen bir yaklaşım, kod tabanını gördükten sonra geçerliliğini yitirebilir. OpenSpec bu gerçeği kucaklar.
 
-**Kolay, karmaşık değil.** Bazı spesifikasyon çerçeveleri kapsamlı kurulum, katı formatlar veya ağır süreçler gerektirir. OpenSpec yolunuzdan çekilir. Saniyeler içinde başlatın, hemen çalışmaya başlayın, yalnızca gerekirse özelleştirin.
+**Karmaşık değil kolay.** Bazı belirtim çerçeveleri kapsamlı kurulum, katı formatlar veya ağır süreçler gerektirir. OpenSpec yolunuzdan çekilir. Saniyeler içinde başlatın, hemen çalışmaya başlayın, yalnızca gerekirse özelleştirin.
 
-**Mevcut kod tabanlı öncelikli.** Çoğu yazılım çalışması sıfırdan inşa etmek değil — mevcut sistemleri değiştirmektir. OpenSpec'in delta tabanlı yaklaşımı, yalnızca yeni sistemleri tanımlamayı değil, mevcut davranışlara yönelik değişiklikleri belirtmeyi kolaylaştırır.
+**Önce brownfield.** Çoğu yazılım çalışması sıfırdan oluşturma değil — mevcut sistemleri değiştirmedir. OpenSpec'in delta tabanlı yaklaşımı, yalnızca yeni sistemleri tanımlamak yerine mevcut davranışlarda değişiklikler belirtmeyi kolaylaştırır.
 
-## Genel Bakış
+## Büyük Resim
 
-OpenSpec çalışmanızı iki ana alana ayırır:
+OpenSpec çalışmanızı iki ana alana organize eder:
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -34,49 +34,49 @@ OpenSpec çalışmanızı iki ana alana ayırır:
 │   ┌─────────────────────┐      ┌───────────────────────────────┐   │
 │   │       specs/        │      │         changes/              │   │
 │   │                     │      │                               │   │
-│   │  Gerçekliğin kaynağı│◄─────│  Önerilen değişiklikler       │   │
-│   │  Sisteminizin       │ birleş│  Her değişiklik = bir klasör  │   │
-│   │  mevcut çalışma     │      │  Yapıt ve deltaları içerir    │   │
-│   │  şekli              │      │                               │   │
+│   │  Source of truth    │◄─────│  Proposed modifications       │   │
+│   │  How your system    │ merge│  Each change = one folder     │   │
+│   │  currently works    │      │  Contains artifacts + deltas  │   │
 │   │                     │      │                               │   │
 │   └─────────────────────┘      └───────────────────────────────┘   │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs** gerçekliğin kaynağıdır — sisteminizin şu anda nasıl davrandığını tanımlarlar.
+**Spesifikasyonlar** gerçeğin tek kaynağıdır — sisteminizin şu anda nasıl çalıştığını tanımlar.
 
-**Changes** önerilen değişikliklerdir — birleştirmeye hazır olana kadar ayrı klasörlerde yaşarlar.
+**Değişiklikler** önerilen değişikliklerdir — birleştirmeye hazır olana kadar ayrı klasörlerde yaşarlar.
 
-Bu ayrım anahtardır. Çakışma olmadan paralel olarak birden fazla değişiklik üzerinde çalışabilirsiniz. Bir değişiklik ana specs'leri etkilemeden önce inceleyebilirsiniz. Ve bir değişikliği arşivlediğinizde, deltaları gerçekliğin kaynağına temiz bir şekilde birleşir.
+Bu ayrım anahtardır. Çakışmalar olmadan paralel olarak birden fazla değişiklik üzerinde çalışabilirsiniz. Ana spesifikasyonları etkilemeden önce bir değişikliği inceleyebilirsiniz. Ve bir değişikliği arşivlediğinizde, deltaları temiz bir şekilde gerçeğin tek kaynağına birleşir.
 
 ## Koordinasyon Çalışma Alanları
 
-Çalışma alanı desteği aktif olarak geliştirilmektedir ve henüz kullanıma hazır değildir. Çalışma alanı davranışının üzerine harici otomasyon, entegrasyonlar veya uzun ömürlü iş akışları oluşturmayın; komutlar, durum dosyaları ve JSON çıktısı herhangi bir zamanda değişebilir.
+Çalışma Alanı desteği beta sürümündedir. Aşağıdaki yerel görünüm modeli mevcut yönlendirmedir, ancak harici otomasyonlar, entegrasyonlar ve uzun süreli iş akışları hâlâ komut davranışını, durum dosyalarını ve JSON çıktısını değişken olarak ele almalıdır.
 
-Aşağıdaki komutlar, bağlantılı depolar veya klasörler arasında planlama için ilk kurulum akışını sağlar.
+Aşağıdaki komutlar, bağlı depoları veya klasörleri açmak için ilk kurulum akışını sağlar.
 
-Depo yerel OpenSpec projeleri, bir depo planlama, uygulama ve arşivleme akışına sahip olduğunda doğru varsayılan değerdir. Bazı çalışmalar birkaç depo veya klasörü kapsar. Bu durumda, bir OpenSpec koordinasyon çalışma alanı kalıcı planlama evidir.
+Repo-lokal OpenSpec projeleri, planlama, uygulama ve arşiv akışına tek bir repo sahip olduğunda doğru varsayılan değerdir. Bazı işler birden fazla repo veya klasörü kapsar. Bu durumda, bir OpenSpec koordinasyon çalışma alanı, bağlı yolları, açıcı durumunu ve ajan kurulumunu bir arada tutan makine-lokal bir görünümdür.
 
-Çalışma alanı zihinsel modeli şudur:
-
-```text
-workspace = ilgili çapraz-depo değişikliklerinin yaşadığı yer
-link      = çalışma alanının planlama yapabileceği bir depo veya klasör için sabit bir isim
-change    = bir özellik, düzeltme, proje veya diğer planlanmış iş parçası
-```
-
-Bir çalışma alanı, depo yerel bir projeden farklı bir şekle sahiptir:
+Çalışma Alanı zihinsel modeli şudur:
 
 ```text
-workspace-folder/
-├── changes/                       # Çalışma alanı düzeyinde planlama
-└── .openspec-workspace/
-    ├── workspace.yaml             # Paylaşılan çalışma alanı kimliği ve bağlantı isimleri
-    └── local.yaml                 # Bu makinenin yerel yolları
+workspace     = private local view over context stores, initiatives, repos, and folders
+context store = durable shared context container
+initiative    = durable coordination context inside a context store
+link          = a stable name for a repo or folder the workspace can resolve locally
+change        = one planned piece of work; implementation belongs in the owning repo
 ```
 
-Depo yerel OpenSpec durumu mevcut şekli korur:
+Bir çalışma alanının, repo-lokal bir projeden farklı bir şekli vardır:
+
+```text
+getGlobalDataDir()/workspaces/<workspace-name>/
+├── workspace.yaml                 # Private local view record
+├── AGENTS.md                      # Generated runtime guidance
+└── <workspace-name>.code-workspace # Generated editor workspace file
+```
+
+Repo-lokal OpenSpec durumu mevcut şekli korur:
 
 ```text
 repo-root/
@@ -85,30 +85,35 @@ repo-root/
     └── changes/
 ```
 
-Bu ayrım önemlidir. Çalışma alanı klasörü, bağlantılı depolar veya klasörler arasında planlama için bir koordinasyon yüzeyidir. Her deponun `openspec/` dizini, depoya ait specs'ler, depo yerel değişiklikler ve uygulama planlaması için ev sahibi olmaya devam eder. Kullanıcıların bir çalışma alanı klasörü içinde depo yerel `openspec init` çalıştırmasına gerek yoktur.
+Bu ayrım önemlidir. Çalışma alanı klasörü, bağlı depoları veya klasörleri açmak ve incelemek için yerel bir koordinasyon yüzeyidir. Her repo'nun `openspec/` dizini, repo'ya ait spesifikasyonlar, repo-lokal değişiklikler ve uygulama planlaması için merkez olmaya devam eder. Kullanıcıların bir çalışma alanı klasörü içinde repo-lokal `openspec init` çalıştırmasına gerek yoktur.
 
-Sabit bağlantı isimleri, çalışma alanı planlamasının depolara ve klasörlere atıfta bulunma yoludur. Paylaşılan çalışma alanı durumu `api`, `web` veya `checkout` gibi isimleri korur; her makine bu isimleri `.openspec-workspace/local.yaml` içindeki kendi yerel yollarıyla eşler.
+Kararlı bağlantı adları, bir çalışma alanının depolara ve klasörlere başvurma yoludur. Özel çalışma alanı kaydı, `api`, `web` veya `checkout` gibi isimleri tutar ve bunları bu çalışma zamanının yerel yollarına eşler.
 
 ```yaml
-# .openspec-workspace/workspace.yaml
+# workspace.yaml
 version: 1
 name: platform
+context: null
 links:
-  api: {}
-  web: {}
-```
-
-```yaml
-# .openspec-workspace/local.yaml
-version: 1
-paths:
   api: /repos/api
   web: /repos/web
 ```
 
-OpenSpec tarafından oluşturulan çalışma alanları, varsayılan olarak taşınabilir işbirliği durumundan `.openspec-workspace/local.yaml` hariç tutar. `.openspec-workspace/workspace.yaml`, çalışma alanının adını ve sabit bağlantı isimlerini sakladığı, bir kullanıcının mutel çekme yollarını değil, için taşınabilir kalır.
+Bir çalışma alanı bir inisiyatif açtığında, `context` seçilen bağlam deposu bağını ve inisiyatif kimliğini kaydeder. Kayıt-defteri seçili depolar kimliğe göre taşınabilir kalır; yol seçili depolar ise kasıtlı olarak çalışma zamanı-lokal yolu korur çünkü `workspace.yaml` özel yerel durumdur.
 
-Bağlantılı yollar tam depolar, büyük bir monorepo içindeki klasörler veya diğer mevcut klasörler olabilir. Çalışma alanı planlamasına katılmadan önce depo yerel `openspec/` durumuna ihtiyaç duymazlar. Daha sonraki uygulama, doğrulama veya arşivleme iş akışları daha fazla depo hazırlığı gerektirebilir, ancak planlama görünürlüğü bağlantı ile başlar.
+```yaml
+context:
+  kind: initiative
+  store:
+    id: platform
+    selector:
+      kind: registry
+      id: platform
+  initiative:
+    id: billing-launch
+```
+
+Bağlantılı yollar tam depolar, büyük bir monorepo içindeki klasörler veya diğer mevcut klasörler olabilir. Çalışma alanı planlamasına katılmadan önce repo-lokal `openspec/` durumuna ihtiyaç duymazlar. Sonraki uygulama, doğrulama veya arşiv akışları daha fazla repo hazırlığı gerektirebilir, ancak planlama görünürlüğü bağlantı ile başlar.
 
 ```text
 multi-repo:
@@ -126,176 +131,179 @@ Yönetilen çalışma alanları standart OpenSpec veri dizini altında yaşar:
 getGlobalDataDir()/workspaces
 ```
 
-Bu, `XDG_DATA_HOME` ayarlandığında `$XDG_DATA_HOME/openspec/workspaces`, Unix tarzı geri dönüşte `~/.local/share/openspec/workspaces` ve yerel Windows geri dönüşünde `%LOCALAPPDATA%\openspec\workspaces` anlamına gelir. Yerel Windows kabukları, PowerShell ve WSL2'nin her biri, OpenSpec'i çalıştıran çalışma zamanı için yol dizelerini korur. Bu temel, `D:\repo`, `/mnt/d/repo` ve UNC WSL yolları arasında çeviri yapmaz.
+Bu, `XDG_DATA_HOME` ayarlandığında `$XDG_DATA_HOME/openspec/workspaces`, Unix stili geri dönüşte `~/.local/share/openspec/workspaces` ve yerel Windows geri dönüşünde `%LOCALAPPDATA%\openspec\workspaces` anlamına gelir. Yerel Windows kabukları, PowerShell ve WSL2, OpenSpec'i çalıştıran çalışma zamanı için yol dizelerini ayrı ayrı tutar. Bu temel, `D:\repo`, `/mnt/d/repo` ve UNC WSL yolları arasında çeviri yapmaz.
 
-OpenSpec ayrıca makine yerel bir kayıt defteri de tutar:
+OpenSpec, hâlâ eski beta çalışma alanı köklerini uyumluluk girdileri olarak okuyabilir, ancak yönetilen çalışma alanları artık yukarıdaki kök `workspace.yaml` kaydını kullanır. Çalışma alanı klasörü, kendi özel yerel görünümü için yetkili olmaya devam eder.
 
-```text
-getGlobalDataDir()/workspaces/registry.yaml
-```
-
-Kayıt defteri, çalışma alanı isimlerini çalışma alanı konumlarıyla eşler, böylece daha sonraki global komutlar herhangi bir yerden bilinen çalışma alanlarını listeleyebilir veya seçebilir. Bu sadece bir dizindir. Her çalışma alanı klasörü, kendi `.openspec-workspace/workspace.yaml` ve `.openspec-workspace/local.yaml` dosyaları için yetkili olmaya devam eder, böylece eski kayıt kayıtları, çalışma alanının kendisini yeniden tanımlamadan rapor edilebilir ve onarılabilir.
-
-Çalışma alanı görünürlüğü, değişiklik taahhüdü değildir. OpenSpec hangi depoların veya klasörlerin ilgili olduğunu bilmesi gerektiğinde bir çalışma alanı kurun; bir özellik, düzeltme, proje veya diğer iş parçasını planlamaya hazır olduğunuzda daha sonra bir değişiklik oluşturun.
+Çalışma alanı görünürlüğü, değişiklik taahhüdü değildir. Hangi depoların veya klasörlerin ilgili olduğunu OpenSpec'in bilmesi gerektiğinde bir çalışma alanı kurun; bir özellik, düzeltme, proje veya başka bir iş parçasını planlamaya hazır olduğunuzda daha sonra bir değişiklik oluşturun.
 
 Faydalı komutlar:
 
 ```bash
-# Rehberli kurulum
+# Guided setup
 openspec workspace setup
 
-# Otomasyon dostu kurulum
+# Automation-friendly setup
 openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex
+openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
 
-# Yerel kayıt defterinden bilinen çalışma alanlarını görün
+# See known workspaces from the local registry
 openspec workspace list
 openspec workspace ls
 
-# Seçili çalışma alanı için bağlantı ekleyin veya onarın
+# Add or repair links for the selected workspace
 openspec workspace link /repos/api
 openspec workspace link api-service /repos/api
 openspec workspace relink api-service /new/path/to/api
 
-# Bu makinenin neleri çözebileceğini kontrol edin
+# Check what this machine can resolve
 openspec workspace doctor
 openspec workspace doctor --workspace platform
 
-# Bağlantılı çalışma kümesini açın
+# Refresh workspace-local guidance and agent skills
+openspec workspace update
+openspec workspace update --workspace platform --tools codex,claude
+
+# Open the linked working set
 openspec workspace open
 openspec workspace open platform --agent github-copilot
 openspec workspace open --editor
+
+# Open an initiative as a local workspace view
+openspec workspace open --initiative billing-launch --store platform
+openspec workspace open --initiative billing-launch --store-path /repos/platform-context
 ```
 
-`workspace setup` her zaman çalışma alanını standart çalışma alanı konumunda oluşturur, yerel kayıt defterine kaydeder, çalışma alanı konumunu gösterir ve en az bir bağlantılı depo veya klasör gerektirir. Etkileşimli kurulum tercih edilen bir açıcı sorar. Etkileşimli olmayan kurulum, yalnızca `--opener codex`, `--opener claude`, `--opener github-copilot` veya `--opener editor` sağlandığında bir tane saklar.
+`workspace setup` her zaman çalışma alanını standart çalışma alanı konumunda oluşturur, yerel kayıt defterine kaydeder, çalışma alanının konumunu gösterir ve en az bir bağlı repo veya klasör gerektirir. Etkileşimli kurulum, tercih edilen bir açıcı ister ve seçilen ajanlar için OpenSpec becerilerini yükleyebilir. Etkileşim dışı kurulum, yalnızca `--opener codex-cli`, `--opener claude`, `--opener github-copilot` veya `--opener editor` sağlandığında bir tane saklar.
 
-OpenSpec ayrıca kök çalışma alanı açık dosyalarını da korur: `AGENTS.md` içinde OpenSpec tarafından yönetilen bir rehber bloğu, VS Code ve GitHub Copilot-in-VS-Code açılışları için makine yerel `<workspace-name>.code-workspace` dosyası ve bu korunan `.code-workspace` dosyası için özel bir yok sayma girdisi. Kullanıcı tarafından oluşturulan `*.code-workspace` dosyaları, yok sayma kuralı yalnızca korunan dosyayı hedeflediği için izlenebilir kalır.
+Çalışma alanı becerileri yalnızca çalışma alanı köküne yüklenir. Aktif global profil, hangi iş akışı becerilerinin oluşturulacağını seçer; `--tools` bunları hangi ajanların alacağını seçer. Çalışma alanı kurulumu ve güncelleme, global teslim komutları içerdiğinde bile eğik çizgi komut dosyaları oluşturmaz. Bağlı depoları veya klasörleri düzenlemek yerine, çalışma alanı-lokal yönlendirmeyi yenilemek, yönetilen çalışma alanı-lokal beceri dizinlerini eklemek, yenilemek veya kaldırmak için `openspec workspace update` komutunu çalıştırın.
 
-Korunan VS Code çalışma alanı, koordinasyon kökünü `.` ve geçerli bağlantılı depoları veya klasörleri ek kökler olarak içerir. VS Code bu girdileri çoklu kök çalışma alanı olarak görüntüler.
+OpenSpec ayrıca kök çalışma alanı açık dosyalarını da korur: `AGENTS.md` içindeki OpenSpec tarafından yönetilen bir yönlendirme bloğu ve VS Code ile GitHub Copilot-in-VS-Code açılışları için makine-lokal `<workspace-name>.code-workspace` dosyası. Yönetilen bir çalışma alanı bir repo değildir, bu nedenle OpenSpec varsayılan bir çalışma alanı `.gitignore` veya varsayılan bir çalışma alanı düzeyinde `changes/` dizini oluşturmaz.
 
-`workspace open`, saklanan tercih edilen açıcı ile bağlantılı çalışma kümesini açar, ancak bu bir oturum için `--agent <tool>` veya `--editor` geçirilmediği sürece. Her iki açıcı geçersiz kılmasını geçirmek bir hatadır. Kök çalışma alanı açma, bağlantılı depoları ve klasörleri keşif ve planlama için görünür kılar; uygulama, kullanıcı açıkça uygulama çalışması istedikten sonra başlar.
+Bakımı yapılan VS Code çalışma alanı, ilk olarak geçerli bağlı depoları veya klasörleri, ardından eklendiğinde inisiyatif bağlamını ve son olarak OpenSpec çalışma alanı dosyalarını listeler. VS Code bu girdileri çoklu kök çalışma alanı olarak görüntüler.
 
-`workspace link` ve `workspace relink` yalnızca mevcut klasörleri kaydeder; bağlantılı depoyu veya klasörü oluşturmaz, kopyalamaz, taşımayı başlatmaz veya düzenlemez. Başarılı bir bağlantı veya yeniden bağlantıdan sonra OpenSpec, yönetilen rehberi, VS Code çalışma alanı dosyasını ve yok sayma kuralını yeniler.
+`workspace open`, saklanan tercih edilen açıcı ile bağlı iş kümesini açar; bu oturum için `--agent <tool>` veya `--editor` geçirilmediği sürece. Her iki açıcı geçişini birden yapmak bir hatadır. Kök çalışma alanı açma, keşif ve bağlam için bağlı depoları ve klasörleri görünür kılar; uygulama, kullanıcı açıkça uygulama çalışması isteyene kadar başlamaz.
 
-Bir çalışma alanı gerektiren çalışma alanı komutları, `--workspace <name>` ile herhangi bir yerden çalıştırılabilir. Bir çalışma alanı klasörü veya alt dizini içinde çalıştırırsanız, OpenSpec o mevcut çalışma alanını kullanır. Birden fazla bilinen çalışma alanı mevcutsa ve `--workspace <name>` geçirmezseniz, insan komutları bir seçici gösterir; `--json` ve `--no-interactive` ise istem yerine yapılandırılmış bir durum hatasıyla başarısız olur.
+`workspace link` ve `workspace relink` yalnızca mevcut klasörleri kaydeder; bağlı repo veya klasörü oluşturmak, kopyalamak, taşımak, başlatmak veya düzenlemek yoktur. Başarılı bir bağlantı veya yeniden bağlantıdan sonra OpenSpec, yönlendirmeyi ve VS Code çalışma alanı dosyasını yeniler.
 
-Doğrudan çalışma alanı komutları, betikler için JSON çıktısını destekler. JSON yanıtları, birincil verileri `workspace`, `workspaces` veya `link` nesnelerinde tutar ve uyarıları veya hataları `status` dizilerinde raporlar. Sağlıklı nesneler `status: []` kullanır.
+Bir çalışma alanına ihtiyaç duyan çalışma alanı komutları, `--workspace <name>` ile herhangi bir yerden çalıştırılabilir. Bu komutları bir çalışma alanı klasörü veya alt dizini içinde çalıştırırsanız, OpenSpec o mevcut çalışma alanını kullanır. Bilinen birden fazla çalışma alanı mevcutsa ve `--workspace <name>` geçirmediyseniz, insan komutları bir seçici gösterir; `--json` ve `--no-interactive` ise istem yerine yapılandırılmış bir durum hatasıyla başarısız olur.
 
-## Specs
+Doğrudan çalışma alanı komutları, betikler için JSON çıktısını destekler. JSON yanıtları birincil verileri `workspace`, `workspaces` veya `link` nesnelerinde tutar ve uyarıları veya hataları `status` dizilerinde raporlar. Sağlıklı nesneler `status: []` kullanır.
 
-Specs, yapılandırılmış gereksinimler ve senaryolar kullanarak sisteminizin davranışını tanımlar.
+## Spesifikasyonlar
+
+Spesifikasyonlar, sisteminizin davranışını yapılandırılmış gereksinimler ve senaryolar kullanarak tanımlar.
 
 ### Yapı
 
 ```
 openspec/specs/
 ├── auth/
-│   └── spec.md           # Kimlik doğrulama davranışı
+│   └── spec.md           # Authentication behavior
 ├── payments/
-│   └── spec.md           # Ödeme işleme
+│   └── spec.md           # Payment processing
 ├── notifications/
-│   └── spec.md           # Bildirim sistemi
+│   └── spec.md           # Notification system
 └── ui/
-    └── spec.md           # UI davranışı ve temalar
+    └── spec.md           # UI behavior and themes
 ```
 
-Specs'leri etki alanına göre düzenleyin — sisteminiz için anlamlı mantıksal gruplamalar. Yaygın desenler:
+Spesifikasyonları alana göre organize edin — sisteminiz için anlamlı mantıksal gruplar. Yaygın desenler:
 
 - **Özellik alanına göre**: `auth/`, `payments/`, `search/`
 - **Bileşene göre**: `api/`, `frontend/`, `workers/`
-- **Sınırlı bağlama göre**: `ordering/`, `fulfillment/`, `inventory/`
+- **Sınırlandırılmış bağlama göre**: `ordering/`, `fulfillment/`, `inventory/`
 
-### Spec Biçimi
+### Spesifikasyon Biçimi
 
-Bir spec gereksinimler içerir ve her gereksinimin senaryoları vardır:
+Bir spesifikasyon gereksinimler içerir ve her gereksinimin senaryoları vardır:
 
 ```markdown
 # Auth Specification
-```
 
-## Amaç
-Uygulama için kimlik doğrulama ve oturum yönetimi.
+## Purpose
+Authentication and session management for the application.
 
-## Gereksinimler
+## Requirements
 
-### Gereksinim: Kullanıcı Kimlik Doğrulama
-Sistem, başarılı giriş üzerine bir JWT token'ı vermelidir.
+### Requirement: User Authentication
+The system SHALL issue a JWT token upon successful login.
 
-#### Senaryo: Geçerli kimlik bilgileri
-- GEÇERLİ kimlik bilgilerine sahip bir kullanıcı VERİLDİĞİNDE
-- Kullanıcı giriş formunu GÖNDERDİĞİNDE
-- O ZAMAN bir JWT token'ı döndürülür
-- VE kullanıcı kontrol paneline yönlendirilir
+#### Scenario: Valid credentials
+- GIVEN a user with valid credentials
+- WHEN the user submits login form
+- THEN a JWT token is returned
+- AND the user is redirected to dashboard
 
-#### Senaryo: Geçersiz kimlik bilgileri
-- GEÇERSİZ kimlik bilgileri VERİLDİĞİNDE
-- Kullanıcı giriş formunu GÖNDERDİĞİNDE
-- O ZAMAN bir hata mesajı görüntülenir
-- VE herhangi bir token verilmez
+#### Scenario: Invalid credentials
+- GIVEN invalid credentials
+- WHEN the user submits login form
+- THEN an error message is displayed
+- AND no token is issued
 
-### Gereksinim: Oturum Süresinin Dolması
-Sistem, 30 dakikalık hareketsizlikten sonra oturumları sona ERDİRMELİDİR.
+### Requirement: Session Expiration
+The system MUST expire sessions after 30 minutes of inactivity.
 
-#### Senaryo: Boşta kalma zaman aşımı
-- Doğrulanmış bir oturum VERİLDİĞİNDE
-- Hareket olmadan 30 dakika GEÇTİĞİNDE
-- O ZAMAN oturum geçersiz kılınır
-- VE kullanıcının yeniden kimlik doğrulaması yapması gerekir
+#### Scenario: Idle timeout
+- GIVEN an authenticated session
+- WHEN 30 minutes pass without activity
+- THEN the session is invalidated
+- AND the user must re-authenticate
 ```
 
 **Anahtar unsurlar:**
 
 | Unsur | Amaç |
 |---------|---------|
-| `## Purpose` | Bu spesifikasyonun alanının üst düzey açıklaması |
+| `## Purpose` | Bu spesifikasyon alanının üst düzey açıklaması |
 | `### Requirement:` | Sistemin sahip olması gereken belirli bir davranış |
-| `#### Scenario:` | Gereksinimin eylem halinde somut bir örneği |
+| `#### Scenario:` | Gereksinimin uygulamadaki somut bir örneği |
 | SHALL/MUST/SHOULD | Gereksinim gücünü gösteren RFC 2119 anahtar kelimeleri |
 
-### Spesifikasyonlar Neden Bu Şekilde Yapılandırılır
+### Spesifikasyonlar Neden Bu Şekilde Yapılandırılıyor
 
-**Gereksinimler "ne"dir** — uygulamayı belirtmeden sistemin ne yapması gerektiğini ifade ederler.
+**Gereksinimler "ne"dir** — sistemin ne yapması gerektiğini, uygulamayı belirtmeden ifade ederler.
 
-**Senaryolar "zaman"dır** — doğrulanabilen somut örnekler sağlarlar. İyi senaryolar:
-- Test edilebilir (otomatik bir test yazabilirsiniz)
-- Mutlu yolu ve sınır durumlarını kapsar
-- Verilen/Zaman/O Zaman veya benzeri yapılandırılmış biçimi kullanır
+**Senaryolar "ne zaman"dır** — doğrulanabilen somut örnekler sağlarlar. İyi senaryolar:
+- Test edilebilir (bunlar için otomatik bir test yazabilirsiniz)
+- Hem mutlu yolu hem de uç durumları kapsar
+- Given/When/Then veya benzeri yapılandırılmış bir biçim kullanır
 
 **RFC 2119 anahtar kelimeleri** (SHALL, MUST, SHOULD, MAY) niyeti iletir:
 - **MUST/SHALL** — kesin gereksinim
-- **SHOULD** — önerilen, ancak istisnalar vardır
+- **SHOULD** — önerilen, ancak istisnalar var
 - **MAY** — isteğe bağlı
 
-### Spesifikasyon Nedir (ve Ne Değildir)
+### Bir Spesifikasyon Nedir (ve Nedir Değil)
 
 Bir spesifikasyon bir **davranış sözleşmesidir**, bir uygulama planı değil.
 
 İyi spesifikasyon içeriği:
-- Kullanıcıların veya alt sistemlerin güvendiği gözlemlenebilir davranış
+- Kullanıcıların veya aşağı akış sistemlerin güvendiği gözlemlenebilir davranış
 - Girdiler, çıktılar ve hata koşulları
 - Dış kısıtlamalar (güvenlik, gizlilik, güvenilirlik, uyumluluk)
 - Test edilebilen veya açıkça doğrulanabilen senaryolar
 
 Spesifikasyonlardan kaçınılması gerekenler:
-- Dahili sınıf/fonksiyon adları
+- Dahali sınıf/fonksiyon adları
 - Kütüphane veya çerçeve seçimleri
 - Adım adım uygulama ayrıntıları
-- Ayrıntılı yürütme planları (bunlar `design.md` veya `tasks.md` dosyalarına aittir)
+- Ayrıntılı yürütme planları (bunlar `design.md` veya `tasks.md` içinde yer alır)
 
 Hızlı test:
-- Eğer uygulama, dışarıdan görülebilir davranışı değiştirmeden değişebiliyorsa, muhtemelen spesifikasyona ait değildir.
+- Eğer uygulama, dışarıdan görünür davranış değişmeden değişebiliyorsa, muhtemelen spesifikasyonda yer almaz.
 
 ### Hafif Tutun: Aşamalı Titizlik
 
-OpenSpec bürokrasiden kaçınmayı amaçlar. Değişikliği doğrulanabilir kılan en hafif düzeyi kullanın.
+OpenSpec bürokrasiden kaçınmayı amaçlamak. Değişikliği doğrulanabilir kılan en hafif düzeyi kullanın.
 
 **Hafif spesifikasyon (varsayılan):**
-- Kısa, davranış odaklı gereksinimler
-- Açık kapsam ve olmayan hedefler
+- Kısa davranış-odaklı gereksinimler
+- Net kapsam ve hedef dışı alanlar
 - Birkaç somut kabul kontrolü
 
 **Tam spesifikasyon (daha yüksek risk için):**
-- Ekipler arası veya depo değişiklikleri
+- Takımlar arası veya repo'lar arası değişiklikler
 - API/sözleşme değişiklikleri, geçişler, güvenlik/gizlilik endişeleri
 - Belirsizliğin pahalı yeniden çalışmaya yol açma olasılığının yüksek olduğu değişiklikler
 
@@ -303,18 +311,18 @@ OpenSpec bürokrasiden kaçınmayı amaçlar. Değişikliği doğrulanabilir kı
 
 ### İnsan + Ajan İşbirliği
 
-Birçok ekipte, insanlar keşfeder ve ajanlar taslaklar üretir. Hedeflenen döngü şudur:
+Birçok takımda, insanlar keşfeder ve ajanlar eserler taslağını oluşturur. Öngörülen döngü şudur:
 
-1. İnsan niyet, bağlam ve kısıtlamaları sağlar.
-2. Ajan bunu davranış odaklı gereksinimlere ve senaryolara dönüştürür.
-3. Ajan uygulama ayrıntısını `design.md` ve `tasks.md` dosyalarında tutar, `spec.md` dosyasında değil.
-4. Doğrulama, uygulamadan önce yapıyı ve netliği onaylar.
+1. İnsan niyeti, bağlamı ve kısıtlamaları sağlar.
+2. Ajan bunu davranış-odaklı gereksinimlere ve senaryolara dönüştürür.
+3. Ajan uygulama ayrıntılarını `spec.md` yerine `design.md` ve `tasks.md` içinde tutar.
+4. Doğrulama, uygulamadan önce yapı ve netliği onaylar.
 
-Bu, spesifikasyonları insanlar için okunabilir ve ajan-tutarlı tutar.
+Bu, spesifikasyonları insanlar için okunabilir ve ajanlar-tutarlı tutar.
 
 ## Değişiklikler
 
-Bir değişiklik, sisteminize önerilen bir değişikliktir; anlamak ve uygulamak için gereken her şeyi bir klasör olarak paketler.
+Bir değişiklik, anlamak ve uygulamak için gereken her şeyi bir klasörde paketleyerek sisteminize önerilen bir değişikliktir.
 
 ### Değişiklik Yapısı
 
@@ -326,78 +334,76 @@ openspec/changes/add-dark-mode/
 ├── .openspec.yaml        # Değişiklik meta verileri (isteğe bağlı)
 └── specs/                # Delta spesifikasyonları
     └── ui/
-        └── spec.md       # ui/spec.md dosyasında ne değişiyor
+        └── spec.md       # ui/spec.md'de ne değişiyor
 ```
 
-Her değişiklik kendi içinde bütündür. Şunları içerir:
-- **Artefaktlar** — amacı, tasarımı ve görevleri yakalayan belgeler
-- **Delta spesifikasyonları** — eklenen, değiştirilen veya kaldırılan şeyler için spesifikasyonlar
+Her değişiklik kendine yeterlidir. Şunları içerir:
+- **Eserler** — amacı, tasarımı ve görevleri yakalayan belgeler
+- **Delta spesifikasyonları** — eklenen, değiştirilen veya kaldırılan öğelerin spesifikasyonları
 - **Meta veriler** — bu belirli değişiklik için isteğe bağlı yapılandırma
 
-### Değişiklikler Neden Klasörlerdir
+### Değişiklikler Neden Klasördür
 
-Bir değişikliği klasör olarak paketlemenin birkaç faydası vardır:
+Bir değişikliği klasör olarak paketlemenin birkaç avantajı vardır:
 
-1. **Her şey bir arada.** Teklif, tasarım, görevler ve spesifikasyonlar tek bir yerde yaşar. Farklı konumları aramak zorunda kalmazsınız.
+1. **Her şey bir arada.** Öneri, tasarım, görevler ve spesifikasyonlar tek bir yerde bulunur. Farklı konumlarda arama yapmanıza gerek kalmaz.
 
-2. **Paralel çalışma.** Birden fazla değişiklik aynı anda çakışmadan var olabilir. `add-dark-mode` üzerinde çalışırken `fix-auth-bug` da devam edebilir.
+2. **Paralel çalışma.** Birden fazla değişiklik aynı anda çakışmadan var olabilir. `fix-auth-bug` devam ederken `add-dark-mode` üzerinde çalışabilirsiniz.
 
-3. **Temiz geçmiş.** Arşivlendiğinde, değişiklikler tam bağlamı korunarak `changes/archive/` klasörüne taşınır. Sadece neyin değiştiğini değil, neden değiştiğini de geriye dönük anlayabilirsiniz.
+3. **Temiz geçmiş.** Arşivlendiğinde, değişiklikler tam bağlamı korunarak `changes/archive/` klasörüne taşınır. Geriye bakıp neyin değiştiğini değil, neden değiştiğini de anlayabilirsiniz.
 
-4. **İncelemeye uygun.** Bir değişiklik klasörünü incelemek kolaydır — açın, teklifi okuyun, tasarımı kontrol edin, spesifikasyon deltalarını görün.
+4. **İnceleme dostu.** Bir değişiklik klasörünü incelemek kolaydır — açın, öneriyi okuyun, tasarımı kontrol edin, spesifikasyon farklarını görün.
 
-## Artefaktlar
+## Eserler
 
-Artefaktlar, bir değişiklik içindeki çalışmayı yönlendiren belgelerdir.
+Eserler, bir değişiklik içindeki çalışmayı yönlendiren belgelerdir.
 
-### Artefakt Akışı
+### Eser Akışı
 
 ```
-proposal ──────► specs ──────► design ──────► tasks ──────► implement
-    │               │             │              │
-   why            what           how          steps
- + scope        changes       approach      to take
+öneri ──────► spesifikasyonlar ──────► tasarım ──────► görevler ──────► uygulama
+    │               │                    │                │
+   neden           ne                  nasıl           adımlar
+ + kapsam        değişiyor            yaklaşım        atılacak
 ```
 
-Artefaktlar birbirinin üzerine inşa edilir. Her artefakt, bir sonraki için bağlam sağlar.
+Eserler birbirinin üzerine inşa edilir. Her eser bir sonrakine bağlam sağlar.
 
-### Artefakt Türleri
+### Eser Türleri
 
-#### Teklif (`proposal.md`)
+#### Öneri (`proposal.md`)
 
-Teklif, üst düzeyde **amacı**, **kapsamı** ve **yaklaşımı** yakalar.
+Öneri, üst düzeyde **amacı**, **kapsamı** ve **yaklaşımı** yakalar.
 
 ```markdown
-# Teklif: Karanlık Mod Ekleme
+# Proposal: Add Dark Mode
+```
 
 ## Amaç
-Kullanıcılar, gece kullanımı sırasında göz yorgunluğunu azaltmak
-ve sistem tercihleriyle eşleşmek için bir karanlık mod seçeneği talep etti.
+Kullanıcılar, gece kullanımda göz yorgunluğunu azaltmak ve sistem tercihleriyle uyum sağlamak için bir karanlık mod seçeneği talep ettiler.
 
 ## Kapsam
 Kapsam dahilinde:
-- Ayarlarda tema geçişi
-- Sistem tercihi algılama
-- Tercihi localStorage'da saklama
+- Ayarlarda tema değiştirici
+- Sistem tercihlerinin algılanması
+- Tercihin localStorage'da saklanması
 
 Kapsam dışında:
 - Özel renk temaları (gelecek çalışma)
-- Sayfa başına tema geçersiz kılma
+- Sayfa bazlı tema geçersiz kılmaları
 
 ## Yaklaşım
-Durum yönetimi için bir React context ile temalandırma için
-CSS özel özellikleri kullanın. İlk yüklemede sistem tercihini algılayın,
-manuel geçersiz kılınmaya izin verin.
+Durum yönetimi için bir React context ile temalandırmada CSS özel özellikleri kullanın. İlk yüklemede sistem tercihini algılayın, manuel geçersiz kılmalara izin verin.
 ```
 
 **Teklif ne zaman güncellenmeli:**
-- Kapsam değiştiğinde (daraltma veya genişletme)
-- Amaç netleştiğinde (problemi daha iyi anlama)
-- Yaklaşım temelden değiştiğinde
+- Kapsam değişiklikleri (daraltma veya genişletme)
+- Amaç netleşir (problemin daha iyi anlaşılması)
+- Yaklaşım temelden değişir
 
-#### Spesifikasyonlar (`specs/` klasöründeki delta spesifikasyonları)
+#### Özellikler (`specs/` içindeki delta özellikler)
 
-Delta spesifikasyonları, mevcut spesifikasyonlara göre **neyin değiştiğini** tanımlar. Aşağıdaki [Delta Spesifikasyonları](#delta-spesifikasyonları) bölümüne bakın.
+Delta özellikleri, mevcut özelliklere göre **neyin değiştiğini** tanımlar. Aşağıdaki [Delta Özellikleri](#delta-özellikleri) bölümüne bakın.
 
 #### Tasarım (`design.md`)
 
@@ -407,20 +413,20 @@ Tasarım, **teknik yaklaşımı** ve **mimari kararları** yakalar.
 # Tasarım: Karanlık Mod Ekleme
 
 ## Teknik Yaklaşım
-Tema durumu, prop drilling'i önlemek için React Context üzerinden yönetilir.
+Prop drilling'i önlemek için React Context ile tema durumu yönetilir.
 CSS özel özellikleri, sınıf geçişi olmadan çalışma zamanı geçişine olanak tanır.
 
 ## Mimari Kararlar
 
 ### Karar: Redux yerine Context
 Tema durumu için React Context kullanılıyor çünkü:
-- Basit ikili durum (açık/koyu)
+- Basit ikili durum (aydınlık/karanlık)
 - Karmaşık durum geçişleri yok
 - Redux bağımlılığı eklemekten kaçınılıyor
 
 ### Karar: CSS Özel Özellikleri
 CSS-in-JS yerine CSS değişkenleri kullanılıyor çünkü:
-- Mevcut stil sayfasıyla çalışır
+- Mevcut stil dosyasıyla çalışır
 - Çalışma zamanı ek yükü yok
 - Tarayıcıya özgü çözüm
 
@@ -432,7 +438,7 @@ ThemeProvider (context)
 ThemeToggle ◄──► localStorage
        │
        ▼
-CSS Variables (applied to :root)
+CSS Değişkenleri (:root'a uygulanır)
 ```
 
 ## Dosya Değişiklikleri
@@ -442,32 +448,32 @@ CSS Variables (applied to :root)
 ````
 
 **Tasarım ne zaman güncellenmeli:**
-- Uygulama yaklaşımın çalışmayacağını ortaya koyduğunda
-- Daha iyi bir çözüm keşfedildiğinde
-- Bağımlılıklar veya kısıtlamalar değiştiğinde
+- Uygulama, yaklaşımın çalışmayacağını ortaya koyarsa
+- Daha iyi bir çözüm keşfedilirse
+- Bağımlılıklar veya kısıtlamalar değişirse
 
 #### Görevler (`tasks.md`)
 
-Görevler, **uygulama kontrol listesi**dir — onay kutuları olan somut adımlar.
+Görevler, **uygulama kontrol listesidir** — onay kutuları olan somut adımlar.
 
 ```markdown
 # Görevler
 
 ## 1. Tema Altyapısı
-- [ ] 1.1 Açık/koyu durumlu ThemeContext oluşturun
-- [ ] 1.2 Renkler için CSS özel özellikleri ekleyin
-- [ ] 1.3 localStorage kalıcılığını uygulayın
-- [ ] 1.4 Sistem tercihi algılama ekleyin
+- [ ] 1.1 Aydınlık/karanlık durumlu ThemeContext oluştur
+- [ ] 1.2 Renkler için CSS özel özellikleri ekle
+- [ ] 1.3 localStorage kalıcılığını uygula
+- [ ] 1.4 Sistem tercihi algılama ekle
 
 ## 2. UI Bileşenleri
-- [ ] 2.1 ThemeToggle bileşeni oluşturun
-- [ ] 2.2 Ayarlar sayfasına geçiş ekleyin
-- [ ] 2.3 Hızlı geçiş eklemek için Header'ı güncelleyin
+- [ ] 2.1 ThemeToggle bileşeni oluştur
+- [ ] 2.2 Ayarlar sayfasına geçici ekleyici ekle
+- [ ] 2.3 Hızlı geçiş eklemek için Başlığı güncelle
 
 ## 3. Stil
-- [ ] 3.1 Koyu tema renk paletini tanımlayın
-- [ ] 3.2 Bileşenleri CSS değişkenlerini kullanacak şekilde güncelleyin
-- [ ] 3.3 Erişilebilirlik için kontrast oranlarını test edin
+- [ ] 3.1 Karanlık tema renk paleti tanımla
+- [ ] 3.2 Bileşenleri CSS değişkenleri kullanacak şekilde güncelle
+- [ ] 3.3 Erişilebilirlik için kontrast oranlarını test et
 ```
 
 **Görev en iyi uygulamaları:**
@@ -476,9 +482,9 @@ Görevler, **uygulama kontrol listesi**dir — onay kutuları olan somut adımla
 - Görevleri bir oturumda tamamlayabilecek kadar küçük tutun
 - Görevleri tamamladıkça işaretleyin
 
-## Delta Spesifikasyonları
+## Delta Özellikleri
 
-Delta spesifikasyonları, OpenSpec'in mevcut sistem geliştirme (brownfield) için çalışmasını sağlayan temel kavramdır. Tüm spesifikasyonu tekrarlamak yerine **neyin değiştiğini** tanımlarlar.
+Delta özellikleri, OpenSpec'in eski kod tabanlı geliştirme için çalışmasını sağlayan temel kavramdır. Tüm özelliği yeniden ifade etmek yerine **neyin değiştiğini** tanımlarlar.
 
 ### Format
 
@@ -488,30 +494,30 @@ Delta spesifikasyonları, OpenSpec'in mevcut sistem geliştirme (brownfield) iç
 ## EKLENEN Gereksinimler
 
 ### Gereksinim: İki Faktörlü Kimlik Doğrulama
-Sistem, TOTP tabanlı iki faktörlü kimlik doğrulamayı DESTEKLEMELİDİR.
+Sistem TOTP tabanlı iki faktörlü kimlik doğrulamayı DESTEKLEMELİDİR.
 
-#### Senaryo: 2FA kaydı
-- 2FA etkinleştirilmemiş bir kullanıcı VERİLDİĞİNDE
+#### Senaryo: 2FA kayıt
+- 2FA etkinleştirilmemiş bir kullanıcı verildiğinde
 - Kullanıcı ayarlarda 2FA'yı etkinleştirdiğinde
-- O zaman kimlik doğrulayıcı uygulama kurulumu için bir QR kodu görüntülenir
+- Authenticator uygulaması kurulumu için bir QR kodu görüntülenir
 - VE kullanıcı etkinleştirmeden önce bir kodla doğrulama yapmalıdır
 
-#### Senaryo: 2FA girişi
-- 2FA etkinleştirilmiş bir kullanıcı VERİLDİĞİNDE
+#### Senaryo: 2FA oturum açma
+- 2FA etkinleştirilmiş bir kullanıcı verildiğinde
 - Kullanıcı geçerli kimlik bilgilerini gönderdiğinde
-- O zaman bir OTP mücadelesi sunulur
-- VE giriş yalnızca geçerli OTP'den sonra tamamlanır
+- Bir OTP sorusu sunulur
+- VE oturum açma yalnızca geçerli OTP'den sonra tamamlanır
 
 ## DEĞİŞTİRİLEN Gereksinimler
 
-### Gereksinim: Oturum Süresinin Dolması
-Sistem, 15 dakikalık hareketsizlikten sonra oturumları sona ERDİRMELİDİR.
+### Gereksinim: Oturum Sonlanması
+Sistem oturumları 15 dakika hareketsizlikten sonra sona erdirmelidir.
 (Önceden: 30 dakika)
 
 #### Senaryo: Boşta kalma zaman aşımı
-- Kimliği doğrulanmış bir oturum VERİLDİĞİNDE
-- Hareket olmadan 15 dakika geçtiğinde
-- O zaman oturum geçersiz kılınır
+- Doğrulanmış bir oturum verildiğinde
+- 15 dakika etkinlik olmadan geçtiğinde
+- Oturum geçersiz kılınır
 
 ## KALDIRILAN Gereksinimler
 
@@ -521,21 +527,21 @@ Sistem, 15 dakikalık hareketsizlikten sonra oturumları sona ERDİRMELİDİR.
 
 ### Delta Bölümleri
 
-| Bölüm | Anlamı | Arşivlemede Ne Olur |
+| Bölüm | Anlamı | Arşivde Ne Olur |
 |---------|---------|------------------------|
-| `## EKLENEN Gereksinimler` | Yeni davranış | Ana spesifikasyona eklenir |
+| `## EKLENEN Gereksinimler` | Yeni davranış | Ana özelliğe eklenir |
 | `## DEĞİŞTİRİLEN Gereksinimler` | Değişen davranış | Mevcut gereksinimin yerini alır |
-| `## KALDIRILAN Gereksinimler` | Kullanımdan kaldırılan davranış | Ana spesifikasyondan silinir |
+| `## KALDIRILAN Gereksinimler` | Kullanımdan kaldırılan davranış | Ana özellikten silinir |
 
-### Neden Tam Spesifikasyonlar Yerine Deltalar
+### Neden Tam Özellikler Yerine Deltalar
 
-**Netlik.** Bir delta tam olarak neyin değiştiğini gösterir. Tam bir spesifikasyonu okurken, mevcut sürümle zihninizde karşılaştırma yapmanız gerekirdi.
+**Netlik.** Bir delta, tam olarak neyin değiştiğini gösterir. Tam bir özelliği okurken, mevcut sürümle zihninizde karşılaştırma yapmanız gerekirdi.
 
-**Çakışmadan kaçınma.** İki değişiklik, farklı gereksinimleri değiştirdikçe aynı spesifikasyon dosyasına dokunabilir ve çakışmaz.
+**Çatışma önleme.** İki değişiklik, farklı gereksinimleri değiştirdikleri sürece, aynı özellik dosyasına dokunabilir ve çakışmayabilir.
 
 **İnceleme verimliliği.** İnceleyenler değişikliği görür, değişmeyen bağlamı değil. Önemli olana odaklanın.
 
-**Mevcut sistem geliştirme uyumu.** Çoğu çalışma mevcut davranışı değiştirir. Deltalar, değişiklikleri birinci sınıf vatandaş yapar, sonradan akla gelen bir şey değil.
+**Eski kod tabanına uygunluk.** Çoğu çalışma mevcut davranışı değiştirir. Deltalar, değişiklikleri bir art düşünce değil, birinci sınıf hale getirir.
 
 ## Şemalar
 
@@ -553,15 +559,15 @@ artifacts:
 
   - id: specs
     generates: specs/**/*.md
-    requires: [proposal]      # Oluşturulmadan önce proposal'a ihtiyaç duyar
+    requires: [proposal]      # Oluşturmadan önce teklif gerekli
 
   - id: design
     generates: design.md
-    requires: [proposal]      # specs ile paralel olarak oluşturulabilir
+    requires: [proposal]      # Özelliklerle paralel oluşturulabilir
 
   - id: tasks
     generates: tasks.md
-    requires: [specs, design] # Önce hem specs hem de design'a ihtiyaç duyar
+    requires: [specs, design] # Önce hem özellikler hem de tasarım gerekli
 ```
 
 **Eserler bir bağımlılık grafiği oluşturur:**
@@ -574,30 +580,30 @@ artifacts:
          │                           │
          ▼                           ▼
       specs                       design
-   (requires:                  (requires:
+   (gerekli:                  (gerekli:
     proposal)                   proposal)
          │                           │
          └─────────────┬─────────────┘
                        │
                        ▼
                     tasks
-                (requires:
+                (gerekli:
                 specs, design)
 ```
 
-**Bağımlılıklar etkinleştiricilerdir, kapılar değil.** Ne oluşturmanın mümkün olduğunu gösterir, sırada ne oluşturmanız gerektiğini değil. Tasarıma ihtiyacınız yoksa atlayabilirsiniz. Specs'i tasarımdan önce veya sonra oluşturabilirsiniz — her ikisi de yalnızca proposal'a bağlıdır.
+**Bağımlılıklar etkinleştiricilerdir, kapılar değil.** Oluşturulabilecek olanı gösterirler, sırada ne oluşturmanız gerektiğini değil. Tasarıma ihtiyacınız yoksa atlayabilirsiniz. Özellikleri tasarımdan önce veya sonra oluşturabilirsiniz — her ikisi de yalnızca teklife bağlıdır.
 
 ### Yerleşik Şemalar
 
 **spec-driven** (varsayılan)
 
-Spec-driven geliştirme için standart iş akışı:
+Özellik odaklı geliştirme için standart iş akışı:
 
 ```
-proposal → specs → design → tasks → implement
+teklif → özellikler → tasarım → görevler → uygula
 ```
 
-En uygun olduğu yer: Uygulamadan önce spesifikasyonlar üzerinde anlaşmak istediğiniz çoğu özellik çalışması.
+En uygun: Uygulamadan önce özellikler üzerinde anlaşmak istediğiniz çoğu özellik çalışması.
 
 ### Özel Şemalar
 
@@ -619,22 +625,22 @@ name: research-first
 artifacts:
   - id: research
     generates: research.md
-    requires: []           # Önce araştırma yap
+    requires: []           # Önce araştırma yapın
 
   - id: proposal
     generates: proposal.md
-    requires: [research]   # Araştırmayla bilgilendirilmiş teklif
+    requires: [research]   # Araştırmayla bilgilendirilen teklif
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # specs/design'ı atla, doğrudan görevlere geç
+    requires: [proposal]   # Özellikleri/tasarımı atlayın, doğrudan görevlere geçin
 ```
 
-Özel şemalar oluşturma ve kullanma hakkında tüm ayrıntılar için [Özelleştirme](customization.md) bölümüne bakın.
+Özel şemalar oluşturma ve kullanma hakkında tüm ayrıntılar için bkz. [Özelleştirme](customization.md).
 
-## Arşivleme
+## Arşiv
 
-Arşivleme, bir değişikliği tamamlayarak delta spesifikasyonlarını ana spesifikasyonlarla birleştirir ve değişikliği geçmiş için korur.
+Arşivleme, bir değişikliğin delta özelliklerini ana özelliklerle birleştirerek ve değişikliği geçmiş için koruyarak tamamlar.
 
 ### Arşivlediğinizde Ne Olur
 
@@ -660,7 +666,7 @@ Arşivlemeden sonra:
 openspec/
 ├── specs/
 │   └── auth/
-│       └── spec.md        # Artık 2FA gereksinimlerini içeriyor
+│       └── spec.md        # Şimdi 2FA gereksinimlerini içeriyor
 └── changes/
     └── archive/
         └── 2025-01-24-add-2fa/    # Geçmiş için korundu
@@ -674,19 +680,19 @@ openspec/
 
 ### Arşivleme Süreci
 
-1. **Deltaları birleştir.** Her delta spesifikasyon bölümü (EKLENEN/DEĞİŞTİRİLEN/KALDIRILAN) ilgili ana spesifikasyona uygulanır.
+1. **Deltaları birleştir.** Her delta özelliği bölümü (EKLENEN/DEĞİŞTİRİLEN/KALDIRILAN) ilgili ana özelliğe uygulanır.
 
-2. **Arşive taşı.** Değişiklik klasörü kronolojik sıralama için tarih ön ekiyle `changes/archive/` altına taşınır.
+2. **Arşive taşı.** Değişiklik klasörü, kronolojik sıralama için tarih ön ekiyle `changes/archive/` taşınır.
 
 3. **Bağlamı koru.** Tüm eserler arşivde sağlam kalır. Bir değişikliğin neden yapıldığını anlamak için her zaman geriye bakabilirsiniz.
 
-### Neden Arşivleme Önemlidir
+### Arşiv Neden Önemli
 
-**Temiz durum.** Aktif değişiklikler (`changes/`) yalnızca devam eden çalışmaları gösterir. Tamamlanan çalışmalar yoldan çekilir.
+**Temiz durum.** Aktif değişiklikler (`changes/`) yalnızca devam eden çalışmaları gösterir. Tamamlanan çalışma yolun dışına çıkar.
 
 **Denetim izi.** Arşiv, her değişikliğin tam bağlamını korur — sadece neyin değiştiği değil, nedenini açıklayan teklif, nasılını açıklayan tasarım ve yapılan işi gösteren görevler.
 
-**Spesifikasyon evrimi.** Spesifikasyonlar, değişiklikler arşivlendikçe organik olarak büyür. Her arşiv, deltalarını birleştirerek zaman içinde kapsamlı bir spesifikasyon oluşturur.
+**Özellik evrimi.** Özellikler arşivlendikçe organik olarak büyür. Her arşiv, deltalarını birleştirir ve zaman içinde kapsamlı bir belirtim oluşturur.
 
 ## Hepsi Nasıl Bir Araya Gelir
 
@@ -696,68 +702,66 @@ openspec/
 │                                                                              │
 │   ┌────────────────┐                                                         │
 │   │  1. BAŞLAT     │  /opsx:propose (çekirdek) veya /opsx:new (genişletilmiş)│
-│   │     DEĞİŞİKLİK│                                                         │
+│   │   DEĞİŞİKLİK  │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
 │   │  2. OLUŞTUR    │  /opsx:ff veya /opsx:continue (genişletilmiş iş akışı)  │
-│   │     ESERLER    │  proposal → specs → design → tasks oluşturur            │
-│   │                │  (şema bağımlılıklarına dayalı)                          │
+│   │    ESERLER     │  Teklif → özellikler → tasarım → görevler oluşturur      │
+│   │                │  (şema bağımlılıklarına dayalı)                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
 │   │  3. UYGULA     │  /opsx:apply                                            │
-│   │     GÖREVLER   │  Görevler üzerinde çalışın, işaretleyin                 │
-│   │                │◄──── Öğrendikçe eserleri güncelleyin                     │
+│   │   GÖREVLER     │  Görevler üzerinde çalışın, işaretleyin                 │
+│   │                │◄──── Öğrendikçe eserleri güncelleyin                    │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. DOĞRULA    │  /opsx:verify (isteğe bağlı)                             │
-│   │     ÇALIŞMA    │  Uygulamanın spesifikasyonlara uygunluğunu kontrol edin  │
+│   │  4. DOĞRULA    │  /opsx:verify (isteğe bağlı)                            │
+│   │   ÇALIŞMA      │  Uygulamanın özelliklerle eşleştiğini kontrol edin     │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. ARŞİVLE    │────►│  Delta spesifikasyonlar ana spesifikasyonlara │    │
-│   │     DEĞİŞİKLİK│     │  birleşir.                                   │    │
-│   └────────────────┘     │  Değişiklik klasörü arşive taşınır.          │    │
-│                          │  Spesifikasyonlar artık güncellenmiş          │    │
-│                          │  gerçeğin kaynağıdır.                         │    │
+│   │  5. ARŞİVLE    │────►│  Delta özellikler ana özelliklerle birleşir  │    │
+│   │   DEĞİŞİKLİK  │     │  Değişiklik klasörü arşive taşınır           │    │
+│   └────────────────┘     │  Özellikler artık güncellenmiş gerçeğin kaynağı│    │
 │                          └──────────────────────────────────────────────┘    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Döngüsel süreç:**
+**Faydalı döngü:**
 
-1. Spesifikasyonlar mevcut davranışı tanımlar
-2. Değişiklikler değişiklikleri önerir (deltalar olarak)
-3. Uygulama değişiklikleri gerçeğe dönüştürür
-4. Arşivleme deltaları spesifikasyonlara birleştirir
-5. Spesifikasyonlar artık yeni davranışı tanımlar
-6. Sonraki değişiklik güncellenmiş spesifikasyonlar üzerine inşa edilir
+1. Özellikler mevcut davranışı tanımlar
+2. Değişiklikler (deltalar olarak) değişiklik önerir
+3. Uygulama değişiklikleri gerçek yapar
+4. Arşiv deltaları özelliklerle birleştirir
+5. Özellikler artık yeni davranışı tanımlar
+6. Sonraki değişiklik güncellenmiş özellikler üzerine kurulur
 
 ## Sözlük
 
 | Terim | Tanım |
 |------|------------|
-| **Artifact (Eser)** | Bir değişiklik içindeki bir belge (teklif, tasarım, görevler veya delta spesifikasyonları) |
-| **Archive (Arşivleme)** | Bir değişikliği tamamlama ve deltalarını ana spesifikasyonlara birleştirme süreci |
-| **Change (Değişiklik)** | Sisteme önerilen bir değişiklik, eserlerle birlikte bir klasör olarak paketlenmiş |
-| **Delta spec (Delta spesifikasyon)** | Mevcut spesifikasyonlara göre değişiklikleri (EKLENEN/DEĞİŞTİRİLEN/KALDIRILAN) tanımlayan bir spesifikasyon |
-| **Domain (Alan)** | Spesifikasyonlar için mantıksal bir gruplama (ör. `auth/`, `payments/`) |
-| **Requirement (Gereksinim)** | Sistemin sahip olması gereken belirli bir davranış |
-| **Scenario (Senaryo)** | Bir gereksinimin somut bir örneği, genellikle Verilen/Olduğunda/O zaman biçiminde |
-| **Schema (Şema)** | Eser türlerinin ve bunların bağımlılıklarının tanımı |
-| **Spec (Spesifikasyon)** | Sistem davranışını tanımlayan, gereksinimler ve senaryolar içeren bir spesifikasyon |
-| **Source of truth (Gerçeğin kaynağı)** | Mevcut üzerinde anlaşılmış davranışı içeren `openspec/specs/` dizini |
+| **Artifact** | Bir değişiklik içindeki belge (öneri, tasarım, görevler veya delta spesifikasyonları) |
+| **Archive** | Bir değişikliği tamamlama ve deltalarını ana spesifikasyonlara birleştirme süreci |
+| **Change** | Sisteme önerilen bir değişiklik, artifact'larla birlikte bir klasör olarak paketlenir |
+| **Delta spec** | Mevcut spesifikasyonlara göre değişiklikleri (EKLENMİŞ/DEĞİŞTİRİLMİŞ/KALDIRILMIŞ) tanımlayan bir spesifikasyon |
+| **Domain** | Spesifikasyonlar için mantıksal gruplama (örneğin, `auth/`, `payments/`) |
+| **Requirement** | Sistemin sahip olması gereken belirli bir davranış |
+| **Scenario** | Bir gereksinimin somut bir örneği, genellikle Given/When/Then biçiminde |
+| **Schema** | Artifact türlerinin ve bunların bağımlılıklarının tanımı |
+| **Spec** | Gereksinimleri ve senaryoları içeren, sistem davranışını tanımlayan bir spesifikasyon |
+| **Source of truth** | Üzerinde anlaşmaya varılmış mevcut davranışı içeren `openspec/specs/` dizini |
 
 ## Sonraki Adımlar
 
-- [Başlarken](getting-started.md) - Pratik ilk adımlar
+- [Başlarken](getting-started.md) - Uygulamaya yönelik ilk adımlar
 - [İş Akışları](workflows.md) - Yaygın kalıplar ve her birinin ne zaman kullanılacağı
 - [Komutlar](commands.md) - Tam komut referansı
 - [Özelleştirme](customization.md) - Özel şemalar oluşturun ve projenizi yapılandırın

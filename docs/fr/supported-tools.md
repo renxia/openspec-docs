@@ -1,13 +1,13 @@
-# Outils supportés
+# Outils pris en charge
 
-OpenSpec fonctionne avec de nombreux assistants de codage IA. Lorsque vous exécutez `openspec init`, OpenSpec configure les outils sélectionnés en utilisant votre profil/workflow actif et le mode de livraison.
+OpenSpec fonctionne avec de nombreux assistants de codage IA. Lorsque vous exécutez `openspec init`, OpenSpec configure les outils sélectionnés en utilisant votre profil/flux de travail actif et votre mode de livraison.
 
 ## Fonctionnement
 
 Pour chaque outil sélectionné, OpenSpec peut installer :
 
 1. **Compétences** (si la livraison inclut des compétences) : `.../skills/openspec-*/SKILL.md`
-2. **Commandes** (si la livraison inclut des commandes) : fichiers de commande spécifiques à l'outil `opsx-*`
+2. **Commandes** (si la livraison inclut des commandes) : fichiers de commande `opsx-*` spécifiques à l'outil
 
 Par défaut, OpenSpec utilise le profil `core`, qui inclut :
 - `propose`
@@ -16,12 +16,12 @@ Par défaut, OpenSpec utilise le profil `core`, qui inclut :
 - `sync`
 - `archive`
 
-Vous pouvez activer des workflows étendus (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) via `openspec config profile`, puis exécuter `openspec update`.
+Vous pouvez activer des flux de travail étendus (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) via `openspec config profile`, puis exécuter `openspec update`.
 
-## Répertoire des outils
+## Répertoire de référence des outils
 
-| Outil (ID) | Chemin des compétences | Chemin des commandes |
-|------------|------------------------|----------------------|
+| Outil (ID) | Modèle de chemin des compétences | Modèle de chemin des commandes |
+|-----------|---------------------|----------------------|
 | Amazon Q Developer (`amazon-q`) | `.amazonq/skills/openspec-*/SKILL.md` | `.amazonq/prompts/opsx-<id>.md` |
 | Antigravity (`antigravity`) | `.agent/skills/openspec-*/SKILL.md` | `.agent/workflows/opsx-<id>.md` |
 | Auggie (`auggie`) | `.augment/skills/openspec-*/SKILL.md` | `.augment/commands/opsx-<id>.md` |
@@ -44,6 +44,7 @@ Vous pouvez activer des workflows étendus (`new`, `continue`, `ff`, `verify`, `
 | Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | Non généré (pas d'adaptateur de commande ; utiliser les invocations basées sur les compétences `/skill:openspec-*`) |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
 | Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
+| Mistral Vibe (`vibe`) | `.vibe/skills/openspec-*/SKILL.md` | Non généré (pas d'adaptateur de commande ; utiliser les invocations basées sur les compétences `/openspec-*`) |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
@@ -52,43 +53,43 @@ Vous pouvez activer des workflows étendus (`new`, `continue`, `ff`, `verify`, `
 | Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | Non généré (pas d'adaptateur de commande ; utiliser les invocations basées sur les compétences `/openspec-*`) |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* Les commandes Codex sont installées dans le répertoire racine global de Codex (`$CODEX_HOME/prompts/` si défini, sinon `~/.codex/prompts/`), pas dans votre répertoire de projet.
+\* Les commandes Codex sont installées dans le répertoire personnel global de Codex (`$CODEX_HOME/prompts/` si défini, sinon `~/.codex/prompts/`), et non dans le répertoire de votre projet.
 
-\*\* Les fichiers de prompt GitHub Copilot sont reconnus comme des commandes slash personnalisées dans les extensions IDE (VS Code, JetBrains, Visual Studio). Le CLI Copilot ne consomme actuellement pas directement les fichiers `.github/prompts/*.prompt.md`.
+\*\* Les fichiers de prompt GitHub Copilot sont reconnus comme des commandes slash personnalisées dans les extensions d'IDE (VS Code, JetBrains, Visual Studio). Copilot CLI ne consomme pas actuellement les fichiers `.github/prompts/*.prompt.md` directement.
 
 ## Configuration non interactive
 
-Pour les CI/CD ou les configurations scriptées, utilisez `--tools` (et optionnellement `--profile`) :
+Pour les configurations CI/CD ou scriptées, utilisez `--tools` (et optionnellement `--profile`) :
 
 ```bash
 # Configurer des outils spécifiques
 openspec init --tools claude,cursor
 
-# Configurer tous les outils supportés
+# Configurer tous les outils pris en charge
 openspec init --tools all
 
 # Ignorer la configuration des outils
 openspec init --tools none
 
-# Remplacer le profil pour cette exécution init
+# Remplacer le profil pour cette exécution d'initialisation
 openspec init --profile core
 ```
 
-**ID d'outils disponibles (`--tools`) :** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
+**IDs d'outils disponibles (`--tools`) :** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `vibe`, `windsurf`
 
-## Installation dépendante du workflow
+## Installation dépendante du flux de travail
 
-OpenSpec installe les artefacts de workflow en fonction des workflows sélectionnés :
+OpenSpec installe les artefacts de flux de travail en fonction des flux de travail sélectionnés :
 
 - **Profil core (par défaut) :** `propose`, `explore`, `apply`, `sync`, `archive`
-- **Sélection personnalisée :** tout sous-ensemble de tous les ID de workflow :
+- **Sélection personnalisée :** n'importe quel sous-ensemble des IDs de flux de travail :
   `propose`, `explore`, `new`, `continue`, `apply`, `ff`, `sync`, `archive`, `bulk-archive`, `verify`, `onboard`
 
-En d'autres termes, le nombre de compétences/commandes dépend du profil et de la livraison, il n'est pas fixe.
+En d'autres termes, le nombre de compétences/commandes dépend du profil et du mode de livraison, et n'est pas fixe.
 
-## Noms des compétences générées
+## Noms de compétences générés
 
-Lorsqu'elles sont sélectionnées par la configuration du profil/workflow, OpenSpec génère ces compétences :
+Lorsqu'ils sont sélectionnés par la configuration du profil/flux de travail, OpenSpec génère les compétences suivantes :
 
 - `openspec-propose`
 - `openspec-explore`
@@ -104,8 +105,8 @@ Lorsqu'elles sont sélectionnées par la configuration du profil/workflow, OpenS
 
 Voir [Commandes](commands.md) pour le comportement des commandes et [CLI](cli.md) pour les options `init`/`update`.
 
-## Liens connexes
+## Voir aussi
 
 - [Référence CLI](cli.md) — Commandes du terminal
 - [Commandes](commands.md) — Commandes slash et compétences
-- [Démarrage](getting-started.md) — Configuration initiale
+- [Premiers pas](getting-started.md) — Configuration initiale

@@ -1,15 +1,15 @@
 # Desteklenen Araçlar
 
-OpenSpec birçok AI kodlama asistanıyla çalışır. `openspec init` komutunu çalıştırdığınızda OpenSpec, seçilen araçları etkin profil/iş akışı seçiminize ve teslimat modunuza göre yapılandırır.
+OpenSpec, birçok AI kodlama asistanıyla birlikte çalışır. `openspec init` komutunu çalıştırdığınızda OpenSpec, aktif profilinizi/iş akışı seçiminizi ve teslim modunu kullanarak seçili araçları yapılandırır.
 
 ## Nasıl Çalışır
 
-Seçilen her araç için OpenSpec şunları kurabilir:
+Her seçili araç için OpenSpec şunları kurabilir:
 
-1. **Beceriler** (teslimat becerileri içeriyorsa): `.../skills/openspec-*/SKILL.md`
-2. **Komutlar** (teslimat komutları içeriyorsa): araca özel `opsx-*` komut dosyaları
+1. **Yetenekler** (teslim yetenekleri içeriyorsa): `.../skills/openspec-*/SKILL.md`
+2. **Komutlar** (teslim komutları içeriyorsa): araça özgü `opsx-*` komut dosyaları
 
-Varsayılan olarak OpenSpec, aşağıdakileri içeren `core` profilini kullanır:
+Varsayılan olarak OpenSpec `core` profilini kullanır ve bu profil şunları içerir:
 - `propose`
 - `explore`
 - `apply`
@@ -18,9 +18,9 @@ Varsayılan olarak OpenSpec, aşağıdakileri içeren `core` profilini kullanır
 
 `openspec config profile` aracılığıyla genişletilmiş iş akışlarını (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) etkinleştirebilir, ardından `openspec update` komutunu çalıştırabilirsiniz.
 
-## Araç Dizin Referansı
+## Araç Dizini Referansı
 
-| Araç (ID) | Beceri yolu deseni | Komut yolu deseni |
+| Araç (Kimlik) | Yetenek yolu deseni | Komut yolu deseni |
 |-----------|---------------------|----------------------|
 | Amazon Q Developer (`amazon-q`) | `.amazonq/skills/openspec-*/SKILL.md` | `.amazonq/prompts/opsx-<id>.md` |
 | Antigravity (`antigravity`) | `.agent/skills/openspec-*/SKILL.md` | `.agent/workflows/opsx-<id>.md` |
@@ -30,7 +30,7 @@ Varsayılan olarak OpenSpec, aşağıdakileri içeren `core` profilini kullanır
 | Cline (`cline`) | `.cline/skills/openspec-*/SKILL.md` | `.clinerules/workflows/opsx-<id>.md` |
 | CodeBuddy (`codebuddy`) | `.codebuddy/skills/openspec-*/SKILL.md` | `.codebuddy/commands/opsx/<id>.md` |
 | Codex (`codex`) | `.codex/skills/openspec-*/SKILL.md` | `$CODEX_HOME/prompts/opsx-<id>.md`\* |
-| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | Oluşturulmaz (komut adaptörü yok; beceri tabanlı `/openspec-*` çağırmalarını kullanın) |
+| ForgeCode (`forgecode`) | `.forge/skills/openspec-*/SKILL.md` | Oluşturulmaz (komut adaptörü yok; yetenek tabanlı `/openspec-*` çağrıları kullanın) |
 | Continue (`continue`) | `.continue/skills/openspec-*/SKILL.md` | `.continue/prompts/opsx-<id>.prompt` |
 | CoStrict (`costrict`) | `.cospec/skills/openspec-*/SKILL.md` | `.cospec/openspec/commands/opsx-<id>.md` |
 | Crush (`crush`) | `.crush/skills/openspec-*/SKILL.md` | `.crush/commands/opsx/<id>.md` |
@@ -41,54 +41,55 @@ Varsayılan olarak OpenSpec, aşağıdakileri içeren `core` profilini kullanır
 | iFlow (`iflow`) | `.iflow/skills/openspec-*/SKILL.md` | `.iflow/commands/opsx-<id>.md` |
 | Junie (`junie`) | `.junie/skills/openspec-*/SKILL.md` | `.junie/commands/opsx-<id>.md` |
 | Kilo Code (`kilocode`) | `.kilocode/skills/openspec-*/SKILL.md` | `.kilocode/workflows/opsx-<id>.md` |
-| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | Oluşturulmaz (komut adaptörü yok; beceri tabanlı `/skill:openspec-*` çağırmalarını kullanın) |
+| Kimi CLI (`kimi`) | `.kimi/skills/openspec-*/SKILL.md` | Oluşturulmaz (komut adaptörü yok; yetenek tabanlı `/skill:openspec-*` çağrıları kullanın) |
 | Kiro (`kiro`) | `.kiro/skills/openspec-*/SKILL.md` | `.kiro/prompts/opsx-<id>.prompt.md` |
 | Lingma (`lingma`) | `.lingma/skills/openspec-*/SKILL.md` | `.lingma/commands/opsx/<id>.md` |
+| Mistral Vibe (`vibe`) | `.vibe/skills/openspec-*/SKILL.md` | Oluşturulmaz (komut adaptörü yok; yetenek tabanlı `/openspec-*` çağrıları kullanın) |
 | OpenCode (`opencode`) | `.opencode/skills/openspec-*/SKILL.md` | `.opencode/commands/opsx-<id>.md` |
 | Pi (`pi`) | `.pi/skills/openspec-*/SKILL.md` | `.pi/prompts/opsx-<id>.md` |
 | Qoder (`qoder`) | `.qoder/skills/openspec-*/SKILL.md` | `.qoder/commands/opsx/<id>.md` |
 | Qwen Code (`qwen`) | `.qwen/skills/openspec-*/SKILL.md` | `.qwen/commands/opsx-<id>.toml` |
 | RooCode (`roocode`) | `.roo/skills/openspec-*/SKILL.md` | `.roo/commands/opsx-<id>.md` |
-| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | Oluşturulmaz (komut adaptörü yok; beceri tabanlı `/openspec-*` çağırmalarını kullanın) |
+| Trae (`trae`) | `.trae/skills/openspec-*/SKILL.md` | Oluşturulmaz (komut adaptörü yok; yetenek tabanlı `/openspec-*` çağrıları kullanın) |
 | Windsurf (`windsurf`) | `.windsurf/skills/openspec-*/SKILL.md` | `.windsurf/workflows/opsx-<id>.md` |
 
-\* Codex komutları, proje dizininiz yerine global Codex ana dizinine (`$CODEX_HOME/prompts/` ayarlanmışsa, aksi takdirde `~/.codex/prompts/`) kurulur.
+\* Codex komutları, proje dizininizde değil, genel Codex ana dizinine (`$CODEX_HOME/prompts/` ayarlanmışsa, aksi halde `~/.codex/prompts/`) kurulur.
 
-\*\* GitHub Copilot istem dosyaları, IDE uzantılarında (VS Code, JetBrains, Visual Studio) özel eğik çizgi komutları olarak tanınır. Copilot CLI şu anda `.github/prompts/*.prompt.md` dosyalarını doğrudan kullanmamaktadır.
+\*\* GitHub Copilot prompt dosyaları, IDE uzantılarında (VS Code, JetBrains, Visual Studio) özel slash komutları olarak tanınır. Copilot CLI şu anda `.github/prompts/*.prompt.md` dosyalarını doğrudan kullanmaz.
 
-## Etkileşim Olmayan Kurulum
+## Etkileşimsiz Kurulum
 
 CI/CD veya betik tabanlı kurulum için `--tools` (ve isteğe bağlı olarak `--profile`) kullanın:
 
 ```bash
-# Belirli araçları yapılandırın
+# Belirli araçları yapılandır
 openspec init --tools claude,cursor
 
-# Tüm desteklenen araçları yapılandırın
+# Tüm desteklenen araçları yapılandır
 openspec init --tools all
 
-# Araç yapılandırmasını atlayın
+# Araç yapılandırmasını atla
 openspec init --tools none
 
-# Bu init çalıştırması için profili geçersiz kılın
+# Bu init çalıştırması için profil geçersiz kıl
 openspec init --profile core
 ```
 
-**Mevcut araç ID'leri (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
+**Kullanılabilir araç kimlikleri (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `vibe`, `windsurf`
 
 ## İş Akışına Bağımlı Kurulum
 
-OpenSpec, seçilen iş akışlarına göre iş akışı eserlerini kurar:
+OpenSpec, seçilen iş akışlarına göre iş akışı yapıtlarını kurar:
 
-- **Çekirdek profil (varsayılan):** `propose`, `explore`, `apply`, `sync`, `archive`
-- **Özel seçim:** tüm iş akışı ID'lerinin herhangi bir alt kümesi:
+- **Core profil (varsayılan):** `propose`, `explore`, `apply`, `sync`, `archive`
+- **Özel seçim:** tüm iş akışı kimliklerinin herhangi bir alt kümesi:
   `propose`, `explore`, `new`, `continue`, `apply`, `ff`, `sync`, `archive`, `bulk-archive`, `verify`, `onboard`
 
-Başka bir deyişle, beceri/komut sayıları profile ve teslimata bağlıdır, sabit değildir.
+Başka bir deyişle, yetenek/komut sayıları profile ve teslime bağlıdır, sabit değildir.
 
-## Oluşturulan Beceri İsimleri
+## Oluşturulan Yetenek Adları
 
-Profil/iş akışı yapılandırması tarafından seçildiğinde OpenSpec şu becerileri oluşturur:
+Profil/iş akışı yapılandırması tarafından seçildiğinde OpenSpec şu yetenekleri oluşturur:
 
 - `openspec-propose`
 - `openspec-explore`
@@ -102,10 +103,10 @@ Profil/iş akışı yapılandırması tarafından seçildiğinde OpenSpec şu be
 - `openspec-verify-change`
 - `openspec-onboard`
 
-Komut davranışları için [Komutlar](commands.md) ve `init`/`update` seçenekleri için [CLI](cli.md) bölümüne bakın.
+Komut davranışı için [Komutlar](commands.md) ve `init`/`update` seçenekleri için [CLI](cli.md) sayfalarına bakın.
 
 ## İlgili
 
 - [CLI Referansı](cli.md) — Terminal komutları
-- [Komutlar](commands.md) — Eğik çizgi komutları ve beceriler
+- [Komutlar](commands.md) — Slash komutları ve yetenekler
 - [Başlarken](getting-started.md) — İlk kurulum

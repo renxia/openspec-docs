@@ -1,6 +1,6 @@
 # Conceitos
 
-Este guia explica as ideias centrais por trás do OpenSpec e como elas se encaixam. Para uso prático, consulte [Primeiros Passos](getting-started.md) e [Fluxos de Trabalho](workflows.md).
+Este guia explica as ideias centrais por trás do OpenSpec e como elas se relacionam. Para uso prático, consulte [Primeiros Passos](getting-started.md) e [Fluxos de Trabalho](workflows.md).
 
 ## Filosofia
 
@@ -15,13 +15,13 @@ brownfield-first        — works with existing codebases, not just greenfield
 
 ### Por Que Esses Princípios São Importantes
 
-**Fluído, não rígido.** Sistemas de especificação tradicionais o prendem em fases: primeiro você planeja, depois implementa, e então termina. O OpenSpec é mais flexível — você pode criar artefatos em qualquer ordem que faça sentido para o seu trabalho.
+**Fluid not rigid.** Sistemas de especificação tradicionais o prendem em fases: primeiro você planeja, depois implementa, e então termina. O OpenSpec é mais flexível — você pode criar artefatos em qualquer ordem que faça sentido para o seu trabalho.
 
-**Iterativo, não cascata.** Os requisitos mudam. A compreensão se aprofunda. O que parecia uma boa abordagem no início pode não se sustentar depois que você vê a base de código. O OpenSpec abraça essa realidade.
+**Iterative not waterfall.** Os requisitos mudam. O entendimento se aprofunda. O que parecia uma boa abordagem no início pode não se sustentar depois que você conhece a base de código. O OpenSpec abraça essa realidade.
 
-**Fácil, não complexo.** Alguns frameworks de especificação exigem configuração extensiva, formatos rígidos ou processos pesados. O OpenSpec fica fora do seu caminho. Inicialize em segundos, comece a trabalhar imediatamente, personalize apenas se precisar.
+**Easy not complex.** Alguns frameworks de especificação exigem configuração extensiva, formatos rígidos ou processos pesados. O OpenSpec não interfere no seu trabalho. Inicialize em segundos, comece a trabalhar imediatamente e personalize apenas se necessário.
 
-**Prioridade para sistemas existentes.** A maioria do trabalho de software não é construir do zero — é modificar sistemas existentes. A abordagem baseada em deltas do OpenSpec facilita a especificação de mudanças no comportamento existente, não apenas a descrição de novos sistemas.
+**Brownfield-first.** A maioria do trabalho com software não consiste em construir do zero — é modificar sistemas existentes. A abordagem baseada em deltas do OpenSpec facilita especificar mudanças no comportamento existente, não apenas descrever novos sistemas.
 
 ## Visão Geral
 
@@ -34,7 +34,7 @@ O OpenSpec organiza seu trabalho em duas áreas principais:
 │   ┌─────────────────────┐      ┌───────────────────────────────┐   │
 │   │       specs/        │      │         changes/              │   │
 │   │                     │      │                               │   │
-│   │  Fonte da verdade   │◄─────│  Modificações propostas       │   │
+│   │  Fonte de verdade   │◄─────│  Modificações propostas       │   │
 │   │  Como seu sistema   │ merge│  Cada mudança = uma pasta     │   │
 │   │  funciona atualmente│      │  Contém artefatos + deltas    │   │
 │   │                     │      │                               │   │
@@ -43,99 +43,99 @@ O OpenSpec organiza seu trabalho em duas áreas principais:
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs** são a fonte da verdade — elas descrevem como seu sistema se comporta atualmente.
+**Specs** são a fonte de verdade — elas descrevem como seu sistema se comporta atualmente.
 
-**Changes** são modificações propostas — elas ficam em pastas separadas até que você esteja pronto para mesclá-las.
+**Changes** são modificações propostas — elas residem em pastas separadas até que você esteja pronto para mesclá-las.
 
-Essa separação é fundamental. Você pode trabalhar em múltiplas mudanças em paralelo sem conflitos. Você pode revisar uma mudança antes que ela afete as specs principais. E quando você arquiva uma mudança, seus deltas são mesclados de forma limpa na fonte da verdade.
+Essa separação é fundamental. Você pode trabalhar em múltiplas mudanças em paralelo sem conflitos. Você pode revisar uma mudança antes que ela afete as specs principais. E quando você arquiva uma mudança, seus deltas se mesclam de forma limpa na fonte de verdade.
 
 ## Workspaces de Coordenação
 
-O suporte a workspaces está em desenvolvimento ativo e ainda não está pronto para uso. Não construa automações externas, integrações ou fluxos de trabalho de longa duração sobre o comportamento do workspace; os comandos, arquivos de estado e saída JSON podem mudar a qualquer momento.
+O suporte a workspaces está em beta. O modelo de visualização local abaixo é a direção atual, mas automação externa, integrações e fluxos de trabalho de longa duração ainda devem tratar o comportamento dos comandos, arquivos de estado e saída JSON como em evolução.
 
-Os comandos abaixo fornecem o fluxo inicial de configuração para planejamento entre repositórios ou pastas vinculados.
+Os comandos abaixo fornecem o fluxo inicial de configuração para abrir visualizações locais sobre repositórios ou pastas vinculados.
 
-Projetos OpenSpec locais do repositório são o padrão correto quando um único repositório é dono do fluxo de planejamento, implementação e arquivo. Alguns trabalhos abrangem vários repositórios ou pastas. Para esse caso, um workspace de coordenação OpenSpec é o lar duradouro do planejamento.
+Projetos OpenSpec locais ao repositório são a escolha padrão correta quando um único repositório é dono do fluxo de planejamento, implementação e arquivo. Alguns trabalhos abrangem vários repositórios ou pastas. Para esse caso, um workspace de coordenação OpenSpec é uma visualização local da máquina que mantém caminhos vinculados, estado do opener e configuração de agentes juntos.
 
 O modelo mental do workspace é:
 
 ```text
-workspace = onde mudanças cross-repo relacionadas vivem
-link      = um nome estável para um repositório ou pasta contra o qual o workspace pode planejar
-change    = uma feature, fix, projeto ou outra peça de trabalho planejada
+workspace     = visualização local privada sobre armazenadores de contexto, iniciativas, repositórios e pastas
+armazenador de contexto = contêiner de contexto compartilhado durável
+iniciativa     = contexto de coordenação durável dentro de um armazenador de contexto
+vínculo        = um nome estável para um repositório ou pasta que o workspace pode resolver localmente
+mudança        = uma peça de trabalho planejada; a implementação pertence ao repositório dono
 ```
 
-Um workspace tem um formato diferente de um projeto local do repositório:
+Um workspace tem um formato diferente de um projeto local ao repositório:
 
 ```text
-workspace-folder/
-├── changes/                       # Planejamento no nível do workspace
-└── .openspec-workspace/
-    ├── workspace.yaml             # Identidade compartilhada do workspace e nomes de links
-    └── local.yaml                 # Caminhos locais desta máquina
+getGlobalDataDir()/workspaces/<nome-do-workspace>/
+├── workspace.yaml                 # Registro da visualização local privada
+├── AGENTS.md                      # Guia de tempo de execução gerado
+└── <nome-do-workspace>.code-workspace # Arquivo de workspace do editor gerado
 ```
 
-O estado local do repositório OpenSpec mantém o formato existente:
+O estado OpenSpec local ao repositório mantém o formato existente:
 
 ```text
-repo-root/
+raiz-do-repositório/
 └── openspec/
     ├── specs/
     └── changes/
 ```
 
-Essa distinção importa. A pasta do workspace é uma superfície de coordenação para planejamento entre repositórios ou pastas vinculados. O diretório `openspec/` de cada repositório continua sendo o lar para specs de propriedade do repositório, mudanças locais do repositório e planejamento de implementação. Os usuários não precisam executar `openspec init` local do repositório dentro de uma pasta de workspace.
+Essa distinção importa. A pasta do workspace é uma superfície de coordenação local para abrir e inspecionar repositórios ou pastas vinculados. O diretório `openspec/` de cada repositório continua sendo o lar para specs de propriedade do repositório, mudanças locais ao repositório e planejamento de implementação. Usuários não precisam executar o `openspec init` local ao repositório dentro de uma pasta de workspace.
 
-Nomes de links estáveis são como o planejamento do workspace se refere a repositórios e pastas. O estado compartilhado do workspace mantém nomes como `api`, `web` ou `checkout`; cada máquina mapeia esses nomes para seus próprios caminhos locais em `.openspec-workspace/local.yaml`.
+Nomes de vínculos estáveis são como um workspace se refere a repositórios e pastas. O registro privado do workspace mantém nomes como `api`, `web` ou `checkout` e os mapeia para os caminhos locais em tempo de execução.
 
 ```yaml
-# .openspec-workspace/workspace.yaml
+# workspace.yaml
 version: 1
 name: platform
+context: null
 links:
-  api: {}
-  web: {}
-```
-
-```yaml
-# .openspec-workspace/local.yaml
-version: 1
-paths:
   api: /repos/api
   web: /repos/web
 ```
 
-Workspaces criados pelo OpenSpec excluem `.openspec-workspace/local.yaml` do estado de colaboração portátil por padrão. `.openspec-workspace/workspace.yaml` permanece portátil porque armazena o nome do workspace e nomes de links estáveis, não os caminhos absolutos de checkout de um usuário.
+Quando um workspace abre uma iniciativa, `context` registra a ligação do armazenador de contexto selecionado e o id da iniciativa. Armazenadores selecionados pelo registro permanecem portáveis por id; armazenadores selecionados por caminho intencionalmente preservam o caminho local em tempo de execução porque `workspace.yaml` é um estado local privado.
 
-Os caminhos vinculados podem ser repositórios completos, pastas dentro de um grande monorepo ou outras pastas existentes. Eles não precisam do estado local do repositório `openspec/` antes de poderem participar do planejamento do workspace. Fluxos de trabalho posteriores de implementação, verificação ou arquivo podem exigir mais preparação do repositório, mas a visibilidade do planejamento começa com o link.
+```yaml
+context:
+  kind: initiative
+  store:
+    id: platform
+    selector:
+      kind: registry
+      id: platform
+  initiative:
+    id: billing-launch
+```
+
+Caminhos vinculados podem ser repositórios completos, pastas dentro de um monorepo grande ou outras pastas existentes. Eles não precisam de estado `openspec/` local ao repositório antes de poderem participar do planejamento do workspace. Fluxos de trabalho de implementação, verificação ou arquivo subsequentes podem exigir mais preparação do repositório, mas a visibilidade de planejamento começa com o vínculo.
 
 ```text
 multi-repo:
   api      -> /repos/api
   web      -> /repos/web
 
-large monorepo:
+monorepo grande:
   billing  -> /repos/platform/services/billing
   checkout -> /repos/platform/apps/checkout
 ```
 
-Workspaces gerenciados vivem sob o diretório padrão de dados do OpenSpec:
+Workspaces gerenciados residem sob o diretório de dados padrão do OpenSpec:
 
 ```text
 getGlobalDataDir()/workspaces
 ```
 
-Isso significa `$XDG_DATA_HOME/openspec/workspaces` quando `XDG_DATA_HOME` está definido, `~/.local/share/openspec/workspaces` no fallback estilo Unix, e `%LOCALAPPDATA%\openspec\workspaces` no fallback nativo do Windows. Shells nativos do Windows, PowerShell e WSL2 mantêm cada um as strings de caminho para o runtime que executa o OpenSpec. Essa base não traduz entre `D:\repo`, `/mnt/d/repo` e caminhos UNC do WSL.
+Isso significa `$XDG_DATA_HOME/openspec/workspaces` quando `XDG_DATA_HOME` está definido, `~/.local/share/openspec/workspaces` no fallback estilo Unix e `%LOCALAPPDATA%\openspec\workspaces` no fallback nativo do Windows. Shells nativos do Windows, PowerShell e WSL2 mantêm cada um as strings de caminho para o tempo de execução que está executando o OpenSpec. Essa base não faz tradução entre `D:\repo`, `/mnt/d/repo` e caminhos UNC do WSL.
 
-O OpenSpec também mantém um registro local da máquina em:
+O OpenSpec ainda pode ler raízes de workspace beta mais antigas como entradas de compatibilidade, mas os workspaces gerenciados agora usam o registro raiz `workspace.yaml` acima. A pasta do workspace permanece autoritativa para sua própria visualização local privada.
 
-```text
-getGlobalDataDir()/workspaces/registry.yaml
-```
-
-O registro mapeia nomes de workspaces para localizações de workspaces para que comandos globais posteriores possam listar ou selecionar workspaces conhecidos de qualquer lugar. É apenas um índice. Cada pasta de workspace permanece autoritativa para seu próprio `.openspec-workspace/workspace.yaml` e `.openspec-workspace/local.yaml`, então registros desatualizados no registro podem ser reportados e reparados sem redefinir o workspace em si.
-
-A visibilidade do workspace não é um compromisso de mudança. Configure um workspace quando o OpenSpec deve saber quais repositórios ou pastas são relevantes; crie uma mudança mais tarde quando você estiver pronto para planejar uma feature, fix, projeto ou outra peça de trabalho.
+A visibilidade do workspace não é compromisso com uma mudança. Configure um workspace quando o OpenSpec deveria saber quais repositórios ou pastas são relevantes; crie uma mudança mais tarde quando você estiver pronto para planejar uma funcionalidade, correção, projeto ou outra peça de trabalho.
 
 Comandos úteis:
 
@@ -145,13 +145,13 @@ openspec workspace setup
 
 # Configuração amigável para automação
 openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex
+openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
 
 # Ver workspaces conhecidos do registro local
 openspec workspace list
 openspec workspace ls
 
-# Adicionar ou reparar links para o workspace selecionado
+# Adicionar ou reparar vínculos para o workspace selecionado
 openspec workspace link /repos/api
 openspec workspace link api-service /repos/api
 openspec workspace relink api-service /new/path/to/api
@@ -160,25 +160,35 @@ openspec workspace relink api-service /new/path/to/api
 openspec workspace doctor
 openspec workspace doctor --workspace platform
 
+# Atualizar o guia e habilidades de agentes do workspace local
+openspec workspace update
+openspec workspace update --workspace platform --tools codex,claude
+
 # Abrir o conjunto de trabalho vinculado
 openspec workspace open
 openspec workspace open platform --agent github-copilot
 openspec workspace open --editor
+
+# Abrir uma iniciativa como uma visualização de workspace local
+openspec workspace open --initiative billing-launch --store platform
+openspec workspace open --initiative billing-launch --store-path /repos/platform-context
 ```
 
-`workspace setup` sempre cria o workspace no local padrão do workspace, registra-o no registro local, mostra a localização do workspace e requer pelo menos um repositório ou pasta vinculado. A configuração interativa pede um opener preferido. A configuração não interativa armazena um apenas quando `--opener codex`, `--opener claude`, `--opener github-copilot`, ou `--opener editor` é fornecido.
+`workspace setup` sempre cria o workspace no local padrão do workspace, o registra no registro local, mostra a localização do workspace e requer pelo menos um repositório ou pasta vinculado. A configuração interativa pergunta por um opener preferido e pode instalar habilidades do OpenSpec para agentes selecionados. A configuração não interativa armazena um apenas quando `--opener codex-cli`, `--opener claude`, `--opener github-copilot` ou `--opener editor` é fornecido.
 
-O OpenSpec também mantém arquivos de abertura raiz do workspace: um bloco de orientação gerenciado pelo OpenSpec em `AGENTS.md`, um arquivo `<workspace-name>.code-workspace` local da máquina para VS Code e GitHub Copilot-in-VS-Code, e uma entrada de ignore específica para esse arquivo `.code-workspace` mantido. Arquivos `*.code-workspace` criados pelo usuário permanecem rastreáveis porque a regra de ignore visa apenas o arquivo mantido.
+Habilidades do workspace são instaladas apenas na raiz do workspace. O perfil global ativo seleciona quais habilidades de fluxo de trabalho são geradas; `--tools` seleciona quais agentes as recebem. A configuração e atualização do workspace não criam arquivos de comando barra mesmo quando a entrega global inclui comandos. Execute `openspec workspace update` para atualizar o guia local do workspace e adicionar, atualizar ou remover diretórios de habilidades gerenciados localmente ao workspace sem editar repositórios ou pastas vinculados.
 
-O workspace mantido do VS Code inclui a raiz de coordenação como `.` mais repositórios ou pastas vinculados válidos como raízes adicionais. O VS Code exibe essas entradas como um workspace multi-raiz.
+O OpenSpec também mantém arquivos abertos do workspace raiz: um bloco de guia gerenciado pelo OpenSpec em `AGENTS.md` e um arquivo `<nome-do-workspace>.code-workspace` local da máquina para aberturas do VS Code e GitHub Copilot-in-VS-Code. Um workspace gerenciado não é um repositório, então o OpenSpec não cria um `.gitignore` padrão do workspace nem um diretório `changes/` padrão no nível do workspace.
 
-`workspace open` abre o conjunto de trabalho vinculado com o opener preferido armazenado, a menos que `--agent <tool>` ou `--editor` seja passado para essa sessão específica. Passar ambas as substituições de opener é um erro. A abertura raiz do workspace torna os repositórios e pastas vinculados visíveis para exploração e planejamento; a implementação começa depois que o usuário pede explicitamente pelo trabalho de implementação.
+O workspace VS Code mantido lista primeiro os repositórios ou pastas vinculados válidos, depois o contexto da iniciativa quando anexado, e então os arquivos do workspace OpenSpec. O VS Code exibe essas entradas como um workspace multi-raiz.
 
-`workspace link` e `workspace relink` registram apenas pastas existentes; eles não criam, copiam, movem, inicializam ou editam o repositório ou pasta vinculado. Após um link ou relink bem-sucedido, o OpenSpec atualiza a orientação gerenciada, o arquivo de workspace do VS Code e a regra de ignore.
+`workspace open` abre o conjunto de trabalho vinculado com o opener preferido armazenado, a menos que `--agent <ferramenta>` ou `--editor` seja passado para aquela sessão. Passar ambas as substituições de opener é um erro. A abertura do workspace raiz torna os repositórios e pastas vinculados visíveis para exploração e contexto; a implementação começa após o usuário solicitar explicitamente o trabalho de implementação.
 
-Comandos de workspace que precisam de um workspace podem ser executados de qualquer lugar com `--workspace <name>`. Se você os executar dentro de uma pasta ou subdiretório do workspace, o OpenSpec usa esse workspace atual. Se vários workspaces conhecidos estiverem disponíveis e você não passar `--workspace <name>`, comandos humanos mostram um seletor; `--json` e `--no-interactive` falham com um erro de status estruturado em vez de solicitar.
+`workspace link` e `workspace relink` apenas registram pastas existentes; eles não criam, copiam, movem, inicializam nem editam o repositório ou pasta vinculado. Após um vínculo ou re-vínculo bem-sucedido, o OpenSpec atualiza o guia gerenciado e o arquivo de workspace do VS Code.
 
-Comandos diretos de workspace suportam saída JSON para scripts. Respostas JSON mantêm dados primários em objetos `workspace`, `workspaces` ou `link` e reportam avisos ou erros em arrays `status`. Objetos saudáveis usam `status: []`.
+Comandos de workspace que precisam de um workspace podem ser executados de qualquer lugar com `--workspace <nome>`. Se você os executar dentro de uma pasta ou subdiretório do workspace, o OpenSpec usa esse workspace atual. Se vários workspaces conhecidos estiverem disponíveis e você não passar `--workspace <nome>`, comandos humanos mostram um seletor; `--json` e `--no-interactive` falham com um erro de status estruturado em vez de solicitar.
+
+Comandos diretos do workspace suportam saída JSON para scripts. Respostas JSON mantêm dados primários em objetos `workspace`, `workspaces` ou `link` e reportam avisos ou erros em arrays `status`. Objetos saudáveis usam `status: []`.
 
 ## Specs
 
@@ -200,7 +210,7 @@ openspec/specs/
 
 Organize as specs por domínio — agrupamentos lógicos que fazem sentido para o seu sistema. Padrões comuns:
 
-- **Por área de feature**: `auth/`, `payments/`, `search/`
+- **Por área de funcionalidade**: `auth/`, `payments/`, `search/`
 - **Por componente**: `api/`, `frontend/`, `workers/`
 - **Por contexto delimitado**: `ordering/`, `fulfillment/`, `inventory/`
 
@@ -210,7 +220,6 @@ Uma spec contém requisitos, e cada requisito tem cenários:
 
 ```markdown
 # Especificação de Autenticação
-```
 
 ## Propósito
 Autenticação e gerenciamento de sessão para a aplicação.
@@ -218,7 +227,7 @@ Autenticação e gerenciamento de sessão para a aplicação.
 ## Requisitos
 
 ### Requisito: Autenticação de Usuário
-O sistema DEVE emitir um token JWT após login bem-sucedido.
+O sistema DEVE emitir um token JWT após um login bem-sucedido.
 
 #### Cenário: Credenciais válidas
 - DADO um usuário com credenciais válidas
@@ -235,81 +244,81 @@ O sistema DEVE emitir um token JWT após login bem-sucedido.
 ### Requisito: Expiração de Sessão
 O sistema DEVE expirar sessões após 30 minutos de inatividade.
 
-#### Cenário: Tempo limite por inatividade
+#### Cenário: Timeout por inatividade
 - DADO uma sessão autenticada
-- QUANDO 30 minutos se passam sem atividade
+- QUANDO 30 minutos passam sem atividade
 - ENTÃO a sessão é invalidada
-- E o usuário deve reautenticar-se
+- E o usuário deve se reautenticar
 ```
 
 **Elementos-chave:**
 
 | Elemento | Propósito |
-|----------|-----------|
-| `## Propósito` | Descrição de alto nível do domínio desta especificação |
+|---------|---------|
+| `## Propósito` | Descrição de alto nível do domínio desta spec |
 | `### Requisito:` | Um comportamento específico que o sistema deve ter |
 | `#### Cenário:` | Um exemplo concreto do requisito em ação |
-| SHALL/MUST/SHOULD | Palavras-chave RFC 2119 indicando a força do requisito |
+| SHALL/MUST/SHOULD (DEVE/DEVE/DEVERIA) | Palavras-chave RFC 2119 indicando a força do requisito |
 
-### Por que Estruturar Especificações Desta Forma
+### Por que Estruturar Specs Dessa Forma
 
 **Requisitos são o "o quê"** — eles declaram o que o sistema deve fazer sem especificar a implementação.
 
 **Cenários são o "quando"** — eles fornecem exemplos concretos que podem ser verificados. Bons cenários:
 - São testáveis (você poderia escrever um teste automatizado para eles)
-- Cobrem tanto o caminho feliz quanto casos extremos
-- Usam formato estruturado Dado/Quando/Então ou similar
+- Cobrem tanto o caminho feliz quanto os casos de borda
+- Usam Dado/Quando/Então ou formato estruturado similar
 
-**Palavras-chave RFC 2119** (SHALL, MUST, SHOULD, MAY) comunicam a intenção:
-- **MUST/SHALL** — requisito absoluto
-- **SHOULD** — recomendado, mas existem exceções
-- **MAY** — opcional
+**Palavras-chave RFC 2119** (DEVE, DEVERIA, PODE) comunicam a intenção:
+- **DEVE (MUST/SHALL)** — requisito absoluto
+- **DEVERIA (SHOULD)** — recomendado, mas existem exceções
+- **PODE (MAY)** — opcional
 
-### O que uma Especificação É (e Não É)
+### O que uma Spec É (e o que Não É)
 
-Uma especificação é um **contrato de comportamento**, não um plano de implementação.
+Uma spec é um **contrato de comportamento**, não um plano de implementação.
 
-Bom conteúdo de especificação:
-- Comportamento observável no qual usuários ou sistemas dependentes confiam
+Bom conteúdo de spec:
+- Comportamento observável em que usuários ou sistemas downstream dependem
 - Entradas, saídas e condições de erro
 - Restrições externas (segurança, privacidade, confiabilidade, compatibilidade)
-- Cenários que podem ser testados ou validados explicitamente
+- Cenários que podem ser testados ou explicitamente validados
 
-Evite em especificações:
+Evite em specs:
 - Nomes internos de classes/funções
 - Escolhas de bibliotecas ou frameworks
 - Detalhes de implementação passo a passo
 - Planos de execução detalhados (esses pertencem a `design.md` ou `tasks.md`)
 
 Teste rápido:
-- Se a implementação pode mudar sem alterar o comportamento visível externamente, provavelmente não pertence à especificação.
+- Se a implementação pode mudar sem alterar o comportamento visível externamente, provavelmente não pertence à spec.
 
 ### Mantenha Leve: Rigor Progressivo
 
 O OpenSpec visa evitar burocracia. Use o nível mais leve que ainda torne a mudança verificável.
 
-**Especificação leve (padrão):**
-- Requisitos curtos focados em comportamento
-- Escopo claro e não-objetivos
+**Spec lite (padrão):**
+- Requisitos curtos focados no comportamento
+- Escopo e não-objetivos claros
 - Algumas verificações de aceitação concretas
 
-**Especificação completa (para maior risco):**
-- Mudanças entre equipes ou repositórios
-- Alterações de API/contrato, migrações, preocupações com segurança/privacidade
-- Mudanças onde a ambiguidade pode causar retrabalho caro
+**Spec completa (para maior risco):**
+- Mudanças entre equipes ou entre repositórios
+- Mudanças de API/contrato, migrações, preocupações de segurança/privacidade
+- Mudanças onde a ambigüidade provavelmente causaria retrabalho caro
 
-A maioria das mudanças deve permanecer no modo leve.
+A maioria das mudanças deve permanecer no modo Lite.
 
 ### Colaboração Humano + Agente
 
-Em muitas equipes, humanos exploram e agentes redigem artefatos. O loop pretendido é:
+Em muitas equipes, humanos exploram e agentes rascunham artefatos. O loop pretendido é:
 
 1. O humano fornece intenção, contexto e restrições.
-2. O agente converte isso em requisitos e cenários focados em comportamento.
+2. O agente converte isso em requisitos e cenários focados no comportamento.
 3. O agente mantém detalhes de implementação em `design.md` e `tasks.md`, não em `spec.md`.
 4. A validação confirma a estrutura e clareza antes da implementação.
 
-Isso mantém as especificações legíveis para humanos e consistentes para agentes.
+Isso mantém as specs legíveis para humanos e consistentes para agentes.
 
 ## Alterações
 
@@ -319,31 +328,31 @@ Uma alteração é uma modificação proposta para o seu sistema, empacotada com
 
 ```
 openspec/changes/add-dark-mode/
-├── proposal.md           # Por quê e o quê
+├── proposal.md           # Por que e o quê
 ├── design.md             # Como (abordagem técnica)
-├── tasks.md              # Checklist de implementação
+├── tasks.md              # Lista de verificação de implementação
 ├── .openspec.yaml        # Metadados da alteração (opcional)
 └── specs/                # Especificações delta
     └── ui/
         └── spec.md       # O que está mudando em ui/spec.md
 ```
 
-Cada alteração é autossuficiente. Ela contém:
+Cada alteração é autocontida. Ela possui:
 - **Artefatos** — documentos que capturam a intenção, o design e as tarefas
-- **Especificações delta** — especificações do que está sendo adicionado, modificado ou removido
+- **Especificações delta** — especificações para o que está sendo adicionado, modificado ou removido
 - **Metadados** — configuração opcional para esta alteração específica
 
-### Por Que Alterações São Pastas
+### Por que Alterações São Pastas
 
-Empacotar uma alteração como uma pasta tem vários benefícios:
+Empacotar uma alteração como uma pasta possui diversos benefícios:
 
-1. **Tudo junto.** Proposta, design, tarefas e especificações ficam em um só lugar. Sem precisar procurar em diferentes locais.
+1. **Tudo junto.** A proposta, o design, as tarefas e as especificações ficam em um único lugar. Sem precisar procurar em diferentes localizações.
 
-2. **Trabalho paralelo.** Múltiplas alterações podem existir simultaneamente sem conflitar. Trabalhe em `add-dark-mode` enquanto `fix-auth-bug` também está em andamento.
+2. **Trabalho paralelo.** Várias alterações podem existir simultaneamente sem conflitar. Trabalhe em `add-dark-mode` enquanto `fix-auth-bug` também está em andamento.
 
-3. **Histórico limpo.** Quando arquivadas, as alterações movem-se para `changes/archive/` com seu contexto completo preservado. Você pode olhar para trás e entender não apenas o que mudou, mas por quê.
+3. **Histórico limpo.** Quando arquivadas, as alterações são movidas para `changes/archive/` com seu contexto completo preservado. Você pode olhar para trás e entender não apenas o que mudou, mas o porquê.
 
-4. **Fácil revisão.** Uma pasta de alteração é fácil de revisar — abra-a, leia a proposta, verifique o design, veja os deltas das especificações.
+4. **Amigável para revisão.** Uma pasta de alteração é fácil de revisar — abra-a, leia a proposta, verifique o design, veja as deltas da especificação.
 
 ## Artefatos
 
@@ -354,8 +363,8 @@ Artefatos são os documentos dentro de uma alteração que orientam o trabalho.
 ```
 proposal ──────► specs ──────► design ──────► tasks ──────► implement
     │               │             │              │
-   por quê        o quê         como         etapas
- + escopo       mudanças      abordagem     a seguir
+   por que        o quê        como        etapas
+ + escopo       mudanças    abordagem    a tomar
 ```
 
 Os artefatos se constroem uns sobre os outros. Cada artefato fornece contexto para o próximo.
@@ -368,29 +377,27 @@ A proposta captura a **intenção**, o **escopo** e a **abordagem** em alto nív
 
 ```markdown
 # Proposta: Adicionar Modo Escuro
+```
 
 ## Intenção
-Os usuários solicitaram uma opção de modo escuro para reduzir o cansaço visual
-durante o uso noturno e corresponder às preferências do sistema.
+Os usuários solicitaram uma opção de modo escuro para reduzir o cansaço visual durante o uso noturno e corresponder às preferências do sistema.
 
 ## Escopo
 Dentro do escopo:
 - Alternância de tema nas configurações
 - Detecção de preferência do sistema
-- Persistir preferência no localStorage
+- Persistência da preferência no localStorage
 
 Fora do escopo:
 - Temas de cores personalizados (trabalho futuro)
 - Substituições de tema por página
 
 ## Abordagem
-Usar propriedades CSS personalizadas para theming com um contexto React
-para gerenciamento de estado. Detectar a preferência do sistema na primeira carga,
-permitir substituição manual.
+Usar propriedades CSS personalizadas para temas com um contexto React para gerenciamento de estado. Detectar a preferência do sistema na primeira carga, permitir substituição manual.
 ```
 
 **Quando atualizar a proposta:**
-- O escopo muda (redução ou expansão)
+- Mudanças no escopo (redução ou expansão)
 - A intenção se esclarece (melhor entendimento do problema)
 - A abordagem muda fundamentalmente
 
@@ -406,12 +413,11 @@ O design captura a **abordagem técnica** e as **decisões de arquitetura**.
 # Design: Adicionar Modo Escuro
 
 ## Abordagem Técnica
-Estado do tema gerenciado via React Context para evitar prop drilling.
-Propriedades CSS personalizadas permitem a troca em tempo de execução sem alternância de classes.
+Estado do tema gerenciado via React Context para evitar prop drilling. Propriedades CSS personalizadas permitem a troca em tempo real sem alternância de classe.
 
 ## Decisões de Arquitetura
 
-### Decisão: Context em vez de Redux
+### Decisão: Contexto sobre Redux
 Usar React Context para o estado do tema porque:
 - Estado binário simples (claro/escuro)
 - Sem transições de estado complexas
@@ -431,10 +437,10 @@ ThemeProvider (context)
 ThemeToggle ◄──► localStorage
        │
        ▼
-CSS Variables (applied to :root)
+CSS Variables (aplicado ao :root)
 ```
 
-## Alterações de Arquivo
+## Mudanças de Arquivo
 - `src/contexts/ThemeContext.tsx` (novo)
 - `src/components/ThemeToggle.tsx` (novo)
 - `src/styles/globals.css` (modificado)
@@ -447,7 +453,7 @@ CSS Variables (applied to :root)
 
 #### Tarefas (`tasks.md`)
 
-As tarefas são o **checklist de implementação** — etapas concretas com caixas de seleção.
+As tarefas são a **lista de implementação** — etapas concretas com caixas de seleção.
 
 ```markdown
 # Tarefas
@@ -470,14 +476,14 @@ As tarefas são o **checklist de implementação** — etapas concretas com caix
 ```
 
 **Melhores práticas para tarefas:**
-- Agrupar tarefas relacionadas sob cabeçalhos
+- Agrupar tarefas relacionadas sob títulos
 - Usar numeração hierárquica (1.1, 1.2, etc.)
-- Manter tarefas pequenas o suficiente para serem concluídas em uma sessão
+- Manter tarefas pequenas o suficiente para completar em uma sessão
 - Marcar tarefas como concluídas à medida que as finaliza
 
 ## Especificações Delta
 
-As especificações delta são o conceito-chave que faz o OpenSpec funcionar para o desenvolvimento brownfield. Elas descrevem **o que está mudando** em vez de reafirmar a especificação inteira.
+Especificações delta são o conceito chave que faz o OpenSpec funcionar para desenvolvimento em sistemas legados. Elas descrevem **o que está mudando** em vez de reafirmar toda a especificação.
 
 ### O Formato
 
@@ -489,16 +495,16 @@ As especificações delta são o conceito-chave que faz o OpenSpec funcionar par
 ### Requisito: Autenticação de Dois Fatores
 O sistema DEVE suportar autenticação de dois fatores baseada em TOTP.
 
-#### Cenário: Ativação do 2FA
-- DADO um usuário sem 2FA ativado
-- QUANDO o usuário ativa o 2FA nas configurações
+#### Cenário: Ingresso no 2FA
+- DADO um usuário sem 2FA habilitado
+- QUANDO o usuário habilita 2FA nas configurações
 - ENTÃO um código QR é exibido para configuração do aplicativo autenticador
 - E o usuário deve verificar com um código antes da ativação
 
 #### Cenário: Login com 2FA
-- DADO um usuário com 2FA ativado
+- DADO um usuário com 2FA habilitado
 - QUANDO o usuário submete credenciais válidas
-- ENTÃO um desafio OTP é apresentado
+- ENTÃO um desafio de OTP é apresentado
 - E o login é concluído somente após OTP válido
 
 ## REQUISITOS MODIFICADOS
@@ -507,40 +513,40 @@ O sistema DEVE suportar autenticação de dois fatores baseada em TOTP.
 O sistema DEVE expirar sessões após 15 minutos de inatividade.
 (Anteriormente: 30 minutos)
 
-#### Cenário: Timeout por inatividade
-- DADO uma sessão autenticada
-- QUANDO 15 minutos passam sem atividade
+#### Cenário: Tempo limite por inatividade
+- DADA uma sessão autenticada
+- QUANDO 15 minutos se passam sem atividade
 - ENTÃO a sessão é invalidada
 
 ## REQUISITOS REMOVIDOS
 
 ### Requisito: Lembrar-me
-(Descontinuado em favor do 2FA. Os usuários devem reautenticar a cada sessão.)
+(Descontinuado em favor do 2FA. Os usuários devem reautenticar-se a cada sessão.)
 ```
 
 ### Seções Delta
 
 | Seção | Significado | O que acontece no Arquivamento |
-|---------|---------|------------------------|
+|-------|-------------|--------------------------------|
 | `## REQUISITOS ADICIONADOS` | Novo comportamento | Anexado à especificação principal |
 | `## REQUISITOS MODIFICADOS` | Comportamento alterado | Substitui o requisito existente |
 | `## REQUISITOS REMOVIDOS` | Comportamento descontinuado | Excluído da especificação principal |
 
-### Por Que Deltas em Vez de Especificações Completas
+### Por que Deltas em vez de Especificações Completas
 
-**Clareza.** Um delta mostra exatamente o que está mudando. Ao ler uma especificação completa, você teria que compará-la mentalmente com a versão atual.
+**Clareza.** Um delta mostra exatamente o que está mudando. Ao ler uma especificação completa, você teria que diferenciá-la mentalmente da versão atual.
 
-**Evita conflitos.** Duas alterações podem tocar no mesmo arquivo de especificação sem conflitar, desde que modifiquem requisitos diferentes.
+**Evita conflitos.** Duas mudanças podem tocar no mesmo arquivo de especificação sem conflitar, desde que modifiquem requisitos diferentes.
 
 **Eficiência na revisão.** Os revisores veem a mudança, não o contexto inalterado. Foco no que importa.
 
-**Adequação para brownfield.** A maioria do trabalho modifica comportamentos existentes. As deltas tornam as modificações cidadãs de primeira classe, não uma reflexão tardia.
+**Adequado para sistemas legados.** A maioria do trabalho modifica comportamentos existentes. Tornam as modificações cidadãos de primeira classe, não uma reflexão tardia.
 
-## Esquemas
+## Schemas
 
-Esquemas definem os tipos de artefatos e suas dependências para um fluxo de trabalho.
+Schemas definem os tipos de artefatos e suas dependências para um fluxo de trabalho.
 
-### Como os Esquemas Funcionam
+### Como os Schemas Funcionam
 
 ```yaml
 # openspec/schemas/spec-driven/schema.yaml
@@ -556,14 +562,14 @@ artifacts:
 
   - id: design
     generates: design.md
-    requires: [proposal]      # Pode criar em paralelo com as especificações
+    requires: [proposal]      # Pode criar em paralelo com specs
 
   - id: tasks
     generates: tasks.md
-    requires: [specs, design] # Precisa tanto das especificações quanto do design primeiro
+    requires: [specs, design] # Precisa de specs e design primeiro
 ```
 
-**Os artefatos formam um grafo de dependências:**
+**Artefatos formam um grafo de dependência:**
 
 ```
                     proposal
@@ -573,7 +579,7 @@ artifacts:
          │                           │
          ▼                           ▼
       specs                       design
-   (requer:                    (requer:
+   (requer:                  (requer:
     proposal)                   proposal)
          │                           │
          └─────────────┬─────────────┘
@@ -584,13 +590,13 @@ artifacts:
                 specs, design)
 ```
 
-**As dependências são facilitadoras, não bloqueios.** Elas mostram o que é possível criar, não o que você deve criar em seguida. Você pode pular o design se não precisar dele. Você pode criar as especificações antes ou depois do design — ambas dependem apenas da proposta.
+**Dependências são facilitadores, não bloqueios.** Elas mostram o que é possível criar, não o que você deve criar a seguir. Você pode pular o design se não precisar dele. Você pode criar especificações antes ou depois do design — ambas dependem apenas da proposta.
 
-### Esquemas Integrados
+### Schemas Embutidos
 
 **spec-driven** (padrão)
 
-O fluxo de trabalho padrão para desenvolvimento guiado por especificações:
+O fluxo de trabalho padrão para desenvolvimento orientado por especificações:
 
 ```
 proposal → specs → design → tasks → implement
@@ -598,19 +604,19 @@ proposal → specs → design → tasks → implement
 
 Ideal para: A maioria do trabalho de funcionalidades onde você deseja concordar nas especificações antes da implementação.
 
-### Esquemas Personalizados
+### Schemas Personalizados
 
-Crie esquemas personalizados para o fluxo de trabalho da sua equipe:
+Crie schemas personalizados para o fluxo de trabalho da sua equipe:
 
 ```bash
-# Criar do zero
+# Crie do zero
 openspec schema init research-first
 
-# Ou bifurcar um existente
+# Ou bifurque um existente
 openspec schema fork spec-driven research-first
 ```
 
-**Exemplo de esquema personalizado:**
+**Exemplo de schema personalizado:**
 
 ```yaml
 # openspec/schemas/research-first/schema.yaml
@@ -626,16 +632,16 @@ artifacts:
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # Pular especificações/design, ir direto para as tarefas
+    requires: [proposal]   # Pular specs/design, ir direto para tarefas
 ```
 
-Consulte [Personalização](customization.md) para detalhes completos sobre como criar e usar esquemas personalizados.
+Consulte [Personalização](customization.md) para detalhes completos sobre como criar e usar schemas personalizados.
 
 ## Arquivamento
 
-O arquivamento conclui uma alteração mesclando suas especificações delta nas especificações principais e preservando a alteração para o histórico.
+O arquivamento conclui uma mudança, mesclando suas especificações delta nas especificações principais e preservando a mudança para o histórico.
 
-### O Que Acontece Quando Você Arquiva
+### O que Acontece Quando Você Arquiva
 
 ```
 Antes do arquivamento:
@@ -673,57 +679,56 @@ openspec/
 
 ### O Processo de Arquivamento
 
-1. **Mesclar deltas.** Cada seção de especificação delta (ADDED/MODIFIED/REMOVED) é aplicada à especificação principal correspondente.
+1. **Mesclar deltas.** Cada seção de especificação delta (ADICIONADOS/MODIFICADOS/REMOVIDOS) é aplicada à especificação principal correspondente.
 
-2. **Mover para o arquivo.** A pasta da alteração é movida para `changes/archive/` com um prefixo de data para ordenação cronológica.
+2. **Mover para o arquivo.** A pasta da mudança é movida para `changes/archive/` com um prefixo de data para ordenação cronológica.
 
-3. **Preservar contexto.** Todos os artefatos permanecem intactos no arquivo. Você sempre pode olhar para trás para entender por que uma alteração foi feita.
+3. **Preservar contexto.** Todos os artefatos permanecem intactos no arquivo. Você sempre pode olhar para trás para entender por que uma mudança foi feita.
 
-### Por Que o Arquivamento é Importante
+### Por que o Arquivamento é Importante
 
-**Estado limpo.** Alterações ativas (`changes/`) mostram apenas trabalho em andamento. Trabalho concluído sai do caminho.
+**Estado limpo.** As mudanças ativas (`changes/`) mostram apenas o trabalho em andamento. O trabalho concluído sai do caminho.
 
-**Trilha de auditoria.** O arquivo preserva o contexto completo de cada alteração — não apenas o que mudou, mas a proposta explicando por quê, o design explicando como, e as tarefas mostrando o trabalho realizado.
+**Trilha de auditoria.** O arquivo preserva o contexto completo de cada mudança — não apenas o que mudou, mas a proposta explicando por quê, o design explicando como e as tarefas mostrando o trabalho feito.
 
-**Evolução das especificações.** As especificações crescem organicamente à medida que as alterações são arquivadas. Cada arquivo mescla seus deltas, construindo uma especificação abrangente ao longo do tempo.
+**Evolução das especificações.** As especificações crescem organicamente à medida que as mudanças são arquivadas. Cada arquivo mescla seus deltas, construindo ao longo do tempo uma especificação abrangente.
 
 ## Como Tudo se Encaixa
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              FLUXO OPENSPEC                                   │
+│                              FLUXO OPENSPEC                                  │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. INICIAR    │  /opsx:propose (core) ou /opsx:new (expandido)           │
-│   │     ALTERAÇÃO  │                                                         │
+│   │  1. INICIAR    │  /opsx:propose (core) ou /opsx:new (expandido)          │
+│   │    MUDANÇA     │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. CRIAR      │  /opsx:ff ou /opsx:continue (fluxo de trabalho expandido)│
-│   │     ARTEFATOS  │  Cria proposta → especificações → design → tarefas       │
-│   │                │  (com base nas dependências do esquema)                  │
+│   │  2. CRIAR      │  /opsx:ff ou /opsx:continue (fluxo de trabalho expandido)|
+│   │   ARTEFATOS    │  Cria proposta → especificações → design → tarefas       │
+│   │                │  (baseado nas dependências do schema)                    │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
 │   │  3. IMPLEMENTAR│  /opsx:apply                                            │
-│   │     TAREFAS    │  Trabalhar nas tarefas, marcando-as como concluídas      │
-│   │                │◄──── Atualizar artefatos conforme você aprende           │
+│   │    TAREFAS     │  Trabalhar nas tarefas, marcando-as como concluídas     │
+│   │                │◄──── Atualizar artefatos conforme você aprende          │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
 │   │  4. VERIFICAR  │  /opsx:verify (opcional)                                │
-│   │     TRABALHO   │  Verificar se a implementação corresponde às especificações│
+│   │    TRABALHO    │  Verificar se a implementação corresponde às specs      │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. ARQUIVAR   │────►│  Especificações delta mesclam nas principais │    │
-│   │     ALTERAÇÃO  │     │  Pasta da alteração move para archive/       │    │
-│   └────────────────┘     │  Especificações agora são a fonte da verdade │    │
-│                          │  atualizada                                  │    │
+│   │  5. ARQUIVAR   │────►│  Especificações delta mesclam nas specs     │    │
+│   │    MUDANÇA     │     │  Pasta da mudança movida para archive/      │    │
+│   └────────────────┘     │  Specs agora são a fonte atualizada da verdade│    │
 │                          └──────────────────────────────────────────────┘    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
@@ -731,27 +736,27 @@ openspec/
 
 **O ciclo virtuoso:**
 
-1. As especificações descrevem o comportamento atual
-2. As alterações propõem modificações (como deltas)
-3. A implementação torna as alterações reais
-4. O arquivamento mescla os deltas nas especificações
-5. As especificações agora descrevem o novo comportamento
-6. A próxima alteração se baseia nas especificações atualizadas
+1. Especificações descrevem o comportamento atual
+2. Mudanças propõem modificações (como deltas)
+3. Implementação torna as mudanças reais
+4. Arquivamento mescla deltas nas especificações
+5. Especificações agora descrevem o novo comportamento
+6. A próxima mudança se baseia nas especificações atualizadas
 
 ## Glossário
 
 | Termo | Definição |
 |-------|-----------|
-| **Artifact** | Um documento dentro de uma alteração (proposta, design, tarefas ou especificações delta) |
-| **Archive** | O processo de concluir uma alteração e mesclar seus deltas nas especificações principais |
-| **Change** | Uma modificação proposta para o sistema, empacotada como uma pasta com artefatos |
-| **Delta spec** | Uma especificação que descreve alterações (ADDED/MODIFIED/REMOVED) em relação às especificações atuais |
-| **Domain** | Um agrupamento lógico para especificações (ex.: `auth/`, `payments/`) |
-| **Requirement** | Um comportamento específico que o sistema deve ter |
-| **Scenario** | Um exemplo concreto de um requisito, tipicamente no formato Given/When/Then |
-| **Schema** | Uma definição dos tipos de artefatos e suas dependências |
-| **Spec** | Uma especificação descrevendo o comportamento do sistema, contendo requisitos e cenários |
-| **Source of truth** | O diretório `openspec/specs/`, contendo o comportamento atual acordado |
+| **Artefato** | Um documento dentro de uma mudança (proposta, design, tarefas ou especificações delta) |
+| **Arquivamento** | O processo de concluir uma mudança e mesclar suas deltas nas especificações principais |
+| **Mudança** | Uma modificação proposta para o sistema, empacotada como uma pasta com artefatos |
+| **Especificação delta** | Uma especificação que descreve alterações (ADICIONADAS/MODIFICADAS/REMOVIDAS) em relação às especificações atuais |
+| **Domínio** | Um agrupamento lógico para especificações (ex.: `auth/`, `payments/`) |
+| **Requisito** | Um comportamento específico que o sistema deve ter |
+| **Cenário** | Um exemplo concreto de um requisito, tipicamente no formato Dado/Quando/Então |
+| **Esquema** | Uma definição dos tipos de artefatos e suas dependências |
+| **Especificação** | Uma especificação que descreve o comportamento do sistema, contendo requisitos e cenários |
+| **Fonte da verdade** | O diretório `openspec/specs/`, contendo o comportamento atual acordado |
 
 ## Próximos Passos
 

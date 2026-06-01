@@ -7,23 +7,23 @@ Diese Anleitung erklärt die grundlegenden Ideen hinter OpenSpec und wie sie zus
 OpenSpec basiert auf vier Prinzipien:
 
 ```
-flüssig nicht starr         — keine Phasentore, arbeiten Sie an dem, was sinnvoll ist
-iterativ nicht Wasserfall   — lernen Sie während des Bauens, verfeinern Sie unterwegs
-einfach nicht komplex       — leichtgewichtige Einrichtung, minimale Formalitäten
-brownfield-first            — funktioniert mit bestehenden Codebasen, nicht nur bei Greenfield-Projekten
+flüssig, nicht starr       — keine Phasentore, arbeiten Sie an dem, was sinnvoll ist
+iterativ, nicht kaskadenförmig — lernen Sie beim Bauen, verfeinern Sie im Prozess
+einfach, nicht komplex      — leichtgewichtige Einrichtung, minimaler Aufwand
+brownfield-first            — funktioniert mit bestehenden Codebasen, nicht nur bei Greenfield
 ```
 
 ### Warum diese Prinzipien wichtig sind
 
-**Flüssig nicht starr.** Traditionelle Spezifikationssysteme zwingen Sie in Phasen: Zuerst planen Sie, dann implementieren Sie, dann sind Sie fertig. OpenSpec ist flexibler – Sie können Artefakte in jeder für Ihre Arbeit sinnvollen Reihenfolge erstellen.
+**Flüssig, nicht starr.** Traditionelle Spezifikationssysteme zwingen Sie in Phasen: zuerst planen Sie, dann implementieren Sie, dann sind Sie fertig. OpenSpec ist flexibler – Sie können Artefakte in jeder für Ihre Arbeit sinnvollen Reihenfolge erstellen.
 
-**Iterativ nicht Wasserfall.** Anforderungen ändern sich. Das Verständnis vertieft sich. Was zu Beginn wie ein guter Ansatz schien, hält möglicherweise nicht stand, nachdem Sie die Codebasis gesehen haben. OpenSpec akzeptiert diese Realität.
+**Iterativ, nicht kaskadenförmig.** Anforderungen ändern sich. Das Verständnis vertieft sich. Was zu Beginn wie ein guter Ansatz schien, hält möglicherweise nicht stand, nachdem Sie die Codebasis gesehen haben. OpenSpec begrüßt diese Realität.
 
-**Einfach nicht komplex.** Einige Spezifikations-Frameworks erfordern umfangreiche Einrichtung, starre Formate oder schwergewichtige Prozesse. OpenSpec steht Ihnen nicht im Weg. Initialisierung in Sekunden, sofortige Arbeitsaufnahme, Anpassung nur bei Bedarf.
+**Einfach, nicht komplex.** Einige Spezifikations-Frameworks erfordern umfangreiche Einrichtung, starre Formate oder schwergewichtige Prozesse. OpenSpec bleibt Ihnen aus dem Weg. Initialisierung in Sekunden, sofort mit der Arbeit beginnen, nur bei Bedarf anpassen.
 
-**Brownfield-first.** Die meisten Softwarearbeiten bestehen nicht im Neuaufbau – sondern in der Modifikation bestehender Systeme. Der delta-basierte Ansatz von OpenSpec erleichtert die Spezifikation von Änderungen am bestehenden Verhalten, nicht nur die Beschreibung neuer Systeme.
+**Brownfield-first.** Die meiste Softwarearbeit ist kein Neuaufbau – es ist die Modifikation bestehender Systeme. Der delta-basierte Ansatz von OpenSpec erleichtert die Spezifikation von Änderungen am bestehenden Verhalten, anstatt nur neue Systeme zu beschreiben.
 
-## Das Gesamtbild
+## Das große Ganze
 
 OpenSpec organisiert Ihre Arbeit in zwei Hauptbereiche:
 
@@ -34,48 +34,49 @@ OpenSpec organisiert Ihre Arbeit in zwei Hauptbereiche:
 │   ┌─────────────────────┐      ┌───────────────────────────────┐   │
 │   │       specs/        │      │         changes/              │   │
 │   │                     │      │                               │   │
-│   │  Quelle der Wahrheit│◄─────│  Vorgeschlagene Änderungen    │   │
+│   │  Source of truth    │◄─────│  Vorgeschlagene Änderungen    │   │
 │   │  Wie Ihr System     │ merge│  Jede Änderung = ein Ordner   │   │
-│   │  aktuell funktioniert│     │  Enthält Artefakte + Deltas   │   │
+│   │  derzeit funktioniert│     │  Enthält Artefakte + Deltas   │   │
 │   │                     │      │                               │   │
 │   └─────────────────────┘      └───────────────────────────────┘   │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs** sind die Quelle der Wahrheit – sie beschreiben, wie sich Ihr System aktuell verhält.
+**Specs** sind die zentrale Quelle der Wahrheit – sie beschreiben, wie sich Ihr System derzeit verhält.
 
-**Changes** sind vorgeschlagene Änderungen – sie liegen in separaten Ordnern, bis Sie bereit sind, sie zusammenzuführen.
+**Changes** sind vorgeschlagene Änderungen – sie befinden sich in separaten Ordnern, bis Sie bereit sind, sie zusammenzuführen.
 
-Diese Trennung ist der Schlüssel. Sie können parallel an mehreren Änderungen arbeiten, ohne Konflikte. Sie können eine Änderung überprüfen, bevor sie die Haupt-Specs beeinflusst. Und wenn Sie eine Änderung archivieren, führen sich ihre Deltas sauber in die Quelle der Wahrheit zusammen.
+Diese Trennung ist entscheidend. Sie können parallel an mehreren Änderungen arbeiten, ohne Konflikte zu haben. Sie können eine Änderung überprüfen, bevor sie sich auf die Hauptspezifikationen auswirkt. Und wenn Sie eine Änderung archivieren, fließen ihre Deltas sauber in die zentrale Wahrheitsquelle ein.
 
-## Koordinations-Workspaces
+## Koordinierungs-Workspaces
 
-Die Workspace-Unterstützung befindet sich in aktiver Entwicklung und ist noch nicht einsatzbereit. Bauen Sie keine externen Automatisierungen, Integrationen oder langfristigen Workflows auf das Workspace-Verhalten auf; die Befehle, Statusdateien und die JSON-Ausgabe können sich jederzeit ändern.
+Die Workspace-Unterstützung befindet sich in der Beta-Phase. Das unten beschriebene lokale Sichtmodell ist die aktuelle Ausrichtung, aber externe Automatisierungen, Integrationen und lang laufende Workflows sollten das Kommandoverhalten, Statusdateien und die JSON-Ausgabe weiterhin als sich entwickelnd betrachten.
 
-Die folgenden Befehle bieten den ersten Einrichtungsablauf für die Planung über verknüpfte Repos oder Ordner hinweg.
+Die folgenden Befehle bieten den ersten Einrichtungsablauf zum Öffnen lokaler Ansichten über verknüpfte Repos oder Ordner.
 
-Repo-lokale OpenSpec-Projekte sind die richtige Voreinstellung, wenn ein Repo den Planungs-, Implementierungs- und Archivierungsablauf besitzt. Manche Arbeiten erstrecken sich über mehrere Repos oder Ordner. Für diesen Fall ist ein OpenSpec-Koordinations-Workspace die dauerhafte Planungsheimat.
+Repo-lokale OpenSpec-Projekte sind die richtige Voreinstellung, wenn ein einzelnes Repo den Planungs-, Implementierungs- und Archivierungsablauf steuert. Manche Arbeiten erstrecken sich über mehrere Repos oder Ordner. Für diesen Fall ist ein OpenSpec-Koordinierungs-Workspace eine maschinenlokale Ansicht, die verknüpfte Pfade, den Opener-Status und die Agent-Einrichtung zusammenhält.
 
 Das mentale Modell des Workspaces ist:
 
 ```text
-workspace = wo verwandte repo-übergreifende Änderungen leben
-link      = ein stabiler Name für ein Repo oder einen Ordner, gegen den der Workspace planen kann
-change    = ein Feature, eine Korrektur, ein Projekt oder eine andere geplante Arbeitseinheit
+workspace     = private lokale Ansicht über Kontextspeicher, Initiativen, Repos und Ordner
+context store = dauerhafter geteilter Kontextcontainer
+initiative    = dauerhafter Koordinierungskontext in einem Kontextspeicher
+link          = ein stabiler Name für ein Repo oder einen Ordner, den der Workspace lokal auflösen kann
+change        = ein geplantes Arbeitspaket; die Implementierung gehört in das besitzende Repo
 ```
 
 Ein Workspace hat eine andere Struktur als ein repo-lokales Projekt:
 
 ```text
-workspace-folder/
-├── changes/                       # Workspace-weite Planung
-└── .openspec-workspace/
-    ├── workspace.yaml             # Gemeinsame Workspace-Identität und Link-Namen
-    └── local.yaml                 # Lokale Pfade dieser Maschine
+getGlobalDataDir()/workspaces/<workspace-name>/
+├── workspace.yaml                 # Private lokaler Ansichtsdatensatz
+├── AGENTS.md                      # Generierte Laufzeitanleitung
+└── <workspace-name>.code-workspace # Generierte Editor-Workspace-Datei
 ```
 
-Repo-lokaler OpenSpec-Status behält die bestehende Struktur bei:
+Repo-lokaler OpenSpec-Zustand behält die bestehende Struktur bei:
 
 ```text
 repo-root/
@@ -84,30 +85,23 @@ repo-root/
     └── changes/
 ```
 
-Diese Unterscheidung ist wichtig. Der Workspace-Ordner ist eine Koordinationsoberfläche für die Planung über verknüpfte Repos oder Ordner hinweg. Das `openspec/`-Verzeichnis jedes Repos bleibt die Heimat für repo-eigene Specs, repo-lokale Änderungen und Implementierungsplanung. Benutzer müssen kein repo-lokales `openspec init` innerhalb eines Workspace-Ordners ausführen.
+Diese Unterscheidung ist wichtig. Der Workspace-Ordner ist eine lokale Koordinationsoberfläche zum Öffnen und Inspizieren verknüpfter Repos oder Ordner. Das `openspec/`-Verzeichnis jedes Repos bleibt die Heimat für repo-eigene Spezifikationen, repo-lokale Änderungen und Implementierungsplanung. Benutzer müssen kein repo-lokales `openspec init` innerhalb eines Workspace-Ordners ausführen.
 
-Stabile Link-Namen sind die Art, wie die Workspace-Planung auf Repos und Ordner verweist. Der gemeinsame Workspace-Status speichert Namen wie `api`, `web` oder `checkout`; jede Maschine ordnet diese Namen ihren eigenen lokalen Pfaden in `.openspec-workspace/local.yaml` zu.
+Stabile Link-Namen sind die Art, wie ein Workspace auf Repos und Ordner verweist. Der private Workspace-Datensatz speichert Namen wie `api`, `web` oder `checkout` und ordnet sie den lokalen Pfaden dieser Laufzeit zu.
 
 ```yaml
-# .openspec-workspace/workspace.yaml
+# workspace.yaml
 version: 1
 name: platform
+context: null
 links:
-  api: {}
-  web: {}
-```
-
-```yaml
-# .openspec-workspace/local.yaml
-version: 1
-paths:
   api: /repos/api
   web: /repos/web
 ```
 
-Von OpenSpec erstellte Workspaces schließen `.openspec-workspace/local.yaml` standardmäßig vom portablen Kollaborationsstatus aus. `.openspec-workspace/workspace.yaml` bleibt portabel, da es den Workspace-Namen und stabile Link-Namen speichert, nicht die absoluten Checkout-Pfade eines einzelnen Benutzers.
+Wenn ein Workspace eine Initiative öffnet, speichert `context` die ausgewählte Kontextspeicher-Binding und die Initiati-ID. Durch die Registry ausgewählte Speicher bleiben über die ID portabel; pfadausgewählte Speicher bewusst den laufzeitlokalen Pfad, da `workspace.yaml` ein privater lokaler Zustand ist.
 
-Verknüpfte Pfade können ganze Repos, Ordner innerhalb eines großen Monorepos oder andere bestehende Ordner sein. Sie benötigen keinen repo-lokalen `openspec/`-Status, bevor sie an der Workspace-Planung teilnehmen können. Spätere Implementierungs-, Verifizierungs- oder Archivierungsworkflows erfordern möglicherweise mehr Repo-Bereitschaft, aber die Planungssichtbarkeit beginnt mit dem Link.
+Verknüpfte Pfade können vollständige Repos, Ordner innerhalb eines großen Monorepos oder andere bestehende Ordner sein. Sie benötigen keinen repo-lokalen `openspec/`-Zustand, bevor sie an der Workspace-Planung teilnehmen können. Spätere Implementierungs-, Verifizierungs- oder Archivierungsworkflows erfordern möglicherweise mehr Repo-Bereitschaft, aber die Planungssichtbarkeit beginnt mit dem Link.
 
 ```text
 multi-repo:
@@ -119,23 +113,17 @@ large monorepo:
   checkout -> /repos/platform/apps/checkout
 ```
 
-Verwaltete Workspaces leben unter dem Standard-OpenSpec-Datenverzeichnis:
+Verwaltete Workspaces liegen unter dem standardmäßigen OpenSpec-Datenverzeichnis:
 
 ```text
 getGlobalDataDir()/workspaces
 ```
 
-Das bedeutet `$XDG_DATA_HOME/openspec/workspaces`, wenn `XDG_DATA_HOME` gesetzt ist, `~/.local/share/openspec/workspaces` als Unix-Standardrückgriff und `%LOCALAPPDATA%\openspec\workspaces` als nativer Windows-Rückgriff. Native Windows-Shells, PowerShell und WSL2 speichern jeweils die Pfadzeichenketten für die Laufzeit, die OpenSpec ausführt. Diese Grundlage übersetzt nicht zwischen `D:\repo`, `/mnt/d/repo` und UNC-WSL-Pfaden.
+Das bedeutet `$XDG_DATA_HOME/openspec/workspaces`, wenn `XDG_DATA_HOME` gesetzt ist, `~/.local/share/openspec/workspaces` als Fallback bei Unix-Systemen und `%LOCALAPPDATA%\openspec\workspaces` als natives Windows-Fallback. Native Windows-Shells, PowerShell und WSL2 führen jeweils die Pfadstrings für die Laufzeit, die OpenSpec ausführt. Diese Grundlage übersetzt nicht zwischen `D:\repo`, `/mnt/d/repo` und UNC-WSL-Pfaden.
 
-OpenSpec führt auch ein maschinenlokales Register unter:
+OpenSpec kann weiterhin ältere Beta-Workspace-Roots als Kompatibilitätseingaben lesen, aber verwaltete Workspaces verwenden jetzt den oben beschriebenen Root-`workspace.yaml`-Datensatz. Der Workspace-Ordner bleibt maßgeblich für seine eigene private lokale Ansicht.
 
-```text
-getGlobalDataDir()/workspaces/registry.yaml
-```
-
-Das Register ordnet Workspace-Namen Workspace-Standorten zu, sodass spätere globale Befehle bekannte Workspaces von überall auflisten oder auswählen können. Es ist nur ein Index. Jeder Workspace-Ordner bleibt maßgebend für seine eigene `.openspec-workspace/workspace.yaml` und `.openspec-workspace/local.yaml`, sodass veraltete Registereinträge gemeldet und repariert werden können, ohne den Workspace selbst neu zu definieren.
-
-Workspace-Sichtbarkeit ist keine Änderungsverpflichtung. Richten Sie einen Workspace ein, wenn OpenSpec wissen soll, welche Repos oder Ordner relevant sind; erstellen Sie eine Änderung später, wenn Sie bereit sind, ein Feature, eine Korrektur, ein Projekt oder eine andere Arbeitseinheit zu planen.
+Workspace-Sichtbarkeit ist nicht Änderungsverpfrichtung. Richten Sie einen Workspace ein, wenn OpenSpec wissen soll, welche Repos oder Ordner relevant sind; erstellen Sie später eine Änderung, wenn Sie bereit sind, ein Feature, einen Fix, ein Projekt oder ein anderes Arbeitspaket zu planen.
 
 Nützliche Befehle:
 
@@ -145,7 +133,7 @@ openspec workspace setup
 
 # Automatisierungsfreundliche Einrichtung
 openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex
+openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
 
 # Bekannte Workspaces aus dem lokalen Register anzeigen
 openspec workspace list
@@ -156,33 +144,43 @@ openspec workspace link /repos/api
 openspec workspace link api-service /repos/api
 openspec workspace relink api-service /new/path/to/api
 
-# Überprüfen, was diese Maschine auflösen kann
+# Überprüfen, was dieser Rechner auflösen kann
 openspec workspace doctor
 openspec workspace doctor --workspace platform
 
-# Den verknüpften Arbeitsbereich öffnen
+# Workspace-lokale Anleitung und Agent-Skills aktualisieren
+openspec workspace update
+openspec workspace update --workspace platform --tools codex,claude
+
+# Das verknüpfte Arbeitsset öffnen
 openspec workspace open
 openspec workspace open platform --agent github-copilot
 openspec workspace open --editor
+
+# Eine Initiative als lokale Workspace-Ansicht öffnen
+openspec workspace open --initiative billing-launch --store platform
+openspec workspace open --initiative billing-launch --store-path /repos/platform-context
 ```
 
-`workspace setup` erstellt den Workspace immer am Standard-Workspace-Standort, trägt ihn im lokalen Register ein, zeigt den Workspace-Standort an und erfordert mindestens ein verknüpftes Repo oder einen Ordner. Die interaktive Einrichtung fragt nach einem bevorzugten Opener. Die nicht-interaktive Einrichtung speichert einen nur, wenn `--opener codex`, `--opener claude`, `--opener github-copilot` oder `--opener editor` angegeben wird.
+`workspace setup` erstellt den Workspace immer am standardmäßigen Workspace-Standort, zeichnet ihn im lokalen Register auf, zeigt den Workspace-Standort an und erfordert mindestens einen verknüpften Repo oder Ordner. Die interaktive Einrichtung fragt nach einem bevorzugten Opener und kann OpenSpec-Skills für ausgewählte Agents installieren. Die nicht-interaktive Einrichtung speichert einen nur, wenn `--opener codex-cli`, `--opener claude`, `--opener github-copilot` oder `--opener editor` angegeben wird.
 
-OpenSpec pflegt auch Workspace-öffnende Dateien im Root: einen von OpenSpec verwalteten Guidance-Block in `AGENTS.md`, eine maschinenlokale `<workspace-name>.code-workspace`-Datei für VS Code und GitHub Copilot-in-VS-Code-Öffnungen sowie einen spezifischen Ignore-Eintrag für diese gepflegte `.code-workspace`-Datei. Vom Benutzer erstellte `*.code-workspace`-Dateien bleiben verfolgbar, da die Ignore-Regel nur auf die gepflegte Datei abzielt.
+Workspace-Skills werden nur im Workspace-Root installiert. Das aktive globale Profil bestimmt, welche Workflow-Skills generiert werden; `--tools` wählt aus, welche Agents sie erhalten. Workspace-Setup und -Update erstellen keine Slash-Befehlsdateien, auch wenn die globale Bereitstellung Befehle enthält. Führen Sie `openspec workspace update` aus, um die workspace-lokale Anleitung zu aktualisieren und verwaltete workspace-lokale Skill-Verzeichnisse hinzuzufügen, zu aktualisieren oder zu entfernen, ohne verknüpfte Repos oder Ordner zu bearbeiten.
 
-Die gepflegte VS Code Workspace-Datei enthält den Koordinations-Root als `.` plus gültige verknüpfte Repos oder Ordner als zusätzliche Roots. VS Code zeigt diese Einträge als Multi-Root-Workspace an.
+OpenSpec pflegt auch Root-Workspace-Open-Dateien: einen von OpenSpec verwalteten Anleitungsblock in `AGENTS.md` und eine maschinenlokale `<workspace-name>.code-workspace`-Datei für VS Code und GitHub Copilot-in-VS-Code-Öffnungen. Ein verwalteter Workspace ist kein Repo, daher erstellt OpenSpec keine standardmäßige Workspace-`.gitignore` oder ein standardmäßiges Workspace-Level-`changes/`-Verzeichnis.
 
-`workspace open` öffnet den verknüpften Arbeitsbereich mit dem gespeicherten bevorzugten Opener, es sei denn, `--agent <tool>` oder `--editor` wird für diese eine Sitzung übergeben. Beide Opener-Overrides zu übergeben ist ein Fehler. Das Öffnen des Root-Workspaces macht verknüpfte Repos und Ordner für Exploration und Planung sichtbar; die Implementierung beginnt, nachdem der Benutzer explizit nach Implementierungsarbeit fragt.
+Die gepflegte VS Code-Workspace-Datei listet zuerst gültige verknüpfte Repos oder Ordner auf, dann den Initiati-Kontext, wenn verbunden, und dann die OpenSpec-Workspace-Dateien. VS Code zeigt diese Einträge als Multi-Root-Workspace an.
 
-`workspace link` und `workspace relink` zeichnen nur bestehende Ordner auf; sie erstellen, kopieren, verschieben, initialisieren oder bearbeiten das verknüpfte Repo oder den Ordner nicht. Nach einem erfolgreichen Link oder Relink aktualisiert OpenSpec die verwaltete Guidance, die VS Code Workspace-Datei und die Ignore-Regel.
+`workspace open` öffnet das verknüpfte Arbeitsset mit dem gespeicherten bevorzugten Opener, es sei denn, `--agent <tool>` oder `--editor` wird für diese eine Sitzung übergeben. Beide Opener-Überschreibungen gleichzeitig zu übergeben ist ein Fehler. Root-Workspace-Open macht verknüpfte Repos und Ordner sichtbar für Exploration und Kontext; die Implementierung beginnt, nachdem der Benutzer explizit nach Implementierungsarbeit fragt.
 
-Workspace-Befehle, die einen Workspace benötigen, können von überall mit `--workspace <name>` ausgeführt werden. Wenn Sie sie innerhalb eines Workspace-Ordners oder Unterverzeichnisses ausführen, verwendet OpenSpec diesen aktuellen Workspace. Wenn mehrere bekannte Workspaces verfügbar sind und Sie `--workspace <name>` nicht übergeben, zeigen menschliche Befehle eine Auswahl an; `--json` und `--no-interactive` schlagen mit einem strukturierten Statusfehler fehl, anstatt nachzufragen.
+`workspace link` und `workspace relink` zeichnen nur bestehende Ordner auf; sie erstellen, kopieren, verschieben, initialisieren oder bearbeiten den verknüpften Repo oder Ordner nicht. Nach einem erfolgreichen Link oder Relink aktualisiert OpenSpec die verwaltete Anleitung und die VS Code-Workspace-Datei.
+
+Workspace-Befehle, die einen Workspace benötigen, können von überall mit `--workspace <name>` ausgeführt werden. Wenn Sie sie innerhalb eines Workspace-Ordners oder Unterverzeichnisses ausführen, verwendet OpenSpec diesen aktuellen Workspace. Wenn mehrere bekannte Workspaces verfügbar sind und Sie `--workspace <name>` nicht übergeben, zeigen menschliche Befehle einen Picker an; `--json` und `--no-interactive` schlagen mit einem strukturierten Statusfehler fehl, anstatt nachzufragen.
 
 Direkte Workspace-Befehle unterstützen JSON-Ausgabe für Skripte. JSON-Antworten halten primäre Daten in `workspace`, `workspaces` oder `link`-Objekten und melden Warnungen oder Fehler in `status`-Arrays. Gesunde Objekte verwenden `status: []`.
 
-## Specs
+## Spezifikationen
 
-Specs beschreiben das Verhalten Ihres Systems unter Verwendung strukturierter Anforderungen und Szenarien.
+Spezifikationen beschreiben das Verhalten Ihres Systems mithilfe strukturierter Anforderungen und Szenarien.
 
 ### Struktur
 
@@ -198,22 +196,21 @@ openspec/specs/
     └── spec.md           # UI-Verhalten und Themes
 ```
 
-Organisieren Sie Specs nach Domäne – logische Gruppierungen, die für Ihr System sinnvoll sind. Gängige Muster:
+Organisieren Sie Spezifikationen nach Domäne – logische Gruppierungen, die für Ihr System sinnvoll sind. Gängige Muster:
 
-- **Nach Feature-Bereich**: `auth/`, `payments/`, `search/`
+- **Nach Funktionsbereich**: `auth/`, `payments/`, `search/`
 - **Nach Komponente**: `api/`, `frontend/`, `workers/`
-- **Nach begrenztem Kontext**: `ordering/`, `fulfillment/`, `inventory/`
+- **Nach Bounded Context**: `ordering/`, `fulfillment/`, `inventory/`
 
-### Spec-Format
+### Spezifikationsformat
 
-Eine Spec enthält Anforderungen, und jede Anforderung hat Szenarien:
+Eine Spezifikation enthält Anforderungen, und jede Anforderung hat Szenarien:
 
 ```markdown
-# Auth-Spezifikation
-```
+# Authentifizierungsspezifikation
 
 ## Zweck
-Authentifizierung und Sitzungsverwaltung für die Anwendung.
+Authentifizierung und Sitzungsmanagement für die Anwendung.
 
 ## Anforderungen
 
@@ -230,12 +227,12 @@ Das System MUSS bei erfolgreicher Anmeldung ein JWT-Token ausstellen.
 - ANGENOMMEN ungültige Anmeldedaten
 - WENN der Benutzer das Anmeldeformular absendet
 - DANN wird eine Fehlermeldung angezeigt
-- UND kein Token wird ausgestellt
+- UND es wird kein Token ausgestellt
 
 ### Anforderung: Sitzungsablauf
 Das System MUSS Sitzungen nach 30 Minuten Inaktivität ablaufen lassen.
 
-#### Szenario: Leerlauf-Timeout
+#### Szenario: Zeitlimit bei Untätigkeit
 - ANGENOMMEN eine authentifizierte Sitzung
 - WENN 30 Minuten ohne Aktivität vergehen
 - DANN wird die Sitzung ungültig
@@ -246,24 +243,24 @@ Das System MUSS Sitzungen nach 30 Minuten Inaktivität ablaufen lassen.
 
 | Element | Zweck |
 |---------|-------|
-| `## Purpose` | Übergeordnete Beschreibung des Bereichs dieser Spezifikation |
-| `### Requirement:` | Ein bestimmtes Verhalten, das das System haben muss |
-| `#### Scenario:` | Ein konkretes Beispiel der Anforderung in Aktion |
-| SHALL/MUST/SHOULD | RFC-2119-Schlüsselwörter zur Angabe der Anforderungsstärke |
+| `## Zweck` | Hochrangige Beschreibung der Domäne dieser Spezifikation |
+| `### Anforderung:` | Ein spezifisches Verhalten, das das System haben muss |
+| `#### Szenario:` | Ein konkreter Beispiel der Anforderung in Aktion |
+| SHALL/MUST/SHOULD | RFC 2119-Schlüsselwörter zur Angabe der Anforderungsstärke |
 
-### Warum Spezifikationen so strukturiert werden
+### Warum Spezifikationen so strukturieren
 
-**Anforderungen sind das „Was"** – sie beschreiben, was das System tun soll, ohne die Implementierung festzulegen.
+**Anforderungen sind das „Was"** – sie legen fest, was das System tun soll, ohne die Implementierung zu spezifizieren.
 
-**Szenarien sind das „Wann"** – sie liefern konkrete Beispiele, die überprüft werden können. Gute Szenarien:
+**Szenarien sind das „Wann"** – sie liefern konkrete Beispiele, die verifiziert werden können. Gute Szenarien:
 - Sind testbar (man könnte einen automatisierten Test dafür schreiben)
 - Decken sowohl den Happy Path als auch Randfälle ab
-- Verwenden das Format Gegeben/Wenn/Dann oder eine ähnliche strukturierte Form
+- Verwenden Gegeben/Wenn/Dann oder ein ähnliches strukturiertes Format
 
-**RFC-2119-Schlüsselwörter** (SHALL, MUST, SHOULD, MAY) kommunizieren die Absicht:
-- **MUST/SHALL** – absolute Anforderung
-- **SOLL** – empfohlen, aber Ausnahmen sind möglich
-- **KANN** – optional
+**RFC 2119-Schlüsselwörter** (SHALL, MUST, SHOULD, MAY) kommunizieren die Absicht:
+- **MUST/SHALL** — absolute Anforderung
+- **SHOULD** — empfohlen, aber Ausnahmen sind möglich
+- **MAY** — optional
 
 ### Was eine Spezifikation ist (und was nicht)
 
@@ -282,11 +279,11 @@ Was in Spezifikationen vermieden werden sollte:
 - Detaillierte Ausführungspläne (diese gehören in `design.md` oder `tasks.md`)
 
 Schnelltest:
-- Wenn sich die Implementierung ändern kann, ohne dass sich das nach außen sichtbare Verhalten ändert, gehört es wahrscheinlich nicht in die Spezifikation.
+- Wenn sich die Implementierung ändern kann, ohne dass sich das extern sichtbare Verhalten ändert, gehört sie wahrscheinlich nicht in die Spezifikation.
 
 ### Leichtgewichtig halten: Progressive Strenge
 
-OpenSpec zielt darauf ab, Bürokratie zu vermeiden. Verwenden Sie die leichteste Stufe, die die Änderung noch überprüfbar macht.
+OpenSpec zielt darauf ab, Bürokratie zu vermeiden. Verwenden Sie die leichteste Stufe, die die Änderung noch verifizierbar macht.
 
 **Lite-Spezifikation (Standard):**
 - Kurze verhaltensorientierte Anforderungen
@@ -294,26 +291,26 @@ OpenSpec zielt darauf ab, Bürokratie zu vermeiden. Verwenden Sie die leichteste
 - Einige konkrete Akzeptanzprüfungen
 
 **Vollständige Spezifikation (für höheres Risiko):**
-- Team- oder Repository-übergreifende Änderungen
+- Team- oder repo-übergreifende Änderungen
 - API-/Vertragsänderungen, Migrationen, Sicherheits-/Datenschutzbedenken
-- Änderungen, bei denen Mehrdeutigkeit wahrscheinlich zu kostspieliger Nacharbeit führt
+- Änderungen, bei denen Mehrdeutigkeit wahrscheinlich zu kostspieliger Überarbeitung führt
 
 Die meisten Änderungen sollten im Lite-Modus bleiben.
 
 ### Mensch + Agent Zusammenarbeit
 
-In vielen Teams erkunden Menschen und Agenten entwerfen Artefakte. Die beabsichtigte Schleife ist:
+In vielen Teams erkunden Menschen und Agents entwerfen Artefakte. Der vorgesehene Ablauf ist:
 
 1. Der Mensch liefert Absicht, Kontext und Einschränkungen.
 2. Der Agent wandelt dies in verhaltensorientierte Anforderungen und Szenarien um.
 3. Der Agent hält Implementierungsdetails in `design.md` und `tasks.md`, nicht in `spec.md`.
 4. Die Validierung bestätigt Struktur und Klarheit vor der Implementierung.
 
-Dies hält Spezifikationen für Menschen lesbar und für Agenten konsistent.
+Dies hält Spezifikationen für Menschen lesbar und für Agents konsistent.
 
 ## Änderungen
 
-Eine Änderung ist eine vorgeschlagene Modifikation Ihres Systems, die als Ordner mit allem gepackt ist, was zum Verständnis und zur Umsetzung benötigt wird.
+Eine Änderung ist eine vorgeschlagene Modifikation Ihres Systems, die als Ordner mit allem Nötigen zum Verständnis und zur Implementierung gepackt ist.
 
 ### Struktur einer Änderung
 
@@ -322,28 +319,28 @@ openspec/changes/add-dark-mode/
 ├── proposal.md           # Warum und was
 ├── design.md             # Wie (technischer Ansatz)
 ├── tasks.md              # Implementierungs-Checkliste
-├── .openspec.yaml        # Änderungs-Metadaten (optional)
+├── .openspec.yaml        # Metadaten der Änderung (optional)
 └── specs/                # Delta-Spezifikationen
     └── ui/
         └── spec.md       # Was sich in ui/spec.md ändert
 ```
 
 Jede Änderung ist in sich geschlossen. Sie enthält:
-- **Artefakte** — Dokumente, die Absicht, Design und Aufgaben erfassen
+- **Artefakte** — Dokumente, die Absicht, Design und Aufgaben festhalten
 - **Delta-Spezifikationen** — Spezifikationen für das, was hinzugefügt, geändert oder entfernt wird
 - **Metadaten** — optionale Konfiguration für diese spezifische Änderung
 
 ### Warum Änderungen Ordner sind
 
-Das Packen einer Änderung als Ordner bietet mehrere Vorteile:
+Das Packen einer Änderung in einen Ordner hat mehrere Vorteile:
 
-1. **Alles zusammen.** Proposal, Design, Aufgaben und Spezifikationen befinden sich an einem Ort. Kein Suchen an verschiedenen Stellen.
+1. **Alles zusammen.** Vorschlag, Design, Aufgaben und Spezifikationen leben an einem Ort. Kein Suchen an verschiedenen Stellen.
 
-2. **Parallele Arbeit.** Mehrere Änderungen können gleichzeitig existieren, ohne sich zu überschneiden. Arbeiten Sie an `add-dark-mode`, während `fix-auth-bug` ebenfalls in Bearbeitung ist.
+2. **Parallele Arbeit.** Mehrere Änderungen können gleichzeitig existieren, ohne sich zu widersprechen. Arbeiten Sie an `add-dark-mode`, während `fix-auth-bug` ebenfalls in Bearbeitung ist.
 
 3. **Saubere Historie.** Wenn archiviert, werden Änderungen mit ihrem vollständigen Kontext nach `changes/archive/` verschoben. Sie können zurückblicken und verstehen, nicht nur was sich geändert hat, sondern auch warum.
 
-4. **Review-freundlich.** Ein Änderungsordner ist leicht zu prüfen — öffnen Sie ihn, lesen Sie das Proposal, prüfen Sie das Design, sehen Sie die Spezifikations-Deltas.
+4. **Überprüfungsfreundlich.** Ein Änderungsordner ist leicht zu überprüfen — öffnen Sie ihn, lesen Sie den Vorschlag, prüfen Sie das Design, sehen Sie sich die Spezifikationsdeltas an.
 
 ## Artefakte
 
@@ -358,189 +355,187 @@ proposal ──────► specs ──────► design ────�
  + scope        changes       approach      to take
 ```
 
-Artefakte bauen aufeinander auf. Jedes Artefakt liefert Kontext für das nächste.
+Artefakte bauen aufeinander auf. Jedes Artefakt liefert den Kontext für das nächste.
 
-### Artefakt-Typen
+### Artefakttypen
 
-#### Proposal (`proposal.md`)
+#### Vorschlag (`proposal.md`)
 
-Das Proposal erfasst **Absicht**, **Umfang** und **Ansatz** auf hoher Ebene.
+Der Vorschlag erfasst auf hoher Ebene die **Absicht**, den **Umfang** und den **Ansatz**.
 
 ```markdown
-# Proposal: Add Dark Mode
+# Vorschlag: Dark Mode hinzufügen
+```
 
 ## Intent
-Users have requested a dark mode option to reduce eye strain
-during nighttime usage and match system preferences.
+Benutzer haben eine Dark-Mode-Option angefordert, um die Belastung der Augen bei nächtlicher Nutzung zu verringern und an Systemeinstellungen angepasst zu werden.
 
 ## Scope
-In scope:
-- Theme toggle in settings
-- System preference detection
-- Persist preference in localStorage
+Im Umfang enthalten:
+- Theme-Umschaltung in den Einstellungen
+- Erkennung der Systemeinstellungen
+- Speichern der Präferenz im localStorage
 
-Out of scope:
-- Custom color themes (future work)
-- Per-page theme overrides
+Nicht im Umfang enthalten:
+- Benutzerdefinierte Farbthemen (zukünftige Arbeit)
+- Seitenspezifische Theme-Überschreibungen
 
-## Approach
-Use CSS custom properties for theming with a React context
-for state management. Detect system preference on first load,
-allow manual override.
+## Ansatz
+Verwendung von CSS Custom Properties für Theming mit einem React Context zur Zustandsverwaltung. Erkennung der Systemeinstellung beim ersten Laden, manuelle Überschreibung ermöglichen.
 ```
 
 **Wann das Proposal aktualisiert werden sollte:**
-- Der Umfang ändert sich (Eingrenzung oder Erweiterung)
-- Die Absicht klärt sich (besseres Verständnis des Problems)
-- Der Ansatz ändert sich grundlegend
+- Änderungen des Umfangs (Einschränkung oder Erweiterung)
+- Klärung der Intention (besseres Verständnis des Problems)
+- Grundlegende Änderung des Ansatzes
 
 #### Spezifikationen (Delta-Spezifikationen in `specs/`)
 
-Delta-Spezifikationen beschreiben, **was sich ändert**, bezogen auf die aktuellen Spezifikationen. Siehe [Delta-Spezifikationen](#delta-specs) unten.
+Delta-Spezifikationen beschreiben, **was sich ändert**, bezogen auf die aktuellen Spezifikationen. Siehe [Delta-Spezifikationen](#delta-spezifikationen) unten.
 
-#### Design (`design.md`)
+#### Entwurf (`design.md`)
 
-Das Design erfasst den **technischen Ansatz** und **Architekturentscheidungen**.
+Der Entwurf dokumentiert den **technischen Ansatz** und die **Architekturentscheidungen**.
 
 ````markdown
-# Design: Add Dark Mode
+# Entwurf: Dark Mode hinzufügen
 
-## Technical Approach
-Theme state managed via React Context to avoid prop drilling.
-CSS custom properties enable runtime switching without class toggling.
+## Technischer Ansatz
+Theme-Zustand wird über React Context verwaltet, um Prop-Drilling zu vermeiden.
+CSS Custom Properties ermöglichen Runtime-Switching ohne Klassen-Umschaltung.
 
-## Architecture Decisions
+## Architekturentscheidungen
 
-### Decision: Context over Redux
-Using React Context for theme state because:
-- Simple binary state (light/dark)
-- No complex state transitions
-- Avoids adding Redux dependency
+### Entscheidung: Context statt Redux
+Verwendung von React Context für den Theme-Zustand, weil:
+- Einfacher binärer Zustand (hell/dunkel)
+- Keine komplexen Zustandsübergänge
+- Vermeidung der Hinzufügung einer Redux-Abhängigkeit
 
-### Decision: CSS Custom Properties
-Using CSS variables instead of CSS-in-JS because:
-- Works with existing stylesheet
-- No runtime overhead
-- Browser-native solution
+### Entscheidung: CSS Custom Properties
+Verwendung von CSS-Variablen statt CSS-in-JS, weil:
+- Funktioniert mit bestehendem Stylesheet
+- Kein Runtime-Overhead
+- Browser-native Lösung
 
-## Data Flow
+## Datenfluss
 ```
-ThemeProvider (context)
+ThemeProvider (Context)
        │
        ▼
 ThemeToggle ◄──► localStorage
        │
        ▼
-CSS Variables (applied to :root)
+CSS-Variablen (angewendet auf :root)
 ```
 
-## File Changes
-- `src/contexts/ThemeContext.tsx` (new)
-- `src/components/ThemeToggle.tsx` (new)
-- `src/styles/globals.css` (modified)
+## Dateiänderungen
+- `src/contexts/ThemeContext.tsx` (neu)
+- `src/components/ThemeToggle.tsx` (neu)
+- `src/styles/globals.css` (geändert)
 ````
 
-**Wann das Design aktualisiert werden sollte:**
+**Wann der Entwurf aktualisiert werden sollte:**
 - Die Implementierung zeigt, dass der Ansatz nicht funktioniert
 - Eine bessere Lösung wird entdeckt
 - Abhängigkeiten oder Einschränkungen ändern sich
 
 #### Aufgaben (`tasks.md`)
 
-Aufgaben sind die **Implementierungs-Checkliste** — konkrete Schritte mit Kontrollkästchen.
+Aufgaben sind die **Implementierungs-Checkliste** – konkrete Schritte mit Checkboxen.
 
 ```markdown
-# Tasks
+# Aufgaben
 
-## 1. Theme Infrastructure
-- [ ] 1.1 Create ThemeContext with light/dark state
-- [ ] 1.2 Add CSS custom properties for colors
-- [ ] 1.3 Implement localStorage persistence
-- [ ] 1.4 Add system preference detection
+## 1. Theme-Infrastruktur
+- [ ] 1.1 ThemeContext mit hell/dunkel-Zustand erstellen
+- [ ] 1.2 CSS Custom Properties für Farben hinzufügen
+- [ ] 1.3 localStorage-Persistenz implementieren
+- [ ] 1.4 Systemeinstellungs-Erkennung hinzufügen
 
-## 2. UI Components
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Add toggle to settings page
-- [ ] 2.3 Update Header to include quick toggle
+## 2. UI-Komponenten
+- [ ] 2.1 ThemeToggle-Komponente erstellen
+- [ ] 2.2 Umschaltung zur Einstellungsseite hinzufügen
+- [ ] 2.3 Header aktualisieren, um schnelle Umschaltung zu integrieren
 
 ## 3. Styling
-- [ ] 3.1 Define dark theme color palette
-- [ ] 3.2 Update components to use CSS variables
-- [ ] 3.3 Test contrast ratios for accessibility
+- [ ] 3.1 Dunkles Theme-Farbpalette definieren
+- [ ] 3.2 Komponenten aktualisieren, um CSS-Variablen zu verwenden
+- [ ] 3.3 Kontrastverhältnisse für Barrierefreiheit testen
 ```
 
 **Best Practices für Aufgaben:**
-- Gruppieren Sie verwandte Aufgaben unter Überschriften
-- Verwenden Sie hierarchische Nummerierung (1.1, 1.2 usw.)
-- Halten Sie Aufgaben klein genug, um sie in einer Sitzung abzuschließen
-- Haken Sie Aufgaben ab, sobald Sie sie erledigt haben
+- Verwandte Aufgaben unter Überschriften gruppieren
+- Hierarchische Nummerierung verwenden (1.1, 1.2 usw.)
+- Aufgaben klein genug halten, um in einer Sitzung abgeschlossen zu werden
+- Aufgaben nach Abschluss abhaken
 
 ## Delta-Spezifikationen
 
-Delta-Spezifikationen sind das Schlüsselkonzept, das OpenSpec für die Weiterentwicklung bestehender Systeme (Brownfield-Entwicklung) nutzbar macht. Sie beschreiben, **was sich ändert**, anstatt die gesamte Spezifikation zu wiederholen.
+Delta-Spezifikationen sind das Schlüsselkonzept, das OpenSpec für die Weiterentwicklung bestehender Systeme nutzbar macht. Sie beschreiben, **was sich ändert**, anstatt die gesamte Spezifikation zu wiederholen.
 
 ### Das Format
 
 ```markdown
-# Delta for Auth
+# Delta für Authentifizierung
 
-## ADDED Requirements
+## HINZUGEFÜGT Anforderungen
 
-### Requirement: Two-Factor Authentication
-The system MUST support TOTP-based two-factor authentication.
+### Anforderung: Zwei-Faktor-Authentifizierung
+Das System MUSS TOTP-basierte Zwei-Faktor-Authentifizierung unterstützen.
 
-#### Scenario: 2FA enrollment
-- GIVEN a user without 2FA enabled
-- WHEN the user enables 2FA in settings
-- THEN a QR code is displayed for authenticator app setup
-- AND the user must verify with a code before activation
+#### Szenario: 2FA-Registrierung
+- ANGENOMMEN ein Benutzer ohne aktiviertes 2FA
+- WENN der Benutzer 2FA in den Einstellungen aktiviert
+- DANN wird ein QR-Code zur Einrichtung einer Authentifizierungs-App angezeigt
+- UND der Benutzer muss sich mit einem Code vor der Aktivierung verifizieren
 
-#### Scenario: 2FA login
-- GIVEN a user with 2FA enabled
-- WHEN the user submits valid credentials
-- THEN an OTP challenge is presented
-- AND login completes only after valid OTP
+#### Szenario: 2FA-Anmeldung
+- ANGENOMMEN ein Benutzer mit aktiviertem 2FA
+- WENN der Benutzer gültige Zugangsdaten einreicht
+- DANN wird eine OTP-Herausforderung präsentiert
+- UND die Anmeldung wird erst nach gültigem OTP abgeschlossen
 
-## MODIFIED Requirements
+## GEÄNDERT Anforderungen
 
-### Requirement: Session Expiration
-The system MUST expire sessions after 15 minutes of inactivity.
-(Previously: 30 minutes)
+### Anforderung: Sitzungsablauf
+Das System MUSS Sitzungen nach 15 Minuten Inaktivität ablaufen lassen.
+(Zuvor: 30 Minuten)
 
-#### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 15 minutes pass without activity
-- THEN the session is invalidated
+#### Szenario: Inaktivitäts-Timeout
+- ANGENOMMEN eine authentifizierte Sitzung
+- WENN 15 Minuten ohne Aktivität vergehen
+- DANN wird die Sitzung ungültig
 
-## REMOVED Requirements
+## ENTFERNT Anforderungen
 
-### Requirement: Remember Me
-(Deprecated in favor of 2FA. Users should re-authenticate each session.)
+### Anforderung: Angemeldet bleiben
+(Veraltet zugunsten von 2FA. Benutzer sollten sich bei jeder Sitzung neu authentifizieren.)
 ```
 
-### Delta-Abschnitte
+### Delta-Sektionen
 
-| Abschnitt | Bedeutung | Was beim Archivieren passiert |
-|---------|---------|------------------------|
-| `## ADDED Requirements` | Neues Verhalten | An die Hauptspezifikation angehängt |
-| `## MODIFIED Requirements` | Geändertes Verhalten | Ersetzt bestehende Anforderung |
-| `## REMOVED Requirements` | Veraltetes Verhalten | Aus der Hauptspezifikation gelöscht |
+| Sektion | Bedeutung | Was beim Archivieren passiert |
+|---------|-----------|-------------------------------|
+| `## HINZUGEFÜGT Anforderungen` | Neues Verhalten | Wird zur Hauptspezifikation hinzugefügt |
+| `## GEÄNDERT Anforderungen` | Geändertes Verhalten | Ersetzt die bestehende Anforderung |
+| `## ENTFERNT Anforderungen` | Veraltetes Verhalten | Wird aus der Hauptspezifikation gelöscht |
 
 ### Warum Deltas statt vollständiger Spezifikationen
 
-**Klarheit.** Ein Delta zeigt genau, was sich ändert. Bei einer vollständigen Spezifikation müssten Sie diese gedanklich gegen die aktuelle Version differenzieren.
+**Klarheit.** Ein Delta zeigt genau, was sich ändert. Bei der Lektüre einer vollständigen Spezifikation müsste man sie mental gegen die aktuelle Version differenzieren.
 
-**Konfliktvermeidung.** Zwei Änderungen können dieselbe Spezifikationsdatei betreffen, ohne sich zu überschneiden, solange sie unterschiedliche Anforderungen modifizieren.
+**Konfliktvermeidung.** Zwei Änderungen können dieselbe Spezifikationsdatei betreffen, ohne sich zu widersprechen, solange sie verschiedene Anforderungen modifizieren.
 
-**Review-Effizienz.** Reviewer sehen die Änderung, nicht den unveränderten Kontext. Der Fokus liegt auf dem, was wichtig ist.
+**Effizienz der Überprüfung.** Prüfer sehen die Änderung, nicht den unveränderten Kontext. Der Fokus liegt auf dem Wesentlichen.
 
-**Passend für Brownfield-Entwicklung.** Die meisten Arbeiten modifizieren bestehendes Verhalten. Deltas machen Modifikationen zum primären Konzept, nicht zum Nachgedanken.
+**Passend für die Weiterentwicklung.** Die meiste Arbeit modifiziert bestehendes Verhalten. Deltas machen Modifikationen zu erstklassigen Bürgern, nicht zu nachträglichen Gedanken.
 
-## Schemas
+## Schemata
 
-Schemas definieren die Artefakttypen und deren Abhängigkeiten für einen Workflow.
+Schemata definieren die Artefakttypen und ihre Abhängigkeiten für einen Workflow.
 
-### Wie Schemas funktionieren
+### Wie Schemata funktionieren
 
 ```yaml
 # openspec/schemas/spec-driven/schema.yaml
@@ -584,9 +579,9 @@ artifacts:
                 specs, design)
 ```
 
-**Abhängigkeiten sind Ermöglicher, keine Tore.** Sie zeigen, was erstellt werden kann, nicht was als nächstes erstellt werden muss. Sie können design überspringen, wenn Sie es nicht benötigen. Sie können specs vor oder nach design erstellen – beide hängen nur von proposal ab.
+**Abhängigkeiten sind Ermöglicher, nicht Tore.** Sie zeigen, was erstellt werden kann, nicht was als nächstes erstellt werden muss. Sie können den Entwurf überspringen, wenn Sie ihn nicht benötigen. Sie können die Spezifikationen vor oder nach dem Entwurf erstellen – beide hängen nur vom Proposal ab.
 
-### Integrierte Schemas
+### Integrierte Schemata
 
 **spec-driven** (Standard)
 
@@ -596,17 +591,17 @@ Der Standard-Workflow für spezifikationsgetriebene Entwicklung:
 proposal → specs → design → tasks → implement
 ```
 
-Am besten geeignet für: Die meisten Feature-Arbeiten, bei denen Sie sich vor der Implementierung auf Spezifikationen einigen möchten.
+Geeignet für: Die meisten Feature-Arbeiten, bei denen eine Einigung über Spezifikationen vor der Implementierung gewünscht wird.
 
-### Benutzerdefinierte Schemas
+### Benutzerdefinierte Schemata
 
-Erstellen Sie benutzerdefinierte Schemas für den Workflow Ihres Teams:
+Erstellen Sie benutzerdefinierte Schemata für den Workflow Ihres Teams:
 
 ```bash
-# Von Grund auf neu erstellen
+# Von Grund auf erstellen
 openspec schema init research-first
 
-# Oder ein vorhandenes forken
+# Oder ein bestehendes forken
 openspec schema fork spec-driven research-first
 ```
 
@@ -618,24 +613,24 @@ name: research-first
 artifacts:
   - id: research
     generates: research.md
-    requires: []           # Zuerst recherchieren
+    requires: []           # Zuerst Recherche durchführen
 
   - id: proposal
     generates: proposal.md
-    requires: [research]   # Proposal basierend auf Recherche
+    requires: [research]   # Proposal auf Grundlage der Recherche
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # Specs/Design überspringen, direkt zu Tasks
+    requires: [proposal]   # Spezifikationen/Entwurf überspringen, direkt zu Aufgaben
 ```
 
-Weitere Details zur Erstellung und Verwendung benutzerdefinierter Schemas finden Sie unter [Anpassung](customization.md).
+Vollständige Details zur Erstellung und Verwendung benutzerdefinierter Schemata finden Sie unter [Anpassung](customization.md).
 
-## Archiv
+## Archivieren
 
-Das Archivieren schließt eine Änderung ab, indem ihre Delta-Spezifikationen in die Hauptspezifikationen zusammengeführt und die Änderung für die Historie erhalten wird.
+Das Archivieren schließt eine Änderung ab, indem es ihre Delta-Spezifikationen in die Hauptspezifikationen zusammenführt und die Änderung für die Historie bewahrt.
 
-### Was passiert beim Archivieren
+### Was beim Archivieren passiert
 
 ```
 Vor dem Archivieren:
@@ -647,7 +642,7 @@ openspec/
 └── changes/                         │
     └── add-2fa/                     │
         ├── proposal.md              │
-        ├── design.md                │ Zusammenführung
+        ├── design.md                │ zusammenführen
         ├── tasks.md                 │
         └── specs/                   │
             └── auth/                │
@@ -662,7 +657,7 @@ openspec/
 │       └── spec.md        # Enthält jetzt 2FA-Anforderungen
 └── changes/
     └── archive/
-        └── 2025-01-24-add-2fa/    # Für die Historie erhalten
+        └── 2025-01-24-add-2fa/    # Für die Historie bewahrt
             ├── proposal.md
             ├── design.md
             ├── tasks.md
@@ -673,91 +668,90 @@ openspec/
 
 ### Der Archivierungsprozess
 
-1. **Deltas zusammenführen.** Jeder Delta-Spezifikationsabschnitt (HINZUGEFÜGT/GEÄNDERT/ENTFERNT) wird auf die entsprechende Hauptspezifikation angewendet.
+1. **Deltas zusammenführen.** Jede Delta-Spezifikationssektion (HINZUGEFÜGT/GEÄNDERT/ENTFERNT) wird auf die entsprechende Hauptspezifikation angewendet.
 
-2. **Ins Archiv verschieben.** Der Änderungsordner wird mit einem Datumspräfix für die chronologische Sortierung nach `changes/archive/` verschoben.
+2. **Verschieben ins Archiv.** Der Änderungsordner wird nach `changes/archive/` verschoben und erhält ein Datumspräfix für die chronologische Sortierung.
 
-3. **Kontext bewahren.** Alle Artefakte bleiben im Archiv intakt. Sie können jederzeit zurückblicken, um zu verstehen, warum eine Änderung vorgenommen wurde.
+3. **Kontext bewahren.** Alle Artefakte bleiben im Archiv erhalten. Sie können immer zurückblicken, um zu verstehen, warum eine Änderung vorgenommen wurde.
 
 ### Warum Archivieren wichtig ist
 
-**Saubere Zustand.** Aktive Änderungen (`changes/`) zeigt nur laufende Arbeiten an. Abgeschlossene Arbeit wird aus dem Weg geräumt.
+**Saubere Übersicht.** Aktive Änderungen (`changes/`) zeigt nur Arbeit in Bearbeitung. Abgeschlossene Arbeit wird aus dem Weg geräumt.
 
-**Prüfpfad.** Das Archiv bewahrt den vollständigen Kontext jeder Änderung – nicht nur was sich geändert hat, sondern auch das Proposal, das erklärt warum, das Design, das erklärt wie, und die Tasks, die die geleistete Arbeit zeigen.
+**Prüfpfad.** Das Archiv bewahrt den vollständigen Kontext jeder Änderung – nicht nur was sich geändert hat, sondern das Proposal, das erklärt warum, der Entwurf, der erklärt wie, und die Aufgaben, die die geleistete Arbeit zeigen.
 
-**Spezifikationsentwicklung.** Spezifikationen wachsen organisch, wenn Änderungen archiviert werden. Jedes Archiv führt seine Deltas zusammen und baut im Laufe der Zeit eine umfassende Spezifikation auf.
+**Spezifikationsentwicklung.** Spezifikationen wachsen organisch, wenn Änderungen archiviert werden. Jedes Archiv zusammenführt seine Deltas und baut im Laufe der Zeit eine umfassende Spezifikation auf.
 
 ## Wie alles zusammenpasst
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              OPENSPEC FLOW                                   │
+│                              OPENSPEC-FLOW                                   │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. START      │  /opsx:propose (Kern) oder /opsx:new (erweitert)        │
-│   │     CHANGE     │                                                         │
+│   │  1. BEGINNE     │  /opsx:propose (Kern) oder /opsx:new (erweitert)       │
+│   │     ÄNDERUNG    │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. CREATE     │  /opsx:ff oder /opsx:continue (erweiterter Workflow)     │
-│   │     ARTIFACTS  │  Erstellt proposal → specs → design → tasks             │
-│   │                │  (basierend auf Schema-Abhängigkeiten)                   │
+│   │  2. ERSTELLE   │  /opsx:ff oder /opsx:continue (erweiterter Workflow)    │
+│   │     ARTEFAKTE   │  Erstellt proposal → specs → design → tasks            │
+│   │                │  (basierend auf Schema-Abhängigkeiten)                  │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  3. IMPLEMENT  │  /opsx:apply                                            │
-│   │     TASKS      │  Tasks durcharbeiten und abhaken                         │
-│   │                │◄──── Artefakte aktualisieren, wenn Sie Neues erfahren    │
+│   │  3. IMPLMENTIERE│  /opsx:apply                                          │
+│   │     AUFGABEN    │  Aufgaben abarbeiten und abhaken                       │
+│   │                │◄──── Artefakte aktualisieren beim Lernen                │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. VERIFY     │  /opsx:verify (optional)                                │
-│   │     WORK       │  Prüfen, ob die Implementierung den Spezifikationen     │
-│   │                │  entspricht                                              │
-│   └───────┬────────┘                                                         │
+│   │  4. ÜBERPRÜFE  │  /opsx:verify (optional)                               │
+│   │     ARBEIT     │  Überprüfen, ob Implementierung den Spezifikationen     │
+│   └───────┬────────┘      entspricht                                        │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. ARCHIVE    │────►│  Delta-Spezifikationen werden in die          │    │
-│   │     CHANGE     │     │  Hauptspezifikationen zusammengeführt        │    │
-│   └────────────────┘     │  Änderungsordner wird ins Archiv verschoben  │    │
+│   │  5. ARCHIVIERE │────►│  Delta-Spezifikationen werden zu Hauptspezifikationen │    │
+│   │     ÄNDERUNG   │     │  zusammengeführt                           │    │
+│   └────────────────┘     │  Änderungsordner wird ins Archiv verschoben │    │
 │                          │  Spezifikationen sind jetzt die aktualisierte│    │
-│                          │  Quelle der Wahrheit                         │    │
+│                          │  Quelle der Wahrheit                        │    │
 │                          └──────────────────────────────────────────────┘    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Der Tugendkreislauf:**
+**Der tugendhafte Kreislauf:**
 
 1. Spezifikationen beschreiben das aktuelle Verhalten
 2. Änderungen schlagen Modifikationen vor (als Deltas)
-3. Die Implementierung setzt die Änderungen um
-4. Das Archiv führt Deltas in Spezifikationen zusammen
+3. Die Implementierung macht die Änderungen real
+4. Das Archivieren zusammenführt die Deltas in die Spezifikationen
 5. Spezifikationen beschreiben jetzt das neue Verhalten
 6. Die nächste Änderung baut auf den aktualisierten Spezifikationen auf
 
 ## Glossar
 
-| Term | Definition |
-|------|------------|
-| **Artifact** | Ein Dokument innerhalb einer Änderung (proposal, design, tasks oder Delta-Spezifikationen) |
-| **Archive** | Der Prozess des Abschließens einer Änderung und Zusammenführens ihrer Deltas in die Hauptspezifikationen |
-| **Change** | Eine vorgeschlagene Modifikation des Systems, gepackt als Ordner mit Artefakten |
-| **Delta spec** | Eine Spezifikation, die Änderungen (HINZUGEFÜGT/GEÄNDERT/ENTFERNT) relativ zu den aktuellen Spezifikationen beschreibt |
+| Begriff | Definition |
+|---------|------------|
+| **Artifact** | Ein Dokument innerhalb einer Änderung (Vorschlag, Design, Tasks oder Deltaspezifikationen) |
+| **Archive** | Der Prozess des Abschließens einer Änderung und Zusammenführens ihrer Deltas in Hauptspezifikationen |
+| **Change** | Eine vorgeschlagene Modifikation des Systems, gebündelt als Ordner mit Artefakten |
+| **Delta spec** | Eine Spezifikation, die Änderungen (HINZUGEFÜGT/GEÄNDERT/ENTFERNT) relativ zu aktuellen Spezifikationen beschreibt |
 | **Domain** | Eine logische Gruppierung für Spezifikationen (z.B. `auth/`, `payments/`) |
-| **Requirement** | Ein bestimmtes Verhalten, das das System haben muss |
-| **Scenario** | Ein konkretes Beispiel einer Anforderung, typischerweise im Given/When/Then-Format |
+| **Requirement** | Ein spezifisches Verhalten, das das System haben muss |
+| **Scenario** | Ein konkreter Anwendungsfall einer Anforderung, typischerweise im Given/When/Then-Format |
 | **Schema** | Eine Definition von Artefakttypen und deren Abhängigkeiten |
-| **Spec** | Eine Spezifikation, die das Systemverhalten beschreibt und Anforderungen und Szenarien enthält |
+| **Spec** | Eine Spezifikation, die Systemverhalten beschreibt und Anforderungen und Szenarien enthält |
 | **Source of truth** | Das Verzeichnis `openspec/specs/`, das das aktuell vereinbarte Verhalten enthält |
 
 ## Nächste Schritte
 
 - [Erste Schritte](getting-started.md) - Praktische erste Schritte
-- [Workflows](workflows.md) - Gängige Muster und wann jedes verwendet wird
+- [Workflows](workflows.md) - Gängige Muster und wann sie verwendet werden
 - [Befehle](commands.md) - Vollständige Befehlsreferenz
-- [Anpassung](customization.md) - Benutzerdefinierte Schemas erstellen und Ihr Projekt konfigurieren
+- [Anpassung](customization.md) - Erstellen Sie eigene Schemas und konfigurieren Sie Ihr Projekt

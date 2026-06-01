@@ -72,6 +72,7 @@ program
   .option('-k, --api-key <key>', 'API key', process.env.OPENAI_API_KEY || '')
   .option('-B, --build', 'Build docs after translation', false)
   .option('-S, --sync', 'Sync docs from hermes-agent repository before translating', false)
+  .option('-D, --debug', 'Debug mode')
   .addHelpText('after', `
 Supported languages: ${SUPPORTED_LANGUAGES.join(', ')}
 
@@ -84,18 +85,28 @@ Examples:
 program.parse();
 const options = program.opts();
 
+if (options.debug) logger.updateOptions({ levelType: 'debug' })
+logger.debug('options:', options)
+
 // ---- Text Chunking ----
 function splitBySection(text: string): string[] {
   const lines = text.split('\n')
   const chunks: string[] = []
   let currentChunk: string[] = []
   let currentLength = 0
+  let insideFence = false
 
   for (const line of lines) {
     const lineLength = line.length + 1
     const isSectionHeader = /^##\s/.test(line)
 
-    if (isSectionHeader && currentLength > MAX_CHUNK_SIZE && currentChunk.length > 0) {
+    // Track fenced code block state (```, ~~~, etc.)
+    if (/^```/.test(line.trim())) {
+      insideFence = !insideFence
+    }
+
+    // 仅在不在 code block 内部时才按 ## 切分
+    if (isSectionHeader && !insideFence && currentLength > MAX_CHUNK_SIZE && currentChunk.length > 0) {
       chunks.push(currentChunk.join('\n'))
       currentChunk = [line]
       currentLength = lineLength
@@ -127,9 +138,32 @@ function splitByParagraph(text: string): string[] {
     return [text.slice(0, sidx), text.slice(sidx)]
   }
 
-  // Split by paragraphs
+  // 将原始 text 按段落拆分，但合并 fenced code block 内部的段落
+  const rawParagraphs = text.split(/\n\n+/)
+  const paragraphs: string[] = []
+  let insideFence = false
+  let pending: string[] = []
+
+  for (const para of rawParagraphs) {
+    const lines = para.split('\n')
+    for (const line of lines) {
+      if (/^```/.test(line.trim())) {
+        insideFence = !insideFence
+      }
+    }
+    pending.push(para)
+    // 只有在非 fence 内部时才确认一个真正的段落边界
+    if (!insideFence) {
+      paragraphs.push(pending.join('\n\n'))
+      pending = []
+    }
+  }
+  // 收尾：如果 fence 未闭合，将剩余部分合并到一起
+  if (pending.length > 0) {
+    paragraphs.push(pending.join('\n\n'))
+  }
+
   const chunks: string[] = []
-  const paragraphs = text.split(/\n\n+/)
   let currentChunk = ''
 
   for (const para of paragraphs) {
@@ -187,28 +221,63 @@ Translate the following markdown documentation from **${sourceLangDisplay}** to 
 
 ${content}`
 
-  const response = await fetch(`${options.baseUrl}/chat/completions`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${options.apiKey}`,
-    },
-    body: JSON.stringify({
-      model: options.model,
-      messages: [
-        { role: 'user', content: prompt },
-      ],
-      temperature: 0.3,
-    }),
-  })
+  const MAX_RETRIES = 10
+  const BASE_DELAY_MS = 1000
 
-  if (!response.ok) {
-    const text = await response.text()
-    throw new Error(`API error ${response.status}: ${text}`)
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await fetch(`${options.baseUrl}/chat/completions`, {
+        method: 'POST',
+        verbose: options.debug,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${options.apiKey}`,
+        },
+        body: JSON.stringify({
+          model: options.model,
+          messages: [
+            { role: 'user', content: prompt },
+          ],
+          temperature: 0.3,
+        }),
+      })
+
+      if (response.ok) {
+        const json = await response.json()
+        return json.choices[0].message.content.trim()
+      }
+
+      if (response.status === 429 && attempt < MAX_RETRIES) {
+        const delay = Math.min(BASE_DELAY_MS * Math.pow(2, attempt - 1), 60_000)
+        const jitter = Math.random() * 1000
+        const totalDelay = delay + jitter
+        logger.log(`  Rate limited (429), retrying in ${Math.round(totalDelay)}ms (attempt ${attempt}/${MAX_RETRIES})...`)
+        await new Promise(resolve => setTimeout(resolve, totalDelay))
+        continue
+      }
+
+      const text = await response.text()
+      throw new Error(`API error ${response.status}: ${text}`)
+    } catch (err) {
+      // 网络连接错误（如 socket 关闭）也视为临时故障进行重试
+      if (attempt < MAX_RETRIES && err instanceof Error && (
+        err.message.includes('socket connection was closed') ||
+        err.message.includes('ECONNRESET') ||
+        err.message.includes('ETIMEDOUT') ||
+        err.message.includes('fetch failed')
+      )) {
+        const delay = Math.min(BASE_DELAY_MS * Math.pow(2, attempt - 1), 60_000)
+        const jitter = Math.random() * 1000
+        const totalDelay = delay + jitter
+        logger.log(`  Connection error (${err.message}), retrying in ${Math.round(totalDelay)}ms (attempt ${attempt}/${MAX_RETRIES})...`)
+        await new Promise(resolve => setTimeout(resolve, totalDelay))
+        continue
+      }
+      throw err
+    }
   }
 
-  const json = await response.json()
-  return json.choices[0].message.content.trim()
+  throw new Error('Exceeded maximum retry attempts due to rate limiting')
 }
 
 async function translateText(text: string, sourceLang: string, targetLang: string, id = ''): Promise<string> {
@@ -241,7 +310,7 @@ async function translateText(text: string, sourceLang: string, targetLang: strin
     const translatedChunks: string[] = [];
     for (let i = 0; i < finalChunks.length; i++) {
       const chunk = finalChunks[i];
-      logger.log(`  Translating chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars)... ${color.gray(id)}`);
+      logger.log(`  [${color.cyan(sourceLang)}->${color.green(targetLang)}]Translating chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars)... ${color.gray(id)}`);
 
       const translated = await translateSingleChunk(chunk, sourceLang, targetLang);
       translatedChunks.push(translated);
@@ -372,35 +441,30 @@ async function main(opts = options) {
   // 前置：同步文档
   if (sync) await syncDocs();
 
-  if (targetLang === 'all') {
-    logger.log(`Translating to all languages...`)
-    for (const lang of Object.keys(LANGUAGE_NAMES)) {
-      if (lang === sourceLang) continue;
-      console.info(''.padEnd(30, '='), `Translating to ${color.green(lang)}`, ''.padEnd(30, '='))
-      await main({ ...opts, sync: false, build: false, targetLang: lang })
-    }
-    if (opts.build) await build();
-    return
-  }
-
   // 验证语言代码
   if (!LANGUAGE_NAMES[sourceLang]) {
     logger.error(`Unsupported source language: ${color.red(sourceLang)}. Supported: ${SUPPORTED_LANGUAGES.join(', ')}`);
     process.exit(1);
   }
-  if (!LANGUAGE_NAMES[targetLang]) {
-    logger.error(`Unsupported target language: ${color.red(targetLang)}. Supported: ${SUPPORTED_LANGUAGES.join(', ')}`);
-    process.exit(1);
-  }
-  if (sourceLang === targetLang) {
-    logger.error(`Source and target language cannot be the same: ${color.red(sourceLang)}`);
-    process.exit(1);
-  }
 
   const sourceLangDisplay = getLanguageDisplayName(sourceLang, true);
-  const targetLangDisplay = getLanguageDisplayName(targetLang);
-  logger.log(`Translation: ${color.cyan(sourceLangDisplay)} → ${color.green(targetLangDisplay)}`);
+  let targetLangDisplay: string;
 
+  if (targetLang === 'all') {
+    targetLangDisplay = 'All Languages';
+  } else {
+    if (!LANGUAGE_NAMES[targetLang]) {
+      logger.error(`Unsupported target language: ${color.red(targetLang)}. Supported: ${SUPPORTED_LANGUAGES.join(', ')}`);
+      process.exit(1);
+    }
+    if (sourceLang === targetLang) {
+      logger.error(`Source and target language cannot be the same: ${color.red(sourceLang)}`);
+      process.exit(1);
+    }
+    targetLangDisplay = getLanguageDisplayName(targetLang);
+  }
+
+  logger.log(`Translation: ${color.cyan(sourceLangDisplay)} → ${color.green(targetLangDisplay)}`);
 
   if (!existsSync(inputPath)) {
     logger.error(`Path does not exist: ${color.red(inputPath)}`);
@@ -423,10 +487,31 @@ async function main(opts = options) {
   logger.log(`Found ${color.yellow(filesToTranslate.length)} files to translate`);
   logger.log(`Use Model: ${color.green(opts.model)}`);
 
-  let current = 0;
-  const total = filesToTranslate.length;
+  const tasks: (() => Promise<void>)[] = [];
 
-  const tasks = filesToTranslate.map(file => () => translateFile(file, sourceLang, targetLang, ++current, total).catch(error => logger.error(`Error translating ${file}:`, error)));
+  if (targetLang === 'all') {
+    // 扁平化：收集 文件数 × 语言数 的所有任务对，最大化并发
+    const targetLangs = Object.keys(LANGUAGE_NAMES).filter(l => l !== sourceLang);
+    logger.log(`Target languages: ${color.yellow(targetLangs.length)} → total tasks: ${color.yellow(filesToTranslate.length * targetLangs.length)}`);
+
+    for (const lang of targetLangs) {
+      let idx = 0;
+      const total = filesToTranslate.length;
+      for (const file of filesToTranslate) {
+        const f = file;
+        const l = lang;
+        const i = ++idx;
+        tasks.push(() => translateFile(f, sourceLang, l, i, total).catch(error => logger.error(`Error translating ${f} to ${l}:`, error)));
+      }
+    }
+  } else {
+    let current = 0;
+    const total = filesToTranslate.length;
+    for (const file of filesToTranslate) {
+      tasks.push(() => translateFile(file, sourceLang, targetLang, ++current, total).catch(error => logger.error(`Error translating ${file}:`, error)));
+    }
+  }
+
   await concurrency(tasks, Number(threads));
 
   logger.log(color.greenBright('Translation completed!'));
