@@ -1,705 +1,703 @@
-# Các lệnh
+# Lệnh
 
-Đây là tài liệu tham khảo cho các lệnh slash của OpenSpec. Các lệnh này được gọi trong giao diện trò chuyện của trợ lý lập trình AI của bạn (ví dụ: Claude Code, Cursor, Windsurf).
+Đây là tài liệu tham khảo cho các lệnh gạch chéo của OpenSpec. Các lệnh này được gọi trong giao diện trò chuyện của trợ lý lập trình AI (ví dụ: Claude Code, Cursor, Windsurf).
 
-Để biết các mẫu quy trình làm việc và thời điểm sử dụng từng lệnh, hãy xem [Quy trình làm việc](workflows.md). Đối với các lệnh CLI, hãy xem [CLI](cli.md).
+Đối với các mẫu quy trình làm việc và thời điểm sử dụng từng lệnh, hãy xem [Workflows](workflows.md). Đối với các lệnh CLI, hãy xem [CLI](cli.md).
 
-## Tham chiếu nhanh
+## Tham Khảo Nhanh
 
-### Đường dẫn nhanh mặc định (hồ sơ `core`)
+### Đường Dẫn Nhanh Mặc Định (`core` profile)
 
-| Lệnh | Mục đích |
+| Command | Purpose |
 |---------|---------|
-| `/opsx:propose` | Tạo một thay đổi và tạo các tài liệu quy hoạch trong một bước |
-| `/opsx:explore` | Suy nghĩ kỹ về các ý tưởng trước khi cam kết thực hiện thay đổi |
+| `/opsx:propose` | Tạo một thay đổi và tạo các artifact lập kế hoạch trong một bước |
+| `/opsx:explore` | Suy nghĩ qua các ý tưởng trước khi cam kết vào một thay đổi |
 | `/opsx:apply` | Triển khai các tác vụ từ thay đổi |
-| `/opsx:sync` | Hợp nhất các đặc tả delta vào các đặc tả chính |
+| `/opsx:sync` | Hợp nhất các spec delta vào các spec chính |
 | `/opsx:archive` | Lưu trữ một thay đổi đã hoàn thành |
 
-### Các lệnh quy trình làm việc mở rộng (lựa chọn quy trình làm việc tùy chỉnh)
+### Các Lệnh Quy Trình Làm Việc Mở Rộng (chọn tùy chỉnh quy trình làm việc)
 
-| Lệnh | Mục đích |
+| Command | Purpose |
 |---------|---------|
 | `/opsx:new` | Bắt đầu một khung thay đổi mới |
-| `/opsx:continue` | Tạo tài liệu tiếp theo dựa trên các phụ thuộc |
-| `/opsx:ff` | Chuyển tiếp nhanh: tạo tất cả các tài liệu quy hoạch cùng một lúc |
-| `/opsx:verify` | Xác nhận rằng việc triển khai khớp với các tài liệu |
+| `/opsx:continue` | Tạo artifact tiếp theo dựa trên các phụ thuộc |
+| `/opsx:ff` | Tăng tốc (Fast-forward): tạo tất cả các artifact lập kế hoạch cùng một lúc |
+| `/opsx:verify` | Xác thực rằng việc triển khai khớp với các artifact |
 | `/opsx:bulk-archive` | Lưu trữ nhiều thay đổi cùng một lúc |
-| `/opsx:onboard` | Hướng dẫn qua toàn bộ quy trình làm việc |
+| `/opsx:onboard` | Hướng dẫn từng bước qua toàn bộ quy trình làm việc |
 
-Hồ sơ toàn cầu mặc định là `core`. Để kích hoạt các lệnh quy trình làm việc mở rộng, hãy chạy `openspec config profile`, chọn quy trình làm việc, sau đó chạy `openspec update` trong dự án của bạn.
+Hồ sơ toàn cục mặc định là `core`. Để kích hoạt các lệnh quy trình làm việc mở rộng, hãy chạy `openspec config profile`, chọn các quy trình làm việc, sau đó chạy `openspec update` trong dự án của bạn.
 
----
-
-## Tham chiếu lệnh
+## Tham Chiếu Lệnh
 
 ### `/opsx:propose`
 
-Tạo một thay đổi mới và tạo các tạo phẩm quy hoạch trong một bước. Đây là lệnh khởi động mặc định trong profile `core`.
+Tạo một thay đổi mới và tạo các tác phẩm lập kế hoạch trong một bước. Đây là lệnh khởi đầu mặc định trong profile `core`.
 
 **Cú pháp:**
 ```text
-/opsx:propose [tên-hoặc-mô-tả-thay-đổi]
+/opsx:propose [change-name-or-description]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-hoặc-mô-tả-thay-đổi` | Không | Tên dạng kebab-case hoặc mô tả thay đổi bằng ngôn ngữ tự nhiên |
+| `change-name-or-description` | Không | Tên theo định dạng kebab-case hoặc mô tả thay đổi bằng ngôn ngữ thông thường |
 
-**Chức năng:**
-- Tạo `openspec/changes/<tên-thay-đổi>/`
-- Tạo các tạo phẩm cần thiết trước khi triển khai (đối với `spec-driven`: đề xuất, đặc tả, thiết kế, tác vụ)
+**Nó làm gì:**
+- Tạo thư mục `openspec/changes/<change-name>/`
+- Tạo các tác phẩm cần thiết trước khi triển khai (cho `spec-driven`: proposal, specs, design, tasks)
 - Dừng lại khi thay đổi sẵn sàng cho `/opsx:apply`
 
 **Ví dụ:**
 ```text
-Bạn: /opsx:propose add-dark-mode
+You: /opsx:propose add-dark-mode
 
-AI:  Đã tạo openspec/changes/add-dark-mode/
+AI:  Created openspec/changes/add-dark-mode/
      ✓ proposal.md
      ✓ specs/ui/spec.md
      ✓ design.md
      ✓ tasks.md
-     Sẵn sàng triển khai. Chạy /opsx:apply.
+     Ready for implementation. Run /opsx:apply.
 ```
 
 **Mẹo:**
-- Sử dụng lệnh này để có đường dẫn nhanh nhất từ đầu đến cuối
-- Nếu bạn muốn kiểm soát từng tạo phẩm một, hãy bật quy trình mở rộng và sử dụng `/opsx:new` + `/opsx:continue`
+- Sử dụng lệnh này cho quy trình từ đầu đến cuối nhanh nhất
+- Nếu bạn muốn kiểm soát tác phẩm từng bước, hãy bật các quy trình mở rộng và sử dụng `/opsx:new` + `/opsx:continue`
 
 ---
 
 ### `/opsx:explore`
 
-Suy nghĩ về các ý tưởng, điều tra vấn đề và làm rõ yêu cầu trước khi cam kết thực hiện một thay đổi.
+> **Hãy bắt đầu tại đây khi bạn không chắc chắn.** Explore là một đối tác tư duy không áp lực: nó đọc codebase của bạn, so sánh các lựa chọn và biến một ý tưởng mơ hồ thành một kế hoạch cụ thể trước khi bất kỳ thay đổi nào tồn tại. Nó có sẵn trong profile mặc định. Đối với trường hợp đầy đủ hơn và nhiều ví dụ hơn, hãy xem hướng dẫn [Explore First](explore.md).
+
+Hãy suy nghĩ về các ý tưởng, điều tra các vấn đề và làm rõ các yêu cầu trước khi cam kết thực hiện một thay đổi.
 
 **Cú pháp:**
 ```
-/opsx:explore [chủ-đề]
+/opsx:explore [topic]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `chủ-đề` | Không | Chủ đề bạn muốn khám phá hoặc điều tra |
+| `topic` | Không | Điều bạn muốn khám phá hoặc điều tra |
 
-**Chức năng:**
-- Mở một cuộc trò chuyện khám phá không yêu cầu cấu trúc
+**Nó làm gì:**
+- Mở một cuộc trò chuyện thăm dò mà không yêu cầu cấu trúc
 - Điều tra codebase để trả lời các câu hỏi
-- So sánh các tùy chọn và phương pháp
+- So sánh các lựa chọn và phương pháp tiếp cận
 - Tạo sơ đồ trực quan để làm rõ suy nghĩ
-- Có thể chuyển sang `/opsx:propose` (mặc định) hoặc `/opsx:new` (quy trình mở rộng) khi các hiểu biết trở nên rõ ràng
+- Có thể chuyển sang `/opsx:propose` (mặc định) hoặc `/opsx:new` (quy trình mở rộng) khi những hiểu biết được kết tinh
 
 **Ví dụ:**
 ```text
-Bạn: /opsx:explore
+You: /opsx:explore
 
-AI:  Bạn muốn khám phá điều gì?
+AI:  What would you like to explore?
 
-Bạn: Chúng ta nên xử lý xác thực cho ứng dụng di động như thế nào?
+You: How should we handle authentication for the mobile app?
 
-AI:  Để tôi điều tra thiết lập xác thực hiện tại của bạn...
-     [Phân tích codebase]
+AI:  Let me investigate your current auth setup...
+     [Analyzes codebase]
 
-     Tôi thấy bạn đang sử dụng xác thực dựa trên phiên cho ứng dụng web.
-     Đối với di động, chúng ta có ba lựa chọn chính:
+     I see you're using session-based auth for the web app.
+     For mobile, we have three main options:
 
-     1. JWT token (không trạng thái, hoạt động ngoại tuyến)
-     2. OAuth2 (nếu bạn cần đăng nhập bên thứ ba)
-     3. Mở rộng phiên hiện tại (đơn giản hơn, nhưng yêu cầu kết nối)
+     1. JWT tokens (stateless, works offline)
+     2. OAuth2 (if you need third-party login)
+     3. Extend current sessions (simpler, but requires connectivity)
 
-     API của bạn đã được cấu hình CORS. Bạn quan tâm đến hướng nào?
+     Your API already has CORS configured. Which direction interests you?
 
-Bạn: Hãy dùng JWT. Chúng ta có thể bắt đầu một thay đổi cho điều đó không?
+You: Let's go with JWT. Can we start a change for that?
 
-AI:  Sẵn sàng khi bạn muốn. Chạy /opsx:propose add-jwt-auth để bắt đầu.
+AI:  Ready when you are. Run /opsx:propose add-jwt-auth to begin.
 ```
 
 **Mẹo:**
 - Sử dụng khi yêu cầu chưa rõ ràng hoặc bạn cần điều tra
-- Không tạo tạo phẩm nào trong quá trình khám phá
-- Phù hợp để so sánh nhiều phương pháp trước khi quyết định
-- Có thể đọc tệp và tìm kiếm trong codebase
+- Không có tác phẩm nào được tạo ra trong quá trình khám phá
+- Tốt cho việc so sánh nhiều phương pháp tiếp cận trước khi quyết định
+- Có thể đọc các tệp và tìm kiếm codebase
 
 ---
 
 ### `/opsx:new`
 
-Bắt đầu một khung thay đổi mới. Tạo thư mục thay đổi và chờ bạn tạo tạo phẩm bằng `/opsx:continue` hoặc `/opsx:ff`.
+Bắt đầu một khung thay đổi mới. Tạo thư mục thay đổi và chờ bạn tạo các tác phẩm bằng `/opsx:continue` hoặc `/opsx:ff`.
 
-Lệnh này là một phần của bộ quy trình mở rộng (không được bao gồm trong profile `core` mặc định).
+Lệnh này là một phần của bộ quy trình mở rộng (không có trong profile `core` mặc định).
 
 **Cú pháp:**
 ```
-/opsx:new [tên-thay-đổi] [--schema <tên-schema>]
+/opsx:new [change-name] [--schema <schema-name>]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Tên cho thư mục thay đổi (sẽ được nhắc nếu không cung cấp) |
-| `--schema` | Không | Schema quy trình làm việc cần sử dụng (mặc định: từ cấu hình hoặc `spec-driven`) |
+| `change-name` | Không | Tên cho thư mục thay đổi (sẽ được nhắc nếu không cung cấp) |
+| `--schema` | Không | Schema quy trình cần sử dụng (mặc định: từ config hoặc `spec-driven`) |
 
-**Chức năng:**
-- Tạo thư mục `openspec/changes/<tên-thay-đổi>/`
+**Nó làm gì:**
+- Tạo thư mục `openspec/changes/<change-name>/`
 - Tạo tệp siêu dữ liệu `.openspec.yaml` trong thư mục thay đổi
-- Hiển thị mẫu tạo phẩm đầu tiên sẵn sàng để tạo
-- Nhắc nhập tên thay đổi và schema nếu chưa cung cấp
+- Hiển thị mẫu tác phẩm đầu tiên sẵn sàng để tạo
+- Nhắc tên thay đổi và schema nếu chưa được cung cấp
 
-**Thành phần được tạo:**
+**Nó tạo ra gì:**
 ```
-openspec/changes/<tên-thay-đổi>/
+openspec/changes/<change-name>/
 └── .openspec.yaml    # Siêu dữ liệu thay đổi (schema, ngày tạo)
 ```
 
 **Ví dụ:**
 ```
-Bạn: /opsx:new add-dark-mode
+You: /opsx:new add-dark-mode
 
-AI:  Đã tạo openspec/changes/add-dark-mode/
+AI:  Created openspec/changes/add-dark-mode/
      Schema: spec-driven
 
-     Sẵn sàng tạo: proposal
-     Sử dụng /opsx:continue để tạo nó, hoặc /opsx:ff để tạo tất cả tạo phẩm.
+     Ready to create: proposal
+     Use /opsx:continue to create it, or /opsx:ff to create all artifacts.
 ```
 
 **Mẹo:**
-- Sử dụng tên mô tả: `add-feature`, `fix-bug`, `refactor-module`
-- Tránh tên chung chung như `update`, `changes`, `wip`
+- Sử dụng các tên mô tả: `add-feature`, `fix-bug`, `refactor-module`
+- Tránh các tên chung chung như `update`, `changes`, `wip`
 - Schema cũng có thể được đặt trong cấu hình dự án (`openspec/config.yaml`)
 
 ---
 
 ### `/opsx:continue`
 
-Tạo tạo phẩm tiếp theo trong chuỗi phụ thuộc. Tạo từng tạo phẩm một để tiến triển dần.
+Tạo tác phẩm tiếp theo trong chuỗi phụ thuộc. Tạo từng tác phẩm một để tiến triển tăng dần.
 
 **Cú pháp:**
 ```
-/opsx:continue [tên-thay-đổi]
+/opsx:continue [change-name]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Thay đổi nào cần tiếp tục (suy ra từ ngữ cảnh nếu không cung cấp) |
+| `change-name` | Không | Thay đổi nào cần tiếp tục (sẽ được suy luận từ ngữ cảnh nếu không cung cấp) |
 
-**Chức năng:**
-- Truy vấn đồ thị phụ thuộc của tạo phẩm
-- Hiển thị những tạo phẩm nào sẵn sàng so với bị chặn
-- Tạo tạo phẩm sẵn sàng đầu tiên
+**Nó làm gì:**
+- Truy vấn biểu đồ phụ thuộc tác phẩm
+- Hiển thị những tác phẩm nào đã sẵn sàng so với bị chặn
+- Tạo tác phẩm đầu tiên đã sẵn sàng
 - Đọc các tệp phụ thuộc để lấy ngữ cảnh
-- Hiển thị những gì sẽ khả dụng sau khi tạo
+- Hiển thị những gì sẽ có sẵn sau khi tạo
 
 **Ví dụ:**
 ```
-Bạn: /opsx:continue
+You: /opsx:continue
 
-AI:  Thay đổi: add-dark-mode
+AI:  Change: add-dark-mode
 
-     Trạng thái tạo phẩm:
-     ✓ proposal    (hoàn thành)
-     ◆ specs       (sẵn sàng)
-     ◆ design      (sẵn sàng)
-     ○ tasks       (bị chặn - cần: specs)
+     Artifact status:
+     ✓ proposal    (done)
+     ◆ specs       (ready)
+     ◆ design      (ready)
+     ○ tasks       (blocked - needs: specs)
 
-     Đang tạo specs...
+     Creating specs...
 
-     [Đọc proposal.md, tạo specs dựa trên yêu cầu]
+     [Reads proposal.md, creates specs based on requirements]
 
-     ✓ Đã tạo openspec/changes/add-dark-mode/specs/ui/spec.md
+     ✓ Created openspec/changes/add-dark-mode/specs/ui/spec.md
 
-     Bây giờ khả dụng: tasks
-     Chạy /opsx:continue để tạo tạo phẩm tiếp theo.
+     Now available: tasks
+     Run /opsx:continue to create the next artifact.
 ```
 
 **Mẹo:**
-- Sử dụng khi bạn muốn xem xét từng tạo phẩm trước khi tiến hành
-- Phù hợp cho các thay đổi phức tạp khi bạn muốn kiểm soát
-- Nhiều tạo phẩm có thể sẵn sàng đồng thời
-- Bạn có thể chỉnh sửa các tạo phẩm đã tạo trước khi tiếp tục
+- Sử dụng khi bạn muốn xem xét từng tác phẩm trước khi tiếp tục
+- Tốt cho các thay đổi phức tạp nơi bạn muốn có sự kiểm soát
+- Nhiều tác phẩm có thể sẵn sàng cùng một lúc
+- Bạn có thể chỉnh sửa các tác phẩm đã tạo trước khi tiếp tục
 
 ---
 
 ### `/opsx:ff`
 
-Tua nhanh quá trình tạo tạo phẩm. Tạo tất cả tạo phẩm quy hoạch cùng một lúc.
+Tăng tốc qua quá trình tạo tác phẩm. Tạo tất cả các tác phẩm lập kế hoạch cùng một lúc.
 
 **Cú pháp:**
 ```
-/opsx:ff [tên-thay-đổi]
+/opsx:ff [change-name]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Thay đổi nào cần tua nhanh (suy ra từ ngữ cảnh nếu không cung cấp) |
+| `change-name` | Không | Thay đổi nào cần tăng tốc (sẽ được suy luận từ ngữ cảnh nếu không cung cấp) |
 
-**Chức năng:**
-- Tạo tất cả tạo phẩm theo thứ tự phụ thuộc
-- Theo dõi tiến trình qua danh sách việc cần làm
-- Dừng lại khi tất cả tạo phẩm yêu cầu `apply-required` hoàn thành
-- Đọc từng phụ thuộc trước khi tạo tạo phẩm tiếp theo
+**Nó làm gì:**
+- Tạo tất cả các tác phẩm theo thứ tự phụ thuộc
+- Theo dõi tiến độ thông qua danh sách việc cần làm (todo list)
+- Dừng lại khi tất cả các tác phẩm `apply-required` đã hoàn thành
+- Đọc từng phụ thuộc trước khi tạo tác phẩm tiếp theo
 
 **Ví dụ:**
 ```
-Bạn: /opsx:ff add-dark-mode
+You: /opsx:ff add-dark-mode
 
-AI:  Đang tua nhanh add-dark-mode...
+AI:  Fast-forwarding add-dark-mode...
 
-     ✓ Đang tạo proposal.md
-     ✓ Đang tạo specs/ui/spec.md
-     ✓ Đang tạo design.md
-     ✓ Đang tạo tasks.md
+     ✓ Creating proposal.md
+     ✓ Creating specs/ui/spec.md
+     ✓ Creating design.md
+     ✓ Creating tasks.md
 
-     Tất cả tạo phẩm quy hoạch đã hoàn thành!
-     Sẵn sàng triển khai. Chạy /opsx:apply để bắt đầu.
+     All planning artifacts complete!
+     Ready for implementation. Run /opsx:apply to begin.
 ```
 
 **Mẹo:**
-- Sử dụng khi bạn có cái nhìn rõ ràng về những gì bạn đang xây dựng
-- Nhanh hơn `/opsx:continue` cho các thay đổi đơn giản
-- Bạn vẫn có thể chỉnh sửa tạo phẩm sau đó
-- Phù hợp cho các tính năng nhỏ đến trung bình
+- Sử dụng khi bạn có cái nhìn rõ ràng về những gì mình đang xây dựng
+- Nhanh hơn `/opsx:continue` đối với các thay đổi đơn giản
+- Bạn vẫn có thể chỉnh sửa tác phẩm sau đó
+- Tốt cho các tính năng nhỏ đến trung bình
 
 ---
 
 ### `/opsx:apply`
 
-Triển khai các tác vụ từ thay đổi. Làm việc qua danh sách tác vụ, viết code và đánh dấu hoàn thành.
+Triển khai các nhiệm vụ từ thay đổi. Thực hiện qua danh sách công việc, viết mã và đánh dấu hoàn thành.
 
 **Cú pháp:**
 ```
-/opsx:apply [tên-thay-đổi]
+/opsx:apply [change-name]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Thay đổi nào cần triển khai (suy ra từ ngữ cảnh nếu không cung cấp) |
+| `change-name` | Không | Thay đổi nào cần triển khai (sẽ được suy luận từ ngữ cảnh nếu không cung cấp) |
 
-**Chức năng:**
-- Đọc `tasks.md` và xác định các tác vụ chưa hoàn thành
-- Làm việc qua từng tác vụ một
-- Viết code, tạo tệp, chạy kiểm thử khi cần
-- Đánh dấu tác vụ hoàn thành bằng hộp kiểm `[x]`
+**Nó làm gì:**
+- Đọc `tasks.md` và xác định các nhiệm vụ chưa hoàn thành
+- Thực hiện từng nhiệm vụ một
+- Viết mã, tạo tệp, chạy kiểm thử khi cần thiết
+- Đánh dấu nhiệm vụ đã hoàn thành bằng hộp kiểm `[x]`
 
 **Ví dụ:**
 ```
-Bạn: /opsx:apply
+You: /opsx:apply
 
-AI:  Đang triển khai add-dark-mode...
+AI:  Implementing add-dark-mode...
 
-     Đang đọc tasks.md:
-     - [ ] 1.1 Tạo ThemeContext
-     - [ ] 1.2 Thêm thuộc tính CSS tùy chỉnh
-     - [ ] 1.3 Triển khai lưu trữ localStorage
+     Reading tasks.md:
+     - [ ] 1.1 Create ThemeContext
+     - [ ] 1.2 Add CSS custom properties
+     - [ ] 1.3 Implement localStorage persistence
 
-     Đang làm 1.1: Tạo ThemeContext...
-     [Tạo src/context/ThemeContext.tsx]
+     Working on 1.1: Create ThemeContext...
+     [Creates src/context/ThemeContext.tsx]
 
-     ✓ 1.1 Hoàn thành
+     ✓ 1.1 Complete
 
-     Đang làm 1.2: Thêm thuộc tính CSS tùy chỉnh...
-     [Cập nhật src/styles/globals.css]
+     Working on 1.2: Add CSS custom properties...
+     [Updates src/styles/globals.css]
 
-     ✓ 1.2 Hoàn thành
+     ✓ 1.2 Complete
      ...
 ```
 
 **Mẹo:**
 - Có thể tiếp tục từ nơi bạn đã dừng nếu bị gián đoạn
 - Sử dụng cho các thay đổi song song bằng cách chỉ định tên thay đổi
-- Trạng thái hoàn thành được theo dõi trong các hộp kiểm của `tasks.md`
+- Trạng thái hoàn thành được theo dõi trong hộp kiểm `tasks.md`
 
 ---
 
 ### `/opsx:verify`
 
-Xác nhận rằng triển khai khớp với các tạo phẩm thay đổi của bạn. Kiểm tra tính đầy đủ, chính xác và nhất quán.
+Xác thực rằng việc triển khai khớp với các tác phẩm thay đổi của bạn. Kiểm tra tính đầy đủ, tính chính xác và sự mạch lạc.
 
 **Cú pháp:**
 ```
-/opsx:verify [tên-thay-đổi]
+/opsx:verify [change-name]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Thay đổi nào cần xác minh (suy ra từ ngữ cảnh nếu không cung cấp) |
+| `change-name` | Không | Thay đổi nào cần xác minh (sẽ được suy luận từ ngữ cảnh nếu không cung cấp) |
 
-**Chức năng:**
-- Kiểm tra ba chiều của chất lượng triển khai
-- Tìm kiếm codebase để tìm bằng chứng triển khai
-- Báo cáo các vấn đề được phân loại là QUAN TRỌNG, CẢNH BÁO hoặc ĐỀ XUẤT
-- Không chặn lưu trữ, nhưng nêu ra các vấn đề
+**Nó làm gì:**
+- Kiểm tra ba khía cạnh chất lượng triển khai
+- Tìm kiếm bằng chứng cứ triển khai trong codebase
+- Báo cáo các vấn đề được phân loại là CRITICAL, WARNING hoặc SUGGESTION
+- Không chặn việc lưu trữ (archive), nhưng sẽ hiển thị các vấn đề
 
-**Các chiều xác minh:**
+**Các chiều kích thước xác minh:**
 
-| Chiều | Nội dung xác nhận |
+| Chiều kích thước | Nó xác thực điều gì |
 |-----------|-------------------|
-| **Tính đầy đủ** | Tất cả tác vụ đã hoàn thành, tất cả yêu cầu đã triển khai, các kịch bản được đề cập |
-| **Tính chính xác** | Triển khai khớp với ý định của đặc tả, xử lý các trường hợp biên |
-| **Tính nhất quán** | Các quyết định thiết kế được phản ánh trong code, mẫu nhất quán |
+| **Completeness** | Tất cả nhiệm vụ đã hoàn thành, tất cả yêu cầu đã được triển khai, kịch bản đã được bao phủ |
+| **Correctness** | Triển khai khớp với ý định của spec, các trường hợp biên (edge cases) đã được xử lý |
+| **Coherence** | Các quyết định thiết kế phản ánh trong mã, các mẫu (patterns) nhất quán |
 
 **Ví dụ:**
 ```
-Bạn: /opsx:verify
+You: /opsx:verify
 
-AI:  Đang xác minh add-dark-mode...
+AI:  Verifying add-dark-mode...
 
-     TÍNH ĐẦY ĐỦ
-     ✓ Tất cả 8 tác vụ trong tasks.md đã được đánh dấu
-     ✓ Tất cả yêu cầu trong specs có code tương ứng
-     ⚠ Kịch bản "Phát hiện tùy chọn hệ thống" không có bảo mật kiểm thử
+     COMPLETENESS
+     ✓ All 8 tasks in tasks.md are checked
+     ✓ All requirements in specs have corresponding code
+     ⚠ Scenario "System preference detection" has no test coverage
 
-     TÍNH CHÍNH XÁC
-     ✓ Triển khai khớp với ý định của đặc tả
-     ✓ Các trường hợp biên từ kịch bản được xử lý
-     ✓ Trạng thái lỗi khớp với định nghĩa đặc tả
+     CORRECTNESS
+     ✓ Implementation matches spec intent
+     ✓ Edge cases from scenarios are handled
+     ✓ Error states match spec definitions
 
-     TÍNH NHẤT QUÁN
-     ✓ Các quyết định thiết kế được phản ánh trong cấu trúc code
-     ✓ Quy ước đặt tên nhất quán với design.md
-     ⚠ Thiết kế đề cập "CSS variables" nhưng triển khai sử dụng lớp Tailwind
+     COHERENCE
+     ✓ Design decisions reflected in code structure
+     ✓ Naming conventions consistent with design.md
+     ⚠ Design mentions "CSS variables" but implementation uses Tailwind classes
 
-     TÓM TẮT
+     SUMMARY
      ─────────────────────────────
-     Vấn đề nghiêm trọng: 0
-     Cảnh báo: 2
-     Sẵn sàng lưu trữ: Có (có cảnh báo)
+     Critical issues: 0
+     Warnings: 2
+     Ready to archive: Yes (with warnings)
 
-     Đề xuất:
-     1. Thêm kiểm thử cho phát hiện tùy chọn hệ thống
-     2. Cập nhật design.md để phản ánh việc sử dụng Tailwind, hoặc tái cấu trúc để sử dụng CSS variables
+     Recommendations:
+     1. Add test for system preference detection
+     2. Update design.md to reflect Tailwind usage, or refactor to use CSS variables
 ```
 
 **Mẹo:**
-- Chạy trước khi lưu trữ để phát hiện sớm sự không khớp
-- Cảnh báo không chặn lưu trữ nhưng chỉ ra các vấn đề tiềm ẩn
-- Phù hợp để xem xét công việc của AI trước khi cam kết
-- Có thể phát hiện sự trôi dạt giữa tạo phẩm và triển khai
+- Chạy trước khi lưu trữ để bắt các sự không khớp sớm
+- Cảnh báo (Warnings) không chặn việc lưu trữ nhưng cho biết có vấn đề tiềm ẩn
+- Tốt cho việc xem xét công việc của AI trước khi cam kết
+- Có thể tiết lộ sự sai lệch giữa các tác phẩm và triển khai
 
 ---
 
 ### `/opsx:sync`
 
-**Lệnh tùy chọn.** Hợp nhất các đặc tả delta từ một thay đổi vào đặc tả chính. Lưu trữ sẽ nhắc đồng bộ nếu cần, vì vậy bạn thường không cần chạy lệnh này thủ công.
+**Lệnh tùy chọn.** Hợp nhất các spec delta từ một thay đổi vào các spec chính. Archive sẽ nhắc đồng bộ nếu cần, vì vậy bạn thường không cần chạy lệnh này thủ công.
 
 **Cú pháp:**
 ```
-/opsx:sync [tên-thay-đổi]
+/opsx:sync [change-name]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Thay đổi nào cần đồng bộ (suy ra từ ngữ cảnh nếu không cung cấp) |
+| `change-name` | Không | Thay đổi nào cần đồng bộ (sẽ được suy luận từ ngữ cảnh nếu không cung cấp) |
 
-**Chức năng:**
-- Đọc các đặc tả delta từ thư mục thay đổi
+**Nó làm gì:**
+- Đọc các spec delta từ thư mục thay đổi
 - Phân tích các phần ADDED/MODIFIED/REMOVED/RENAMED
 - Hợp nhất các thay đổi vào thư mục `openspec/specs/` chính
 - Bảo toàn nội dung hiện có không được đề cập trong delta
-- Không lưu trữ thay đổi (vẫn hoạt động)
+- Không lưu trữ (archive) thay đổi (vẫn còn hoạt động)
 
 **Ví dụ:**
 ```text
-Bạn: /opsx:sync
+You: /opsx:sync
 
-AI:  Đang đồng bộ đặc tả delta add-dark-mode...
+AI:  Syncing add-dark-mode delta specs...
 
-     Đang đọc: openspec/changes/add-dark-mode/specs/ui/spec.md
-     Mục tiêu:  openspec/specs/ui/spec.md
+     Reading: openspec/changes/add-dark-mode/specs/ui/spec.md
+     Target:  openspec/specs/ui/spec.md
 
-     Các thay đổi cần áp dụng:
-     ✓ ADDED: Yêu cầu Chọn giao diện (2 kịch bản)
-     ✓ ADDED: Yêu cầu Khả năng truy cập (1 kịch bản)
+     Changes to apply:
+     ✓ ADDED: Theme Selection requirement (2 scenarios)
+     ✓ ADDED: Accessibility requirement (1 scenario)
 
-     Đang hợp nhất...
-     ✓ openspec/specs/ui/spec.md đã được cập nhật
+     Merging...
+     ✓ openspec/specs/ui/spec.md updated
 
-     Thay đổi vẫn hoạt động. Chạy /opsx:archive khi sẵn sàng hoàn thành.
+     Change remains active. Run /opsx:archive when ready to complete.
 ```
 
-**Khi nào sử dụng thủ công:**
+**Khi nào nên sử dụng thủ công:**
 
-| Kịch bản | Sử dụng sync? |
+| Kịch bản | Có cần sync không? |
 |----------|-----------|
-| Thay đổi chạy dài, muốn đặc tả ở bản chính trước khi lưu trữ | Có |
-| Nhiều thay đổi song song cần đặc tả cơ sở được cập nhật | Có |
-| Muốn xem trước/xem xét việc hợp nhất riêng biệt | Có |
-| Thay đổi nhanh, đi thẳng đến lưu trữ | Không (lưu trữ xử lý) |
+| Thay đổi kéo dài, muốn có spec trong chính trước khi lưu trữ | Có |
+| Nhiều thay đổi song song cần các spec cơ sở đã được cập nhật | Có |
+| Muốn xem trước/xem xét việc hợp nhất một cách riêng biệt | Có |
+| Thay đổi nhanh, đi thẳng đến archive | Không (archive sẽ xử lý) |
 
 **Mẹo:**
-- Đồng bộ thông minh, không phải sao chép-dán
-- Có thể thêm kịch bản vào các yêu cầu hiện có mà không trùng lặp
-- Thay đổi vẫn hoạt động sau khi đồng bộ (không được lưu trữ)
-- Hầu hết người dùng sẽ không bao giờ cần gọi trực tiếp lệnh này—lưu trữ sẽ nhắc nếu cần
+- Sync là thông minh, không phải sao chép
+- Có thể thêm các kịch bản vào các yêu cầu hiện có mà không cần trùng lặp
+- Thay đổi vẫn còn hoạt động sau khi sync (không được lưu trữ)
+- Hầu hết người dùng sẽ không bao giờ cần gọi trực tiếp lệnh này—archive sẽ nhắc nếu cần
 
 ---
 
 ### `/opsx:archive`
 
-Lưu trữ một thay đổi đã hoàn thành. Hoàn tất thay đổi và di chuyển nó vào thư mục lưu trữ.
+Lưu trữ một thay đổi đã hoàn thành. Hoàn thiện thay đổi và di chuyển nó đến thư mục archive.
 
 **Cú pháp:**
 ```
-/opsx:archive [tên-thay-đổi]
+/opsx:archive [change-name]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Thay đổi nào cần lưu trữ (suy ra từ ngữ cảnh nếu không cung cấp) |
+| `change-name` | Không | Thay đổi nào cần lưu trữ (sẽ được suy luận từ ngữ cảnh nếu không cung cấp) |
 
-**Chức năng:**
-- Kiểm tra trạng thái hoàn thành của tạo phẩm
-- Kiểm tra hoàn thành tác vụ (cảnh báo nếu chưa hoàn thành)
-- Đề xuất đồng bộ đặc tả delta nếu chưa được đồng bộ
-- Di chuyển thư mục thay đổi sang `openspec/changes/archive/YYYY-MM-DD-<tên>/`
-- Bảo toàn tất cả tạo phẩm để kiểm tra
+**Nó làm gì:**
+- Kiểm tra trạng thái hoàn thành của tác phẩm
+- Kiểm tra việc hoàn thành nhiệm vụ (cảnh báo nếu chưa hoàn thành)
+- Đề nghị đồng bộ delta specs nếu chưa được đồng bộ
+- Di chuyển thư mục thay đổi đến `openspec/changes/archive/YYYY-MM-DD-<name>/`
+- Bảo toàn tất cả các tác phẩm để truy vết kiểm toán
 
 **Ví dụ:**
 ```text
-Bạn: /opsx:archive
+You: /opsx:archive
 
-AI:  Đang lưu trữ add-dark-mode...
+AI:  Archiving add-dark-mode...
 
-     Trạng thái tạo phẩm:
-     ✓ proposal.md tồn tại
-     ✓ specs/ tồn tại
-     ✓ design.md tồn tại
-     ✓ tasks.md tồn tại (8/8 tác vụ hoàn thành)
+     Artifact status:
+     ✓ proposal.md exists
+     ✓ specs/ exists
+     ✓ design.md exists
+     ✓ tasks.md exists (8/8 tasks complete)
 
-     Đặc tả delta: Chưa được đồng bộ
-     → Đồng bộ ngay? (khuyến nghị)
+     Delta specs: Not yet synced
+     → Sync now? (recommended)
 
-Bạn: Có
+You: Yes
 
-AI:  ✓ Đã đồng bộ specs vào openspec/specs/ui/spec.md
-     ✓ Đã di chuyển đến openspec/changes/archive/2025-01-24-add-dark-mode/
+AI:  ✓ Synced specs to openspec/specs/ui/spec.md
+     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
 
-     Thay đổi đã được lưu trữ thành công.
+     Change archived successfully.
 ```
 
 **Mẹo:**
-- Lưu trữ sẽ không chặn các tác vụ chưa hoàn thành, nhưng sẽ cảnh báo
-- Đặc tả delta có thể được đồng bộ trong quá trình lưu trữ hoặc trước đó
-- Các thay đổi đã lưu trữ được bảo toàn để lịch sử
-- Sử dụng `/opsx:verify` trước để phát hiện vấn đề
+- Archive sẽ không chặn nếu nhiệm vụ chưa hoàn thành, nhưng sẽ cảnh báo
+- Delta specs có thể được đồng bộ trong quá trình archive hoặc trước đó
+- Các thay đổi đã lưu trữ được bảo toàn cho lịch sử
+- Sử dụng `/opsx:verify` trước để bắt các vấn đề
 
 ---
 
 ### `/opsx:bulk-archive`
 
-Lưu trữ nhiều thay đổi đã hoàn thành cùng một lúc. Xử lý xung đột đặc tả giữa các thay đổi.
+Lưu trữ nhiều thay đổi đã hoàn thành cùng một lúc. Xử lý xung đột spec giữa các thay đổi.
 
 **Cú pháp:**
 ```
-/opsx:bulk-archive [tên-thay-đổi...]
+/opsx:bulk-archive [change-names...]
 ```
 
 **Đối số:**
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Các thay đổi cụ thể cần lưu trữ (sẽ nhắc chọn nếu không cung cấp) |
+| `change-names` | Không | Các thay đổi cụ thể cần lưu trữ (sẽ được nhắc chọn nếu không cung cấp) |
 
-**Chức năng:**
+**Nó làm gì:**
 - Liệt kê tất cả các thay đổi đã hoàn thành
-- Xác nhận từng thay đổi trước khi lưu trữ
-- Phát hiện xung đột đặc tả giữa các thay đổi
-- Giải quyết xung đột bằng cách kiểm tra những gì thực sự đã triển khai
+- Xác thực từng thay đổi trước khi lưu trữ
+- Phát hiện xung đột spec giữa các thay đổi
+- Giải quyết xung đột bằng cách kiểm tra những gì thực sự được triển khai
 - Lưu trữ theo thứ tự thời gian
 
 **Ví dụ:**
 ```
-Bạn: /opsx:bulk-archive
+You: /opsx:bulk-archive
 
-AI:  Tìm thấy 3 thay đổi đã hoàn thành:
-     - add-dark-mode (8/8 tác vụ hoàn thành)
-     - fix-login-bug (3/3 tác vụ hoàn thành)
-     - update-footer (2/2 tác vụ hoàn thành)
+AI:  Found 3 completed changes:
+     - add-dark-mode (8/8 tasks complete)
+     - fix-login-bug (3/3 tasks complete)
+     - update-footer (2/2 tasks complete)
 
-     Đang kiểm tra xung đột đặc tả...
-     ⚠ add-dark-mode và update-footer đều chạm vào specs/ui/
+     Checking for spec conflicts...
+     ⚠ add-dark-mode and update-footer both touch specs/ui/
 
-     Đang kiểm tra codebase để giải quyết...
-     Cả hai thay đổi đều đã được triển khai. Sẽ hợp nhất theo thứ tự thời gian:
-     1. add-dark-mode (tạo ngày 20 tháng 1)
-     2. update-footer (tạo ngày 22 tháng 1)
+     Inspecting codebase to resolve...
+     Both changes are implemented. Will merge in chronological order:
+     1. add-dark-mode (created Jan 20)
+     2. update-footer (created Jan 22)
 
-     Lưu trữ tất cả 3 thay đổi?
+     Archive all 3 changes?
 
-Bạn: Có
+You: Yes
 
-AI:  ✓ Đã lưu trữ add-dark-mode
-     ✓ Đã lưu trữ fix-login-bug
-     ✓ Đã lưu trữ update-footer
-     Đặc tả đã hợp nhất: add-dark-mode → update-footer
+AI:  ✓ Archived add-dark-mode
+     ✓ Archived fix-login-bug
+     ✓ Archived update-footer
+     Specs merged: add-dark-mode → update-footer
 ```
 
 **Mẹo:**
-- Phù hợp cho các luồng công việc song công
-- Giải quyết xung đột là tác vụ tự động (kiểm tra codebase)
+- Tốt cho các luồng công việc song song
+- Giải quyết xung đột là hành động của agent (kiểm tra codebase)
 - Các thay đổi được lưu trữ theo thứ tự tạo
-- Nhắc trước khi ghi đè nội dung đặc tả
+- Nhắc trước khi ghi đè nội dung spec
 
 ---
 
 ### `/opsx:onboard`
 
-Hướng dẫn làm quen qua toàn bộ quy trình làm việc OpenSpec. Một hướng dẫn tương tác sử dụng codebase thực tế của bạn.
+Hướng dẫn onboarding qua toàn bộ quy trình OpenSpec. Một bài hướng dẫn tương tác sử dụng codebase thực tế của bạn.
 
 **Cú pháp:**
 ```
 /opsx:onboard
 ```
 
-**Chức năng:**
-- Hướng dẫn qua một chu kỳ quy trình làm việc hoàn chỉnh với lời giải thích
-- Quét codebase của bạn để tìm cơ hội cải tiến thực tế
-- Tạo một thay đổi thực tế với các tạo phẩm thực tế
+**Nó làm gì:**
+- Đi qua một chu kỳ quy trình hoàn chỉnh với lời tường thuật
+- Quét codebase để tìm các cơ hội cải tiến thực sự
+- Tạo một thay đổi thực tế với các tác phẩm thực tế
 - Triển khai công việc thực tế (các thay đổi nhỏ, an toàn)
 - Lưu trữ thay đổi đã hoàn thành
 - Giải thích từng bước khi nó xảy ra
 
 **Các giai đoạn:**
 1. Chào mừng và phân tích codebase
-2. Tìm cơ hội cải tiến
-3. Tạo thay đổi (`/opsx:new`)
-4. Viết đề xuất
-5. Tạo đặc tả
-6. Viết thiết kế
-7. Tạo tác vụ
-8. Triển khai tác vụ (`/opsx:apply`)
+2. Tìm một cơ hội cải tiến
+3. Tạo một thay đổi (`/opsx:new`)
+4. Viết proposal
+5. Tạo specs
+6. Viết thiết kế (design)
+7. Tạo tasks
+8. Triển khai tasks (`/opsx:apply`)
 9. Xác minh triển khai
 10. Lưu trữ thay đổi
 11. Tóm tắt và các bước tiếp theo
 
 **Ví dụ:**
 ```
-Bạn: /opsx:onboard
+You: /opsx:onboard
 
-AI:  Chào mừng đến với OpenSpec!
+AI:  Welcome to OpenSpec!
 
-     Tôi sẽ hướng dẫn bạn qua toàn bộ quy trình làm việc sử dụng codebase thực tế của bạn.
-     Chúng ta sẽ tìm thứ gì đó nhỏ để cải thiện, tạo một thay đổi đúng đắn cho nó,
-     triển khai nó và lưu trữ nó.
+     I'll walk you through the complete workflow using your actual codebase.
+     We'll find something small to improve, create a proper change for it,
+     implement it, and archive it.
 
-     Để tôi quét codebase của bạn để tìm cơ hội...
+     Let me scan your codebase for opportunities...
 
-     [Phân tích codebase]
+     [Analyzes codebase]
 
-     Tôi tìm thấy một vài thứ chúng ta có thể làm việc:
-     1. Thêm xác thực đầu vào cho biểu mẫu liên hệ
-     2. Cải thiện thông báo lỗi trong luồng xác thực
-     3. Thêm trạng thái tải cho các nút bất đồng bộ
+     I found a few things we could work on:
+     1. Add input validation to the contact form
+     2. Improve error messages in the auth flow
+     3. Add loading states to async buttons
 
-     Bạn quan tâm đến điều nào? (hoặc đề xuất điều gì khác)
+     Which interests you? (or suggest something else)
 ```
 
 **Mẹo:**
-- Phù hợp nhất cho người dùng mới học quy trình làm việc
-- Sử dụng code thực, không phải ví dụ mẫu
-- Tạo một thay đổi thực tế bạn có thể giữ hoặc loại bỏ
-- Mất 15-30 phút để hoàn thành
+- Tốt nhất cho người dùng mới học quy trình làm việc
+- Sử dụng mã thực tế, không phải ví dụ đồ chơi
+- Tạo một thay đổi thực sự mà bạn có thể giữ lại hoặc loại bỏ
+- Mất khoảng 15-30 phút để hoàn thành
 
----
-
-## Cú pháp lệnh theo công cụ AI
+## Cú pháp Lệnh theo Công cụ AI
 
 Các công cụ AI khác nhau sử dụng cú pháp lệnh hơi khác nhau. Hãy sử dụng định dạng phù hợp với công cụ của bạn:
 
-| Công cụ | Ví dụ cú pháp |
-|---------|----------------|
+| Tool | Syntax Example |
+|------|----------------|
 | Claude Code | `/opsx:propose`, `/opsx:apply` |
 | Cursor | `/opsx-propose`, `/opsx-apply` |
 | Windsurf | `/opsx-propose`, `/opsx-apply` |
 | Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
-| Kimi CLI | Các lệnh gọi dựa trên kỹ năng như `/skill:openspec-propose`, `/skill:openspec-apply-change` (không tạo các tệp lệnh `opsx-*`) |
-| Trae | Các lệnh gọi dựa trên kỹ năng như `/openspec-propose`, `/openspec-apply-change` (không tạo các tệp lệnh `opsx-*`) |
+| Kimi CLI | Skill-based invocations such as `/skill:openspec-propose`, `/skill:openspec-apply-change` (no generated `opsx-*` command files) |
+| Trae | Skill-based invocations such as `/openspec-propose`, `/openspec-apply-change` (no generated `opsx-*` command files) |
 
-Mục đích là như nhau trên tất cả các công cụ, nhưng cách lệnh được hiển thị có thể khác nhau tùy theo tích hợp.
+Mục đích là như nhau trên tất cả các công cụ, nhưng cách hiển thị lệnh có thể khác tùy thuộc vào tích hợp.
 
-> **Lưu ý:** Các lệnh của GitHub Copilot (`.github/prompts/*.prompt.md`) chỉ có sẵn trong các phần mở rộng IDE (VS Code, JetBrains, Visual Studio). GitHub Copilot CLI hiện không hỗ trợ các tệp lệnh tùy chỉnh — xem [Các công cụ được hỗ trợ](supported-tools.md) để biết chi tiết và cách giải quyết.
+> **Lưu ý:** Các lệnh của GitHub Copilot (`.github/prompts/*.prompt.md`) chỉ khả dụng trong các tiện ích mở rộng IDE (VS Code, JetBrains, Visual Studio). GitHub Copilot CLI hiện không hỗ trợ các tệp prompt tùy chỉnh — hãy xem [Supported Tools](supported-tools.md) để biết chi tiết và các giải pháp thay thế.
 
 ---
 
-## Các lệnh cũ
+## Lệnh Cũ (Legacy)
 
-Các lệnh này sử dụng quy trình làm việc cũ "tất cả cùng một lúc". Chúng vẫn hoạt động nhưng các lệnh OPSX được khuyến nghị sử dụng.
+Các lệnh này sử dụng quy trình làm việc "tất cả cùng một lúc" cũ hơn. Chúng vẫn hoạt động nhưng các lệnh OPSX được khuyến nghị.
 
-| Lệnh | Chức năng |
+| Command | What it does |
 |---------|--------------|
-| `/openspec:proposal` | Tạo tất cả các thành phần cùng một lúc (đề xuất, thông số kỹ thuật, thiết kế, nhiệm vụ) |
+| `/openspec:proposal` | Tạo tất cả các tài sản cùng một lúc (đề xuất, thông số kỹ thuật, thiết kế, nhiệm vụ) |
 | `/openspec:apply` | Triển khai thay đổi |
 | `/openspec:archive` | Lưu trữ thay đổi |
 
 **Khi nào nên sử dụng các lệnh cũ:**
 - Các dự án hiện có đang sử dụng quy trình làm việc cũ
-- Các thay đổi đơn giản mà bạn không cần tạo thành phần tăng dần
-- Ưu tiên cách tiếp cận "được ăn cả, ngã về không"
+- Các thay đổi đơn giản mà bạn không cần tạo tài sản tăng dần
+- Ưu tiên phương pháp tiếp cận tất cả hoặc không gì
 
-**Chuyển sang OPSX:**
-Các thay đổi cũ có thể được tiếp tục bằng các lệnh OPSX. Cấu trúc thành phần là tương thích.
+**Chuyển đổi sang OPSX:**
+Các thay đổi cũ vẫn có thể được thực hiện bằng các lệnh OPSX. Cấu trúc tài sản là tương thích.
 
 ---
 
 ## Khắc phục sự cố
 
-### "Không tìm thấy thay đổi"
+### "Change not found" (Không tìm thấy thay đổi)
 
-Lệnh không thể xác định thay đổi nào cần làm việc.
-
-**Giải pháp:**
-- Chỉ rõ tên thay đổi một cách tường minh: `/opsx:apply add-dark-mode`
-- Kiểm tra xem thư mục thay đổi có tồn tại không: `openspec list`
-- Xác minh bạn đang ở đúng thư mục dự án
-
-### "Không có thành phần sẵn sàng"
-
-Tất cả các thành phần đã hoàn thành hoặc bị chặn do thiếu phụ thuộc.
+Lệnh không thể xác định thay đổi nào để xử lý.
 
 **Giải pháp:**
-- Chạy `openspec status --change <name>` để xem điều gì đang chặn
-- Kiểm tra xem các thành phần bắt buộc có tồn tại không
-- Tạo trước các thành phần phụ thuộc bị thiếu
+- Chỉ định rõ tên thay đổi: `/opsx:apply add-dark-mode`
+- Kiểm tra xem thư mục thay đổi có tồn tại hay không: `openspec list`
+- Xác minh rằng bạn đang ở trong đúng thư mục dự án
 
-### "Không tìm thấy lược đồ"
+### "No artifacts ready" (Không có tài sản nào sẵn sàng)
 
-Lược đồ được chỉ định không tồn tại.
+Tất cả các tài sản đều đã hoàn thành hoặc bị chặn bởi các phụ thuộc còn thiếu.
 
 **Giải pháp:**
-- Liệt kê các lược đồ có sẵn: `openspec schemas`
-- Kiểm tra chính tả của tên lược đồ
-- Tạo lược đồ nếu nó là tùy chỉnh: `openspec schema init <name>`
+- Chạy `openspec status --change <name>` để xem cái gì đang gây tắc nghẽn
+- Kiểm tra xem các tài sản cần thiết có tồn tại không
+- Tạo trước các tài sản phụ thuộc còn thiếu
 
-### Lệnh không được nhận dạng
+### "Schema not found" (Không tìm thấy schema)
 
-Công cụ AI không nhận dạng các lệnh OpenSpec.
+Schema được chỉ định không tồn tại.
+
+**Giải pháp:**
+- Liệt kê các schema khả dụng: `openspec schemas`
+- Kiểm tra chính tả tên schema
+- Tạo schema nếu nó là tùy chỉnh: `openspec schema init <name>`
+
+### Commands not recognized (Các lệnh không được nhận diện)
+
+Công cụ AI không nhận ra các lệnh OpenSpec.
 
 **Giải pháp:**
 - Đảm bảo OpenSpec đã được khởi tạo: `openspec init`
-- Tạo lại các kỹ năng: `openspec update`
+- Tái tạo lại skills: `openspec update`
 - Kiểm tra xem thư mục `.claude/skills/` có tồn tại không (đối với Claude Code)
-- Khởi động lại công cụ AI của bạn để nhận các kỹ năng mới
+- Khởi động lại công cụ AI của bạn để nhận các skills mới
 
-### Thành phần không được tạo đúng cách
+### Artifacts not generating properly (Tài sản không được tạo đúng cách)
 
-AI tạo ra các thành phần không đầy đủ hoặc không chính xác.
+AI tạo ra các tài sản không đầy đủ hoặc không chính xác.
 
 **Giải pháp:**
-- Thêm ngữ cảnh dự án trong `openspec/config.yaml`
-- Thêm các quy tắc cho từng thành phần cụ thể để được hướng dẫn chi tiết
+- Thêm ngữ cảnh dự án vào `openspec/config.yaml`
+- Thêm các quy tắc cho từng tài sản để có hướng dẫn cụ thể
 - Cung cấp thêm chi tiết trong mô tả thay đổi của bạn
-- Sử dụng `/opsx:continue` thay vì `/opsx:ff` để có nhiều quyền kiểm soát hơn
+- Sử dụng `/opsx:continue` thay vì `/opsx:ff` để kiểm soát tốt hơn
 
 ---
 
-## Các bước tiếp theo
+## Các Bước Tiếp Theo
 
-- [Quy trình làm việc](workflows.md) - Các mẫu phổ biến và khi nào nên sử dụng mỗi lệnh
-- [CLI](cli.md) - Các lệnh dòng lệnh để quản lý và xác thực
-- [Tùy chỉnh](customization.md) - Tạo lược đồ và quy trình làm việc tùy chỉnh
+- [Workflows](workflows.md) - Các mẫu phổ biến và khi nào nên sử dụng từng lệnh
+- [CLI](cli.md) - Các lệnh Terminal để quản lý và xác thực
+- [Customization](customization.md) - Tạo các schema và quy trình làm việc tùy chỉnh

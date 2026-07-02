@@ -1,16 +1,43 @@
-# Başlarken
+# Başlangıç
 
-Bu kılavuz, OpenSpec'i yükledikten ve başlattıktan sonra nasıl çalıştığını açıklar. Kurulum talimatları için [ana README](index.md#quick-start) sayfasına bakın.
+Bu kılavuz, OpenSpec'in kurulup başlatıldıktan sonra nasıl çalıştığını açıklamaktadır. Kurulum talimatları için [ana README](../index.md#quick-start) veya [Kurulum rehberine](installation.md) bakınız. Tüm dokümantasyon setine yeni misiniz? [Dokümantasyon ana sayfası](index.md) her şeyi haritalandırır.
 
-## Nasıl Çalışır
+> **Bu komutları nereye yazıyorum?** İki yere, ve bunları karıştırmak en yaygın ilk hatadır.
+>
+> - `openspec ...` komutları (örneğin `openspec init`) **terminalinizde** çalışır.
+> - `/opsx:...` komutları (örneğin `/opsx:propose`) **AI asistanınızın sohbetinde** çalışır; kod yazmasını istediğiniz kutu aynıdır.
+>
+> Başlamak için ayrı bir "etkileşim modu" yoktur. Sadece sohbette eğik çizgi komutunu yazarsınız ve asistanınız oradan devam eder. Tam açıklama: [Komutlar Nasıl Çalışır](how-commands-work.md).
 
-OpenSpec, herhangi bir kod yazılmadan önce neyin inşa edileceği konusunda siz ve yapay zeka kodlama asistanınızın anlaşmanıza yardımcı olur.
+## İlk Beş Dakikanız
 
-**Varsayılan hızlı yol (çekirdek profil):**
+Tüm döngü, her adımın nerede gerçekleştiğiyle etiketlenmiştir:
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+TERMINAL   $ npm install -g @fission-ai/openspec@latest
+TERMINAL   $ cd your-project && openspec init
+AI CHAT      /opsx:explore                    (isteğe bağlı: önce düşünün)
+AI CHAT      /opsx:propose add-dark-mode      (AI planı taslaklar; siz gözden geçirirsiniz)
+AI CHAT      /opsx:apply                      (AI inşa eder)
+AI CHAT      /opsx:archive                    (specs güncellendi, değişiklik dosyalandı)
 ```
+
+Kurulum için iki terminal adımı vardır, ardından sohbet ortamında çalışırsınız. Bu kılavuzun geri kalanı her adımın ne yaptığını ve ne göreceğinizi açar.
+
+> **Henüz ne inşa edeceğinizden emin değil misiniz? `/opsx:explore` ile başlayın.** Bu, kod tabanınızı okuyan, seçenekleri tartarak belirsiz bir fikri somut bir plana dönüştüren, herhangi bir eser veya koddan önce çalışan risksiz bir düşünme ortağıdır. Resim netleştiğinde, `/opsx:propose`'a devredilir. Bu, aksi takdirde yanlış şeyi kendinden emin bir şekilde inşa edecek bir AI ile çalışmak için tek en iyi alışkanlıktır. [Explore rehberine](explore.md) bakın.
+
+## Nasıl Çalışıyor
+
+OpenSpec, herhangi bir kod yazılmadan önce sizin ve yapay zeka kodlama asistanınızın neyi inşa edeceğiniz konusunda anlaşmasına yardımcı olur.
+
+**Varsayılan hızlı yol (çekirdek profili):**
+
+```text
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+   (isteğe bağlı)
+```
+
+Ne yapacağınızı bulurken `/opsx:explore` ile başlayın veya zaten biliyorsanız doğrudan `/opsx:propose`'a atlayın. Explore varsayılan profilde olduğundan, istediğiniz zaman oradadır.
 
 **Genişletilmiş yol (özel iş akışı seçimi):**
 
@@ -18,23 +45,23 @@ OpenSpec, herhangi bir kod yazılmadan önce neyin inşa edileceği konusunda si
 /opsx:new ──► /opsx:ff veya /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-Varsayılan global profil `core`'dur ve `propose`, `explore`, `apply`, `sync` ve `archive` komutlarını içerir. Genişletilmiş iş akışı komutlarını `openspec config profile` ve ardından `openspec update` komutlarıyla etkinleştirebilirsiniz.
+Varsayılan küresel profil `core`'dur ve `propose`, `explore`, `apply`, `sync` ve `archive` içerir. Genişletilmiş iş akışı komutlarını `openspec config profile` ve ardından `openspec update` ile etkinleştirebilirsiniz.
 
-## OpenSpec Ne Oluşturur
+## OpenSpec Ne Oluşturur?
 
-`openspec init` komutunu çalıştırdıktan sonra projenizde şu yapı oluşur:
+`openspec init` çalıştırıldıktan sonra projeniz bu yapıya sahiptir:
 
 ```
 openspec/
-├── specs/              # Doğruluk kaynağı (sisteminizin davranışı)
+├── specs/              # Gerçek kaynak (sisteminizin davranışı)
 │   └── <domain>/
 │       └── spec.md
-├── changes/            # Önerilen güncellemeler (her değişiklik için bir klasör)
+├── changes/            # Önerilen güncellemeler (değişiklik başına bir klasör)
 │   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Delta spesifikasyonları (ne değişiyor)
+│       └── specs/      # Delta specs (ne değişiyor)
 │           └── <domain>/
 │               └── spec.md
 └── config.yaml         # Proje yapılandırması (isteğe bağlı)
@@ -42,22 +69,22 @@ openspec/
 
 **İki ana dizin:**
 
-- **`specs/`** - Doğruluk kaynağı. Bu spesifikasyonlar sisteminizin şu anki davranışını tanımlar. Alana göre organize edilir (ör. `specs/auth/`, `specs/payments/`).
+- **`specs/`** - Gerçek kaynak. Bu specs, sisteminizin şu anda nasıl davrandığını açıklar. Alan (örneğin, `specs/auth/`, `specs/payments/`) bazında düzenlenmiştir.
 
-- **`changes/`** - Önerilen değişiklikler. Her değişiklik, tüm ilgili eserlerle birlikte kendi klasörünü alır. Bir değişiklik tamamlandığında, spesifikasyonları ana `specs/` dizinine birleşir.
+- **`changes/`** - Önerilen değişiklikler. Her değişiklik, ilgili tüm artefaktlarla kendi klasörünü alır. Bir değişiklik tamamlandığında, specs ana `specs/` dizinine birleştirilir.
 
-## Eserlerin Anlaşılması
+## Artefaktları Anlamak
 
-Her değişiklik klasörü, çalışmayı yönlendiren eserler içerir:
+Her değişiklik klasörü, çalışmayı yönlendiren artefaktlar içerir:
 
-| Eser | Amaç |
-|------|------|
-| `proposal.md` | "Neden" ve "ne" - amacı, kapsamı ve yaklaşımı yakalar |
-| `specs/` | EKLENEN/DEĞİŞTİRİLEN/KALDIRILAN gereksinimleri gösteren delta spesifikasyonları |
+| Artefakt | Amaç |
+|----------|---------|
+| `proposal.md` | "Neden" ve "ne" - niyeti, kapsamı ve yaklaşımı yakalar |
+| `specs/` | EKlenen/DEĞİŞTİRİLEN/KALDIRILAN gereksinimleri gösteren Delta specs |
 | `design.md` | "Nasıl" - teknik yaklaşım ve mimari kararlar |
-| `tasks.md` | Onay kutuları ile uygulama kontrol listesi |
+| `tasks.md` | Kontrol kutucuklu uygulama kontrol listesi |
 
-**Eserler birbirinin üzerine inşa edilir:**
+**Artefaktlar birbirine dayanır:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
@@ -66,39 +93,39 @@ proposal ──► specs ──► design ──► tasks ──► implement
             öğrendikçe güncelle
 ```
 
-Uygulama sırasında daha fazla şey öğrendikçe her zaman geri dönüp önceki eserleri iyileştirebilirsiniz.
+Uygulama sırasında daha fazla şey öğrendikçe her zaman önceki artefaktları geri dönüp iyileştirebilirsiniz.
 
-## Delta Spesifikasyonları Nasıl Çalışır
+## Delta Specs Nasıl Çalışır?
 
-Delta spesifikasyonları, OpenSpec'in temel kavramıdır. Mevcut spesifikasyonlarınıza göre neyin değiştiğini gösterirler.
+Delta specs, OpenSpec'teki ana kavramdır. Mevcut specs'inize göre neyin değiştiğini gösterirler.
 
-### Biçim
+### Format
 
-Delta spesifikasyonları, değişiklik türünü belirtmek için bölümler kullanır:
+Delta specs, değişiklik türünü belirtmek için bölümler kullanır:
 
 ```markdown
-# Auth için Delta
+# Auth İçin Delta
 
-## EKLENEN Gereksinimler
+## EKlenen Gereksinimler
 
 ### Gereksinim: İki Faktörlü Kimlik Doğrulama
-Sistem, giriş sırasında ikinci bir faktör ZORUNLU kılmalıdır.
+Sistem, giriş sırasında ikinci bir faktör gerektirmelidir.
 
 #### Senaryo: OTP gerekli
-- 2FA etkin bir kullanıcı VERİLDİĞİNDE
-- Kullanıcı geçerli kimlik bilgilerini GÖNDERDİĞİNDE
-- BİR OTP mücadelesi SUNULUR
+- VERİLEN: 2FA etkinleştirilmiş bir kullanıcı
+- DÜŞÜNÜLEN: Kullanıcı geçerli kimlik bilgilerini gönderdiğinde
+- SONUÇ: Bir OTP zorluğu sunulur
 
 ## DEĞİŞTİRİLEN Gereksinimler
 
 ### Gereksinim: Oturum Zaman Aşımı
-Sistem, 30 dakikalık hareketsizlikten sonra oturumları SONA ERDİRMELİDİR.
-(Önceden: 60 dakika)
+Sistem, 30 dakika hareketsizlikten sonra oturumları sona erdirmelidir.
+(Önceki: 60 dakika)
 
-#### Senaryo: Boşta kalma zaman aşımı
-- Kimliği doğrulanmış bir oturum VERİLDİĞİNDE
-- Hareketsiz 30 dakika GEÇTİĞİNDE
-- Oturum GEÇERSİZ kılınır
+#### Senaryo: Boşta Kalma zaman aşımı
+- VERİLEN: Kimlik doğrulaması yapılmış bir oturum
+- DÜŞÜNÜLEN: 30 dakika hareketsiz geçildiğinde
+- SONUÇ: Oturum geçersiz kılınır
 
 ## KALDIRILAN Gereksinimler
 
@@ -106,76 +133,74 @@ Sistem, 30 dakikalık hareketsizlikten sonra oturumları SONA ERDİRMELİDİR.
 (2FA lehine kullanımdan kaldırıldı)
 ```
 
-### Arşivlemede Ne Olur
+### Arşivlenirken Ne Olur?
 
 Bir değişikliği arşivlediğinizde:
 
-1. **EKLENEN** gereksinimler ana spesifikasyona eklenir
-2. **DEĞİŞTİRİLEN** gereksinimler mevcut sürümün yerini alır
-3. **KALDIRILAN** gereksinimler ana spesifikasyondan silinir
+1. **EKlenen** gereksinimler ana spec'e eklenir.
+2. **DEĞİŞTİRİLEN** gereksinimler mevcut sürümü değiştirir.
+3. **KALDIRILAN** gereksinimler ana speçten silinir.
 
-Değişiklik klasörü, denetim geçmişi için `openspec/changes/archive/` dizinine taşınır.
+Değişiklik klasörü, denetim geçmişi için `openspec/changes/archive/` konumuna taşınır.
 
 ## Örnek: İlk Değişikliğiniz
 
-Bir uygulamaya karanlık mod eklemeyi adım adım inceleyelim.
+Bir uygulamaya karanlık mod ekleme sürecini inceleyelim.
 
-### 1. Değişikliği Başlat (Varsayılan)
+### 1. Değişikliği Başlatma (Varsayılan)
 
 ```text
 Siz: /opsx:propose add-dark-mode
 
 AI:  openspec/changes/add-dark-mode/ oluşturuldu
-     ✓ proposal.md — neden bunu yapıyoruz, ne değişiyor
+     ✓ proposal.md — neden bunu yaptığımız, ne değişiyor
      ✓ specs/       — gereksinimler ve senaryolar
      ✓ design.md    — teknik yaklaşım
      ✓ tasks.md     — uygulama kontrol listesi
      Uygulamaya hazır!
 ```
 
-Genişletilmiş iş akışı profilini etkinleştirdiyseniz, bunu iki adımda da yapabilirsiniz: `/opsx:new` ardından `/opsx:ff` (veya adım adım `/opsx:continue`).
+Genişletilmiş iş akışı profilini etkinleştirdiyseniz, bunu iki adım olarak da yapabilirsiniz: `/opsx:new` ardından `/opsx:ff` (veya kademeli olarak `/opsx:continue`).
 
-### 2. Neler Oluşturulur
+### 2. Ne Oluşturulur?
 
-**proposal.md** - Amacı yakalar:
+**proposal.md** - Niyeti yakalar:
 
 ```markdown
-# Öneri: Karanlık Mod Ekle
+# Öneri: Karanlık Mod Ekleme
 
 ## Amaç
-Kullanıcılar, gece kullanımı sırasında göz yorgunluğunu azaltmak için
-bir karanlık mod seçeneği talep etti.
+Kullanıcılar, gece kullanımı sırasında göz yorgunluğunu azaltmak için karanlık mod seçeneği talep etti.
 
 ## Kapsam
-- Ayarlara tema geçişi ekle
-- Sistem tercihi algılamasını destekle
-- Tercihi localStorage'da sakla
+- Ayarlarda tema anahtarı ekleme
+- Sistem tercihi algılamayı destekleme
+- Tercihi localStorage'da kalıcı hale getirme
 
 ## Yaklaşım
-Durum yönetimi için bir React context ile temalandırma için
-CSS özel özellikleri kullan.
+Durum yönetimi için bir React bağlamı ile temalandırma amacıyla CSS özel özelliklerini kullanma.
 ```
 
-**specs/ui/spec.md** - Yeni gereksinimleri gösteren delta:
+**specs/ui/spec.md** - Yeni gereksinimleri gösteren Delta:
 
 ```markdown
-# UI için Delta
+# UI İçin Delta
 
-## EKLENEN Gereksinimler
+## EKlenen Gereksinimler
 
 ### Gereksinim: Tema Seçimi
-Sistem, kullanıcıların açık ve karanlık temalar arasında seçim yapmasına İZİN VERMELİDİR.
+Sistem, kullanıcıların açık ve koyu temalar arasında seçim yapmasına izin vermelidir.
 
-#### Senaryo: Manuel geçiş
-- Herhangi bir sayfadaki bir kullanıcı VERİLDİĞİNDE
-- Kullanıcı tema geçişine TIKLADIĞINDA
-- Tema HEMEN değişir
-- VE tercih oturumlar arasında KALICI olur
+#### Senaryo: Manuel anahtar
+- VERİLEN: Herhangi bir sayfadaki bir kullanıcı
+- DÜŞÜNÜLEN: Kullanıcı tema anahtarına tıkladığında
+- SONUÇ: Tema hemen değişir
+- VE tercih oturumlar arasında kalıcı olur
 
 #### Senaryo: Sistem tercihi
-- Kayıtlı tercihi olmayan bir kullanıcı VERİLDİĞİNDE
-- Uygulama YÜKLENDİĞİNDE
-- Sistemin tercih ettiği renk şeması KULLANILIR
+- VERİLEN: Kaydedilmiş tercihi olmayan bir kullanıcı
+- DÜŞÜNÜLEN: Uygulama yüklendiğinde
+- SONUÇ: Sistemin tercih edilen renk şeması kullanılır
 ```
 
 **tasks.md** - Uygulama kontrol listesi:
@@ -184,27 +209,27 @@ Sistem, kullanıcıların açık ve karanlık temalar arasında seçim yapmasın
 # Görevler
 
 ## 1. Tema Altyapısı
-- [ ] 1.1 Açık/karanlık durumlu ThemeContext oluştur
-- [ ] 1.2 Renkler için CSS özel özellikleri ekle
-- [ ] 1.3 localStorage kalıcılığını uygula
+- [ ] 1.1 light/dark durumu ile ThemeContext oluşturma
+- [ ] 1.2 Renklar için CSS özel özelliklerini ekleme
+- [ ] 1.3 localStorage kalıcılığını uygulama
 
 ## 2. UI Bileşenleri
-- [ ] 2.1 ThemeToggle bileşeni oluştur
-- [ ] 2.2 Ayarlar sayfasına geçiş ekle
-- [ ] 2.3 Hızlı geçiş eklemek için Header'ı güncelle
+- [ ] 2.1 ThemeToggle bileşeni oluşturma
+- [ ] 2.2 Ayarlar sayfasına anahtar ekleme
+- [ ] 2.3 Hızlı anahtarı içerecek şekilde Başlığı güncelleme
 
 ## 3. Stil
-- [ ] 3.1 Karanlık tema renk paletini tanımla
-- [ ] 3.2 Bileşenleri CSS değişkenlerini kullanacak şekilde güncelle
+- [ ] 3.1 Koyu tema renk paletini tanımlama
+- [ ] 3.2 Bileşenleri CSS değişkenlerini kullanacak şekilde güncelleme
 ```
 
-### 3. Uygula
+### 3. Uygulama
 
 ```
 Siz: /opsx:apply
 
 AI:  Görevler üzerinde çalışılıyor...
-     ✓ 1.1 Açık/karanlık durumlu ThemeContext oluşturuldu
+     ✓ 1.1 light/dark durumu ile ThemeContext oluşturuldu
      ✓ 1.2 globals.css'e CSS özel özellikleri eklendi
      ✓ 1.3 localStorage kalıcılığı uygulandı
      ✓ 2.1 ThemeToggle bileşeni oluşturuldu
@@ -212,42 +237,49 @@ AI:  Görevler üzerinde çalışılıyor...
      Tüm görevler tamamlandı!
 ```
 
-Uygulama sırasında tasarımın ayarlanması gerektiğini keşfederseniz, eseri güncelleyip devam edin.
+Uygulama sırasında tasarımın ayarlanması gerektiğini keşfederseniz, sadece artefaktı güncelleyin ve devam edin.
 
-### 4. Arşivle
+### 4. Arşivleme
 
 ```
 Siz: /opsx:archive
 
 AI:  add-dark-mode arşivleniyor...
-     ✓ Spesifikasyonlar openspec/specs/ui/spec.md'ye birleştirildi
-     ✓ openspec/changes/archive/2025-01-24-add-dark-mode/ dizinine taşındı
+     ✓ specs openspec/specs/ui/spec.md içine birleştirildi
+     ✓ openspec/changes/archive/2025-01-24-add-dark-mode/ konumuna taşındı
      Bitti! Sonraki özellik için hazır.
 ```
 
-Delta spesifikasyonlarınız artık sisteminizin nasıl çalıştığını belgeleyen ana spesifikasyonların bir parçasıdır.
+Delta specs'iniz artık sisteminizin nasıl çalıştığını belgeleyen ana speçin bir parçasıdır.
 
 ## Doğrulama ve İnceleme
 
-Değişikliklerinizi kontrol etmek için CLI'ı kullanın:
+Değişikliklerinizi kontrol etmek için CLI kullanın:
 
 ```bash
 # Aktif değişiklikleri listele
 openspec list
 
-# Değişiklik ayrıntılarını görüntüle
+# Değişiklik detaylarını görüntüle
 openspec show add-dark-mode
 
-# Spesifikasyon biçimlendirmesini doğrula
+# Spec formatını doğrula
 openspec validate add-dark-mode
 
-# Etkileşimli kontrol paneli
+# Etkileşimli gösterge tablosu
 openspec view
 ```
 
 ## Sonraki Adımlar
 
-- [İş Akışları](workflows.md) - Yaygın kalıplar ve her komutun ne zaman kullanılacağı
-- [Komutlar](commands.md) - Tüm eğik çizgi komutları için tam referans
-- [Kavramlar](concepts.md) - Spesifikasyonlar, değişiklikler ve şemalar hakkında daha derin anlayış
-- [Özelleştirme](customization.md) - OpenSpec'i kendi yolunuzla çalıştırın
+- [Önce Keşfet](explore.md) - Taahhüt vermeden önce bir fikri düşünmek için `/opsx:explore` kullanın
+- [Mevcut Bir Projede OpenSpec Kullanma](existing-projects.md) - Büyük, eski bir kod tabanında başlayın
+- [Bir Değişikliği Düzenleme ve Yineleme](editing-changes.md) - Artefaktları güncelleyin, geri dönün, manuel düzenlemeleri uzlaştırın
+- [Temel Kavramlar Genel Bakışta](overview.md) - Tüm zihinsel model tek bir sayfada
+- [Örnekler ve Tarifler](examples.md) - Gerçek değişiklikler, baştan sona
+- [İş Akışları](workflows.md) - Ortak desenler ve her komutu ne zaman kullanacağınız
+- [Komutlar](commands.md) - Tüm eğik çizgi komutlarının tam referansı
+- [Kavramlar](concepts.md) - Specs, değişiklikler ve şemalar hakkında daha derinlemesine anlayış
+- [Özelleştirme](customization.md) - OpenSpec'i kendi tarzınıza göre yapın
+- [Depolar](stores-beta/user-guide.md) - Tekil depoları veya ekipleri kapsayan planlama mı? Kendi deposunda tutun (beta)
+- [SSS](faq.md) ve [Sorun Giderme](troubleshooting.md) - Takıldığınızda

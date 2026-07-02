@@ -1,540 +1,410 @@
-# CLI リファレンス
+# CLI Reference
 
-OpenSpec CLI (`openspec`) は、プロジェクトのセットアップ、検証、ステータスの確認、管理のためのターミナルコマンドを提供します。これらのコマンドは、[コマンド](commands.md)で文書化されているAIスラッシュコマンド（`/opsx:propose`など）を補完するものです。
+OpenSpec CLI（`openspec`）は、プロジェクトのセットアップ、検証、ステータス検査、および管理のためのターミナルコマンドを提供します。これらのコマンドは、[Commands]（`commands.md`）で文書化されているAIスラッシュコマンド（例：`/opsx:propose`）を補完するものです。
 
-## サマリー
+## 概要
 
-| カテゴリ | コマンド | 目的 |
-|----------|----------|------|
-| **セットアップ** | `init`, `update` | プロジェクト内のOpenSpecの初期化と更新 |
-| **ワークスペース (ベータ)** | `workspace setup`, `workspace list`, `workspace ls`, `workspace link`, `workspace relink`, `workspace doctor`, `workspace update`, `workspace open` | リンクされたリポジトリやフォルダに対するローカルビューをセットアップする |
-| **共有コンテキスト (ベータ)** | `context-store setup`, `context-store register`, `context-store unregister`, `context-store remove`, `context-store list`, `context-store doctor`, `initiative create`, `initiative show`, `initiative list` | ローカルのコンテキストストア登録と永続的なイニシアティブコンテキストを管理する |
-| **閲覧** | `list`, `view`, `show` | 変更や仕様を閲覧する |
-| **検証** | `validate` | 変更や仕様の問題をチェックする |
-| **ライフサイクル** | `archive` | 完了した変更を確定する |
-| **ワークフロー** | `new change`, `set change`, `status`, `instructions`, `templates`, `schemas` | アーティファクト主導のワークフロー支援 |
-| **スキーマ** | `schema init`, `schema fork`, `schema validate`, `schema which` | カスタムワークフローの作成と管理 |
-| **設定** | `config` | 設定の表示と変更 |
-| **ユーティリティ** | `feedback`, `completion` | フィードバックとシェル統合 |
+| カテゴリ | コマンド | 用途 |
+|----------|----------|---------|
+| **Setup** | `init`, `update` | プロジェクトでOpenSpecを初期化および更新します |
+| **Stores (standalone OpenSpec repos)** | `store setup`, `store register`, `store unregister`, `store remove`, `store list`, `store doctor` | 登録済みのスタンドアロンのOpenSpecリポジトリであるストアを管理します |
+| **Health** | `doctor` | 解像されたルートに対する関係の健全性を報告します |
+| **Working context** | `context` | 作業セット（ルート＋参照されているストア）を組み立てます |
+| **Personal worksets** | `workset create`, `workset list`, `workset open`, `workset remove` | ツール内での個人的な、ローカルな作業ビューを保持し、開きます |
+| **Browsing** | `list`, `view`, `show` | 変更点と仕様を閲覧します |
+| **Validation** | `validate` | 変更点と仕様に問題がないか確認します |
+| **Lifecycle** | `archive` | 完了した変更点を確定させます |
+| **Workflow** | `new change`, `status`, `instructions`, `templates`, `schemas` | アーティファクト駆動型のワークフローをサポートします |
+| **Schemas** | `schema init`, `schema fork`, `schema validate`, `schema which` | カスタムワークフローを作成し、管理します |
+| **Config** | `config` | 設定を表示および変更します |
+| **Utility** | `feedback`, `completion` | フィードバックとシェル統合を提供します |
 
----
+## 人間操作とエージェント操作のコマンド
 
-## Human vs Agent Commands
+ほとんどのCLIコマンドは、ターミナルでの**人間による利用**を想定しています。一部のコマンドは、JSON出力経由で**エージェント／スクリプトによる利用**もサポートしています。
 
-ほとんどのCLIコマンドは、ターミナルでの**人間による使用**を想定して設計されています。一部のコマンドは、JSON出力による**エージェント/スクリプトによる使用**もサポートしています。
+### 人間操作専用のコマンド
 
-### Human-Only Commands
+これらのコマンドは対話型であり、ターミナル使用のために設計されています：
 
-これらのコマンドは対話型であり、ターミナルでの使用を想定しています：
-
-| コマンド | 目的 |
+| Command | Purpose |
 |---------|---------|
-| `openspec init` | プロジェクトの初期化 (対話型プロンプト) |
+| `openspec init` | プロジェクトの初期化（対話形式のプロンプト） |
 | `openspec view` | 対話型ダッシュボード |
-| `openspec config edit` | エディタで設定を開く |
-| `openspec feedback` | GitHub経由でフィードバックを送信する |
-| `openspec completion install` | シェル補完をインストールする |
+| `openspec workset open <name>` | 保存されたワークセットを開く（エディタウィンドウまたはターミナルエージェントセッション） |
+| `openspec config edit` | エディタで設定ファイルを開く |
+| `openspec feedback` | GitHub経由でのフィードバック送信 |
+| `openspec completion install` | シェル補完のインストール |
 
-### Agent-Compatible Commands
+### エージェント互換のコマンド
 
-これらのコマンドは、AIエージェントやスクリプトによるプログラム利用のために `--json` 出力をサポートしています：
+これらのコマンドは、AIエージェントおよびスクリプトによるプログラム的な使用のために `--json` 出力をサポートしています：
 
-| コマンド | 人間による使用 | エージェントによる使用 |
+| Command | Human Use | Agent Use |
 |---------|-----------|-----------|
-| `openspec list` | 変更/仕様を参照する | `--json` で構造化データを取得 |
-| `openspec show <item>` | コンテンツを表示する | `--json` で解析用データを取得 |
-| `openspec validate` | 問題を確認する | `--all --json` で一括検証 |
-| `openspec status` | アーティファクトの進捗を表示する | `--json` で構造化されたステータスを取得 |
-| `openspec instructions` | 次のステップを取得する | `--json` でエージェント指示を取得 |
-| `openspec templates` | テンプレートパスを検索する | `--json` でパス解決データを取得 |
-| `openspec schemas` | 利用可能なスキーマを一覧表示する | `--json` でスキーマを発見する |
-| `openspec workspace setup --no-interactive` | 明示的な入力でワークスペースを作成する | `--json` で構造化されたセットアップ出力を取得 |
-| `openspec workspace list` | 既知のワークスペースを参照する | `--json` で型付きワークスペースオブジェクトを取得 |
-| `openspec workspace link` | リポジトリまたはフォルダをリンクする | `--json` で構造化されたリンク出力を取得 |
-| `openspec workspace relink` | リンクされたパスを修復する | `--json` で構造化されたリンク出力を取得 |
-| `openspec workspace doctor` | 1つのワークスペースを確認する | `--json` で構造化されたステータス出力を取得 |
-| `openspec workspace update` | ワークスペースローカルのガイダンスとエージェントスキルを更新する | `--tools` でエージェントを選択; プロファイルがワークフローを選択 |
-| `openspec context-store setup <id>` | ローカルコンテキストストアを作成する | `--json` と明示的な入力で構造化されたセットアップ出力を取得 |
-| `openspec context-store register <path>` | 既存のコンテキストストアを登録する | `--json` で構造化された登録出力を取得 |
-| `openspec context-store unregister <id>` | ローカルコンテキストストアの登録を解除する | `--json` で構造化されたクリーンアップ出力を取得 |
-| `openspec context-store remove <id>` | 登録済みのローカルコンテキストストアフォルダを削除する | `--yes --json` で非対話型削除を実行 |
-| `openspec context-store list` | 登録済みのコンテキストストアを参照する | `--json` で構造化された登録情報を取得 |
-| `openspec context-store doctor` | ローカルストアのセットアップを確認する | `--json` で構造化された診断結果を取得 |
-| `openspec initiative list` | 共有イニシアチブを参照する | `--json` で構造化されたイニシアチブレコードを取得 |
-| `openspec initiative show <id>` | イニシアチブを解決する | `--json` で標準パスとメタデータを取得 |
-| `openspec new change <id>` | リポジトリローカルな変更スキャフォールディングを作成する | `--json`、共有調整リンク用の `--initiative` も使用可能 |
-| `openspec set change <id>` | チェックインされた変更メタデータを更新する | `--json`、共有調整リンク用の `--initiative` も使用可能 |
+| `openspec list` | 変更／仕様の閲覧 | 構造化されたデータのための`--json` |
+| `openspec show <item>` | コンテンツの読み取り | 解析のための`--json` |
+| `openspec validate` | 問題点のチェック | 一括検証のための`--all --json` |
+| `openspec status` | アーティファクトの進捗確認 | 構造化されたステータスのための`--json` |
+| `openspec instructions` | 次のステップを取得 | エージェント指示のための`--json` |
+| `openspec templates` | テンプレートパスの検索 | パス解決のための`--json` |
+| `openspec schemas` | 利用可能なスキーマの一覧表示 | スキーマ発見のための`--json` |
+| `openspec store setup <id>` | ローカルストアの作成と登録 | 構造化された設定出力のための明示的な入力を伴う`--json` |
+| `openspec store register <path>` | 既存ストアの登録 | 構造化された登録出力のための`--json` |
+| `openspec store unregister <id>` | ローカルストア登録の解除 | 構造化されたクリーンアップ出力のための`--json` |
+| `openspec store remove <id>` | 登録されたローカルストアフォルダの削除 | 非対話的な削除のための`--yes --json` |
+| `openspec store list` | 登録済みストアの閲覧 | 構造化された登録のための`--json` |
+| `openspec store doctor` | ローカルストア設定のチェック | 構造化された診断のための`--json` |
+| `openspec new change <id>` | リポジトリローカルな変更スキャフォールドの作成 | `--store <id>` を使用して登録済みストアをOpenSpecルートとして利用するための`--json` |
+| `openspec workset create [name]` | 個人的な作業ビューの構成 | 非対話的な構成のための`--member <path> --json` |
+| `openspec workset list` | 保存されたワークセットの閲覧 | 構造化されたビューのための`--json` |
+| `openspec workset remove <name>` | 保存されたビューの削除 | 非対話的な削除のための`--yes --json` |
 
 ---
 
-## Global Options
+## グローバルオプション
 
-これらのオプションはすべてのコマンドで動作します：
+これらのオプションはすべてのコマンドで機能します：
 
-| オプション | 説明 |
+| Option | Description |
 |--------|-------------|
-| `--version`, `-V` | バージョン番号を表示する |
-| `--no-color` | カラー出力を無効にする |
-| `--help`, `-h` | コマンドのヘルプを表示する |
+| `--version`, `-V` | バージョン番号を表示 |
+| `--no-color` | 色付き出力の無効化 |
+| `--help`, `-h` | コマンドのヘルプ表示 |
 
 ---
 
-## Setup Commands
+## セットアップコマンド
 
 ### `openspec init`
 
-プロジェクトにOpenSpecを初期化します。フォルダ構造を作成し、AIツールの統合を設定します。
+プロジェクトにOpenSpecを初期化します。フォルダ構造を作成し、AIツール統合を設定します。
 
-デフォルトの動作ではグローバル設定のデフォルト値を使用します：プロファイルは `core`、デリバリーは `both`、ワークフローは `propose, explore, apply, sync, archive`。
+デフォルトの動作はグローバル設定のデフォルトを使用します：プロファイル `core`、デリバリー `both`、ワークフロー `propose, explore, apply, sync, archive`。
 
 ```
 openspec init [path] [options]
 ```
 
-**引数：**
+**Arguments:**
 
-| 引数 | 必須 | 説明 |
+| Argument | Required | Description |
 |----------|----------|-------------|
-| `path` | いいえ | 対象ディレクトリ (デフォルト: カレントディレクトリ) |
+| `path` | No | 対象ディレクトリ（デフォルト：カレントディレクトリ） |
 
-**オプション：**
+**Options:**
 
-| オプション | 説明 |
+| Option | Description |
 |--------|-------------|
-| `--tools <list>` | 非対話型でAIツールを設定する。`all`、`none`、またはカンマ区切りリストを使用 |
-| `--force` | プロンプトなしでレガシーファイルを自動クリーンアップする |
-| `--profile <profile>` | このinit実行時のグローバルプロファイルを上書きする (`core` または `custom`) |
+| `--tools <list>` | AIツールを非対話的に設定します。`all`、`none`、またはカンマ区切りのリストを使用します |
+| `--force` | プロンプトなしでレガシーファイルを自動クリーンアップします |
+| `--profile <profile>` | この初期化実行に対するグローバルプロファイルのオーバーライド（`core`または`custom`） |
 
-`--profile custom` は、グローバル設定で現在選択されているワークフローを使用します (`openspec config profile`)。
+`--profile custom` は、グローバル設定（`openspec config profile`）で現在選択されているワークフローを使用します。
 
-**サポートされるツールID (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
+**サポートされているツールID（`--tools`）：** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`, `vibe`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
 
-**例：**
+> このリストは、`src/core/config.ts` の `AI_TOOLS` を反映しています。各ツールのスキルとコマンドパスについては、[Supported Tools](supported-tools.md) を参照してください。
+
+**Examples:**
 
 ```bash
-# 対話型初期化
+# Interactive initialization
 openspec init
 
-# 特定のディレクトリに初期化
+# Initialize in a specific directory
 openspec init ./my-project
 
-# 非対話型: ClaudeとCursor用に設定
+# Non-interactive: configure for Claude and Cursor
 openspec init --tools claude,cursor
 
-# すべてのサポート対象ツール用に設定
+# Configure for all supported tools
 openspec init --tools all
 
-# この実行時のプロファイルを上書き
+# Override profile for this run
 openspec init --profile core
 
-# プロンプトをスキップし、レガシーファイルを自動クリーンアップ
+# Skip prompts and auto-cleanup legacy files
 openspec init --force
 ```
 
-**作成される内容：**
+**What it creates:**
 
 ```
 openspec/
-├── specs/              # 仕様 (信頼できるソース)
-├── changes/            # 提案された変更
-└── config.yaml         # プロジェクト設定
+├── specs/              # Your specifications (source of truth)
+├── changes/            # Proposed changes
+└── config.yaml         # Project configuration
 
-.claude/skills/         # Claude Codeスキル (claudeが選択された場合)
-.cursor/skills/         # Cursorスキル (cursorが選択された場合)
-.cursor/commands/       # Cursor OPSXコマンド (デリバリーにコマンドが含まれる場合)
-... (他のツール設定)
+.claude/skills/         # Claude Code skills (if claude selected)
+.cursor/skills/         # Cursor skills (if cursor selected)
+.cursor/commands/       # Cursor OPSX commands (if delivery includes commands)
+... (other tool configs)
 ```
 
 ---
 
 ### `openspec update`
 
-CLIをアップグレードした後、OpenSpec指示ファイルを更新します。現在のグローバルプロファイル、選択されたワークフロー、およびデリバリー モードを使用して、AIツール設定ファイルを再生成します。
+CLIをアップグレードした後、OpenSpecの指示ファイルを更新します。現在のグローバルプロファイル、選択されたワークフロー、およびデリバリーモードを使用してAIツールの設定ファイルを再生成します。
 
 ```
 openspec update [path] [options]
 ```
 
-**引数：**
+**Arguments:**
 
-| 引数 | 必須 | 説明 |
+| Argument | Required | Description |
 |----------|----------|-------------|
-| `path` | いいえ | 対象ディレクトリ (デフォルト: カレントディレクトリ) |
+| `path` | No | 対象ディレクトリ（デフォルト：カレントディレクトリ） |
 
-**オプション：**
+**Options:**
 
-| オプション | 説明 |
+| Option | Description |
 |--------|-------------|
-| `--force` | ファイルが最新の場合でも強制的に更新する |
+| `--force` | ファイルが最新の状態であっても強制的に更新します |
 
-**例：**
+**Example:**
 
 ```bash
-# npmアップグレード後に指示ファイルを更新
+# Update instruction files after npm upgrade
 npm update @fission-ai/openspec
 openspec update
 ```
 
 ---
 
-## Workspace Commands
+## ストア（スタンドアロンのOpenSpecリポジトリ）
 
-ワークスペースコマンドはベータ版です。以下のローカルビューモデルは現在の方向性ですが、外部の自動化、統合、および長時間実行されるワークフローでは、コマンドの動作、ステートファイル、およびJSON出力を進化し続けるものとして扱う必要があります。
+> **ベータ版。**ストアおよびそれに基づいて構築された機能（参照、作業コンテキスト、ワークセット）は新規のものです。コマンド名、フラグ、ファイル形式、JSON出力はリリース間で変更される可能性があります。問題解決を優先したウォークスルーについては、[stores guide](stores-beta/user-guide.md) を参照してください。
 
-調整ワークスペースは、リンクされたリポジトリまたはフォルダに対するマシンローカルなビューです。ワークスペースの可視性は変更コミットメントではありません：OpenSpecが把握すべきリポジトリまたはフォルダをリンクし、特定の作業を計画する準備ができてから変更を作成してください。
+ストアとは、このマシンに登録したスタンドアロンのOpenSpecリポジトリです。例えば、計画リポジトリや契約リポジトリなどがあります。ストアを登録することで、通常のコマンド（`list`、`show`、`status`、`validate`、`new change`、`archive`など）が、`--store <id>` を渡すことでどこからでもそれに対して作用できるようになります。
 
-### `openspec workspace setup`
+### `openspec store setup`
 
-標準のOpenSpecワークスペースの場所にワークスペースを作成し、少なくとも1つの既存のリポジトリまたはフォルダをリンクします。
+ローカルストアを作成し、登録します。ターミナルで引数を指定しない場合、OpenSpecがユーザーをセットアッププロセスに導きます。エージェントやスクリプトは明示的な入力を渡し、`--json` を使用する必要があります。
 
 ```bash
-openspec workspace setup [options]
+openspec store setup [id] [options]
 ```
 
-**オプション：**
+**Options:**
 
-| オプション | 説明 |
+| Option | Description |
 |--------|-------------|
-| `--name <name>` | ワークスペース名。名前はkebab-caseでなければならない |
-| `--link <path>` | 既存のリポジトリまたはフォルダをリンクし、フォルダ名からリンク名を推測する |
-| `--link <name>=<path>` | 明示的なリンク名で既存のリポジトリまたはフォルダをリンクする |
-| `--opener <id>` | 非対話型セットアップ時に優先オープナーを保存する：`codex-cli`、`claude`、`github-copilot`、または `editor` |
-| `--tools <tools>` | エージェント用のワークスペースローカルOpenSpecスキルをインストールする。`all`、`none`、またはカンマ区切りのツールIDを使用 |
-| `--no-interactive` | プロンプトを無効にする；`--name` と少なくとも1つの `--link` が必要 |
-| `--json` | JSONを出力する；`--no-interactive` が必要 |
+| `--path <path>` | ストアが存在すべきフォルダ（例：`~/openspec/<id>`） |
+| `--remote <url>` | 新しいストアの `store.yaml` に正規のリモートを記録します |
+| `--init-git` | 初期コミットを含むGitリポジトリの初期化（デフォルト） |
+| `--no-init-git` | すべてのGitアクションをスキップします：初期化なし、初回コミットなし |
+| `--json` | JSONを出力 |
 
-**例：**
+非対話的な実行（`--json`、スクリプト、エージェント）では、ストアIDと`--path`の両方を渡す必要があります。対話型ターミナルでは、セットアップが場所を尋ねますが、これはユーザー所有の目に見える場所に編集可能な提案として表示されます（例：`~/openspec/<id>`）。OpenSpecの管理データディレクトリにデフォルト設定されることはありません。
 
-```bash
-openspec workspace setup
-openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
-openspec workspace setup --no-interactive --name platform --link /repos/api --tools codex,claude
-openspec workspace setup --no-interactive --json --name checkout --link /repos/platform/apps/checkout
-```
-
-対話型セットアップでは、優先オープナーを尋ねられ、選択されたエージェント用のワークスペースローカルOpenSpecスキルをインストールできます。非対話型セットアップでは、`--opener` が提供された場合にのみ優先オープナーが保存されます。それ以外の場合、`workspace open` は後で対話型ターミナルで対応するオープナーが利用可能な場合にプロンプトを表示するか、スクリプトに `--agent <tool>` または `--editor` を渡すよう求めます。
-
-このベータ版では、ワークスペーススキルのインストールはスキルのみです：グローバルデリバリーが `commands` または `both` であっても、ワークスペースのセットアップはワークスペースルートにエージェントスキルフォルダを作成し、スラッシュコマンドファイルは作成しません。アクティブなグローバルプロファイルがインストールするワークフロースキルを選択し、`--tools` がそれらを受け取るエージェントを選択します。非対話型セットアップで `--tools` が省略された場合、スキルはインストールされず、`workspace update --tools <ids>` で後から追加できます。
-
-### `openspec workspace list`
-
-ローカルレジストリから既知のOpenSpecワークスペースを一覧表示します。
+Examples:
 
 ```bash
-openspec workspace list [--json]
-openspec workspace ls [--json]
+openspec store setup
+openspec store setup team-context
+openspec store setup team-context --path ~/openspec/team-context --no-init-git
+openspec store setup team-context --path ~/openspec/team-context --no-init-git --json
 ```
 
-リストには、各ワークスペースの場所とリンクされたリポジトリまたはフォルダが表示されます。古いレジストリレコードは報告されますが、変更されません。
+### `openspec store register`
 
-### `openspec workspace link`
-
-1つのワークスペースについて、既存のリポジトリまたはフォルダを記録します。
+既存のローカルストアフォルダを登録します。
 
 ```bash
-openspec workspace link [name] <path> [options]
+openspec store register [path] [options]
 ```
 
-**オプション：**
+**Options:**
 
-| オプション | 説明 |
+| Option | Description |
 |--------|-------------|
-| `--workspace <name>` | ローカルレジストリから既知のワークスペースを選択する |
-| `--json` | JSONを出力する |
-| `--no-interactive` | ワークスペースピッカープロンプトを無効にする |
+| `--id <id>` | ストアID。ストアメタデータまたはフォルダ名がデフォルトになります |
+| `--yes` | 健康なOpenSpecルートのためのストアアイデンティティメタデータの作成を確定します |
+| `--json` | JSONを出力 |
 
-**例：**
+### `openspec store unregister`
 
-```bash
-openspec workspace link /repos/api
-openspec workspace link api-service /repos/api
-openspec workspace link --workspace platform /repos/platform/apps/checkout
-```
-
-パスは既に存在する必要があります。相対パスは、OpenSpecが検証済みの絶対パスをマシンローカルワークスペースステートに保存する前に、コマンドのカレントディレクトリに対して解決されます。リンクされたパスは、リポジトリローカルな `openspec/` ステートのない、完全なリポジトリ、パッケージ、サービス、アプリ、またはフォルダでもかまいません。
-
-### `openspec workspace relink`
-
-既存のリンクのローカルパスを修復または変更します。
+ファイルを削除することなく、ローカルストアの登録を解除します。
 
 ```bash
-openspec workspace relink <name> <path> [options]
+openspec store unregister <id> [--json]
 ```
 
-パスは既に存在する必要があります。relinkは、安定したリンク名のマシンローカルパスのみを更新します。
+これは、ストアが移動された場合、他の場所にクローンされた場合、またはこのマシン上でOpenSpecによって表示されるべきではない場合に使用します。
 
-### `openspec workspace doctor`
+### `openspec store remove`
 
-現在のマシンで1つのワークスペースが解決できる内容を確認します。
+ローカルストアの登録を解除し、そのローカルフォルダを削除します。
 
 ```bash
-openspec workspace doctor [options]
+openspec store remove <id> [--yes] [--json]
 ```
 
-doctorは、ワークスペースの場所、リンクされたリポジトリまたはフォルダ、欠落しているパス、存在する場合はリポジトリローカルのspecsパス、および推奨される修正を表示します。JSON出力には、互換性のためにワークスペースプランニングパスも含まれます。問題を報告するだけで、自動的には修復しません。
+`remove` は、対話型ターミナルで削除前に正確なフォルダを表示します。エージェント、スクリプト、JSON呼び出し元は、削除を確定するために`--yes`を渡す必要があります。OpenSpecは、一致するストアメタデータを含まないフォルダの削除を拒否します。
 
-1つのワークスペースを必要とするコマンドは、ワークスペースフォルダまたはサブディレクトリ内から実行された場合、現在のワークスペースを使用します。それ以外の場所からは、`--workspace <name>` を渡すか、対話型ターミナルでピッカーから選択するか、既知のワークスペースが1つだけ存在する場合はそれに依存します。`--json` または `--no-interactive` モードでは、あいまいな選択は構造化されたステータスエラーで失敗し、`--workspace <name>` を提案します。
+### `openspec store list`
 
-JSONレスポンスは、型付きオブジェクトと `status` 配列を使用します。主要データは `workspace`、`workspaces`、または `link` にあり、警告とエラーは `status` にあります。
-
-### `openspec workspace update`
-
-ワークスペースローカルのOpenSpecガイダンスとエージェントスキルを更新します。
+ローカルに登録されているストアの一覧を表示します。
 
 ```bash
-openspec workspace update [name] [options]
+openspec store list [--json]
+openspec store ls [--json]
 ```
 
-**オプション：**
+### `openspec store doctor`
 
-| オプション | 説明 |
-|--------|-------------|
-| `--workspace <name>` | ローカルレジストリから既知のワークスペースを選択する |
-| `--tools <tools>` | ワークスペーススキル用のエージェントを選択する。`all`、`none`、またはカンマ区切りのツールIDを使用 |
-| `--json` | JSONを出力する |
-| `--no-interactive` | ワークスペースピッカープロンプトを無効にする |
-
-**例：**
+ローカルストアの登録、メタデータ、Gitの存在を確認します。
 
 ```bash
-openspec workspace update
-openspec workspace update platform
-openspec workspace update --workspace platform --tools codex,claude
-openspec workspace update --workspace platform --tools none
+openspec store doctor [id] [--json]
 ```
 
-`workspace update` は、生成されたワークスペースガイダンスブロックとローカルオープンサーフェスを更新します。エージェントスキルについては、`--tools` が省略された場合、保存されたワークスペーススキルエージェント選択を再利用します。`--tools` を渡すと、その保存された選択が置き換えられます。ワークスペースルート内のOpenSpec管理対象のワークフロースキルディレクトリのみを更新し、選択解除された管理対象ワークフロースキルを削除し、リンクされたリポジトリとフォルダはそのまま残します。
+Doctorは診断専用であり、ストアを変更することなく、ルートの欠落、メタデータの不一致、ローカルレジストリの状態の無効性を報告します。
 
-ワークスペース内部から `openspec update` を実行すると、`openspec workspace update` にリダイレクトされます。リポジトリ所有のツールファイルを更新したい場合は、リポジトリローカルプロジェクト内で `openspec update` を実行してください。
+### プロジェクトからのストア参照
 
-### `openspec workspace open`
+プロジェクトリポジトリは、`openspec/config.yaml` でどのストアを利用するかを宣言できます：
 
-保存された優先オープナー、1セッションのエージェントオーバーライド、またはVS Codeエディターモードを通じて、ワークスペースワーキングセットを開きます。
+```yaml
+schema: spec-driven
+references:
+  - team-context
+```
+
+これ以降、そのリポジトリにおける `openspec instructions` の出力（アーティファクトごとの表示と `apply` 表示の両方、JSONおよび人間モード）には、参照された各ストアの仕様（spec ID、各仕様のPurposeセクションからの1行要約、およびフェッチコマンド (`openspec show <spec-id> --type spec --store <id>`)）がインデックスとして含まれます。このインデックスは、実行ごとに登録済みのチェックアウトからライブで構築され、仕様の内容が出力にコピーされることはありません。
+
+参照は読み取り専用のコンテキストです。それはコマンドが作用する場所を一切変更しません。作業はリポジトリ自身のルートに留まり、参照されたストアへの書き込みは明示的な `--store` アクションのままです。解決できない参照（例えば、このマシンに登録されていないストア）は、正確な修正案とともにインデックス内の警告に格下げられますが、指示は引き続き生成されます。`openspec doctor` はある場所で参照の状態を報告します。
+
+### ストアがどこからクローンされたかを記録する
+
+ストアは、コミットされたアイデンティティファイルに正規のクローンソースを記録できるため、「ストアを登録する」という点でオンボーディングが行き詰まることはありません：
 
 ```bash
-openspec workspace open [name] [options]
+openspec store setup team-context --path ~/openspec/team-context \
+  --remote git@github.com:acme/team-context.git
 ```
 
-**オプション：**
+リモートは初回コミット内の `.openspec-store/store.yaml` に格納されるため、すべてのクローンがそれを知った状態で生まれます。既存のストアについては、手動で `store.yaml` を編集しコミットします。`store doctor` は記録されたリモート（およびチェックアウトが観測したGitオリジン）を表示します。setup/register はガイダンス名を与えるものであり、register はローカルマシンレジストリにチェックアウトのオリジンを記録します。
 
-| オプション | 説明 |
-|--------|-------------|
-| `--workspace <name>` | 位置指定のワークスペース名のエイリアス |
-| `--initiative <id>` | イニシアチブをローカルワークスペースビューとして開く。`<id>` または `<store>/<id>` を受け付ける |
-| `--store <id>` | `--initiative` 用の登録済みコンテキストストアID |
-| `--store-path <path>` | `--initiative` 用の既存ローカルコンテキストストアルート |
-| `--agent <tool>` | 1セッションのエージェントオーバーライド：`codex-cli`、`claude`、または `github-copilot` |
-| `--editor` | 管理されているVS Codeワークスペースファイルを通常のエディターワークスペースとして開く |
-| `--no-interactive` | ワークスペースとオープナーピッカープロンプトを無効にする |
+参照宣言もクローンソースを保持できるため、まだストアを持っていないチームメイトは完全で貼り付け可能な修正（`git clone <remote> <path> && openspec store register <path> --id <id>`）を得ることができます：
 
-**例：**
+```yaml
+references:
+  - { id: team-context, remote: "git@github.com:acme/team-context.git" }
+```
+
+リモートの記録は同期ではありません。OpenSpecは自らクローンしたり、プルしたり、プッシュしたりすることはありません。
+
+### デフォルトストアの宣言
+
+計画が完全に外部化されているリポジトリ（ローカルの `openspec/specs/` や `openspec/changes/` がない）は、すべてのコマンドで `--store` を渡す代わりに、一度でストアを宣言できます：
+
+```yaml
+# openspec/config.yaml (the only file under openspec/)
+store: team-context
+```
+
+通常のコマンドはその後、宣言されたストアに自動的に解決されます。ルートバナーとJSONの `root` ブロックは、ストアIDとともに `source: "declared"` を報告し、表示されるヒントには引き続き `--store <id>` が含まれます。この宣言はフォールバックであり、決してオーバーライドではありません。明示的な `--store` が常に優先され、実際の計画フォルダを持つディレクトリはポインターを無視します（警告付き）。ポインターリポジトリをローカルのOpenSpecルートに変換するには、`store:` 行を削除し `openspec init` を実行してください。宣言が存在する限り、init はスキャフォールドすることを拒否します。
+
+## Doctor（リレーションシップの健全性）
+
+オープン仕様ルートが健全であるか、またそれが参照しているストアがこのマシンで利用可能であるかを問う、読み取り専用の質問です。
 
 ```bash
-openspec workspace open
-openspec workspace open platform
-openspec workspace open platform --agent github-copilot
-openspec workspace open --agent codex-cli
-openspec workspace open --editor
-openspec workspace open --initiative billing-launch --store platform
-openspec workspace open --initiative platform/billing-launch
+openspec doctor [--store <id>] [--json]
 ```
 
-`workspace open` は、内部で実行された場合は現在のワークスペースを使用し、他の場所で実行された場合は唯一の既知のワークスペースを自動選択し、複数のワークスペースが既知の場合はユーザーに選択を求めます。`--agent` と `--editor` は保存された優先オープナーを変更しません。両方のオープナーオーバーライドを渡すことはエラーです。`--agent <tool>` または `--editor` のいずれかを選択してください。
+レポートは、ルートの健全性、ストアメタデータの健全性（記録されているリモートとチェックアウトのオリジンが異なる場合の注記を含む）、および参照の健全性（未解決の参照に対するクローン修正を伴う同じ診断手順を表示）に分けています。いずれかの重大度を持つ健全性の発見があった場合、エージェントは `status` 配列を読み取ります。コマンド自体の失敗（ルートがない、ストアが不明）でのみ終了コード 1 が返されます。Doctor は決してクローンしたり、同期したり、修復したりしません。アセンブルされたセット自体を取得したい場合は、`openspec context` を使用してください。
 
-`--initiative` が使用されると、OpenSpecはそのイニシアチブ用のプライベートローカルワークスペースビューを準備または選択します。レジストリで選択されたストアはIDで保存されます。`--store-path` は、ワークスペースビューがプライベートローカルステートであるため、実行時ローカルパスセレクターを保存します。
+## Working context（アセンブルされたセット）
 
-OpenSpecは、VS CodeエディターおよびGitHub Copilot-in-VS-Codeでのオープンのために、ワークスペースルートに `<workspace-name>.code-workspace` を管理しています。そのファイルはマシンローカルワークスペースビューステートです。
+この作業に関連するすべてのもの—オープン仕様の宣言を通じて—は、一つのワーキングセットにまとめられています。すなわち、オープン仕様ルートとそれが参照しているストアです。
 
-管理されているVS Codeワークスペースは、有効なリンクされたリポジトリまたはフォルダを最初に一覧表示し、次にアタッチされた場合のイニシアチブコンテキスト、最後にOpenSpecワークスペースファイルを表示します。VS Codeはこれらのエントリをマルチルートワークスペースとして表示します。
+```bash
+openspec context [--store <id>] [--json] [--code-workspace <path> [--force]]
+```
 
-ルートワークスペースオープンは、リンクされたリポジトリまたはフォルダを探索とコンテキストに可視化します。実装編集は、明示的なユーザー要求と通常のOpenSpec実装ワークフローの後でのみ開始すべきです。
+JSONブリーフはエージェントが消費できる形式であり（利用可能な各参照ストアは自身のフェッチレシピを持ちます。未解決のメンバーは同じ修正手順とDoctorの表示を伴います）。`--code-workspace` は、ルートと利用可能な参照ストア（`ref:<id>` フォルダ）を含む VS Code のワークスペースファイルを書き出すことに加えて機能します。このコマンドが実行する作業であり、ファイルが存在する場合に `--force` なしで拒否されます。未利用のメンバーは報告されるだけであり、推測されることはありません。
+
+「Working context」とはアセンブルされたセットそのものであり、`openspec/config.yaml` の `context:` フィールドは、指示に注入されるプロジェクトの背景情報であり—これらは異なるものです。`openspec doctor` はそのセットが健全であるかを回答し、`openspec context` はそのセットが何であるかを回答します。
+
+## 個人用ワークセット (Personal worksets)
+
+> **ベータ版。** ワークセットは新しいベータ機能の一部です。コマンド、フラグ、ファイル形式はリリースによって変更される可能性があります。ウォークスルーについては、[ストアガイド](stores-beta/user-guide.md#worksets-reopen-the-folders-you-work-on-together)を参照してください。
+
+ワークセットとは、一緒に作業するフォルダの個人的な名前付きビュー（計画ルートとその他選択したものを組み合わせたもの）であり、ローカルマシンに保存され、ツール内で名前によって再オープンされます。これは完全にローカルです。コミットされることはなく、共有されることもなく、宣言から派生することもなく、一つを削除してもメンバーフォルダには一切影響を与えません。
+
+```bash
+openspec workset create [name] [--member <path> | --member <name>=<path>]... [--tool <id>] [--json]
+openspec workset list [--json]
+openspec workset open <name> [--tool <id>]
+openspec workset remove <name> [--yes] [--json]
+```
+
+`create` は短いガイド付きフローを実行します（または `--member` フラグを使用して非対話的に実行されます。最初のメンバーがプライマリとなり、そこからセッションが開始されます）。`open` は選択されたツールを起動します：エディタ（VS Code, Cursor）はすべてのメンバーを含むウィンドウを開き、戻ります。CLIエージェント（Claude Code, codex）はこのターミナルを各メンバーのセッションとして引き継ぎ、プロンプトは事前に埋められず、終了時に閉じます。オープン時に見つからないメンバーフォルダは注記付きでスキップされますが、残りは開かれます。保存されたツール設定は、`--tool` を使用してオープンごとに上書きできます。
+
+新しいツールをサポートすることは、コードではなく設定です。すべてのツールは2つの起動スタイル（生成された `.code-workspace` で起動される `workspace-file` またはメンバーごとの1つのアタッチフラグを持つ `attach-dirs`）のいずれかであり、グローバルな `config.json` の `openers` キー（`openspec config edit` で開く）は、フィールドごとにツールを追加するか組み込み機能を調整します。
+
+```json
+{
+  "openers": {
+    "zed": { "style": "workspace-file" },
+    "claude": { "attach_flag": "--dir" }
+  }
+}
+```
+
+すべてのワークセットの状態は、グローバルデータディレクトリの `worksets/` フォルダ（保存されたビューと、オープンごとに再生成される `<name>.code-workspace` ファイル）に存在します。このフォルダを削除すると、その痕跡すべてが失われます。
 
 ---
 
-## 共有コンテキストコマンド
-
-コンテキストストアとイニシアチブはベータ版の調整機能です。コンテキストストアとは、永続的な共有コンテキストのためのローカル登録で、通常はGitで管理されるフォルダーまたはクローンです。イニシアチブとは、コンテキストストア内の共有調整コンテキストです。リポジトリローカルな変更は、共有計画をすべてのリポジトリにコピーすることなくリンクできます。
-
-### `openspec context-store setup`
-
-ローカルのコンテキストストアを作成し登録します。ターミナルで引数を指定しない場合、
-OpenSpecがセットアップをガイドします。エージェントやスクリプトでは明示的な
-入力を渡し、`--json`を使用してください。
-
-```bash
-openspec context-store setup [id] [options]
-```
-
-**オプション:**
-
-| オプション | 説明 |
-|--------|-------------|
-| `--path <path>` | コンテキストストアのフォルダーパス。デフォルトはOpenSpecが管理するローカルデータディレクトリ |
-| `--init-git` | コンテキストストア内にGitリポジトリを初期化 |
-| `--no-init-git` | Gitリポジトリを初期化しない |
-| `--json` | JSON出力 |
-
-`--path`を省略した場合、`getGlobalDataDir()/context-stores/<id>`の下にストアが作成されます。`XDG_DATA_HOME`が設定されている場合は`$XDG_DATA_HOME/openspec/context-stores/<id>`、Unix系のフォールバックでは`~/.local/share/openspec/context-stores/<id>`になります。ストアを可視なクローンやチーム固有のフォルダーに配置したい場合は`--path`を渡してください。
-
-例:
-
-```bash
-openspec context-store setup
-openspec context-store setup team-context
-openspec context-store setup team-context --path /repos/team-context --no-init-git
-openspec context-store setup team-context --json --no-init-git
-```
-
-### `openspec context-store register`
-
-既存のローカルコンテキストストアフォルダーを登録します。
-
-```bash
-openspec context-store register [path] [options]
-```
-
-**オプション:**
-
-| オプション | 説明 |
-|--------|-------------|
-| `--id <id>` | コンテキストストアID。デフォルトはストアのメタデータまたはフォルダー名 |
-| `--json` | JSON出力 |
-
-### `openspec context-store unregister`
-
-ファイルを削除せずに、ローカルコンテキストストアの登録を解除します。
-
-```bash
-openspec context-store unregister <id> [--json]
-```
-
-ストアが移動された、別の場所にクローンされた、またはこのマシン上でOpenSpecに表示されないようにする場合に使用します。
-
-### `openspec context-store remove`
-
-ローカルコンテキストストアの登録を解除し、ローカルフォルダーを削除します。
-
-```bash
-openspec context-store remove <id> [--yes] [--json]
-```
-
-`remove`は対話型ターミナルで削除前に正確なフォルダーを表示します。
-エージェント、スクリプト、およびJSON呼び出し元では削除を確認するために`--yes`を渡す必要があります。
-OpenSpecは一致するコンテキストストアのメタデータを含まないフォルダーの削除を拒否します。
-
-### `openspec context-store list`
-
-ローカルに登録されたコンテキストストアを一覧表示します。
-
-```bash
-openspec context-store list [--json]
-openspec context-store ls [--json]
-```
-
-### `openspec context-store doctor`
-
-ローカルのコンテキストストアの登録、メタデータ、Gitの存在を確認します。
-
-```bash
-openspec context-store doctor [id] [--json]
-```
-
-doctorは診断のみを行い、ストアを変更せずにルートの欠落、メタデータの不一致、ローカルレジストリの無効な状態を報告します。
-
-### `openspec initiative create`
-
-コンテキストストア内にイニシアチブを作成します。
-
-```bash
-openspec initiative create <id> --title <title> --summary <summary> [options]
-```
-
-**オプション:**
-
-| オプション | 説明 |
-|--------|-------------|
-| `--store <id>` | ローカルレジストリからのコンテキストストアID |
-| `--store-path <path>` | 既存のローカルコンテキストストアルート |
-| `--title <title>` | イニシアチブのタイトル |
-| `--summary <summary>` | イニシアチブの概要 |
-| `--json` | JSON出力 |
-
-### `openspec initiative list`
-
-イニシアチブを一覧表示します。セレクターを指定しない場合、登録されたすべてのコンテキストストアを検索し、`status`に部分的な読み取り警告を報告します。
-
-```bash
-openspec initiative list [options]
-openspec initiative ls [options]
-```
-
-**オプション:**
-
-| オプション | 説明 |
-|--------|-------------|
-| `--store <id>` | 登録されたコンテキストストアを1つ指定して一覧表示 |
-| `--store-path <path>` | 既存のローカルコンテキストストアルートを1つ指定して一覧表示 |
-| `--json` | JSON出力 |
-
-### `openspec initiative show`
-
-イニシアチブを解決し、その正規の場所を表示します。
-
-```bash
-openspec initiative show <id> [options]
-openspec initiative show <store>/<id> [options]
-```
-
-`--store`を指定しない場合、OpenSpecは登録されたコンテキストストアを検索します。同じイニシアチブIDが複数のストアに存在する場合は、`--store <id>`を渡すか`<store>/<id>`形式を使用してください。
-
----
-
-## ブラウズコマンド
+## ブラウジングコマンド (Browsing Commands)
 
 ### `openspec list`
 
-プロジェクトの変更または仕様を一覧表示します。
+プロジェクト内の変更または仕様を一覧表示します。
 
 ```
 openspec list [options]
 ```
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--specs` | 変更ではなく仕様を一覧表示 |
-| `--changes` | 変更を一覧表示（デフォルト） |
-| `--sort <order>` | `recent`（デフォルト）または `name` で並べ替え |
-| `--json` | JSON 形式で出力 |
+| `--specs` | 変更ではなく仕様を一覧表示する |
+| `--changes` | 変更を一覧表示する（デフォルト） |
+| `--sort <order>` | `recent`（デフォルト）または `name` でソートする |
+| `--json` | JSONとして出力する |
 
-**例：**
+**例:**
 
 ```bash
-# すべてのアクティブな変更を一覧表示
+# すべてのアクティブな変更を一覧表示する
 openspec list
 
-# すべての仕様を一覧表示
+# すべての仕様を一覧表示する
 openspec list --specs
 
-# スクリプト用に JSON 出力
+# スクリプト用のJSON出力
 openspec list --json
 ```
 
-**出力（テキスト）：**
+**出力（テキスト）:**
 
 ```
-Active changes:
-  add-dark-mode     UI theme switching support
-  fix-login-bug     Session timeout handling
+Changes:
+  add-dark-mode     No tasks      just now
 ```
 
 ---
 
 ### `openspec view`
 
-仕様と変更を探索するための対話式ダッシュボードを表示します。
+仕様と変更を探索するための対話型ダッシュボードを表示します。
 
 ```
 openspec view
@@ -552,38 +422,38 @@ openspec view
 openspec show [item-name] [options]
 ```
 
-**引数：**
+**引数:**
 
 | 引数 | 必須 | 説明 |
 |----------|----------|-------------|
-| `item-name` | いいえ | 変更または仕様の名前（省略時は入力を促す） |
+| `item-name` | なし | 変更または仕様の名前（省略された場合はプロンプトが表示される） |
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--type <type>` | タイプを指定：`change` または `spec`（明白な場合は自動検出） |
-| `--json` | JSON 形式で出力 |
+| `--type <type>` | タイプを指定: `change` または `spec`（曖昧でない場合は自動検出される） |
+| `--json` | JSONとして出力する |
 | `--no-interactive` | プロンプトを無効にする |
 
-**変更固有のオプション：**
+**変更固有のオプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--deltas-only` | デルタ仕様のみを表示（JSON モード） |
+| `--deltas-only` | Delta仕様のみを表示する（JSONモード） |
 
-**仕様固有のオプション：**
+**仕様固有のオプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--requirements` | 要件のみを表示、シナリオを除外（JSON モード） |
-| `--no-scenarios` | シナリオコンテンツを除外（JSON モード） |
-| `-r, --requirement <id>` | 1 から始まるインデックスで特定の要件を表示（JSON モード） |
+| `--requirements` | 要件のみを表示し、シナリオを除外する（JSONモード） |
+| `--no-scenarios` | シナリオコンテンツを除外する（JSONモード） |
+| `-r, --requirement <id>` | 1ベースのインデックスによる特定の要件を表示する（JSONモード） |
 
-**例：**
+**例:**
 
 ```bash
-# 対話式選択
+# 対話型選択
 openspec show
 
 # 特定の変更を表示
@@ -592,61 +462,61 @@ openspec show add-dark-mode
 # 特定の仕様を表示
 openspec show auth --type spec
 
-# 解析用に JSON 出力
+# 解析用のJSON出力
 openspec show add-dark-mode --json
 ```
 
 ---
 
-## 検証コマンド
+## 検証コマンド (Validation Commands)
 
 ### `openspec validate`
 
-変更と仕様の構造上の問題を検証します。
+構造的な問題について変更と仕様を検証します。
 
 ```
 openspec validate [item-name] [options]
 ```
 
-**引数：**
+**引数:**
 
 | 引数 | 必須 | 説明 |
 |----------|----------|-------------|
-| `item-name` | いいえ | 検証する特定のアイテム（省略時は入力を促す） |
+| `item-name` | なし | 検証する特定のアイテム（省略された場合はプロンプトが表示される） |
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--all` | すべての変更と仕様を検証 |
-| `--changes` | すべての変更を検証 |
-| `--specs` | すべての仕様を検証 |
-| `--type <type>` | 名前が曖昧な場合にタイプを指定：`change` または `spec` |
-| `--strict` | 厳密な検証モードを有効にする |
-| `--json` | JSON 形式で出力 |
+| `--all` | すべての変更と仕様を検証する |
+| `--changes` | すべての変更を検証する |
+| `--specs` | すべての仕様を検証する |
+| `--type <type>` | 名前が曖昧な場合のタイプ指定: `change` または `spec` |
+| `--strict` | 厳格な検証モードを有効にする |
+| `--json` | JSONとして出力する |
 | `--concurrency <n>` | 最大並列検証数（デフォルト: 6、または `OPENSPEC_CONCURRENCY` 環境変数） |
 | `--no-interactive` | プロンプトを無効にする |
 
-**例：**
+**例:**
 
 ```bash
-# 対話式検証
+# 対話型検証
 openspec validate
 
 # 特定の変更を検証
 openspec validate add-dark-mode
 
-# すべての変更を検証
+# すべての変更を検証する
 openspec validate --changes
 
-# JSON 出力ですべてを検証（CI/スクリプト用）
+# CI/スクリプト用のすべてJSON出力での検証
 openspec validate --all --json
 
-# 厳密な検証と並列度の向上
+# 並列処理数を増やした厳格な検証
 openspec validate --all --strict --concurrency 12
 ```
 
-**出力（テキスト）：**
+**出力（テキスト）:**
 
 ```
 Validating add-dark-mode...
@@ -657,7 +527,7 @@ Validating add-dark-mode...
 1 warning found
 ```
 
-**出力（JSON）：**
+**出力（JSON）:**
 
 ```json
 {
@@ -681,136 +551,114 @@ Validating add-dark-mode...
 
 ---
 
-## ライフサイクルコマンド
+## ライフサイクルコマンド (Lifecycle Commands)
 
 ### `openspec archive`
 
-完了した変更をアーカイブし、デルタ仕様をメイン仕様にマージします。
+完了した変更をアーカイブし、delta仕様をメインの仕様にマージします。
 
 ```
 openspec archive [change-name] [options]
 ```
 
-**引数：**
+**引数:**
 
 | 引数 | 必須 | 説明 |
 |----------|----------|-------------|
-| `change-name` | いいえ | アーカイブする変更（省略時は入力を促す） |
+| `change-name` | なし | アーカイブする変更（省略された場合はプロンプトが表示される） |
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `-y, --yes` | 確認プロンプトをスキップ |
-| `--skip-specs` | 仕様の更新をスキップ（インフラ/ツール/ドキュメントのみの変更用） |
-| `--no-validate` | 検証をスキップ（確認が必要） |
+| `-y, --yes` | 確認プロンプトをスキップする |
+| `--skip-specs` | 仕様の更新をスキップする（インフラストラクチャ/ツールング/ドキュメントのみの変更の場合） |
+| `--no-validate` | 検証をスキップする（確認が必要） |
 
-**例：**
+**例:**
 
 ```bash
-# 対話式アーカイブ
+# 対話型アーカイブ
 openspec archive
 
 # 特定の変更をアーカイブ
 openspec archive add-dark-mode
 
-# プロンプトなしでアーカイブ（CI/スクリプト用）
+# プロンプトなしでアーカイブ（CI/スクリプト）
 openspec archive add-dark-mode --yes
 
-# 仕様に影響しないツール変更をアーカイブ
+# 仕様に影響しないツールングの変更をアーカイブ
 openspec archive update-ci-config --skip-specs
 ```
 
-**処理内容：**
+**機能:**
 
-1. 変更を検証（`--no-validate` を除く）
-2. 確認を求めるプロンプト（`--yes` を除く）
-3. デルタ仕様を `openspec/specs/` にマージ
-4. 変更フォルダを `openspec/changes/archive/YYYY-MM-DD-<name>/` に移動
+1. 変更を検証する（`--no-validate` の場合を除く）
+2. 確認プロンプトを表示する（`--yes` の場合を除く）
+3. delta仕様を `openspec/specs/` にマージする
+4. 変更フォルダを `openspec/changes/archive/YYYY-MM-DD-<name>/` に移動する
 
 ---
 
-## ワークフローコマンド
+## ワークフローコマンド (Workflow Commands)
 
-これらのコマンドは、アーティファクト駆動の OPSX ワークフローをサポートします。進捗を確認する人間と、次のステップを判断するエージェントの両方に役立ちます。
+これらのコマンドは、成果物駆動型のOPSXワークフローをサポートします。人間が進捗を確認する場合も、エージェントが次のステップを決定する場合も役立ちます。
 
 ### `openspec new change`
 
-リポジトリローカルの変更ディレクトリとオプションのチェックイン済みメタデータを作成します。
+解決されたOpenSpecルートに変更ディレクトリとオプションのチェックインメタデータを作成します。
 
 ```bash
 openspec new change <name> [options]
 ```
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--description <text>` | `README.md` に追加する説明 |
-| `--goal <text>` | 変更とともに保存するワークスペース製品の目標 |
-| `--areas <names>` | 影響を受けるワークスペースリンク名をカンマ区切りで指定 |
-| `--initiative <id>` | リポジトリローカルの変更をイニシアチブにリンク |
-| `--store <id>` | `--initiative` 用のコンテキストストア ID |
-| `--store-path <path>` | `--initiative` 用の既存のローカルコンテキストストアルート |
+| `--description <text>` | `index.md` に追加する説明文 |
+| `--goal <text>` | 変更と一緒に保存するオプションの目標メタデータ |
 | `--schema <name>` | 使用するワークフロースキーマ |
-| `--json` | JSON を出力 |
+| `--store <id>` | OpenSpecルートとして使用するストアID（ストアとは、登録済みのスタンドアロンOpenSpecリポジトリです） |
+| `--json` | JSONを出力する |
 
-例：
-
-```bash
-openspec new change add-billing-api --initiative billing-launch --store platform
-openspec new change add-billing-api --initiative platform/billing-launch --json
-```
-
-### `openspec set change`
-
-変更を再作成せずに、チェックイン済みのリポジトリローカルの変更メタデータを更新します。
+**例:**
 
 ```bash
-openspec set change <name> [options]
+openspec new change add-billing-api
+openspec new change add-billing-api --store team-context --json
 ```
-
-**オプション：**
-
-| オプション | 説明 |
-|--------|-------------|
-| `--initiative <id>` | リポジトリローカルの変更をイニシアチブにリンク |
-| `--store <id>` | `--initiative` 用のコンテキストストア ID |
-| `--store-path <path>` | `--initiative` 用の既存のローカルコンテキストストアルート |
-| `--json` | JSON を出力 |
-
-`set change --initiative` は、要求されたリンクが既に存在する場合は冪等であり、異なる既存のイニシアチブリンクの置換を拒否します。
 
 ### `openspec status`
 
-変更に対するアーティファクトの完了状態を表示します。
+変更の成果物完了ステータスを表示します。
 
 ```
 openspec status [options]
 ```
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--change <id>` | 変更名（省略時は入力を促す） |
-| `--schema <name>` | スキーマのオーバーライド（変更の設定から自動検出） |
-| `--json` | JSON 形式で出力 |
+| `--change <id>` | 変更名（省略された場合はプロンプトが表示される） |
+| `--schema <name>` | スキーマのオーバーライド（変更の設定から自動検出される） |
+| `--json` | JSONとして出力する |
 
-**例：**
+**例:**
 
 ```bash
-# 対話式ステータス確認
+# 対話型のステータスチェック
 openspec status
 
 # 特定の変更のステータス
 openspec status --change add-dark-mode
 
-# エージェント用の JSON
+# エージェント使用用のJSON
 openspec status --change add-dark-mode --json
 ```
 
-**出力（テキスト）：**
+**出力（テキスト）:**
 
 ```
 Change: add-dark-mode
@@ -823,7 +671,7 @@ Progress: 2/4 artifacts complete
 [-] tasks (blocked by: design)
 ```
 
-**出力（JSON）：**
+**出力（JSON）:**
 
 ```json
 {
@@ -844,69 +692,69 @@ Progress: 2/4 artifacts complete
 
 ### `openspec instructions`
 
-アーティファクトの作成またはタスクの適用に関する充実した指示を取得します。次に何を作成すべきか理解するために AI エージェントが使用します。
+成果物を作成したりタスクを適用したりするためのリッチな指示を取得します。AIエージェントが次に何を作成すべきかを理解するために使用されます。
 
 ```
 openspec instructions [artifact] [options]
 ```
 
-**引数：**
+**引数:**
 
 | 引数 | 必須 | 説明 |
 |----------|----------|-------------|
-| `artifact` | いいえ | アーティファクト ID：`proposal`、`specs`、`design`、`tasks`、または `apply` |
+| `artifact` | なし | 成果物ID: `proposal`, `specs`, `design`, `tasks`, または `apply` |
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--change <id>` | 変更名（非対話モードでは必須） |
+| `--change <id>` | 変更名（非対話モードで必須） |
 | `--schema <name>` | スキーマのオーバーライド |
-| `--json` | JSON 形式で出力 |
+| `--json` | JSONとして出力する |
 
-**特別なケース：** タスク実装の指示を取得するには、アーティファクトとして `apply` を使用します。
+**特殊なケース:** `apply` をアーティファクトとして使用して、タスクの実装指示を取得します。
 
-**例：**
+**例:**
 
 ```bash
-# 次のアーティファクトの指示を取得
+# 次の成果物に関する指示を取得
 openspec instructions --change add-dark-mode
 
-# 特定のアーティファクトの指示を取得
+# 特定の成果物に関する指示を取得
 openspec instructions design --change add-dark-mode
 
-# 適用/実装の指示を取得
+# apply/実装に関する指示を取得
 openspec instructions apply --change add-dark-mode
 
-# エージェント用の JSON
+# エージェント消費用のJSON
 openspec instructions design --change add-dark-mode --json
 ```
 
-**出力に含まれるもの：**
+**出力内容:**
 
-- アーティファクト用のテンプレートコンテンツ
-- 設定からのプロジェクトコンテキスト
-- 依存アーティファクトからのコンテンツ
-- 設定からのアーティファクトごとのルール
+*   成果物用のテンプレートコンテンツ
+*   設定からのプロジェクトコンテキスト
+*   依存する成果物からのコンテンツ
+*   設定からの成果物ごとのルール
 
 ---
 
 ### `openspec templates`
 
-スキーマ内のすべてのアーティファクトについて、解決されたテンプレートパスを表示します。
+スキーマ内のすべての成果物に対する解決済みテンプレートパスを表示します。
 
 ```
 openspec templates [options]
 ```
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--schema <name>` | 調査するスキーマ（デフォルト：`spec-driven`） |
-| `--json` | JSON 形式で出力 |
+| `--schema <name>` | 検査するスキーマ（デフォルト: `spec-driven`） |
+| `--json` | JSONとして出力する |
 
-**例：**
+**例:**
 
 ```bash
 # デフォルトスキーマのテンプレートパスを表示
@@ -915,11 +763,11 @@ openspec templates
 # カスタムスキーマのテンプレートを表示
 openspec templates --schema my-workflow
 
-# プログラム用の JSON
+# プログラムによる使用のためのJSON
 openspec templates --json
 ```
 
-**出力（テキスト）：**
+**出力（テキスト）:**
 
 ```
 Schema: spec-driven
@@ -935,47 +783,45 @@ Templates:
 
 ### `openspec schemas`
 
-利用可能なワークフロースキーマとその説明、およびアーティファクトフローを一覧表示します。
+利用可能なワークフロースキーマとその説明、成果物の流れを一覧表示します。
 
 ```
 openspec schemas [options]
 ```
 
-**オプション：**
+**オプション:**
 
 | オプション | 説明 |
 |--------|-------------|
-| `--json` | JSON 形式で出力 |
+| `--json` | JSONとして出力する |
 
-**例：**
+**例:**
 
 ```bash
 openspec schemas
 ```
 
-**出力：**
+**出力:**
 
 ```
 Available schemas:
 
   spec-driven (package)
-    The default spec-driven development workflow
-    Flow: proposal → specs → design → tasks
+    デフォルトの仕様駆動型開発ワークフロー
+    流れ: proposal → specs → design → tasks
 
   my-custom (project)
-    Custom workflow for this project
-    Flow: research → proposal → tasks
+    このプロジェクト向けのカスタムワークフロー
+    流れ: research → proposal → tasks
 ```
-
----
 
 ## スキーマコマンド
 
-カスタムワークフロースキーマの作成と管理を行うコマンド。
+カスタムワークフロースキーマの作成と管理に関するコマンド。
 
 ### `openspec schema init`
 
-新しいプロジェクトローカルスキーマを作成します。
+新しいプロジェクトローカルなスキーマを作成します。
 
 ```
 openspec schema init <name> [options]
@@ -984,34 +830,34 @@ openspec schema init <name> [options]
 **引数:**
 
 | 引数 | 必須 | 説明 |
-|----------|----------|-------------|
-| `name` | はい | スキーマ名（ケバブケース） |
+|---|---|---|
+| `name` | はい | スキーマ名 (kebab-case) |
 
 **オプション:**
 
 | オプション | 説明 |
-|--------|-------------|
+|---|---|
 | `--description <text>` | スキーマの説明 |
-| `--artifacts <list>` | カンマ区切りのアーティファクトID（デフォルト: `proposal,specs,design,tasks`） |
+| `--artifacts <list>` | アーティファクトIDのカンマ区切り (デフォルト: `proposal,specs,design,tasks`) |
 | `--default` | プロジェクトのデフォルトスキーマとして設定 |
-| `--no-default` | デフォルトとして設定するプロンプトを表示しない |
+| `--no-default` | デフォルト設定のプロンプトを表示しない |
 | `--force` | 既存のスキーマを上書き |
-| `--json` | JSONとして出力 |
+| `--json` | JSON形式で出力 |
 
 **例:**
 
 ```bash
-# インタラクティブなスキーマ作成
+# 対話形式でのスキーマ作成
 openspec schema init research-first
 
-# 特定のアーティファクトを指定した非インタラクティブ作成
+# 特定のアーティファクトを指定した非対話形式
 openspec schema init rapid \
   --description "Rapid iteration workflow" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
-**作成される内容:**
+**作成されるファイル:**
 
 ```
 openspec/schemas/<name>/
@@ -1027,7 +873,7 @@ openspec/schemas/<name>/
 
 ### `openspec schema fork`
 
-既存のスキーマをプロジェクトにコピーしてカスタマイズします。
+既存のスキーマをコピーして、プロジェクトでカスタマイズします。
 
 ```
 openspec schema fork <source> [name] [options]
@@ -1036,21 +882,21 @@ openspec schema fork <source> [name] [options]
 **引数:**
 
 | 引数 | 必須 | 説明 |
-|----------|----------|-------------|
-| `source` | はい | コピー元のスキーマ |
-| `name` | いいえ | 新しいスキーマ名（デフォルト: `<source>-custom`） |
+|---|---|---|
+| `source` | はい | コピーするスキーマ |
+| `name` | いいえ | 新しいスキーマ名 (デフォルト: `<source>-custom`) |
 
 **オプション:**
 
 | オプション | 説明 |
-|--------|-------------|
-| `--force` | 既存のコピー先を上書き |
-| `--json` | JSONとして出力 |
+|---|---|
+| `--force` | 既存の宛先を上書き |
+| `--json` | JSON形式で出力 |
 
 **例:**
 
 ```bash
-# 組み込みのspec-drivenスキーマをフォーク
+# 内蔵されているspec-drivenスキーマをフォークする
 openspec schema fork spec-driven my-workflow
 ```
 
@@ -1067,15 +913,15 @@ openspec schema validate [name] [options]
 **引数:**
 
 | 引数 | 必須 | 説明 |
-|----------|----------|-------------|
-| `name` | いいえ | 検証するスキーマ（省略時はすべて検証） |
+|---|---|---|
+| `name` | いいえ | 検証するスキーマ (省略された場合はすべて検証) |
 
 **オプション:**
 
 | オプション | 説明 |
-|--------|-------------|
-| `--verbose` | 詳細な検証手順を表示 |
-| `--json` | JSONとして出力 |
+|---|---|
+| `--verbose` | 詳細な検証ステップを表示 |
+| `--json` | JSON形式で出力 |
 
 **例:**
 
@@ -1091,7 +937,7 @@ openspec schema validate
 
 ### `openspec schema which`
 
-スキーマがどこから解決されるかを表示します（優先順位のデバッグに便利）。
+スキーマがどこから解決されているかを表示します (優先順位のデバッグに便利です)。
 
 ```
 openspec schema which [name] [options]
@@ -1100,20 +946,20 @@ openspec schema which [name] [options]
 **引数:**
 
 | 引数 | 必須 | 説明 |
-|----------|----------|-------------|
+|---|---|---|
 | `name` | いいえ | スキーマ名 |
 
 **オプション:**
 
 | オプション | 説明 |
-|--------|-------------|
-| `--all` | すべてのスキーマとそのソースを一覧表示 |
-| `--json` | JSONとして出力 |
+|---|---|
+| `--all` | すべてのスキーマとそのソースをリスト表示 |
+| `--json` | JSON形式で出力 |
 
 **例:**
 
 ```bash
-# スキーマのソースを確認
+# スキーマがどこから来ているかを確認
 openspec schema which spec-driven
 ```
 
@@ -1128,7 +974,7 @@ spec-driven resolves from: package
 
 1. プロジェクト: `openspec/schemas/<name>/`
 2. ユーザー: `~/.local/share/openspec/schemas/<name>/`
-3. パッケージ: 組み込みスキーマ
+3. パッケージ: 内蔵スキーマ
 
 ---
 
@@ -1136,7 +982,7 @@ spec-driven resolves from: package
 
 ### `openspec config`
 
-グローバルなOpenSpec設定を表示・変更します。
+グローバルなOpenSpec設定の表示と変更。
 
 ```
 openspec config <subcommand> [options]
@@ -1145,23 +991,23 @@ openspec config <subcommand> [options]
 **サブコマンド:**
 
 | サブコマンド | 説明 |
-|------------|-------------|
+|---|---|
 | `path` | 設定ファイルの場所を表示 |
-| `list` | 現在のすべての設定を表示 |
+| `list` | すべての設定を表示 |
 | `get <key>` | 特定の値を取得 |
 | `set <key> <value>` | 値を設定 |
 | `unset <key>` | キーを削除 |
 | `reset` | デフォルトにリセット |
-| `edit` | `$EDITOR`で開く |
-| `profile [preset]` | ワークフロープロファイルをインタラクティブまたはプリセットで設定 |
+| `edit` | `$EDITOR` で開く |
+| `profile [preset]` | ワークフロープロファイルを対話形式またはプリセット経由で設定 |
 
 **例:**
 
 ```bash
-# 設定ファイルのパスを表示
+# 設定ファイルパスを表示
 openspec config path
 
-# すべての設定を一覧表示
+# すべての設定をリスト表示
 openspec config list
 
 # 特定の値を取得
@@ -1170,7 +1016,7 @@ openspec config get telemetry.enabled
 # 値を設定
 openspec config set telemetry.enabled false
 
-# 文字列の値を明示的に設定
+# 文字列値を明示的に設定
 openspec config set user.name "My Name" --string
 
 # カスタム設定を削除
@@ -1179,39 +1025,39 @@ openspec config unset user.name
 # すべての設定をリセット
 openspec config reset --all --yes
 
-# エディタで設定を編集
+# エディタで設定を開く
 openspec config edit
 
-# アクションベースのウィザードでプロファイルを設定
+# アクションベースのウィザードでプロファイルを構成
 openspec config profile
 
-# 高速プリセット: ワークフローをコアに切り替え（配信モードは維持）
+# 高速プリセット: ワークフローをcoreに切り替える (デリバリーモードは維持)
 openspec config profile core
 ```
 
-`openspec config profile` は現在の状態の概要から始まり、以下から選択できます:
-- 配信 + ワークフローの変更
-- 配信のみ変更
-- ワークフローのみ変更
-- 現在の設定を維持（終了）
+`openspec config profile` は、現在の状態サマリーから始まり、以下の選択肢を提供します。
+- デリバリーとワークフローの変更
+- デリバリーのみの変更
+- ワークフローのみの変更
+- 現在の設定を維持 (終了)
 
-現在の設定を維持する場合、変更は書き込まれず、更新プロンプトも表示されません。
-設定変更がなくても、現在のプロジェクトまたはワークスペースファイルがグローバルなプロファイル/配信と同期していない場合、OpenSpecは警告を表示し、リポジトリローカルプロジェクトには `openspec update` を、ワークスペースローカルのガイダンスとスキルには `openspec workspace update` を提案します。
-`Ctrl+C` を押すと、フローはきれいにキャンされ（スタックトレースなし）、コード `130` で終了します。
-ワークフローチェックリストでは、`[x]` はワークフローがグローバル設定で選択されていることを意味します。これらの選択をプロジェクトファイルに適用するには、`openspec update` を実行します（またはプロジェクト内でプロンプトが表示されたときに `Apply changes to this project now?` を選択）。ワークスペース内では、`openspec workspace update` を使用してワークスペースローカルのガイダンスとスキルを更新します。これは生成されたエージェントワークフローファイルについてはスキルのみのままとなり、ワークスペーススラッシュコマンドは生成されません。
+現在の設定を維持した場合、何も変更は書き込まれず、更新プロンプトも表示されません。
+設定の変更がないにもかかわらず、現在のプロジェクトファイルがグローバルなプロフィール/デリバリーと同期していない場合、OpenSpec は警告を表示し `openspec update` を提案します。
+`Ctrl+C` を押してもフローはクリーンにキャンセルされ (スタックトレースなし)、コード `130` で終了します。
+ワークフローチェックリストにおいて、`[x]` はグローバル設定でそのワークフローが選択されていることを意味します。これらの選択をプロジェクトファイルに適用するには、`openspec update` を実行するか、プロジェクト内でプロンプトが表示されたときに「このプロジェクトに変更を適用しますか？」を選択してください。
 
-**インタラクティブな例:**
+**対話形式の例:**
 
 ```bash
-# 配信のみの更新
+# デリバリーのみの更新
 openspec config profile
-# 選択: Change delivery only
-# 配信を選択: Skills only
+# 選択: デリバリーの変更のみ
+# 選択: デリバリー: スキルのみ
 
 # ワークフローのみの更新
 openspec config profile
-# 選択: Change workflows only
-# チェックリストでワークフローをトグルし、確認
+# 選択: ワークフローの変更のみ
+# チェックリストでワークフローをトグルし、確認する
 ```
 
 ---
@@ -1220,7 +1066,7 @@ openspec config profile
 
 ### `openspec feedback`
 
-OpenSpecに関するフィードバックを送信します。GitHubのIssueを作成します。
+OpenSpecに関するフィードバックを送信します。GitHub Issueを作成します。
 
 ```
 openspec feedback <message> [options]
@@ -1229,16 +1075,16 @@ openspec feedback <message> [options]
 **引数:**
 
 | 引数 | 必須 | 説明 |
-|----------|----------|-------------|
+|---|---|---|
 | `message` | はい | フィードバックメッセージ |
 
 **オプション:**
 
 | オプション | 説明 |
-|--------|-------------|
+|---|---|
 | `--body <text>` | 詳細な説明 |
 
-**要件:** GitHub CLI (`gh`) がインストールされ、認証されている必要があります。
+**要件:** GitHub CLI (`gh`) がインストールされ、認証されていること。
 
 **例:**
 
@@ -1260,23 +1106,23 @@ openspec completion <subcommand> [shell]
 **サブコマンド:**
 
 | サブコマンド | 説明 |
-|------------|-------------|
-| `generate [shell]` | 補完スクリプトを標準出力に出力 |
-| `install [shell]` | 使用中のシェルに補完をインストール |
-| `uninstall [shell]` | インストール済みの補完を削除 |
+|---|---|
+| `generate [shell]` | 補完スクリプトをstdoutに出力 |
+| `install [shell]` | シェルに補完をインストール |
+| `uninstall [shell]` | インストールされた補完を削除 |
 
 **サポートされているシェル:** `bash`, `zsh`, `fish`, `powershell`
 
 **例:**
 
 ```bash
-# 補完をインストール（シェルを自動検出）
+# 補完をインストール (シェルの自動検出を行う)
 openspec completion install
 
 # 特定のシェルにインストール
 openspec completion install zsh
 
-# 手動インストール用のスクリプトを生成
+# 手動インストールのためのスクリプトを生成
 openspec completion generate bash > ~/.bash_completion.d/openspec
 
 # アンインストール
@@ -1288,27 +1134,27 @@ openspec completion uninstall
 ## 終了コード
 
 | コード | 意味 |
-|------|---------|
+|---|---|
 | `0` | 成功 |
-| `1` | エラー（検証失敗、ファイル欠落など） |
+| `1` | エラー (検証失敗、ファイル不足など) |
 
 ---
 
 ## 環境変数
 
 | 変数 | 説明 |
-|----------|-------------|
-| `OPENSPEC_TELEMETRY` | `0` に設定するとテレメトリーを無効化 |
-| `DO_NOT_TRACK` | `1` に設定するとテレメトリーを無効化（標準のDNTシグナル） |
-| `OPENSPEC_CONCURRENCY` | バルク検証のデフォルトの並行度（デフォルト: 6） |
-| `EDITOR` または `VISUAL` | `openspec config edit` で使用するエディタ |
-| `NO_COLOR` | 設定するとカラー出力を無効化 |
+|---|---|
+| `OPENSPEC_TELEMETRY` | `0` に設定するとテレメトリーを無効にする |
+| `DO_NOT_TRACK` | `1` に設定するとテレメトリーを無効にする (標準のDNTシグナル) |
+| `OPENSPEC_CONCURRENCY` | 一括検証のデフォルト並列数 (デフォルト: 6) |
+| `EDITOR` または `VISUAL` | `openspec config edit` 用のエディタ |
+| `NO_COLOR` | 設定するとカラー出力を無効にする |
 
 ---
 
 ## 関連ドキュメント
 
-- [コマンド](commands.md) - AIスラッシュコマンド（`/opsx:propose`, `/opsx:apply` など）
-- [ワークフロー](workflows.md) - 一般的なパターンと各コマンドの使用タイミング
-- [カスタマイズ](customization.md) - カスタムスキーマとテンプレートの作成
-- [はじめに](getting-started.md) - 初回セットアップガイド
+- [Commands](commands.md) - AIスラッシュコマンド (`/opsx:propose`, `/opsx:apply` など)
+- [Workflows](workflows.md) - 一般的なパターンと各コマンドの使用タイミング
+- [Customization](customization.md) - カスタムスキーマとテンプレートの作成
+- [Getting Started](getting-started.md) - 初回セットアップガイド

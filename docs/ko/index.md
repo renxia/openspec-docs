@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "AI 어시스턴트를 위한 스펙 기반 개발"
-  tagline: AI 어시스턴트 프로젝트를 구축하고 관리하기 위한 경량 스펙.
+  text: "AI 어시스턴트를 위한 명세 기반 개발"
+  tagline: AI 어시스턴트 프로젝트를 구축하고 관리하기 위한 경량 명세.
   actions:
     - theme: brand
       text: 시작하기
@@ -14,179 +14,118 @@ hero:
       link: /
 
 features:
-  - title: 스펙 우선 워크플로우
-    details: 코드를 작성하기 전에 요구사항을 정의하세요.
-  - title: AI 네이티브 설계
-    details: Claude Code, Cursor, Windsurf 등을 위해 구축되었습니다.
-  - title: 다국어 지원
-    details: 여러 언어로 문서를 이용할 수 있습니다.
+  - title: Spec-First Workflow
+    details: 코드를 작성하기 전에 요구 사항을 정의합니다.
+  - title: AI-Native Design
+    details: Claude Code, Cursor, Windsurf 등과 함께 사용하도록 설계되었습니다.
+  - title: Multi-Language
+    details: 다양한 언어로 문서화가 가능합니다.
 ---
 
+# OpenSpec 문서
 
-우리의 철학:
+환영합니다. 이곳은 OpenSpec에 관한 모든 것의 홈입니다.
+
+OpenSpec은 코드가 작성되기 전에 AI 코딩 어시스턴트와 **무엇을 만들지 합의하는** 데 도움을 줍니다. 사용자는 변경 사항을 설명하고, AI는 짧은 명세와 작업 목록을 초안으로 작성하며, 두 사람은 동일한 계획을 검토한 후 작업을 진행합니다. 중간에 AI가 잘못된 것을 만든다는 사실을 발견하는 일은 이제 없습니다.
+
+다른 것은 읽지 않더라도 이 두 페이지를 읽어보세요:
+
+1. [Getting Started](getting-started.md): 설치, 초기화 및 첫 번째 변경 사항 배포 방법.
+2. [How Commands Work](how-commands-work.md): `/opsx:propose`가 실제로 입력되는 곳(힌트: 터미널이 아닌 AI 채팅에서). 이 부분 때문에 거의 모든 사람이 혼란을 겪습니다.
+
+두 번째 항목은 보이는 것보다 더 중요합니다. OpenSpec에는 두 가지 측면이 있습니다. 터미널에서 실행하는 커맨드라인 도구와 AI 어시스턴트에게 제공하는 슬래시 명령어입니다. 어느 것이 무엇인지 아는 것은 가장 흔한 혼란을 방지해 줍니다.
+
+> **가장 먼저 구축해야 할 습관: 무엇을 만들어야 할지 확신이 서지 않을 때 `/opsx:explore`를 시작하세요.** 이는 코드를 읽고, 옵션을 평가하며, 어떤 아티팩트나 코드가 존재하기 전에 모호한 아이디어를 구체적인 계획으로 다듬어주는 부담 없는 사고 파트너입니다. [Explore First](explore.md) 가이드가 이를 입증합니다.
+
+## 경로 선택하기
+
+**완전히 초보자입니다.** [Getting Started](getting-started.md)로 시작한 다음, [Core Concepts at a Glance](overview.md)를 훑어보세요. 무언가가 미스터리하게 느껴진다면, [FAQ](faq.md)와 [Glossary](glossary.md)가 근처에 있습니다.
+
+**문제가 있지만 계획이 없습니다.** 이것은 흔한 경우이며, 전용 답변이 있습니다: [Explore First](explore.md). 어떤 것에 확정하기 전에 AI와 함께 생각하려면 `/opsx:explore`를 사용하세요.
+
+**크고 기존의 코드베이스가 있습니다.** 모든 것을 문서화할 필요는 없습니다. [Using OpenSpec in an Existing Project](existing-projects.md)에서는 바다 전체를 끓이지 않고 실제 레거시(brownfield) 코드로 시작하는 방법을 보여줍니다.
+
+**그냥 작동하게 만들고 싶습니다.** [Install](installation.md)를 실행하고, `openspec init`을 실행한 다음, 첫 번째 슬래시 명령어가 올바른 곳에 도달하도록 [How Commands Work](how-commands-work.md)를 읽으세요.
+
+**예제를 통해 배웁니다.** [Examples & Recipes](examples.md) 페이지는 실제 변경 사항(작은 기능, 버그 수정, 리팩토링, 탐색 등)을 처음부터 끝까지 안내합니다.
+
+**이전 워크플로우에서 왔습니다.** [Migration Guide](migration-guide.md)는 무엇이 어떻게 바뀌었는지, 그리고 왜 바뀌었는지 설명하며 기존 작업이 안전하다는 것을 보장합니다.
+
+**내 팀의 프로세스에 맞게 조정하고 싶습니다.** [Customization](customization.md)은 프로젝트 구성, 사용자 정의 스키마 및 공유 컨텍스트를 다룹니다.
+
+**무언가 고장 났습니다.** [Troubleshooting](troubleshooting.md)는 사람들이 실제로 겪는 실패 사례와 그 해결책을 모아 놓았습니다.
+
+## 전체 지도
+
+### 여기서 시작하기
+
+| Doc | 제공하는 내용 |
+|-----|-------------------|
+| [Getting Started](getting-started.md) | 설치, 초기화 및 첫 번째 변경 사항을 처음부터 끝까지 실행하는 방법 |
+| [Explore First](explore.md) | 커밋하기 전에 아이디어를 생각하기 위해 `/opsx:explore`를 사용하는 방법 |
+| [How Commands Work](how-commands-work.md) | 슬래시 명령어가 실행되는 곳, "대화형 모드"의 의미, 터미널 대 채팅 |
+| [Core Concepts at a Glance](overview.md) | 명세, 변경 사항, 델타, 아카이브에 대한 전체적인 사고 모델을 한 페이지에 담았습니다 |
+| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix 및 작동 여부를 확인하는 방법 |
+
+### 일상적으로 사용하기
+
+| Doc | 제공하는 내용 |
+|-----|-------------------|
+| [Workflows](workflows.md) | 일반적인 패턴과 각 명령어를 언제 사용할지에 대한 가이드 |
+| [Examples & Recipes](examples.md) | 실제 변경 사항에 대한 전체 안내, 복사/붙여넣기 가능 |
+| [Using OpenSpec in an Existing Project](existing-projects.md) | 대규모 레거시 코드베이스에서 OpenSpec을 채택하는 방법 |
+| [Editing & Iterating on a Change](editing-changes.md) | 아티팩트 업데이트, 되돌아가기, 수동 편집 조정 |
+| [Commands](commands.md) | 모든 `/opsx:*` 슬래시 명령어에 대한 참조 |
+| [CLI](cli.md) | 모든 `openspec` 터미널 명령어에 대한 참조 |
+
+### 깊이 이해하기
+
+| Doc | 제공하는 내용 |
+|-----|-------------------|
+| [Concepts](concepts.md) | 명세, 변경 사항, 아티팩트, 스키마 및 아카이브에 대한 상세 설명 |
+| [OPSX Workflow](opsx.md) | 왜 워크플로우가 단계별 잠금(phase-locked)이 아닌 유동적인지, 그리고 아키텍처 심층 분석 |
+| [Glossary](glossary.md) | 모든 용어를 한곳에 정의했습니다 |
+
+### 나만의 것으로 만들기
+
+| Doc | 제공하는 내용 |
+|-----|-------------------|
+| [Customization](customization.md) | 프로젝트 구성, 사용자 정의 스키마, 공유 컨텍스트 |
+| [Multi-Language](multi-language.md) | 영어 외의 언어로 아티팩트를 생성하는 방법 |
+| [Supported Tools](supported-tools.md) | OpenSpec이 통합되는 25가지 이상의 AI 도구와 파일 저장 위치 |
+
+### 도움이 필요할 때
+
+| Doc | 제공하는 내용 |
+|-----|-------------------|
+| [FAQ](faq.md) | 사람들이 가장 많이 묻는 질문에 대한 빠른 답변 |
+| [Troubleshooting](troubleshooting.md) | 구체적인 실패에 대한 실질적인 해결책 |
+| [Migration Guide](migration-guide.md) | 레거시 워크플로우에서 OPSX로 이동하는 방법 |
+
+### 리포지토리 간 조정 (베타)
+
+| Doc | 제공하는 내용 |
+|-----|-------------------|
+| [Stores: User Guide](stores-beta/user-guide.md) | 작업이 여러 리포지토리나 팀에 걸쳐 있을 때의 계획 |
+| [Agent Contract](agent-contract.md) | 에이전트가 구동하는 기계 판독 가능한 CLI 표면 |
+
+## 30초 버전
 
 ```text
-→ 유연함, 경직되지 않음
-→ 반복적, 폭포수 모델이 아님
-→ 간단함, 복잡하지 않음
-→ 그린필드만이 아닌 브라운필드를 위해 구축
-→ 개인 프로젝트에서 기업까지 확장 가능
+1. Install        npm install -g @fission-ai/openspec@latest
+2. Initialize     cd your-project && openspec init
+3. Explore        (in your AI chat)  /opsx:explore           ← 선택 사항이지만 좋은 습관입니다
+4. Propose        (in your AI chat)  /opsx:propose add-dark-mode
+5. Build          (in your AI chat)  /opsx:apply
+6. Archive        (in your AI chat)  /opsx:archive
 ```
 
-> [!TIP]
-> **새로운 워크플로우가 이제 가능합니다!** 아티팩트 기반 워크플로우로 OpenSpec을 재구축했습니다.
->
-> 시작하려면 `/opsx:propose "your idea"`를 실행하세요. → [자세히 알아보기](opsx.md)
+1단계와 2단계는 터미널에서 실행됩니다. 나머지는 AI 어시스턴트의 채팅에서 실행됩니다. 이 분할은 기억할 가치가 있는 유일한 부분이며, [How Commands Work](how-commands-work.md)가 정확히 그 이유를 설명합니다. 3단계는 선택 사항이지만, 확신이 서지 않을 때 `/opsx:explore`로 시작하는 것은 가장 형성할 가치가 있는 습관입니다.
 
-<p align="center">
-  업데이트를 위해 <a href="https://x.com/0xTab">@0xTab on X</a>를 팔로우하세요 · 도움과 질문을 위해 <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a>에 참여하세요.
-</p>
+## 다른 도움을 얻을 수 있는 곳
 
-## 작동 모습 보기
+- **Discord:** 질문, 아이디어 및 도움은 [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)에서 받으세요.
+- **GitHub Issues:** 버그 및 기능 요청은 [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)를 확인하세요.
+- **`openspec feedback "your message"`** 는 터미널에서 직접 피드백을 보냅니다(GitHub 이슈가 열립니다).
 
-```text
-You: /opsx:propose add-dark-mode
-AI:  Created openspec/changes/add-dark-mode/
-     ✓ proposal.md — why we're doing this, what's changing
-     ✓ specs/       — requirements and scenarios
-     ✓ design.md    — technical approach
-     ✓ tasks.md     — implementation checklist
-     Ready for implementation!
-
-You: /opsx:apply
-AI:  Implementing tasks...
-     ✓ 1.1 Add theme context provider
-     ✓ 1.2 Create toggle component
-     ✓ 2.1 Add CSS variables
-     ✓ 2.2 Wire up localStorage
-     All tasks complete!
-
-You: /opsx:archive
-AI:  Archived to openspec/changes/archive/2025-01-23-add-dark-mode/
-     Specs updated. Ready for the next feature.
-```
-
-<details>
-<summary><strong>OpenSpec 대시보드</strong></summary>
-</details>
-
-## 빠른 시작
-
-**Node.js 20.19.0 이상이 필요합니다.**
-
-OpenSpec을 전역으로 설치합니다:
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-그런 다음 프로젝트 디렉토리로 이동하여 초기화합니다:
-
-```bash
-cd your-project
-openspec init
-```
-
-이제 AI에게 알려주세요: `/opsx:propose <what-you-want-to-build>`
-
-확장된 워크플로우(`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`)를 원하시면, `openspec config profile`로 선택하고 `openspec update`로 적용하세요.
-
-> [!NOTE]
-> 사용 중인 도구가 지원되는지 확실하지 않으신가요? [전체 목록 보기](supported-tools.md) – 25개 이상의 도구를 지원하며 계속 추가되고 있습니다.
->
-> pnpm, yarn, bun, nix에서도 작동합니다. [설치 옵션 보기](installation.md).
-
-## 문서
-
-→ **[시작하기](getting-started.md)**: 첫 단계<br>
-→ **[워크플로우](workflows.md)**: 조합과 패턴<br>
-→ **[커맨드](commands.md)**: 슬래시 커맨드 & 스킬<br>
-→ **[CLI](cli.md)**: 터미널 참조<br>
-→ **[지원 도구](supported-tools.md)**: 도구 통합 & 설치 경로<br>
-→ **[개념](concepts.md)**: 전체 구조 이해<br>
-→ **[다국어 지원](multi-language.md)**: 다국어 지원<br>
-→ **[사용자 정의](customization.md)**: 나만의 설정
-
-
-## 왜 OpenSpec인가?
-
-AI 코딩 어시스턴트는 강력하지만, 요구사항이 채팅 기록에만 존재하면 예측하기 어렵습니다. OpenSpec은 코드가 작성되기 전에 무엇을 만들 것인지 합의할 수 있도록 경량 스펙 레이어를 추가합니다.
-
-- **구축 전에 합의하세요** — 인간과 AI가 코드가 작성되기 전에 스펙에 대해 합의합니다
-- **정리된 상태를 유지하세요** — 각 변경사항은 제안서, 스펙, 설계, 작업 목록이 포함된 자체 폴더를 가집니다
-- **유연하게 작업하세요** — 언제든지 아티팩트를 업데이트할 수 있으며, 경직된 단계 게이트가 없습니다
-- **도구를 사용하세요** — 슬래시 커맨드를 통해 20개 이상의 AI 어시스턴트와 함께 작동합니다
-
-### 비교
-
-**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — 철저하지만 무겁습니다. 경직된 단계 게이트, 많은 마크다운, Python 설정. OpenSpec은 더 가볍고 자유롭게 반복할 수 있습니다.
-
-**vs. [Kiro](https://kiro.dev)** (AWS) — 강력하지만 해당 IDE에 종속되고 Claude 모델로 제한됩니다. OpenSpec은 이미 사용 중인 도구와 함께 작동합니다.
-
-**vs. 아무것도 없음** — 스펙 없는 AI 코딩은 모호한 프롬프트와 예측 불가능한 결과를 의미합니다. OpenSpec은 형식적인 절차 없이 예측 가능성을 제공합니다.
-
-## OpenSpec 업데이트
-
-**패키지 업그레이드**
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-**에이전트 지침 새로고침**
-
-각 프로젝트 내에서 실행하여 AI 가이드를 재생성하고 최신 슬래시 커맨드가 활성화되도록 합니다:
-
-```bash
-openspec update
-```
-
-## 사용 참고사항
-
-**모델 선택**: OpenSpec은 고급 추론 모델에서 가장 잘 작동합니다. 계획과 구현 모두에 Opus 4.5와 GPT 5.2를 권장합니다.
-
-**컨텍스트 위생**: OpenSpec은 깨끗한 컨텍스트 창에서 이점을 얻습니다. 구현을 시작하기 전에 컨텍스트를 지우고 세션 내내 좋은 컨텍스트 위생을 유지하세요.
-
-## 기여하기
-
-**작은 수정** — 버그 수정, 오타 수정, 사소한 개선은 PR로 직접 제출할 수 있습니다.
-
-**큰 변경사항** — 새로운 기능, 중요한 리팩토링 또는 아키텍처 변경의 경우, 구현이 시작되기 전에 의도와 목표를 맞출 수 있도록 먼저 OpenSpec 변경 제안서를 제출해 주세요.
-
-제안서를 작성할 때 OpenSpec 철학을 염두에 두세요: 우리는 다양한 코딩 에이전트, 모델, 사용 사례를 가진 광범위한 사용자를 지원합니다. 변경사항은 모두에게 잘 작동해야 합니다.
-
-**AI 생성 코드는 환영합니다** — 테스트와 검증을 거친 경우에 한합니다. AI 생성 코드를 포함하는 PR은 사용된 코딩 에이전트와 모델을 언급해야 합니다 (예: "Generated with Claude Code using claude-opus-4-5-20251101").
-
-### 개발
-
-- 의존성 설치: `pnpm install`
-- 빌드: `pnpm run build`
-- 테스트: `pnpm test`
-- 로컬에서 CLI 개발: `pnpm run dev` 또는 `pnpm run dev:cli`
-- 컨벤션 커밋 (한 줄): `type(scope): subject`
-
-## 기타
-
-<details>
-<summary><strong>텔레메트리</strong></summary>
-
-OpenSpec은 익명의 사용 통계를 수집합니다.
-
-사용 패턴을 이해하기 위해 커맨드 이름과 버전만 수집합니다. 인수, 경로, 내용 또는 PII는 수집하지 않습니다. CI에서는 자동으로 비활성화됩니다.
-
-**옵트아웃:** `export OPENSPEC_TELEMETRY=0` 또는 `export DO_NOT_TRACK=1`
-
-</details>
-
-<details>
-<summary><strong>관리자 & 어드바이저</strong></summary>
-
-프로젝트를 안내하는 핵심 관리자 및 어드바이저 목록은 [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md)를 참조하세요.
-
-</details>
-
-
-
-## 라이선스
-
-MIT
+이 문서에서 잘못되거나, 오래되었거나, 혼란스러운 것을 발견했습니까? 그것은 버그입니다. 이슈나 PR을 여세요. 문서 개선은 여러분이 할 수 있는 가장 가치 있는 기여 중 일부입니다.

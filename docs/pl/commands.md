@@ -1,41 +1,39 @@
-# Polecenia
+# Komendy
 
-To jest referencja dla poleceń ukośnych OpenSpec. Te polecenia są wywoływane w interfejsie czatu Twojego asystenta kodowania AI (np. Claude Code, Cursor, Windsurf).
+Jest to odniesienie do komend z ukośnikiem OpenSpec. Te komendy są wywoływane w interfejsie czatu Twojego asystenta kodowania AI (np. Claude Code, Cursor, Windsurf).
 
-Aby poznać wzorce przepływu pracy i kiedy używać poszczególnych poleceń, zobacz [Przepływy pracy](workflows.md). Aby zobaczyć polecenia CLI, zobacz [CLI](cli.md).
+Aby dowiedzieć się o wzorcach przepływu pracy i kiedy używać każdej komendy, zapoznaj się z [Przepływami Pracy](workflows.md). W przypadku komend CLI, sprawdź [CLI](cli.md).
 
-## Szybka Referencja
+## Szybki Przewodnik
 
-### Domyślna Szybka Ścieżka (profil `core`)
+### Standardowa Ścieżka Szybkiego Użycia (`core` profil)
 
-| Polecenie | Cel |
-|-----------|-----|
+| Command | Purpose |
+|---------|---------|
 | `/opsx:propose` | Utwórz zmianę i wygeneruj artefakty planowania w jednym kroku |
-| `/opsx:explore` | Przemyśl pomysły przed zatwierdzeniem zmiany |
-| `/opsx:apply` | Wdróż zadania ze zmiany |
-| `/opsx:sync` | Scal specyfikacje delta z głównymi specyfikacjami |
-| `/opsx:archive` | Zarchiwizuj ukończoną zmianę |
+| `/opsx:explore` | Przeanalizuj pomysły przed zatwierdzeniem zmiany |
+| `/opsx:apply` | Zrealizuj zadania z danej zmiany |
+| `/opsx:sync` | Połącz specyfikacje delty ze specyfikacjami głównymi |
+| `/opsx:archive` | Zarchiwizuj zakończoną zmianę |
 
-### Rozszerzone Polecenia Przepływu Pracy (niestandardowy wybór przepływu pracy)
+### Rozszerzone Komendy Przepływu Pracy (wybór niestandardowego przepływu pracy)
 
-| Polecenie | Cel |
-|-----------|-----|
-| `/opsx:new` | Rozpocznij nowe rusztowanie zmiany |
+| Command | Purpose |
+|---------|---------|
+| `/opsx:new` | Rozpocznij nowy szkielet zmiany |
 | `/opsx:continue` | Utwórz następny artefakt na podstawie zależności |
-| `/opsx:ff` | Przewiń do przodu: utwórz wszystkie artefakty planowania naraz |
-| `/opsx:verify` | Sprawdź, czy wdrożenie odpowiada artefaktom |
+| `/opsx:ff` | Przyspieszenie (Fast-forward): utwórz wszystkie artefakty planowania jednocześnie |
+| `/opsx:verify` | Zweryfikuj, czy implementacja odpowiada artefaktom |
 | `/opsx:bulk-archive` | Zarchiwizuj wiele zmian naraz |
-| `/opsx:onboard` | Prowadzony samouczek przez kompletny przepływ pracy |
+| `/opsx:onboard` | Przewodnik krok po kroku przez cały przepływ pracy |
 
-Domyślnym profilem globalnym jest `core`. Aby włączyć rozszerzone polecenia przepływu pracy, uruchom `openspec config profile`, wybierz przepływy pracy, a następnie uruchom `openspec update` w swoim projekcie.
+Domyślnym globalnym profilem jest `core`. Aby włączyć rozszerzone komendy przepływu pracy, uruchom `openspec config profile`, wybierz przepływy pracy, a następnie uruchom `openspec update` w swoim projekcie.
 
----
-
-## Referencja Komend
+## Odniesienie Komend
 
 ### `/opsx:propose`
 
-Utwórz nową zmianę i wygeneruj artefakty planowania w jednym kroku. To jest domyślna komenda startowa w profilu `core`.
+Tworzy nową zmianę i generuje artefakty planowania w jednym kroku. Jest to domyślna komenda startowa w profilu `core`.
 
 **Składnia:**
 ```text
@@ -44,11 +42,11 @@ Utwórz nową zmianę i wygeneruj artefakty planowania w jednym kroku. To jest d
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
+|----------|----------|-------------|
 | `change-name-or-description` | Nie | Nazwa w formacie kebab-case lub opis zmiany w języku naturalnym |
 
-**Co robi:**
-- Tworzy `openspec/changes/<change-name>/`
+**Co to robi:**
+- Tworzy katalog `openspec/changes/<change-name>/`
 - Generuje artefakty potrzebne przed implementacją (dla `spec-driven`: propozycja, specyfikacje, projekt, zadania)
 - Zatrzymuje się, gdy zmiana jest gotowa do `/opsx:apply`
 
@@ -65,14 +63,16 @@ AI:  Created openspec/changes/add-dark-mode/
 ```
 
 **Wskazówki:**
-- Użyj tej komendy, aby uzyskać najszybszą ścieżkę od początku do końca
+- Używaj tego do najszybszej ścieżki od początku do końca
 - Jeśli chcesz kontrolować artefakty krok po kroku, włącz rozszerzone przepływy pracy i użyj `/opsx:new` + `/opsx:continue`
 
 ---
 
 ### `/opsx:explore`
 
-Przemyśl pomysły, zbadaj problemy i doprecyzuj wymagania przed zatwierdzeniem zmiany.
+> **Zacznij tutaj, gdy nie jesteś pewien.** Explore jest partnerem do myślenia bez ryzyka: czyta bazę kodu, porównuje opcje i przekształca niejasny pomysł w konkretny plan zanim jakakolwiek zmiana zostanie wprowadzona. Jest dostępny w profilu domyślnym. Aby uzyskać pełną wiedzę i więcej przykładów, zapoznaj się z przewodnikiem [Explore First](explore.md).
+
+Przeanalizuj pomysły, zbadaj problemy i wyjaśnij wymagania przed zobowiązaniem się do jakiejkolwiek zmiany.
 
 **Składnia:**
 ```
@@ -81,15 +81,15 @@ Przemyśl pomysły, zbadaj problemy i doprecyzuj wymagania przed zatwierdzeniem 
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `topic` | Nie | Co chcesz zbadać lub zbadać |
+|----------|----------|-------------|
+| `topic` | Nie | Co chcesz zbadać lub przeanalizować |
 
-**Co robi:**
-- Otwiera rozmowę eksploracyjną bez wymaganej struktury
-- Bada bazę kodu, aby odpowiedzieć na pytania
+**Co to robi:**
+- Rozpoczyna eksploracyjną rozmowę bez narzucania struktury
+- Badana jest baza kodu w celu odpowiedzi na pytania
 - Porównuje opcje i podejścia
 - Tworzy wizualne diagramy, aby wyjaśnić myślenie
-- Może przejść do `/opsx:propose` (domyślnie) lub `/opsx:new` (rozszerzony przepływ pracy), gdy wnioski się skrystalizują
+- Może przejść do `/opsx:propose` (domyślnie) lub `/opsx:new` (rozszerzony workflow), gdy wnioski się skrystalizują
 
 **Przykład:**
 ```text
@@ -117,18 +117,18 @@ AI:  Ready when you are. Run /opsx:propose add-jwt-auth to begin.
 ```
 
 **Wskazówki:**
-- Użyj, gdy wymagania nie są jasne lub musisz przeprowadzić dochodzenie
-- Podczas eksploracji nie są tworzone żadne artefakty
-- Przydatne do porównywania wielu podejść przed podjęciem decyzji
+- Używaj, gdy wymagania są niejasne lub potrzebujesz dogłębnego zbadania tematu
+- Podczas eksploracji żadne artefakty nie są tworzone
+- Jest dobre do porównywania wielu podejść przed podjęciem decyzji
 - Może czytać pliki i przeszukiwać bazę kodu
 
 ---
 
 ### `/opsx:new`
 
-Rozpocznij nowe rusztowanie zmiany. Tworzy folder zmiany i czeka na wygenerowanie artefaktów za pomocą `/opsx:continue` lub `/opsx:ff`.
+Rozpocznij nowy szkielet zmiany. Tworzy folder zmiany i czeka na to, aż wygenerujesz artefakty za pomocą `/opsx:continue` lub `/opsx:ff`.
 
-Ta komenda jest częścią zestawu rozszerzonych przepływów pracy (nie jest uwzględniona w domyślnym profilu `core`).
+Ta komenda jest częścią rozszerzonego zestawu przepływów pracy (nie jest zawarta w domyślnym profilu `core`).
 
 **Składnia:**
 ```
@@ -137,17 +137,17 @@ Ta komenda jest częścią zestawu rozszerzonych przepływów pracy (nie jest uw
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `change-name` | Nie | Nazwa folderu zmiany (monitowana, jeśli nie podano) |
+|----------|----------|-------------|
+| `change-name` | Nie | Nazwa folderu zmiany (poproszony, jeśli nie jest podana) |
 | `--schema` | Nie | Schemat przepływu pracy do użycia (domyślnie: z konfiguracji lub `spec-driven`) |
 
-**Co robi:**
+**Co to robi:**
 - Tworzy katalog `openspec/changes/<change-name>/`
 - Tworzy plik metadanych `.openspec.yaml` w folderze zmiany
-- Pokazuje pierwszy szablon artefaktu gotowy do utworzenia
-- Prosi o nazwę zmiany i schemat, jeśli nie zostały podane
+- Pokazuje pierwszy szablon artefaktu do utworzenia
+- Prosi o nazwę i schemat zmiany, jeśli nie są podane
 
-**Co tworzy:**
+**Co to tworzy:**
 ```
 openspec/changes/<change-name>/
 └── .openspec.yaml    # Metadane zmiany (schemat, data utworzenia)
@@ -166,14 +166,14 @@ AI:  Created openspec/changes/add-dark-mode/
 
 **Wskazówki:**
 - Używaj opisowych nazw: `add-feature`, `fix-bug`, `refactor-module`
-- Unikaj ogólnych nazw jak `update`, `changes`, `wip`
+- Unikaj ogólnych nazw takich jak `update`, `changes`, `wip`
 - Schemat można również ustawić w konfiguracji projektu (`openspec/config.yaml`)
 
 ---
 
 ### `/opsx:continue`
 
-Utwórz następny artefakt w łańcuchu zależności. Tworzy jeden artefakt na raz, aby uzyskać przyrostowy postęp.
+Twórz następny artefakt w łańcuchu zależności. Tworzy po jednym artefakcie dla stopniowego postępu.
 
 **Składnia:**
 ```
@@ -182,15 +182,15 @@ Utwórz następny artefakt w łańcuchu zależności. Tworzy jeden artefakt na r
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `change-name` | Nie | Którą zmianę kontynuować (wywnioskowana z kontekstu, jeśli nie podano) |
+|----------|----------|-------------|
+| `change-name` | Nie | Którą zmianę kontynuować (wywniosana z kontekstu, jeśli nie jest podana) |
 
-**Co robi:**
-- Odpytuje graf zależności artefaktów
-- Pokazuje, które artefakty są gotowe, a które zablokowane
+**Co to robi:**
+- Zapytuje o graf zależności artefaktów
+- Pokazuje, które artefakty są gotowe, a które są zablokowane
 - Tworzy pierwszy gotowy artefakt
 - Czyta pliki zależności dla kontekstu
-- Pokazuje, co staje się dostępne po utworzeniu
+- Pokazuje, co stanie się dostępnym po utworzeniu
 
 **Przykład:**
 ```
@@ -215,16 +215,16 @@ AI:  Change: add-dark-mode
 ```
 
 **Wskazówki:**
-- Użyj, gdy chcesz przejrzeć każdy artefakt przed kontynuowaniem
-- Przydatne dla złożonych zmian, gdy chcesz mieć kontrolę
-- Wiele artefaktów może stać się gotowych jednocześnie
+- Używaj, gdy chcesz przejrzeć każdy artefakt przed kontynuowaniem
+- Jest dobre dla złożonych zmian, gdzie potrzebujesz kontroli
+- Kilka artefaktów może stać się gotowych jednocześnie
 - Możesz edytować utworzone artefakty przed kontynuowaniem
 
 ---
 
 ### `/opsx:ff`
 
-Przewiń do przodu tworzenie artefaktów. Tworzy wszystkie artefakty planowania naraz.
+Przeskocz przez tworzenie artefaktów. Tworzy wszystkie artefakty planowania naraz.
 
 **Składnia:**
 ```
@@ -233,13 +233,13 @@ Przewiń do przodu tworzenie artefaktów. Tworzy wszystkie artefakty planowania 
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `change-name` | Nie | Którą zmianę przewinąć (wywnioskowana z kontekstu, jeśli nie podano) |
+|----------|----------|-------------|
+| `change-name` | Nie | Którą zmianę przeskoczyć (wywniosana z kontekstu, jeśli nie jest podana) |
 
-**Co robi:**
+**Co to robi:**
 - Tworzy wszystkie artefakty w kolejności zależności
 - Śledzi postęp za pomocą listy zadań
-- Zatrzymuje się, gdy wszystkie artefakty `apply-required` są zakończone
+- Zatrzymuje się, gdy wszystkie artefakty `apply-required` zostaną ukończone
 - Czyta każdą zależność przed utworzeniem następnego artefaktu
 
 **Przykład:**
@@ -258,16 +258,16 @@ AI:  Fast-forwarding add-dark-mode...
 ```
 
 **Wskazówki:**
-- Użyj, gdy masz jasny obraz tego, co budujesz
-- Szybsze niż `/opsx:continue` dla prostych zmian
+- Używaj, gdy masz jasny obraz tego, co budujesz
+- Jest szybsze niż `/opsx:continue` dla prostych zmian
 - Nadal możesz edytować artefakty później
-- Przydatne dla małych i średnich funkcji
+- Dobre do małych i średnich funkcji
 
 ---
 
 ### `/opsx:apply`
 
-Zaimplementuj zadania ze zmiany. Przechodzi przez listę zadań, pisząc kod i odhaczając pozycje.
+Implementuje zadania z zmiany. Przechodzi przez listę zadań, pisząc kod i odznaczając pozycje.
 
 **Składnia:**
 ```
@@ -276,10 +276,10 @@ Zaimplementuj zadania ze zmiany. Przechodzi przez listę zadań, pisząc kod i o
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `change-name` | Nie | Którą zmianę zaimplementować (wywnioskowana z kontekstu, jeśli nie podano) |
+|----------|----------|-------------|
+| `change-name` | Nie | Którą zmianę implementować (wywniosana z kontekstu, jeśli nie jest podana) |
 
-**Co robi:**
+**Co to robi:**
 - Czyta `tasks.md` i identyfikuje nieukończone zadania
 - Przechodzi przez zadania po kolei
 - Pisze kod, tworzy pliki, uruchamia testy w razie potrzeby
@@ -309,15 +309,15 @@ AI:  Implementing add-dark-mode...
 ```
 
 **Wskazówki:**
-- Może wznowić od miejsca przerwania w razie przerwania
-- Użyj dla równoległych zmian, podając nazwę zmiany
+- Może wznowić pracę, jeśli została przerwana
+- Używaj do równoległych zmian, podając nazwę zmiany
 - Stan ukończenia jest śledzony w polach wyboru `tasks.md`
 
 ---
 
 ### `/opsx:verify`
 
-Sprawdź, czy implementacja odpowiada Twoim artefaktom zmiany. Sprawdza kompletność, poprawność i spójność.
+Sprawdza, czy implementacja odpowiada artefaktom zmiany. Kontroluje kompletność, poprawność i spójność.
 
 **Składnia:**
 ```
@@ -326,22 +326,22 @@ Sprawdź, czy implementacja odpowiada Twoim artefaktom zmiany. Sprawdza kompletn
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `change-name` | Nie | Którą zmianę zweryfikować (wywnioskowana z kontekstu, jeśli nie podano) |
+|----------|----------|-------------|
+| `change-name` | Nie | Którą zmianę zweryfikować (wywniosana z kontekstu, jeśli nie jest podana) |
 
-**Co robi:**
+**Co to robi:**
 - Sprawdza trzy wymiary jakości implementacji
-- Przeszukuje bazę kodu w poszukiwaniu dowodów implementacji
-- Raportuje problemy sklasyfikowane jako KRYTYCZNE, OSTRZEŻENIE lub SUGESTIA
+- Przeszukuje bazę kodu w poszukiwaniu dowodów na implementację
+- Raportuje problemy skategoryzowane jako CRITICAL (KRYTYCZNY), WARNING (OSTRZEŻENIE) lub SUGGESTION (SUGESTIA)
 - Nie blokuje archiwizacji, ale ujawnia problemy
 
 **Wymiary weryfikacji:**
 
-| Wymiar | Co weryfikuje |
-|--------|---------------|
-| **Kompletność** | Wszystkie zadania wykonane, wszystkie wymagania zaimplementowane, scenariusze pokryte |
-| **Poprawność** | Implementacja odpowiada intencji specyfikacji, obsłużone przypadki brzegowe |
-| **Spójność** | Decyzje projektowe odzwierciedlone w kodzie, spójne wzorce |
+| Wymiar | Co jest sprawdzane |
+|-----------|-------------------|
+| **Completeness** | Wszystkie zadania wykonane, wszystkie wymagania zaimplementowane, scenariusze objęte |
+| **Correctness** | Implementacja odpowiada intencjom specyfikacji, przypadki brzegowe są obsłużone |
+| **Coherence** | Decyzje projektowe odzwierciedlone w kodzie, wzorce są spójne |
 
 **Przykład:**
 ```
@@ -378,14 +378,14 @@ AI:  Verifying add-dark-mode...
 **Wskazówki:**
 - Uruchom przed archiwizacją, aby wcześnie wykryć niezgodności
 - Ostrzeżenia nie blokują archiwizacji, ale wskazują na potencjalne problemy
-- Przydatne do przeglądania pracy AI przed zatwierdzeniem
-- Może ujawnić dryf między artefaktami a implementacją
+- Jest dobre do przeglądania pracy AI przed zobowiązaniem się
+- Może ujawnić rozbieżność między artefaktami a implementacją
 
 ---
 
 ### `/opsx:sync`
 
-**Komenda opcjonalna.** Scal specyfikacje delta ze zmiany do głównych specyfikacji. Archiwizacja zasugeruje synchronizację w razie potrzeby, więc zazwyczaj nie musisz uruchamiać tego ręcznie.
+**Opcjonalna komenda.** Łączy specyfikacje delta z danej zmiany z głównymi specyfikacjami. Archiwizacja poprosi o synchronizację, jeśli to konieczne, więc zazwyczaj nie musisz uruchamiać tego ręcznie.
 
 **Składnia:**
 ```
@@ -394,14 +394,14 @@ AI:  Verifying add-dark-mode...
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `change-name` | Nie | Którą zmianę zsynchronizować (wywnioskowana z kontekstu, jeśli nie podano) |
+|----------|----------|-------------|
+| `change-name` | Nie | Którą zmianę zsynchronizować (wywniosana z kontekstu, jeśli nie jest podana) |
 
-**Co robi:**
+**Co to robi:**
 - Czyta specyfikacje delta z folderu zmiany
 - Parsuje sekcje ADDED/MODIFIED/REMOVED/RENAMED
-- Scala zmiany do głównego katalogu `openspec/specs/`
-- Zachowuje istniejącą treść nieuwzględnioną w delcie
+- Łączy zmiany z głównym katalogiem `openspec/specs/`
+- Zachowuje istniejącą zawartość, która nie została wspomniana w delcie
 - Nie archiwizuje zmiany (pozostaje aktywna)
 
 **Przykład:**
@@ -425,24 +425,24 @@ AI:  Syncing add-dark-mode delta specs...
 
 **Kiedy używać ręcznie:**
 
-| Scenariusz | Użyć sync? |
-|------------|------------|
-| Długotrwała zmiana, chcesz specyfikacje w głównych przed archiwizacją | Tak |
-| Wiele równoległych zmian potrzebuje zaktualizowanych specyfikacji bazowych | Tak |
-| Chcesz osobno podejrzeć/przejrzeć scalenie | Tak |
-| Szybka zmiana, idziesz prosto do archiwizacji | Nie (archiwizacja obsługuje to) |
+| Scenariusz | Użyj sync? |
+|----------|-----------|
+| Długotrwała zmiana, chcę mieć specyfikacje w głównej wersji przed archiwizacją | Tak |
+| Kilka równoległych zmian wymaga zaktualizowanej bazy specyfikacji | Tak |
+| Chcę najpierw podglądnąć/przejrzeć połączenie osobno | Tak |
+| Szybka zmiana, idę prosto do archiwizacji | Nie (archiwizacja to obsłuży) |
 
 **Wskazówki:**
-- Sync jest inteligentny, nie jest kopiuj-wklej
+- Sync jest inteligentny, a nie kopiowaniem i wklejaniem
 - Może dodawać scenariusze do istniejących wymagań bez duplikowania
-- Zmiana pozostaje aktywna po synchronizacji (nie jest zarchiwizowana)
-- Większość użytkowników nigdy nie będzie musiała wywoływać tego bezpośrednio — archiwizacja zasugeruje w razie potrzeby
+- Zmiana pozostaje aktywna po synchronizacji (nie jest archiwizowana)
+- Większość użytkowników nigdy nie będzie musiała tego wywoływać bezpośrednio — archiwizacja poprosi o to, jeśli zajdzie potrzeba
 
 ---
 
 ### `/opsx:archive`
 
-Zarchiwizuj ukończoną zmianę. Finalizuje zmianę i przenosi ją do folderu archiwum.
+Archiwizuje ukończoną zmianę. Finalizuje zmianę i przenosi ją do folderu archiwalnego.
 
 **Składnia:**
 ```
@@ -451,15 +451,15 @@ Zarchiwizuj ukończoną zmianę. Finalizuje zmianę i przenosi ją do folderu ar
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `change-name` | Nie | Którą zmianę zarchiwizować (wywnioskowana z kontekstu, jeśli nie podano) |
+|----------|----------|-------------|
+| `change-name` | Nie | Którą zmianę archiwizować (wywniosana z kontekstu, jeśli nie jest podana) |
 
-**Co robi:**
+**Co to robi:**
 - Sprawdza status ukończenia artefaktów
-- Sprawdza ukończenie zadań (ostrzega, jeśli nieukończone)
-- Oferuje synchronizację specyfikacji delta, jeśli jeszcze nie zsynchronizowane
+- Sprawdza ukończenie zadań (ostrzega, jeśli są nieukończone)
+- Oferuje synchronizację specyfikacji delta, jeśli jeszcze nie została zsynchronizowana
 - Przenosi folder zmiany do `openspec/changes/archive/YYYY-MM-DD-<name>/`
-- Zachowuje wszystkie artefakty do audytu
+- Zachowuje wszystkie artefakty dla ścieżki audytu
 
 **Przykład:**
 ```text
@@ -487,14 +487,14 @@ AI:  ✓ Synced specs to openspec/specs/ui/spec.md
 **Wskazówki:**
 - Archiwizacja nie zablokuje się na nieukończonych zadaniach, ale ostrzeże
 - Specyfikacje delta mogą być zsynchronizowane podczas archiwizacji lub wcześniej
-- Zarchiwizowane zmiany są zachowane dla historii
-- Użyj `/opsx:verify` wcześniej, aby wykryć problemy
+- Archiwowane zmiany są zachowywane dla historii
+- Użyj `/opsx:verify` najpierw, aby wykryć problemy
 
 ---
 
 ### `/opsx:bulk-archive`
 
-Zarchiwizuj wiele ukończonych zmian naraz. Obsługuje konflikty specyfikacji między zmianami.
+Archiwizuje wiele ukończonych zmian naraz. Obsługuje konflikty specyfikacji między zmianami.
 
 **Składnia:**
 ```
@@ -503,14 +503,14 @@ Zarchiwizuj wiele ukończonych zmian naraz. Obsługuje konflikty specyfikacji mi
 
 **Argumenty:**
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `change-names` | Nie | Konkretne zmiany do zarchiwizowania (monit o wybór, jeśli nie podano) |
+|----------|----------|-------------|
+| `change-names` | Nie | Konkretne zmiany do archiwizacji (poprosi o wybór, jeśli nie są podane) |
 
-**Co robi:**
-- Wyświetla wszystkie ukończone zmiany
+**Co to robi:**
+- Lista wszystkie ukończone zmiany
 - Waliduje każdą zmianę przed archiwizacją
 - Wykrywa konflikty specyfikacji między zmianami
-- Rozwiązuje konflikty, sprawdzając co faktycznie zostało zaimplementowane
+- Rozwiązuje konflikty poprzez sprawdzenie, co zostało faktycznie zaimplementowane
 - Archiwizuje w kolejności chronologicznej
 
 **Przykład:**
@@ -541,41 +541,41 @@ AI:  ✓ Archived add-dark-mode
 ```
 
 **Wskazówki:**
-- Przydatne dla równoległych strumieni pracy
+- Jest dobre dla równoległych strumieni pracy
 - Rozwiązywanie konfliktów jest agentowe (sprawdza bazę kodu)
 - Zmiany są archiwizowane w kolejności utworzenia
-- Monituje przed nadpisaniem treści specyfikacji
+- Poprosi przed nadpisaniem zawartości specyfikacji
 
 ---
 
 ### `/opsx:onboard`
 
-Prowadzony onboarding przez kompletny przepływ pracy OpenSpec. Interaktywny tutorial z użyciem Twojej rzeczywistej bazy kodu.
+Prowadzenie przez pełny przepływ pracy OpenSpec. Interaktywny tutorial wykorzystujący Twoją rzeczywistą bazę kodu.
 
 **Składnia:**
 ```
 /opsx:onboard
 ```
 
-**Co robi:**
-- Przeprowadza przez kompletny cykl przepływu pracy z narracją
-- Skanuje Twoją bazę kodu w poszukiwaniu realnych możliwości ulepszeń
+**Co to robi:**
+- Prowadzi przez kompletny cykl pracy z narracją
+- Przeszukuje Twoją bazę kodu w celu znalezienia realnych możliwości ulepszenia
 - Tworzy rzeczywistą zmianę z prawdziwymi artefaktami
 - Implementuje rzeczywistą pracę (małe, bezpieczne zmiany)
 - Archiwizuje ukończoną zmianę
-- Wyjaśnia każdy krok w trakcie
+- Wyjaśnia każdy krok, gdy ten się dzieje
 
 **Fazy:**
 1. Powitanie i analiza bazy kodu
 2. Znalezienie możliwości ulepszenia
-3. Utworzenie zmiany (`/opsx:new`)
-4. Napisanie propozycji
-5. Utworzenie specyfikacji
-6. Napisanie projektu
-7. Utworzenie zadań
+3. Tworzenie zmiany (`/opsx:new`)
+4. Pisanie propozycji
+5. Tworzenie specyfikacji
+6. Pisanie projektu (design)
+7. Tworzenie zadań
 8. Implementacja zadań (`/opsx:apply`)
 9. Weryfikacja implementacji
-10. Archiwizacja zmiany
+10. Archiwizowanie zmiany
 11. Podsumowanie i kolejne kroki
 
 **Przykład:**
@@ -602,104 +602,102 @@ AI:  Welcome to OpenSpec!
 
 **Wskazówki:**
 - Najlepsze dla nowych użytkowników uczących się przepływu pracy
-- Używa prawdziwego kodu, nie sztucznych przykładów
+- Używa prawdziwego kodu, a nie przykładów do zabawy
 - Tworzy rzeczywistą zmianę, którą możesz zachować lub odrzucić
-- Zajmuje 15-30 minut do ukończenia
+- Zajmuje 15-30 minut na ukończenie
 
----
+## Składnia poleceń dla narzędzi AI
 
-## Składnia poleceń według narzędzia AI
+Różne narzędzia AI wykorzystują nieco inną składnię poleceń. Użyj formatu, który odpowiada Twojemu narzędziu:
 
-Różne narzędzia AI używają nieco odmiennej składni poleceń. Użyj formatu odpowiadającego Twojemu narzędziu:
-
-| Narzędzie | Przykład składni |
-|-----------|------------------|
+| Tool | Syntax Example |
+|------|----------------|
 | Claude Code | `/opsx:propose`, `/opsx:apply` |
 | Cursor | `/opsx-propose`, `/opsx-apply` |
 | Windsurf | `/opsx-propose`, `/opsx-apply` |
 | Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
-| Kimi CLI | Wywołania oparte na umiejętnościach, takie jak `/skill:openspec-propose`, `/skill:openspec-apply-change` (bez generowanych plików poleceń `opsx-*`) |
-| Trae | Wywołania oparte na umiejętnościach, takie jak `/openspec-propose`, `/openspec-apply-change` (bez generowanych plików poleceń `opsx-*`) |
+| Kimi CLI | Skill-based invocations such as `/skill:openspec-propose`, `/skill:openspec-apply-change` (no generated `opsx-*` command files) |
+| Trae | Skill-based invocations such as `/openspec-propose`, `/openspec-apply-change` (no generated `opsx-*` command files) |
 
-Intencja jest taka sama we wszystkich narzędziach, ale sposób prezentacji poleceń może się różnić w zależności od integracji.
+Intencja jest taka sama we wszystkich narzędziach, ale sposób prezentowania poleceń może się różnić w zależności od integracji.
 
-> **Uwaga:** Polecenia GitHub Copilot (`.github/prompts/*.prompt.md`) są dostępne tylko w rozszerzeniach IDE (VS Code, JetBrains, Visual Studio). GitHub Copilot CLI obecnie nie obsługuje niestandardowych plików promptów — zobacz [Obsługiwane narzędzia](supported-tools.md), aby uzyskać szczegóły i obejścia.
+> **Uwaga:** Polecenia GitHub Copilot (`.github/prompts/*.prompt.md`) są dostępne tylko w rozszerzeniach IDE (VS Code, JetBrains, Visual Studio). CLI GitHub Copilot nie obsługuje obecnie niestandardowych plików promptów — szczegóły i obejścia znajdziesz na [Supported Tools](supported-tools.md).
 
 ---
 
-## Polecenia starszej wersji
+## Starsze polecenia
 
-Te polecenia używają starszego przepływu pracy „wszystko naraz". Nadal działają, ale zalecane są polecenia OPSX.
+Te polecenia wykorzystują starszy tryb pracy „wszystko naraz”. Nadal działają, ale zaleca się używanie poleceń OPSX.
 
-| Polecenie | Co robi |
-|-----------|---------|
-| `/openspec:proposal` | Tworzy wszystkie artefakty naraz (propozycję, specyfikacje, projekt, zadania) |
-| `/openspec:apply` | Wdraża zmianę |
-| `/openspec:archive` | Archiwizuje zmianę |
+| Command | What it does |
+|---------|--------------|
+| `/openspec:proposal` | Tworzy wszystkie artefakty jednocześnie (propozycja, specyfikacje, projekt, zadania) |
+| `/openspec:apply` | Implementuje zmianę |
+| `/openspec:archive` | Archiwuje zmianę |
 
-**Kiedy używać poleceń starszej wersji:**
-- Istniejące projekty korzystające ze starego przepływu pracy
-- Proste zmiany, w których nie potrzebujesz przyrostowego tworzenia artefaktów
-- Preferencja podejścia „wszystko albo nic"
+**Kiedy używać starszych poleceń:**
+- W istniejących projektach korzystających ze starego trybu pracy
+- Przy prostych zmianach, w których nie jest wymagane stopniowe tworzenie artefaktów
+- Gdy preferowany jest podejście „wszystko albo nic”
 
 **Migracja do OPSX:**
-Zmiany starszej wersji mogą być kontynuowane za pomocą poleceń OPSX. Struktura artefaktów jest kompatybilna.
+Starsze zmiany można kontynuować za pomocą poleceń OPSX. Struktura artefaktów jest kompatybilna.
 
 ---
 
-## Rozwiązywanie problemów
+## Ustalanie problemów
 
-### „Change not found"
+### "Change not found" (Zmiana nie została znaleziona)
 
-Polecenie nie mogło zidentyfikować, nad którą zmianą pracować.
-
-**Rozwiązania:**
-- Jawne określenie nazwy zmiany: `/opsx:apply add-dark-mode`
-- Sprawdzenie, czy folder zmiany istnieje: `openspec list`
-- Upewnienie się, że jesteś w odpowiednim katalogu projektu
-
-### „No artifacts ready"
-
-Wszystkie artefakty są albo ukończone, albo zablokowane przez brakujące zależności.
+Polecenie nie było w stanie zidentyfikować, nad jaką zmianą ma pracować.
 
 **Rozwiązania:**
-- Uruchomienie `openspec status --change <name>`, aby zobaczyć, co blokuje
-- Sprawdzenie, czy wymagane artefakty istnieją
-- Najpierw utworzenie brakujących artefaktów zależności
+- Podaj wyraźnie nazwę zmiany: `/opsx:apply add-dark-mode`
+- Sprawdź, czy folder zmiany istnieje: `openspec list`
+- Upewnij się, że jesteś w odpowiednim katalogu projektu
 
-### „Schema not found"
+### "No artifacts ready" (Żadne artefakty nie są gotowe)
 
-Określone schemat nie istnieje.
-
-**Rozwiązania:**
-- Wyświetlenie dostępnych schematów: `openspec schemas`
-- Sprawdzenie pisowni nazwy schematu
-- Utworzenie schematu, jeśli jest niestandardowy: `openspec schema init <name>`
-
-### Polecenia nierozpoznawane
-
-Narzędzie AI nie rozpoznaje poleceń OpenSpec.
+Wszystkie artefakty są albo ukończone, albo zablokowane brakiem zależności.
 
 **Rozwiązania:**
-- Upewnienie się, że OpenSpec jest zainicjalizowany: `openspec init`
-- Ponowne wygenerowanie umiejętności: `openspec update`
-- Sprawdzenie, czy katalog `.claude/skills/` istnieje (dla Claude Code)
-- Ponowne uruchomienie narzędzia AI, aby załadować nowe umiejętności
+- Uruchom `openspec status --change <name>`, aby zobaczyć, co blokuje proces
+- Sprawdź, czy istnieją wymagane artefakty
+- Najpierw utwórz brakujące artefakty zależne
 
-### Artefakty generowane nieprawidłowo
+### "Schema not found" (Schemat nie został znaleziony)
 
-AI tworzy niekompletne lub niepoprawne artefakty.
+Podany schemat nie istnieje.
 
 **Rozwiązania:**
-- Dodanie kontekstu projektu w `openspec/config.yaml`
-- Dodanie reguł dla poszczególnych artefaktów w celu uzyskania konkretnych wytycznych
-- Podanie więcej szczegółów w opisie zmiany
-- Użycie `/opsx:continue` zamiast `/opsx:ff` dla większej kontroli
+- Wypisz dostępne schematy: `openspec schemas`
+- Sprawdź pisownię nazwy schematu
+- Utwórz schemat, jeśli jest on niestandardowy: `openspec schema init <name>`
+
+### Commands not recognized (Polecenia nie są rozpoznawane)
+
+Narzędzie AI nie rozpozna poleceń OpenSpec.
+
+**Rozwiązania:**
+- Upewnij się, że OpenSpec został zainicjowany: `openspec init`
+- Odśwież umiejętności (skills): `openspec update`
+- Sprawdź, czy istnieje katalog `.claude/skills/` (dla Claude Code)
+- Uruchom ponownie swoje narzędzie AI, aby załadowało nowe umiejętności
+
+### Artifacts not generating properly (Artefakty nie są poprawnie generowane)
+
+AI tworzy niekompletne lub błędne artefakty.
+
+**Rozwiązania:**
+- Dodaj kontekst projektu w `openspec/config.yaml`
+- Dodaj zasady dla poszczególnych artefaktów, aby zapewnić odpowiednie wskazówki
+- Podaj więcej szczegółów w opisie zmiany
+- Użyj `/opsx:continue` zamiast `/opsx:ff`, aby uzyskać większą kontrolę
 
 ---
 
 ## Następne kroki
 
-- [Przepływy pracy](workflows.md) - Typowe wzorce i kiedy używać poszczególnych poleceń
+- [Workflows](workflows.md) - Typowe wzorce i kiedy używać każdego polecenia
 - [CLI](cli.md) - Polecenia terminala do zarządzania i walidacji
-- [Dostosowywanie](customization.md) - Tworzenie niestandardowych schematów i przepływów pracy
+- [Customization](customization.md) - Tworzenie niestandardowych schematów i przepływów pracy

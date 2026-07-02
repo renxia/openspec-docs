@@ -65,6 +65,31 @@ const sidebarConfig: SidebarItem[] = [
     },
     {
         "text": {
+            "en": "Overview",
+            "zh-CN": "概览",
+            "ja": "概要",
+            "es": "Visión general",
+            "ko": "개요",
+            "ru": "Обзор",
+            "pt-BR": "Visão geral",
+            "fr": "Aperçu",
+            "de": "Übersicht",
+            "id": "Ikhtisar",
+            "vi": "Tổng quan",
+            "ar": "نظرة عامة",
+            "zh-TW": "概覽",
+            "it": "Panoramica",
+            "uk": "Огляд",
+            "pl": "Przegląd",
+            "tr": "Genel Bakış",
+            "th": "ภาพรวม",
+            "hi": "अवलोकन",
+            "nl": "Overzicht"
+        },
+        "link": "/overview"
+    },
+    {
+        "text": {
             "en": "Installation",
             "zh-CN": "安装",
             "ja": "インストール",
@@ -165,6 +190,56 @@ const sidebarConfig: SidebarItem[] = [
     },
     {
         "text": {
+            "en": "How Commands Work",
+            "zh-CN": "命令工作原理",
+            "ja": "コマンドの仕組み",
+            "es": "Cómo funcionan los comandos",
+            "ko": "명령어 작동 방식",
+            "ru": "Как работают команды",
+            "pt-BR": "Como os comandos funcionam",
+            "fr": "Fonctionnement des commandes",
+            "de": "Wie Befehle funktionieren",
+            "id": "Cara kerja perintah",
+            "vi": "Cách lệnh hoạt động",
+            "ar": "كيفية عمل الأوامر",
+            "zh-TW": "命令工作原理",
+            "it": "Come funzionano i comandi",
+            "uk": "Як працюють команди",
+            "pl": "Jak działają polecenia",
+            "tr": "Komutlar Nasıl Çalışır",
+            "th": "คำสั่งทำงานอย่างไร",
+            "hi": "कमांड कैसे काम करते हैं",
+            "nl": "Hoe opdrachten werken"
+        },
+        "link": "/how-commands-work"
+    },
+    {
+        "text": {
+            "en": "Agent Contract",
+            "zh-CN": "Agent 协议",
+            "ja": "エージェント契約",
+            "es": "Contrato de agente",
+            "ko": "에이전트 계약",
+            "ru": "Контракт агента",
+            "pt-BR": "Contrato de agente",
+            "fr": "Contrat d'agent",
+            "de": "Agent-Vertrag",
+            "id": "Kontrak agen",
+            "vi": "Hợp đồng tác nhân",
+            "ar": "عقد الوكيل",
+            "zh-TW": "Agent 協議",
+            "it": "Contratto agente",
+            "uk": "Контракт агента",
+            "pl": "Kontrakt agenta",
+            "tr": "Ajan Sözleşmesi",
+            "th": "สัญญาเอเจนต์",
+            "hi": "एजेंट अनुबंध",
+            "nl": "Agent-contract"
+        },
+        "link": "/agent-contract"
+    },
+    {
+        "text": {
             "en": "Workflows",
             "zh-CN": "工作流",
             "ja": "ワークフロー",
@@ -240,6 +315,106 @@ const sidebarConfig: SidebarItem[] = [
     },
     {
         "text": {
+            "en": "Editing Changes",
+            "zh-CN": "编辑变更",
+            "ja": "変更の編集",
+            "es": "Editar cambios",
+            "ko": "변경사항 편집",
+            "ru": "Редактирование изменений",
+            "pt-BR": "Editando alterações",
+            "fr": "Modifier les changements",
+            "de": "Änderungen bearbeiten",
+            "id": "Mengedit perubahan",
+            "vi": "Chỉnh sửa thay đổi",
+            "ar": "تحرير التغييرات",
+            "zh-TW": "編輯變更",
+            "it": "Modifica delle modifiche",
+            "uk": "Редагування змін",
+            "pl": "Edycja zmian",
+            "tr": "Değişiklikleri Düzenleme",
+            "th": "การแก้ไขการเปลี่ยนแปลง",
+            "hi": "परिवर्तन संपादित करना",
+            "nl": "Wijzigingen bewerken"
+        },
+        "link": "/editing-changes"
+    },
+    {
+        "text": {
+            "en": "Existing Projects",
+            "zh-CN": "现有项目",
+            "ja": "既存プロジェクト",
+            "es": "Proyectos existentes",
+            "ko": "기존 프로젝트",
+            "ru": "Существующие проекты",
+            "pt-BR": "Projetos existentes",
+            "fr": "Projets existants",
+            "de": "Bestehende Projekte",
+            "id": "Proyek yang ada",
+            "vi": "Dự án hiện có",
+            "ar": "المشاريع القائمة",
+            "zh-TW": "現有項目",
+            "it": "Progetti esistenti",
+            "uk": "Існуючі проєкти",
+            "pl": "Istniejące projekty",
+            "tr": "Mevcut Projeler",
+            "th": "โปรเจกต์ที่มีอยู่",
+            "hi": "मौजूदा प्रोजेक्ट",
+            "nl": "Bestaande projecten"
+        },
+        "link": "/existing-projects"
+    },
+    {
+        "text": {
+            "en": "Examples",
+            "zh-CN": "示例",
+            "ja": "例",
+            "es": "Ejemplos",
+            "ko": "예제",
+            "ru": "Примеры",
+            "pt-BR": "Exemplos",
+            "fr": "Exemples",
+            "de": "Beispiele",
+            "id": "Contoh",
+            "vi": "Ví dụ",
+            "ar": "أمثلة",
+            "zh-TW": "範例",
+            "it": "Esempi",
+            "uk": "Приклади",
+            "pl": "Przykłady",
+            "tr": "Örnekler",
+            "th": "ตัวอย่าง",
+            "hi": "उदाहरण",
+            "nl": "Voorbeelden"
+        },
+        "link": "/examples"
+    },
+    {
+        "text": {
+            "en": "Explore",
+            "zh-CN": "探索",
+            "ja": "探索",
+            "es": "Explorar",
+            "ko": "탐색",
+            "ru": "Исследование",
+            "pt-BR": "Explorar",
+            "fr": "Explorer",
+            "de": "Erkunden",
+            "id": "Jelajahi",
+            "vi": "Khám phá",
+            "ar": "استكشاف",
+            "zh-TW": "探索",
+            "it": "Esplora",
+            "uk": "Дослідження",
+            "pl": "Eksploruj",
+            "tr": "Keşfet",
+            "th": "สำรวจ",
+            "hi": "अन्वेषण",
+            "nl": "Verkennen"
+        },
+        "link": "/explore"
+    },
+    {
+        "text": {
             "en": "Supported Tools",
             "zh-CN": "支持的工具",
             "ja": "サポートツール",
@@ -312,6 +487,106 @@ const sidebarConfig: SidebarItem[] = [
             "nl": "Migratiehandleiding"
         },
         "link": "/migration-guide"
+    },
+    {
+        "text": {
+            "en": "FAQ",
+            "zh-CN": "常见问题",
+            "ja": "よくある質問",
+            "es": "Preguntas frecuentes",
+            "ko": "자주 묻는 질문",
+            "ru": "Часто задаваемые вопросы",
+            "pt-BR": "Perguntas frequentes",
+            "fr": "FAQ",
+            "de": "FAQ",
+            "id": "Pertanyaan umum",
+            "vi": "Câu hỏi thường gặp",
+            "ar": "الأسئلة الشائعة",
+            "zh-TW": "常見問題",
+            "it": "Domande frequenti",
+            "uk": "Поширені запитання",
+            "pl": "Często zadawane pytania",
+            "tr": "SSS",
+            "th": "คำถามที่พบบ่อย",
+            "hi": "अक्सर पूछे जाने वाले प्रश्न",
+            "nl": "Veelgestelde vragen"
+        },
+        "link": "/faq"
+    },
+    {
+        "text": {
+            "en": "Troubleshooting",
+            "zh-CN": "故障排查",
+            "ja": "トラブルシューティング",
+            "es": "Solución de problemas",
+            "ko": "문제 해결",
+            "ru": "Устранение неполадок",
+            "pt-BR": "Solução de problemas",
+            "fr": "Dépannage",
+            "de": "Fehlerbehebung",
+            "id": "Pemecahan masalah",
+            "vi": "Khắc phục sự cố",
+            "ar": "استكشاف الأخطاء وإصلاحها",
+            "zh-TW": "故障排查",
+            "it": "Risoluzione dei problemi",
+            "uk": "Усунення несправностей",
+            "pl": "Rozwiązywanie problemów",
+            "tr": "Sorun Giderme",
+            "th": "การแก้ไขปัญหา",
+            "hi": "समस्या निवारण",
+            "nl": "Probleemoplossing"
+        },
+        "link": "/troubleshooting"
+    },
+    {
+        "text": {
+            "en": "Glossary",
+            "zh-CN": "术语表",
+            "ja": "用語集",
+            "es": "Glosario",
+            "ko": "용어집",
+            "ru": "Глоссарий",
+            "pt-BR": "Glossário",
+            "fr": "Glossaire",
+            "de": "Glossar",
+            "id": "Glosarium",
+            "vi": "Thuật ngữ",
+            "ar": "مسرد المصطلحات",
+            "zh-TW": "術語表",
+            "it": "Glossario",
+            "uk": "Глосарій",
+            "pl": "Słownik",
+            "tr": "Sözlük",
+            "th": "อภิธานศัพท์",
+            "hi": "शब्दावली",
+            "nl": "Woordenlijst"
+        },
+        "link": "/glossary"
+    },
+    {
+        "text": {
+            "en": "Stores Beta",
+            "zh-CN": "Stores Beta",
+            "ja": "Stores ベータ",
+            "es": "Stores Beta",
+            "ko": "Stores 베타",
+            "ru": "Stores Beta",
+            "pt-BR": "Stores Beta",
+            "fr": "Stores Beta",
+            "de": "Stores Beta",
+            "id": "Stores Beta",
+            "vi": "Stores Beta",
+            "ar": "Stores Beta",
+            "zh-TW": "Stores Beta",
+            "it": "Stores Beta",
+            "uk": "Stores Beta",
+            "pl": "Stores Beta",
+            "tr": "Stores Beta",
+            "th": "Stores Beta",
+            "hi": "Stores Beta",
+            "nl": "Stores Beta"
+        },
+        "link": "/stores-beta/user-guide"
     }
 ]
 
@@ -359,7 +634,7 @@ export default defineConfig({
     // 多语言 hreflang（静态注入）
     ['link', { rel: 'alternate', type: 'application/rss+xml', title: 'OpenSpec RSS', href: '/feed.json' }],
     // 公共脚本
-    ['script', { src: 'https://lzw.me/x/lib/utils/h5-common.min.js?v=3da9ebdd', defer: '' }],
+    ['script', { src: 'https://lzw.me/x/lib/utils/h5-common.min.js?v=7ccb47da', defer: '' }],
   ],
 
   // 多语言 hreflang 配置（VitePress 会自动处理，但需确保正确）

@@ -1,31 +1,31 @@
 # コンセプト
 
-このガイドでは、OpenSpec の背後にある核心的なアイデアと、それらがどのように関連しているかを説明します。実際の使用方法については、[Getting Started](getting-started.md) および [Workflows](workflows.md) を参照してください。
+このガイドでは、OpenSpecの核となるアイデアとそれらがどのように連携するかを説明します。実用的な使用方法については、[Getting Started](getting-started.md) および [Workflows](workflows.md) を参照してください。
 
-## 哲学
+## 設計思想
 
-OpenSpec は 4 つの原則に基づいて構築されています。
+OpenSpecは、以下の4つの原則に基づいています:
 
 ```
-固定的ではなく流動的         — フェーズゲートなし、意味のある作業に取り組む
-ウォーターフォールではなく反復的 — 作りながら学び、進化させる
-複雑ではなく簡単            — 軽量なセットアップ、最小限の手順
-ブラウンフィールド優先       — 新規開発だけでなく、既存のコードベースに対応
+fluid not rigid         — no phase gates, work on what makes sense
+iterative not waterfall — learn as you build, refine as you go
+easy not complex        — lightweight setup, minimal ceremony
+brownfield-first        — works with existing codebases, not just greenfield
 ```
 
 ### これらの原則が重要な理由
 
-**固定的ではなく流動的です。** 従来の仕様システムでは、フェーズに縛られます：最初に計画し、次に実装し、そして完了です。OpenSpec はより柔軟です — 作業に意味のある任意の順序で成果物を作成できます。
+**fluid not rigid。** 従来の仕様システムは、フェーズに縛り付けます。つまり、まず計画し、次に実装し、その後完了します。OpenSpecはより柔軟で、作業にとって意味のある順序でアーティファクトを作成できます。
 
-**ウォーターフォールではなく反復的です。** 要件は変化します。理解は深まります。最初は良い方法に思えたことも、コードベースを実際に見た後では維持できなくなるかもしれません。OpenSpec はこの現実を受容します。
+**iterative not waterfall。** 要件は変化します。理解は深まります。当初良さそうに見えたアプローチも、コードベースを見た後では通用しないかもしれません。OpenSpecはこの現実を受け入れています。
 
-**複雑ではなく簡単です。** 仕様フレームワークの中には、広範なセットアップ、厳格なフォーマット、重いプロセスを必要とするものがあります。OpenSpec は邪魔をしません。数秒で初期化し、すぐに作業を開始でき、必要な場合にのみカスタマイズします。
+**easy not complex。** 一部の仕様フレームワークは、広範なセットアップ、厳格なフォーマット、または重厚なプロセスを必要とします。OpenSpecは邪魔になりません。数秒で初期化し、すぐに作業を開始し、必要な場合のみカスタマイズしてください。
 
-**ブラウンフィールド優先です。** ほとんどのソフトウェア開発は、ゼロからの構築ではなく、既存システムの修正です。OpenSpec のデルタベースのアプローチにより、新しいシステムを説明するだけでなく、既存の動作への変更を容易に指定できます。
+**brownfield-first。** ほとんどのソフトウェア作業はゼロからの構築ではなく、既存システムの修正です。OpenSpecのデルタベースのアプローチにより、新しいシステムを記述するだけでなく、既存の動作への変更を指定することが容易になります。
 
 ## 全体像
 
-OpenSpecは、作業を2つの主要な領域に整理します。
+OpenSpecは、あなたの作業を2つの主要な領域に整理します。
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -43,397 +43,251 @@ OpenSpecは、作業を2つの主要な領域に整理します。
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs** は情報源です。システムの現在の振る舞いを記述します。
+**Specs** は真実の源泉（source of truth）であり、システムが現在どのように動作しているかを記述します。
 
-**Changes** は提案された変更です。マージする準備が整うまで、別のフォルダ内に置かれます。
+**Changes** は提案された変更であり、マージする準備ができるまで個別のフォルダ内に存在します。
 
-この分離が重要です。競合なく複数の変更を並行して作業できます。メインの仕様に影響を与える前に変更をレビューでき、変更をアーカイブすると、そのデルタが情報源にきれいにマージされます。
+この分離が鍵となります。これにより、競合することなく複数の変更を並行して作業できます。また、メインのspecsに影響を与える前に変更内容を確認することができます。そして、変更をアーカイブするとき、その差分（deltas）は真実の源泉にきれいにマージされます。
 
-## 協調ワークスペース
+## Specs
 
-ワークスペースサポートはベータ版です。以下のローカル表示モデルは現在の方向性ですが、外部の自動化、統合、長期間のワークフローは、コマンドの動作、状態ファイル、およびJSON出力を進化するものとして扱う必要があります。
+Specsは、構造化された要件とシナリオを使用してシステムの動作を記述します。
 
-以下のコマンドは、リンクされたリポジトリまたはフォルダにローカル表示を開くための最初のセットアップフローを提供します。
-
-リポジトリローカルなOpenSpecプロジェクトは、1つのリポジトリが計画、実装、およびアーカイブフローを所有する場合に適切なデフォルトです。一部の作業は複数のリポジトリやフォルダにまたがります。その場合、OpenSpec協調ワークスペースは、リンクされたパス、オープナーの状態、およびエージェントのセットアップをまとめるマシンローカルな表示です。
-
-ワークスペースのメンタルモデルは次のとおりです:
-
-```text
-workspace     = private local view over context stores, initiatives, repos, and folders
-context store = durable shared context container
-initiative    = durable coordination context inside a context store
-link          = a stable name for a repo or folder the workspace can resolve locally
-change        = one planned piece of work; implementation belongs in the owning repo
-```
-
-ワークスペースは、リポジトリローカルプロジェクトとは異なる形状を持ちます:
-
-```text
-getGlobalDataDir()/workspaces/<workspace-name>/
-├── workspace.yaml                 # Private local view record
-├── AGENTS.md                      # Generated runtime guidance
-└── <workspace-name>.code-workspace # Generated editor workspace file
-```
-
-リポジトリローカルなOpenSpecの状態は、既存の形状を維持します:
-
-```text
-repo-root/
-└── openspec/
-    ├── specs/
-    └── changes/
-```
-
-この区別は重要です。ワークスペースフォルダは、リンクされたリポジトリまたはフォルダを開いて検査するためのローカル協調サーフェスです。各リポジトリの `openspec/` ディレクトリは、リポジトリが所有する仕様、リポジトリローカルな変更、および実装計画の場所であり続けます。ユーザーはワークスペースフォルダ内でリポジトリローカルな `openspec init` を実行する必要はありません。
-
-安定したリンク名は、ワークスペースがリポジトリやフォルダを参照する方法です。プライベートワークスペースレコードは、`api`、`web`、`checkout` などの名前を保持し、それらをこのランタイムのローカルパスにマッピングします。
-
-```yaml
-# workspace.yaml
-version: 1
-name: platform
-context: null
-links:
-  api: /repos/api
-  web: /repos/web
-```
-
-ワークスペースがイニシアチブを開くと、`context` は選択されたコンテキストストアのバインディングとイニシアチブIDを記録します。レジストリで選択されたストアはIDにより移植性を維持します。パスで選択されたストアは、`workspace.yaml` がプライベートローカル状態であるため、ランタイムローカルなパスを意図的に保持します。
-
-```yaml
-context:
-  kind: initiative
-  store:
-    id: platform
-    selector:
-      kind: registry
-      id: platform
-  initiative:
-    id: billing-launch
-```
-
-リンクされたパスは、完全なリポジトリ、大きなモノリポ内のフォルダ、または他の既存のフォルダであってもかまいません。ワークスペース計画に参加する前に、リポジトリローカルな `openspec/` 状態は必要ありません。後の実装、検証、またはアーカイブワークフローには、リポジトリの準備がさらに必要になる場合がありますが、計画の可視性はリンクから始まります。
-
-```text
-multi-repo:
-  api      -> /repos/api
-  web      -> /repos/web
-
-large monorepo:
-  billing  -> /repos/platform/services/billing
-  checkout -> /repos/platform/apps/checkout
-```
-
-管理されたワークスペースは、標準のOpenSpecデータディレクトリの下にあります:
-
-```text
-getGlobalDataDir()/workspaces
-```
-
-これは、`XDG_DATA_HOME` が設定されている場合は `$XDG_DATA_HOME/openspec/workspaces`、Unixスタイルのフォールバックでは `~/.local/share/openspec/workspaces`、ネイティブWindowsのフォールバックでは `%LOCALAPPDATA%\openspec\workspaces` を意味します。ネイティブWindowsシェル、PowerShell、およびWSL2は、それぞれOpenSpecを実行しているランタイムのパス文字列を保持します。この基盤は、`D:\repo`、`/mnt/d/repo`、およびUNC WSLパス間で変換されません。
-
-OpenSpecは、以前のベータワークスペースのルートを互換性入力として引き続き読み取ることができますが、管理されたワークスペースは現在、上記のルート `workspace.yaml` レコードを使用します。ワークスペースフォルダは、自身のプライベートローカル表示に対する権限を持ち続けます。
-
-ワークスペースの可視性は、変更のコミットメントではありません。OpenSpecがどのリポジトリまたはフォルダが関連しているかを知るべき場合にワークスペースをセットアップします。後で機能、修正、プロジェクト、またはその他の作業を計画する準備が整ったら、変更を作成します。
-
-便利なコマンド:
-
-```bash
-# Guided setup
-openspec workspace setup
-
-# Automation-friendly setup
-openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
-
-# See known workspaces from the local registry
-openspec workspace list
-openspec workspace ls
-
-# Add or repair links for the selected workspace
-openspec workspace link /repos/api
-openspec workspace link api-service /repos/api
-openspec workspace relink api-service /new/path/to/api
-
-# Check what this machine can resolve
-openspec workspace doctor
-openspec workspace doctor --workspace platform
-
-# Refresh workspace-local guidance and agent skills
-openspec workspace update
-openspec workspace update --workspace platform --tools codex,claude
-
-# Open the linked working set
-openspec workspace open
-openspec workspace open platform --agent github-copilot
-openspec workspace open --editor
-
-# Open an initiative as a local workspace view
-openspec workspace open --initiative billing-launch --store platform
-openspec workspace open --initiative billing-launch --store-path /repos/platform-context
-```
-
-`workspace setup` は常に標準のワークスペース場所にワークスペースを作成し、ローカルレジストリに記録し、ワークスペースの場所を表示し、少なくとも1つのリンクされたリポジトリまたはフォルダを必要とします。対話型セットアップでは、優先オープナーを求められ、選択されたエージェントにOpenSpecスキルをインストールできます。非対話型セットアップでは、`--opener codex-cli`、`--opener claude`、`--opener github-copilot`、または `--opener editor` が提供された場合にのみ保存します。
-
-ワークスペーススキルはワークスペースルートにのみインストールされます。アクティブなグローバルプロファイルは、どのワークフロースキルが生成されるかを選択します。`--tools` はそれらを受け取るエージェントを選択します。ワークスペースのセットアップと更新は、グローバルデリバリーにコマンドが含まれていても、スラッシュコマンドファイルを作成しません。`openspec workspace update` を実行して、ワークスペースローカルのガイダンスを更新し、管理されたワークスペースローカルスキルディレクトリをリンクされたリポジトリまたはフォルダを編集せずに追加、更新、または削除します。
-
-OpenSpecはまた、ルートワークスペースのオープンファイルも維持します: `AGENTS.md` のOpenSpec管理ガイダンスブロックと、VS CodeおよびGitHub Copilot-in-VS-Codeのオープン用のマシンローカルな `<workspace-name>.code-workspace` ファイルです。管理されたワークスペースはリポジトリではないため、OpenSpecはデフォルトのワークスペース `.gitignore` やデフォルトのワークスペースレベルの `changes/` ディレクトリを作成しません。
-
-管理されたVS Codeワークスペースは、最初に有効なリンクされたリポジトリまたはフォルダを列挙し、次にアタッチされた場合にイニシアチブコンテキストを、最後にOpenSpecワークスペースファイルを列挙します。VS Codeはそれらのエントリをマルチルートワークスペースとして表示します。
-
-`workspace open` は、そのセッションのために `--agent <tool>` または `--editor` が渡されない限り、保存された優先オープナーでリンクされたワーキングセットを開きます。両方のオープナーのオーバーライドを渡すことはエラーです。ルートワークスペースのオープンは、探索とコンテキストのためにリンクされたリポジトリとフォルダを可視にします。実装は、ユーザーが明示的に実装作業を要求した後に始まります。
-
-`workspace link` と `workspace relink` は既存のフォルダのみを記録します。これらはリンクされたリポジトリまたはフォルダを作成、コピー、移動、初期化、または編集しません。リンクまたはリリンクが成功した後、OpenSpecは管理されたガイダンスとVS Codeワークスペースファイルを更新します。
-
-1つのワークスペースを必要とするワークスペースコマンドは、`--workspace <name>` を指定してどこからでも実行できます。ワークスペースフォルダまたはサブディレクトリ内で実行すると、OpenSpecはその現在のワークスペースを使用します。複数の既知のワークスペースが利用可能で、`--workspace <name>` を渡さない場合、人間向けコマンドはピッカーを表示します。`--json` と `--no-interactive` は、プロンプトの代わりに構造化されたステータスエラーで失敗します。
-
-直接のワークスペースコマンドは、スクリプト用にJSON出力をサポートします。JSONレスポンスは、プライマリデータを `workspace`、`workspaces`、または `link` オブジェクトに保持し、警告またはエラーを `status` 配列で報告します。正常なオブジェクトは `status: []` を使用します。
-
-## 仕様
-
-仕様は、構造化された要件とシナリオを使用してシステムの動作を記述します。
-
-### 構造
+### 構成
 
 ```
 openspec/specs/
 ├── auth/
-│   └── spec.md           # 認証動作
+│   └── spec.md           # Authentication behavior（認証の動作）
 ├── payments/
-│   └── spec.md           # 決済処理
+│   └── spec.md           # Payment processing（支払い処理）
 ├── notifications/
-│   └── spec.md           # 通知システム
+│   └── spec.md           # Notification system（通知システム）
 └── ui/
-    └── spec.md           # UIの動作とテーマ
+    └── spec.md           # UI behavior and themes（UIの動作とテーマ）
 ```
 
-仕様はドメイン別に整理します — システムにとって論理的で意味のあるグループ化です。一般的なパターン：
+Specsは、システムの論理的なグループ分けとなるドメインごとに整理します。一般的なパターンは以下の通りです。
 
-- **機能領域別**: `auth/`, `payments/`, `search/`
-- **コンポーネント別**: `api/`, `frontend/`, `workers/`
-- **境界付きコンテキスト別**: `ordering/`, `fulfillment/`, `inventory/`
+- **機能領域ごと**: `auth/`、`payments/`、`search/`
+- **コンポーネントごと**: `api/`、`frontend/`、`workers/`
+- **境界づけられたコンテキスト（Bounded Context）ごと**: `ordering/`、`fulfillment/`、`inventory/`
 
-### 仕様フォーマット
+### Specの形式
 
-仕様は要件を含み、各要件にはシナリオがあります：
+Specには要件が含まれ、各要件にはシナリオがあります。
 
 ```markdown
-# 認証仕様
+# Auth Specification（認証仕様）
 
-## 目的
-アプリケーションの認証とセッション管理。
+## Purpose (目的)
+アプリケーションの認証とセッション管理について。
+
+## Requirements (要件)
+
+### Requirement: User Authentication（ユーザー認証）
+システムは、ログインが成功した場合にJWTトークンを発行しなければならない（SHALL）。
+
+#### Scenario: Valid credentials（有効な資格情報）
+- GIVEN a user with valid credentials（前提：有効な資格情報を持つユーザーがいる）
+- WHEN the user submits login form（実行：ユーザーがログインフォームを送信する）
+- THEN a JWT token is returned（結果：JWTトークンが返される）
+- AND the user is redirected to dashboard（かつ、ユーザーはダッシュボードにリダイレクトされる）
+
+#### Scenario: Invalid credentials（無効な資格情報）
+- GIVEN invalid credentials（前提：無効な資格情報がある）
+- WHEN the user submits login form（実行：ユーザーがログインフォームを送信する）
+- THEN an error message is displayed（結果：エラーメッセージが表示される）
+- AND no token is issued（かつ、トークンは発行されない）
+
+### Requirement: Session Expiration（セッションの期限切れ）
+システムは、30分間の非アクティブ状態の後でセッションを失効させなければならない（MUST）。
+
+#### Scenario: Idle timeout（アイドルタイムアウト）
+- GIVEN an authenticated session（前提：認証済みのセッションがある）
+- WHEN 30 minutes pass without activity（実行：活動なしに30分が経過する）
+- THEN the session is invalidated（結果：セッションが無効化される）
+- AND the user must re-authenticate（かつ、ユーザーは再認証しなければならない）
 ```
 
-## 要件
-
-### 要件: ユーザー認証
-システムは、ログイン成功時にJWTトークンを発行するものとします。
-
-#### シナリオ: 有効な資格情報
-- GIVEN: 有効な資格情報を持つユーザー
-- WHEN: ユーザーがログインフォームを送信する
-- THEN: JWTトークンが返される
-- AND: ユーザーはダッシュボードにリダイレクトされる
-
-#### シナリオ: 無効な資格情報
-- GIVEN: 無効な資格情報
-- WHEN: ユーザーがログインフォームを送信する
-- THEN: エラーメッセージが表示される
-- AND: トークンは発行されない
-
-### 要件: セッション有効期限
-システムは、30分間の非アクティブ状態の後にセッションを期限切れにする必要があります。
-
-#### シナリオ: アイドルタイムアウト
-- GIVEN: 認証済みのセッション
-- WHEN: アクティビティなしで30分が経過する
-- THEN: セッションは無効化される
-- AND: ユーザーは再認証を行う必要がある
-```
-
-**主要な要素:**
+**主な要素:**
 
 | 要素 | 目的 |
 |---------|---------|
-| `## Purpose` | この仕様のドメインの高レベルな説明 |
-| `### Requirement:` | システムが備えるべき具体的な動作 |
-| `#### Scenario:` | 要件の具体的な例 |
+| `## Purpose` | このSpecのドメインに関するハイレベルな説明 |
+| `### Requirement:` | システムが持つべき特定の動作 |
+| `#### Scenario:` | 要件を具体的に実行した例 |
 | SHALL/MUST/SHOULD | 要件の強度を示すRFC 2119キーワード |
 
-### なぜこのように仕様を構造化するのか
+### なぜこのような構造でSpecsを書くのか
 
-**要件は「何を」か** — 実装を指定せずに、システムが何をすべきかを述べます。
+**要件（Requirements）は「何をすべきか (what)」** — 実装方法を指定することなく、システムが何をするべきかを記述します。
 
-**シナリオは「いつ」か** — 検証可能な具体的な例を提供します。良いシナリオは：
-- テスト可能であること（自動テストを記述可能）
-- ハッピーパスとエッジケースの両方をカバーすること
-- Given/When/Thenまたは類似の構造化された形式を使用すること
+**シナリオ（Scenarios）は「いつ（どのような状況で）」** — 検証できる具体的な例を提供します。良いシナリオとは：
+- テスト可能であること（自動テストを記述できること）
+- ハッピーパスとエッジケースの両方をカバーしていること
+- Given/When/Thenのような構造化された形式を使用していること
 
-**RFC 2119キーワード**（SHALL, MUST, SHOULD, MAY）は意図を伝えます：
+**RFC 2119キーワード** (SHALL, MUST, SHOULD, MAY) は意図を伝達します：
 - **MUST/SHALL** — 絶対的な要件
-- **SHOULD** — 推奨されるが、例外がある場合がある
-- **MAY** — 任意
+- **SHOULD** — 推奨されるが、例外が存在する可能性あり
+- **MAY** — オプション
 
-### 仕様とは何か（そして何でないか）
+### Specとは何か（そして何ではないか）
 
-仕様は**動作の契約**であり、実装計画ではありません。
+Specは実装計画ではなく、**動作契約（behavior contract）** です。
 
-良い仕様の内容：
-- ユーザーやダウンストリームシステムが依存する、観測可能な動作
+良いSpecの内容:
+- ユーザーやダウンストリームシステムが依存する観察可能な動作
 - 入力、出力、エラー条件
 - 外部制約（セキュリティ、プライバシー、信頼性、互換性）
-- テストまたは明示的に検証可能なシナリオ
+- テストまたは明示的に検証できるシナリオ
 
-仕様に含めるべきでないもの：
+Specで避けるべきこと:
 - 内部のクラス/関数名
 - ライブラリやフレームワークの選択
-- ステップバイステップの実装の詳細
-- 詳細な実行計画（それらは `design.md` または `tasks.md` に属します）
+- ステップバイステップの実装詳細
+- 詳細な実行計画（これらは`design.md`や`tasks.md`に属します）
 
 簡単なテスト：
-- 実装が外部から見える動作を変更せずに変更できる場合、それはおそらく仕様に属さない。
+- もし実装が変わっても外部に見える動作が変わらなければ、それはSpecには含まれない可能性が高いです。
 
-### 軽量さを保つ：段階的な厳格さ
+### 軽量化の維持：段階的な厳密性 (Progressive Rigor)
 
-OpenSpecは官僚主義を避けることを目指しています。変更を検証可能にする最小限のレベルを使用してください。
+OpenSpecは官僚主義を避けることを目指しています。変更が検証可能であるために必要な最も軽いレベルを使用してください。
 
-**Lite仕様（デフォルト）：**
-- 短い動作中心の要件
-- 明確なスコープと非目標
-- 具体的な受入チェックをいくつか
+**Lite spec（デフォルト）:**
+- 短く、動作優先の要件
+- 明確なスコープと非目標（non-goals）
+- いくつかの具体的な受け入れチェック
 
-**Full仕様（より高いリスクの場合）：**
-- チーム間やリポジトリ間の変更
-- API/契約の変更、移行、セキュリティ/プライバシーの懸念
-- 曖昧さが高価な再作業を引き起こす可能性のある変更
+**Full spec（高リスクの場合）:**
+- チーム間またはリポジトリをまたぐ変更
+- API/契約の変更、マイグレーション、セキュリティ/プライバシーに関する懸念事項
+- 曖昧さが高価な手戻りを引き起こす可能性のある変更
 
-ほとんどの変更はLiteモードに留まるべきです。
+ほとんどの変更はLiteモードで留めるべきです。
 
-### 人間とエージェントの協力
+### 人間とエージェントのコラボレーション
 
-多くのチームでは、人間が探索し、エージェントが成果物を起草します。意図されているループは以下の通りです：
+多くのチームでは、人間がアイデアを練り、エージェントが成果物（artifacts）を作成します。意図されたフローは以下の通りです：
 
 1. 人間が意図、コンテキスト、制約を提供する。
-2. エージェントがこれを動作中心の要件とシナリオに変換する。
-3. エージェントは `design.md` と `tasks.md` に実装の詳細を保持し、`spec.md` には含めない。
-4. 検証が構造と明確さを実装前に確認する。
+2. エージェントがこれを動作優先の要件とシナリオに変換する。
+3. エージェントは実装の詳細を`design.md`や`tasks.md`に保持し、`spec.md`には含めない。
+4. 検証によって、実装前に構造と明確さが確認される。
 
-これにより、仕様は人間にとって読みやすく、エージェントにとって一貫性のあるものになります。
+これにより、Specが人間にとって読みやすく、エージェントにとって一貫性のあるものになります。
 
-## 変更
+## Changes
 
-変更とは、システムへの提案された修正であり、それを理解し実装するために必要なすべてを含むフォルダとしてパッケージ化されます。
+Changeはシステムに対する提案された変更であり、それを理解し実装するために必要なすべてのものが含まれたフォルダとしてパッケージ化されます。
 
-### 変更の構造
+### Changeの構成
 
 ```
 openspec/changes/add-dark-mode/
-├── proposal.md           # なぜ、そして何を
-├── design.md             # どのように（技術的アプローチ）
-├── tasks.md              # 実装チェックリスト
-├── .openspec.yaml        # 変更メタデータ（オプション）
-└── specs/                # デルタ仕様
+├── proposal.md           # Why and what（理由と内容）
+├── design.md             # How (technical approach)（方法（技術的アプローチ））
+├── tasks.md              # Implementation checklist（実装チェックリスト）
+├── .openspec.yaml        # Change metadata (optional)（変更メタデータ（オプション））
+└── specs/                # Delta specs（差分Spec）
     └── ui/
-        └── spec.md       # ui/spec.mdの何が変わるか
+        └── spec.md       # What's changing in ui/spec.md（ui/spec.mdで何が変わるか）
 ```
 
-各変更は自己完結しています。以下を含みます：
-- **成果物** — 意図、設計、タスクを捉えた文書
-- **デルタ仕様** — 追加、変更、または削除される仕様
-- **メタデータ** — この特定の変更のオプション設定
+各Changeは自己完結的です。以下の要素を持ちます：
+- **Artifacts** — 意図、設計、タスクを捉えるドキュメント
+- **Delta specs** — 追加、変更、削除される内容の仕様
+- **Metadata** — この特定の変更に関するオプションの設定情報
 
-### なぜ変更がフォルダなのか
+### なぜChangesがフォルダなのか
 
-変更をフォルダとしてパッケージ化することには、いくつかの利点があります：
+Changeをフォルダとしてパッケージ化することにはいくつかの利点があります：
 
-1. **すべてが一箇所に。** 提案、設計、タスク、仕様が1つの場所に存在します。異なる場所を探し回る必要がありません。
+1. **すべてを一箇所に。** 提案、設計、タスク、Specが一つの場所に存在します。色々な場所を探し回る必要がありません。
 
-2. **並行作業。** 複数の変更が同時に存在でき、競合しません。`add-dark-mode` に取り組みながら、`fix-auth-bug` も進行中にしておくことができます。
+2. **並行作業。** 複数のChangeが競合することなく同時に存在できます。「`add-dark-mode`」に取り組んでいる間に「`fix-auth-bug`」も進行中である、といったことが可能です。
 
-3. **クリーンな履歴。** アーカイブされると、変更は完全なコンテキストとともに `changes/archive/` に移動します。何が変わったかだけでなく、なぜ変わったかを振り返って理解できます。
+3. **クリーンな履歴。** アーカイブされる際、Changeは完全なコンテキストを保持したまま`changes/archive/`に移動します。何が変わったかだけでなく、なぜ変わったかを振り返って理解することができます。
 
-4. **レビューしやすい。** 変更フォルダはレビューしやすいです。開いて、提案を読み、設計を確認し、仕様の差分を見ます。
+4. **レビューしやすい。** Changeフォルダはレビューが容易です。開いて、提案を読み、設計を確認し、Specの差分を見るだけで済みます。
 
-## 成果物
+## Artifacts
 
-成果物とは、作業を導く変更内の文書のことです。
+Artifactsは、作業を導くChange内のドキュメントです。
 
-### 成果物の流れ
+### Artifactの流れ
 
 ```
 proposal ──────► specs ──────► design ──────► tasks ──────► implement
     │               │             │              │
-   なぜ          何が          どのように      実行する
- + スコープ      変わるか      アプローチ      ステップ
+   why            what           how          steps
+ + scope        changes       approach      to take
 ```
 
-成果物は相互に構築されます。各成果物は次の成果物のコンテキストを提供します。
+Artifactsは互いに積み重ねられています。各Artifactは次のものに対するコンテキストを提供します。
 
-### 成果物の種類
+### Artifactの種類
 
-#### 提案 (`proposal.md`)
+#### Proposal (`proposal.md`)
 
-提案は高レベルで**意図**、**スコープ**、**アプローチ**を捉えます。
+Proposalは、高レベルでの**意図（intent）**、**スコープ（scope）**、および**アプローチ（approach）**を捉えます。
 
 ```markdown
-# Proposal: Add Dark Mode
+# Proposal: Add Dark Mode（提案：ダークモードの追加）
 
-## Intent
-Users have requested a dark mode option to reduce eye strain
-during nighttime usage and match system preferences.
+## Intent (意図)
+ユーザーからの要望として、夜間の使用における目の負担軽減とシステム設定との一致のため、ダークモードオプションを提供すること。
 
-## Scope
-In scope:
-- Theme toggle in settings
-- System preference detection
-- Persist preference in localStorage
+## Scope (スコープ)
+対象範囲内:
+- 設定画面でのテーマ切り替え
+- システム設定の検出
+- ユーザー設定をlocalStorageに永続化する
 
-Out of scope:
-- Custom color themes (future work)
-- Per-page theme overrides
+対象外:
+- カスタムカラーテーマ（今後の作業）
+- ページごとのテーマ上書き
 
-## Approach
-Use CSS custom properties for theming with a React context
-for state management. Detect system preference on first load,
-allow manual override.
+## Approach (アプローチ)
+状態管理のためのReactコンテキストとCSSカスタムプロパティを使用してテーマ付けを行う。初回ロード時にシステム設定を検出し、手動での上書きを許可する。
 ```
 
-**提案を更新すべきタイミング：**
-- スコープが変更された場合（狭まるか、広がるか）
-- 意図が明確になった場合（問題のより良い理解）
-- アプローチが根本的に変更された場合
+**Proposalを更新すべきタイミング:**
+- スコープの変更（絞り込みまたは拡大）
+- 意図の明確化（問題に対するより良い理解）
+- アプローチの根本的なシフト
 
-#### 仕様 (`specs/` 内のデルタ仕様)
+#### Specs (delta specs in `specs/`)
 
-デルタ仕様は、現在の仕様に対する**何が変わるか**を説明します。以下の[デルタ仕様](#delta-specs)を参照してください。
+Delta specsは、現在のSpecに対する**何が変わっているか**を記述します。後述の[Delta Specs](#delta-specs)を参照してください。
 
-#### 設計 (`design.md`)
+#### Design (`design.md`)
 
-設計は**技術的アプローチ**と**アーキテクチャの決定**を捉えます。
+Designは**技術的アプローチ**と**アーキテクチャ上の決定事項**を捉えます。
 
 ````markdown
-# Design: Add Dark Mode
+# Design: Add Dark Mode（設計：ダークモードの追加）
 
-## Technical Approach
-Theme state managed via React Context to avoid prop drilling.
-CSS custom properties enable runtime switching without class toggling.
+## Technical Approach (技術的アプローチ)
+プロパティドリリングを避けるため、React Contextを通じてテーマの状態を管理する。CSSカスタムプロパティにより、クラス切り替えなしでランタイムでの切り替えを可能にする。
 
-## Architecture Decisions
+## Architecture Decisions (アーキテクチャ上の決定事項)
 
-### Decision: Context over Redux
-Using React Context for theme state because:
-- Simple binary state (light/dark)
-- No complex state transitions
-- Avoids adding Redux dependency
+### Decision: Context over Redux（ReduxではなくContextを使用すること）
+理由：
+- 単純なバイナリ状態（ライト/ダーク）であるため
+- 複雑な状態遷移がないため
+- Reduxの依存関係を追加することを避けるため
 
-### Decision: CSS Custom Properties
-Using CSS variables instead of CSS-in-JS because:
-- Works with existing stylesheet
-- No runtime overhead
-- Browser-native solution
+### Decision: CSS Custom Properties（CSSカスタムプロパティの使用）
+理由：
+- 既存のスタイルシートと連携するため
+- ランタイムオーバーヘッドがないため
+- ブラウザネイティブなソリューションであるため
 
-## Data Flow
+## Data Flow (データフロー)
 ```
 ThemeProvider (context)
        │
@@ -444,111 +298,111 @@ ThemeToggle ◄──► localStorage
 CSS Variables (applied to :root)
 ```
 
-## File Changes
-- `src/contexts/ThemeContext.tsx` (new)
-- `src/components/ThemeToggle.tsx` (new)
-- `src/styles/globals.css` (modified)
+## File Changes (ファイル変更)
+- `src/contexts/ThemeContext.tsx` (新規)
+- `src/components/ThemeToggle.tsx` (新規)
+- `src/styles/globals.css` (修正)
 ````
 
-**設計を更新すべきタイミング：**
-- 実装の過程でアプローチが機能しないと判明した場合
-- より良い解決策が見つかった場合
-- 依存関係や制約が変更された場合
+**Designを更新すべきタイミング:**
+- 実装によりアプローチが機能しないことが判明したとき
+- より良いソリューションを発見したとき
+- 依存関係や制約が変更されたとき
 
-#### タスク (`tasks.md`)
+#### Tasks (`tasks.md`)
 
-タスクは**実装チェックリスト**です。チェックボックス付きの具体的なステップです。
+Tasksは**実装チェックリスト**であり、チェックボックス付きの具体的なステップです。
 
 ```markdown
-# Tasks
+# Tasks (タスク)
 
-## 1. Theme Infrastructure
-- [ ] 1.1 Create ThemeContext with light/dark state
-- [ ] 1.2 Add CSS custom properties for colors
-- [ ] 1.3 Implement localStorage persistence
-- [ ] 1.4 Add system preference detection
+## 1. Theme Infrastructure（テーマ基盤）
+- [ ] 1.1 Create ThemeContext with light/dark state（ライト/ダーク状態を持つThemeContextを作成する）
+- [ ] 1.2 Add CSS custom properties for colors（色のためのCSSカスタムプロパティを追加する）
+- [ ] 1.3 Implement localStorage persistence（localStorageへの永続化を実装する）
+- [ ] 1.4 Add system preference detection（システム設定の検出を追加する）
 
-## 2. UI Components
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Add toggle to settings page
-- [ ] 2.3 Update Header to include quick toggle
+## 2. UI Components（UIコンポーネント）
+- [ ] 2.1 Create ThemeToggle component（ThemeToggleコンポーネントを作成する）
+- [ ] 2.2 Add toggle to settings page（設定ページにトグルを追加する）
+- [ ] 2.3 Update Header to include quick toggle（クイックトグルを含めるためにヘッダーを更新する）
 
-## 3. Styling
-- [ ] 3.1 Define dark theme color palette
-- [ ] 3.2 Update components to use CSS variables
-- [ ] 3.3 Test contrast ratios for accessibility
+## 3. Styling（スタイリング）
+- [ ] 3.1 Define dark theme color palette（ダークテーマのカラーパレットを定義する）
+- [ ] 3.2 Update components to use CSS variables（CSS変数を使用するようにコンポーネントを更新する）
+- [ ] 3.3 Test contrast ratios for accessibility（アクセシビリティのためのコントラスト比率をテストする）
 ```
 
-**タスクのベストプラクティス：**
-- 関連するタスクを見出しの下にグループ化する
-- 階層的な番号付けを使用する（1.1、1.2など）
-- タスクは1回のセッションで完了できる程度の小ささに保つ
-- 完了したタスクにチェックを入れる
+**タスクのベストプラクティス:**
+- 関連するタスクをヘッダーの下にグループ化する
+- 階層的な番号付けを使用する（1.1, 1.2など）
+- 一つのセッションで完了できる程度の小さなタスクに保つ
+- 完了したタスクはチェックを入れる
 
-## デルタ仕様
+## Delta Specs (差分Spec)
 
-デルタ仕様は、OpenSpecを既存システム開発（brownfield development）で機能させる主要な概念です。全体の仕様を繰り返し述べるのではなく、**何が変わるか**を記述します。
+Delta specsは、OpenSpecがブラウンフィールド開発（既存のシステムへの変更）に対応するための鍵となる概念です。これは、全体のSpecを再記述するのではなく、**何が変わっているか**を記述します。
 
 ### 形式
 
 ```markdown
-# Delta for Auth
+# Delta for Auth（認証の差分）
 
-## ADDED Requirements
+## ADDED Requirements (追加された要件)
 
-### Requirement: Two-Factor Authentication
-The system MUST support TOTP-based two-factor authentication.
+### Requirement: Two-Factor Authentication（二要素認証）
+システムはTOTPベースの二要素認証をサポートしなければならない（MUST）。
 
-#### Scenario: 2FA enrollment
-- GIVEN a user without 2FA enabled
-- WHEN the user enables 2FA in settings
-- THEN a QR code is displayed for authenticator app setup
-- AND the user must verify with a code before activation
+#### Scenario: 2FA enrollment（2FA登録）
+- GIVEN a user without 2FA enabled（前提：2FAが有効になっていないユーザーがいる）
+- WHEN the user enables 2FA in settings（実行：ユーザーが設定で2FAを有効にする）
+- THEN a QR code is displayed for authenticator app setup（結果：認証アプリの設定用のQRコードが表示される）
+- AND the user must verify with a code before activation（かつ、アクティベーション前にコードで検証しなければならない）
 
-#### Scenario: 2FA login
-- GIVEN a user with 2FA enabled
-- WHEN the user submits valid credentials
-- THEN an OTP challenge is presented
-- AND login completes only after valid OTP
+#### Scenario: 2FA login（2FAログイン）
+- GIVEN a user with 2FA enabled（前提：2FAが有効になっているユーザーがいる）
+- WHEN the user submits valid credentials（実行：ユーザーが有効な資格情報を送信する）
+- THEN an OTP challenge is presented（結果：OTPチャレンジが表示される）
+- AND login completes only after valid OTP（かつ、有効なOTPの後にのみログインが完了する）
 
-## MODIFIED Requirements
+## MODIFIED Requirements (変更された要件)
 
-### Requirement: Session Expiration
-The system MUST expire sessions after 15 minutes of inactivity.
-(Previously: 30 minutes)
+### Requirement: Session Expiration（セッションの期限切れ）
+システムは15分間の非アクティブ状態の後でセッションを失効させなければならない（MUST）。
+(以前：30分)
 
-#### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 15 minutes pass without activity
-- THEN the session is invalidated
+#### Scenario: Idle timeout（アイドルタイムアウト）
+- GIVEN an authenticated session（前提：認証済みのセッションがある）
+- WHEN 15 minutes pass without activity（実行：活動なしに15分が経過する）
+- THEN the session is invalidated（結果：セッションが無効化される）
 
-## REMOVED Requirements
+## REMOVED Requirements (削除された要件)
 
-### Requirement: Remember Me
-(Deprecated in favor of 2FA. Users should re-authenticate each session.)
+### Requirement: Remember Me（ログイン状態の記憶）
+(2FAに置き換えられました。ユーザーは各セッションで再認証する必要があります。)
 ```
 
-### デルタセクション
+### Delta Sections (差分セクション)
 
-| セクション | 意味 | アーカイブ時に何が起こるか |
+| Section | Meaning (意味) | What Happens on Archive (アーカイブ時の挙動) |
 |---------|---------|------------------------|
-| `## ADDED Requirements` | 新しい動作 | メイン仕様に追加される |
+| `## ADDED Requirements` | 新しい動作 | メインSpecに追加される |
 | `## MODIFIED Requirements` | 変更された動作 | 既存の要件を置き換える |
-| `## REMOVED Requirements` | 非推奨の動作 | メイン仕様から削除される |
+| `## REMOVED Requirements` | 非推奨（廃止）となった動作 | メインSpecから削除される |
 
-### なぜ完全な仕様ではなくデルタなのか
+### なぜフルSpecではなくDeltaを使うのか
 
-**明確さ。** デルタは正確に何が変わるかを示します。完全な仕様を読む場合、現在のバージョンと頭の中で差分を比較する必要があります。
+**明確性。** Deltaは正確に何が変わっているかを示します。フルSpecを読む場合、現在のバージョンと比較して頭の中で差分を取る必要があります。
 
-**競合の回避。** 2つの変更が同じ仕様ファイルに触れる場合でも、異なる要件を変更する限り競合しません。
+**競合の回避。** 2つのChangeが異なる要件を変更している限り、同じSpecファイルを触っても競合することはありません。
 
-**レビューの効率性。** レビュアーは変更点を見ることができ、変更されていないコンテキストは省かれます。重要なことに集中できます。
+**レビュー効率性。** レビュアーは変更点のみに焦点を当てることができ、変更されていないコンテキストを見る必要がありません。
 
-**既存システムへの適合。** ほとんどの作業は既存の動作を変更します。デルタは変更を第一級の存在とし、後付けのものではありません。
+**ブラウンフィールドへの適合。** ほとんどの作業は既存の動作を修正することです。Deltaは修正を後回しではなく、第一級の要素にします。
 
 ## スキーマ
 
-スキーマは、ワークフローにおける成果物のタイプとその依存関係を定義します。
+スキーマは、ワークフローにおけるアーティファクトの種類とその依存関係を定義します。
 
 ### スキーマの仕組み
 
@@ -573,7 +427,7 @@ artifacts:
     requires: [specs, design] # Needs both specs and design first
 ```
 
-**成果物は依存関係のグラフを形成します:**
+**アーティファクトは依存関係グラフを形成します:**
 
 ```
                     proposal
@@ -594,29 +448,29 @@ artifacts:
                 specs, design)
 ```
 
-**依存関係はイネーブラーであり、ゲートではありません。** これらは次に作成すべきものではなく、何を作成可能かを示します。設計が不要ならスキップできます。設計の前後どちらで仕様を作成することも可能です—どちらもプロポーザルにのみ依存します。
+**依存関係はゲートではなくイネーブラー（実現要因）です。** それらは次に何を「しなければならないか」を示すのではなく、何が作成可能であるかを示します。デザインが必要なければスキップできます。スペックとデザインはどちらもproposalにのみ依存するため、順番を問わず作成できます。
 
-### 組み込みスキーマ
+### 標準スキーマ
 
 **spec-driven** (デフォルト)
 
-spec-driven 開発の標準ワークフロー:
+仕様駆動開発のための標準的なワークフローです:
 
 ```
 proposal → specs → design → tasks → implement
 ```
 
-最適な用途: 実装前に仕様を合意したい場合の、ほとんどの機能開発作業。
+最適な用途: 実装前に仕様について合意したいほとんどの機能開発。
 
 ### カスタムスキーマ
 
 チームのワークフローに合わせてカスタムスキーマを作成します:
 
 ```bash
-# 作成を開始
+# ゼロから作成
 openspec schema init research-first
 
-# 既存のスキーマをフォーク
+# または既存のものをフォークする
 openspec schema fork spec-driven research-first
 ```
 
@@ -628,24 +482,24 @@ name: research-first
 artifacts:
   - id: research
     generates: research.md
-    requires: []           # Do research first
+    requires: []           # まずリサーチを行う
 
   - id: proposal
     generates: proposal.md
-    requires: [research]   # Proposal informed by research
+    requires: [research]   # リサーチに基づいた提案書を作成
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # Skip specs/design, go straight to tasks
+    requires: [proposal]   # スペック/デザインをスキップし、直接タスクへ進む
 ```
 
-カスタムスキーマの作成と使用の詳細については、[カスタマイズ](customization.md) を参照してください。
+カスタムスキーマの作成と使用に関する詳細については、[Customization](customization.md)を参照してください。
 
 ## アーカイブ
 
-アーカイブは、変更のデルタ仕様をメイン仕様にマージし、変更を履歴として保存することで、変更を完了させます。
+アーカイブは、デルタ仕様（delta specs）をメインの仕様にマージし、変更点を履歴として保持することで、変更を完了させます。
 
-### アーカイブ時の動作
+### アーカイブする際に何が起こるか
 
 ```
 アーカイブ前:
@@ -669,10 +523,10 @@ openspec/
 openspec/
 ├── specs/
 │   └── auth/
-│       └── spec.md        # 2FA要件が含まれるようになりました
+│       └── spec.md        # これで2FAの要件を含むようになる
 └── changes/
     └── archive/
-        └── 2025-01-24-add-2fa/    # 履歴として保存されます
+        └── 2025-01-24-add-2fa/    # 履歴のために保持される
             ├── proposal.md
             ├── design.md
             ├── tasks.md
@@ -681,90 +535,87 @@ openspec/
                     └── spec.md
 ```
 
-### アーカイブプロセス
+### アーカイブのプロセス
 
-1. **デルタをマージします。** 各デルタ仕様セクション (ADDED/MODIFIED/REMOVED) が、対応するメイン仕様に適用されます。
+1. **デルタのマージ。** 各デルタ仕様セクション（ADDED/MODIFIED/REMOVED）が対応するメインの仕様に適用されます。
+2. **アーカイブへの移動。** 変更フォルダは、時系列順序付けのために日付プレフィックスを付けて `changes/archive/` に移動します。
+3. **コンテキストの保持。** すべてのアーティファクトがアーカイブ内にそのまま残ります。いつでもなぜその変更が行われたのかを振り返ることができます。
 
-2. **アーカイブへ移動します。** 変更フォルダが、時系列順に並べるための日付プレフィックスを付けて `changes/archive/` に移動します。
+### なぜアーカイブが重要なのか
 
-3. **コンテキストを保持します。** 全ての成果物はアーカイブ内にそのまま残ります。いつでも変更がなされた理由を遡って確認できます。
+**クリーンな状態。** アクティブな変更（`changes/`）には進行中の作業のみが表示されます。完了した作業は整理されて移動します。
 
-### アーカイブが重要な理由
+**監査証跡。** アーカイブは、単に何が変わったかだけでなく、なぜ変わるのかを説明する提案書、どのように変わるかを説明するデザイン、そして行われた作業を示すタスクという、すべての変更の完全なコンテキストを保持します。
 
-**クリーンな状態。** アクティブな変更 (`changes/`) には進行中の作業のみが表示されます。完了した作業は邪魔にならない場所に移動します。
+**仕様の進化。** 仕様は、変更がアーカイブされるにつれて有機的に成長します。各アーカイブがデルタをマージし、時間の経過とともに包括的な仕様を構築していきます。
 
-**監査証跡。** アーカイブは、変更された内容だけでなく、変更を説明するプロポーザル、方法を説明する設計、そして行われた作業を示すタスクなど、変更の完全なコンテキストを保存します。
-
-**仕様の進化。** 変更がアーカイブされるにつれて、仕様は自然と成長していきます。各アーカイブはデルタをマージし、時間とともに包括的な仕様を構築していきます。
-
-## 全体の連携
+## 全体の流れ
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              OPENSPEC フロー                                 │
+│                              OPENSPEC FLOW                                   │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. 開始       │  /opsx:propose (コア) または /opsx:new (拡張)            │
-│   │     変更       │                                                         │
+│   │  1. START      │  /opsx:propose (core) or /opsx:new (expanded)           │
+│   │     CHANGE     │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. 作成       │  /opsx:ff または /opsx:continue (拡張ワークフロー)        │
-│   │     成果物     │  proposal → specs → design → tasks を作成               │
-│   │                │  (スキーマの依存関係に基づく)                             │
+│   │  2. CREATE     │  /opsx:ff or /opsx:continue (expanded workflow)         │
+│   │     ARTIFACTS  │  Creates proposal → specs → design → tasks              │
+│   │                │  (based on schema dependencies)                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  3. 実装       │  /opsx:apply                                            │
-│   │     タスク     │  タスクを進め、完了チェックを入れる                       │
-│   │                │◄──── 学習しながら成果物を更新                             │
+│   │  3. IMPLEMENT  │  /opsx:apply                                            │
+│   │     TASKS      │  Work through tasks, checking them off                  │
+│   │                │◄──── Update artifacts as you learn                      │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. 検証       │  /opsx:verify (任意)                                     │
-│   │     作業       │  実装が仕様と一致しているかを確認                         │
+│   │  4. VERIFY     │  /opsx:verify (optional)                                │
+│   │     WORK       │  Check implementation matches specs                     │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. アーカイブ │────►│  デルタ仕様がメイン仕様にマージされる        │    │
-│   │     変更       │     │  変更フォルダが archive/ に移動する          │    │
-│   └────────────────┘     │  仕様が更新された信頼できる情報源になる      │    │
-│                          └──────────────────────────────────────────────┘    │
+│   │  5. ARCHIVE    │────►│  Delta specs merge into main specs           │    │
+│   │     CHANGE     │     │  Change folder moves to archive/             │    │
+│   └────────────────┘     │  Specs are now the updated source of truth   │    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 **好循環:**
 
-1. 仕様が現在の動作を記述する
-2. 変更が修正を提案する (デルタとして)
-3. 実装が変更を現実のものにする
+1. 仕様は現在の動作を記述する
+2. 変更は修正案（デルタとして）を提案する
+3. 実装がその変更を現実のものとする
 4. アーカイブがデルタを仕様にマージする
-5. 仕様が新しい動作を記述するようになる
-6. 次の変更が更新された仕様を基にして行われる
+5. 仕様は新しい動作を記述するようになる
+6. 次の変更は更新された仕様に基づいて構築される
 
 ## 用語集
 
-| 用語 | 定義 |
-|------|------|
-| **成果物 (Artifact)** | 変更内の文書 (提案、設計、タスク、またはデルタ仕様) |
-| **アーカイブ (Archive)** | 変更を完了し、そのデルタをメイン仕様にマージするプロセス |
-| **変更 (Change)** | システムへの提案された修正。成果物を含むフォルダとしてパッケージされる |
-| **デルタ仕様 (Delta spec)** | 現在の仕様に対する変更内容 (追加/変更/削除) を記述する仕様 |
-| **ドメイン (Domain)** | 仕様の論理的なグループ (例: `auth/`, `payments/`) |
-| **要件 (Requirement)** | システムが持つべき特定の動作 |
-| **シナリオ (Scenario)** | 要件の具体的な例。通常は Given/When/Then 形式で記述される |
-| **スキーマ (Schema)** | 成果物のタイプとその依存関係の定義 |
-| **仕様 (Spec)** | システムの動作を記述する仕様。要件とシナリオを含む |
-| **信頼できる情報源 (Source of truth)** | 現在合意された動作を含む `openspec/specs/` ディレクトリ |
+| Term | Definition |
+|------|------------|
+| **Artifact** | 変更（提案書、デザイン、タスク、またはデルタ仕様）内のドキュメント |
+| **Archive** | 変更を完了させ、そのデルタをメインの仕様にマージするプロセス |
+| **Change** | アーティファクトを含むフォルダとしてパッケージ化されたシステムへの提案された修正 |
+| **Delta spec** | 現在の仕様に対する変更（ADDED/MODIFIED/REMOVED）を記述する仕様 |
+| **Domain** | 仕様の論理的なグループ化（例: `auth/`、`payments/`） |
+| **Requirement** | システムが満たすべき特定の動作 |
+| **Scenario** | 要件の具体的な例。通常はGiven/When/Then形式で記述される |
+| **Schema** | アーティファクトの種類とその依存関係の定義 |
+| **Spec** | システムの動作を記述する仕様書。要件とシナリオを含む |
+| **Source of truth** | 現在合意されている動作を含む `openspec/specs/` ディレクトリ |
 
 ## 次のステップ
 
-- [始め方](getting-started.md) - 実践的な最初のステップ
-- [ワークフロー](workflows.md) - 一般的なパターンと各々の使用タイミング
-- [コマンド](commands.md) - 完全なコマンドリファレンス
-- [カスタマイズ](customization.md) - カスタムスキーマの作成とプロジェクト設定
+- [Getting Started](getting-started.md) - 実践的な最初のステップ
+- [Workflows](workflows.md) - 一般的なパターンとそれぞれの使用タイミング
+- [Commands](commands.md) - 完全なコマンドリファレンス
+- [Customization](customization.md) - カスタムスキーマの作成とプロジェクトの設定

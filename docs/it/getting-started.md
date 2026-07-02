@@ -1,63 +1,90 @@
-# Introduzione
+# Iniziare
 
-Questa guida spiega come funziona OpenSpec dopo averlo installato e inizializzato. Per le istruzioni di installazione, consulta il [README principale](index.md#quick-start).
+Questa guida spiega come funziona OpenSpec dopo che l'hai installato e inizializzato. Per le istruzioni di installazione, consulta il [README principale](../index.md#quick-start) o la [guida all'installazione](installation.md). Sei nuovo a tutto il set di documentazione? La [home della documentazione](index.md) mappa ogni cosa.
+
+> **Dove digito questi comandi?** In due posti, e confonderli è lo scoglio iniziale più comune.
+>
+> - I comandi `openspec ...` (come `openspec init`) vengono eseguiti nel tuo **terminale**.
+> - I comandi `/opsx:...` (come `/opsx:propose`) vengono eseguiti nella **chat del tuo assistente AI**, la stessa casella in cui gli chiedi di scrivere codice.
+>
+> Non c'è una "modalità interattiva" separata da avviare. Devi semplicemente digitare il comando con la barra nella chat e il tuo assistente prende il resto. Spiegazione completa: [Come funzionano i comandi](how-commands-work.md).
+
+## I Tuoi Primi Cinque Minuti
+
+L'intero ciclo, con ogni passaggio etichettato in base al luogo in cui avviene:
+
+```text
+TERMINAL   $ npm install -g @fission-ai/openspec@latest
+TERMINAL   $ cd your-project && openspec init
+AI CHAT      /opsx:explore                    (opzionale: rifletterci prima)
+AI CHAT      /opsx:propose add-dark-mode      (l'AI prepara il piano; tu lo rivedi)
+AI CHAT      /opsx:apply                      (l'AI lo costruisce)
+AI CHAT      /opsx:archive                    (le specifiche sono aggiornate, la modifica è archiviata)
+```
+
+Due passaggi nel terminale per l'impostazione, poi vivi nella chat. Il resto di questa guida scompone cosa fa ogni passaggio e cosa vedrai.
+
+> **Non sei sicuro di cosa costruire? Inizia con `/opsx:explore`.** È un partner di pensiero senza rischi che legge la tua codebase, valuta le opzioni e affina un'idea vaga in un piano concreto, tutto prima che esista qualsiasi artefatto o codice. Quando il quadro è chiaro, passa a `/opsx:propose`. Questa è l'abitudine migliore per lavorare con un AI che altrimenti costruirebbe con sicurezza la cosa sbagliata. Vedi la [guida all'esplorazione](explore.md).
 
 ## Come Funziona
 
-OpenSpec ti aiuta, te e il tuo assistente di programmazione AI, a mettervi d'accordo su cosa costruire prima che venga scritto qualsiasi codice.
+OpenSpec ti aiuta e il tuo assistente di codifica AI a concordare cosa costruire prima che venga scritto qualsiasi codice.
 
 **Percorso rapido predefinito (profilo core):**
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+   (opzionale)
 ```
 
-**Percorso esteso (selezione del workflow personalizzato):**
+Inizia con `/opsx:explore` quando stai cercando di capire cosa fare, o passa direttamente a `/opsx:propose` quando lo sai già. L'Esplorazione è nel profilo predefinito, quindi è sempre disponibile quando ne hai bisogno.
+
+**Percorso esteso (selezione del flusso di lavoro personalizzato):**
 
 ```text
 /opsx:new ──► /opsx:ff o /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-Il profilo globale predefinito è `core`, che include `propose`, `explore`, `apply`, `sync` e `archive`. Puoi abilitare i comandi del workflow esteso con `openspec config profile` e poi `openspec update`.
+Il profilo globale predefinito è `core`, che include `propose`, `explore`, `apply`, `sync` e `archive`. Puoi abilitare i comandi del flusso di lavoro esteso con `openspec config profile` e poi `openspec update`.
 
 ## Cosa Crea OpenSpec
 
-Dopo aver eseguito `openspec init`, il tuo progetto avrà questa struttura:
+Dopo aver eseguito `openspec init`, il tuo progetto ha questa struttura:
 
 ```
 openspec/
-├── specs/              # Fonte di verità (il comportamento del tuo sistema)
+├── specs/              # Fonte della verità (il comportamento del tuo sistema)
 │   └── <dominio>/
 │       └── spec.md
-├── changes/            # Aggiornamenti proposti (una cartella per modifica)
-│   └── <nome-modifica>/
+├── changes/            # Aggiornamenti proposti (una cartella per ogni cambiamento)
+│   └── <nome-cambiamento>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Specifiche delta (cosa sta cambiando)
+│       └── specs/      # Spec delta (cosa sta cambiando)
 │           └── <dominio>/
 │               └── spec.md
 └── config.yaml         # Configurazione del progetto (opzionale)
 ```
 
-**Due directory chiave:**
+**Due cartelle chiave:**
 
-- **`specs/`** - La fonte di verità. Queste specifiche descrivono come si comporta attualmente il tuo sistema. Organizzate per dominio (es. `specs/auth/`, `specs/payments/`).
+- **`specs/`** - La fonte della verità. Queste specifiche descrivono come si comporta attualmente il tuo sistema. Organizzate per dominio (es. `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** - Modifiche proposte. Ogni modifica ha la sua cartella con tutti gli artefatti correlati. Quando una modifica è completa, le sue specifiche vengono unite nella directory principale `specs/`.
+- **`changes/`** - Modifiche proposte. Ogni cambiamento ha la sua cartella con tutti gli artefatti correlati. Quando un cambiamento è completato, le sue specifiche vengono fuse nella directory principale `specs/`.
 
 ## Comprendere gli Artefatti
 
-Ogni cartella di modifica contiene artefatti che guidano il lavoro:
+Ogni cartella di cambiamento contiene artefatti che guidano il lavoro:
 
 | Artefatto | Scopo |
-|-----------|-------|
-| `proposal.md` | Il "perché" e il "cosa" - cattura intento, ambito e approccio |
-| `specs/` | Specifiche delta che mostrano i requisiti AGGIUNTI/MODIFICATI/RIMOSSI |
+|----------|---------|
+| `proposal.md` | Il "perché" e il "cosa" - cattura l'intento, lo scopo e l'approccio |
+| `specs/` | Spec delta che mostrano i requisiti Aggiunti/Modificati/Rimossi |
 | `design.md` | Il "come" - approccio tecnico e decisioni architetturali |
-| `tasks.md` | Checklist di implementazione con caselle di controllo |
+| `tasks.md` | Lista di controllo dell'implementazione con caselle di spunta |
 
-**Gli artefatti si costruiscono l'uno sull'altro:**
+**Gli artefatti si basano l'uno sull'altro:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
@@ -66,92 +93,94 @@ proposal ──► specs ──► design ──► tasks ──► implement
             aggiorna man mano che impari
 ```
 
-Puoi sempre tornare indietro e perfezionare gli artefatti precedenti man mano che impari di più durante l'implementazione.
+Puoi sempre tornare indietro e affinare gli artefatti precedenti mentre impari di più durante l'implementazione.
 
-## Come Funzionano le Specifiche Delta
+## Come Funzionano le Spec Delta
 
-Le specifiche delta sono il concetto chiave in OpenSpec. Mostrano cosa sta cambiando rispetto alle tue specifiche attuali.
+Le spec delta sono il concetto chiave in OpenSpec. Mostrano cosa sta cambiando rispetto alle tue specifiche attuali.
 
 ### Il Formato
 
-Le specifiche delta usano sezioni per indicare il tipo di modifica:
+Le spec delta utilizzano sezioni per indicare il tipo di cambiamento:
 
 ```markdown
 # Delta per Auth
 
 ## Requisiti AGGIUNTI
 
-### Requisito: Autenticazione a Due Fattori
-Il sistema DEVE richiedere un secondo fattore durante il login.
+### Requisito: Autenticazione a due fattori
+Il sistema DEVE richiedere un secondo fattore durante l'accesso.
 
 #### Scenario: OTP richiesto
-- DATO un utente con 2FA abilitato
+- DATO un utente con 2FA abilitata
 - QUANDO l'utente invia credenziali valide
-- ALLORA viene presentata una sfida OTP
+- ALLORA viene presentato un challenge OTP
 
 ## Requisiti MODIFICATI
 
-### Requisito: Timeout di Sessione
-Il sistema DEVE far scadere le sessioni dopo 30 minuti di inattività.
+### Requisito: Timeout di sessione
+Il sistema DEVE scadere le sessioni dopo 30 minuti di inattività.
 (Precedentemente: 60 minuti)
 
-#### Scenario: Timeout di inattività
-- DATA una sessione autenticata
+#### Scenario: timeout di inattività
+- DATO una sessione autenticata
 - QUANDO passano 30 minuti senza attività
 - ALLORA la sessione viene invalidata
 
 ## Requisiti RIMOSSI
 
 ### Requisito: Ricordami
-(Deprecato a favore di 2FA)
+(Deprecato a favore del 2FA)
 ```
 
-### Cosa Succede durante l'Archiviazione
+### Cosa Succede all'Archiviazione
 
-Quando archivi una modifica:
+Quando archivi un cambiamento:
 
 1. I requisiti **AGGIUNTI** vengono aggiunti alla specifica principale
 2. I requisiti **MODIFICATI** sostituiscono la versione esistente
 3. I requisiti **RIMOSSI** vengono eliminati dalla specifica principale
 
-La cartella della modifica viene spostata in `openspec/changes/archive/` per la cronologia di audit.
+La cartella di cambiamento si sposta in `openspec/changes/archive/` per la cronologia di audit.
 
-## Esempio: La Tua Prima Modifica
+## Esempio: Il Tuo Primo Cambiamento
 
-Procediamo con l'aggiunta della modalità scura a un'applicazione.
+Vediamo come aggiungere il dark mode a un'applicazione.
 
-### 1. Avviare la Modifica (Predefinito)
+### 1. Avviare il Cambiamento (Predefinito)
 
 ```text
 Tu: /opsx:propose add-dark-mode
 
 AI:  Creata openspec/changes/add-dark-mode/
-     ✓ proposal.md — perché lo stiamo facendo, cosa sta cambiando
+     ✓ proposal.md — perché stiamo facendo questo, cosa sta cambiando
      ✓ specs/       — requisiti e scenari
      ✓ design.md    — approccio tecnico
-     ✓ tasks.md     — checklist di implementazione
+     ✓ tasks.md     — lista di controllo dell'implementazione
      Pronto per l'implementazione!
 ```
 
-Se hai abilitato il profilo del workflow esteso, puoi anche farlo in due passaggi: `/opsx:new` poi `/opsx:ff` (o `/opsx:continue` in modo incrementale).
+Se hai abilitato il profilo di flusso di lavoro esteso, puoi farlo anche in due passaggi: `/opsx:new` e poi `/opsx:ff` (o `/opsx:continue` incrementale).
 
 ### 2. Cosa Viene Creato
 
 **proposal.md** - Cattura l'intento:
 
 ```markdown
-# Proposta: Aggiungere Modalità Scura
+# Proposta: Aggiungere il Dark Mode
 
 ## Intento
-Gli utenti hanno richiesto un'opzione di modalità scura per ridurre l'affaticamento degli occhi durante l'uso notturno.
+Gli utenti hanno richiesto un'opzione dark mode per ridurre l'affaticamento visivo
+durante l'uso notturno.
 
-## Ambito
-- Aggiungere un interruttore del tema nelle impostazioni
-- Supportare il rilevamento delle preferenze di sistema
-- Salvare la preferenza in localStorage
+## Scopo
+- Aggiungere la commutazione del tema nelle impostazioni
+- Supportare la rilevazione delle preferenze di sistema
+- Persistere le preferenze in localStorage
 
 ## Approccio
-Usare le proprietà CSS personalizzate per il theming con un contesto React per la gestione dello stato.
+Utilizzare proprietà CSS personalizzate per il tematizzazione con un contesto React
+per la gestione dello stato.
 ```
 
 **specs/ui/spec.md** - Delta che mostra i nuovi requisiti:
@@ -161,39 +190,39 @@ Usare le proprietà CSS personalizzate per il theming con un contesto React per 
 
 ## Requisiti AGGIUNTI
 
-### Requisito: Selezione Tema
-Il sistema DEVE consentire agli utenti di scegliere tra temi chiari e scuri.
+### Requisito: Selezione del tema
+Il sistema DEVE consentire agli utenti di scegliere tra temi chiaro e scuro.
 
-#### Scenario: Interruttore manuale
+#### Scenario: Commutazione manuale
 - DATO un utente su qualsiasi pagina
-- QUANDO l'utente clicca sull'interruttore del tema
+- QUANDO l'utente fa clic sulla commutazione del tema
 - ALLORA il tema cambia immediatamente
-- E la preferenza persiste tra le sessioni
+- E la preferenza persiste attraverso le sessioni
 
 #### Scenario: Preferenza di sistema
 - DATO un utente senza preferenze salvate
 - QUANDO l'applicazione si carica
-- ALLORA viene usato lo schema di colore preferito dal sistema
+- ALLORA viene utilizzato lo schema di colori preferito dal sistema
 ```
 
-**tasks.md** - Checklist di implementazione:
+**tasks.md** - Lista di controllo dell'implementazione:
 
 ```markdown
-# Attività
+# Compiti
 
-## 1. Infrastruttura Tema
+## 1. Infrastruttura del Tema
 - [ ] 1.1 Creare ThemeContext con stato chiaro/scuro
 - [ ] 1.2 Aggiungere proprietà CSS personalizzate per i colori
-- [ ] 1.3 Implementare la persistenza in localStorage
+- [ ] 1.3 Implementare la persistenza di localStorage
 
 ## 2. Componenti UI
 - [ ] 2.1 Creare il componente ThemeToggle
-- [ ] 2.2 Aggiungere l'interruttore alla pagina delle impostazioni
-- [ ] 2.3 Aggiornare l'Header per includere un interruttore rapido
+- [ ] 2.2 Aggiungere la commutazione alla pagina delle impostazioni
+- [ ] 2.3 Aggiornare l'Header per includere la commutazione rapida
 
 ## 3. Stile
-- [ ] 3.1 Definire la tavolozza colori del tema scuro
-- [ ] 3.2 Aggiornare i componenti per usare le variabili CSS
+- [ ] 3.1 Definire la palette di colori del tema scuro
+- [ ] 3.2 Aggiornare i componenti per utilizzare le variabili CSS
 ```
 
 ### 3. Implementare
@@ -201,42 +230,42 @@ Il sistema DEVE consentire agli utenti di scegliere tra temi chiari e scuri.
 ```
 Tu: /opsx:apply
 
-AI:  Lavorando sulle attività...
+AI:  Lavorando sui compiti...
      ✓ 1.1 Creato ThemeContext con stato chiaro/scuro
      ✓ 1.2 Aggiunte proprietà CSS personalizzate a globals.css
-     ✓ 1.3 Implementata la persistenza in localStorage
+     ✓ 1.3 Implementata la persistenza di localStorage
      ✓ 2.1 Creato il componente ThemeToggle
      ...
-     Tutte le attività completate!
+     Tutti i compiti completati!
 ```
 
-Durante l'implementazione, se scopri che il design necessita di aggiustamenti, aggiorna semplicemente l'artefatto e continua.
+Durante l'implementazione, se scopri che il design ha bisogno di aggiustamenti, aggiorna semplicemente l'artefatto e continua.
 
 ### 4. Archiviare
 
 ```
 Tu: /opsx:archive
 
-AI:  Archiviazione di add-dark-mode in corso...
-     ✓ Specifiche unite in openspec/specs/ui/spec.md
-     ✓ Spostato in openspec/changes/archive/2025-01-24-add-dark-mode/
+AI:  Archiviando add-dark-mode...
+     ✓ Fuse le specifiche in openspec/specs/ui/spec.md
+     ✓ Spostato a openspec/changes/archive/2025-01-24-add-dark-mode/
      Fatto! Pronto per la prossima funzionalità.
 ```
 
-Le tue specifiche delta ora fanno parte delle specifiche principali, documentando come funziona il tuo sistema.
+Le tue spec delta fanno ora parte delle specifiche principali, documentando come funziona il tuo sistema.
 
 ## Verifica e Revisione
 
-Usa la CLI per controllare le tue modifiche:
+Usa la CLI per controllare i tuoi cambiamenti:
 
 ```bash
-# Elenca le modifiche attive
+# Elenca i cambiamenti attivi
 openspec list
 
-# Visualizza i dettagli della modifica
+# Visualizza i dettagli del cambiamento
 openspec show add-dark-mode
 
-# Valida la formattazione della specifica
+# Valida il formato della specifica
 openspec validate add-dark-mode
 
 # Dashboard interattiva
@@ -245,7 +274,14 @@ openspec view
 
 ## Prossimi Passi
 
-- [Workflow](workflows.md) - Pattern comuni e quando usare ogni comando
+- [Esplora Prima](explore.md) - Usa `/opsx:explore` per riflettere su un'idea prima di impegnarti
+- [Usare OpenSpec in un Progetto Esistente](existing-projects.md) - Inizia con una codebase brownfield ampia
+- [Modificare e Iterare su un Cambiamento](editing-changes.md) - Aggiorna gli artefatti, torna indietro, riconcilia le modifiche manuali
+- [Concetti Fondamentali in Breve](overview.md) - L'intero modello mentale su una pagina
+- [Esempi e Ricette](examples.md) - Cambiamenti reali, dall'inizio alla fine
+- [Flussi di Lavoro](workflows.md) - Schemi comuni e quando usare ciascun comando
 - [Comandi](commands.md) - Riferimento completo per tutti i comandi slash
-- [Concetti](concepts.md) - Comprensione più profonda di specifiche, modifiche e schemi
-- [Personalizzazione](customization.md) - Fai funzionare OpenSpec a modo tuo
+- [Concetti](concepts.md) - Comprensione più approfondita delle specifiche, dei cambiamenti e degli schemi
+- [Personalizzazione](customization.md) - Fai in modo che OpenSpec funzioni a tuo piacimento
+- [Stores](stores-beta/user-guide.md) - Un pianificazione che copre repository o team? Tienila nel suo repository (beta)
+- [FAQ](faq.md) e [Risoluzione dei Problemi](troubleshooting.md) - Quando ti blocchi

@@ -1,253 +1,285 @@
 # शुरुआत करना
 
-यह मार्गदर्शिका बताती है कि OpenSpec कैसे काम करता है, इंस्टॉलेशन और इनिशियलाइज़ेशन के बाद। इंस्टॉलेशन निर्देशों के लिए, [मुख्य README](index.md#quick-start) देखें।
+यह गाइड बताती है कि OpenSpec आपके द्वारा इसे स्थापित और इनिशियलाइज़ करने के बाद कैसे काम करता है। इंस्टॉलेशन निर्देशों के लिए, [main README](../index.md#quick-start) या [Installation guide](installation.md) देखें। क्या आप पूरे दस्तावेज़ीकरण सेट से नए हैं? [documentation home](index.md) सब कुछ मैप करता है।
+
+> **मैं ये कमांड कहाँ टाइप करता हूँ?** दो जगहों पर, और इन्हें मिलाना सबसे आम शुरुआती गलती है।
+>
+> - `openspec ...` कमांड (जैसे `openspec init`) आपके **टर्मिनल** में चलते हैं।
+> - `/opsx:...` कमांड (जैसे `/opsx:propose`) आपके **AI असिस्टेंट की चैट** में चलते हैं, उसी बॉक्स में जहाँ आप इसे कोड लिखने के लिए कहते हैं।
+>
+> शुरू करने के लिए कोई अलग "इंटरैक्टिव मोड" नहीं है। आप बस चैट में स्लैश कमांड टाइप करते हैं और आपका सहायक वहाँ से काम संभाल लेता है। पूरी व्याख्या: [How Commands Work](how-commands-work.md)।
+
+## आपके पहले पाँच मिनट
+
+पूरी प्रक्रिया, प्रत्येक चरण को यह लेबल करके कि वह कहाँ होता है:
+
+```text
+TERMINAL   $ npm install -g @fission-ai/openspec@latest
+TERMINAL   $ cd your-project && openspec init
+AI CHAT      /opsx:explore                    (वैकल्पिक: पहले सोचें)
+AI CHAT      /opsx:propose add-dark-mode      (AI योजना का मसौदा तैयार करता है; आप इसकी समीक्षा करते हैं)
+AI CHAT      /opsx:apply                      (AI इसे बनाता है)
+AI CHAT      /opsx:archive                    (specs अपडेट हो गए, परिवर्तन संग्रहीत किया गया)
+```
+
+सेटअप के लिए दो टर्मिनल चरण होते हैं, जिसके बाद आप चैट में काम करना शुरू कर देते हैं। यह गाइड का बाकी हिस्सा बताता है कि प्रत्येक चरण क्या करता है और आपको क्या दिखाई देगा।
+
+> **अभी क्या बनाना है, इसके बारे में निश्चित नहीं हैं? `/opsx:explore` से शुरुआत करें।** यह एक जोखिम-मुक्त सोचने वाला साथी है जो आपके कोडबेस को पढ़ता है, विकल्पों का मूल्यांकन करता है, और किसी भी आर्टिफैक्ट या कोड के अस्तित्व से पहले एक अस्पष्ट विचार को एक ठोस योजना में बदल देता है। जब तस्वीर साफ हो जाती है, तो यह `/opsx:propose` को सौंप देता है। यह AI के साथ काम करने की सबसे अच्छी आदत है जो अन्यथा आत्मविश्वास से गलत चीज़ बना देगा। [Explore guide](explore.md) देखें।
 
 ## यह कैसे काम करता है
 
-OpenSpec आपको और आपके AI कोडिंग सहायक को किसी भी कोड को लिखने से पहले यह तय करने में मदद करता है कि क्या बनाना है।
+OpenSpec आपको और आपके AI कोडिंग सहायक को यह तय करने में मदद करता है कि कोई कोड लिखे जाने से पहले क्या बनाना है।
 
-**डिफ़ॉल्ट त्वरित मार्ग (कोर प्रोफ़ाइल):**
-
-```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
-```
-
-**विस्तृत मार्ग (कस्टम वर्कफ़्लो चयन):**
+**डिफ़ॉल्ट त्वरित पथ (कोर प्रोफ़ाइल):**
 
 ```text
-/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+   (वैकल्पिक)
 ```
 
-डिफ़ॉल्ट ग्लोबल प्रोफ़ाइल `core` है, जिसमें `propose`, `explore`, `apply`, `sync`, और `archive` शामिल हैं। आप `openspec config profile` और फिर `openspec update` के साथ विस्तृत वर्कफ़्लो कमांड सक्षम कर सकते हैं।
+जब आप यह पता लगा रहे होते हैं कि क्या करना है, तो `/opsx:explore` से शुरुआत करें, या जब आपको पहले से पता होता है तो सीधे `/opsx:propose` पर कूद जाएं। एक्सप्लोर डिफ़ॉल्ट प्रोफ़ाइल में है, इसलिए जब आपको इसकी आवश्यकता होती है तो यह हमेशा उपलब्ध रहता है।
+
+**विस्तारित पथ (कस्टम वर्कफ़्लो चयन):**
+
+```text
+/opsx:new ──► /opsx:ff या /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+```
+
+डिफ़ॉल्ट ग्लोबल प्रोफ़ाइल `core` है, जिसमें `propose`, `explore`, `apply`, `sync`, और `archive` शामिल हैं। आप `openspec config profile` और फिर `openspec update` का उपयोग करके विस्तारित वर्कफ़्लो कमांड को सक्षम कर सकते हैं।
 
 ## OpenSpec क्या बनाता है
 
-`openspec init` चलाने के बाद, आपके प्रोजेक्ट में यह संरचना होती है:
+`openspec init` चलाने के बाद, आपके पास यह संरचना होती है:
 
 ```
 openspec/
 ├── specs/              # सत्य का स्रोत (आपके सिस्टम का व्यवहार)
 │   └── <domain>/
 │       └── spec.md
-├── changes/            # प्रस्तावित अपडेट (प्रत्येक परिवर्तन के लिए एक फ़ोल्डर)
+├── changes/            # प्रस्तावित अपडेट (परिवर्तन प्रति फ़ोल्डर एक)
 │   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # डेल्टा स्पेक्स (क्या बदल रहा है)
+│       └── specs/      # डेल्टा specs (क्या बदल रहा है)
 │           └── <domain>/
 │               └── spec.md
 └── config.yaml         # प्रोजेक्ट कॉन्फ़िगरेशन (वैकल्पिक)
 ```
 
-**दो प्रमुख निर्देशिकाएँ:**
+**दो मुख्य डायरेक्टरी:**
 
-- **`specs/`** - सत्य का स्रोत। ये स्पेक्स बताते हैं कि आपका सिस्टम वर्तमान में कैसे व्यवहार करता है। डोमेन के अनुसार व्यवस्थित (जैसे, `specs/auth/`, `specs/payments/`)।
+- **`specs/`** - सत्य का स्रोत। ये specs बताते हैं कि आपका सिस्टम वर्तमान में कैसे व्यवहार करता है। डोमेन द्वारा व्यवस्थित (उदाहरण के लिए, `specs/auth/`, `specs/payments/`)।
 
-- **`changes/`** - प्रस्तावित संशोधन। प्रत्येक परिवर्तन को अपना फ़ोल्डर मिलता है जिसमें सभी संबंधित आर्टिफ़ैक्ट्स होते हैं। जब कोई परिवर्तन पूरा हो जाता है, तो उसके स्पेक्स मुख्य `specs/` निर्देशिका में विलीन हो जाते हैं।
+- **`changes/`** - प्रस्तावित संशोधन। प्रत्येक परिवर्तन अपने सभी संबंधित आर्टिफैक्ट्स के साथ अपना फ़ोल्डर प्राप्त करता है। जब कोई परिवर्तन पूरा हो जाता है, तो इसके specs मुख्य `specs/` डायरेक्टरी में विलय हो जाते हैं।
 
-## आर्टिफ़ैक्ट्स को समझना
+## आर्टिफैक्ट्स को समझना
 
-प्रत्येक परिवर्तन फ़ोल्डर में आर्टिफ़ैक्ट्स होते हैं जो कार्य का मार्गदर्शन करते हैं:
+प्रत्येक परिवर्तन फ़ोल्डर ऐसे आर्टिफैक्ट्स (artifacts) को समाहित करता है जो काम का मार्गदर्शन करते हैं:
 
-| आर्टिफ़ैक्ट | उद्देश्य |
+| आर्टिफैक्ट | उद्देश्य |
 |----------|---------|
-| `proposal.md` | "क्यों" और "क्या" - उद्देश्य, दायरा और दृष्टिकोण को कैप्चर करता है |
-| `specs/` | डेल्टा स्पेक्स जो जोड़े गए/संशोधित/हटाए गए आवश्यकताओं को दिखाते हैं |
-| `design.md` | "कैसे" - तकनीकी दृष्टिकोण और आर्किटेक्चर निर्णय |
+| `proposal.md` | "क्यों" और "क्या" - इरादे, दायरे और दृष्टिकोण को कैप्चर करता है |
+| `specs/` | डेल्टा specs जो ADDED/MODIFIED/REMOVED आवश्यकताओं को दिखाते हैं |
+| `design.md` | "कैसे" - तकनीकी दृष्टिकोण और वास्तुकला निर्णय |
 | `tasks.md` | चेकबॉक्स के साथ कार्यान्वयन चेकलिस्ट |
 
-**आर्टिफ़ैक्ट्स एक-दूसरे पर आधारित होते हैं:**
+**आर्टिफैक्ट्स एक-दूसरे पर निर्मित होते हैं:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            जैसे-जैसे आप सीखते हैं अपडेट करें
+            सीखने के साथ अपडेट करें
 ```
 
-कार्यान्वयन के दौरान जैसे-जैसे आप अधिक जानते हैं, आप हमेशा पिछले आर्टिफ़ैक्ट्स को परिष्कृत करने के लिए वापस जा सकते हैं।
+आप कार्यान्वयन के दौरान और अधिक जानने पर हमेशा पहले के आर्टिफैक्ट्स को परिष्कृत करने के लिए वापस जा सकते हैं।
 
-## डेल्टा स्पेक्स कैसे काम करते हैं
+## डेल्टा specs कैसे काम करते हैं
 
-डेल्टा स्पेक्स OpenSpec में एक प्रमुख अवधारणा हैं। ये दिखाते हैं कि आपके वर्तमान स्पेक्स के सापेक्ष क्या बदल रहा है।
+डेल्टा specs OpenSpec में मुख्य अवधारणा है। वे बताते हैं कि आपके वर्तमान specs के सापेक्ष क्या बदल रहा है।
 
-### प्रारूप
+### प्रारूप (The Format)
 
-डेल्टा स्पेक्स परिवर्तन के प्रकार को इंगित करने के लिए अनुभागों का उपयोग करते हैं:
+डेल्टा specs परिवर्तन के प्रकार को इंगित करने के लिए अनुभागों का उपयोग करते हैं:
 
 ```markdown
-# Delta for Auth
+# Auth के लिए डेल्टा
 
-## ADDED Requirements
+## ADDED आवश्यकताएँ
 
-### Requirement: Two-Factor Authentication
-The system MUST require a second factor during login.
+### आवश्यकता: टू-फैक्टर ऑथेंटिकेशन
+सिस्टम को लॉगिन के दौरान दूसरे कारक की आवश्यकता होनी चाहिए।
 
-#### Scenario: OTP required
-- GIVEN a user with 2FA enabled
-- WHEN the user submits valid credentials
-- THEN an OTP challenge is presented
+#### परिदृश्य: OTP आवश्यक
+- GIVEN 2FA सक्षम उपयोगकर्ता
+- WHEN उपयोगकर्ता वैध क्रेडेंशियल सबमिट करता है
+- THEN एक OTP चुनौती प्रस्तुत की जाती है
 
-## MODIFIED Requirements
+## MODIFIED आवश्यकताएँ
 
-### Requirement: Session Timeout
-The system SHALL expire sessions after 30 minutes of inactivity.
-(Previously: 60 minutes)
+### आवश्यकता: सत्र टाइमआउट
+सिस्टम निष्क्रियता के 30 मिनट बाद सेशंस को समाप्त कर देगा।
+(पहले: 60 मिनट)
 
-#### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 30 minutes pass without activity
-- THEN the session is invalidated
+#### परिदृश्य: आइडल टाइमआउट
+- GIVEN एक प्रमाणित सत्र
+- WHEN गतिविधि के बिना 30 मिनट बीत जाते हैं
+- THEN सत्र अमान्य हो जाता है
 
-## REMOVED Requirements
+## REMOVED आवश्यकताएँ
 
-### Requirement: Remember Me
-(Deprecated in favor of 2FA)
+### आवश्यकता: मुझे याद रखें (Remember Me)
+(2FA के पक्ष में अप्रचलित)
 ```
 
 ### आर्काइव पर क्या होता है
 
-जब आप किसी परिवर्तन को आर्काइव करते हैं:
+जब आप किसी परिवर्तन को संग्रहीत (archive) करते हैं:
 
-1. **जोड़ी गई** आवश्यकताएँ मुख्य स्पेक में जोड़ दी जाती हैं
-2. **संशोधित** आवश्यकताएँ मौजूदा संस्करण को प्रतिस्थापित करती हैं
-3. **हटाई गई** आवश्यकताएँ मुख्य स्पेक से हटा दी जाती हैं
+1. **ADDED** आवश्यकताओं को मुख्य spec में जोड़ा जाता है।
+2. **MODIFIED** आवश्यकताओं मौजूदा संस्करण को बदल देती हैं।
+3. **REMOVED** आवश्यकताओं को मुख्य spec से हटा दिया जाता है।
 
-ऑडिट इतिहास के लिए परिवर्तन फ़ोल्डर `openspec/changes/archive/` में चला जाता है।
+परिवर्तन फ़ोल्डर ऑडिट इतिहास के लिए `openspec/changes/archive/` पर चला जाता है।
 
 ## उदाहरण: आपका पहला परिवर्तन
 
-आइए किसी एप्लिकेशन में डार्क मोड जोड़ने की प्रक्रिया से गुज़रते हैं।
+आइए एक एप्लिकेशन में डार्क मोड जोड़ने की प्रक्रिया देखें।
 
-### 1. परिवर्तन शुरू करें (डिफ़ॉल्ट)
+### 1. परिवर्तन शुरू करना (डिफ़ॉल्ट)
 
 ```text
 You: /opsx:propose add-dark-mode
 
-AI:  Created openspec/changes/add-dark-mode/
-     ✓ proposal.md — why we're doing this, what's changing
-     ✓ specs/       — requirements and scenarios
-     ✓ design.md    — technical approach
-     ✓ tasks.md     — implementation checklist
-     Ready for implementation!
+AI:  openspec/changes/add-dark-mode/ बनाया गया
+     ✓ proposal.md — हम यह क्यों कर रहे हैं, क्या बदल रहा है
+     ✓ specs/       — आवश्यकताएँ और परिदृश्य
+     ✓ design.md    — तकनीकी दृष्टिकोण
+     ✓ tasks.md     — कार्यान्वयन चेकलिस्ट
+     कार्यान्वयन के लिए तैयार!
 ```
 
-यदि आपने विस्तृत वर्कफ़्लो प्रोफ़ाइल सक्षम की है, तो आप यह दो चरणों में भी कर सकते हैं: `/opsx:new` फिर `/opsx:ff` (या क्रमिक रूप से `/opsx:continue`)।
+यदि आपने विस्तारित वर्कफ़्लो प्रोफ़ाइल सक्षम की है, तो आप इसे दो चरणों के रूप में भी कर सकते हैं: `/opsx:new` फिर `/opsx:ff` (या क्रमिक रूप से `/opsx:continue`)।
 
 ### 2. क्या बनाया जाता है
 
-**proposal.md** - उद्देश्य को कैप्चर करता है:
+**proposal.md** - इरादे को कैप्चर करता है:
 
 ```markdown
-# Proposal: Add Dark Mode
+# प्रस्ताव: डार्क मोड जोड़ना
 
-## Intent
-Users have requested a dark mode option to reduce eye strain
-during nighttime usage.
+## इरादा
+उपयोगकर्ताओं ने रात के समय उपयोग के दौरान आंखों का तनाव कम करने के लिए एक डार्क मोड विकल्प का अनुरोध किया है।
 
-## Scope
-- Add theme toggle in settings
-- Support system preference detection
-- Persist preference in localStorage
+## दायरा (Scope)
+- सेटिंग्स में थीम टॉगल जोड़ें
+- सिस्टम प्राथमिकता पहचान का समर्थन करें
+- localStorage में वरीयता सहेजें
 
-## Approach
-Use CSS custom properties for theming with a React context
-for state management.
+## दृष्टिकोण (Approach)
+स्टेट मैनेजमेंट के लिए React संदर्भ के साथ थीমিंग के लिए CSS कस्टम प्रॉपर्टीज़ का उपयोग करें।
 ```
 
-**specs/ui/spec.md** - नई आवश्यकताएँ दिखाने वाला डेल्टा:
+**specs/ui/spec.md** - नई आवश्यकताओं को दिखाने वाला डेल्टा:
 
 ```markdown
-# Delta for UI
+# UI के लिए डेल्टा
 
-## ADDED Requirements
+## ADDED आवश्यकताएँ
 
-### Requirement: Theme Selection
-The system SHALL allow users to choose between light and dark themes.
+### आवश्यकता: थीम चयन
+सिस्टम उपयोगकर्ताओं को लाइट और डार्क थीम्स के बीच चुनने की अनुमति देगा।
 
-#### Scenario: Manual toggle
-- GIVEN a user on any page
-- WHEN the user clicks the theme toggle
-- THEN the theme switches immediately
-- AND the preference persists across sessions
+#### परिदृश्य: मैन्युअल टॉगल
+- GIVEN किसी भी पेज पर एक उपयोगकर्ता
+- WHEN उपयोगकर्ता थीम टॉगल पर क्लिक करता है
+- THEN थीम तुरंत बदल जाती है
+- AND वरीयता सत्रों में बनी रहती है
 
-#### Scenario: System preference
-- GIVEN a user with no saved preference
-- WHEN the application loads
-- THEN the system's preferred color scheme is used
+#### परिदृश्य: सिस्टम प्राथमिकता
+- GIVEN कोई सहेजी गई प्राथमिकता नहीं वाला उपयोगकर्ता
+- WHEN एप्लिकेशन लोड होता है
+- THEN सिस्टम की पसंदीदा रंग योजना का उपयोग किया जाता है
 ```
 
 **tasks.md** - कार्यान्वयन चेकलिस्ट:
 
 ```markdown
-# Tasks
+# कार्य (Tasks)
 
-## 1. Theme Infrastructure
-- [ ] 1.1 Create ThemeContext with light/dark state
-- [ ] 1.2 Add CSS custom properties for colors
-- [ ] 1.3 Implement localStorage persistence
+## 1. थीम इंफ्रास्ट्रक्चर
+- [ ] 1.1 लाइट/डार्क स्टेट के साथ ThemeContext बनाएँ
+- [ ] 1.2 रंगों के लिए CSS कस्टम प्रॉपर्टीज़ जोड़ें
+- [ ] 1.3 localStorage दृढ़ता लागू करें
 
-## 2. UI Components
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Add toggle to settings page
-- [ ] 2.3 Update Header to include quick toggle
+## 2. UI घटक (Components)
+- [ ] 2.1 ThemeToggle घटक बनाएँ
+- [ ] 2.2 सेटिंग्स पेज पर टॉगल जोड़ें
+- [ ] 2.3 त्वरित टॉगल को शामिल करने के लिए हेडर अपडेट करें
 
-## 3. Styling
-- [ ] 3.1 Define dark theme color palette
-- [ ] 3.2 Update components to use CSS variables
+## 3. स्टाइलिंग
+- [ ] 3.1 डार्क थीम रंग पैलेट परिभाषित करें
+- [ ] 3.2 CSS वैरिएबल्स का उपयोग करने के लिए घटकों को अपडेट करें
 ```
 
-### 3. कार्यान्वयन
+### 3. कार्यान्वयन (Implement)
 
 ```
 You: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ 1.1 Created ThemeContext with light/dark state
-     ✓ 1.2 Added CSS custom properties to globals.css
-     ✓ 1.3 Implemented localStorage persistence
-     ✓ 2.1 Created ThemeToggle component
+AI:  कार्यों पर काम कर रहा है...
+     ✓ 1.1 लाइट/डार्क स्टेट के साथ ThemeContext बनाया
+     ✓ 1.2 globals.css में CSS कस्टम प्रॉपर्टीज़ जोड़ी
+     ✓ 1.3 localStorage दृढ़ता लागू की
+     ✓ 2.1 ThemeToggle घटक बनाया
      ...
-     All tasks complete!
+     सभी कार्य पूरे!
 ```
 
-कार्यान्वयन के दौरान, यदि आपको पता चलता है कि डिज़ाइन में समायोजन की आवश्यकता है, तो बस आर्टिफ़ैक्ट को अपडेट करें और जारी रखें।
+कार्यान्वयन के दौरान, यदि आप पाते हैं कि डिज़ाइन को समायोजन की आवश्यकता है, तो बस आर्टिफैक्ट को अपडेट करें और जारी रखें।
 
-### 4. आर्काइव
+### 4. आर्काइव (Archive)
 
 ```
 You: /opsx:archive
 
-AI:  Archiving add-dark-mode...
-     ✓ Merged specs into openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
-     Done! Ready for the next feature.
+AI:  add-dark-mode संग्रहीत कर रहा है...
+     ✓ specs को openspec/specs/ui/spec.md में विलय किया गया
+     ✓ openspec/changes/archive/2025-01-24-add-dark-mode/ पर ले जाया गया
+     हो गया! अगली सुविधा के लिए तैयार।
 ```
 
-आपके डेल्टा स्पेक्स अब मुख्य स्पेक्स का हिस्सा हैं, जो दस्तावेज़ करते हैं कि आपका सिस्टम कैसे काम करता है।
+आपके डेल्टा specs अब मुख्य specs का हिस्सा हैं, जो बताते हैं कि आपका सिस्टम कैसे काम करता है।
 
-## सत्यापन और समीक्षा
+## सत्यापन और समीक्षा (Verifying and Reviewing)
 
 अपने परिवर्तनों की जाँच करने के लिए CLI का उपयोग करें:
 
 ```bash
-# List active changes
+# सक्रिय परिवर्तन सूचीबद्ध करें
 openspec list
 
-# View change details
+# परिवर्तन विवरण देखें
 openspec show add-dark-mode
 
-# Validate spec formatting
+# spec फॉर्मेटिंग मान्य करें
 openspec validate add-dark-mode
 
-# Interactive dashboard
+# इंटरैक्टिव डैशबोर्ड
 openspec view
 ```
 
-## अगले कदम
+## अगले चरण (Next Steps)
 
-- [वर्कफ़्लोज़](workflows.md) - सामान्य पैटर्न और प्रत्येक कमांड का उपयोग कब करें
-- [कमांड्स](commands.md) - सभी स्लैश कमांड्स का पूर्ण संदर्भ
-- [अवधारणाएँ](concepts.md) - स्पेक्स, परिवर्तन और स्कीमास की गहरी समझ
-- [कस्टमाइज़ेशन](customization.md) - OpenSpec को अपने तरीके से काम करें
+- [पहले Explore करें](explore.md) - प्रतिबद्ध होने से पहले एक विचार पर सोचने के लिए `/opsx:explore` का उपयोग करें
+- [मौजूदा प्रोजेक्ट में OpenSpec का उपयोग करना](existing-projects.md) - एक बड़े ब्राउनफ़ील्ड कोडबेस पर शुरुआत करें
+- [परिवर्तन को संपादित और पुनरावृत्त करना](editing-changes.md) - आर्टिफैक्ट्स को अपडेट करें, वापस जाएं, मैन्युअल संपादनों का समाधान करें
+- [एक नज़र में कोर अवधारणाएँ](overview.md) - एक पृष्ठ पर पूरी मानसिक मॉडल
+- [उदाहरण और नुस्खे](examples.md) - वास्तविक परिवर्तन, शुरुआत से अंत तक
+- [वर्कफ़्लो (Workflows)](workflows.md) - सामान्य पैटर्न और प्रत्येक कमांड का उपयोग कब करना है
+- [कमांड्स (Commands)](commands.md) - सभी स्लैश कमांड के लिए पूर्ण संदर्भ
+- [अवधारणाएँ (Concepts)](concepts.md) - specs, changes और schemas की गहरी समझ
+- [अनुकूलन (Customization)](customization.md) - OpenSpec को अपनी तरह से काम करने दें
+- [स्टोर्स (Stores)](stores-beta/user-guide.md) - क्या योजना रिपॉजिटरी या टीमों तक फैली हुई है? इसे अपने स्वयं के रेपो में रखें (बीटा)
+- [FAQ](faq.md) और [ट्रबलशूटिंग (Troubleshooting)](troubleshooting.md) - जब आप फंस जाते हैं

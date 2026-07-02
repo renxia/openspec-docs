@@ -1,91 +1,88 @@
-# Referencja CLI
+# Odniesienie do interfejsu wiersza poleceń (CLI)
 
-OpenSpec CLI (`openspec`) udostępnia polecenia terminalowe do konfiguracji projektu, walidacji, inspekcji stanu i zarządzania. Te polecenia uzupełniają komendy slash AI (takie jak `/opsx:propose`) udokumentowane w sekcji [Commands](commands.md).
+OpenSpec CLI (`openspec`) zapewnia komendy terminalowe do konfiguracji projektu, walidacji, inspekcji statusu i zarządzania. Te komendy uzupełniają komendy z `/` AI (takie jak `/opsx:propose`), udokumentowane w [Commands](commands.md).
 
 ## Podsumowanie
 
-| Kategoria | Polecenia | Cel |
-|-----------|-----------|-----|
-| **Konfiguracja** | `init`, `update` | Inicjalizacja i aktualizacja OpenSpec w projekcie |
-| **Przestrzenie robocze (beta)** | `workspace setup`, `workspace list`, `workspace ls`, `workspace link`, `workspace relink`, `workspace doctor`, `workspace update`, `workspace open` | Konfiguracja widoków lokalnych dla połączonych repozytoriów lub folderów |
-| **Kontekst współdzielony (beta)** | `context-store setup`, `context-store register`, `context-store unregister`, `context-store remove`, `context-store list`, `context-store doctor`, `initiative create`, `initiative show`, `initiative list` | Zarządzanie lokalnymi rejestracjami kontekst-store i trwałym kontekstem inicjatyw |
-| **Przeglądanie** | `list`, `view`, `show` | Eksploracja zmian i specyfikacji |
+| Kategoria | Komendy | Cel |
+|----------|----------|---------|
+| **Konfiguracja** | `init`, `update` | Inicjalizacja i aktualizacja OpenSpec w Twoim projekcie |
+| **Magazyny (standalone OpenSpec repos)** | `store setup`, `store register`, `store unregister`, `store remove`, `store list`, `store doctor` | Zarządzanie magazynami — samodzielnymi repozytoriami OpenSpec, które zarejestrowałeś |
+| **Stan** | `doctor` | Raportowanie stanu relacji dla rozstrzygniętego korzenia |
+| **Kontekst roboczy** | `context` | Składanie zbioru roboczego (korzeń + odwołane magazyny) |
+| **Osobiste zbiory pracy** | `workset create`, `workset list`, `workset open`, `workset remove` | Przechowywanie i otwieranie osobistych, lokalnych widoków roboczych w Twoim narzędziu |
+| **Przeglądanie** | `list`, `view`, `show` | Eksplorowanie zmian i specyfikacji |
 | **Walidacja** | `validate` | Sprawdzanie zmian i specyfikacji pod kątem problemów |
-| **Cykl życia** | `archive` | Finalizacja ukończonych zmian |
-| **Przepływ pracy** | `new change`, `set change`, `status`, `instructions`, `templates`, `schemas` | Wsparcie przepływu pracy opartego na artefaktach |
+| **Cykl życia** | `archive` | Finalizowanie ukończonych zmian |
+| **Przepływ pracy** | `new change`, `status`, `instructions`, `templates`, `schemas` | Obsługa przepływu pracy oparta na artefaktach |
 | **Schematy** | `schema init`, `schema fork`, `schema validate`, `schema which` | Tworzenie i zarządzanie niestandardowymi przepływami pracy |
-| **Konfiguracja** | `config` | Przeglądanie i modyfikacja ustawień |
-| **Narzędzia** | `feedback`, `completion` | Opinie i integracja z powłoką
+| **Konfiguracja** | `config` | Wyświetlanie i modyfikowanie ustawień |
+| **Użyteczność** | `feedback`, `completion` | Informacja zwrotna i integracja z powłoką (shell) |
 
 ---
 
-## Polecenia dla człowieka vs agenta
+## Komendy dla człowieka a agenta
 
-Większość poleceń CLI jest przeznaczona do **użytku przez człowieka** w terminalu. Niektóre polecenia obsługują również **użytek przez agenty/skrypty** poprzez wyjście JSON.
+Większość komend CLI jest przeznaczona do **użycia przez człowieka** w terminalu. Niektóre komendy obsługują również **użycie przez agenta/skrypt** poprzez wyjście JSON.
 
-### Polecenia wyłącznie dla człowieka
+### Komendy tylko dla człowieka
 
-Te polecenia są interaktywne i przeznaczone do użytku w terminalu:
+Te komendy są interaktywne i przeznaczone do użytku w terminalu:
 
-| Polecenie | Przeznaczenie |
-|-----------|---------------|
-| `openspec init` | Inicjalizacja projektu (interaktywne monity) |
-| `openspec view` | Interaktywny panel |
-| `openspec config edit` | Otwórz konfigurację w edytorze |
-| `openspec feedback` | Wyślij opinię przez GitHub |
-| `openspec completion install` | Zainstaluj uzupełnienia powłoki |
+| Komenda | Cel |
+|---------|---------|
+| `openspec init` | Inicjalizacja projektu (interaktywne podpowiedzi) |
+| `openspec view` | Interaktywna tablica (dashboard) |
+| `openspec workset open <name>` | Otwarcie zapisanej pracy (okno edytora lub sesja agenta terminalowego) |
+| `openspec config edit` | Otwarcie konfiguracji w edytorze |
+| `openspec feedback` | Przesłanie opinii przez GitHub |
+| `openspec completion install` | Instalacja kompletów poleceń dla powłoki (shell completions) |
 
-### Polecenia kompatybilne z agentami
+### Komendy kompatybilne z agentami
 
-Te polecenia obsługują wyjście `--json` do programistycznego użytku przez agenty AI i skrypty:
+Te komendy obsługują wyjście `--json` do programatycznego użycia przez AI agents i skrypty:
 
-| Polecenie | Użytek przez człowieka | Użytek przez agenta |
-|-----------|------------------------|---------------------|
-| `openspec list` | Przeglądaj zmiany/specyfikacje | `--json` dla danych strukturalnych |
-| `openspec show <item>` | Czytaj zawartość | `--json` do parsowania |
-| `openspec validate` | Sprawdź problemy | `--all --json` do masowej walidacji |
-| `openspec status` | Zobacz postęp artefaktów | `--json` dla strukturalnego statusu |
-| `openspec instructions` | Uzyskaj następne kroki | `--json` dla instrukcji agenta |
-| `openspec templates` | Znajdź ścieżki szablonów | `--json` do rozwiązywania ścieżek |
+| Komenda | Użycie ludzkie | Użycie agenta |
+|---------|-----------|-----------|
+| `openspec list` | Przegląd zmian/specyfikacji | `--json` dla ustrukturyzowanych danych |
+| `openspec show <item>` | Odczyt treści | `--json` do parsowania |
+| `openspec validate` | Sprawdzenie problemów | `--all --json` do walidacji zbiorczej |
+| `openspec status` | Wyświetlenie postępu artefaktu | `--json` dla ustrukturyzowanego statusu |
+| `openspec instructions` | Pobranie kolejnych kroków | `--json` dla instrukcji agenta |
+| `openspec templates` | Znalezienie ścieżek szablonów | `--json` do rozwiązywania ścieżek |
 | `openspec schemas` | Lista dostępnych schematów | `--json` do odkrywania schematów |
-| `openspec workspace setup --no-interactive` | Utwórz przestrzeń roboczą z jawnymi danymi wejściowymi | `--json` dla strukturalnego wyjścia konfiguracji |
-| `openspec workspace list` | Przeglądaj znane przestrzenie robocze | `--json` dla typowanych obiektów przestrzeni roboczej |
-| `openspec workspace link` | Połącz repozytorium lub folder | `--json` dla strukturalnego wyjścia łączenia |
-| `openspec workspace relink` | Napraw połączoną ścieżkę | `--json` dla strukturalnego wyjścia łączenia |
-| `openspec workspace doctor` | Sprawdź jedną przestrzeń roboczą | `--json` dla strukturalnego wyjścia statusu |
-| `openspec workspace update` | Odśwież lokalne wskazówki przestrzeni roboczej i umiejętności agentów | `--tools` wybiera agenty; profil wybiera przepływy pracy |
-| `openspec context-store setup <id>` | Utwórz lokalny magazyn kontekstu | `--json` z jawnymi danymi wejściowymi dla strukturalnego wyjścia konfiguracji |
-| `openspec context-store register <path>` | Zarejestruj istniejący magazyn kontekstu | `--json` dla strukturalnego wyjścia rejestracji |
-| `openspec context-store unregister <id>` | Zapomnij rejestrację lokalnego magazynu kontekstu | `--json` dla strukturalnego wyjścia czyszczenia |
-| `openspec context-store remove <id>` | Usuń zarejestrowany folder lokalnego magazynu kontekstu | `--yes --json` do nieinteraktywnego usuwania |
-| `openspec context-store list` | Przeglądaj zarejestrowane magazyny kontekstu | `--json` dla strukturalnych rejestracji |
-| `openspec context-store doctor` | Sprawdź konfigurację lokalnego magazynu | `--json` dla strukturalnej diagnostyki |
-| `openspec initiative list` | Przeglądaj wspólne inicjatywy | `--json` dla strukturalnych rekordów inicjatyw |
-| `openspec initiative show <id>` | Rozwiąż inicjatywę | `--json` dla kanonicznych ścieżek i metadanych |
-| `openspec new change <id>` | Utwórz lokalne rusztowanie zmiany w repozytorium | `--json` oraz `--initiative` dla wspólnych łączy koordynacji |
-| `openspec set change <id>` | Zaktualizuj metadane zatwierdzonej zmiany | `--json` oraz `--initiative` dla wspólnych łączy koordynacji |
+| `openspec store setup <id>` | Utworzenie i zarejestrowanie lokalnego magazynu (store) | `--json` z wyraźnymi danymi wejściowymi dla ustrukturyzowanego wyjścia konfiguracji |
+| `openspec store register <path>` | Rejestracja istniejącego magazynu | `--json` dla ustrukturyzowanego wyjścia rejestracji |
+| `openspec store unregister <id>` | Zapomnienie o lokalnej rejestracji magazynu | `--json` dla ustrukturyzowanego wyjścia czyszczenia |
+| `openspec store remove <id>` | Usunięcie zarejestrowanego folderu magazynu | `--yes --json` do nieinteraktywnego usuwania |
+| `openspec store list` | Przegląd zarejestrowanych magazynów | `--json` dla ustrukturyzowanych rejestracji |
+| `openspec store doctor` | Sprawdzenie konfiguracji lokalnego magazynu | `--json` dla ustrukturyzowanej diagnostyki |
+| `openspec new change <id>` | Utworzenie szkieletu zmiany specyficznej dla repozytorium | `--json`, plus `--store <id>` do użycia zarejestrowanego magazynu jako korzenia OpenSpec |
+| `openspec workset create [name]` | Skomponowanie osobistego widoku roboczego | `--member <path> --json` do nieinteraktywnego komponowania |
+| `openspec workset list` | Przegląd zapisanych widoków | `--json` dla ustrukturyzowanych widoków |
+| `openspec workset remove <name>` | Usunięcie zapisanego widoku | `--yes --json` do nieinteraktywnego usuwania |
 
 ---
 
 ## Opcje globalne
 
-Te opcje działają ze wszystkimi poleceniami:
+Te opcje działają z wszystkimi komendami:
 
 | Opcja | Opis |
-|-------|------|
-| `--version`, `-V` | Wyświetl numer wersji |
-| `--no-color` | Wyłącz kolorowe wyjście |
-| `--help`, `-h` | Wyświetl pomoc dla polecenia |
+|--------|-------------|
+| `--version`, `-V` | Wyświetlenie numeru wersji |
+| `--no-color` | Wyłączenie kolorowego wyjścia |
+| `--help`, `-h` | Wyświetlenie pomocy dla komendy |
 
 ---
 
-## Polecenia konfiguracji
+## Komendy konfiguracji (Setup Commands)
 
 ### `openspec init`
 
-Zainicjalizuj OpenSpec w swoim projekcie. Tworzy strukturę folderów i konfiguruje integracje narzędzi AI.
+Inicjalizuje OpenSpec w Twoim projekcie. Tworzy strukturę folderów i konfigurowuje integracje z narzędziami AI.
 
-Domyślne zachowanie używa globalnych domyślnych wartości konfiguracji: profil `core`, dostarczanie `both`, przepływy pracy `propose, explore, apply, sync, archive`.
+Domyślne zachowanie używa domyślnych globalnych ustawień: profil `core`, dostawa `both`, przepływy pracy `propose, explore, apply, sync, archive`.
 
 ```
 openspec init [path] [options]
@@ -94,31 +91,33 @@ openspec init [path] [options]
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `path` | Nie | Katalog docelowy (domyślnie: bieżący katalog) |
+|----------|----------|-------------|
+| `path` | Nie | Docelowy katalog (domyślnie: bieżący katalog) |
 
 **Opcje:**
 
 | Opcja | Opis |
-|-------|------|
-| `--tools <list>` | Skonfiguruj narzędzia AI nieinteraktywnie. Użyj `all`, `none` lub listy oddzielonej przecinkami |
-| `--force` | Automatycznie usuń starsze pliki bez pytania |
-| `--profile <profile>` | Nadpisz globalny profil dla tego uruchomienia init (`core` lub `custom`) |
+|--------|-------------|
+| `--tools <list>` | Konfiguruje narzędzia AI w sposób nieinteraktywny. Użyj `all`, `none` lub listy oddzielonej przecinkami |
+| `--force` | Automatyczne czyszczenie starych plików bez pytania |
+| `--profile <profile>` | Nadpisanie globalnego profilu dla tego uruchomienia inicjalizacji (`core` lub `custom`) |
 
-`--profile custom` używa aktualnie wybranych przepływów pracy w konfiguracji globalnej (`openspec config profile`).
+Opcja `--profile custom` używa przepływów pracy wybranych w bieżącej konfiguracji globalnej (`openspec config profile`).
 
-**Obsługiwane identyfikatory narzędzi (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
+**Obsługiwane identyfikatory narzędzi (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`, `vibe`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+
+> Ta lista odzwierciedla `AI_TOOLS` w `src/core/config.ts`. Sprawdź [Supported Tools](supported-tools.md) dla umiejętności i ścieżek komend każdego narzędzia.
 
 **Przykłady:**
 
 ```bash
-# Interaktywna inicjalizacja
+# Inicjalizacja interaktywna
 openspec init
 
-# Inicjalizacja w określonym katalogu
+# Inicjalizacja w konkretnym katalogu
 openspec init ./my-project
 
-# Nieinteraktywna: konfiguracja dla Claude i Cursor
+# Nieinteraktywnie: konfiguracja dla Claude i Cursor
 openspec init --tools claude,cursor
 
 # Konfiguracja dla wszystkich obsługiwanych narzędzi
@@ -127,7 +126,7 @@ openspec init --tools all
 # Nadpisanie profilu dla tego uruchomienia
 openspec init --profile core
 
-# Pomiń monity i automatycznie usuń starsze pliki
+# Pomiń podpowiedzi i automatycznie wyczyść stare pliki
 openspec init --force
 ```
 
@@ -141,7 +140,7 @@ openspec/
 
 .claude/skills/         # Umiejętności Claude Code (jeśli wybrano claude)
 .cursor/skills/         # Umiejętności Cursor (jeśli wybrano cursor)
-.cursor/commands/       # Polecenia OPSX dla Cursor (jeśli dostarczanie obejmuje polecenia)
+.cursor/commands/       # Komendy OPSX dla Cursor (jeśli dostawa zawiera komendy)
 ... (inne konfiguracje narzędzi)
 ```
 
@@ -149,7 +148,7 @@ openspec/
 
 ### `openspec update`
 
-Zaktualizuj pliki instrukcji OpenSpec po aktualizacji CLI. Ponownie generuje pliki konfiguracji narzędzi AI, używając bieżącego globalnego profilu, wybranych przepływów pracy i trybu dostarczania.
+Aktualizuje pliki instrukcji OpenSpec po uaktualnieniu CLI. Ponownie generuje pliki konfiguracji narzędzi AI, używając Twojego aktualnego globalnego profilu, wybranych przepływów pracy i trybu dostawy.
 
 ```
 openspec update [path] [options]
@@ -158,470 +157,347 @@ openspec update [path] [options]
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `path` | Nie | Katalog docelowy (domyślnie: bieżący katalog) |
+|----------|----------|-------------|
+| `path` | Nie | Docelowy katalog (domyślnie: bieżący katalog) |
 
 **Opcje:**
 
 | Opcja | Opis |
-|-------|------|
-| `--force` | Wymuś aktualizację, nawet gdy pliki są aktualne |
+|--------|-------------|
+| `--force` | Wymusza aktualizację, nawet jeśli pliki są aktualne |
 
 **Przykład:**
 
 ```bash
-# Aktualizuj pliki instrukcji po aktualizacji npm
+# Aktualizacja plików instrukcji po npm upgrade
 npm update @fission-ai/openspec
 openspec update
 ```
 
 ---
 
-## Polecenia przestrzeni roboczej
+## Magazyny (Stores - samodzielne repozytoria OpenSpec)
 
-Polecenia przestrzeni roboczej są w wersji beta. Poniższy model widoku lokalnego jest bieżącym kierunkiem, ale zewnętrzna automatyzacja, integracje i długotrwałe przepływy pracy powinny nadal traktować zachowanie poleceń, pliki stanu i wyjście JSON jako zmieniające się.
+> **Beta.** Magazyny i funkcje oparte na nich (odniesienia, kontekst pracy, worksety) są nowe; nazwy komend, flagi, formaty plików i wyjście JSON mogą się zmieniać między wydaniami. W celu przejścia przez proces oparty na problemie, sprawdź [stores guide](stores-beta/user-guide.md).
 
-Przestrzenie robocze koordynacji to lokalne widoki maszynowe na połączonych repozytoriach lub folderach. Widoczność przestrzeni roboczej nie oznacza zobowiązania do zmiany: połącz repozytorium lub foldery, które OpenSpec powinien znać, a następnie twórz zmiany, gdy będziesz gotowy do planowania konkretnej pracy.
+Magazyn (store) to samodzielne repozytorium OpenSpec zarejestrowane w tej maszynie — na przykład repozytorium planistyczne lub kontrakty. Rejestracja magazynu pozwala normalnym komendom (`list`, `show`, `status`, `validate`, `new change`, `archive`, ...) działać w nim z dowolnego miejsca, przekazując `--store <id>`.
 
-### `openspec workspace setup`
+### `openspec store setup`
 
-Utwórz przestrzeń roboczą w standardowej lokalizacji przestrzeni roboczej OpenSpec i połącz co najmniej jedno istniejące repozytorium lub folder.
-
-```bash
-openspec workspace setup [options]
-```
-
-**Opcje:**
-
-| Opcja | Opis |
-|-------|------|
-| `--name <name>` | Nazwa przestrzeni roboczej. Nazwy muszą być w formacie kebab-case |
-| `--link <path>` | Połącz istniejące repozytorium lub folder i wywnioskuj nazwę łącza z nazwy folderu |
-| `--link <name>=<path>` | Połącz istniejące repozytorium lub folder z jawną nazwą łącza |
-| `--opener <id>` | Zapisz preferowane narzędzie otwierające podczas nieinteraktywnej konfiguracji: `codex-cli`, `claude`, `github-copilot` lub `editor` |
-| `--tools <tools>` | Zainstaluj lokalne umiejętności OpenSpec w przestrzeni roboczej dla agentów. Użyj `all`, `none` lub identyfikatorów narzędzi oddzielonych przecinkami |
-| `--no-interactive` | Wyłącz monity; wymaga `--name` i co najmniej jednego `--link` |
-| `--json` | Wyjście JSON; wymaga `--no-interactive` |
-
-**Przykłady:**
+Tworzy i rejestruje lokalny magazyn. Bez argumentów w terminalu OpenSpec prowadzi użytkownika przez konfigurację. Agenci i skrypty powinny podawać wyraźne dane wejściowe i używać `--json`.
 
 ```bash
-openspec workspace setup
-openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
-openspec workspace setup --no-interactive --name platform --link /repos/api --tools codex,claude
-openspec workspace setup --no-interactive --json --name checkout --link /repos/platform/apps/checkout
-```
-
-Interaktywna konfiguracja pyta o preferowane narzędzie otwierające i może instalować lokalne umiejętności OpenSpec w przestrzeni roboczej dla wybranych agentów. Nieinteraktywna konfiguracja zapisuje preferowane narzędzie otwierające tylko wtedy, gdy podano `--opener`; w przeciwnym razie `workspace open` monituje później w interaktywnych terminalach, gdy dostępne jest obsługiwane narzędzie otwierające, lub prosi skrypty o przekazanie `--agent <tool>` lub `--editor`.
-
-Instalacja umiejętności przestrzeni roboczej obejmuje tylko umiejętności w tym wydaniu beta: nawet jeśli globalne dostarczanie to `commands` lub `both`, konfiguracja przestrzeni roboczej zapisuje foldery umiejętności agentów w katalogu głównym przestrzeni roboczej i nie tworzy plików poleceń ukośnikowych. Aktywny globalny profil decyduje, które umiejętności przepływu pracy są instalowane; `--tools` decyduje, które agenty je otrzymują. Jeśli pominięto `--tools` w nieinteraktywnej konfiguracji, żadne umiejętności nie są instalowane i `workspace update --tools <ids>` może je dodać później.
-
-### `openspec workspace list`
-
-Wyświetl listę znanych przestrzeni roboczych OpenSpec z rejestru lokalnego.
-
-```bash
-openspec workspace list [--json]
-openspec workspace ls [--json]
-```
-
-Lista pokazuje lokalizację każdej przestrzeni roboczej oraz połączone repozytoria lub foldery. Nieaktualne rekordy rejestru są raportowane, ale nie zmieniane.
-
-### `openspec workspace link`
-
-Zapisz istniejące repozytorium lub folder dla jednej przestrzeni roboczej.
-
-```bash
-openspec workspace link [name] <path> [options]
-```
-
-**Opcje:**
-
-| Opcja | Opis |
-|-------|------|
-| `--workspace <name>` | Wybierz znaną przestrzeń roboczą z rejestru lokalnego |
-| `--json` | Wyjście JSON |
-| `--no-interactive` | Wyłącz monity wyboru przestrzeni roboczej |
-
-**Przykłady:**
-
-```bash
-openspec workspace link /repos/api
-openspec workspace link api-service /repos/api
-openspec workspace link --workspace platform /repos/platform/apps/checkout
-```
-
-Ścieżka musi już istnieć. Ścieżki względne są rozwiązywane względem bieżącego katalogu polecenia, zanim OpenSpec zapisze zweryfikowaną ścieżkę bezwzględną w lokalnym stanie maszynowym przestrzeni roboczej. Połączone ścieżki mogą być pełnymi repozytoriami, paczkami, usługami, aplikacjami lub folderami bez lokalnego stanu `openspec/` w repozytorium.
-
-### `openspec workspace relink`
-
-Napraw lub zmień lokalną ścieżkę dla istniejącego łącza.
-
-```bash
-openspec workspace relink <name> <path> [options]
-```
-
-Ścieżka musi już istnieć. Relink aktualizuje tylko lokalną ścieżkę maszynową dla stabilnej nazwy łącza.
-
-### `openspec workspace doctor`
-
-Sprawdź, co jedna przestrzeń robocza może rozwiązać na bieżącej maszynie.
-
-```bash
-openspec workspace doctor [options]
-```
-
-Doctor pokazuje lokalizację przestrzeni roboczej, połączone repozytoria lub foldery, brakujące ścieżki, ścieżki specyfikacji lokalnych repozytoriów, gdy są obecne, oraz sugerowane poprawki. Wyjście JSON zawiera również ścieżkę planowania przestrzeni roboczej dla kompatybilności. Raportuje tylko problemy; nie naprawia ich automatycznie.
-
-Polecenia wymagające jednej przestrzeni roboczej używają bieżącej przestrzeni roboczej, gdy są uruchamiane z folderu lub podkatalogu przestrzeni roboczej. Z innego miejsca przekaż `--workspace <name>`, wybierz z selektora w interaktywnym terminalu lub polegaj na jedynej znanej przestrzeni roboczej, gdy istnieje dokładnie jedna. W trybie `--json` lub `--no-interactive` niejednoznaczny wybór kończy się błędem strukturalnego statusu i sugeruje `--workspace <name>`.
-
-Odpowiedzi JSON używają typowanych obiektów oraz tablic `status`. Dane główne znajdują się w `workspace`, `workspaces` lub `link`; ostrzeżenia i błędy znajdują się w `status`.
-
-### `openspec workspace update`
-
-Odśwież lokalne wskazówki OpenSpec przestrzeni roboczej i umiejętności agentów.
-
-```bash
-openspec workspace update [name] [options]
-```
-
-**Opcje:**
-
-| Opcja | Opis |
-|-------|------|
-| `--workspace <name>` | Wybierz znaną przestrzeń roboczą z rejestru lokalnego |
-| `--tools <tools>` | Wybierz agenty dla umiejętności przestrzeni roboczej. Użyj `all`, `none` lub identyfikatorów narzędzi oddzielonych przecinkami |
-| `--json` | Wyjście JSON |
-| `--no-interactive` | Wyłącz monity wyboru przestrzeni roboczej |
-
-**Przykłady:**
-
-```bash
-openspec workspace update
-openspec workspace update platform
-openspec workspace update --workspace platform --tools codex,claude
-openspec workspace update --workspace platform --tools none
-```
-
-`workspace update` odświeża wygenerowany blok wskazówek przestrzeni roboczej i lokalną powierzchnię otwartą. Dla umiejętności agentów ponownie używa zapisanego wyboru agenta umiejętności przestrzeni roboczej, gdy pominięto `--tools`. Przekazanie `--tools` zastępuje ten zapisany wybór. Odświeża tylko katalogi umiejętności przepływu pracy zarządzane przez OpenSpec w katalogu głównym przestrzeni roboczej, usuwa odznaczone zarządzane umiejętności przepływu pracy i nie dotyka połączonych repozytoriów i folderów.
-
-Uruchomienie `openspec update` z wnętrza przestrzeni roboczej przekierowuje do `openspec workspace update`; uruchom `openspec update` w projektach lokalnych repozytoriów, gdy chcesz zaktualizować pliki narzędzi należące do repozytorium.
-
-### `openspec workspace open`
-
-Otwórz zbiór roboczy przestrzeni roboczej przez zapisane preferowane narzędzie otwierające, jednosesyjne nadpisanie agenta lub tryb edytora VS Code.
-
-```bash
-openspec workspace open [name] [options]
-```
-
-**Opcje:**
-
-| Opcja | Opis |
-|-------|------|
-| `--workspace <name>` | Alias dla pozycyjnej nazwy przestrzeni roboczej |
-| `--initiative <id>` | Otwórz inicjatywę jako lokalny widok przestrzeni roboczej. Akceptuje `<id>` lub `<store>/<id>` |
-| `--store <id>` | Identyfikator zarejestrowanego magazynu kontekstu dla `--initiative` |
-| `--store-path <path>` | Istniejący lokalny katalog główny magazynu kontekstu dla `--initiative` |
-| `--agent <tool>` | Jednosesyjne nadpisanie agenta: `codex-cli`, `claude` lub `github-copilot` |
-| `--editor` | Otwórz utrzymywany plik przestrzeni roboczej VS Code jako normalną przestrzeń roboczą edytora |
-| `--no-interactive` | Wyłącz monity wyboru przestrzeni roboczej i narzędzia otwierającego |
-
-**Przykłady:**
-
-```bash
-openspec workspace open
-openspec workspace open platform
-openspec workspace open platform --agent github-copilot
-openspec workspace open --agent codex-cli
-openspec workspace open --editor
-openspec workspace open --initiative billing-launch --store platform
-openspec workspace open --initiative platform/billing-launch
-```
-
-`workspace open` używa bieżącej przestrzeni roboczej, gdy jest uruchamiane w jej wnętrzu, automatycznie wybiera jedyną znaną przestrzeń roboczą, gdy jest uruchamiane z innego miejsca, i pyta użytkownika o wybór, gdy znanych jest wiele przestrzeni roboczych. `--agent` i `--editor` nie zmieniają zapisanego preferowanego narzędzia otwierającego. Przekazanie obu nadpisań narzędzia otwierającego jest błędem; wybierz `--agent <tool>` lub `--editor`.
-
-Gdy użyto `--initiative`, OpenSpec przygotowuje lub wybiera prywatny lokalny widok przestrzeni roboczej dla tej inicjatywy. Magazyny wybrane z rejestru są zapisywane według identyfikatora; `--store-path` zapisuje selektor ścieżki lokalnej dla środowiska uruchomieniowego, ponieważ widoki przestrzeni roboczej są prywatnym stanem lokalnym.
-
-OpenSpec utrzymuje `<workspace-name>.code-workspace` w katalogu głównym przestrzeni roboczej dla otwarć VS Code i GitHub Copilot w VS Code. Ten plik jest stanem lokalnego widoku maszynowego przestrzeni roboczej.
-
-Utrzymywana przestrzeń robocza VS Code列出 najpierw prawidłowe połączone repozytoria lub foldery, następnie kontekst inicjatywy, gdy jest dołączony, a następnie pliki przestrzeni roboczej OpenSpec. VS Code wyświetla te wpisy jako przestrzeń roboczą wielokorzeniową.
-
-Otwarcie głównej przestrzeni roboczej czyni połączone repozytoria lub foldery widocznymi do eksploracji i kontekstu. Edycje implementacji powinny rozpocząć się dopiero po jawnym żądaniu użytkownika i normalnym przepływie pracy implementacji OpenSpec.
-
----
-
-## Komendy współdzielonego kontekstu
-
-Magazyny kontekstu i inicjatywy to koordynacyjne powierzchnie w fazie beta. Magazyn kontekstu jest lokalną rejestracją dla trwałego współdzielonego kontekstu, zazwyczaj folderu lub klonu opartego na Git. Inicjatywa to współdzielony kontekst koordynacji wewnątrz magazynu kontekstu; lokalne zmiany w repozytorium mogą się do niego odwoływać bez kopiowania współdzielonego planu do każdego repozytorium.
-
-### `openspec context-store setup`
-
-Tworzenie i rejestrowanie lokalnego magazynu kontekstu. W terminalu bez argumentów OpenSpec przeprowadzi użytkownika przez konfigurację. Agenty i skrypty powinny przekazywać jawne dane wejściowe i używać `--json`.
-
-```bash
-openspec context-store setup [id] [options]
+openspec store setup [id] [options]
 ```
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--path <path>` | Ścieżka folderu magazynu kontekstu; domyślnie katalog danych lokalnych zarządzanych przez OpenSpec |
-| `--init-git` | Inicjalizuj repozytorium Git w magazynie kontekstu |
-| `--no-init-git` | Nie inicjalizuj repozytorium Git |
-| `--json` | Wynik w formacie JSON |
+| `--path <path>` | Folder, w którym ma się znajdować magazyn (np. `~/openspec/<id>`) |
+| `--remote <url>` | Rejestruje kanoniczny zdalny adres w pliku `store.yaml` nowego magazynu |
+| `--init-git` | Inicjalizuje repozytorium Git z początkowym commitem (domyślnie) |
+| `--no-init-git` | Pomija każdą akcję Git: brak inicjalizacji, brak początkowego commitu |
+| `--json` | Wyjście JSON |
 
-Gdy `--path` jest pominięte, konfiguracja tworzy magazyn w `getGlobalDataDir()/context-stores/<id>`: `$XDG_DATA_HOME/openspec/context-stores/<id>` gdy `XDG_DATA_HOME` jest ustawione lub `~/.local/share/openspec/context-stores/<id>` jako alternatywa w stylu Uniksowym. Użyj `--path`, gdy chcesz, aby magazyn znajdował się w widocznym klonie lub folderze specyficznym dla zespołu.
+Uruchomienia nieinteraktywne (`--json`, skrypty, agenci) muszą podawać zarówno id magazynu, jak i `--path`. W interaktywnym terminalu konfiguracja pyta o lokalizację z edytowalną sugestią w widocznym miejscu należącym do użytkownika (np. `~/openspec/<id>`); nigdy nie domyślnie używa katalogu danych zarządzanego przez OpenSpec.
 
 Przykłady:
 
 ```bash
-openspec context-store setup
-openspec context-store setup team-context
-openspec context-store setup team-context --path /repos/team-context --no-init-git
-openspec context-store setup team-context --json --no-init-git
+openspec store setup
+openspec store setup team-context
+openspec store setup team-context --path ~/openspec/team-context --no-init-git
+openspec store setup team-context --path ~/openspec/team-context --no-init-git --json
 ```
 
-### `openspec context-store register`
+### `openspec store register`
 
-Rejestrowanie istniejącego lokalnego folderu magazynu kontekstu.
+Rejestruje istniejący lokalny folder magazynu.
 
 ```bash
-openspec context-store register [path] [options]
+openspec store register [path] [options]
 ```
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--id <id>` | Identyfikator magazynu kontekstu; domyślnie metadane magazynu lub nazwa folderu |
-| `--json` | Wynik w formacie JSON |
+| `--id <id>` | Id magazynu; domyślnie jest to metadane magazynu lub nazwa folderu |
+| `--yes` | Potwierdza utworzenie metadanych tożsamości magazynu dla zdrowego korzenia OpenSpec |
+| `--json` | Wyjście JSON |
 
-### `openspec context-store unregister`
+### `openspec store unregister`
 
-Usunięcie rejestracji lokalnego magazynu kontekstu bez usuwania plików.
-
-```bash
-openspec context-store unregister <id> [--json]
-```
-
-Użyj tej komendy, gdy magazyn został przeniesiony, sklonowany w inne miejsce lub nie powinien być już wyświetlany przez OpenSpec na tym komputerze.
-
-### `openspec context-store remove`
-
-Usunięcie rejestracji lokalnego magazynu kontekstu i usunięcie jego lokalnego folderu.
+Zapomina o rejestracji lokalnego magazynu bez usuwania plików.
 
 ```bash
-openspec context-store remove <id> [--yes] [--json]
+openspec store unregister <id> [--json]
 ```
 
-`remove` wyświetla dokładną ścieżkę folderu przed usunięciem w interaktywnym terminalu. Agenty, skrypty i wywołania JSON muszą przekazać `--yes`, aby potwierdzić usunięcie. OpenSpec odmawia usunięcia folderu, który nie zawiera pasujących metadanych magazynu kontekstu.
+Używaj tego, gdy magazyn został przeniesiony, sklonowany gdzie indziej lub nie powinien już być wyświetlany przez OpenSpec w tej maszynie.
 
-### `openspec context-store list`
+### `openspec store remove`
 
-Listowanie lokalnie zarejestrowanych magazynów kontekstu.
+Zapomina o rejestracji lokalnego magazynu i usuwa jego lokalny folder.
 
 ```bash
-openspec context-store list [--json]
-openspec context-store ls [--json]
+openspec store remove <id> [--yes] [--json]
 ```
 
-### `openspec context-store doctor`
+Polecenie `remove` pokazuje dokładny folder przed usunięciem w interaktywnym terminalu. Agenci, skrypty i wywołujący JSON muszą użyć `--yes`, aby potwierdzić usunięcie. OpenSpec odmawia usunięcia folderu, który nie zawiera pasujących metadanych magazynu.
 
-Sprawdzanie lokalnej rejestracji magazynu kontekstu, metadanych i obecności Git.
+### `openspec store list`
+
+Wyszukuje lokalnie zarejestrowane magazyny.
 
 ```bash
-openspec context-store doctor [id] [--json]
+openspec store list [--json]
+openspec store ls [--json]
 ```
 
-Doctor jest narzędziem wyłącznie diagnostycznym; raportuje brakujące katalogi główne, niezgodności metadanych i nieprawidłowy stan lokalnej rejestracji bez modyfikowania magazynu.
+### `openspec store doctor`
 
-### `openspec initiative create`
-
-Tworzenie inicjatywy w magazynie kontekstu.
+Sprawdza rejestrację lokalnego magazynu, metadane i obecność Git.
 
 ```bash
-openspec initiative create <id> --title <title> --summary <summary> [options]
+openspec store doctor [id] [--json]
 ```
 
-**Opcje:**
+Doctor jest przeznaczony wyłącznie do diagnostyki; raportuje brakujące korzenie, niezgodności metadanych i nieprawidłowy stan lokalnej rejestracji bez modyfikowania magazynu.
 
-| Opcja | Opis |
-|--------|-------------|
-| `--store <id>` | Identyfikator magazynu kontekstu z lokalnej rejestracji |
-| `--store-path <path>` | Istniejący lokalny katalog główny magazynu kontekstu |
-| `--title <title>` | Tytuł inicjatywy |
-| `--summary <summary>` | Podsumowanie inicjatywy |
-| `--json` | Wynik w formacie JSON |
+### Odwoływanie się do magazynów z projektu
 
-### `openspec initiative list`
+Repozytorium projektu może deklarować, z jakich magazynów korzysta jego praca w pliku `openspec/config.yaml`:
 
-Listowanie inicjatyw. Bez selektora, komenda przeszukuje wszystkie zarejestrowane magazyny kontekstu i raportuje ostrzeżenia o częściowym odczycie w `status`.
+```yaml
+schema: spec-driven
+references:
+  - team-context
+```
+
+Od tego momentu wyjście `openspec instructions` w tym repozytorium (zarówno na poziomie poszczególnych artefaktów, jak i powierzchni `apply`, tryby JSON i ludzkie) zawiera indeks specyfikacji każdego odwołanego magazynu — identyfikatory specyfikacji, jednowersyjny podsumowanie z sekcji Celu (`Purpose`) każdej specyfikacji oraz komendę pobrania (`openspec show <spec-id> --type spec --store <id>`). Indeks jest budowany na żywo z zarejestrowanego checkouta przy każdym uruchomieniu; zawartość specyfikacji nigdy nie jest kopiowana do wyjścia.
+
+Odwołania są kontekstem tylko do odczytu. Nigdy nie zmieniają miejsca działania komend: praca pozostaje w własnym korzeniu repozytorium, a zapis do odwoływanego magazynu pozostaje jawną akcją `--store`. Odwołanie, które nie może zostać rozwiązane (na przykład magazyn niezarejestrowany w tej maszynie), degradowuje się do ostrzeżenia w indeksie z dokładnym sposobem naprawy, a instrukcje nadal są generowane. `openspec doctor` raportuje stan odwołań w jednym miejscu.
+
+### Rejestrowanie źródła klonowania magazynu
+
+Magazyn może rejestrować swoje kanoniczne źródło klonowania w swoim zatwierdzonym pliku tożsamości, dzięki czemu proces onboardingu nigdy nie kończy się na "zarejestruj magazyn":
 
 ```bash
-openspec initiative list [options]
-openspec initiative ls [options]
+openspec store setup team-context --path ~/openspec/team-context \
+  --remote git@github.com:acme/team-context.git
 ```
 
-**Opcje:**
+Zdalny adres trafia do `.openspec-store/store.yaml` wewnątrz początkowego commitu, więc każdy klon jest świadomy tego od początku. Dla istniejącego magazynu edytuj `store.yaml` ręcznie i zatwierdź zmiany. `store doctor` pokazuje zarejestrowany zdalny adres (i zaobserwowany Git origin checkouta); setup/register podaje nazwy wskazówek; a register rejestruje origin checkouta w lokalnej rejestracji maszyny.
 
-| Opcja | Opis |
-|--------|-------------|
-| `--store <id>` | Listowanie jednego zarejestrowanego magazynu kontekstu |
-| `--store-path <path>` | Listowanie jednego istniejącego lokalnego katalogu głównego magazynu kontekstu |
-| `--json` | Wynik w formacie JSON |
+Deklaracja odwołania może również zawierać źródło klonowania, dzięki czemu kolega, który jeszcze nie ma magazynu, otrzymuje kompletne, kopiowalne rozwiązanie (`git clone <remote> <path> && openspec store register <path> --id <id>`):
 
-### `openspec initiative show`
+```yaml
+references:
+  - { id: team-context, remote: "git@github.com:acme/team-context.git" }
+```
 
-Rozwiązywanie inicjatywy i wyświetlanie jej kanonicznej lokalizacji.
+Rejestrowanie zdalnego adresu nie jest synchronizacją: OpenSpec nigdy sam nie klonuje, pobiera ani nie wysyła.
+
+### Deklarowanie domyślnego magazynu
+
+Repozytorium, którego planowanie jest w pełni zexternalizowane — bez lokalnych `openspec/specs/` lub `openspec/changes/` — może zadeklarować swój magazyn raz zamiast podawać `--store` przy każdej komendzie:
+
+```yaml
+# openspec/config.yaml (jedyny plik wewnątrz openspec/)
+store: team-context
+```
+
+Normalne komendy automatycznie rozwiązują się do zadeklarowanego magazynu; baner korzenia i blok `root` JSON raportują `source: "declared"` wraz z id magazynu, a wyświetlane podpowiedzi nadal zawierają `--store <id>`. Deklaracja jest opcją zapasową, nigdy nadpisuje: jawne `--store` zawsze wygrywa, a katalog z prawdziwymi folderami planowania ignoruje wskaźnik (z ostrzeżeniem). Aby przekonwertować repozytorium wskazujące na lokalny korzeń OpenSpec, usuń linię `store:` i uruchom `openspec init` — inicjalizacja odmawia tworzenia szkieletu, gdy deklaracja jest obecna.
+
+## Doctor (zdrowie relacji)
+
+Jedno pytanie tylko do odczytu, jedno miejsce: czy korzeń OpenSpec jest zdrowy, a przechowywane w nim repozytoria są dostępne na tej maszynie?
 
 ```bash
-openspec initiative show <id> [options]
-openspec initiative show <store>/<id> [options]
+openspec doctor [--store <id>] [--json]
 ```
 
-Bez `--store` OpenSpec przeszukuje zarejestrowane magazyny kontekstu. Jeśli ten sam identyfikator inicjatywy istnieje w wielu magazynach, przekaż `--store <id>` lub użyj formularza `<store>/<id>`.
+Raport rozdziela stan zdrowia korzenia, metadane magazynów (w tym informację o rozbieżności między zarejestrowanym zdalnym a pochodzeniem checkoutu) oraz stan referencji (te same instrukcje diagnostyczne, z poprawkami klonowania dla nierozstrzygniętych referencji). Wyniki stanu zdrowia dowolnej wagi powodują wyjście 0 — agenci odczytują tablice `status`; tylko błędy poleceń (brak korzenia, nieznany magazyn) powodują wyjście 1. Doctor nigdy nie klonuje, nie synchronizuje ani nie naprawia. Aby uzyskać sam zebrany zbiór, a nie jego stan zdrowia, użyj `openspec context`.
+
+## Kontekst roboczy (zebrany zbiór)
+
+Wszystko, do czego ten mechanizm się odnosi za pomocą deklaracji OpenSpec, w jednym zestawie roboczym: korzeń OpenSpec i magazyny, na które on się odwołuje.
+
+```bash
+openspec context [--store <id>] [--json] [--code-workspace <path> [--force]]
+```
+
+JSON jest zwięzły i przeznaczony dla agentów (każdy dostępny referowany magazyn niesie swoją receptę pobrania; nierozstrzygnięte członkowie niosą te same instrukcje naprawy, a doctor pokazuje stan). `--code-workspace` dodatkowo zapisuje plik przestrzeni roboczej VS Code zawierający korzeń oraz dostępne referowane magazyny (`ref:<id>` foldery) — to jedyna operacja zapisu wykonywana przez to polecenie, odrzucana bez `--force`, jeśli plik istnieje. Niedostępne członkowie są zgłaszane, nigdy nie domyślane.
+
+„Kontekst roboczy” jest zebranym zbiorem; pole `context:` w `openspec/config.yaml` to tło projektu wstrzyknięte do instrukcji — dwie różne rzeczy. `openspec doctor` odpowiada na pytanie, czy zbiór jest zdrowy; `openspec context` odpowiada na pytanie, czym jest ten zbiór.
+
+## Osobiste zestawy pracy
+
+> **Beta.** Zestawy pracy są częścią nowego beta interfejsu; komendy, flagi i formaty plików mogą ulegać zmianom między wydaniami. Aby przejść przez instrukcję, zapoznaj się z [stores guide](stores-beta/user-guide.md#worksets-reopen-the-folders-you-work-on-together).
+
+Zestaw pracy to osobista, nazwana widokacja folderów, nad którymi pracujesz wspólnie — korzeń planowania plus wszystko, co wybierzesz — przechowywana na Twojej maszynie i ponownie otwierana przez nazwę w Twoim narzędziu. Jest całkowicie lokalny: nigdy nie jest zatwierdzany, nigdy nie jest udostępniany, nigdy nie pochodzi z deklaracji, a usunięcie go nigdy nie dotyka folderów członkowskich.
+
+```bash
+openspec workset create [name] [--member <path> | --member <name>=<path>]... [--tool <id>] [--json]
+openspec workset list [--json]
+openspec workset open <name> [--tool <id>]
+openspec workset remove <name> [--yes] [--json]
+```
+
+`create` uruchamia krótki proces z przewodnikiem (lub przyjmuje flagi `--member` nieinteraktywnie; pierwszy członek jest główny — sesje rozpoczynają się tam). `open` uruchamia wybrany narzędzie: edytory (VS Code, Cursor) otwierają okno ze wszystkimi członkami i zwracają; agenci CLI (Claude Code, codex) przejmują to terminal jako sesję ze wszystkimi członkami załączonymi i bez wstępnie wypełnionego promptu, kończąc, gdy wyjdziesz. Folder członek, który brakuje w momencie otwarcia, jest pomijany z notatką; reszta się otwiera. Preferencje narzędzia zapisane są nadpisujące dla każdego otwarcia za pomocą `--tool`.
+
+Wspieranie nowego narzędzia to konfiguracja, a nie kod. Każde narzędzie jest jednym ze dwóch stylów uruchamiania — `workspace-file` (uruchomiony z wygenerowanym `.code-workspace`) lub `attach-dirs` (jedna flaga załączająca na członka) — a klucz `openers` w globalnym pliku `config.json` (otwórz go za pomocą `openspec config edit`) dodaje narzędzia lub dostosowuje wbudowane elementy według pola:
+
+```json
+{
+  "openers": {
+    "zed": { "style": "workspace-file" },
+    "claude": { "attach_flag": "--dir" }
+  }
+}
+```
+
+Cały stan zestawu pracy znajduje się w folderze `worksets/` katalogu danych globalnych (widoki zapisane plus wygenerowane pliki `<name>.code-workspace`, regenerowane przy każdym otwarciu); usunięcie tego folderu usuwa wszelkie ślady.
 
 ---
 
-## Komendy przeglądania
+## Komendy przeglądowe
 
 ### `openspec list`
 
-Wyświetl zmiany lub specyfikacje w swoim projekcie.
+Lista zmian lub specyfikacji w Twoim projekcie.
 
 ```
-openspec list [opcje]
+openspec list [options]
 ```
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--specs` | Wyświetl specyfikacje zamiast zmian |
-| `--changes` | Wyświetl zmiany (domyślnie) |
-| `--sort <kolejność>` | Sortuj wg `recent` (domyślnie) lub `name` |
-| `--json` | Wyświetl jako JSON |
+| `--specs` | Lista specyfikacji zamiast zmian |
+| `--changes` | Lista zmian (domyślnie) |
+| `--sort <order>` | Sortowanie według `recent` (ostatnie) lub `name` (nazwa) |
+| `--json` | Wyjście w formacie JSON |
 
 **Przykłady:**
 
 ```bash
-# Wyświetl wszystkie aktywne zmiany
+# Lista wszystkich aktywnych zmian
 openspec list
 
-# Wyświetl wszystkie specyfikacje
+# Lista wszystkich specyfikacji
 openspec list --specs
 
-# Wynik JSON dla skryptów
+# Wyjście JSON dla skryptów
 openspec list --json
 ```
 
-**Wynik (tekst):**
+**Wyjście (tekst):**
 
 ```
-Active changes:
-  add-dark-mode     UI theme switching support
-  fix-login-bug     Session timeout handling
+Changes:
+  add-dark-mode     No tasks      just now
 ```
 
 ---
 
 ### `openspec view`
 
-Wyświetl interaktywny panel do przeglądania specyfikacji i zmian.
+Wyświetla interaktywną konsolę do eksplorowania specyfikacji i zmian.
 
 ```
 openspec view
 ```
 
-Otwiera interfejs terminalowy do nawigacji po specyfikacjach i zmianach w projekcie.
+Otwiera interfejs oparty na terminalu do nawigacji po specyfikacjach i zmianach Twojego projektu.
 
 ---
 
 ### `openspec show`
 
-Wyświetl szczegóły zmiany lub specyfikacji.
+Wyświetla szczegóły zmiany lub specyfikacji.
 
 ```
-openspec show [nazwa-elementu] [opcje]
+openspec show [item-name] [options]
 ```
 
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
 |----------|----------|-------------|
-| `nazwa-elementu` | Nie | Nazwa zmiany lub specyfikacji (pyta o podanie, jeśli pominięto) |
+| `item-name` | Nie | Nazwa zmiany lub specyfikacji (pyta, jeśli jest pominięta) |
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--type <typ>` | Określ typ: `change` lub `spec` (wykrywany automatycznie, jeśli jednoznaczny) |
-| `--json` | Wyświetl jako JSON |
-| `--no-interactive` | Wyłącz monity |
+| `--type <type>` | Określenie typu: `change` lub `spec` (automatycznie wykryty, jeśli niejednoznaczny) |
+| `--json` | Wyjście w formacie JSON |
+| `--no-interactive` | Wyłączanie pytań |
 
 **Opcje specyficzne dla zmian:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--deltas-only` | Wyświetl tylko delty specyfikacji (tryb JSON) |
+| `--deltas-only` | Pokaż tylko delty specyfikacji (tryb JSON) |
 
 **Opcje specyficzne dla specyfikacji:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--requirements` | Wyświetl tylko wymagania, wyklucz scenariusze (tryb JSON) |
-| `--no-scenarios` | Wyklucz zawartość scenariuszy (tryb JSON) |
-| `-r, --requirement <id>` | Wyświetl określone wymaganie wg indeksu od 1 (tryb JSON) |
+| `--requirements` | Pokaż tylko wymagania, pomiń scenariusze (tryb JSON) |
+| `--no-scenarios` | Pomijanie treści scenariuszów (tryb JSON) |
+| `-r, --requirement <id>` | Pokaż konkretne wymaganie za pomocą indeksu opartego na 1 (tryb JSON) |
 
 **Przykłady:**
 
 ```bash
-# Interaktywny wybór
+# Interaktywne wybiórcze wyświetlenie
 openspec show
 
-# Wyświetl określoną zmianę
+# Wyświetl konkretną zmianę
 openspec show add-dark-mode
 
-# Wyświetl określoną specyfikację
+# Wyświetl konkretną specyfikację
 openspec show auth --type spec
 
-# Wynik JSON do przetwarzania
+# Wyjście JSON do parsowania
 openspec show add-dark-mode --json
 ```
 
 ---
 
-## Komendy walidacji
+## Komendy walidacyjne
 
 ### `openspec validate`
 
-Waliduj zmiany i specyfikacje pod kątem problemów strukturalnych.
+Waliduje zmiany i specyfikacje pod kątem problemów strukturalnych.
 
 ```
-openspec validate [nazwa-elementu] [opcje]
+openspec validate [item-name] [options]
 ```
 
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
 |----------|----------|-------------|
-| `nazwa-elementu` | Nie | Określony element do walidacji (pyta o podanie, jeśli pominięto) |
+| `item-name` | Nie | Konkretny element do walidacji (pyta, jeśli jest pominięty) |
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--all` | Waliduj wszystkie zmiany i specyfikacje |
-| `--changes` | Waliduj wszystkie zmiany |
-| `--specs` | Waliduj wszystkie specyfikacje |
-| `--type <typ>` | Określ typ, gdy nazwa jest niejednoznaczna: `change` lub `spec` |
-| `--strict` | Włącz tryb ścisłej walidacji |
-| `--json` | Wyświetl jako JSON |
-| `--concurrency <n>` | Maksymalna liczba równoległych walidacji (domyślnie: 6 lub zmienna env `OPENSPEC_CONCURRENCY`) |
-| `--no-interactive` | Wyłącz monity |
+| `--all` | Waliduje wszystkie zmiany i specyfikacje |
+| `--changes` | Waliduje wszystkie zmiany |
+| `--specs` | Waliduje wszystkie specyfikacje |
+| `--type <type>` | Określenie typu, gdy nazwa jest niejednoznaczna: `change` lub `spec` |
+| `--strict` | Włączenie trybu ścisłej walidacji |
+| `--json` | Wyjście w formacie JSON |
+| `--concurrency <n>` | Maksymalna liczba równoległych walidacji (domyślnie: 6, lub zmienna środowiskowa `OPENSPEC_CONCURRENCY`) |
+| `--no-interactive` | Wyłączanie pytań |
 
 **Przykłady:**
 
@@ -629,31 +505,31 @@ openspec validate [nazwa-elementu] [opcje]
 # Interaktywna walidacja
 openspec validate
 
-# Waliduj określoną zmianę
+# Walidacja konkretnej zmiany
 openspec validate add-dark-mode
 
-# Waliduj wszystkie zmiany
+# Walidacja wszystkich zmian
 openspec validate --changes
 
-# Waliduj wszystko z wynikiem JSON (dla CI/skryptów)
+# Walidacja wszystkiego z wyjściem JSON (dla CI/skryptów)
 openspec validate --all --json
 
-# Ścisła walidacja ze zwiększonym stopniem równoległości
+# Ścisła walidacja ze zwiększoną równoległością
 openspec validate --all --strict --concurrency 12
 ```
 
-**Wynik (tekst):**
+**Wyjście (tekst):**
 
 ```
 Validating add-dark-mode...
   ✓ proposal.md valid
   ✓ specs/ui/spec.md valid
-  ⚠ design.md: missing "Technical Approach" section
+  ⚠ design.md: brak sekcji "Technical Approach"
 
 1 warning found
 ```
 
-**Wynik (JSON):**
+**Wyjście (JSON):**
 
 ```json
 {
@@ -663,7 +539,7 @@ Validating add-dark-mode...
       {
         "name": "add-dark-mode",
         "valid": true,
-        "warnings": ["design.md: missing 'Technical Approach' section"]
+        "warnings": ["design.md: brak sekcji 'Technical Approach'"]
       }
     ]
   },
@@ -681,25 +557,25 @@ Validating add-dark-mode...
 
 ### `openspec archive`
 
-Archiwizuj ukończoną zmianę i scal delty specyfikacji do głównych specyfikacji.
+Archiwuje ukończoną zmianę i łączy delty specyfikacji z głównymi specyfikacjami.
 
 ```
-openspec archive [nazwa-zmiany] [opcje]
+openspec archive [change-name] [options]
 ```
 
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
 |----------|----------|-------------|
-| `nazwa-zmiany` | Nie | Zmiana do archiwizacji (pyta o podanie, jeśli pominięto) |
+| `change-name` | Nie | Zmiana do archiwizacji (pyta, jeśli jest pominięta) |
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `-y, --yes` | Pomiń monity potwierdzenia |
-| `--skip-specs` | Pomiń aktualizacje specyfikacji (dla zmian dotyczących tylko infrastruktury/narzędzi/dokumentacji) |
-| `--no-validate` | Pomiń walidację (wymaga potwierdzenia) |
+| `-y, --yes` | Pomiń pytania o potwierdzenie |
+| `--skip-specs` | Pomijanie aktualizacji specyfikacji (dla zmian tylko infrastrukturalnych/narzędziowych/dokumentacyjnych) |
+| `--no-validate` | Pomijanie walidacji (wymaga potwierdzenia) |
 
 **Przykłady:**
 
@@ -707,106 +583,84 @@ openspec archive [nazwa-zmiany] [opcje]
 # Interaktywna archiwizacja
 openspec archive
 
-# Archiwizuj określoną zmianę
+# Archiwizacja konkretnej zmiany
 openspec archive add-dark-mode
 
-# Archiwizacja bez monitów (CI/skrypty)
+# Archiwizacja bez pytań (CI/skrypty)
 openspec archive add-dark-mode --yes
 
-# Archiwizacja zmiany narzędziowej, która nie wpływa na specyfikacje
+# Archiwizacja zmian narzędziowych, które nie wpływają na specyfikacje
 openspec archive update-ci-config --skip-specs
 ```
 
-**Co robi:**
+**Co to robi:**
 
 1. Waliduje zmianę (chyba że `--no-validate`)
 2. Prosi o potwierdzenie (chyba że `--yes`)
-3. Scal delty specyfikacji do `openspec/specs/`
-4. Przenosi folder zmiany do `openspec/changes/archive/YYYY-MM-DD-<nazwa>/`
+3. Łączy delty specyfikacji do `openspec/specs/`
+4. Przenosi folder zmiany do `openspec/changes/archive/YYYY-MM-DD-<name>/`
 
 ---
 
 ## Komendy przepływu pracy
 
-Te komendy obsługują przepływ pracy OPSX oparty na artefaktach. Są przydatne zarówno dla osób sprawdzających postęp, jak i agentów określających następne kroki.
+Te komendy wspierają przepływ pracy OPSX oparty na artefaktach. Są przydatne zarówno dla ludzi sprawdzających postęp, jak i agentów decydujących o kolejnych krokach.
 
 ### `openspec new change`
 
-Utwórz lokalny katalog zmiany w repozytorium i opcjonalny metadane zapisane w repozytorium.
+Tworzy katalog zmiany i opcjonalne metadane zatwierdzone w rozstrzelonym korzeniu OpenSpec.
 
 ```bash
-openspec new change <nazwa> [opcje]
+openspec new change <name> [options]
 ```
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--description <tekst>` | Opis do dodania w `README.md` |
-| `--goal <tekst>` | Cel produktu workspace'u do przechowywania ze zmianą |
-| `--areas <nazwy>` | Nazwy powiązanych linków workspace'u oddzielone przecinkami |
-| `--initiative <id>` | Powiąż lokalną zmianę z inicjatywą |
-| `--store <id>` | Identyfikator magazynu kontekstu dla `--initiative` |
-| `--store-path <ścieżka>` | Istniejący lokalny katalog główny magazynu kontekstu dla `--initiative` |
-| `--schema <nazwa>` | Schemat przepływu pracy do użycia |
-| `--json` | Wyświetl JSON |
+| `--description <text>` | Opis do dodania do `index.md` |
+| `--goal <text>` | Opcjonalne metadane celu do przechowywania ze zmianą |
+| `--schema <name>` | Schemat przepływu pracy do użycia |
+| `--store <id>` | Identyfikator magazynu (store), który służy jako korzeń OpenSpec (magazyn to samodzielny repozytorium OpenSpec, które zarejestrowałeś) |
+| `--json` | Wyjście JSON |
 
 Przykłady:
 
 ```bash
-openspec new change add-billing-api --initiative billing-launch --store platform
-openspec new change add-billing-api --initiative platform/billing-launch --json
+openspec new change add-billing-api
+openspec new change add-billing-api --store team-context --json
 ```
-
-### `openspec set change`
-
-Zaktualizuj metadane lokalnej zmiany zapisane w repozytorium bez ponownego tworzenia zmiany.
-
-```bash
-openspec set change <nazwa> [opcje]
-```
-
-**Opcje:**
-
-| Opcja | Opis |
-|--------|-------------|
-| `--initiative <id>` | Powiąż lokalną zmianę z inicjatywą |
-| `--store <id>` | Identyfikator magazynu kontekstu dla `--initiative` |
-| `--store-path <ścieżka>` | Istniejący lokalny katalog główny magazynu kontekstu dla `--initiative` |
-| `--json` | Wyświetl JSON |
-
-`set change --initiative` jest idempotentne, gdy żądane powiązanie już istnieje, i odmawia zastąpienia innego istniejącego powiązania z inicjatywą.
 
 ### `openspec status`
 
-Wyświetl status ukończenia artefaktów dla zmiany.
+Wyświetla status ukończenia artefaktu dla zmiany.
 
 ```
-openspec status [opcje]
+openspec status [options]
 ```
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--change <id>` | Nazwa zmiany (pyta o podanie, jeśli pominięto) |
-| `--schema <nazwa>` | Nadpisanie schematu (wykrywane automatycznie z konfiguracji zmiany) |
-| `--json` | Wyświetl jako JSON |
+| `--change <id>` | Nazwa zmiany (pyta, jeśli jest pominięta) |
+| `--schema <name>` | Nadpisanie schematu (automatycznie wykryte z konfiguracji zmiany) |
+| `--json` | Wyjście w formacie JSON |
 
 **Przykłady:**
 
 ```bash
-# Interaktywne sprawdzenie statusu
+# Interaktywna kontrola statusu
 openspec status
 
-# Status określonej zmiany
+# Status dla konkretnej zmiany
 openspec status --change add-dark-mode
 
-# JSON dla agenta
+# JSON do użycia przez agenta
 openspec status --change add-dark-mode --json
 ```
 
-**Wynik (tekst):**
+**Wyjście (tekst):**
 
 ```
 Change: add-dark-mode
@@ -819,7 +673,7 @@ Progress: 2/4 artifacts complete
 [-] tasks (blocked by: design)
 ```
 
-**Wynik (JSON):**
+**Wyjście (JSON):**
 
 ```json
 {
@@ -840,82 +694,82 @@ Progress: 2/4 artifacts complete
 
 ### `openspec instructions`
 
-Uzyskaj wzbogacone instrukcje do tworzenia artefaktu lub wdrażania zadań. Używane przez agentów AI do zrozumienia, co utworzyć dalej.
+Pobierz wzbogacone instrukcje do utworzenia artefaktu lub zastosowania zadań. Używane przez agentów AI, aby zrozumieć, co należy stworzyć dalej.
 
 ```
-openspec instructions [artefakt] [opcje]
+openspec instructions [artifact] [options]
 ```
 
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
 |----------|----------|-------------|
-| `artefakt` | Nie | Identyfikator artefaktu: `proposal`, `specs`, `design`, `tasks` lub `apply` |
+| `artifact` | Nie | ID artefaktu: `proposal`, `specs`, `design`, `tasks` lub `apply` |
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
 | `--change <id>` | Nazwa zmiany (wymagana w trybie nieinteraktywnym) |
-| `--schema <nazwa>` | Nadpisanie schematu |
-| `--json` | Wyświetl jako JSON |
+| `--schema <name>` | Nadpisanie schematu |
+| `--json` | Wyjście w formacie JSON |
 
-**Przypadek specjalny:** Użyj `apply` jako artefaktu, aby uzyskać instrukcje implementacji zadań.
+**Specjalny przypadek:** Użyj `apply` jako artefaktu, aby uzyskać instrukcje implementacji zadań.
 
 **Przykłady:**
 
 ```bash
-# Uzyskaj instrukcje dla następnego artefaktu
+# Pobierz instrukcje dla następnego artefaktu
 openspec instructions --change add-dark-mode
 
-# Uzyskaj instrukcje dla określonego artefaktu
+# Pobierz instrukcje dla konkretnego artefaktu
 openspec instructions design --change add-dark-mode
 
-# Uzyskaj instrukcje apply/implementacji
+# Pobierz instrukcje zastosowania/implementacji
 openspec instructions apply --change add-dark-mode
 
-# JSON dla agenta
+# JSON do konsumpcji przez agenta
 openspec instructions design --change add-dark-mode --json
 ```
 
-**Wynik zawiera:**
+**Wyjście zawiera:**
 
-- Treść szablonu dla artefaktu
+- Zawartość szablonu dla artefaktu
 - Kontekst projektu z konfiguracji
 - Treść z artefaktów zależności
-- Reguły dla każdego artefaktu z konfiguracji
+- Zasady na artefakt, zgodnie z konfiguracją
 
 ---
 
 ### `openspec templates`
 
-Wyświetl rozstrzygnięte ścieżki szablonów dla wszystkich artefaktów w schemacie.
+Pokaż rozstrzygnięte ścieżki szablonów dla wszystkich artefaktów w schemacie.
 
 ```
-openspec templates [opcje]
+openspec templates [options]
 ```
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--schema <nazwa>` | Schemat do sprawdzenia (domyślnie: `spec-driven`) |
-| `--json` | Wyświetl jako JSON |
+| `--schema <name>` | Schemat do inspekcji (domyślnie: `spec-driven`) |
+| `--json` | Wyjście w formacie JSON |
 
 **Przykłady:**
 
 ```bash
-# Wyświetl ścieżki szablonów dla domyślnego schematu
+# Pokaż ścieżki szablonów dla domyślnego schematu
 openspec templates
 
-# Wyświetl szablony dla niestandardowego schematu
+# Pokaż szablony dla niestandardowego schematu
 openspec templates --schema my-workflow
 
 # JSON do użycia programistycznego
 openspec templates --json
 ```
 
-**Wynik (tekst):**
+**Wyjście (tekst):**
 
 ```
 Schema: spec-driven
@@ -931,17 +785,17 @@ Templates:
 
 ### `openspec schemas`
 
-Wyświetl dostępne schematy przepływu pracy wraz z ich opisami i przepływami artefaktów.
+Lista dostępnych schematów przepływu pracy wraz z ich opisami i przepływami artefaktów.
 
 ```
-openspec schemas [opcje]
+openspec schemas [options]
 ```
 
 **Opcje:**
 
 | Opcja | Opis |
 |--------|-------------|
-| `--json` | Wyświetl jako JSON |
+| `--json` | Wyjście w formacie JSON |
 
 **Przykład:**
 
@@ -949,29 +803,27 @@ openspec schemas [opcje]
 openspec schemas
 ```
 
-**Wynik:**
+**Wyjście:**
 
 ```
 Available schemas:
 
   spec-driven (package)
-    The default spec-driven development workflow
-    Flow: proposal → specs → design → tasks
+    Domyślny przepływ pracy rozwoju specyficznego.
+    Przepływ: proposal → specs → design → tasks
 
   my-custom (project)
-    Custom workflow for this project
-    Flow: research → proposal → tasks
+    Niestandardowy przepływ pracy dla tego projektu.
+    Przepływ: research → proposal → tasks
 ```
 
----
+## Komendy Schematów
 
-## Polecenia Schematów
-
-Polecenia do tworzenia i zarządzania niestandardowymi schematami przepływu pracy.
+Komendy służące do tworzenia i zarządzania niestandardowymi schematami przepływu pracy (workflow).
 
 ### `openspec schema init`
 
-Utwórz nowy schemat lokalny projektu.
+Tworzy nowy, lokalny dla projektu schemat.
 
 ```
 openspec schema init <name> [options]
@@ -980,19 +832,19 @@ openspec schema init <name> [options]
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
-|----------|----------|------|
+|----------|----------|-------------|
 | `name` | Tak | Nazwa schematu (kebab-case) |
 
 **Opcje:**
 
 | Opcja | Opis |
-|-------|------|
+|--------|-------------|
 | `--description <text>` | Opis schematu |
-| `--artifacts <list>` | Lista identyfikatorów artefaktów oddzielonych przecinkami (domyślnie: `proposal,specs,design,tasks`) |
+| `--artifacts <list>` | Lista ID artefaktów oddzielona przecinkami (domyślnie: `proposal,specs,design,tasks`) |
 | `--default` | Ustaw jako domyślny schemat projektu |
-| `--no-default` | Nie pytaj o ustawienie jako domyślny |
-| `--force` | Nadpisz istniejący schemat |
-| `--json` | Wynik w formacie JSON |
+| `--no-default` | Nie prosi o ustawienie jako domyślny |
+| `--force` | Nadpisuje istniejący schemat |
+| `--json` | Wyjście w formacie JSON |
 
 **Przykłady:**
 
@@ -1000,14 +852,14 @@ openspec schema init <name> [options]
 # Interaktywne tworzenie schematu
 openspec schema init research-first
 
-# Nieinteraktywne z określonymi artefaktami
+# Bez interakcji ze specyficznymi artefaktami
 openspec schema init rapid \
   --description "Rapid iteration workflow" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
-**Co zostanie utworzone:**
+**Co to tworzy:**
 
 ```
 openspec/schemas/<name>/
@@ -1023,7 +875,7 @@ openspec/schemas/<name>/
 
 ### `openspec schema fork`
 
-Skopiuj istniejący schemat do swojego projektu w celu dostosowania.
+Kopiuje istniejący schemat do Twojego projektu w celu dostosowania.
 
 ```
 openspec schema fork <source> [name] [options]
@@ -1032,21 +884,21 @@ openspec schema fork <source> [name] [options]
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
-|----------|----------|------|
+|----------|----------|-------------|
 | `source` | Tak | Schemat do skopiowania |
-| `name` | Nie | Nazwa nowego schematu (domyślnie: `<source>-custom`) |
+| `name` | Nie | Nowa nazwa schematu (domyślnie: `<source>-custom`) |
 
 **Opcje:**
 
 | Opcja | Opis |
-|-------|------|
-| `--force` | Nadpisz istniejący cel |
-| `--json` | Wynik w formacie JSON |
+|--------|-------------|
+| `--force` | Nadpisuje istniejący cel |
+| `--json` | Wyjście w formacie JSON |
 
 **Przykład:**
 
 ```bash
-# Fork wbudowanego schematu spec-driven
+# Forkowanie wbudowanego schematu spec-driven
 openspec schema fork spec-driven my-workflow
 ```
 
@@ -1054,7 +906,7 @@ openspec schema fork spec-driven my-workflow
 
 ### `openspec schema validate`
 
-Waliduj strukturę schematu i szablony.
+Waliduje strukturę i szablony schematu.
 
 ```
 openspec schema validate [name] [options]
@@ -1063,23 +915,23 @@ openspec schema validate [name] [options]
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `name` | Nie | Schemat do walidacji (jeśli pominięty, waliduje wszystkie) |
+|----------|----------|-------------|
+| `name` | Nie | Schemat do walidacji (waliduje wszystkie, jeśli pominięto) |
 
 **Opcje:**
 
 | Opcja | Opis |
-|-------|------|
+|--------|-------------|
 | `--verbose` | Pokaż szczegółowe kroki walidacji |
-| `--json` | Wynik w formacie JSON |
+| `--json` | Wyjście w formacie JSON |
 
 **Przykład:**
 
 ```bash
-# Waliduj określony schemat
+# Walidacja konkretnego schematu
 openspec schema validate my-workflow
 
-# Waliduj wszystkie schematy
+# Walidacja wszystkich schematów
 openspec schema validate
 ```
 
@@ -1087,7 +939,7 @@ openspec schema validate
 
 ### `openspec schema which`
 
-Pokaż, skąd rozwiązywany jest schemat (przydatne do debugowania priorytetów).
+Pokaż, skąd dany schemat jest rozstrzygany (przydatne do debugowania kolejności).
 
 ```
 openspec schema which [name] [options]
@@ -1096,31 +948,31 @@ openspec schema which [name] [options]
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
-|----------|----------|------|
+|----------|----------|-------------|
 | `name` | Nie | Nazwa schematu |
 
 **Opcje:**
 
 | Opcja | Opis |
-|-------|------|
-| `--all` | Wyświetl wszystkie schematy wraz z ich źródłami |
-| `--json` | Wynik w formacie JSON |
+|--------|-------------|
+| `--all` | Lista wszystkich schematów wraz z ich źródłami |
+| `--json` | Wyjście w formacie JSON |
 
 **Przykład:**
 
 ```bash
-# Sprawdź, skąd pochodzi schemat
+# Sprawdzenie, skąd pochodzi schemat
 openspec schema which spec-driven
 ```
 
-**Wynik:**
+**Wyjście:**
 
 ```
 spec-driven resolves from: package
   Source: /usr/local/lib/node_modules/@fission-ai/openspec/schemas/spec-driven
 ```
 
-**Priorytet schematów:**
+**Kolejność rozstrzygania schematów (Schema precedence):**
 
 1. Projekt: `openspec/schemas/<name>/`
 2. Użytkownik: `~/.local/share/openspec/schemas/<name>/`
@@ -1128,95 +980,95 @@ spec-driven resolves from: package
 
 ---
 
-## Polecenia Konfiguracji
+## Komendy Konfiguracyjne
 
 ### `openspec config`
 
-Wyświetl i modyfikuj globalną konfigurację OpenSpec.
+Wyświetlanie i modyfikacja globalnej konfiguracji OpenSpec.
 
 ```
 openspec config <subcommand> [options]
 ```
 
-**Podpolecenia:**
+**Podkomendy:**
 
-| Podpolecenie | Opis |
-|--------------|------|
-| `path` | Pokaż lokalizację pliku konfiguracji |
-| `list` | Pokaż wszystkie bieżące ustawienia |
-| `get <key>` | Pobierz określoną wartość |
+| Podkomenda | Opis |
+|------------|-------------|
+| `path` | Pokaż lokalizację pliku konfiguracyjnego |
+| `list` | Pokaż wszystkie aktualne ustawienia |
+| `get <key>` | Pobierz konkretną wartość |
 | `set <key> <value>` | Ustaw wartość |
 | `unset <key>` | Usuń klucz |
-| `reset` | Przywróć wartości domyślne |
+| `reset` | Resetuj do domyślnych wartości |
 | `edit` | Otwórz w `$EDITOR` |
-| `profile [preset]` | Konfiguruj profil przepływu pracy interaktywnie lub za pomocą presetu |
+| `profile [preset]` | Interaktywnie skonfiguruj profil przepływu pracy lub użyj predefiniowanego zestawu |
 
 **Przykłady:**
 
 ```bash
-# Pokaż ścieżkę pliku konfiguracji
+# Pokaż ścieżkę pliku konfiguracyjnego
 openspec config path
 
-# Wyświetl wszystkie ustawienia
+# Lista wszystkich ustawień
 openspec config list
 
-# Pobierz określoną wartość
+# Pobierz konkretną wartość
 openspec config get telemetry.enabled
 
-# Ustaw wartość
+# Ustawienie wartości
 openspec config set telemetry.enabled false
 
 # Jawne ustawienie wartości tekstowej
 openspec config set user.name "My Name" --string
 
-# Usuń niestandardowe ustawienie
+# Usunięcie niestandardowego ustawienia
 openspec config unset user.name
 
-# Resetuj całą konfigurację
+# Resetowanie całej konfiguracji
 openspec config reset --all --yes
 
-# Edytuj konfigurację w edytorze
+# Edycja konfiguracji w edytorze
 openspec config edit
 
-# Konfiguruj profil za pomocą kreatora opartego na akcjach
+# Konfiguracja profilu za pomocą kreatora opartego na akcjach
 openspec config profile
 
-# Szybki preset: przełącz przepływy pracy na core (zachowuje tryb dostarczania)
+# Szybki preset: przełączanie przepływów pracy na rdzeń (zachowuje tryb dostawy)
 openspec config profile core
 ```
 
-`openspec config profile` rozpoczyna się od podsumowania bieżącego stanu, a następnie pozwala wybrać:
-- Zmień dostarczanie + przepływy pracy
-- Zmień tylko dostarczanie
-- Zmień tylko przepływy pracy
-- Zachowaj bieżące ustawienia (zakończ)
+`openspec config profile` rozpoczyna się od podsumowania stanu i pozwala wybrać:
+- Zmiana dostawy + przepływów pracy
+- Zmiana tylko dostawy
+- Zmiana tylko przepływów pracy
+- Zachowanie bieżących ustawień (wyjście)
 
-Jeśli zachowasz bieżące ustawienia, żadne zmiany nie zostaną zapisane i nie zostanie wyświetlony monit o aktualizację.
-Jeśli nie ma zmian w konfiguracji, ale bieżące pliki projektu lub obszaru roboczego są niezsynchronizowane z globalnym profilem/trybem dostarczania, OpenSpec wyświetli ostrzeżenie i zasugeruje `openspec update` dla projektów lokalnych repozytorium lub `openspec workspace update` dla lokalnych wytycznych i umiejętności obszaru roboczego.
-Naciśnięcie `Ctrl+C` również czysto anuluje proces (bez śladu stosu) i kończy z kodem `130`.
-Na liście kontrolnej przepływów pracy `[x]` oznacza, że przepływ pracy jest wybrany w konfiguracji globalnej. Aby zastosować te wybory do plików projektu, uruchom `openspec update` (lub wybierz `Apply changes to this project now?` gdy zostaniesz o to poproszony wewnątrz projektu). Z poziomu obszaru roboczego użyj `openspec workspace update`, aby odświeżyć lokalne wytyczne i umiejętności obszaru roboczego; dotyczy to wyłącznie umiejętności dla wygenerowanych plików przepływu pracy agenta i nie generuje poleceń ukośnych obszaru roboczego.
+Jeśli zachowasz bieżące ustawienia, żadne zmiany nie są zapisywane i nie wyświetlany jest komunikat o aktualizacji.
+Jeśli nie ma zmian w konfiguracji, ale pliki projektu są niesynchroniczne z Twoim globalnym profilem/dostawą, OpenSpec wyświetli ostrzeżenie i zasugeruje `openspec update`.
+Naciśnięcie `Ctrl+C` również anuluje przepływ czysto (bez stack trace) i zakończy się kodem `130`.
+W liście kontrolnym przepływu pracy, `[x]` oznacza, że przepływ został wybrany w globalnej konfiguracji. Aby zastosować te selekcje do plików projektu, uruchom `openspec update` (lub wybierz „Apply changes to this project now?” podczas promptu wewnątrz projektu).
 
 **Przykłady interaktywne:**
 
 ```bash
-# Aktualizacja tylko dostarczania
+# Aktualizacja tylko dostawy
 openspec config profile
-# wybierz: Change delivery only
-# wybierz dostarczanie: Skills only
+# wybór: Zmiana tylko dostawy
+# wybór dostawa: Tylko umiejętności (Skills)
 
 # Aktualizacja tylko przepływów pracy
 openspec config profile
-# wybierz: Change workflows only
-# przełącz przepływy pracy na liście kontrolnej, a następnie potwierdź
+# wybór: Zmiana tylko przepływów pracy
+# przełączanie przepływów pracy w liście kontrolnej, a następnie potwierdzenie
 ```
 
 ---
 
-## Polecenia Narzędziowe
+## Komendy Użyteczne (Utility Commands)
 
 ### `openspec feedback`
 
-Prześlij opinię na temat OpenSpec. Tworzy zgłoszenie na GitHubie.
+Przesyłanie informacji zwrotnych na temat OpenSpec. Tworzy zgłoszenie w GitHub.
 
 ```
 openspec feedback <message> [options]
@@ -1225,16 +1077,16 @@ openspec feedback <message> [options]
 **Argumenty:**
 
 | Argument | Wymagany | Opis |
-|----------|----------|------|
-| `message` | Tak | Treść opinii |
+|----------|----------|-------------|
+| `message` | Tak | Wiadomość zwrotną |
 
 **Opcje:**
 
 | Opcja | Opis |
-|-------|------|
+|--------|-------------|
 | `--body <text>` | Szczegółowy opis |
 
-**Wymagania:** GitHub CLI (`gh`) musi być zainstalowany i uwierzytelniony.
+**Wymagania:** Wymagana jest instalacja i autoryzacja CLI GitHub (`gh`).
 
 **Przykład:**
 
@@ -1247,64 +1099,64 @@ openspec feedback "Add support for custom artifact types" \
 
 ### `openspec completion`
 
-Zarządzaj uzupełnianiami powłoki dla CLI OpenSpec.
+Zarządzanie uzupełnieniami poleceń (shell completions) dla CLI OpenSpec.
 
 ```
 openspec completion <subcommand> [shell]
 ```
 
-**Podpolecenia:**
+**Podkomendy:**
 
-| Podpolecenie | Opis |
-|--------------|------|
-| `generate [shell]` | Wygeneruj skrypt uzupełniania na stdout |
-| `install [shell]` | Zainstaluj uzupełnianie dla twojej powłoki |
-| `uninstall [shell]` | Usuń zainstalowane uzupełniania |
+| Podkomenda | Opis |
+|------------|-------------|
+| `generate [shell]` | Wyjście skryptu uzupełniania do stdout |
+| `install [shell]` | Instalacja uzupełnienia dla Twojej powłoki (shell) |
+| `uninstall [shell]` | Usunięcie zainstalowanych uzupełnień |
 
 **Obsługiwane powłoki:** `bash`, `zsh`, `fish`, `powershell`
 
 **Przykłady:**
 
 ```bash
-# Zainstaluj uzupełniania (automatyczne wykrywanie powłoki)
+# Instalacja uzupełnień (automatyczne wykrycie powłoki)
 openspec completion install
 
-# Instalacja dla określonej powłoki
+# Instalacja dla konkretnej powłoki
 openspec completion install zsh
 
-# Wygeneruj skrypt do ręcznej instalacji
+# Generowanie skryptu do ręcznej instalacji
 openspec completion generate bash > ~/.bash_completion.d/openspec
 
-# Odinstaluj
+# Odinstalowanie
 openspec completion uninstall
 ```
 
 ---
 
-## Kody Wyjścia
+## Kody Wyjścia (Exit Codes)
 
 | Kod | Znaczenie |
-|-----|-----------|
+|------|---------|
 | `0` | Sukces |
-| `1` | Błąd (niepowodzenie walidacji, brakujące pliki itp.) |
+| `1` | Błąd (błąd walidacji, brak plików itp.) |
 
 ---
 
-## Zmienne Środowiskowe
+## Zmienne Środowiskowe (Environment Variables)
 
 | Zmienna | Opis |
-|---------|------|
-| `OPENSPEC_TELEMETRY` | Ustaw na `0`, aby wyłączyć telemetrię |
-| `DO_NOT_TRACK` | Ustaw na `1`, aby wyłączyć telemetrię (standardowy sygnał DNT) |
-| `OPENSPEC_CONCURRENCY` | Domyślna współbieżność dla zbiorczej walidacji (domyślnie: 6) |
-| `EDITOR` lub `VISUAL` | Edytor dla `openspec config edit` |
-| `NO_COLOR` | Wyłącza kolorowe wyjście, gdy ustawione |
+|----------|-------------|
+| `OPENSPEC_TELEMETRY` | Ustawienie na `0` aby wyłączyć telemetrię |
+| `DO_NOT_TRACK` | Ustawienie na `1` aby wyłączyć telemetrię (standardowy sygnał DNT) |
+| `OPENSPEC_CONCURRENCY` | Domyślna równoległość dla masowej walidacji (domyślnie: 6) |
+| `EDITOR` lub `VISUAL` | Edytor używany przez `openspec config edit` |
+| `NO_COLOR` | Wyłączanie kolorowego wyjścia po ustawieniu |
 
 ---
 
-## Powiązana Dokumentacja
+## Powiązane Dokumentacje
 
-- [Polecenia](commands.md) - Polecenia ukośne AI (`/opsx:propose`, `/opsx:apply` itp.)
-- [Przepływy pracy](workflows.md) - Typowe wzorce i kiedy używać poszczególnych poleceń
-- [Dostosowywanie](customization.md) - Tworzenie niestandardowych schematów i szablonów
-- [Pierwsze kroki](getting-started.md) - Przewodnik po pierwszej konfiguracji
+- [Commands](commands.md) - Komendy z wykorzystaniem AI (slash commands, np. `/opsx:propose`, `/opsx:apply`)
+- [Workflows](workflows.md) - Typowe wzorce i kiedy używać każdej komendy
+- [Customization](customization.md) - Tworzenie niestandardowych schematów i szablonów
+- [Getting Started](getting-started.md) - Przewodnik dla początkujących

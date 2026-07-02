@@ -22,171 +22,110 @@ features:
     details: Documentation available in multiple languages.
 ---
 
+# OpenSpec Documentation
 
-Our philosophy:
+Welcome. This is the home for everything OpenSpec.
+
+OpenSpec helps you and your AI coding assistant **agree on what to build before any code is written.** You describe the change, the AI drafts a short spec and a task list, you both look at the same plan, and then the work happens. No more discovering halfway through that the AI built the wrong thing.
+
+If you read nothing else, read these two pages:
+
+1. [Getting Started](getting-started.md): install, initialize, and ship your first change.
+2. [How Commands Work](how-commands-work.md): where you actually type `/opsx:propose` (hint: in your AI chat, not the terminal). This trips up almost everyone once.
+
+That second one matters more than it looks. OpenSpec has two halves: a command line tool you run in your terminal, and slash commands you give to your AI assistant. Knowing which is which saves you the most common moment of confusion.
+
+> **The best habit to build first: when you're not sure what to build, start with `/opsx:explore`.** It's a no-stakes thinking partner that reads your code, weighs options, and sharpens a fuzzy idea into a concrete plan before any artifact or code exists. The [Explore First](explore.md) guide makes the case.
+
+## Pick your path
+
+**I'm brand new.** Start with [Getting Started](getting-started.md), then skim the [Core Concepts at a Glance](overview.md). When something feels mysterious, the [FAQ](faq.md) and [Glossary](glossary.md) are nearby.
+
+**I have a problem but not a plan.** This is the common case, and it has a dedicated answer: [Explore First](explore.md). Use `/opsx:explore` to think it through with the AI before committing to anything.
+
+**I have a big existing codebase.** You don't document all of it. [Using OpenSpec in an Existing Project](existing-projects.md) shows how to start on real, brownfield code without boiling the ocean.
+
+**I just want to get it working.** [Install](installation.md), run `openspec init`, then read [How Commands Work](how-commands-work.md) so your first slash command lands in the right place.
+
+**I learn by example.** The [Examples & Recipes](examples.md) page walks through real changes start to finish: a small feature, a bug fix, a refactor, an exploration.
+
+**I'm coming from the old workflow.** The [Migration Guide](migration-guide.md) explains what changed and why, and promises your existing work is safe.
+
+**I want to bend it to my team's process.** [Customization](customization.md) covers project config, custom schemas, and shared context.
+
+**Something's broken.** [Troubleshooting](troubleshooting.md) collects the failures people actually hit, with fixes.
+
+## The whole map
+
+### Start here
+
+| Doc | What it gives you |
+|-----|-------------------|
+| [Getting Started](getting-started.md) | Install, initialize, and run your first change end to end |
+| [Explore First](explore.md) | Use `/opsx:explore` to think through an idea before you commit |
+| [How Commands Work](how-commands-work.md) | Where slash commands run, what "interactive mode" means, terminal vs chat |
+| [Core Concepts at a Glance](overview.md) | The whole mental model on one page: specs, changes, deltas, archive |
+| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix, and how to verify it worked |
+
+### Use it day to day
+
+| Doc | What it gives you |
+|-----|-------------------|
+| [Workflows](workflows.md) | Common patterns and when to reach for each command |
+| [Examples & Recipes](examples.md) | Full walkthroughs of real changes, copy-pasteable |
+| [Using OpenSpec in an Existing Project](existing-projects.md) | Adopting OpenSpec on a large brownfield codebase |
+| [Editing & Iterating on a Change](editing-changes.md) | Update artifacts, go back, reconcile manual edits |
+| [Commands](commands.md) | Reference for every `/opsx:*` slash command |
+| [CLI](cli.md) | Reference for every `openspec` terminal command |
+
+### Understand it deeply
+
+| Doc | What it gives you |
+|-----|-------------------|
+| [Concepts](concepts.md) | The long-form explanation of specs, changes, artifacts, schemas, and archive |
+| [OPSX Workflow](opsx.md) | Why the workflow is fluid instead of phase-locked, plus an architecture deep dive |
+| [Glossary](glossary.md) | Every term defined in one place |
+
+### Make it yours
+
+| Doc | What it gives you |
+|-----|-------------------|
+| [Customization](customization.md) | Project config, custom schemas, shared context |
+| [Multi-Language](multi-language.md) | Generate artifacts in languages other than English |
+| [Supported Tools](supported-tools.md) | The 25+ AI tools OpenSpec integrates with, and where files land |
+
+### When you need help
+
+| Doc | What it gives you |
+|-----|-------------------|
+| [FAQ](faq.md) | Quick answers to the questions people ask most |
+| [Troubleshooting](troubleshooting.md) | Concrete fixes for concrete failures |
+| [Migration Guide](migration-guide.md) | Moving from the legacy workflow to OPSX |
+
+### Coordinate across repos (beta)
+
+| Doc | What it gives you |
+|-----|-------------------|
+| [Stores: User Guide](stores-beta/user-guide.md) | Plan in its own repo when your work spans repos or teams |
+| [Agent Contract](agent-contract.md) | The machine-readable CLI surfaces agents drive |
+
+## The thirty-second version
 
 ```text
-→ fluid not rigid
-→ iterative not waterfall
-→ easy not complex
-→ built for brownfield not just greenfield
-→ scalable from personal projects to enterprises
+1. Install        npm install -g @fission-ai/openspec@latest
+2. Initialize     cd your-project && openspec init
+3. Explore        (in your AI chat)  /opsx:explore           ← optional, but a great habit
+4. Propose        (in your AI chat)  /opsx:propose add-dark-mode
+5. Build          (in your AI chat)  /opsx:apply
+6. Archive        (in your AI chat)  /opsx:archive
 ```
 
-> [!TIP]
-> **New workflow now available!** We've rebuilt OpenSpec with a new artifact-guided workflow.
->
-> Run `/opsx:propose "your idea"` to get started. → [Learn more here](opsx.md)
+Steps 1 and 2 happen in your terminal. The rest happen in your AI assistant's chat. That split is the one thing worth memorizing, and [How Commands Work](how-commands-work.md) explains exactly why. Step 3 is optional, but starting with `/opsx:explore` when you're unsure is the habit most worth forming.
 
-<p align="center">
-  Follow <a href="https://x.com/0xTab">@0xTab on X</a> for updates · Join the <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> for help and questions.
-</p>
+## Where else to get help
 
-## See it in action
+- **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) for questions, ideas, and help.
+- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) for bugs and feature requests.
+- **`openspec feedback "your message"`** sends feedback straight from your terminal (it opens a GitHub issue).
 
-```text
-You: /opsx:propose add-dark-mode
-AI:  Created openspec/changes/add-dark-mode/
-     ✓ proposal.md — why we're doing this, what's changing
-     ✓ specs/       — requirements and scenarios
-     ✓ design.md    — technical approach
-     ✓ tasks.md     — implementation checklist
-     Ready for implementation!
-
-You: /opsx:apply
-AI:  Implementing tasks...
-     ✓ 1.1 Add theme context provider
-     ✓ 1.2 Create toggle component
-     ✓ 2.1 Add CSS variables
-     ✓ 2.2 Wire up localStorage
-     All tasks complete!
-
-You: /opsx:archive
-AI:  Archived to openspec/changes/archive/2025-01-23-add-dark-mode/
-     Specs updated. Ready for the next feature.
-```
-
-<details>
-<summary><strong>OpenSpec Dashboard</strong></summary>
-</details>
-
-## Quick Start
-
-**Requires Node.js 20.19.0 or higher.**
-
-Install OpenSpec globally:
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-Then navigate to your project directory and initialize:
-
-```bash
-cd your-project
-openspec init
-```
-
-Now tell your AI: `/opsx:propose <what-you-want-to-build>`
-
-If you want the expanded workflow (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`), select it with `openspec config profile` and apply with `openspec update`.
-
-> [!NOTE]
-> Not sure if your tool is supported? [View the full list](supported-tools.md) – we support 25+ tools and growing.
->
-> Also works with pnpm, yarn, bun, and nix. [See installation options](installation.md).
-
-## Docs
-
-→ **[Getting Started](getting-started.md)**: first steps<br>
-→ **[Workflows](workflows.md)**: combos and patterns<br>
-→ **[Commands](commands.md)**: slash commands & skills<br>
-→ **[CLI](cli.md)**: terminal reference<br>
-→ **[Supported Tools](supported-tools.md)**: tool integrations & install paths<br>
-→ **[Concepts](concepts.md)**: how it all fits<br>
-→ **[Multi-Language](multi-language.md)**: multi-language support<br>
-→ **[Customization](customization.md)**: make it yours
-
-
-## Why OpenSpec?
-
-AI coding assistants are powerful but unpredictable when requirements live only in chat history. OpenSpec adds a lightweight spec layer so you agree on what to build before any code is written.
-
-- **Agree before you build** — human and AI align on specs before code gets written
-- **Stay organized** — each change gets its own folder with proposal, specs, design, and tasks
-- **Work fluidly** — update any artifact anytime, no rigid phase gates
-- **Use your tools** — works with 20+ AI assistants via slash commands
-
-### How we compare
-
-**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Thorough but heavyweight. Rigid phase gates, lots of Markdown, Python setup. OpenSpec is lighter and lets you iterate freely.
-
-**vs. [Kiro](https://kiro.dev)** (AWS) — Powerful but you're locked into their IDE and limited to Claude models. OpenSpec works with the tools you already use.
-
-**vs. nothing** — AI coding without specs means vague prompts and unpredictable results. OpenSpec brings predictability without the ceremony.
-
-## Updating OpenSpec
-
-**Upgrade the package**
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-**Refresh agent instructions**
-
-Run this inside each project to regenerate AI guidance and ensure the latest slash commands are active:
-
-```bash
-openspec update
-```
-
-## Usage Notes
-
-**Model selection**: OpenSpec works best with high-reasoning models. We recommend Opus 4.5 and GPT 5.2 for both planning and implementation.
-
-**Context hygiene**: OpenSpec benefits from a clean context window. Clear your context before starting implementation and maintain good context hygiene throughout your session.
-
-## Contributing
-
-**Small fixes** — Bug fixes, typo corrections, and minor improvements can be submitted directly as PRs.
-
-**Larger changes** — For new features, significant refactors, or architectural changes, please submit an OpenSpec change proposal first so we can align on intent and goals before implementation begins.
-
-When writing proposals, keep the OpenSpec philosophy in mind: we serve a wide variety of users across different coding agents, models, and use cases. Changes should work well for everyone.
-
-**AI-generated code is welcome** — as long as it's been tested and verified. PRs containing AI-generated code should mention the coding agent and model used (e.g., "Generated with Claude Code using claude-opus-4-5-20251101").
-
-### Development
-
-- Install dependencies: `pnpm install`
-- Build: `pnpm run build`
-- Test: `pnpm test`
-- Develop CLI locally: `pnpm run dev` or `pnpm run dev:cli`
-- Conventional commits (one-line): `type(scope): subject`
-
-## Other
-
-<details>
-<summary><strong>Telemetry</strong></summary>
-
-OpenSpec collects anonymous usage stats.
-
-We collect only command names and version to understand usage patterns. No arguments, paths, content, or PII. Automatically disabled in CI.
-
-**Opt-out:** `export OPENSPEC_TELEMETRY=0` or `export DO_NOT_TRACK=1`
-
-</details>
-
-<details>
-<summary><strong>Maintainers & Advisors</strong></summary>
-
-See [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) for the list of core maintainers and advisors who help guide the project.
-
-</details>
-
-
-
-## License
-
-MIT
+Found something in these docs that's wrong, stale, or confusing? That's a bug. Open an issue or a PR. Documentation improvements are some of the most valuable contributions you can make.

@@ -1,80 +1,105 @@
-# Workflows
+# Werkstromen
 
-Deze gids behandelt veelvoorkomende workflowpatronen voor OpenSpec en wanneer je elk patroon kunt gebruiken. Voor de basisconfiguratie, zie [Aan de slag](getting-started.md). Voor de commandoreferentie, zie [Commando's](commands.md).
+Deze handleiding behandelt gangbare workflowpatronen voor OpenSpec en wanneer elk ervan te gebruiken. Voor de basisinstelling zie [Getting Started](getting-started.md). Voor een referentie van commando's zie [Commands](commands.md).
 
-## Filosofie: Acties, Niet Fasen
+## Filosofie: Acties, Geen Fasen
 
-Traditionele workflows dwingen je door fasen: plannen, dan implementeren, dan klaar. Maar echt werk past niet netjes in hokjes.
+Traditionele werkstromen dwingen je door fasen: plannen, dan implementatie, dan voltooid. Maar echt werk past niet netjes in hokjes.
 
 OPSX hanteert een andere aanpak:
 
 ```text
-Traditioneel (fasen-gebonden):
+Traditional (phase-locked):
 
-  PLANNEN ────────► IMPLEMENTEREN ────────► KLAAR
+  PLANNING ────────► IMPLEMENTING ────────► DONE
       │                    │
-      │   "Kan niet terug" │
+      │   "Can't go back"  │
       └────────────────────┘
 
-OPSX (vloeiende acties):
+OPSX (fluid actions):
 
-  voorstel ──► specificaties ──► ontwerp ──► taken ──► implementeren
+  proposal ──► specs ──► design ──► tasks ──► implement
 ```
 
 **Kernprincipes:**
 
-- **Acties, niet fasen** - Commando's zijn dingen die je kunt doen, geen stadia waarin je vastzit
-- **Afhankelijkheden zijn mogelijkmakers** - Ze tonen wat mogelijk is, niet wat als volgende vereist is
+- **Acties, geen fasen** - Commando's zijn dingen die je kunt doen, geen stadia waarin je vastzit.
+- **Afhankelijkheden zijn mogelijkmakers** - Ze tonen wat mogelijk is, niet wat er vervolgens vereist is.
 
-> **Aanpassing:** OPSX-workflows worden aangestuurd door schema's die artefactvolgordes definiëren. Zie [Aanpassing](customization.md) voor details over het maken van aangepaste schema's.
+> **Aanpassing (Customization):** OPSX werkstromen worden aangedreven door schema's die artefactreeks definiëren. Zie [Customization](customization.md) voor details over het maken van aangepaste schema's.
 
 ## Twee Modi
 
-### Standaard Snel Pad (`core` profiel)
+### Standaard Snelpad (`core` profiel)
 
-Nieuwe installaties standaard naar `core`, wat het volgende biedt:
-- `/opsx:propose`
+Nieuwe installaties zijn standaard ingesteld op `core`, wat het volgende biedt:
 - `/opsx:explore`
+- `/opsx:propose`
 - `/opsx:apply`
 - `/opsx:sync`
 - `/opsx:archive`
 
-Typische flow:
+Typische stroom:
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+  (optioneel)
 ```
 
-### Uitgebreide/Volledige Workflow (aangepaste selectie)
+#### Begin met verkennen (de gewoonte die je moet aanleren)
 
-Als je expliciete scaffold-en-build commando's wilt (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`), schakel ze dan in met:
+`/opsx:explore` is onderdeel van het standaardprofiel, geen geavanceerde aanvulling. Het is de stap die je moet zetten wanneer je een probleem hebt maar nog geen plan, wat in de meeste gevallen zo is.
+
+```text
+Jij: /opsx:explore
+
+AI:  Wat wilt u verkennen?
+
+Jij: Onze zoekresultaten voelen stagnerend aan. Ik weet niet of het caching,
+     indexering of de query zelf is.
+
+AI:  Laat me kijken... [leest de zoekservice en cachelaag]
+     Het is de index: deze wordt alleen nachtelijk opnieuw opgebouwd, dus wijzigingen
+     verschijnen pas de volgende dag. Twee opties: rebuild-on-write (eenvoudig,
+     meer belasting) of een korte TTL cache-invalidatie (meer onderdelen, minder belasting). Gezien uw schrijfvolume is rebuild-on-write de schonere oplossing. Wilt u het omvatten?
+
+Jij: Ja.
+
+Jij: /opsx:propose rebuild-search-index-on-write
+```
+
+Verkennen creëert geen artefacten en schrijft geen code. Het is een gratis, risicovrije conversatie die een vage zorg omzet in een precieze wijziging, waardoor het daaropvolgende voorstel scherp is. Weet u al precies wat u wilt? Sla het over en ga rechtstreeks naar `/opsx:propose`. Volledige gids: [Explore First](explore.md).
+
+### Uitgebreide/Volledige Werkstroom (op maat gemaakte selectie)
+
+Als u expliciete scaffold-en-build commando's wilt (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`), activeer deze dan met:
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## Workflow Patronen (Uitgebreide Modus)
+## Werkpatronen (Uitgebreide Modus)
 
-### Snelle Feature
+### Snelle Functie
 
-Wanneer je weet wat je wilt bouwen en alleen hoeft uit te voeren:
+Wanneer u weet wat u wilt bouwen en alleen de uitvoering moet verzorgen:
 
 ```text
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-**Voorbeeldgesprek:**
+**Voorbeeldconversatie:**
 
 ```text
 Jij: /opsx:new add-logout-button
 
-AI:  Aangemaakt openspec/changes/add-logout-button/
-     Klaar om te creëren: proposal
+AI:  Heeft openspec/changes/add-logout-button/ aangemaakt
+     Klaar om te creëren: voorstel
 
 Jij: /opsx:ff
 
-AI:  Alle planning-artefacten aanmaken...
+AI:  Creëert alle planningsartefacten...
      ✓ proposal.md
      ✓ specs/
      ✓ design.md
@@ -83,68 +108,68 @@ AI:  Alle planning-artefacten aanmaken...
 
 Jij: /opsx:apply
 
-AI:  Taken uitvoeren...
-     ✓ Uitlogknop toegevoegd aan header
-     ✓ Sessie-opruiming geïmplementeerd
+AI:  Werk aan de taken...
+     ✓ Logout-knop toegevoegd aan header
+     ✓ Sessie wissen geïmplementeerd
      ✓ Bevestigingsdialoog toegevoegd
      Alle taken voltooid!
 
 Jij: /opsx:archive
 
-AI:  ✓ Specificaties samengevoegd
+AI:  ✓ Specs samengevoegd
      ✓ Wijziging gearchiveerd
 ```
 
-**Het meest geschikt voor:** Kleine tot middelgrote features, bugfixes, eenvoudige wijzigingen.
+**Beste voor:** Kleine tot middelgrote functies, bugfixes, eenvoudige wijzigingen.
 
 ### Verkennend
 
-Wanneer de vereisten onduidelijk zijn of je eerst moet onderzoeken:
+Wanneer de vereisten onduidelijk zijn of u eerst wilt onderzoeken:
 
 ```text
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
 ```
 
-**Voorbeeldgesprek:**
+**Voorbeeldconversatie:**
 
 ```text
 Jij: /opsx:explore
 
-AI:  Wat wil je verkennen?
+AI:  Wat wilt u verkennen?
 
-Jij: Ik wil de laadprestaties van pagina's verbeteren, maar ik weet niet waar de knelpunten zitten.
+Jij: Ik wil de paginalaadtijd verbeteren, maar ik weet niet
+     waar de knelpunten liggen.
 
 AI:  Laat me helpen onderzoeken...
-     [Analyseert bundelgroottes, identificeert trage queries, beoordeelt
-     component-renderpatronen]
+     [Analyseert bundlegroottes, identificeert trage queries, beoordeelt component render-patronen]
 
      Ik heb drie hoofdknelpunten gevonden:
-     1. Grote niet-geoptimaliseerde afbeeldingen
-     2. Synchrone data-ophaling in ProductList
-     3. Hertekeningen door contextwijzigingen
+     1. Grote ongeoptimaliseerde afbeeldingen
+     2. Synchrone data-ophaalacties in ProductList
+     3. Her-renders door contextwijzigingen
 
-     Welke wil je eerst aanpakken?
+     Welk wilt u eerst aanpakken?
 
-Jij: Laten we het data-ophalingsprobleem aanpakken.
+Jij: Laten we het probleem met de data-ophaalactie aanpakken.
 
 Jij: /opsx:new optimize-product-list-fetching
 
-AI:  Wijziging aangemaakt. Klaar om te creëren: proposal
+AI:  Heeft wijziging aangemaakt. Klaar om te creëren: voorstel
 
 Jij: /opsx:continue
 
-AI:  Proposal aanmaken op basis van onze verkenning...
-     [Schrijft proposal met inzichten uit het onderzoek]
+AI:  Creëert voorstel op basis van ons onderzoek...
+     [Schrijft voorstel met onderzoeksinzichten]
 
      Klaar om te creëren: specs, design
-     Welke wil je hierna?
+     Welke wilt u nu?
 
 Jij: /opsx:continue
 
-AI:  Specificaties aanmaken...
+AI:  Creëert specs...
 ```
 
-**Het meest geschikt voor:** Prestatieoptimalisatie, debugging, architectuurbeslissingen, onduidelijke vereisten.
+**Beste voor:** Prestatieoptimalisatie, debugging, architectonische beslissingen, onduidelijke vereisten.
 
 ### Parallelle Wijzigingen
 
@@ -158,22 +183,22 @@ Wijziging A: /opsx:new ──► /opsx:ff ──► /opsx:apply (in uitvoering)
 Wijziging B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
 
-**Voorbeeldgesprek:**
+**Voorbeeldconversatie:**
 
 ```text
-Jij: Ik werk aan add-dark-mode maar ben gestoord door een bugfix
+Jij: Ik werk aan add-dark-mode maar ben afgehaakt voor een bugfix
 
 Jij: /opsx:new fix-login-redirect
 
-AI:  Aangemaakt openspec/changes/fix-login-redirect/
+AI:  Heeft openspec/changes/fix-login-redirect/ aangemaakt
 
 Jij: /opsx:ff
 
-AI:  ✓ Planning-artefacten aangemaakt
+AI:  ✓ Planningsartefacten gecreëerd
 
 Jij: /opsx:apply
 
-AI:  Werken aan fix-login-redirect...
+AI:  Werk aan fix-login-redirect...
      [Implementeert de fix]
      Alle taken voltooid!
 
@@ -185,74 +210,74 @@ Jij: Laten we teruggaan naar dark mode
 
 Jij: /opsx:apply add-dark-mode
 
-AI:  add-dark-mode hervatten...
-     Verder bij taak 2.3: Header bijwerken...
+AI:  Vervolg van add-dark-mode...
+     Pakt op bij taak 2.3: Update Header...
 ```
 
-**Het meest geschikt voor:** Parallelle werkstromen, urgente onderbrekingen, teamsamenwerking.
+**Beste voor:** Parallelle werkstromen, dringende onderbrekingen, teamcollaboratie.
 
-Wanneer je meerdere voltooide wijzigingen hebt, gebruik `/opsx:bulk-archive`:
+Wanneer u meerdere voltooide wijzigingen heeft, gebruik dan `/opsx:bulk-archive`:
 
 ```text
 Jij: /opsx:bulk-archive
 
-AI:  3 voltooide wijzigingen gevonden:
-     - add-dark-mode (alle taken gedaan)
-     - fix-login-redirect (alle taken gedaan)
-     - update-footer (alle taken gedaan)
+AI:  Gevonden 3 voltooide wijzigingen:
+     - add-dark-mode (alle taken voltooid)
+     - fix-login-redirect (alle taken voltooid)
+     - update-footer (alle taken voltooid)
 
-     Controleren op specificatieconflicten...
-     ⚠ add-dark-mode en update-footer raken beide specs/ui/
+     Controle op spec-conflicten...
+     ⚠ add-dark-mode en update-footer raken beide specs/ui/ aan
 
-     Codebase inspecteren om op te lossen...
-     Beide wijzigingen zijn geïmplementeerd. Wordt in chronologische volgorde toegepast.
+     Inspecteert codebase om dit op te lossen...
+     Beide wijzigingen zijn geïmplementeerd. Zal in chronologische volgorde worden toegepast.
 
-     Alle 3 wijzigingen archiveren?
+     Archiveer alle 3 wijzigingen?
 
 Jij: Ja
 
 AI:  ✓ add-dark-mode gearchiveerd
      ✓ fix-login-redirect gearchiveerd
      ✓ update-footer gearchiveerd
-     Specificaties samengevoegd in volgorde: add-dark-mode → update-footer
+     Specs samengevoegd in de juiste volgorde: add-dark-mode → update-footer
 ```
 
-Bulk archive detecteert wanneer meerdere wijzigingen dezelfde specificaties raken en lost conflicten op door te controleren wat daadwerkelijk is geïmplementeerd.
+Bulk archive detecteert wanneer meerdere wijzigingen dezelfde specs aanraken en lost conflicten op door te controleren wat er daadwerkelijk is geïmplementeerd.
 
 ### Een Wijziging Voltooien
 
-De aanbevolen voltooiingsflow:
+De aanbevolen voltooiingsstroom:
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              valideert          vraagt om te synchroniseren
-              implementatie      indien nodig
+              valideert          vraagt om synchronisatie
+              implementatie     indien nodig
 ```
 
-#### Verify: Controleer Je Werk
+#### Verifiëren: Controleer je Werk
 
-`/opsx:verify` valideert de implementatie tegen je artefacten op drie dimensies:
+`/opsx:verify` valideert de implementatie tegen uw artefacten op drie dimensies:
 
 ```text
 Jij: /opsx:verify
 
-AI:  add-auth verifiëren...
+AI:  Verifieert add-auth...
 
-     VOLLEDIGHEID
-     ✓ Alle 12 taken in tasks.md zijn afgevinkt
-     ✓ Alle vereisten in specificaties hebben overeenkomstige code
-     ⚠ Scenario "Sessie-timeout na inactiviteit" niet getest
+     VOLTOOIDHEID
+     ✓ Alle 12 taken in tasks.md zijn gecontroleerd
+     ✓ Alle vereisten in specs hebben corresponderende code
+     ⚠ Scenario "Sessie verloopt na inactiviteit" is niet getest
 
-     JUISTHEID
-     ✓ Implementatie komt overeen met specificatie-intentie
-     ✓ Randgevallen uit scenario's worden afgehandeld
-     ✓ Foutstatussen komen overeen met specificatiedefinities
+     CORRECTNESS (WAARHEIDIGHEID)
+     ✓ Implementatie komt overeen met de intentie van de specificatie
+     ✓ Randgevallen uit scenario's zijn afgehandeld
+     ✓ Fouttoestanden komen overeen met de specificatiedefinitiesaties
 
-     SAMENHANG
-     ✓ Ontwerpbeslissingen weerspiegeld in codestructuur
+     COHERENCE (GEPASTHEID)
+     ✓ Ontwerpbeslissingen weerspiegeld in de code-structuur
      ✓ Naamgevingsconventies consistent met design.md
-     ⚠ Ontwerp vermeldt "event-driven" maar implementatie gebruikt polling
+     ⚠ Design vermeldt "event-driven" maar de implementatie gebruikt polling
 
      SAMENVATTING
      ─────────────────────────────
@@ -261,28 +286,28 @@ AI:  add-auth verifiëren...
      Klaar om te archiveren: Ja (met waarschuwingen)
 
      Aanbevelingen:
-     1. Test toevoegen voor sessie-timeout-scenario
-     2. Overweeg refactoren naar event-driven zoals ontworpen, of werk design.md bij
+     1. Voeg test toe voor het sessie-timeoutscenario
+     2. Overweeg refactoring naar event-driven zoals ontworpen, of update design.md
 ```
 
-**Wat verify controleert:**
+**Wat verifiëren controleert:**
 
 | Dimensie | Wat het valideert |
-|----------|-------------------|
-| Volledigheid | Alle taken gedaan, alle vereisten geïmplementeerd, scenario's afgedekt |
-| Juistheid | Implementatie komt overeen met specificatie-intentie, randgevallen afgehandeld |
-| Samenhang | Ontwerpbeslissingen weerspiegeld in code, patronen consistent |
+|-----------|------------------|
+| Voltooidheid | Alle taken zijn voltooid, alle vereisten zijn geïmplementeerd, scenario's zijn gedekt |
+| Correctness (Waarachtigheid) | Implementatie komt overeen met de intentie van de specificatie, randgevallen zijn afgehandeld |
+| Coherence (Gepastheid) | Ontwerpbeslissingen worden weerspiegeld in de code, patronen zijn consistent |
 
-Verify blokkeert het archiveren niet, maar het brengt problemen aan het licht die je misschien eerst wilt aanpakken.
+Verifiëren blokkeert het archiveren niet, maar het brengt problemen naar boven die u eerst wilt aanpakken.
 
-#### Archive: De Wijziging Afronden
+#### Archiveren: Voltooi de Wijziging
 
 `/opsx:archive` voltooit de wijziging en verplaatst deze naar het archief:
 
 ```text
 Jij: /opsx:archive
 
-AI:  add-auth archiveren...
+AI:  Archiveert add-auth...
 
      Artefactstatus:
      ✓ proposal.md bestaat
@@ -290,50 +315,50 @@ AI:  add-auth archiveren...
      ✓ design.md bestaat
      ✓ tasks.md bestaat (12/12 taken voltooid)
 
-     Delta-specificaties: Nog niet gesynchroniseerd naar main
-     → Wil je nu synchroniseren?
+     Delta specs: Nog niet gesynchroniseerd met de hoofdversie
+     → Wilt u nu synchroniseren?
 
 Jij: Ja
 
-AI:  ✓ Specificaties gesynchroniseerd naar openspec/specs/auth/spec.md
+AI:  ✓ Specs gesynchroniseerd naar openspec/specs/auth/spec.md
      ✓ Verplaatst naar openspec/changes/archive/2025-01-24-add-auth/
 
      Wijziging succesvol gearchiveerd.
 ```
 
-Archive vraagt of specificaties niet zijn gesynchroniseerd. Het blokkeert niet bij onvoltooide taken, maar het waarschuwt je.
+Archiveren zal vragen als de specs niet zijn gesynchroniseerd. Het blokkeert op onvoltooide taken, maar het waarschuwt u.
 
-## Wanneer Wat Gebruiken
+## Wanneer Welke te Gebruiken
 
-### `/opsx:ff` vs `/opsx:continue`
+### `/opsx:ff` versus `/opsx:continue`
 
 | Situatie | Gebruik |
-|----------|---------|
+|-----------|-----|
 | Duidelijke vereisten, klaar om te bouwen | `/opsx:ff` |
-| Verkennen, elke stap willen beoordelen | `/opsx:continue` |
-| Willen itereren op proposal voor specificaties | `/opsx:continue` |
-| Tijdsdruk, snel moeten bewegen | `/opsx:ff` |
-| Complexe wijziging, controle willen | `/opsx:continue` |
+| Verkennen, wilt elke stap beoordelen | `/opsx:continue` |
+| Wilt itereren op het voorstel voordat de specs er zijn | `/opsx:continue` |
+| Tijdsdruk, moet snel doorgaan | `/opsx:ff` |
+| Complexe wijziging, wil controle | `/opsx:continue` |
 
-**Vuistregel:** Als je de volledige scope vooraf kunt beschrijven, gebruik `/opsx:ff`. Als je het onderweg uitvogelt, gebruik `/opsx:continue`.
+**Vuistregel:** Als u vooraf de volledige omvang kunt beschrijven, gebruik dan `/opsx:ff`. Als u het aan het lopen uitvindt, gebruikt u `/opsx:continue`.
 
-### Wanneer Bijwerken vs Opnieuw Beginnen
+### Wanneer Updaten versus Nieuw Beginnen
 
-Een veelgestelde vraag: wanneer is het ok om een bestaande wijziging bij te werken, en wanneer moet je een nieuwe beginnen?
+Een veelgestelde vraag: wanneer is het goed om een bestaande wijziging te updaten en wanneer moet u een nieuwe starten?
 
-**Werk de bestaande wijziging bij wanneer:**
+**Update de bestaande wijziging wanneer:**
 
 - Dezelfde intentie, verfijnde uitvoering
-- Scope smaller wordt (eerst MVP, de rest later)
-- Leergestuurde correcties (codebase is niet wat je verwachtte)
-- Ontwerpaanpassingen op basis van implementatie-ontdekkingen
+- Omvang wordt smaller (MVP eerst, rest later)
+- Correcties op basis van leren (de codebase is niet wat u verwachtte)
+- Ontwerpaanpassingen op basis van implementatiedisontdekkingen
 
-**Begin een nieuwe wijziging wanneer:**
+**Start een nieuwe wijziging wanneer:**
 
-- Intentie fundamenteel veranderd is
-- Scope is geëxplodeerd naar totaal ander werk
-- Originele wijziging als "klaar" kan worden gemarkeerd zonder deze veranderingen
-- Patches meer zouden verwarren dan verduidelijken
+- De intentie fundamenteel is veranderd
+- Het omvang is geëxplodeerd naar geheel andere werkzaamheden
+- De oorspronkelijke wijziging kan als "klaar" worden gemarkeerd, los van deze wijzigingen
+- Patches meer verwarring veroorzaken dan duidelijkheid
 
 ```text
                      ┌─────────────────────────────────────┐
@@ -343,48 +368,48 @@ Een veelgestelde vraag: wanneer is het ok om een bestaande wijziging bij te werk
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Zelfde intentie?  >50% overlap?      Kan origineel
-          Zelfde probleem?  Zelfde scope?      "klaar" zijn zonder
-                 │                  │          deze veranderingen?
+          Derselfde intentie?      >50% overlap?      Kan de oorspronkelijke
+          Derselfde probleem?     Derselfde omvang?        wijzigingen "klaar" zijn zonder
+                 │                  │          deze wijzigingen?
                  │                  │                  │
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      JA                NEE JA           NEE NEE             JA
+      JA               NEE JA           NEE  NEE              JA
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    BIJWERKEN         NIEUW BIJWERKEN   NIEUW BIJWERKEN      NIEUW
+    UPDATE            NIEUW  UPDATE       NIEUW  UPDATE          NIEUW
 ```
 
-**Voorbeeld: "Dark mode toevoegen"**
+**Voorbeeld: "Voeg donkere modus toe"**
 
-- "Moet ook aangepaste thema's ondersteunen" → Nieuwe wijziging (scope geëxplodeerd)
-- "Systeemvoorkeurdetectie is moeilijker dan verwacht" → Bijwerken (zelfde intentie)
-- "Laten we eerst de schakelaar uitbrengen, voorkeuren later" → Bijwerken, dan archiveren, dan nieuwe wijziging
+- "We moeten ook ondersteuning voor aangepaste thema's hebben" → Nieuwe wijziging (omvang is geëxplodeerd)
+- "Het detecteren van systeemvoorkeuren is moeilijker dan verwacht" → Update (dezelfde intentie)
+- "Laten we eerst de toggle uitbrengen, en daarna de voorkeuren toevoegen" → Update en vervolgens archiveren, dan een nieuwe wijziging
 
 ## Best Practices
 
-### Houd Wijzigingen Gefocust
+### Houd Wijzigingen Gericht
 
-Een logische werkeenheid per wijziging. Als je "feature X toevoegen en ook Y refactoren" doet, overweeg twee aparte wijzigingen.
+Eén logische werkseenheid per wijziging. Als u "functie X toevoegen én Y refactoren" doet, overweeg dan twee aparte wijzigingen.
 
-**Waarom het belangrijk is:**
-- Gemakkelijker te beoordelen en begrijpen
-- Schoner archiefgeschiedenis
-- Kan onafhankelijk worden uitgerold
-- Eenvoudiger terug te draaien indien nodig
+**Waarom dit belangrijk is:**
+- Makkelijker te beoordelen en te begrijpen
+- Schoon archiefgeschiedenis
+- Kan onafhankelijk worden uitgebracht
+- Simpelere rollback indien nodig
 
-### Gebruik `/opsx:explore` voor Onduidelijke Vereisten
+### Gebruik `/opsx:explore` voor Onduidelijke Eisen
 
-Voordat je je vastlegt op een wijziging, verken het probleemgebied:
+Voordat u een wijziging vastlegt, verkennen de probleemruimte:
 
 ```text
 Jij: /opsx:explore
 
-AI:  Wat wil je verkennen?
+AI:  Wat wilt u verkennen?
 
-Jij: Hoe moeten we rate limiting voor onze API afhandelen?
+Jij: Hoe moeten we rate limiting aanpakken voor onze API?
 
-AI:  Laat me je huidige setup en opties onderzoeken...
+AI:  Laat me uw huidige setup en opties onderzoeken...
      [Onderzoekt codebase, overweegt patronen]
 
      Ik zie drie benaderingen die we kunnen nemen:
@@ -392,30 +417,30 @@ AI:  Laat me je huidige setup en opties onderzoeken...
      2. Redis-ondersteund (schaalbaar, gedeelde staat)
      3. Token bucket per gebruiker (eerlijk, complex)
 
-     Je huidige stack suggereert #1 of #2. Wat is je schaal?
+     Uw huidige stack suggereert #1 of #2. Wat is uw schaal?
 ```
 
-Verkenning verheldert het denken voordat je artefacten aanmaakt.
+Verkenning maakt het denken duidelijk voordat u artefacten creëert.
 
-### Verifiëren voor Archiveren
+### Verifieer Vóór het Archiveren
 
-Gebruik `/opsx:verify` om te controleren of de implementatie overeenkomt met artefacten:
+Gebruik `/opsx:verify` om te controleren of de implementatie overeenkomt met de artefacten:
 
 ```text
 Jij: /opsx:verify
 
-AI:  add-dark-mode verifiëren...
+AI:  Verifieert add-dark-mode...
 
-     ✓ Alle taken in tasks.md zijn afgevinkt
-     ✓ Vereisten in specificaties hebben overeenkomstige code
-     ✓ Ontwerpbeslissingen zijn weerspiegeld in implementatie
+     ✓ Alle taken in tasks.md zijn gecontroleerd
+     ✓ Vereisten in specs hebben corresponderende code
+     ✓ Ontwerpbeslissingen worden weerspiegeld in de implementatie
 
      Klaar om te archiveren!
 ```
 
-Vangt mismatches op voordat je de wijziging afsluit.
+Dit vangt mismatches op voordat u de wijziging afsluit.
 
-### Geef Wijzigingen Duidelijke Namen
+### Benoem Wijzigingen Duidelijk
 
 Goede namen maken `openspec list` bruikbaar:
 
@@ -427,25 +452,25 @@ optimize-product-query         changes
 implement-2fa                  wip
 ```
 
-## Commando Snelreferentie
+## Snelle Referentie van Commando's
 
-Voor volledige commandodetails en opties, zie [Commando's](commands.md).
+Voor volledige commando-details en opties, zie [Commands](commands.md).
 
-| Commando | Doel | Wanneer te gebruiken |
-|----------|------|----------------------|
-| `/opsx:propose` | Maak wijzigingsvoorstel + planningartefacten | Snelle standaardroute (`core` profiel) |
-| `/opsx:explore` | Ideeën doorgronden | Onheldere vereisten, onderzoek |
-| `/opsx:new` | Start een wijzigingsscaffold | Uitgebreide modus, expliciete artefactcontrole |
-| `/opsx:continue` | Maak het volgende artefact | Uitgebreide modus, stapsgewijze artefactcreatie |
-| `/opsx:ff` | Maak alle planningartefacten | Uitgebreide modus, duidelijke scope |
+| Command | Doel | Wanneer te Gebruiken |
+|---------|---------|-------------|
+| `/opsx:propose` | Creëer wijziging + planningsartefacten | Snelle standaardroute (`core` profiel) |
+| `/opsx:explore` | Verken ideeën met de AI | Begin hier bij onzekerheid: onduidelijke vereisten, onderzoek, het vergelijken van opties |
+| `/opsx:new` | Start een wijzigingsskelet | Uitgebreide modus, expliciete artefactcontrole |
+| `/opsx:continue` | Creëer het volgende artefact | Uitgebreide modus, stapsgewijze creatie van artefacten |
+| `/opsx:ff` | Creëer alle planningsartefacten | Uitgebreide modus, duidelijk scope |
 | `/opsx:apply` | Implementeer taken | Klaar om code te schrijven |
-| `/opsx:verify` | Valideer implementatie | Uitgebreide modus, vóór archivering |
-| `/opsx:sync` | Voeg delta-specificaties samen | Uitgebreide modus, optioneel |
-| `/opsx:archive` | Rond de wijziging af | Al het werk is voltooid |
-| `/opsx:bulk-archive` | Archiveer meerdere wijzigingen | Uitgebreide modus, parallel werk |
+| `/opsx:verify` | Valideer implementatie | Uitgebreide modus, voor het archiveren |
+| `/opsx:sync` | Voegen delta-specificaties samen | Uitgebreide modus, optioneel |
+| `/opsx:archive` | Voltooi de wijziging | Al het werk is voltooid |
+| `/opsx:bulk-archive` | Archiveer meerdere wijzigingen | Uitgebreide modus, parallelle werking |
 
 ## Volgende Stappen
 
-- [Commando's](commands.md) - Volledige commandoreferentie met opties
-- [Concepten](concepts.md) - Diepgaande blik op specificaties, artefacten en schema's
-- [Aanpassing](customization.md) - Maak aangepaste workflows
+- [Commands](commands.md) - Volledige referentie van commando's met opties
+- [Concepts](concepts.md) - Gedetailleerd overzicht van specificaties, artefacten en schema's
+- [Customization](customization.md) - Creëer aangepaste workflows

@@ -1,35 +1,62 @@
 # Початок роботи
 
-Цей посібник пояснює, як працює OpenSpec після встановлення та ініціалізації. Інструкції з встановлення див. у [основному README](index.md#quick-start).
+Цей гайд пояснює, як працює OpenSpec після того, як ви його встановили та ініціалізували. Для інструкцій з встановлення дивіться [main README](../index.md#quick-start) або [Installation guide](installation.md). Новачок у цій документації? [documentation home](index.md) відображає все.
+
+> **Де я вводжу ці команди?** У двох місцях, і змішування їх — це найпоширеніша початкова помилка.
+>
+> - Команди `openspec ...` (як `openspec init`) виконуються у вашому **терміналі**.
+> - Команди `/opsx:...` (як `/opsx:propose`) виконуються у **чаті вашого AI-асистента**, у тому ж вікні, де ви просите його написати код.
+>
+> Немає окремого "інтерактивного режиму" для старту. Ви просто вводите команду зі слешем у чат, і ваш асистент продовжує роботу. Повна пояснення: [How Commands Work](how-commands-work.md).
+
+## Ваші перші п'ять хвилин
+
+Весь цикл, з позначенням кожного кроку за місцем його виконання:
+
+```text
+TERMINAL   $ npm install -g @fission-ai/openspec@latest
+TERMINAL   $ cd your-project && openspec init
+AI CHAT      /opsx:explore                    (optional: think it through first)
+AI CHAT      /opsx:propose add-dark-mode      (AI drafts the plan; you review it)
+AI CHAT      /opsx:apply                      (AI builds it)
+AI CHAT      /opsx:archive                    (specs updated, change filed away)
+```
+
+Два кроки в терміналі для налаштування, а потім ви працюєте у чаті. Решта цього гайду розкриває, що робить кожен крок і що ви побачите.
+
+> **Не знаєте, що створювати? Почніть з `/opsx:explore`.** Це партнер для мислення без ризику, який читає ваш код, оцінює варіанти та перетворює розмиту ідею на конкретний план, і все це до того, як існує будь-який артефакт чи код. Коли картина стає чіткою, він передає роботу `/opsx:propose`. Це найкраща звичка для роботи з AI, який інакше впевнено створив би щось не те. Дивіться [Explore guide](explore.md).
 
 ## Як це працює
 
-OpenSpec допомагає вам та вашому ШІ-асистенту з кодування домовитися про те, що потрібно побудувати, ще до написання жодного рядка коду.
+OpenSpec допомагає вам та вашому AI-кодинговому асистенту погодитися щодо того, що потрібно створити, ще до написання будь-якого коду.
 
-**Шлях за замовчуванням (основний профіль):**
+**Стандартний швидкий шлях (профіль core):**
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+   (optional)
 ```
 
-**Розширений шлях (вибір користувацького робочого процесу):**
+Почніть з `/opsx:explore`, коли ви розгадуєте, що робити, або перейдіть прямо до `/opsx:propose`, якщо ви вже знаєте. Explore є у стандартному профілі, тому він завжди доступний, коли вам це потрібно.
+
+**Розширений шлях (вибір кастомного робочого процесу):**
 
 ```text
 /opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-Глобальний профіль за замовчуванням — `core`, який включає `propose`, `explore`, `apply`, `sync` та `archive`. Ви можете увімкнути команди розширеного робочого процесу за допомогою `openspec config profile`, а потім `openspec update`.
+Стандартний глобальний профіль — `core`, який включає `propose`, `explore`, `apply`, `sync` та `archive`. Ви можете увімкнути команди розширеного робочого процесу за допомогою `openspec config profile`, а потім `openspec update`.
 
 ## Що створює OpenSpec
 
-Після запуску `openspec init` ваш проект матиме таку структуру:
+Після запуску `openspec init` ваш проєкт має таку структуру:
 
 ```
 openspec/
-├── specs/              # Єдине джерело правди (поведінка вашої системи)
+├── specs/              # Джерело істини (поведінка вашої системи)
 │   └── <domain>/
 │       └── spec.md
-├── changes/            # Запропоновані оновлення (по одній папці на зміну)
+├── changes/            # Запропоновані зміни (одна папка на зміну)
 │   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
@@ -37,25 +64,25 @@ openspec/
 │       └── specs/      # Дельта-специфікації (що змінюється)
 │           └── <domain>/
 │               └── spec.md
-└── config.yaml         # Конфігурація проекту (необов'язково)
+└── config.yaml         # Конфігурація проєкту (опціонально)
 ```
 
-**Два ключові каталоги:**
+**Дві ключові директорії:**
 
-- **`specs/`** — Єдине джерело правди. Ці специфікації описують поточну поведінку вашої системи. Організовані за доменами (напр., `specs/auth/`, `specs/payments/`).
+- **`specs/`** — Джерело істини. Ці специфікації описують, як поводиться ваша система наразі. Організовано за доменом (наприклад, `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** — Запропоновані модифікації. Кожна зміна має власну папку з усіма пов'язаними артефактами. Після завершення зміни її специфікації об'єднуються з основним каталогом `specs/`.
+- **`changes/`** — Запропоновані модифікації. Кожна зміна отримує власну папку з усіма пов'язаними артефактами. Коли зміна завершена, її специфікації об'єднуються в головну директорію `specs/`.
 
 ## Розуміння артефактів
 
-Кожна папка зміни містить артефакти, які керують роботою:
+Кожна папка зі змінами містить артефакти, які керують роботою:
 
 | Артефакт | Призначення |
-|----------|-------------|
-| `proposal.md` | «Чому» та «що» — фіксує намір, обсяг та підхід |
-| `specs/` | Дельта-специфікації, що показують ДОДАНІ/ЗМІНЕНІ/ВИДАЛЕНІ вимоги |
-| `design.md` | «Як» — технічний підхід та архітектурні рішення |
-| `tasks.md` | Контрольний список реалізації з прапорцями |
+|----------|---------|
+| `proposal.md` | "Чому" та "що" — фіксує намір, обсяг і підхід |
+| `specs/` | Дельта-специфікації, що показують вимоги ADDED/MODIFIED/REMOVED |
+| `design.md` | "Як" — технічний підхід та архітектурні рішення |
+| `tasks.md` | Чекліст реалізації з прапорцями |
 
 **Артефакти будуються один на одному:**
 
@@ -63,18 +90,18 @@ openspec/
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            оновлюйте по мірі отримання нових знань
+            оновлюйте, вивчаючи
 ```
 
-Ви завжди можете повернутися та вдосконалити попередні артефакти по мірі отримання нових знань під час реалізації.
+Ви завжди можете повернутися і вдосконалити попередні артефакти, коли дізнаєтеся більше під час реалізації.
 
-## Як працюють дельта-специфікації
+## Як працюють Дельта-специфікації (Delta Specs)
 
-Дельта-специфікації — це ключова концепція OpenSpec. Вони показують, що змінюється відносно ваших поточних специфікацій.
+Дельта-специфікації є ключовою концепцією OpenSpec. Вони показують, що змінюється відносно ваших поточних специфікацій.
 
 ### Формат
 
-Дельта-специфікації використовують секції для позначення типу зміни:
+Дельта-специфікації використовують розділи для вказівки типу зміни:
 
 ```markdown
 # Delta for Auth
@@ -82,60 +109,60 @@ proposal ──► specs ──► design ──► tasks ──► implement
 ## ADDED Requirements
 
 ### Requirement: Two-Factor Authentication
-The system MUST require a second factor during login.
+Система ПОВИННА вимагати другий фактор під час входу.
 
 #### Scenario: OTP required
-- GIVEN a user with 2FA enabled
-- WHEN the user submits valid credentials
-- THEN an OTP challenge is presented
+- GIVEN користувач з увімкненим 2FA
+- WHEN користувач надсилає дійсні облікові дані
+- THEN подається виклик OTP
 
 ## MODIFIED Requirements
 
 ### Requirement: Session Timeout
-The system SHALL expire sessions after 30 minutes of inactivity.
-(Previously: 60 minutes)
+Система ПОВИННА закінчувати сесії після 30 хвилин бездіяльності.
+(Раніше: 60 хвилин)
 
 #### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 30 minutes pass without activity
-- THEN the session is invalidated
+- GIVEN автентифікована сесія
+- WHEN минуло 30 хвилин без активності
+- THEN сесія анулюється
 
 ## REMOVED Requirements
 
 ### Requirement: Remember Me
-(Deprecated in favor of 2FA)
+(Застаріло на користь 2FA)
 ```
 
-### Що відбувається під час архівації
+### Що відбувається при архівуванні (Archive)
 
 Коли ви архівуєте зміну:
 
-1. **ДОДАНІ** вимоги додаються до основної специфікації
-2. **ЗМІНЕНІ** вимоги замінюють існуючу версію
-3. **ВИДАЛЕНІ** вимоги видаляються з основної специфікації
+1. Вимоги **ADDED** додаються до головної специфікації
+2. Вимоги **MODIFIED** замінюють існуючу версію
+3. Вимоги **REMOVED** видаляються з головної специфікації
 
-Папка зміни переміщується до `openspec/changes/archive/` для збереження історії аудиту.
+Папка зі змінами переміщується в `openspec/changes/archive/` для аудиторського обліку.
 
-## Приклад: ваша перша зміна
+## Приклад: Ваша перша зміна
 
-Розглянемо додавання темної теми до програми.
+Давайте розглянемо додавання темного режиму до застосунку.
 
-### 1. Початок зміни (за замовчуванням)
+### 1. Початок зміни (Стандартний)
 
 ```text
 You: /opsx:propose add-dark-mode
 
-AI:  Created openspec/changes/add-dark-mode/
-     ✓ proposal.md — why we're doing this, what's changing
-     ✓ specs/       — requirements and scenarios
-     ✓ design.md    — technical approach
-     ✓ tasks.md     — implementation checklist
-     Ready for implementation!
+AI:  Створено openspec/changes/add-dark-mode/
+     ✓ proposal.md — чому ми це робимо, що змінюється
+     ✓ specs/       — вимоги та сценарії
+     ✓ design.md    — технічний підхід
+     ✓ tasks.md     — чекліст реалізації
+     Готово до реалізації!
 ```
 
-Якщо ви увімкнули розширений профіль робочого процесу, ви також можете зробити це у два кроки: `/opsx:new`, а потім `/opsx:ff` (або `/opsx:continue` поетапно).
+Якщо ви увімкнули розширений профіль робочого процесу, ви також можете зробити це двома кроками: `/opsx:new`, а потім `/opsx:ff` (або `/opsx:continue` інкрементально).
 
-### 2. Що створюється
+### 2. Що було створено
 
 **proposal.md** — Фіксує намір:
 
@@ -143,20 +170,20 @@ AI:  Created openspec/changes/add-dark-mode/
 # Proposal: Add Dark Mode
 
 ## Intent
-Users have requested a dark mode option to reduce eye strain
-during nighttime usage.
+Користувачі попросили опцію темного режиму, щоб зменшити напругу очей
+під час нічного використання.
 
 ## Scope
-- Add theme toggle in settings
-- Support system preference detection
-- Persist preference in localStorage
+- Додати перемикач теми в налаштуваннях
+- Підтримка виявлення системних уподобань
+- Збереження переваги у localStorage
 
 ## Approach
-Use CSS custom properties for theming with a React context
-for state management.
+Використовувати CSS custom properties для тематизації з контекстом React
+для керування станом.
 ```
 
-**specs/ui/spec.md** — Дельта з новими вимогами:
+**specs/ui/spec.md** — Дельта, що показує нові вимоги:
 
 ```markdown
 # Delta for UI
@@ -164,90 +191,97 @@ for state management.
 ## ADDED Requirements
 
 ### Requirement: Theme Selection
-The system SHALL allow users to choose between light and dark themes.
+Система ПОВИННА дозволяти користувачам обирати між світлою та темною темами.
 
 #### Scenario: Manual toggle
-- GIVEN a user on any page
-- WHEN the user clicks the theme toggle
-- THEN the theme switches immediately
-- AND the preference persists across sessions
+- GIVEN користувач на будь-якій сторінці
+- WHEN користувач натискає перемикач теми
+- THEN тема змінюється негайно
+- AND перевага зберігається в сесіях
 
 #### Scenario: System preference
-- GIVEN a user with no saved preference
-- WHEN the application loads
-- THEN the system's preferred color scheme is used
+- GIVEN користувач без збереженої переваги
+- WHEN застосунок завантажується
+- THEN використовується системна схема кольорів
 ```
 
-**tasks.md** — Контрольний список реалізації:
+**tasks.md** — Чекліст реалізації:
 
 ```markdown
 # Tasks
 
 ## 1. Theme Infrastructure
-- [ ] 1.1 Create ThemeContext with light/dark state
-- [ ] 1.2 Add CSS custom properties for colors
-- [ ] 1.3 Implement localStorage persistence
+- [ ] 1.1 Створити ThemeContext зі станом light/dark
+- [ ] 1.2 Додати CSS custom properties для кольорів
+- [ ] 1.3 Реалізувати збереження у localStorage
 
 ## 2. UI Components
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Add toggle to settings page
-- [ ] 2.3 Update Header to include quick toggle
+- [ ] 2.1 Створити компонент ThemeToggle
+- [ ] 2.2 Додати перемикач на сторінку налаштувань
+- [ ] 2.3 Оновити Header, щоб включити швидкий перемикач
 
 ## 3. Styling
-- [ ] 3.1 Define dark theme color palette
-- [ ] 3.2 Update components to use CSS variables
+- [ ] 3.1 Визначити палітру кольорів темної теми
+- [ ] 3.2 Оновити компоненти для використання CSS змінних
 ```
 
-### 3. Реалізація
+### 3. Реалізація (Implement)
 
 ```
 You: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ 1.1 Created ThemeContext with light/dark state
-     ✓ 1.2 Added CSS custom properties to globals.css
-     ✓ 1.3 Implemented localStorage persistence
-     ✓ 2.1 Created ThemeToggle component
+AI:  Виконую завдання...
+     ✓ 1.1 Створено ThemeContext зі станом light/dark
+     ✓ 1.2 Додано CSS custom properties до globals.css
+     ✓ 1.3 Реалізовано збереження у localStorage
+     ✓ 2.1 Створено компонент ThemeToggle
      ...
-     All tasks complete!
+     Усі завдання виконані!
 ```
 
 Під час реалізації, якщо ви виявите, що дизайн потребує коригування, просто оновіть артефакт і продовжуйте.
 
-### 4. Архівація
+### 4. Архівування (Archive)
 
 ```
 You: /opsx:archive
 
-AI:  Archiving add-dark-mode...
-     ✓ Merged specs into openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
-     Done! Ready for the next feature.
+AI:  Архівування add-dark-mode...
+     ✓ Об'єднано specs у openspec/specs/ui/spec.md
+     ✓ Переміщено в openspec/changes/archive/2025-01-24-add-dark-mode/
+     Готово! Готуємося до наступної функції.
 ```
 
-Ваші дельта-специфікації тепер є частиною основних специфікацій, документуючи роботу вашої системи.
+Ваші дельта-специфікації тепер є частиною головних специфікацій, документуючи роботу вашої системи.
 
-## Перевірка та перегляд
+## Перевірка та огляд (Verifying and Reviewing)
 
-Використовуйте CLI для перегляду ваших змін:
+Використовуйте CLI для перевірки своїх змін:
 
 ```bash
-# List active changes
+# Список активних змін
 openspec list
 
-# View change details
+# Переглянути деталі зміни
 openspec show add-dark-mode
 
-# Validate spec formatting
+# Валідація форматування специфікації
 openspec validate add-dark-mode
 
-# Interactive dashboard
+# Інтерактивна панель
 openspec view
 ```
 
-## Наступні кроки
+## Наступні кроки (Next Steps)
 
-- [Робочі процеси](workflows.md) — Типові шаблони та коли використовувати кожну команду
-- [Команди](commands.md) — Повний довідник усіх слеш-команд
-- [Концепції](concepts.md) — Глибше розуміння специфікацій, змін та схем
-- [Налаштування](customization.md) — Налаштуйте OpenSpec під свої потреби
+- [Explore First](explore.md) - Використовуйте `/opsx:explore`, щоб продумати ідею перед комітом
+- [Using OpenSpec in an Existing Project](existing-projects.md) - Почніть з великої кодової бази brownfield
+- [Editing & Iterating on a Change](editing-changes.md) - Оновлення артефактів, повернення назад, узгодження ручних правок
+- [Core Concepts at a Glance](overview.md) - Вся ментальна модель на одній сторінці
+- [Examples & Recipes](examples.md) - Реальні зміни від початку до кінця
+- [Workflows](workflows.md) - Поширені патерни та коли використовувати кожну команду
+- [Commands](commands.md) - Повний посібник з усіх слеш-команд
+- [Concepts](concepts.md) - Глибше розуміння специфікацій, змін і схем
+- [Customization](customization.md) - Зробіть OpenSpec під себе
+- [Stores](stores-beta/user-guide.md) - Планування, що охоплює репозиторії або команди? Залиште це у власному репо (бета)
+- [FAQ](faq.md) та [Troubleshooting](troubleshooting.md) - Коли ви застрягли

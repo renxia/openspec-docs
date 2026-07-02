@@ -1,24 +1,51 @@
-# Pour commencer
+# Démarrage
 
-Ce guide explique comment OpenSpec fonctionne après l'avoir installé et initialisé. Pour les instructions d'installation, consultez le [README principal](index.md#quick-start).
+Ce guide explique le fonctionnement d'OpenSpec après son installation et son initialisation. Pour les instructions d'installation, consultez le [main README](../index.md#quick-start) ou le [Guide d'installation](installation.md). Vous êtes nouveau dans l'ensemble de la documentation ? Le [accueil de la documentation](index.md) tout récapitule.
+
+> **Où dois-je taper ces commandes ?** Deux endroits, et les mélanger est le piège le plus courant au début.
+>
+> - Les commandes `openspec ...` (comme `openspec init`) s'exécutent dans votre **terminal**.
+> - Les commandes `/opsx:...` (comme `/opsx:propose`) s'exécutent dans le **chat de votre assistant IA**, la même boîte où vous lui demanderiez d'écrire du code.
+>
+> Il n'y a pas de "mode interactif" séparé pour commencer. Vous tapez simplement la commande slash dans le chat et votre assistant prend le relais. Explication complète : [How Commands Work](how-commands-work.md).
+
+## Vos cinq premières minutes
+
+Le cycle complet, chaque étape étant étiquetée par l'endroit où elle se produit :
+
+```text
+TERMINAL   $ npm install -g @fission-ai/openspec@latest
+TERMINAL   $ cd your-project && openspec init
+AI CHAT      /opsx:explore                    (optionnel : réfléchir d'abord)
+AI CHAT      /opsx:propose add-dark-mode      (l'IA prépare le plan ; vous le révisez)
+AI CHAT      /opsx:apply                      (l'IA le construit)
+AI CHAT      /opsx:archive                    (les spécifications sont mises à jour, le changement est archivé)
+```
+
+Deux étapes dans le terminal pour la configuration, puis vous travaillez dans le chat. Le reste de ce guide détaille ce que fait chaque étape et ce que vous verrez.
+
+> **Vous ne savez pas quoi construire ? Commencez par `/opsx:explore`.** C'est un partenaire de réflexion sans risque qui lit votre base de code, évalue les options et affine une idée vague en un plan concret, avant même qu'un artefact ou du code n'existe. Lorsque le tableau est clair, il passe à `/opsx:propose`. C'est la meilleure habitude pour travailler avec une IA qui pourrait autrement construire faussement avec assurance. Consultez le [guide Explore](explore.md).
 
 ## Comment ça fonctionne
 
-OpenSpec vous aide, vous et votre assistant de codage IA, à vous accorder sur ce qu'il faut construire avant qu'aucun code ne soit écrit.
+OpenSpec vous aide et votre assistant de codage IA à s'accorder sur ce qu'il faut construire avant que du code ne soit écrit.
 
 **Chemin rapide par défaut (profil core) :**
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+   (optionnel)
 ```
 
-**Chemin étendu (sélection de workflow personnalisé) :**
+Commencez par `/opsx:explore` lorsque vous réfléchissez à ce que vous devez faire, ou passez directement à `/opsx:propose` lorsque vous savez déjà. Explore est dans le profil par défaut, il est donc toujours là quand vous en avez besoin.
+
+**Chemin étendu (sélection du flux de travail personnalisé) :**
 
 ```text
-/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:new ──► /opsx:ff ou /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-Le profil global par défaut est `core`, qui inclut `propose`, `explore`, `apply`, `sync` et `archive`. Vous pouvez activer les commandes de workflow étendues avec `openspec config profile` puis `openspec update`.
+Le profil global par défaut est `core`, qui inclut `propose`, `explore`, `apply`, `sync` et `archive`. Vous pouvez activer les commandes de flux de travail étendues avec `openspec config profile` puis `openspec update`.
 
 ## Ce qu'OpenSpec crée
 
@@ -29,12 +56,12 @@ openspec/
 ├── specs/              # Source de vérité (le comportement de votre système)
 │   └── <domain>/
 │       └── spec.md
-├── changes/            # Mises à jour proposées (un dossier par modification)
+├── changes/            # Mises à jour proposées (un dossier par changement)
 │   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Spécifications delta (ce qui change)
+│       └── specs/      # Spécifications Delta (ce qui change)
 │           └── <domain>/
 │               └── spec.md
 └── config.yaml         # Configuration du projet (optionnel)
@@ -42,39 +69,39 @@ openspec/
 
 **Deux répertoires clés :**
 
-- **`specs/`** - La source de vérité. Ces spécifications décrivent le comportement actuel de votre système. Organisées par domaine (par ex., `specs/auth/`, `specs/payments/`).
+- **`specs/`** - La source de vérité. Ces spécifications décrivent comment votre système se comporte actuellement. Organisées par domaine (par exemple, `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** - Modifications proposées. Chaque modification obtient son propre dossier avec tous les artefacts associés. Lorsqu'une modification est terminée, ses spécifications sont fusionnées dans le répertoire principal `specs/`.
+- **`changes/`** - Modifications proposées. Chaque changement reçoit son propre dossier avec tous les artefacts associés. Lorsqu'un changement est terminé, ses spécifications sont fusionnées dans le répertoire principal `specs/`.
 
-## Comprendre les artefacts
+## Comprendre les Artefacts
 
-Chaque dossier de modification contient des artefacts qui guident le travail :
+Chaque dossier de changement contient des artefacts qui guident le travail :
 
 | Artefact | Objectif |
-|----------|----------|
+|----------|---------|
 | `proposal.md` | Le "pourquoi" et le "quoi" - capture l'intention, la portée et l'approche |
-| `specs/` | Spécifications delta montrant les exigences AJOUTÉES/MODIFIÉES/SUPPRIMÉES |
-| `design.md` | Le "comment" - approche technique et décisions architecturales |
+| `specs/` | Spécifications Delta montrant les exigences AJOUTÉES/MODIFIÉES/SUPPRIMÉES |
+| `design.md` | Le "comment" - approche technique et décisions d'architecture |
 | `tasks.md` | Liste de contrôle d'implémentation avec des cases à cocher |
 
-**Les artefacts s'appuient les uns sur les autres :**
+**Les artefacts se construisent les uns sur les autres :**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            mise à jour au fur et à mesure de l'apprentissage
+            mise à jour au fur et à mesure que vous apprenez
 ```
 
-Vous pouvez toujours revenir en arrière et affiner les artefacts précédents à mesure que vous en apprenez davantage pendant l'implémentation.
+Vous pouvez toujours revenir en arrière et affiner les artefacts précédents à mesure que vous en apprenez plus pendant l'implémentation.
 
-## Comment fonctionnent les spécifications delta
+## Comment fonctionnent les Delta Specs
 
-Les spécifications delta sont le concept clé d'OpenSpec. Elles montrent ce qui change par rapport à vos spécifications actuelles.
+Les spécifications Delta sont le concept clé d'OpenSpec. Elles montrent ce qui change par rapport à vos spécifications actuelles.
 
 ### Le format
 
-Les spécifications delta utilisent des sections pour indiquer le type de modification :
+Les spécifications Delta utilisent des sections pour indiquer le type de changement :
 
 ```markdown
 # Delta pour Auth
@@ -85,55 +112,55 @@ Les spécifications delta utilisent des sections pour indiquer le type de modifi
 Le système DOIT exiger un second facteur lors de la connexion.
 
 #### Scénario : OTP requis
-- ÉTANT DONNÉ un utilisateur avec 2FA activé
+- ÉTANT DONNÉ un utilisateur avec 2FA activée
 - QUAND l'utilisateur soumet des identifiants valides
 - ALORS un défi OTP est présenté
 
 ## Exigences MODIFIÉES
 
-### Exigence : Délai d'expiration de session
+### Exigence : Délai de session
 Le système DOIT expirer les sessions après 30 minutes d'inactivité.
 (Précédemment : 60 minutes)
 
 #### Scénario : Délai d'inactivité
 - ÉTANT DONNÉ une session authentifiée
-- QUAND 30 minutes passent sans activité
+- QUAND 30 minutes s'écoulent sans activité
 - ALORS la session est invalidée
 
 ## Exigences SUPPRIMÉES
 
-### Exigence : Se souvenir de moi
-(Déprécié en faveur de 2FA)
+### Exigence : Mémoriser
+(Déprécié au profit du 2FA)
 ```
 
 ### Ce qui se passe lors de l'archivage
 
-Lorsque vous archivez une modification :
+Lorsque vous archivez un changement :
 
 1. Les exigences **AJOUTÉES** sont ajoutées à la spécification principale
 2. Les exigences **MODIFIÉES** remplacent la version existante
 3. Les exigences **SUPPRIMÉES** sont supprimées de la spécification principale
 
-Le dossier de modification est déplacé vers `openspec/changes/archive/` pour l'historique d'audit.
+Le dossier de changement est déplacé vers `openspec/changes/archive/` pour l'historique d'audit.
 
-## Exemple : Votre première modification
+## Exemple : Votre premier changement
 
-Parcourons l'ajout d'un mode sombre à une application.
+Voyons comment ajouter le mode sombre à une application.
 
-### 1. Démarrer la modification (par défaut)
+### 1. Démarrer le changement (Par défaut)
 
 ```text
-Vous : /opsx:propose add-dark-mode
+Vous: /opsx:propose add-dark-mode
 
-IA :  Créé openspec/changes/add-dark-mode/
-     ✓ proposal.md — pourquoi nous faisons ça, ce qui change
+IA:  A créé openspec/changes/add-dark-mode/
+     ✓ proposal.md — pourquoi nous faisons cela, ce qui change
      ✓ specs/       — exigences et scénarios
      ✓ design.md    — approche technique
      ✓ tasks.md     — liste de contrôle d'implémentation
      Prêt pour l'implémentation !
 ```
 
-Si vous avez activé le profil de workflow étendu, vous pouvez également le faire en deux étapes : `/opsx:new` puis `/opsx:ff` (ou `/opsx:continue` de manière incrémentale).
+Si vous avez activé le profil de flux de travail étendu, vous pouvez également faire cela en deux étapes : `/opsx:new` puis `/opsx:ff` (ou `/opsx:continue` incrémentalement).
 
 ### 2. Ce qui est créé
 
@@ -147,12 +174,12 @@ Les utilisateurs ont demandé une option de mode sombre pour réduire la fatigue
 pendant l'utilisation nocturne.
 
 ## Portée
-- Ajouter un basculeur de thème dans les paramètres
-- Supporter la détection des préférences système
+- Ajouter un interrupteur de thème dans les paramètres
+- Prendre en charge la détection des préférences système
 - Persister la préférence dans localStorage
 
 ## Approche
-Utiliser les propriétés CSS personnalisées pour le thème avec un contexte React
+Utiliser des propriétés CSS personnalisées pour le thème avec un contexte React
 pour la gestion d'état.
 ```
 
@@ -163,19 +190,19 @@ pour la gestion d'état.
 
 ## Exigences AJOUTÉES
 
-### Exigence : Sélection du thème
+### Exigence : Sélection de thème
 Le système DOIT permettre aux utilisateurs de choisir entre les thèmes clair et sombre.
 
-#### Scénario : Basculement manuel
+#### Scénario : Interrupteur manuel
 - ÉTANT DONNÉ un utilisateur sur n'importe quelle page
-- QUAND l'utilisateur clique sur le basculeur de thème
+- QUAND l'utilisateur clique sur le commutateur de thème
 - ALORS le thème change immédiatement
-- ET la préférence persiste entre les sessions
+- ET la préférence est persistée à travers les sessions
 
 #### Scénario : Préférence système
 - ÉTANT DONNÉ un utilisateur sans préférence enregistrée
 - QUAND l'application se charge
-- ALORS le schéma de couleurs préféré du système est utilisé
+- ALORS le schéma de couleur préféré du système est utilisé
 ```
 
 **tasks.md** - Liste de contrôle d'implémentation :
@@ -190,55 +217,55 @@ Le système DOIT permettre aux utilisateurs de choisir entre les thèmes clair e
 
 ## 2. Composants UI
 - [ ] 2.1 Créer le composant ThemeToggle
-- [ ] 2.2 Ajouter le basculeur à la page des paramètres
-- [ ] 2.3 Mettre à jour Header pour inclure un basculeur rapide
+- [ ] 2.2 Ajouter l'interrupteur à la page de paramètres
+- [ ] 2.3 Mettre à jour l'en-tête pour inclure un commutateur rapide
 
 ## 3. Style
 - [ ] 3.1 Définir la palette de couleurs du thème sombre
-- [ ] 3.2 Mettre à jour les composants pour utiliser les variables CSS
+- [ ] 3.2 Mettre à jour les composants pour utiliser des variables CSS
 ```
 
 ### 3. Implémenter
 
 ```
-Vous : /opsx:apply
+Vous: /opsx:apply
 
-IA :  Traitement des tâches...
+IA:  Traitement des tâches...
      ✓ 1.1 Créé ThemeContext avec l'état clair/sombre
-     ✓ 1.2 Ajouté des propriétés CSS personnalisées à globals.css
+     ✓ 1.2 Ajouté les propriétés CSS personnalisées dans globals.css
      ✓ 1.3 Implémenté la persistance localStorage
      ✓ 2.1 Créé le composant ThemeToggle
      ...
-     Toutes les tâches terminées !
+     Toutes les tâches sont terminées !
 ```
 
-Pendant l'implémentation, si vous découvrez que le design nécessite un ajustement, mettez simplement à jour l'artefact et continuez.
+Pendant l'implémentation, si vous découvrez que la conception nécessite un ajustement, il suffit de mettre à jour l'artefact et de continuer.
 
 ### 4. Archiver
 
 ```
-Vous : /opsx:archive
+Vous: /opsx:archive
 
-IA :  Archivage de add-dark-mode...
-     ✓ Spécifications fusionnées dans openspec/specs/ui/spec.md
+IA:  Archivage d'add-dark-mode...
+     ✓ Fusionné les spécifications dans openspec/specs/ui/spec.md
      ✓ Déplacé vers openspec/changes/archive/2025-01-24-add-dark-mode/
-     Terminé ! Prêt pour la prochaine fonctionnalité.
+     Fait ! Prêt pour la prochaine fonctionnalité.
 ```
 
-Vos spécifications delta font désormais partie des spécifications principales, documentant le fonctionnement de votre système.
+Vos delta specs font maintenant partie des spécifications principales, documentant le fonctionnement de votre système.
 
 ## Vérification et révision
 
-Utilisez le CLI pour vérifier vos modifications :
+Utilisez l'interface CLI pour vérifier vos changements :
 
 ```bash
-# Lister les modifications actives
+# Lister les changements actifs
 openspec list
 
-# Voir les détails d'une modification
+# Afficher les détails du changement
 openspec show add-dark-mode
 
-# Valider le formatage des spécifications
+# Valider le format des spécifications
 openspec validate add-dark-mode
 
 # Tableau de bord interactif
@@ -247,7 +274,14 @@ openspec view
 
 ## Prochaines étapes
 
-- [Workflows](workflows.md) - Modèles courants et quand utiliser chaque commande
-- [Commands](commands.md) - Référence complète pour toutes les commandes slash
-- [Concepts](concepts.md) - Compréhension approfondie des spécifications, modifications et schémas
-- [Customization](customization.md) - Faites fonctionner OpenSpec à votre manière
+- [Explorez d'abord](explore.md) - Utilisez `/opsx:explore` pour réfléchir à une idée avant de vous engager
+- [Utiliser OpenSpec dans un projet existant](existing-projects.md) - Commencez sur une base de code brownfield importante
+- [Modifier et itérer sur un changement](editing-changes.md) - Mettre à jour les artefacts, revenir en arrière, réconcilier les modifications manuelles
+- [Concepts clés en un coup d'œil](overview.md) - Le modèle mental complet sur une page
+- [Exemples et recettes](examples.md) - Changements réels, du début à la fin
+- [Flux de travail](workflows.md) - Modèles courants et quand utiliser chaque commande
+- [Commandes](commands.md) - Référence complète pour toutes les commandes slash
+- [Concepts](concepts.md) - Compréhension plus approfondie des spécifications, des changements et des schémas
+- [Personnalisation](customization.md) - Faites en sorte qu'OpenSpec corresponde à votre manière de travailler
+- [Stores](stores-beta/user-guide.md) - Une planification qui s'étend sur plusieurs dépôts ou équipes ? Gardez-la dans son propre dépôt (bêta)
+- [FAQ](faq.md) et [Dépannage](troubleshooting.md) - Lorsque vous êtes bloqué

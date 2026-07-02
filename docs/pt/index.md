@@ -18,175 +18,114 @@ features:
     details: Defina os requisitos antes de escrever o código.
   - title: Design Nativo para IA
     details: Construído para Claude Code, Cursor, Windsurf e mais.
-  - title: Multi-idioma
+  - title: Multi-Idioma
     details: Documentação disponível em vários idiomas.
 ---
 
+# Documentação do OpenSpec
 
-Nossa filosofia:
+Bem-vindo. Este é o lar de tudo sobre OpenSpec.
+
+OpenSpec ajuda você e seu assistente de codificação de IA a **concordar no que construir antes que qualquer código seja escrito.** Você descreve a mudança, a IA rascunha uma especificação curta e uma lista de tarefas, ambos olham para o mesmo plano e então o trabalho acontece. Chega de descobrir no meio do caminho que a IA construiu a coisa errada.
+
+Se você não ler mais nada, leia estas duas páginas:
+
+1. [Getting Started](getting-started.md): como instalar, inicializar e enviar sua primeira mudança.
+2. [How Commands Work](how-commands-work.md): onde você realmente digita `/opsx:propose` (dica: no seu chat de IA, não no terminal). Isso confunde quase todo mundo uma vez.
+
+A segunda é mais importante do que parece. OpenSpec tem duas metades: uma ferramenta de linha de comando que você executa no seu terminal e comandos slash que você dá ao seu assistente de IA. Saber qual é qual economiza o momento de confusão mais comum.
+
+> **O melhor hábito para construir primeiro: quando você não tem certeza do que construir, comece com `/opsx:explore`.** É um parceiro de pensamento sem riscos que lê seu código, avalia opções e transforma uma ideia vaga em um plano concreto antes que qualquer artefato ou código exista. O guia [Explore First](explore.md) apresenta este caso.
+
+## Escolha o seu caminho
+
+**Sou totalmente novo.** Comece com [Getting Started](getting-started.md), depois folheie os [Core Concepts at a Glance](overview.md). Quando algo parecer misterioso, o [FAQ](faq.md) e o [Glossary](glossary.md) estão por perto.
+
+**Tenho um problema, mas não tenho um plano.** Este é o caso comum, e ele tem uma resposta dedicada: [Explore First](explore.md). Use `/opsx:explore` para pensar sobre isso com a IA antes de se comprometer com qualquer coisa.
+
+**Eu tenho uma base de código grande existente.** Você não documenta tudo. [Using OpenSpec in an Existing Project](existing-projects.md) mostra como começar em um código real (brownfield) sem tentar resolver o oceano inteiro.
+
+**Eu só quero fazer funcionar.** [Install](installation.md), execute `openspec init`, e depois leia [How Commands Work](how-commands-work.md) para que seu primeiro comando slash caia no lugar certo.
+
+**Aprendo por exemplo.** A página [Examples & Recipes](examples.md) percorre mudanças reais do início ao fim: um pequeno recurso, uma correção de bug, um refactoring, uma exploração.
+
+**Estou vindo do fluxo de trabalho antigo.** O [Migration Guide](migration-guide.md) explica o que mudou e por quê, e promete que seu trabalho existente está seguro.
+
+**Quero adaptar ao processo da minha equipe.** [Customization](customization.md) aborda a configuração do projeto, esquemas personalizados e contexto compartilhado.
+
+**Algo está quebrado.** [Troubleshooting](troubleshooting.md) coleta as falhas reais que as pessoas encontram, com correções.
+
+## O mapa completo
+
+### Comece aqui
+
+| Doc | O que ele oferece |
+|-----|-------------------|
+| [Getting Started](getting-started.md) | Instalação, inicialização e execução da sua primeira mudança de ponta a ponta |
+| [Explore First](explore.md) | Use `/opsx:explore` para pensar em uma ideia antes de se comprometer |
+| [How Commands Work](how-commands-work.md) | Onde os comandos slash são executados, o que significa "modo interativo", terminal vs chat |
+| [Core Concepts at a Glance](overview.md) | Todo o modelo mental em uma página: especificações, mudanças, deltas, arquivo |
+| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix e como verificar se funcionou |
+
+### Use dia após dia
+
+| Doc | O que ele oferece |
+|-----|-------------------|
+| [Workflows](workflows.md) | Padrões comuns e quando usar cada comando |
+| [Examples & Recipes](examples.md) | Guias completos de mudanças reais, prontos para copiar e colar |
+| [Using OpenSpec in an Existing Project](existing-projects.md) | Adotando o OpenSpec em uma base de código brownfield grande |
+| [Editing & Iterating on a Change](editing-changes.md) | Atualizar artefatos, voltar atrás, reconciliar edições manuais |
+| [Commands](commands.md) | Referência para todos os comandos slash `/opsx:*` |
+| [CLI](cli.md) | Referência para todos os comandos de terminal `openspec` |
+
+### Entenda profundamente
+
+| Doc | O que ele oferece |
+|-----|-------------------|
+| [Concepts](concepts.md) | A explicação detalhada de especificações, mudanças, artefatos, esquemas e arquivo |
+| [OPSX Workflow](opsx.md) | Por que o fluxo de trabalho é fluido em vez de bloqueado por fase, além de um mergulho profundo na arquitetura |
+| [Glossary](glossary.md) | Todo termo definido em um só lugar |
+
+### Torne-o seu
+
+| Doc | O que ele oferece |
+|-----|-------------------|
+| [Customization](customization.md) | Configuração do projeto, esquemas personalizados e contexto compartilhado |
+| [Multi-Language](multi-language.md) | Gerar artefatos em idiomas diferentes de inglês |
+| [Supported Tools](supported-tools.md) | As 25+ ferramentas de IA com as quais o OpenSpec se integra e onde os arquivos são armazenados |
+
+### Quando você precisar de ajuda
+
+| Doc | O que ele oferece |
+|-----|-------------------|
+| [FAQ](faq.md) | Respostas rápidas às perguntas mais frequentes |
+| [Troubleshooting](troubleshooting.md) | Correções concretas para falhas concretas |
+| [Migration Guide](migration-guide.md) | Migrando do fluxo de trabalho legado para OPSX |
+
+### Coordenar em repositórios (beta)
+
+| Doc | O que ele oferece |
+|-----|-------------------|
+| [Stores: User Guide](stores-beta/user-guide.md) | Planejar em seu próprio repo quando seu trabalho abrange vários repositórios ou equipes |
+| [Agent Contract](agent-contract.md) | As interfaces CLI legíveis por máquina que os agentes operam |
+
+## A versão de trinta segundos
 
 ```text
-→ fluido não rígido
-→ iterativo não cascata
-→ fácil não complexo
-→ construído para brownfield não apenas greenfield
-→ escalável de projetos pessoais a empresas
+1. Install        npm install -g @fission-ai/openspec@latest
+2. Initialize     cd your-project && openspec init
+3. Explore        (in your AI chat)  /opsx:explore           ← opcional, mas um ótimo hábito
+4. Propose        (in your AI chat)  /opsx:propose add-dark-mode
+5. Build          (in your AI chat)  /opsx:apply
+6. Archive        (in your AI chat)  /opsx:archive
 ```
 
-> [!TIP]
-> **Novo fluxo de trabalho agora disponível!** Reconstruímos o OpenSpec com um novo fluxo orientado por artefatos.
->
-> Execute `/opsx:propose "sua ideia"` para começar. → [Saiba mais aqui](opsx.md)
+Os passos 1 e 2 acontecem no seu terminal. O restante acontece no chat do seu assistente de IA. Essa divisão é a única coisa que vale a pena memorizar, e [How Commands Work](how-commands-work.md) explica exatamente o porquê. O Passo 3 é opcional, mas começar com `/opsx:explore` quando você não tem certeza é o hábito mais valioso para formar.
 
-<p align="center">
-  Siga <a href="https://x.com/0xTab">@0xTab no X</a> para atualizações · Junte-se ao <a href="https://discord.gg/YctCnvvshC">Discord do OpenSpec</a> para ajuda e perguntas.
-</p>
+## Onde mais obter ajuda
 
-## Veja em ação
+- **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) para perguntas, ideias e ajuda.
+- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) para bugs e solicitações de recursos.
+- **`openspec feedback "sua mensagem"`** envia feedback diretamente do seu terminal (ele abre uma issue no GitHub).
 
-```text
-Você: /opsx:propose add-dark-mode
-IA:  Criado openspec/changes/add-dark-mode/
-     ✓ proposal.md — por que estamos fazendo isso, o que está mudando
-     ✓ specs/       — requisitos e cenários
-     ✓ design.md    — abordagem técnica
-     ✓ tasks.md     — lista de implementação
-     Pronto para implementação!
-
-Você: /opsx:apply
-IA:  Implementando tarefas...
-     ✓ 1.1 Adicionar provedor de contexto de tema
-     ✓ 1.2 Criar componente de alternância
-     ✓ 2.1 Adicionar variáveis CSS
-     ✓ 2.2 Conectar localStorage
-     Todas as tarefas concluídas!
-
-Você: /opsx:archive
-IA:  Arquivado em openspec/changes/archive/2025-01-23-add-dark-mode/
-     Especificações atualizadas. Pronto para o próximo recurso.
-```
-
-<details>
-<summary><strong>Painel do OpenSpec</strong></summary>
-</details>
-
-## Início Rápido
-
-**Requer Node.js 20.19.0 ou superior.**
-
-Instale o OpenSpec globalmente:
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-Em seguida, navegue até o diretório do seu projeto e inicialize:
-
-```bash
-cd seu-projeto
-openspec init
-```
-
-Agora diga à sua IA: `/opsx:propose <o-que-você-quer-construir>`
-
-Se você quiser o fluxo de trabalho expandido (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`), selecione-o com `openspec config profile` e aplique com `openspec update`.
-
-> [!NOTE]
-> Não tem certeza se sua ferramenta é suportada? [Veja a lista completa](supported-tools.md) – suportamos mais de 25 ferramentas e estamos crescendo.
->
-> Também funciona com pnpm, yarn, bun e nix. [Veja as opções de instalação](installation.md).
-
-## Documentação
-
-→ **[Primeiros Passos](getting-started.md)**: primeiros passos<br>
-→ **[Fluxos de Trabalho](workflows.md)**: combinações e padrões<br>
-→ **[Comandos](commands.md)**: comandos slash e habilidades<br>
-→ **[CLI](cli.md)**: referência do terminal<br>
-→ **[Ferramentas Suportadas](supported-tools.md)**: integrações de ferramentas e caminhos de instalação<br>
-→ **[Conceitos](concepts.md)**: como tudo se encaixa<br>
-→ **[Multi-idioma](multi-language.md)**: suporte multi-idioma<br>
-→ **[Personalização](customization.md)**: personalize como quiser
-
-
-## Por que OpenSpec?
-
-Assistentes de codificação com IA são poderosos, mas imprevisíveis quando os requisitos vivem apenas no histórico do chat. O OpenSpec adiciona uma camada leve de especificação para que você concorde sobre o que construir antes que qualquer código seja escrito.
-
-- **Concorde antes de construir** — humano e IA alinham-se nas especificações antes do código ser escrito
-- **Mantenha-se organizado** — cada alteração recebe sua própria pasta com proposta, especificações, design e tarefas
-- **Trabalhe de forma fluida** — atualize qualquer artefato a qualquer momento, sem portões de fase rígidos
-- **Use suas ferramentas** — funciona com mais de 20 assistentes de IA via comandos slash
-
-### Como nos comparamos
-
-**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Completo, mas pesado. Portões de fase rígidos, muito Markdown, configuração Python. O OpenSpec é mais leve e permite iteração livre.
-
-**vs. [Kiro](https://kiro.dev)** (AWS) — Poderoso, mas você fica preso ao IDE deles e limitado aos modelos Claude. O OpenSpec funciona com as ferramentas que você já usa.
-
-**vs. nada** — Codificação com IA sem especificações significa prompts vagos e resultados imprevisíveis. O OpenSpec traz previsibilidade sem a cerimônia.
-
-## Atualizando o OpenSpec
-
-**Atualize o pacote**
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-**Atualize as instruções do agente**
-
-Execute isso dentro de cada projeto para regerar a orientação da IA e garantir que os comandos slash mais recentes estejam ativos:
-
-```bash
-openspec update
-```
-
-## Notas de Uso
-
-**Seleção de modelo**: O OpenSpec funciona melhor com modelos de alto raciocínio. Recomendamos Opus 4.5 e GPT 5.2 tanto para planejamento quanto para implementação.
-
-**Higiene de contexto**: O OpenSpec se beneficia de uma janela de contexto limpa. Limpe seu contexto antes de iniciar a implementação e mantenha uma boa higiene de contexto durante toda a sua sessão.
-
-## Contribuindo
-
-**Correções pequenas** — Correções de bugs, correções de erros de digitação e melhorias menores podem ser enviadas diretamente como PRs.
-
-**Alterações maiores** — Para novos recursos, refatorações significativas ou alterações arquitetônicas, envie primeiro uma proposta de alteração do OpenSpec para que possamos alinhar a intenção e os objetivos antes que a implementação comece.
-
-Ao escrever propostas, tenha em mente a filosofia do OpenSpec: servimos uma ampla variedade de usuários em diferentes agentes de codificação, modelos e casos de uso. As alterações devem funcionar bem para todos.
-
-**Código gerado por IA é bem-vindo** — desde que tenha sido testado e verificado. PRs contendo código gerado por IA devem mencionar o agente de codificação e o modelo usados (por exemplo, "Gerado com Claude Code usando claude-opus-4-5-20251101").
-
-### Desenvolvimento
-
-- Instale as dependências: `pnpm install`
-- Construa: `pnpm run build`
-- Teste: `pnpm test`
-- Desenvolva o CLI localmente: `pnpm run dev` ou `pnpm run dev:cli`
-- Commits convencionais (uma linha): `type(scope): subject`
-
-## Outros
-
-<details>
-<summary><strong>Telemetria</strong></summary>
-
-O OpenSpec coleta estatísticas de uso anônimas.
-
-Coletamos apenas nomes de comandos e versão para entender padrões de uso. Nenhum argumento, caminho, conteúdo ou PII. Desativado automaticamente em CI.
-
-**Desativar:** `export OPENSPEC_TELEMETRY=0` ou `export DO_NOT_TRACK=1`
-
-</details>
-
-<details>
-<summary><strong>Mantenedores e Consultores</strong></summary>
-
-Veja [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) para a lista de mantenedores principais e consultores que ajudam a orientar o projeto.
-
-</details>
-
-
-
-## Licença
-
-MIT
+Encontrou algo nessas documentações que está errado, desatualizado ou confuso? Isso é um bug. Abra uma issue ou um PR. Melhorias na documentação são algumas das contribuições mais valiosas que você pode fazer.

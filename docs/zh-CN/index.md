@@ -3,190 +3,129 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "面向AI助手的规范驱动开发"
-  tagline: 一个用于构建和管理AI助手项目的轻量级规范。
+  text: "AI 助手的规范驱动开发"
+  tagline: 用于构建和管理 AI 助手项目的轻量级规范。
   actions:
     - theme: brand
-      text: 快速开始
+      text: 开始使用
       link: ./getting-started
     - theme: alt
-      text: 首页
+      text: 主页
       link: /
 
 features:
-  - title: 规范先行的工作流
-    details: 在编写代码前先定义需求。
-  - title: AI原生设计
-    details: 为Claude Code、Cursor、Windsurf等工具打造。
+  - title: 规范优先的工作流程
+    details: 在编写代码之前定义需求。
+  - title: AI 原生设计
+    details: 为 Claude Code、Cursor、Windsurf 等而构建。
   - title: 多语言支持
-    details: 文档提供多种语言版本。
+    details: 文档提供多种语言。
 ---
 
+# OpenSpec 文档
 
-我们的理念：
+欢迎。这是 OpenSpec 的所有内容的中心。
+
+OpenSpec 帮助您和您的 AI 编码助手在编写任何代码之前**就“要构建什么”达成一致**。您描述更改，AI 草拟一份简短的规范和任务列表，你们双方都查看同一份计划，然后工作就开始了。再也不会出现半途发现 AI 构建错了东西的情况。
+
+如果您只阅读一两页，请阅读这两篇：
+
+1. [Getting Started](getting-started.md)：安装、初始化并发布您的首次更改。
+2. [How Commands Work](how-commands-work.md)：您实际输入 `/opsx:propose` 的地方（提示：在 AI 聊天中，而不是在终端）。这几乎让所有人都会感到困惑一次。
+
+第二篇文档比它看起来更重要。OpenSpec 有两个部分：一个您在终端中运行的命令行工具，以及您提供给 AI 助手的斜杠命令（slash commands）。了解哪一个是哪个，可以避免最常见的困惑。
+
+> **首先建立的最佳习惯：当你不确定要构建什么时，就从 `/opsx:explore` 开始。** 它是一个零风险的思考伙伴，它会阅读您的代码，权衡不同的选项，并在任何产物或代码存在之前，将一个模糊的想法打磨成一个具体的计划。[Explore First](explore.md) 指南提供了论据。
+
+## 选择您的路径
+
+**我是一个新手。** 从 [Getting Started](getting-started.md) 开始，然后浏览一下 [Core Concepts at a Glance](overview.md)。当遇到任何神秘事物时，[FAQ](faq.md) 和 [Glossary](glossary.md) 就在附近。
+
+**我有一个问题，但还没有计划。** 这是常见的情况，它有专门的答案：[Explore First](explore.md)。使用 `/opsx:explore` 在承诺任何事情之前与 AI 一起思考。
+
+**我有一个大型现有代码库。** 您不需要都进行文档化。[Using OpenSpec in an Existing Project](existing-projects.md) 展示了如何在不“把海洋煮沸”的情况下，对真实的、遗留（brownfield）代码开始工作。
+
+**我只想让它运行起来。** [Install](installation.md)，运行 `openspec init`，然后阅读 [How Commands Work](how-commands-work.md)，确保您的第一个斜杠命令发送到正确的地方。
+
+**我通过示例学习。** [Examples & Recipes](examples.md) 页面会带您完成从头到尾的真实更改：一个小型功能、一个错误修复、一次重构，或是一次探索。
+
+**我来自旧的工作流程。** [Migration Guide](migration-guide.md) 解释了哪些地方发生了变化以及为什么，并保证您的现有工作是安全的。
+
+**我想让它适应我的团队流程。** [Customization](customization.md) 涵盖项目配置、自定义模式（schemas）和共享上下文。
+
+**出错了。** [Troubleshooting](troubleshooting.md) 收集了人们实际遇到的故障，并提供了修复方法。
+
+## 完整的地图
+
+### 从这里开始
+
+| Doc | 内容描述 |
+|-----|-------------------|
+| [Getting Started](getting-started.md) | 安装、初始化并端到端运行您的首次更改 |
+| [Explore First](explore.md) | 使用 `/opsx:explore` 在承诺之前思考一个想法 |
+| [How Commands Work](how-commands-work.md) | 斜杠命令在哪里运行，什么是“交互模式”，终端与聊天室的区别 |
+| [Core Concepts at a Glance](overview.md) | 一页纸上的完整心智模型：规范、更改、增量（deltas）、归档 |
+| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix 以及如何验证它是否正常工作 |
+
+### 日常使用
+
+| Doc | 内容描述 |
+|-----|-------------------|
+| [Workflows](workflows.md) | 常见模式以及何时使用每条命令 |
+| [Examples & Recipes](examples.md) | 真实更改的完整操作指南，可复制粘贴 |
+| [Using OpenSpec in an Existing Project](existing-projects.md) | 在大型遗留代码库上采用 OpenSpec |
+| [Editing & Iterating on a Change](editing-changes.md) | 更新产物、回溯、协调手动编辑 |
+| [Commands](commands.md) | 所有 `/opsx:*` 斜杠命令的参考指南 |
+| [CLI](cli.md) | 所有 `openspec` 终端命令的参考指南 |
+
+### 深入理解
+
+| Doc | 内容描述 |
+|-----|-------------------|
+| [Concepts](concepts.md) | 对规范、更改、产物（artifacts）、模式和归档的长篇解释 |
+| [OPSX Workflow](opsx.md) | 为什么工作流程是流动的而不是阶段锁定的，以及架构的深度解析 |
+| [Glossary](glossary.md) | 所有术语的定义集中地 |
+
+### 使它属于您自己
+
+| Doc | 内容描述 |
+|-----|-------------------|
+| [Customization](customization.md) | 项目配置、自定义模式、共享上下文 |
+| [Multi-Language](multi-language.md) | 生成非英语语言的产物 |
+| [Supported Tools](supported-tools.md) | OpenSpec 集成的 25+ 个 AI 工具及其文件存放位置 |
+
+### 需要帮助时
+
+| Doc | 内容描述 |
+|-----|-------------------|
+| [FAQ](faq.md) | 对人们最常问问题的快速回答 |
+| [Troubleshooting](troubleshooting.md) | 对具体故障的切实解决方案 |
+| [Migration Guide](migration-guide.md) | 从旧工作流程迁移到 OPSX |
+
+### 跨仓库协调（Beta）
+
+| Doc | 内容描述 |
+|-----|-------------------|
+| [Stores: User Guide](stores-beta/user-guide.md) | 当您的工作跨越多个仓库或团队时，如何规划存储库 |
+| [Agent Contract](agent-contract.md) | 代理（agents）驱动的、机器可读的 CLI 接口 |
+
+## 三十秒速览
 
 ```text
-→ 流动而非僵化
-→ 迭代而非瀑布
-→ 简单而非复杂
-→ 为存量项目而生，而非仅限于新项目
-→ 从个人项目到企业级均可扩展
+1. Install        npm install -g @fission-ai/openspec@latest
+2. Initialize     cd your-project && openspec init
+3. Explore        (in your AI chat)  /opsx:explore           ← 可选，但是一个很好的习惯
+4. Propose        (in your AI chat)  /opsx:propose add-dark-mode
+5. Build          (in your AI chat)  /opsx:apply
+6. Archive        (in your AI chat)  /opsx:archive
 ```
 
-> [!TIP]
-> **全新工作流现已推出！** 我们使用新的工件引导式工作流重构了OpenSpec。
->
-> 运行 `/opsx:propose "你的想法"` 即可开始。 → [在此了解更多](opsx.md)
+步骤 1 和 2 在您的终端中完成。其余操作在您的 AI 助手聊天室中完成。这个划分是唯一值得记住的事情，而 [How Commands Work](how-commands-work.md) 会解释清楚原因。第 3 步是可选的，但从不确定时就使用 `/opsx:explore` 是最值得培养的习惯。
 
-<p align="center">
-  关注 <a href="https://x.com/0xTab">@0xTab on X</a> 获取更新 · 加入 <a href="https://discord.gg/YctCnvvshC">OpenSpec Discord</a> 获取帮助和提问。
-</p>
+## 其他获取帮助的地方
 
-## 实际演示
+- **Discord：** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) 用于提问、分享想法和寻求帮助。
+- **GitHub Issues：** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) 用于报告 Bug 和功能请求。
+- **`openspec feedback "your message"`** 直接从您的终端发送反馈（它会打开一个 GitHub issue）。
 
-```text
-You: /opsx:propose add-dark-mode
-AI:  已创建 openspec/changes/add-dark-mode/
-     ✓ proposal.md — 说明变更原因和内容
-     ✓ specs/       — 需求与场景
-     ✓ design.md    — 技术方案
-     ✓ tasks.md     — 实施清单
-     准备就绪，可以开始实施！
-
-You: /opsx:apply
-AI:  正在执行任务...
-     ✓ 1.1 添加主题上下文提供者
-     ✓ 1.2 创建切换组件
-     ✓ 2.1 添加CSS变量
-     ✓ 2.2 连接localStorage
-     所有任务完成！
-
-You: /opsx:archive
-AI:  已归档至 openspec/changes/archive/2025-01-23-add-dark-mode/
-     规范已更新。准备好进行下一个功能。
-```
-
-<details>
-<summary><strong>OpenSpec 仪表盘</strong></summary>
-</details>
-
-## 快速开始
-
-**需要 Node.js 20.19.0 或更高版本。**
-
-全局安装 OpenSpec：
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-然后导航到你的项目目录并初始化：
-
-```bash
-cd your-project
-openspec init
-```
-
-现在告诉你的AI：`/opsx:propose <你想构建的内容>`
-
-如果你想要扩展的工作流（`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`），请使用 `openspec config profile` 选择，并通过 `openspec update` 应用。
-
-> [!NOTE]
-> 不确定你的工具是否受支持？[查看完整列表](supported-tools.md) – 我们支持25+种工具且仍在增加。
->
-> 也适用于 pnpm、yarn、bun 和 nix。[查看安装选项](installation.md)。
-
-## 文档
-
-→ **[快速开始](getting-started.md)**：第一步<br>
-→ **[工作流](workflows.md)**：组合与模式<br>
-→ **[命令](commands.md)**：斜杠命令与技能<br>
-→ **[CLI](cli.md)**：终端参考<br>
-→ **[支持的工具](supported-tools.md)**：工具集成与安装路径<br>
-→ **[概念](concepts.md)**：整体如何运作<br>
-→ **[多语言](multi-language.md)**：多语言支持<br>
-→ **[自定义](customization.md)**：打造你的专属配置
-
-
-## 为什么选择 OpenSpec？
-
-AI编程助手功能强大，但当需求仅存在于聊天记录中时，它们就变得不可预测。OpenSpec 增加了一个轻量级的规范层，让你在编写任何代码之前就对要构建的内容达成共识。
-
-- **先达成共识再构建** — 人类和AI在代码编写前就规范对齐
-- **保持组织有序** — 每个变更都有自己的文件夹，包含提案、规范、设计和任务
-- **灵活工作** — 随时更新任何工件，没有僵化的阶段门控
-- **使用你的工具** — 通过斜杠命令与20+种AI助手协同工作
-
-### 我们如何比较
-
-**对比 [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — 全面但笨重。僵化的阶段门控，大量Markdown，需要Python环境。OpenSpec更轻量，让你自由迭代。
-
-**对比 [Kiro](https://kiro.dev)** (AWS) — 功能强大但你被锁定在他们的IDE中，并且仅限于Claude模型。OpenSpec与你已有的工具协同工作。
-
-**对比无规范** — 没有规范的AI编程意味着模糊的提示和不可预测的结果。OpenSpec在不增加繁文缛节的情况下带来可预测性。
-
-## 更新 OpenSpec
-
-**升级软件包**
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-**刷新代理指令**
-
-在每个项目内运行此命令以重新生成AI指导，并确保最新的斜杠命令处于活动状态：
-
-```bash
-openspec update
-```
-
-## 使用说明
-
-**模型选择**：OpenSpec 与高推理能力的模型配合效果最佳。我们推荐 Opus 4.5 和 GPT 5.2 用于规划和实施。
-
-**上下文卫生**：OpenSpec 受益于干净的上下文窗口。在开始实施前清除上下文，并在整个会话中保持良好的上下文卫生。
-
-## 贡献
-
-**小修复** — 错误修复、拼写更正和小改进可以直接作为PR提交。
-
-**较大变更** — 对于新功能、重大重构或架构变更，请先提交一个OpenSpec变更提案，以便我们在开始实施前就意图和目标达成一致。
-
-撰写提案时，请牢记OpenSpec的理念：我们服务于各种不同编码代理、模型和用例的用户。变更应对所有人都适用。
-
-**欢迎AI生成的代码** — 只要经过测试和验证。包含AI生成代码的PR应提及所使用的编码代理和模型（例如，“使用 claude-opus-4-5-20251101 通过 Claude Code 生成”）。
-
-### 开发
-
-- 安装依赖：`pnpm install`
-- 构建：`pnpm run build`
-- 测试：`pnpm test`
-- 本地开发CLI：`pnpm run dev` 或 `pnpm run dev:cli`
-- 约定式提交（单行）：`type(scope): subject`
-
-## 其他
-
-<details>
-<summary><strong>遥测</strong></summary>
-
-OpenSpec 收集匿名使用统计。
-
-我们仅收集命令名称和版本以了解使用模式。不收集参数、路径、内容或个人身份信息。在CI环境中自动禁用。
-
-**选择退出：** `export OPENSPEC_TELEMETRY=0` 或 `export DO_NOT_TRACK=1`
-
-</details>
-
-<details>
-<summary><strong>维护者与顾问</strong></summary>
-
-请参阅 [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) 以获取帮助指导项目的核心维护者和顾问名单。
-
-</details>
-
-
-
-## 许可证
-
-MIT
+在这些文档中发现任何错误、过时或令人困惑的地方吗？那就是一个 Bug。请开一个 Issue 或 PR。文档改进是您可以做出的最有价值的贡献之一。

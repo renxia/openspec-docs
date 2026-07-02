@@ -1,40 +1,40 @@
-# Flussi di lavoro
+# Flussi di Lavoro (Workflows)
 
-Questa guida copre i pattern di flusso di lavoro comuni per OpenSpec e quando utilizzare ciascuno di essi. Per la configurazione di base, consulta [Guida introduttiva](getting-started.md). Per il riferimento ai comandi, consulta [Comandi](commands.md).
+Questa guida copre i modelli comuni di flusso di lavoro per OpenSpec e quando utilizzare ciascuno di essi. Per l'installazione base, vedi [Getting Started](getting-started.md). Per il riferimento dei comandi, vedi [Commands](commands.md).
 
-## Filosofia: Azioni, non fasi
+## Filosofia: Azioni, non Fasi (Actions, Not Phases)
 
-I flussi di lavoro tradizionali ti costringono a passare attraverso fasi: pianificazione, poi implementazione, poi completamento. Ma il lavoro reale non si adatta perfettamente a queste caselle.
+I flussi di lavoro tradizionali ti costringono attraverso fasi: pianificazione, poi implementazione, poi completamento. Ma il lavoro reale non si adatta perfettamente in scatole predefinite.
 
 OPSX adotta un approccio diverso:
 
 ```text
-Tradizionale (a fasi bloccate):
+Tradizionale (bloccato per fasi):
 
-  PIANIFICAZIONE ────────► IMPLEMENTAZIONE ────────► COMPLETATO
-      │                        │
-      │   "Non si può tornare" │
-      └────────────────────────┘
+  PIANIFICAZIONE ────────► IMPLEMENTAZIONE ────────► COMPLETAMENTO
+      │                    │
+      │   "Non si può tornare indietro"  │
+      └────────────────────┘
 
 OPSX (azioni fluide):
 
-  proposta ──► specifiche ──► progettazione ──► compiti ──► implementazione
+  proposal ──► specs ──► design ──► tasks ──► implement
 ```
 
 **Principi chiave:**
 
-- **Azioni, non fasi** - I comandi sono cose che puoi fare, non stadi in cui sei bloccato
-- **Le dipendenze sono abilitatori** - Mostrano cosa è possibile, non cosa è richiesto successivamente
+- **Azioni, non fasi** - I comandi sono cose che puoi fare, non stadi in cui sei bloccato.
+- **Le dipendenze sono abilitanti (enablers)** - Mostrano cosa è possibile, non cosa è richiesto dopo.
 
-> **Personalizzazione:** I flussi di lavoro OPSX sono guidati da schemi che definiscono sequenze di artefatti. Consulta [Personalizzazione](customization.md) per i dettagli sulla creazione di schemi personalizzati.
+> **Personalizzazione:** I flussi di lavoro di OPSX sono guidati da schemi (schemas) che definiscono le sequenze degli artefatti. Vedi [Customization](customization.md) per i dettagli sulla creazione di schemi personalizzati.
 
 ## Due Modalità
 
-### Percorso Rapido Predefinito (profilo `core`)
+### Percorso Rapido Predefinito (`core` profile)
 
-Le nuove installazioni utilizzano per impostazione predefinita `core`, che fornisce:
-- `/opsx:propose`
+Le nuove installazioni sono impostate su `core`, che fornisce:
 - `/opsx:explore`
+- `/opsx:propose`
 - `/opsx:apply`
 - `/opsx:sync`
 - `/opsx:archive`
@@ -42,19 +42,41 @@ Le nuove installazioni utilizzano per impostazione predefinita `core`, che forni
 Flusso tipico:
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+  (opzionale)
 ```
 
-### Flusso di Lavoro Espanso/Completo (selezione personalizzata)
+#### Iniziare esplorando (l'abitudine da sviluppare)
 
-Se desideri comandi espliciti per scaffold e build (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`, `/opsx:onboard`), abilitali con:
+`/opsx:explore` fa parte del profilo predefinito, non è un add-on avanzato. È la mossa da fare ogni volta che hai un problema ma non ancora un piano, cosa che accade nella maggior parte dei casi con un assistente AI.
+
+```text
+Tu: /opsx:explore
+
+AI:  Cosa vorresti esplorare?
+
+Tu: Le mie ricerche sembrano stantidi. Non sono sicuro se sia la cache, l'indicizzazione o la query stessa.
+
+AI:  Lascia che guardi... [legge il servizio di ricerca e lo strato della cache]
+     È l'indice: viene ricostruito solo ogni notte, quindi le modifiche non compaiono fino al giorno successivo. Ci sono due opzioni: rebuild on write (semplice, maggiore carico) o una cancellazione della cache a breve TTL (più parti in movimento, meno carico). Dato che il tuo volume di scrittura è basso, la soluzione più pulita è rebuild-on-write. Vuoi definirne l'ambito?
+
+Tu: Sì.
+
+Tu: /opsx:propose rebuild-search-index-on-write
+```
+
+Esplorare non crea artefatti e non scrive codice. È una conversazione gratuita e senza rischi che trasforma una preoccupazione vaga in un cambiamento preciso, così la proposta successiva è mirata. Sai già esattamente cosa vuoi? Saltalo e vai direttamente a `/opsx:propose`. Guida completa: [Explore First](explore.md).
+
+### Flusso di Lavoro Esteso/Completo (selezione personalizzata)
+
+Se desideri comandi espliciti per lo scaffold e la costruzione (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`), abilitali con:
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## Pattern di Flusso di Lavoro (Modalità Espansa)
+## Modelli di Flusso di Lavoro (Modalità Estesa)
 
 ### Funzionalità Rapida
 
@@ -67,39 +89,39 @@ Quando sai cosa vuoi costruire e devi solo eseguire:
 **Esempio di conversazione:**
 
 ```text
-You: /opsx:new add-logout-button
+Tu: /opsx:new add-logout-button
 
-AI:  Created openspec/changes/add-logout-button/
-     Ready to create: proposal
+AI:  Creato openspec/changes/add-logout-button/
+     Pronto per creare: proposta
 
-You: /opsx:ff
+Tu: /opsx:ff
 
-AI:  Creating all planning artifacts...
+AI:  Creando tutti gli artefatti di pianificazione...
      ✓ proposal.md
      ✓ specs/
      ✓ design.md
      ✓ tasks.md
-     Ready for implementation!
+     Pronto per l'implementazione!
 
-You: /opsx:apply
+Tu: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ Added logout button to header
-     ✓ Implemented session clearing
-     ✓ Added confirmation dialog
-     All tasks complete!
+AI:  Lavorando sui compiti...
+     ✓ Aggiunto pulsante di logout nell'intestazione
+     ✓ Implementata la cancellazione della sessione
+     ✓ Aggiunto dialogo di conferma
+     Tutti i compiti completati!
 
-You: /opsx:archive
+Tu: /opsx:archive
 
-AI:  ✓ Merged specs
-     ✓ Archived change
+AI:  ✓ Schemi unificati (Merged specs)
+     ✓ Cambiamento archiviato
 ```
 
-**Ideale per:** Funzionalità da piccole a medie, correzione di bug, modifiche dirette.
+**Ideale per:** Funzionalità piccole o medie, correzioni di bug, cambiamenti semplici.
 
 ### Esplorativo
 
-Quando i requisiti non sono chiari o è necessario prima investigare:
+Quando i requisiti non sono chiari o devi prima indagare:
 
 ```text
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
@@ -108,127 +130,125 @@ Quando i requisiti non sono chiari o è necessario prima investigare:
 **Esempio di conversazione:**
 
 ```text
-You: /opsx:explore
+Tu: /opsx:explore
 
-AI:  What would you like to explore?
+AI:  Cosa vorresti esplorare?
 
-You: I want to improve page load performance but I'm not sure
-     where the bottlenecks are.
+Tu: Voglio migliorare le prestazioni del caricamento della pagina, ma non sono sicuro dove si trovino i colli di bottiglia.
 
-AI:  Let me help investigate...
-     [Analyzes bundle sizes, identifies slow queries, reviews
-     component render patterns]
+AI:  Lascia che aiuto a indagare...
+     [Analizza le dimensioni dei bundle, identifica query lente, rivede i modelli di rendering dei componenti]
 
-     I found three main bottlenecks:
-     1. Large unoptimized images
-     2. Synchronous data fetching in ProductList
-     3. Re-renders from context changes
+     Ho trovato tre principali colli di bottiglia:
+     1. Immagini grandi e non ottimizzate
+     2. Recupero dati sincrono in ProductList
+     3. Re-rendering dovuti ai cambiamenti di contesto
 
-     Which would you like to address first?
+     Quale vorresti affrontare per primo?
 
-You: Let's tackle the data fetching issue.
+Tu: Affrontiamo il problema del recupero dei dati.
 
-You: /opsx:new optimize-product-list-fetching
+Tu: /opsx:new optimize-product-list-fetching
 
-AI:  Created change. Ready to create: proposal
+AI:  Cambiamento creato. Pronto per creare: proposta
 
-You: /opsx:continue
+Tu: /opsx:continue
 
-AI:  Creating proposal based on our exploration...
-     [Writes proposal incorporating investigation insights]
+AI:  Creando la proposta basata sulla nostra esplorazione...
+     [Scrive la proposta incorporando gli approfondimenti dell'indagine]
 
-     Ready to create: specs, design
-     Which would you like next?
+     Pronto per creare: schemi, design
+     Quale vorresti fare dopo?
 
-You: /opsx:continue
+Tu: /opsx:continue
 
-AI:  Creating specs...
+AI:  Creando i requisiti (specs)...
 ```
 
 **Ideale per:** Ottimizzazione delle prestazioni, debugging, decisioni architetturali, requisiti non chiari.
 
-### Modifiche in Parallelo
+### Cambiamenti Paralleli
 
-Lavora su più modifiche contemporaneamente:
+Lavora su più cambiamenti contemporaneamente:
 
 ```text
-Modifica A: /opsx:new ──► /opsx:ff ──► /opsx:apply (in corso)
+Cambiamento A: /opsx:new ──► /opsx:ff ──► /opsx:apply (in corso)
                                          │
-                                    cambio contesto
+                                    cambio di contesto
                                          │
-Modifica B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
+Cambiamento B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
 
 **Esempio di conversazione:**
 
 ```text
-You: I'm working on add-dark-mode but got pulled into a bug fix
+Tu: Sto lavorando su add-dark-mode ma sono stato richiamato per una correzione di bug
 
-You: /opsx:new fix-login-redirect
+Tu: /opsx:new fix-login-redirect
 
-AI:  Created openspec/changes/fix-login-redirect/
+AI:  Creato openspec/changes/fix-login-redirect/
 
-You: /opsx:ff
+Tu: /opsx:ff
 
-AI:  ✓ Created planning artifacts
+AI:  ✓ Artefatti di pianificazione creati
 
-You: /opsx:apply
+Tu: /opsx:apply
 
-AI:  Working on fix-login-redirect...
-     [Implements the fix]
-     All tasks complete!
+AI:  Lavorando su fix-login-redirect...
+     [Implementa la correzione]
+     Tutti i compiti completati!
 
-You: /opsx:archive
+Tu: /opsx:archive
 
-AI:  ✓ Archived fix-login-redirect
+AI:  ✓ fix-login-redirect archiviato
 
-You: Let's get back to dark mode
+Tu: Torniamo a dark mode
 
-You: /opsx:apply add-dark-mode
+Tu: /opsx:apply add-dark-mode
 
-AI:  Resuming add-dark-mode...
-     Picking up at task 2.3: Update Header...
+AI:  Riprendendo add-dark-mode...
+     Ricomincio dal compito 2.3: Aggiorna Intestazione...
 ```
 
-**Ideale per:** Flussi di lavoro paralleli, interruzioni urgenti, collaborazione di team.
+**Ideale per:** Flussi di lavoro paralleli, interruzioni urgenti, collaborazione di squadra.
 
-Quando hai più modificate completate, usa `/opsx:bulk-archive`:
+Quando hai più cambiamenti completati, usa `/opsx:bulk-archive`:
 
 ```text
-You: /opsx:bulk-archive
+Tu: /opsx:bulk-archive
 
-AI:  Found 3 completed changes:
-     - add-dark-mode (all tasks done)
-     - fix-login-redirect (all tasks done)
-     - update-footer (all tasks done)
+AI:  Trovate 3 cambiamenti completati:
+     - add-dark-mode (tutti i compiti completi)
+     - fix-login-redirect (tutti i compiti completi)
+     - update-footer (tutti i compiti completi)
 
-     Checking for spec conflicts...
-     ⚠ add-dark-mode and update-footer both touch specs/ui/
+     Verifica dei conflitti di schema...
+     ⚠ add-dark-mode e update-footer toccano entrambi specs/ui/
 
-     Inspecting codebase to resolve...
-     Both changes are implemented. Will apply in chronological order.
+     Ispezionando la codebase per risolvere...
+     Entrambi i cambiamenti sono implementati. Verranno applicati in ordine cronologico.
 
-     Archive all 3 changes?
+     Archiviare tutti e tre i cambiamenti?
 
-You: Yes
+Tu: Sì
 
-AI:  ✓ Archived add-dark-mode
-     ✓ Archived fix-login-redirect
-     ✓ Archived update-footer
-     Specs merged in order: add-dark-mode → update-footer
+AI:  ✓ add-dark-mode archiviato
+     ✓ fix-login-redirect archiviato
+     ✓ update-footer archiviato
+     Schemi unificati nell'ordine: add-dark-mode → update-footer
 ```
 
-L'archiviazione in blocco rileva quando più modifiche toccano le stesse specifiche e risolve i conflitti verificando ciò che è effettivamente implementato.
+Bulk archive rileva quando più cambiamenti toccano gli stessi schemi e risolve i conflitti controllando cosa è effettivamente implementato.
 
-### Completare una Modifica
+### Completare un Cambiamento
 
-Il flusso di completamento consigliato:
+Il flusso di completamento raccomandato:
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              valida            propone la sincronizzazione
-              l'implementazione se necessario
+              valida l'implementazione     chiede la sincronizzazione
+              (validates)                   se necessario
 ```
 
 #### Verifica: Controlla il Lavoro
@@ -236,217 +256,215 @@ Il flusso di completamento consigliato:
 `/opsx:verify` valida l'implementazione rispetto ai tuoi artefatti su tre dimensioni:
 
 ```text
-You: /opsx:verify
+Tu: /opsx:verify
 
-AI:  Verifying add-auth...
+AI:  Verificando add-auth...
 
-     COMPLETENESS
-     ✓ All 12 tasks in tasks.md are checked
-     ✓ All requirements in specs have corresponding code
-     ⚠ Scenario "Session timeout after inactivity" not tested
+     COMPLETTEZZA (COMPLETENESS)
+     ✓ Tutti i 12 compiti in tasks.md sono stati controllati
+     ✓ Tutti i requisiti negli schemi hanno codice corrispondente
+     ⚠ Scenario "Timeout della sessione dopo l'inattività" non testato
 
-     CORRECTNESS
-     ✓ Implementation matches spec intent
-     ✓ Edge cases from scenarios are handled
-     ✓ Error states match spec definitions
+     CORRETTEZZA (CORRECTNESS)
+     ✓ L'implementazione corrisponde all'intento dello schema
+     ✓ I casi limite dai vari scenari sono gestiti
+     ✓ Gli stati di errore corrispondono alle definizioni dello schema
 
-     COHERENCE
-     ✓ Design decisions reflected in code structure
-     ✓ Naming conventions consistent with design.md
-     ⚠ Design mentions "event-driven" but implementation uses polling
+     COERENZA (COHERENCE)
+     ✓ Le decisioni di design sono riflesse nella struttura del codice
+     ✓ Convenzioni di denominazione coerenti con design.md
+     ⚠ Il design menziona "event-driven" ma l'implementazione usa il polling
 
-     SUMMARY
+     RIEPILOGO (SUMMARY)
      ─────────────────────────────
-     Critical issues: 0
-     Warnings: 2
-     Ready to archive: Yes (with warnings)
+     Problemi critici: 0
+     Avvisi: 2
+     Pronto per archiviare: Sì (con avvisi)
 
-     Recommendations:
-     1. Add test for session timeout scenario
-     2. Consider refactoring to event-driven as designed, or update design.md
+     Raccomandazioni:
+     1. Aggiungere un test per lo scenario di timeout della sessione
+     2. Considerare il refactoring verso un approccio event-driven come progettato, o aggiornare design.md
 ```
 
-**Cosa verifica la funzione di verifica:**
+**Cosa controlla la verifica:**
 
 | Dimensione | Cosa valida |
-|------------|-------------|
-| Completezza | Tutte le attività completate, tutti i requisiti implementati, scenari coperti |
-| Correttezza | L'implementazione corrisponde all'intento delle specifiche, i casi limite gestiti |
-| Coerenza | Le decisioni progettuali riflesse nel codice, pattern coerenti |
+|-----------|------------------|
+| Completezza | Tutti i compiti completati, tutti i requisiti implementati, scenari coperti |
+| Correttezza | L'implementazione corrisponde all'intento dello schema, i casi limite sono gestiti |
+| Coerenza | Le decisioni di design sono riflesse nel codice, i modelli sono coerenti |
 
-La verifica non bloccherà l'archiviazione, ma evidenzia problemi che potresti voler affrontare prima.
+La verifica non blocca l'archiviazione, ma evidenzia problemi che potresti voler affrontare per primi.
 
-#### Archiviazione: Finalizza la Modifica
+#### Archiviazione: Finalizzare il Cambiamento
 
-`/opsx:archive` completa la modifica e la sposta nell'archivio:
+`/opsx:archive` completa il cambiamento e lo sposta nell'archivio:
 
 ```text
-You: /opsx:archive
+Tu: /opsx:archive
 
-AI:  Archiving add-auth...
+AI:  Archiviando add-auth...
 
-     Artifact status:
-     ✓ proposal.md exists
-     ✓ specs/ exists
-     ✓ design.md exists
-     ✓ tasks.md exists (12/12 tasks complete)
+     Stato degli artefatti:
+     ✓ proposal.md esiste
+     ✓ specs/ esiste
+     ✓ design.md esiste
+     ✓ tasks.md esiste (12/12 compiti completi)
 
-     Delta specs: Not yet synced to main
-     → Would you like to sync now?
+     Schemi Delta: Non ancora sincronizzati su main
+     → Vuoi sincronizzare ora?
 
-You: Yes
+Tu: Sì
 
-AI:  ✓ Synced specs to openspec/specs/auth/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-auth/
+AI:  ✓ Schemi sincronizzati in openspec/specs/auth/spec.md
+     ✓ Spostato in openspec/changes/archive/2025-01-24-add-auth/
 
-     Change archived successfully.
+     Cambiamento archiviato con successo.
 ```
 
-L'archiviazione chiederà se le specifiche non sono sincronizzate. Non bloccherà per attività incomplete, ma avviserà.
+L'archiviazione chiederà conferma se gli schemi non sono sincronizzati. Non bloccherà per compiti incompletati, ma ti avviserà.
 
 ## Quando Usare Cosa
 
 ### `/opsx:ff` vs `/opsx:continue`
 
 | Situazione | Usa |
-|------------|-----|
-| Requisiti chiari, pronto per costruire | `/opsx:ff` |
-| Esplorazione, vuoi rivedere ogni passaggio | `/opsx:continue` |
-| Vuoi iterare sulla proposta prima delle specifiche | `/opsx:continue` |
-| Pressione temporale, bisogna procedere rapidamente | `/opsx:ff` |
-| Modifica complessa, vuoi controllo | `/opsx:continue` |
+|-----------|-----|
+| Requisiti chiari, pronto a costruire | `/opsx:ff` |
+| Esplorando, vuoi rivedere ogni passaggio | `/opsx:continue` |
+| Vuoi iterare sulla proposta prima degli schemi | `/opsx:continue` |
+| Pressione di tempo, devi muoverti velocemente | `/opsx:ff` |
+| Cambiamento complesso, vuoi il controllo | `/opsx:continue` |
 
-**Regola pratica:** Se riesci a descrivere l'intero ambito in anticipo, usa `/opsx:ff`. Se lo stai definendo man mano, usa `/opsx:continue`.
+**Regola generale:** Se puoi descrivere l'intero ambito in anticipo, usa `/opsx:ff`. Se stai scoprendo mentre procedi, usa `/opsx:continue`.
 
-### Quando Aggiornare vs Ricominciare da Zero
+### Quando Aggiornare vs Iniziare da Zero
 
-Una domanda comune: quando è accettabile aggiornare una modifica esistente e quando è meglio ricominiare da zero?
+Una domanda comune: quando è accettabile aggiornare un cambiamento esistente e quando dovresti crearne uno nuovo?
 
-**Aggiorna la modifica esistente quando:**
+**Aggiorna il cambiamento esistente quando:**
 
-- Stessa intenzione, esecuzione raffinata
-- L'ambito si restringe (prima MVP, il resto dopo)
-- Correzioni guidate dall'apprendimento (la base di codice non è come previsto)
-- Aggiustamenti progettuali basati sulle scoperte durante l'implementazione
+- Stesso intento, esecuzione raffinata
+- L'ambito si restringe (MVP per primo, il resto dopo)
+- Correzioni guidate dall'apprendimento (la codebase non era quella che ti aspettavi)
+- Piccoli aggiustamenti del design basati sulle scoperte dell'implementazione
 
-**Inizia una nuova modifica quando:**
+**Inizia un cambiamento nuovo quando:**
 
-- L'intenzione è cambiata fondamentalmente
+- L'intento è cambiato fondamentalmente
 - L'ambito è esploso in un lavoro completamente diverso
-- La modifica originale può essere contrassegnata come "completata" in modo autonomo
+- Il cambiamento originale può essere contrassegnato come "fatto" in autonomia
 - Le patch confonderebbero più che chiarire
 
 ```text
                      ┌─────────────────────────────────────┐
-                     │     È lo stesso lavoro?             │
+                     │     È questo lo stesso lavoro?          │
                      └──────────────┬──────────────────────┘
                                     │
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Stessa intenzione? Sovrapposizione >50%? La modifica
-          Stesso problema?   Stesso ambito?       originale può
-                 │                  │          essere "completata"
-                 │                  │          senza queste modifiche?
+          Stesso intento?      >50% di sovrapposizione?      Il originale può essere "fatto" senza questi cambiamenti?
+                 │                  │                  │
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
       SÌ               NO SÌ           NO  NO              SÌ
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-   AGGIORNA          NUOVA AGGIORNA    NUOVA AGGIORNA       NUOVA
+    AGGIORNA            NUOVO  AGGIORNA        NUOVO  AGGIORNA          NUOVO
 ```
 
-**Esempio: "Aggiungi modalità scura"**
+**Esempio: "Aggiungere la dark mode"**
 
-- "Bisogna supportare anche temi personalizzati" → Nuova modifica (ambito esploso)
-- "Il rilevamento delle preferenze di sistema è più difficile del previsto" → Aggiornamento (stessa intenzione)
-- "Spediamo prima l'interruttore, aggiungiamo le preferenze dopo" → Aggiornamento, poi archiviazione, poi nuova modifica
+- "È necessario supportare anche temi personalizzati" → Nuovo cambiamento (l'ambito è esploso)
+- "La rilevazione delle preferenze di sistema è più difficile del previsto" → Aggiornamento (stesso intento)
+- "Rilasciamo prima il toggle, aggiungiamo le preferenze dopo" → Aggiorna e archivia, poi nuovo cambiamento
 
-## Best Practice
+## Migliori Pratiche
 
-### Mantieni le Modifiche Focalizzate
+### Mantieni i Cambiamenti Focalizzati
 
-Un'unità logica di lavoro per modifica. Se stai facendo "aggiungi funzionalità X e refactoring di Y", considera due modifiche separate.
+Una singola unità logica di lavoro per ogni cambiamento. Se stai facendo "aggiungere la feature X e anche refactorare Y", considera due cambiamenti separati.
 
 **Perché è importante:**
-- Più facile da revisionare e comprendere
-- Cronologia archivio più pulita
-- Possibilità di spedire indipendentemente
+- Più facile da rivedere e comprendere
+- Storia dell'archivio più pulita
+- Può essere rilasciato in modo indipendente
 - Rollback più semplice se necessario
 
 ### Usa `/opsx:explore` per Requisiti Non Chiari
 
-Prima di impegnarti in una modifica, esplora lo spazio del problema:
+Prima di impegnarti su un cambiamento, esplora lo spazio del problema:
 
 ```text
-You: /opsx:explore
+Tu: /opsx:explore
 
-AI:  What would you like to explore?
+AI:  Cosa vorresti esplorare?
 
-You: How should we handle rate limiting for our API?
+Tu: Come dovremmo gestire il rate limiting per la nostra API?
 
-AI:  Let me investigate your current setup and options...
-     [Researches codebase, considers patterns]
+AI:  Lascia che indaghi sulla tua configurazione attuale e sulle opzioni...
+     [Ricerca la codebase, considera i modelli]
 
-     I see three approaches we could take:
-     1. Middleware-based (simple, per-endpoint)
-     2. Redis-backed (scalable, shared state)
-     3. Token bucket per user (fair, complex)
+     Vedo tre approcci che potremmo adottare:
+     1. Basato su middleware (semplice, per endpoint)
+     2. Supportato da Redis (scalabile, stato condiviso)
+     3. Bucket di token per utente (equo, complesso)
 
-     Your current stack suggests #1 or #2. What's your scale?
+     La tua stack attuale suggerisce #1 o #2. Qual è la tua scala?
 ```
 
-L'esplorazione chiarisce il pensiero prima di creare gli artefatti.
+L'esplorazione chiarisce il pensiero prima che tu crei gli artefatti.
 
 ### Verifica Prima di Archiviare
 
-Usa `/opsx:verify` per verificare che l'implementazione corrisponda agli artefatti:
+Usa `/opsx:verify` per controllare che l'implementazione corrisponda agli artefatti:
 
 ```text
-You: /opsx:verify
+Tu: /opsx:verify
 
-AI:  Verifying add-dark-mode...
+AI:  Verificando add-dark-mode...
 
-     ✓ All tasks in tasks.md are checked
-     ✓ Requirements in specs have corresponding code
-     ✓ Design decisions are reflected in implementation
+     ✓ Tutti i compiti in tasks.md sono stati controllati
+     ✓ I requisiti negli schemi hanno codice corrispondente
+     ✓ Le decisioni di design sono riflesse nell'implementazione
 
-     Ready to archive!
+     Pronto per archiviare!
 ```
 
-Rileva discrepanze prima di chiudere la modifica.
+Cattura le discrepanze prima di chiudere il cambiamento.
 
-### Nomina le Modifiche in Modo Chiaro
+### Nomina i Cambiamenti in Modo Chiaro
 
-Nomi buoni rendono `openspec list` utile:
+I nomi buoni rendono utile `openspec list`:
 
 ```text
-Buoni:                         Evita:
+Buoni:                          Evitare:
 add-dark-mode                  feature-1
 fix-login-redirect             update
 optimize-product-query         changes
 implement-2fa                  wip
 ```
 
-## Riferimento Rapido ai Comandi
+## Riferimento Rapido dei Comandi
 
-Per i dettagli completi sui comandi e le opzioni, consulta [Comandi](commands.md).
+Per i dettagli completi e le opzioni dei comandi, vedi [Commands](commands.md).
 
-| Comando | Scopo | Quando utilizzare |
-|---------|-------|-------------------|
-| `/opsx:propose` | Crea modifiche + artefatti di pianificazione | Percorso predefinito rapido (profilo `core`) |
-| `/opsx:explore` | Analizzare le idee | Requisiti poco chiari, indagine |
-| `/opsx:new` | Avviare uno scaffold per una modifica | Modalità espansa, controllo esplicito degli artefatti |
-| `/opsx:continue` | Creare l'artefatto successivo | Modalità espansa, creazione passo-passo degli artefatti |
-| `/opsx:ff` | Creare tutti gli artefatti di pianificazione | Modalità espansa, ambito chiaro |
-| `/opsx:apply` | Implementare i task | Pronto per scrivere codice |
-| `/opsx:verify` | Validare l'implementazione | Modalità espansa, prima dell'archiviazione |
-| `/opsx:sync` | Unire le specifiche delta | Modalità espansa, opzionale |
-| `/opsx:archive` | Completare la modifica | Tutti i lavori conclusi |
-| `/opsx:bulk-archive` | Archiviare più modifiche | Modalità espansa, lavoro parallelo |
+| Command | Purpose | When to Use |
+|---------|---------|-------------|
+| `/opsx:propose` | Creare artefatti di pianificazione e modifiche | Percorso predefinito rapido (profilo `core`) |
+| `/opsx:explore` | Riflettere su idee con l'AI | Iniziare qui quando si è incerti: requisiti non chiari, indagine, confronto delle opzioni |
+| `/opsx:new` | Avviare uno scheletro di modifica (scaffold) | Modalità estesa, controllo esplicito degli artefatti |
+| `/opsx:continue` | Creare il prossimo artefatto | Modalità estesa, creazione di artefatti passo dopo passo |
+| `/opsx:ff` | Creare tutti gli artefatti di pianificazione | Modalità estesa, ambito chiaro |
+| `/opsx:apply` | Implementare i compiti (task) | Pronto a scrivere codice |
+| `/opsx:verify` | Validare l'implementazione | Modalità estesa, prima dell'archiviazione |
+| `/opsx:sync` | Unire le specifiche del delta (delta specs) | Modalità estesa, opzionale |
+| `/opsx:archive` | Completare la modifica | Tutto il lavoro è finito |
+| `/opsx:bulk-archive` | Archiviare modifiche multiple | Modalità estesa, lavoro parallelo |
 
 ## Prossimi Passi
 
-- [Comandi](commands.md) - Riferimento completo ai comandi con opzioni
-- [Concetti](concepts.md) - Approfondimento su specifiche, artefatti e schemi
-- [Personalizzazione](customization.md) - Creare flussi di lavoro personalizzati
+- [Commands](commands.md) - Riferimento completo dei comandi e delle opzioni
+- [Concepts](concepts.md) - Approfondimento delle specifiche (specs), degli artefatti e degli schemi
+- [Customization](customization.md) - Creare flussi di lavoro personalizzati

@@ -1,31 +1,31 @@
 # 개념
 
-이 가이드에서는 OpenSpec의 핵심 개념과 그것들이 어떻게 조화를 이루는지 설명합니다. 실용적인 사용 방법은 [시작하기](getting-started.md) 및 [워크플로우](workflows.md)를 참조하세요.
+이 가이드는 OpenSpec의 핵심 아이디어와 그것들이 어떻게 상호 작용하는지를 설명합니다. 실제 사용법에 대해서는 [Getting Started](getting-started.md) 및 [Workflows](workflows.md)를 참조하십시오.
 
 ## 철학
 
 OpenSpec은 네 가지 원칙을 기반으로 구축되었습니다:
 
 ```
-fluid not rigid         — 단계적 게이트 없음, 의미 있는 작업 수행
-iterative not waterfall — 구축하면서 배우고, 진행하면서 개선
-easy not complex        — 가벼운 설정, 최소한의 절차
-brownfield-first        — 신규 개발뿐만 아니라 기존 코드베이스와 작동
+fluid not rigid         — 단계별 게이트(phase gates) 없이, 의미 있는 작업에 집중합니다
+iterative not waterfall — 구축하면서 배우고, 지속적으로 개선합니다
+easy not complex        — 가벼운 설정, 최소한의 형식 절차(ceremony)
+brownfield-first        — 그린필드(greenfield)뿐만 아니라 기존 시스템과 함께 작동합니다
 ```
 
-### 이러한 원칙들이 중요한 이유
+### 이러한 원칙이 중요한 이유
 
-**유연하지만 경직되지 않습니다.** 기존의 명세 시스템은 여러분을 특정 단계에 고정합니다: 먼저 계획하고, 그 다음 구현하고, 그러면 끝입니다. OpenSpec은 더 유연합니다 — 작업에 의미 있는 순서대로 아티팩트를 생성할 수 있습니다.
+**유연함이지 경직적이지 않음.** 기존 사양 시스템은 단계를 강제합니다. 즉, 먼저 계획하고, 그다음 구현하고, 그리고 끝내는 식입니다. OpenSpec은 더 유연하여, 작업에 의미 있는 순서대로 아티팩트(artifacts)를 생성할 수 있습니다.
 
-**폭포수 모델이 아닌 반복적 접근.** 요구사항은 변합니다. 이해의 깊이는 커집니다. 처음에는 좋은 접근 방식처럼 보였던 것이 코드베이스를 본 후에는 유지되지 않을 수 있습니다. OpenSpec은 이 현실을 수용합니다.
+**반복적이지 폭포수 모델이 아님.** 요구사항은 변합니다. 이해는 심화됩니다. 처음에 좋은 접근 방식처럼 보였던 것도 코드베이스를 본 후에 유효하지 않을 수 있습니다. OpenSpec은 이러한 현실을 받아들입니다.
 
-**복잡하지 않고 쉽습니다.** 일부 명세 프레임워크는 광범위한 설정, 경직된 형식 또는 무거운 프로세스를 필요로 합니다. OpenSpec은 여러분의 방해가 되지 않습니다. 몇 초 안에 초기화하고, 즉시 작업을 시작하며, 필요할 때만 사용자 정의할 수 있습니다.
+**복잡하지 않고 쉬움.** 일부 사양 프레임워크는 광범위한 설정, 경직된 형식 또는 무거운 프로세스를 요구합니다. OpenSpec은 방해되지 않습니다. 몇 초 만에 초기화하고 즉시 작업을 시작하며, 필요한 경우에만 맞춤 설정(customize)할 수 있습니다.
 
-**기존 시스템 우선 접근.** 대부분의 소프트웨어 작업은 처음부터 만드는 것이 아닙니다 — 기존 시스템을 수정하는 것입니다. OpenSpec의 델타 기반 접근 방식은 새로운 시스템을 설명하는 것뿐만 아니라 기존 동작의 변경사항을 쉽게 명세할 수 있게 합니다.
+**기존 코드베이스 우선.** 대부분의 소프트웨어 작업은 처음부터 구축하는 것이 아니라 기존 시스템을 수정하는 것입니다. OpenSpec의 delta-based 접근 방식은 새로운 시스템을 설명하는 것뿐만 아니라 기존 동작에 대한 변경 사항을 지정하는 것을 쉽게 만듭니다.
 
-## 전체 구조
+## 개요 (The Big Picture)
 
-OpenSpec는 작업을 두 가지 주요 영역으로 구성합니다:
+OpenSpec은 작업을 두 가지 주요 영역으로 구성합니다:
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -34,519 +34,377 @@ OpenSpec는 작업을 두 가지 주요 영역으로 구성합니다:
 │   ┌─────────────────────┐      ┌───────────────────────────────┐   │
 │   │       specs/        │      │         changes/              │   │
 │   │                     │      │                               │   │
-│   │  원본 소스          │◄─────│  제안된 수정 사항             │   │
-│   │  시스템의 현재       │ merge│  각 변경 = 하나의 폴더       │   │
-│   │  동작 방식          │      │  아티팩트 + 델타 포함         │   │
+│   │  Source of truth    │◄─────│  Proposed modifications       │   │
+│   │  How your system    │ merge│  Each change = one folder     │   │
+│   │  currently works    │      │  Contains artifacts + deltas  │   │
 │   │                     │      │                               │   │
 │   └─────────────────────┘      └───────────────────────────────┘   │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs**는 원본 소스입니다 — 시스템의 현재 동작 방식을 설명합니다.
+**Specs**는 진실의 원천(source of truth)입니다. 시스템이 현재 어떻게 작동하는지를 설명합니다.
 
-**Changes**는 제안된 수정 사항입니다 — 병합할 준비가 될 때까지 별도의 폴더에 보관됩니다.
+**Changes**는 제안된 수정 사항이며, 병합할 준비가 될 때까지 별도의 폴더에 보관됩니다.
 
-이 분리가 핵심입니다. 충돌 없이 여러 변경 사항을 병렬로 작업할 수 있습니다. 메인 specs에 영향을 미치기 전에 변경 사항을 검토할 수 있습니다. 그리고 변경 사항을 아카이브하면 델타가 원본 소스에 깔끔하게 병합됩니다.
+이러한 분리는 핵심적입니다. 충돌 없이 여러 변경 사항을 동시에 작업할 수 있습니다. 메인 스펙에 영향을 미치기 전에 변경 사항을 검토할 수 있습니다. 그리고 변경 사항을 아카이브(archive)하면 그 변화분(deltas)이 진실의 원천으로 깔끔하게 병합됩니다.
 
-## 조정 워크스페이스
+## Specs (스펙)
 
-워크스페이스 지원은 베타 단계입니다. 아래의 로컬 뷰 모델이 현재 방향이지만, 외부 자동화, 통합, 장기 워크플로우는 명령 동작, 상태 파일, JSON 출력을 여전히 진화 중인 것으로 간주해야 합니다.
-
-아래 명령어는 연결된 리포 또는 폴더에 대한 로컬 뷰를 열기 위한 첫 번째 설정 흐름을 제공합니다.
-
-리포 로컬 OpenSpec 프로젝트는 하나의 리포가 계획, 구현, 아카이브 흐름을 소유할 때 적절한 기본값입니다. 일부 작업은 여러 리포 또는 폴더에 걸쳐 있습니다. 이러한 경우를 위해 OpenSpec 조정 워크스페이스는 연결된 경로, 오프너 상태, 에이전트 설정을 함께 유지하는 머신 로컬 뷰입니다.
-
-워크스페이스의 개념 모델은 다음과 같습니다:
-
-```text
-workspace     = 컨텍스트 스토어, 이니셔티브, 리포, 폴더에 대한 프라이빗 로컬 뷰
-context store = 영구 공유 컨텍스트 컨테이너
-initiative    = 컨텍스트 스토어 내의 영구 조정 컨텍스트
-link          = 워크스페이스가 로컬에서 해석할 수 있는 리포 또는 폴더의 안정적인 이름
-change        = 계획된 하나의 작업 단위; 구현은 소유 리포에 속함
-```
-
-워크스페이스는 리포 로컬 프로젝트와 다른 구조를 가집니다:
-
-```text
-getGlobalDataDir()/workspaces/<workspace-name>/
-├── workspace.yaml                 # 프라이빗 로컬 뷰 레코드
-├── AGENTS.md                      # 생성된 런타임 가이드
-└── <workspace-name>.code-workspace # 생성된 에디터 워크스페이스 파일
-```
-
-리포 로컬 OpenSpec 상태는 기존 구조를 유지합니다:
-
-```text
-repo-root/
-└── openspec/
-    ├── specs/
-    └── changes/
-```
-
-이 구분이 중요합니다. 워크스페이스 폴더는 연결된 리포 또는 폴더를 열고 검사하기 위한 로컬 조정 표면입니다. 각 리포의 `openspec/` 디렉터리는 리포 소유 specs, 리포 로컬 변경 사항, 구현 계획의 본거지로 남습니다. 사용자는 워크스페이스 폴더 내에서 리포 로컬 `openspec init`을 실행할 필요가 없습니다.
-
-안정적인 링크 이름은 워크스페이스가 리포 및 폴더를 참조하는 방식입니다. 프라이빗 워크스페이스 레코드는 `api`, `web`, `checkout`과 같은 이름을 유지하고 이를 이 런타임의 로컬 경로에 매핑합니다.
-
-```yaml
-# workspace.yaml
-version: 1
-name: platform
-context: null
-links:
-  api: /repos/api
-  web: /repos/web
-```
-
-워크스페이스가 이니셔티브를 열면 `context`는 선택된 컨텍스트 스토어 바인딩과 이니셔티브 ID를 기록합니다. 레지스트리로 선택된 스토어는 ID로 이식성을 유지합니다; 경로로 선택된 스토어는 `workspace.yaml`이 프라이빗 로컬 상태이므로 의도적으로 런타임 로컬 경로를 보존합니다.
-
-```yaml
-context:
-  kind: initiative
-  store:
-    id: platform
-    selector:
-      kind: registry
-      id: platform
-  initiative:
-    id: billing-launch
-```
-
-연결된 경로는 전체 리포, 대형 모노레포 내부의 폴더, 또는 기타 기존 폴더일 수 있습니다. 워크스페이스 계획에 참여하기 전에 리포 로컬 `openspec/` 상태가 필요하지 않습니다. 이후 구현, 검증, 아카이브 워크플로우에는 더 많은 리포 준비가 필요할 수 있지만, 계획 가시성은 링크부터 시작됩니다.
-
-```text
-multi-repo:
-  api      -> /repos/api
-  web      -> /repos/web
-
-large monorepo:
-  billing  -> /repos/platform/services/billing
-  checkout -> /repos/platform/apps/checkout
-```
-
-관리되는 워크스페이스는 표준 OpenSpec 데이터 디렉터리 아래에 있습니다:
-
-```text
-getGlobalDataDir()/workspaces
-```
-
-이는 `XDG_DATA_HOME`이 설정된 경우 `$XDG_DATA_HOME/openspec/workspaces`, Unix 스타일 폴백 시 `~/.local/share/openspec/workspaces`, 네이티브 Windows 폴백 시 `%LOCALAPPDATA%\openspec\workspaces`를 의미합니다. 네이티브 Windows 셸, PowerShell, WSL2 각각은 OpenSpec을 실행하는 런타임의 경로 문자열을 유지합니다. 이 기반은 `D:\repo`, `/mnt/d/repo`, UNC WSL 경로 간 변환을 지원하지 않습니다.
-
-OpenSpec은 이전 베타 워크스페이스 루트를 호환성 입력으로 계속 읽을 수 있지만, 관리되는 워크스페이스는 이제 위의 루트 `workspace.yaml` 레코드를 사용합니다. 워크스페이스 폴더는 자체 프라이빗 로컬 뷰에 대한 권위를 유지합니다.
-
-워크스페이스 가시성은 변경 커밋이 아닙니다. OpenSpec이 관련 리포 또는 폴더를 인식해야 할 때 워크스페이스를 설정하세요; 기능 수정, 수정, 프로젝트 또는 기타 작업을 계획할 준비가 되면 나중에 변경 사항을 생성하세요.
-
-유용한 명령어:
-
-```bash
-# 안내 설정
-openspec workspace setup
-
-# 자동화 친화적 설정
-openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
-
-# 로컬 레지스트리에서 알려진 워크스페이스 확인
-openspec workspace list
-openspec workspace ls
-
-# 선택된 워크스페이스의 링크 추가 또는 수정
-openspec workspace link /repos/api
-openspec workspace link api-service /repos/api
-openspec workspace relink api-service /new/path/to/api
-
-# 이 머신이 해석할 수 있는 것 확인
-openspec workspace doctor
-openspec workspace doctor --workspace platform
-
-# 워크스페이스 로컬 가이드 및 에이전트 스킬 새로고침
-openspec workspace update
-openspec workspace update --workspace platform --tools codex,claude
-
-# 연결된 작업 세트 열기
-openspec workspace open
-openspec workspace open platform --agent github-copilot
-openspec workspace open --editor
-
-# 이니셔티브를 로컬 워크스페이스 뷰로 열기
-openspec workspace open --initiative billing-launch --store platform
-openspec workspace open --initiative billing-launch --store-path /repos/platform-context
-```
-
-`workspace setup`은 항상 표준 워크스페이스 위치에 워크스페이스를 생성하고, 로컬 레지스트리에 기록하며, 워크스페이스 위치를 표시하고, 최소 하나의 연결된 리포 또는 폴더를 요구합니다. 대화형 설정은 선호하는 오프너를 묻고 선택된 에이전트에 대해 OpenSpec 스킬을 설치할 수 있습니다. 비대화형 설정은 `--opener codex-cli`, `--opener claude`, `--opener github-copilot` 또는 `--opener editor`가 제공될 때만 하나를 저장합니다.
-
-워크스페이스 스킬은 워크스페이스 루트에만 설치됩니다. 활성 글로벌 프로필이 생성되는 워크플로우 스킬을 선택합니다; `--tools`는 스킬을 받을 에이전트를 선택합니다. 워크스페이스 설정 및 업데이트는 글로벌 전달에 명령어가 포함되어 있더라도 슬래시 명령 파일을 생성하지 않습니다. `openspec workspace update`를 실행하여 워크스페이스 로컬 가이드를 새로고침하고, 연결된 리포 또는 폴더를 편집하지 않고 관리되는 워크스페이스 로컬 스킬 디렉터리를 추가, 새로고침 또는 제거하세요.
-
-OpenSpec은 또한 루트 워크스페이스 열기 파일도 유지합니다: `AGENTS.md`의 OpenSpec 관리 가이드 블록과 VS Code 및 GitHub Copilot-in-VS-Code 열기를 위한 머신 로컬 `<workspace-name>.code-workspace` 파일입니다. 관리되는 워크스페이스는 리포가 아니므로, OpenSpec은 기본 워크스페이스 `.gitignore` 또는 기본 워크스페이스 수준 `changes/` 디렉터리를 생성하지 않습니다.
-
-유지되는 VS Code 워크스페이스는 유효한 연결된 리포 또는 폴더를 먼저 나열하고, 그 다음 연결 시 이니셔티브 컨텍스트를, 그 다음 OpenSpec 워크스페이스 파일을 나열합니다. VS Code는 이러한 항목들을 멀티 루트 워크스페이스로 표시합니다.
-
-`workspace open`은 해당 세션에 `--agent <tool>` 또는 `--editor`가 전달되지 않는 한 저장된 선호 오프너로 연결된 작업 세트를 엽니다. 두 오프너 오버라이드를 모두 전달하면 오류입니다. 루트 워크스페이스 열기는 연결된 리포와 폴더를 탐색 및 컨텍스트에 가시적으로 만듭니다; 구현은 사용자가 명시적으로 구현 작업을 요청한 후에 시작됩니다.
-
-`workspace link`와 `workspace relink`는 기존 폴더만 기록합니다; 연결된 리포 또는 폴더를 생성, 복사, 이동, 초기화 또는 편집하지 않습니다. 성공적인 링크 또는 리링크 후, OpenSpec은 관리되는 가이드 및 VS Code 워크스페이스 파일을 새로고침합니다.
-
-하나의 워크스페이스가 필요한 워크스페이스 명령어는 `--workspace <name>`을 사용하여 어디에서든 실행할 수 있습니다. 워크스페이스 폴더 또는 하위 디렉터리 내에서 실행하면 OpenSpec은 해당 현재 워크스페이스를 사용합니다. 여러 알려진 워크스페이스를 사용할 수 있고 `--workspace <name>`을 전달하지 않으면, 대화형 명령어는 선택기를 표시합니다; `--json` 및 `--no-interactive`는 프롬프트 대신 구조화된 상태 오류로 실패합니다.
-
-직접 워크스페이스 명령어는 스크립트용 JSON 출력을 지원합니다. JSON 응답은 기본 데이터를 `workspace`, `workspaces` 또는 `link` 객체에 유지하고 경고 또는 오류를 `status` 배열에 보고합니다. 정상 객체는 `status: []`를 사용합니다.
-
-## 스펙
-
-스페ック은 구조화된 요구사항과 시나리오를 사용하여 시스템의 동작을 설명합니다.
+Specs는 구조화된 요구사항과 시나리오를 사용하여 시스템의 동작 방식을 설명합니다.
 
 ### 구조
 
 ```
 openspec/specs/
 ├── auth/
-│   └── spec.md           # 인증 동작
+│   └── spec.md           # 인증(Authentication) 동작
 ├── payments/
-│   └── spec.md           # 결제 처리
+│   └── spec.md           # 결제 처리(Payment processing)
 ├── notifications/
-│   └── spec.md           # 알림 시스템
+│   └── spec.md           # 알림 시스템(Notification system)
 └── ui/
-    └── spec.md           # UI 동작 및 테마
+    └── spec.md           # UI 동작 및 테마(Theme)
 ```
 
-스페ック을 도메인별로 정리하세요 — 시스템에 의미 있는 논리적 그룹화입니다. 일반적인 패턴:
+스펙은 도메인별로 구성합니다. 즉, 시스템에 의미가 있는 논리적 그룹화입니다. 일반적인 패턴:
 
 - **기능 영역별**: `auth/`, `payments/`, `search/`
-- **구성요소별**: `api/`, `frontend/`, `workers/`
-- **제한된 컨텍스트별**: `ordering/`, `fulfillment/`, `inventory/`
+- **컴포넌트별**: `api/`, `frontend/`, `workers/`
+- **경계 컨텍스트(Bounded context)별**: `ordering/`, `fulfillment/`, `inventory/`
 
-### 스펙 형식
+### 스펙 형식 (Spec Format)
 
-스페ック은 요구사항을 포함하며, 각 요구사항에는 시나리오가 있습니다:
+스펙은 요구사항을 포함하며, 각 요구사항에는 시나리오가 있습니다:
 
 ```markdown
-# 인증 명세서
+# 인증 스펙 (Auth Specification)
 
-## 목적
-애플리케이션을 위한 인증 및 세션 관리.
+## 목적 (Purpose)
+애플리케이션의 인증 및 세션 관리.
+
+## 요구사항 (Requirements)
+
+### 요구사항: 사용자 인증 (User Authentication)
+시스템은 성공적인 로그인 시 JWT 토큰을 발급해야 합니다(SHALL).
+
+#### 시나리오: 유효한 자격 증명 (Valid credentials)
+- GIVEN 유효한 자격 증명을 가진 사용자
+- WHEN 사용자가 로그인 양식을 제출하면
+- THEN JWT 토큰이 반환되고
+- AND 사용자는 대시보드로 리디렉션됩니다.
+
+#### 시나리오: 유효하지 않은 자격 증명 (Invalid credentials)
+- GIVEN 유효하지 않은 자격 증명
+- WHEN 사용자가 로그인 양식을 제출하면
+- THEN 오류 메시지가 표시되고
+- AND 토큰이 발급되지 않습니다.
+
+### 요구사항: 세션 만료 (Session Expiration)
+시스템은 30분간 활동이 없을 경우 세션을 만료시켜야 합니다(MUST).
+
+#### 시나리오: 유휴 시간 초과 (Idle timeout)
+- GIVEN 인증된 세션
+- WHEN 30분이 경과하고 활동이 없으면
+- THEN 세션이 무효화되고
+- AND 사용자는 재인증명(re-authenticate)해야 합니다.
 ```
 
-## 요구 사항
-
-### 요구 사항: 사용자 인증
-시스템은 로그인 성공 시 JWT 토큰을 발행해야 합니다.
-
-#### 시나리오: 유효한 자격 증명
-- GIVEN 유효한 자격 증명을 가진 사용자가 있을 때
-- WHEN 사용자가 로그인 양식을 제출하면
-- THEN JWT 토큰이 반환됩니다
-- AND 사용자가 대시보드로 리디렉션됩니다
-
-#### 시나리오: 유효하지 않은 자격 증명
-- GIVEN 유효하지 않은 자격 증명이 있을 때
-- WHEN 사용자가 로그인 양식을 제출하면
-- THEN 오류 메시지가 표시됩니다
-- AND 토큰은 발행되지 않습니다
-
-### 요구 사항: 세션 만료
-시스템은 30분 동안 활동이 없으면 세션을 만료시켜야 합니다.
-
-#### 시나리오: 유휴 타임아웃
-- GIVEN 인증된 세션이 있을 때
-- WHEN 활동 없이 30분이 경과하면
-- THEN 세션이 무효화됩니다
-- AND 사용자는 재인증해야 합니다
-```
-
-**핵심 요소:**
+**주요 요소:**
 
 | 요소 | 목적 |
 |---------|---------|
-| `## Purpose` | 이 명세서의 도메인에 대한 상위 수준 설명 |
-| `### Requirement:` | 시스템이 가져야 하는 특정 동작 |
-| `#### Scenario:` | 요구 사항이 실제로 적용되는 구체적인 예시 |
-| SHALL/MUST/SHOULD | 요구 사항 강도를 나타내는 RFC 2119 키워드 |
+| `## Purpose` | 이 스펙의 도메인에 대한 고수준 설명 |
+| `### Requirement:` | 시스템이 가져야 할 특정 동작 |
+| `#### Scenario:` | 요구사항을 구체적으로 보여주는 예시 |
+| SHALL/MUST/SHOULD | 요구사항의 강도를 나타내는 RFC 2119 키워드 |
 
-### 명세서를 이런 구조로 작성하는 이유
+### 왜 이런 방식으로 스펙을 구성하는가 (Why Structure Specs This Way)
 
-**요구 사항은 "무엇을"** — 구현을 지정하지 않고 시스템이 무엇을 해야 하는지를 명시합니다.
+**요구사항은 "무엇(what)"입니다** — 구현 방식을 지정하지 않고 시스템이 무엇을 해야 하는지를 명시합니다.
 
-**시나리오는 "언제"** — 검증할 수 있는 구체적인 예시를 제공합니다. 좋은 시나리오는:
-- 테스트 가능합니다 (자동화된 테스트를 작성할 수 있음)
-- 해피 패스와 엣지 케이스를 모두 다룹니다
-- Given/When/Then 또는 유사한 구조화된 형식을 사용합니다
+**시나리오는 "언제(when)"입니다** — 검증할 수 있는 구체적인 예시를 제공합니다. 좋은 시나리오의 특징:
+- 테스트 가능함 (자동화된 테스트를 작성할 수 있음)
+- 행복한 경로(happy path)와 엣지 케이스(edge cases)를 모두 다룸
+- Given/When/Then 또는 유사한 구조화된 형식을 사용
 
 **RFC 2119 키워드** (SHALL, MUST, SHOULD, MAY)는 의도를 전달합니다:
-- **MUST/SHALL** — 절대적 요구 사항
-- **SHOULD** — 권장되지만 예외가 있음
+- **MUST/SHALL** — 절대적인 요구사항
+- **SHOULD** — 권장 사항이지만 예외가 존재함
 - **MAY** — 선택 사항
 
-### 명세서가 무엇이고 무엇이 아닌가
+### 스펙이란 무엇인가 (그리고 무엇이 아닌가) (What a Spec Is (and Is Not))
 
-명세서는 **행위 계약**이지, 구현 계획이 아닙니다.
+스펙은 구현 계획이 아니라 **행동 규약(behavior contract)**입니다.
 
-좋은 명세서 내용:
+좋은 스펙 내용:
 - 사용자 또는 다운스트림 시스템이 의존하는 관찰 가능한 동작
 - 입력, 출력 및 오류 조건
-- 외부 제약 조건 (보안, 개인정보 보호, 신뢰성, 호환성)
+- 외부 제약 사항 (보안, 개인 정보 보호, 신뢰성, 호환성)
 - 테스트하거나 명시적으로 검증할 수 있는 시나리오
 
-명세서에서 피해야 할 것:
+스펙에서 피해야 할 내용:
 - 내부 클래스/함수 이름
 - 라이브러리 또는 프레임워크 선택
-- 단계별 구현 세부 정보
-- 상세 실행 계획 (해당 내용은 `design.md` 또는 `tasks.md`에 속함)
+- 단계별 구현 세부 사항
+- 상세 실행 계획 (이것들은 `design.md` 또는 `tasks.md`에 속합니다)
 
 빠른 테스트:
-- 구현이 변경되어도 외부적으로 보이는 동작이 바뀌지 않는다면, 그것은 아마 명세서에 속하지 않을 것입니다.
+- 만약 구현이 외부적으로 보이는 동작을 변경하지 않고도 바뀔 수 있다면, 그것은 스펙에 포함되지 않는 것이 좋습니다.
 
-### 가볍게 유지: 점진적 엄격성
+### 가볍게 유지하기: 점진적 엄격성 (Progressive Rigor)
 
-OpenSpec은 관료주의를 피하려고 합니다. 변경 사항을 검증 가능하게 만들 수 있는 가장 가벼운 수준을 사용하세요.
+OpenSpec은 관료주의를 피하는 것을 목표로 합니다. 변화가 검증 가능하도록 만드는 가장 가벼운 수준을 사용하십시오.
 
-**라이트 명세서 (기본):**
-- 짧은 동작 중심 요구 사항
-- 명확한 범위와 비목표
-- 구체적인 수용 검사 항목 몇 가지
+**라이트 스펙 (Lite spec, 기본값):**
+- 짧고 동작 중심적인 요구사항
+- 명확한 범위 및 비목표(non-goals) 설정
+- 몇 가지 구체적인 승인 체크리스트
 
-**전체 명세서 (더 높은 위험도의 경우):**
-- 크로스 팀 또는 크로스 리포 변경
-- API/계약 변경, 마이그레이션, 보안/개인정보 보호 우려 사항
-- 모호성이 비용이 많이 드는 재작업을 초래할 수 있는 변경
+**풀 스펙 (Full spec, 고위험 시):**
+- 팀 간 또는 리포지토리 간의 변경 사항
+- API/계약 변경, 마이그레이션, 보안/개인 정보 보호 문제
+- 모호성이 비싼 재작업을 유발할 가능성이 있는 변경 사항
 
-대부분의 변경은 라이트 모드를 유지해야 합니다.
+대부분의 변경 사항은 라이트 모드에 머물러야 합니다.
 
-### 인간 + 에이전트 협업
+### 인간과 에이전트의 협업 (Human + Agent Collaboration)
 
-많은 팀에서, 인간이 탐색하고 에이전트가 아티팩트를 초안 작성합니다. 의도된 루프는:
+많은 팀에서 인간이 탐색하고 에이전트가 산출물을 초안 작성합니다. 의도된 순서는 다음과 같습니다:
 
-1. 인간이 의도, 맥락 및 제약 조건을 제공합니다.
-2. 에이전트가 이를 동작 중심 요구 사항과 시나리오로 변환합니다.
-3. 에이전트는 구현 세부 정보를 `design.md`와 `tasks.md`에 유지하고, `spec.md`에는 넣지 않습니다.
-4. 검증이 구현 전에 구조와 명확성을 확인합니다.
+1. 인간이 의도, 컨텍스트 및 제약 조건을 제공합니다.
+2. 에이전트가 이를 동작 중심적인 요구사항과 시나리오로 변환합니다.
+3. 에이전트는 구현 세부 사항을 `design.md`와 `tasks.md`에 보관하고 `spec.md`에는 넣지 않습니다.
+4. 검증(Validation)은 구현 전에 구조와 명확성을 확인합니다.
 
-이를 통해 명세서는 인간에게는 읽기 쉽고 에이전트에게는 일관성을 유지합니다.
+이를 통해 스펙은 인간에게 읽기 쉽고 에이전트에게 일관성 있게 유지됩니다.
 
-## 변경 사항
+## Changes (변경 사항)
 
-변경 사항은 이해하고 구현하는 데 필요한 모든 것이 포함된 폴더로 제안된 시스템 수정 사항입니다.
+Changes는 시스템에 대한 제안된 수정 사항이며, 이를 이해하고 구현하는 데 필요한 모든 것을 담은 폴더로 패키징됩니다.
 
-### 변경 구조
+### 변경 사항 구조 (Change Structure)
 
 ```
 openspec/changes/add-dark-mode/
-├── proposal.md           # 이유와 내용
-├── design.md             # 방법 (기술적 접근)
+├── proposal.md           # 이유와 내용 (Why and what)
+├── design.md             # 방법 (How, 기술적 접근 방식)
 ├── tasks.md              # 구현 체크리스트
 ├── .openspec.yaml        # 변경 메타데이터 (선택 사항)
-└── specs/                # 델타 명세서
+└── specs/                # 변화분 스펙 (Delta specs)
     └── ui/
-        └── spec.md       # ui/spec.md에서 변경되는 내용
+        └── spec.md       # ui/spec.md에 어떤 것이 바뀌는지
 ```
 
-각 변경은 자체 포함됩니다. 다음을 포함합니다:
-- **아티팩트** — 의도, 설계 및 작업을 캡처하는 문서
-- **델타 명세서** — 추가, 수정 또는 제거되는 내용에 대한 명세서
-- **메타데이터** — 이 특정 변경에 대한 선택적 구성
+각 변경 사항은 독립적입니다. 다음을 포함합니다:
+- **Artifacts**: 의도, 설계 및 작업을 담고 있는 문서
+- **Delta specs**: 추가, 수정 또는 제거되는 항목에 대한 스펙
+- **Metadata**: 이 특정 변경 사항에 대한 선택적 구성 정보
 
-### 변경 사항이 폴더인 이유
+### 왜 Changes가 폴더인가 (Why Changes Are Folders)
 
-변경 사항을 폴더로 패키징하면 여러 가지 이점이 있습니다:
+변경 사항을 폴더로 패키징하는 것은 여러 가지 이점을 제공합니다:
 
-1. **모든 것이 함께 있습니다.** 제안서, 설계, 작업 및 명세서가 한 곳에 있습니다. 다른 위치를 찾아다닐 필요가 없습니다.
+1. **모든 것을 한곳에.** 제안서, 설계, 작업 및 스펙이 한 곳에 있습니다. 다른 장소를 찾아다닐 필요가 없습니다.
 
-2. **병렬 작업.** 여러 변경 사항이 충돌 없이 동시에 존재할 수 있습니다. `add-dark-mode` 작업을 진행하는 동안 `fix-auth-bug`도 진행할 수 있습니다.
+2. **병렬 작업.** 여러 변경 사항이 충돌 없이 동시에 존재할 수 있습니다. `add-dark-mode`를 작업하는 동안 `fix-auth-bug`도 진행 중일 수 있습니다.
 
-3. **깔끔한 기록.** 아카이브될 때, 변경 사항은 전체 맥락과 함께 `changes-archive/`로 이동합니다. 무엇이 바뀌었는지뿐만 아니라 왜 바뀌었는지 이해할 수 있습니다.
+3. **깔끔한 히스토리.** 아카이브될 때, 변경 사항은 전체 컨텍스트가 보존된 채로 `changes/archive/`로 이동합니다. 무엇이 바뀌었는지뿐만 아니라 왜 바뀌었는지를 되돌아볼 수 있습니다.
 
-4. **리뷰 친화적.** 변경 폴더는 리뷰하기 쉽습니다 — 열고, 제안서를 읽고, 설계를 확인하고, 명세서 델타를 확인하세요.
+4. **검토에 용이함.** 변경 폴더는 검토하기 쉽습니다. 열어서 제안서를 읽고, 설계를 확인하고, 스펙 변화분(delta)을 볼 수 있습니다.
 
-## 아티팩트
+## Artifacts (산출물)
 
-아티팩트는 작업을 안내하는 변경 내의 문서입니다.
+Artifacts는 작업을 안내하는 변경 사항 내의 문서들입니다.
 
-### 아티팩트 흐름
+### 산출물의 흐름 (The Artifact Flow)
 
 ```
 proposal ──────► specs ──────► design ──────► tasks ──────► implement
     │               │             │              │
-   이유            무엇을         어떻게          수행할
- + 범위          변경하는가      접근          단계
+   why            what           how          steps
+ + scope        changes       approach      to take
 ```
 
-아티팩트는 서로 위에 구축됩니다. 각 아티팩트는 다음에 대한 맥락을 제공합니다.
+산출물들은 서로를 기반으로 구축됩니다. 각 산출물은 다음 단계에 대한 컨텍스트를 제공합니다.
 
-### 아티팩트 유형
+### 산출물의 유형 (Artifact Types)
 
 #### 제안서 (`proposal.md`)
 
-제안서는 높은 수준에서 **의도**, **범위** 및 **접근 방식**을 캡처합니다.
+제안서는 고수준에서 **의도(intent)**, **범위(scope)** 및 **접근 방식(approach)**을 담고 있습니다.
 
 ```markdown
-# 제안서: 다크 모드 추가
+# 제안: 다크 모드 추가 (Proposal: Add Dark Mode)
 
-## 의도
-사용자들은 야간 사용 시 눈의 피로를 줄이고 시스템 환경설정과 일치시키기 위해 다크 모드 옵션을 요청했습니다.
+## 의도 (Intent)
+사용자들은 야간 사용 시 눈의 피로를 줄이고 시스템 선호도를 맞추기 위해 다크 모드 옵션을 요청했습니다.
 
-## 범위
-범위 내:
-- 설정의 테마 토글
-- 시스템 환경설정 감지
-- localStorage에 환경설정 유지
+## 범위 (Scope)
+포함되는 사항 (In scope):
+- 설정 내 테마 토글
+- 시스템 선호도 감지
+- localStorage에 선호도 저장
 
-범위 외:
-- 맞춤 색상 테마 (향후 작업)
-- 페이지별 테마 오버라이드
+제외되는 사항 (Out of scope):
+- 사용자 지정 색상 테마 (향후 작업)
+- 페이지별 테마 재정의
 
-## 접근 방식
-상태 관리를 위해 React 컨텍스트와 함께 테마 지정을 위해 CSS 커스텀 속성을 사용합니다. 첫 로드 시 시스템 환경설정을 감지하고 수동 오버라이드를 허용합니다.
+## 접근 방식 (Approach)
+React context를 상태 관리용으로 사용하고, CSS 커스텀 속성(custom properties)을 사용하여 테밍(theming)을 구현합니다. 첫 로드 시 시스템 선호도를 감지하고 수동 오버라이드를 허용합니다.
 ```
 
-**제안서를 업데이트해야 하는 경우:**
+**제안서를 업데이트해야 할 때:**
 - 범위 변경 (축소 또는 확장)
-- 의도가 명확해짐 (문제에 대한 더 나은 이해)
-- 접근 방식이 근본적으로 전환될 때
+- 의도 명확화 (문제에 대한 더 나은 이해)
+- 접근 방식의 근본적인 변화
 
-#### 명세서 (`specs/`의 델타 명세서)
+#### Specs (스펙, `specs/` 내의 delta specs)
 
-델타 명세서는 현재 명세서에 대해 **변경되는 내용**을 설명합니다. 아래 [델타 명세서](#delta-specs)를 참조하세요.
+Delta 스펙은 현재 스펙 대비 **무엇이 바뀌는지**를 설명합니다. 아래 [Delta Specs]를 참조하십시오.
 
 #### 설계 (`design.md`)
 
-설계는 **기술적 접근 방식**과 **아키텍처 결정**을 캡처합니다.
+설계는 **기술적 접근 방식**과 **아키텍처 결정 사항**을 담고 있습니다.
 
 ````markdown
-# 설계: 다크 모드 추가
+# 설계: 다크 모드 추가 (Design: Add Dark Mode)
 
-## 기술적 접근 방식
-프롭 드릴링을 피하기 위해 React 컨텍스트를 통해 테마 상태를 관리합니다. CSS 커스텀 속성을 사용하면 클래스 토글 없이 런타임 전환이 가능합니다.
+## 기술적 접근 방식 (Technical Approach)
+프롭 드릴링(prop drilling)을 방지하기 위해 React Context를 통해 테마 상태를 관리합니다. CSS 커스텀 속성은 클래스 토글 없이 런타임 전환을 가능하게 합니다.
 
-## 아키텍처 결정
+## 아키텍처 결정 사항 (Architecture Decisions)
 
-### 결정: Redux보다 컨텍스트 사용
-테마 상태에 React 컨텍스트를 사용하는 이유:
-- 단순한 이진 상태 (라이트/다크)
-- 복잡한 상태 전환 없음
+### 결정: Redux 대신 Context 사용
+React Context를 테마 상태에 사용하는 이유:
+- 간단한 이진 상태(라이트/다크)
+- 복잡한 상태 전환이 없음
 - Redux 의존성 추가 방지
 
-### 결정: CSS 커스텀 속성
+### 결정: CSS 커스텀 속성 사용
 CSS-in-JS 대신 CSS 변수를 사용하는 이유:
-- 기존 스타일시트와 호환
+- 기존 스타일시트와 호환됨
 - 런타임 오버헤드 없음
-- 브라우저 네이티브 솔루션
+- 브라우저 기본 솔루션
 
-## 데이터 흐름
+## 데이터 흐름 (Data Flow)
 ```
-ThemeProvider (컨텍스트)
+ThemeProvider (context)
        │
        ▼
 ThemeToggle ◄──► localStorage
        │
        ▼
-CSS 변수 (:root에 적용)
+CSS Variables (applied to :root)
 ```
 
-## 파일 변경 사항
-- `src/contexts/ThemeContext.tsx` (새 파일)
-- `src/components/ThemeToggle.tsx` (새 파일)
+## 파일 변경 사항 (File Changes)
+- `src/contexts/ThemeContext.tsx` (새로 추가됨)
+- `src/components/ThemeToggle.tsx` (새로 추가됨)
 - `src/styles/globals.css` (수정됨)
 ````
 
-**설계를 업데이트해야 하는 경우:**
-- 구현에서 접근 방식이 작동하지 않는 것으로 밝혀질 때
-- 더 나은 솔루션이 발견될 때
-- 의존성 또는 제약 조건이 변경될 때
+**설계를 업데이트해야 할 때:**
+- 구현이 접근 방식대로 작동하지 않음을 발견했을 때
+- 더 나은 솔루션이 발견되었을 때
+- 의존성 또는 제약 조건이 변경되었을 때
 
-#### 작업 (`tasks.md`)
+#### 작업 사항 (`tasks.md`)
 
-작업은 **구현 체크리스트** — 체크박스가 있는 구체적인 단계입니다.
+작업 사항은 **구현 체크리스트**이며, 체크박스가 있는 구체적인 단계입니다.
 
 ```markdown
-# 작업
+# 작업 사항 (Tasks)
 
-## 1. 테마 인프라
-- [ ] 1.1 라이트/다크 상태가 있는 ThemeContext 생성
-- [ ] 1.2 색상을 위한 CSS 커스텀 속성 추가
-- [ ] 1.3 localStorage 영속성 구현
-- [ ] 1.4 시스템 환경설정 감지 추가
+## 1. 테마 인프라스트럭처
+- [ ] 1.1 light/dark 상태를 가진 ThemeContext 생성
+- [ ] 1.2 색상에 대한 CSS 커스텀 속성 추가
+- [ ] 1.3 localStorage 영속성(persistence) 구현
+- [ ] 1.4 시스템 선호도 감지 추가
 
 ## 2. UI 컴포넌트
 - [ ] 2.1 ThemeToggle 컴포넌트 생성
 - [ ] 2.2 설정 페이지에 토글 추가
-- [ ] 2.3 빠른 토글을 포함하도록 Header 업데이트
+- [ ] 2.3 빠른 토글을 포함하도록 헤더 업데이트
 
 ## 3. 스타일링
 - [ ] 3.1 다크 테마 색상 팔레트 정의
-- [ ] 3.2 CSS 변수를 사용하도록 컴포넌트 업데이트
-- [ ] 3.3 접근성을 위한 대비 비율 테스트
+- [ ] 3.2 컴포넌트를 CSS 변수 사용하도록 업데이트
+- [ ] 3.3 접근성을 위한 대비 비율(contrast ratios) 테스트
 ```
 
-**작업 모범 사례:**
-- 관련 작업을 제목 아래에 그룹화
-- 계층적 번호 매기기 사용 (1.1, 1.2 등)
-- 작업을 하나의 세션에서 완료할 수 있을 만큼 작게 유지
-- 작업을 완료할 때 체크 표시
+**작업 사항 모범 사례:**
+- 관련 작업을 헤딩 아래에 그룹화합니다.
+- 계층적 번호 매기기를 사용합니다 (1.1, 1.2 등).
+- 한 세션으로 완료할 수 있을 만큼 작게 유지합니다.
+- 완료하는 대로 체크 표시를 합니다.
 
-## 델타 명세서
+## Delta Specs (변화분 스펙)
 
-델타 명세서는 OpenSpec이 레거시 시스템(그린필드가 아닌) 개발에 작동하게 만드는 핵심 개념입니다. 전체 명세서를 다시 진술하는 대신 **변경되는 내용**을 설명합니다.
+Delta 스펙은 OpenSpec이 기존 시스템(brownfield development)에 작동하도록 만드는 핵심 개념입니다. 이는 전체 스펙을 다시 작성하는 것이 아니라 **무엇이 바뀌는지**를 설명합니다.
 
-### 형식
+### 형식 (The Format)
 
 ```markdown
-# 인증에 대한 델타
+# 인증에 대한 변화분 (Delta for Auth)
 
-## 추가된 요구 사항
+## 추가된 요구사항 (ADDED Requirements)
 
-### 요구 사항: 2단계 인증
-시스템은 TOTP 기반 2단계 인증을 지원해야 합니다.
+### 요구사항: 2단계 인증 (Two-Factor Authentication)
+시스템은 TOTP 기반의 2단계 인증을 지원해야 합니다(MUST).
 
-#### 시나리오: 2FA 등록
-- GIVEN 2FA가 활성화되지 않은 사용자가 있을 때
+#### 시나리오: 2FA 등록 (2FA enrollment)
+- GIVEN 2FA가 활성화되지 않은 사용자
 - WHEN 사용자가 설정에서 2FA를 활성화하면
-- THEN 인증 앱 설정을 위한 QR 코드가 표시됩니다
-- AND 사용자는 활성화 전에 코드로 확인해야 합니다
+- THEN 인증 앱 설정을 위한 QR 코드가 표시되고
+- AND 사용자는 활성화 전에 코드로 검증해야 합니다.
 
-#### 시나리오: 2FA 로그인
-- GIVEN 2FA가 활성화된 사용자가 있을 때
+#### 시나리오: 2FA 로그인 (2FA login)
+- GIVEN 2FA가 활성화된 사용자
 - WHEN 사용자가 유효한 자격 증명을 제출하면
-- THEN OTP 챌린지가 제시됩니다
-- AND 로그인은 유효한 OTP 후에만 완료됩니다
+- THEN OTP(One Time Password) 도전 과제가 제시되고
+- AND 유효한 OTP를 통해서만 로그인이 완료됩니다.
 
-## 수정된 요구 사항
+## 수정된 요구사항 (MODIFIED Requirements)
 
-### 요구 사항: 세션 만료
-시스템은 15분 동안 활동이 없으면 세션을 만료시켜야 합니다.
-(이전: 30분)
+### 요구사항: 세션 만료 (Session Expiration)
+시스템은 15분간 활동이 없을 경우 세션을 만료시켜야 합니다(MUST).
+(기존: 30분)
 
-#### 시나리오: 유휴 타임아웃
-- GIVEN 인증된 세션이 있을 때
-- WHEN 활동 없이 15분이 경과하면
-- THEN 세션이 무효화됩니다
+#### 시나리오: 유휴 시간 초과 (Idle timeout)
+- GIVEN 인증된 세션
+- WHEN 15분이 경과하고 활동이 없으면
+- THEN 세션이 무효화됩니다.
 
-## 제거된 요구 사항
+## 제거된 요구사항 (REMOVED Requirements)
 
-### 요구 사항: 로그인 상태 유지
-(2FA로 대체되었습니다. 사용자는 각 세션마다 재인증해야 합니다.)
+### 요구사항: 나를 기억하기 (Remember Me)
+(2FA로 대체됨. 사용자는 매번 세션마다 재인증명해야 합니다.)
 ```
 
-### 델타 섹션
+### Delta 섹션 (Delta Sections)
 
 | 섹션 | 의미 | 아카이브 시 발생하는 일 |
 |---------|---------|------------------------|
-| `## ADDED Requirements` | 새로운 동작 | 메인 명세서에 추가됨 |
-| `## MODIFIED Requirements` | 변경된 동작 | 기존 요구 사항을 대체함 |
-| `## REMOVED Requirements` | 더 이상 사용되지 않는 동작 | 메인 명세서에서 삭제됨 |
+| `## ADDED Requirements` | 새로운 동작 | 메인 스펙에 추가됨 |
+| `## MODIFIED Requirements` | 변경된 동작 | 기존 요구사항을 대체함 |
+| `## REMOVED Requirements` | 폐기된 동작 | 메인 스펙에서 삭제됨 |
 
-### 전체 명세서 대신 델타를 사용하는 이유
+### 전체 스펙 대신 Delta를 사용하는 이유 (Why Deltas Instead of Full Specs)
 
-**명확성.** 델타는 정확히 무엇이 변경되는지 보여줍니다. 전체 명세서를 읽으면 현재 버전과 비교하여 정신적으로 차이를 파악해야 합니다.
+**명확성.** Delta는 정확히 무엇이 바뀌는지 보여줍니다. 전체 스펙을 읽으려면 현재 버전과 정신적으로 비교(diff)해야 합니다.
 
-**충돌 방지.** 두 변경 사항이 서로 다른 요구 사항을 수정하는 한, 같은 명세서 파일을 터치하더라도 충돌하지 않습니다.
+**충돌 방지.** 두 개의 변경 사항이 서로 다른 요구사항을 수정하는 한, 동일한 스펙 파일을 건드려도 충돌하지 않습니다.
 
-**리뷰 효율성.** 리뷰어는 변경 사항을 보지, 변경되지 않은 맥락을 보지 않습니다. 중요한 것에 집중합니다.
+**검토 효율성.** 검토자는 변하지 않은 컨텍스트가 아닌 변화된 부분만 보게 됩니다. 중요한 것에 집중합니다.
 
-**레거시 시스템 적합성.** 대부분의 작업은 기존 동작을 수정합니다. 델타는 수정을 사후 대처가 아닌 우선 처리 대상으로 만듭니다.
+**기존 시스템(Brownfield)에 적합함.** 대부분의 작업은 기존 동작을 수정하는 것입니다. Delta는 수정을 사후 대처가 아닌 핵심적인 것으로 만듭니다.
 
-## 스키마
+## Schemas
 
-스키마는 워크플로우를 위한 아티팩트 유형과 그 종속성을 정의합니다.
+스키마는 워크플로우의 아티팩트 유형과 그 종속성을 정의합니다.
 
-### 스키마 작동 방식
+### How Schemas Work
 
 ```yaml
 # openspec/schemas/spec-driven/schema.yaml
@@ -554,26 +412,26 @@ name: spec-driven
 artifacts:
   - id: proposal
     generates: proposal.md
-    requires: []              # 의존성 없음, 먼저 생성 가능
+    requires: []              # No dependencies, can create first
 
   - id: specs
     generates: specs/**/*.md
-    requires: [proposal]      # 생성 전에 proposal 필요
+    requires: [proposal]      # Needs proposal before creating
 
   - id: design
     generates: design.md
-    requires: [proposal]      # specs와 병렬로 생성 가능
+    requires: [proposal]      # Can create in parallel with specs
 
   - id: tasks
     generates: tasks.md
-    requires: [specs, design] # specs와 design 둘 다 필요
+    requires: [specs, design] # Needs both specs and design first
 ```
 
-**아티팩트는 의존성 그래프를 형성합니다:**
+**Artifacts form a dependency graph:**
 
 ```
                     proposal
-                   (루트 노드)
+                   (root node)
                        │
          ┌─────────────┴─────────────┐
          │                           │
@@ -590,33 +448,33 @@ artifacts:
                 specs, design)
 ```
 
-**의존성은 가능성을 보여주는 것이지, 반드시 거쳐야 하는 관문이 아닙니다.** 다음에 무엇을 생성해야 하는지가 아니라, 무엇을 생성할 수 있는지를 나타냅니다. 필요하지 않다면 design을 건너뛸 수 있습니다. design 전이나 후에 specs를 생성할 수 있습니다 — 둘 다 proposal에만 의존합니다.
+**Dependencies are enablers, not gates.** 종속성은 게이트가 아니라 활성화 요소입니다. 이는 다음에 무엇을 *반드시* 만들어야 하는지가 아니라 어떤 것이 생성될 수 있는지를 보여줍니다. 필요하지 않다면 디자인 단계를 건너뛸 수 있습니다. 스펙과 디자인은 모두 proposal에만 의존하므로, 디자인 이전에 또는 이후에 specs를 만들 수 있습니다.
 
-### 내장 스키마
+### Built-in Schemas
 
 **spec-driven** (기본값)
 
-스펙 주도 개발을 위한 표준 워크플로우:
+스펙 기반 개발을 위한 표준 워크플로우입니다:
 
 ```
 proposal → specs → design → tasks → implement
 ```
 
-적합한 경우: 구현 전에 스펙에 동의하고 싶은 대부분의 기능 작업.
+적합한 경우: 구현 전에 스펙에 합의하고 싶은 대부분의 기능 작업.
 
-### 커스텀 스키마
+### Custom Schemas
 
-팀의 워크플로우에 맞는 커스텀 스키마를 생성하세요:
+팀의 워크플로우에 맞는 사용자 지정 스키마를 생성하십시오:
 
 ```bash
 # 처음부터 생성
 openspec schema init research-first
 
-# 또는 기존 스키마를 포크
+# 기존 스키마 포크(fork)하기
 openspec schema fork spec-driven research-first
 ```
 
-**커스텀 스키마 예시:**
+**사용자 지정 스키마 예시:**
 
 ```yaml
 # openspec/schemas/research-first/schema.yaml
@@ -624,27 +482,27 @@ name: research-first
 artifacts:
   - id: research
     generates: research.md
-    requires: []           # 먼저 조사 수행
+    requires: []           # 먼저 리서치를 수행합니다
 
   - id: proposal
     generates: proposal.md
-    requires: [research]   # 조사를 바탕으로 제안서 작성
+    requires: [research]   # 리서치에 기반한 제안서
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # 스펙/디자인 건너뛰고 바로 작업으로
+    requires: [proposal]   # 스펙/디자인을 건너뛰고 바로 태스크로 이동
 ```
 
-커스텀 스키마 생성 및 사용에 대한 자세한 내용은 [커스터마이제이션](customization.md)을 참조하세요.
+사용자 지정 스키마를 생성하고 사용하는 방법에 대한 전체 내용은 [Customization](customization.md)을 참조하십시오.
 
-## 아카이브
+## Archive
 
-아카이빙은 변경의 델타 스펙을 메인 스펙에 병합하고, 변경 이력을 보존하여 변경을 완료합니다.
+아카이빙(Archiving)은 변경 사항의 델타 스펙을 메인 스펙에 병합하고, 해당 변경 사항을 기록으로 보존함으로써 변경을 완료하는 과정입니다.
 
-### 아카이브 시 발생하는 작업
+### What Happens When You Archive
 
 ```
-아카이브 전:
+Before archive:
 
 openspec/
 ├── specs/
@@ -653,22 +511,22 @@ openspec/
 └── changes/                         │
     └── add-2fa/                     │
         ├── proposal.md              │
-        ├── design.md                │ 병합
+        ├── design.md                │ merge
         ├── tasks.md                 │
         └── specs/                   │
             └── auth/                │
                 └── spec.md ─────────┘
 
 
-아카이브 후:
+After archive:
 
 openspec/
 ├── specs/
 │   └── auth/
-│       └── spec.md        # 이제 2FA 요구 사항 포함
+│       └── spec.md        # 이제 2FA 요구 사항을 포함합니다
 └── changes/
     └── archive/
-        └── 2025-01-24-add-2fa/    # 이력을 위해 보존됨
+        └── 2025-01-24-add-2fa/    # 기록 보존용
             ├── proposal.md
             ├── design.md
             ├── tasks.md
@@ -677,88 +535,90 @@ openspec/
                     └── spec.md
 ```
 
-### 아카이브 프로세스
+### The Archive Process
 
-1. **델타 병합.** 각 델타 스펙 섹션(추가/수정/삭제)이 해당 메인 스펙에 적용됩니다.
-2. **아카이브로 이동.** 변경 폴더는 시간순 정렬을 위해 날짜 접두어와 함께 `changes/archive/`로 이동합니다.
-3. **맥락 보존.** 모든 아티팩트는 아카이브 내에 그대로 보존됩니다. 변경이 이루어진 이유를 항상 되돌아볼 수 있습니다.
+1. **Merge deltas.** 각 델타 스펙 섹션(ADDED/MODIFIED/REMOVED)이 해당 메인 스펙에 적용됩니다.
 
-### 아카이브가 중요한 이유
+2. **Move to archive.** 변경 폴더는 연도 순서 구분을 위한 날짜 접두사를 사용하여 `changes/archive/`로 이동합니다.
 
-**깔끔한 상태.** 활성 변경(`changes/`)에는 진행 중인 작업만 표시됩니다. 완료된 작업은 비켜갑니다.
+3. **Preserve context.** 모든 아티팩트가 아카이브에 그대로 보존됩니다. 언제든지 변경이 이루어진 이유를 이해할 수 있습니다.
 
-**감사 추적.** 아카이브는 모든 변경의 전체 맥락을 보존합니다 — 무엇이 변했는지만이 아니라, 왜 했는지 설명하는 제안서, 어떻게 했는지 설명하는 디자인, 그리고 수행된 작업을 보여주는 작업 문서까지 포함합니다.
+### Why Archive Matters
 
-**스펙의 발전.** 스펙은 아카이브됨에 따라 유기적으로 성장합니다. 각 아카이브는 델타를 병합하여, 시간이 지남에 따라 포괄적인 스펙을 구축합니다.
+**Clean state.** 활성 변경 사항(`changes/`)은 진행 중인 작업만 보여줍니다. 완료된 작업은 정리되어 보이지 않게 됩니다.
 
-## 전체 통합 방식
+**Audit trail.** 아카이브는 모든 변경의 전체 맥락을 보존합니다. 단순히 무엇이 바뀌었는지뿐만 아니라, 왜 바뀌어야 하는지를 설명하는 제안서(proposal), 어떻게 해야 하는지를 설명하는 디자인(design), 그리고 수행된 작업을 보여주는 태스크(tasks)까지 모두 포함됩니다.
+
+**Spec evolution.** 스펙은 변경 사항이 아카이브될 때 유기적으로 성장합니다. 각 아카이브는 델타를 병합하여 시간이 지남에 따라 포괄적인 사양을 구축합니다.
+
+## How It All Fits Together
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │                              OPENSPEC FLOW                                   │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. 변경 시작   │  /opsx:propose (코어) 또는 /opsx:new (확장)               │
-│   │                │                                                         │
+│   │  1. START      │  /opsx:propose (core) or /opsx:new (expanded)           │
+│   │     CHANGE     │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. 아티팩트    │  /opsx:ff 또는 /opsx:continue (확장 워크플로우)             │
-│   │     생성       │  proposal → specs → design → tasks 생성                  │
-│   │                │  (스키마 의존성에 기반)                                    │
+│   │  2. CREATE     │  /opsx:ff or /opsx:continue (expanded workflow)         │
+│   │     ARTIFACTS  │  Creates proposal → specs → design → tasks              │
+│   │                │  (based on schema dependencies)                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  3. 작업       │  /opsx:apply                                            │
-│   │     구현       │  작업을 수행하고 완료 처리                                │
-│   │                │◄──── 학습하면서 아티팩트 업데이트                          │
+│   │  3. IMPLEMENT  │  /opsx:apply                                            │
+│   │     TASKS      │  Work through tasks, checking them off                  │
+│   │                │◄──── Update artifacts as you learn                      │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. 작업 검증   │  /opsx:verify (선택사항)                                 │
-│   │                │  구현이 스펙과 일치하는지 확인                             │
+│   │  4. VERIFY     │  /opsx:verify (optional)                                │
+│   │     WORK       │  Check implementation matches specs                     │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. 변경       │────►│  델타 스펙이 메인 스펙으로 병합                │    │
-│   │     아카이브    │     │  변경 폴더가 archive/로 이동                 │    │
-│   └────────────────┘     │  스펙이 이제 업데이트된 유일한 진실의 원천    │    │
+│   │  5. ARCHIVE    │────►│  Delta specs merge into main specs           │    │
+│   │     CHANGE     │     │  Change folder moves to archive/             │    │
+│   └────────────────┘     │  Specs are now the updated source of truth   │    │
 │                          └──────────────────────────────────────────────┘    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**선순환:**
+**The virtuous cycle:** (선순환)
 
-1. 스펙은 현재 동작을 설명합니다
-2. 변경은 수정 사항을 제안합니다 (델타 형태로)
-3. 구현은 변경을 실현합니다
-4. 아카이브는 델타를 스펙으로 병합합니다
-5. 스펙은 이제 새로운 동작을 설명합니다
-6. 다음 변경은 업데이트된 스펙을 기반으로 합니다
+1. Specs describe current behavior (스펙은 현재 동작을 설명합니다)
+2. Changes propose modifications (as deltas) (변경 사항이 델타로 수정 사항을 제안합니다)
+3. Implementation makes the changes real (구현이 변경 사항을 현실화합니다)
+4. Archive merges deltas into specs (아카이브가 델타를 스펙에 병합합니다)
+5. Specs now describe the new behavior (스펙은 이제 새로운 동작을 설명합니다)
+6. Next change builds on updated specs (다음 변경 사항은 업데이트된 스펙을 기반으로 합니다)
 
-## 용어집
+## Glossary
 
-| 용어 | 정의 |
-|------|------|
-| **Artifact** | 변경 내의 문서 (제안서, 디자인, 작업 또는 델타 스펙) |
-| **Archive** | 변경을 완료하고 그 델타를 메인 스펙으로 병합하는 프로세스 |
-| **Change** | 시스템에 대한 제안된 수정 사항, 아티팩트가 포함된 폴더로 패키징됨 |
-| **Delta spec** | 현재 스펙에 대한 변경 사항(추가/수정/삭제)을 설명하는 스펙 |
-| **Domain** | 스펙의 논리적 그룹 (예: `auth/`, `payments/`) |
-| **Requirement** | 시스템이 가져야 하는 구체적인 동작 |
-| **Scenario** | 요구 사항의 구체적인 예시, 일반적으로 Given/When/Then 형식 |
-| **Schema** | 아티팩트 유형과 그 의존성의 정의 |
-| **Spec** | 시스템 동작을 설명하는 명세, 요구 사항과 시나리오 포함 |
-| **Source of truth** | 현재 합의된 동작을 포함하는 `openspec/specs/` 디렉토리 |
+| Term | Definition |
+|------|------------|
+| **Artifact** | A document within a change (proposal, design, tasks, or delta specs) (변경 사항 내의 문서: 제안서, 디자인, 태스크 또는 델타 스펙) |
+| **Archive** | The process of completing a change and merging its deltas into main specs (변경을 완료하고 델타를 메인 스펙에 병합하는 과정) |
+| **Change** | A proposed modification to the system, packaged as a folder with artifacts (아티팩트가 포함된 폴더 형태로 패키징된 시스템의 제안된 수정 사항) |
+| **Delta spec** | A spec that describes changes (ADDED/MODIFIED/REMOVED) relative to current specs (현재 스펙 대비 변경 사항(추가됨/수정됨/제거됨)을 설명하는 스펙) |
+| **Domain** | A logical grouping for specs (e.g., `auth/`, `payments/`) (스펙에 대한 논리적 그룹화: 예시로 `auth/`, `payments/`) |
+| **Requirement** | A specific behavior the system must have (시스템이 가져야 하는 특정 동작) |
+| **Scenario** | A concrete example of a requirement, typically in Given/When/Then format (요구 사항의 구체적인 예시이며, 일반적으로 Given/When/Then 형식으로 작성됨) |
+| **Schema** | A definition of artifact types and their dependencies (아티팩트 유형과 그 종속성에 대한 정의) |
+| **Spec** | A specification describing system behavior, containing requirements and scenarios (요구 사항 및 시나리오를 포함하는 시스템 동작을 설명하는 사양) |
+| **Source of truth** | The `openspec/specs/` directory, containing the current agreed-upon behavior (`openspec/specs/` 디렉토리로, 현재 합의된 동작을 담고 있음) |
 
-## 다음 단계
+## Next Steps
 
-- [시작하기](getting-started.md) - 실용적인 첫 단계
-- [워크플로우](workflows.md) - 일반적인 패턴과 사용 시기
-- [명령어](commands.md) - 전체 명령어 참조
-- [커스터마이제이션](customization.md) - 커스텀 스키마 생성 및 프로젝트 구성
+- [Getting Started](getting-started.md) - 시작하기 (실질적인 첫 단계)
+- [Workflows](workflows.md) - 워크플로우 (일반적인 패턴 및 사용 시점)
+- [Commands](commands.md) - 명령어 (전체 명령어 참조)
+- [Customization](customization.md) - 사용자 지정 (사용자 지정 스키마 생성 및 프로젝트 구성)

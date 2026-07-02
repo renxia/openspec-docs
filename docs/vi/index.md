@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "Phát triển dựa trên đặc tả cho trợ lý AI"
-  tagline: Một đặc tả nhẹ để xây dựng và quản lý các dự án trợ lý AI.
+  text: "Phát triển dựa trên Đặc tả cho Trợ lý AI"
+  tagline: "Một đặc tả nhẹ để xây dựng và quản lý các dự án trợ lý AI."
   actions:
     - theme: brand
       text: Bắt đầu
@@ -14,179 +14,118 @@ hero:
       link: /
 
 features:
-  - title: Quy trình ưu tiên đặc tả
-    details: Xác định yêu cầu trước khi viết mã.
-  - title: Thiết kế bản địa cho AI
-    details: Được xây dựng cho Claude Code, Cursor, Windsurf và nhiều hơn nữa.
+  - title: Quy trình làm việc ưu tiên Đặc tả (Spec-First)
+    details: Định nghĩa yêu cầu trước khi viết mã.
+  - title: Thiết kế bản địa AI (AI-Native Design)
+    details: Được xây dựng cho Claude Code, Cursor, Windsurf và hơn thế nữa.
   - title: Đa ngôn ngữ
     details: Tài liệu có sẵn bằng nhiều ngôn ngữ.
 ---
 
+# Tài liệu OpenSpec
 
-Triết lý của chúng tôi:
+Chào mừng. Đây là trung tâm của mọi thứ về OpenSpec.
+
+OpenSpec giúp bạn và trợ lý lập trình AI của mình **thống nhất về những gì cần xây dựng trước khi bất kỳ mã nào được viết ra.** Bạn mô tả sự thay đổi, AI phác thảo một đặc tả ngắn và danh sách nhiệm vụ, cả hai cùng xem kế hoạch đó, và sau đó công việc được tiến hành. Không còn tình trạng phát hiện giữa chừng rằng AI đã tạo ra thứ sai.
+
+Nếu bạn không đọc bất cứ điều gì khác, hãy đọc hai trang này:
+
+1. [Getting Started](getting-started.md): cách cài đặt, khởi tạo và triển khai thay đổi đầu tiên của bạn.
+2. [How Commands Work](how-commands-work.md): nơi bạn thực sự gõ `/opsx:propose` (gợi ý: trong cuộc trò chuyện AI của bạn, chứ không phải trong terminal). Điều này khiến hầu hết mọi người gặp khó khăn một lần.
+
+Trang thứ hai quan trọng hơn vẻ ngoài của nó. OpenSpec có hai phần: một công cụ dòng lệnh mà bạn chạy trong terminal, và các lệnh gạch chéo (slash commands) mà bạn đưa cho trợ lý AI của mình. Việc biết cái nào là gì sẽ giúp bạn tránh được sự nhầm lẫn phổ biến nhất.
+
+> **Thói quen tốt nhất cần xây dựng đầu tiên: khi bạn không chắc chắn về thứ cần xây dựng, hãy bắt đầu với `/opsx:explore`.** Đây là một đối tác tư duy không rủi ro, nó đọc mã của bạn, cân nhắc các lựa chọn và làm sắc nét một ý tưởng mơ hồ thành một kế hoạch cụ thể trước khi bất kỳ sản phẩm hoặc mã nào tồn tại. Hướng dẫn [Explore First](explore.md) đã chứng minh điều này.
+
+## Chọn con đường của bạn
+
+**Tôi hoàn toàn mới.** Bắt đầu với [Getting Started](getting-started.md), sau đó xem lướt qua [Core Concepts at a Glance](overview.md). Khi có điều gì đó cảm thấy bí ẩn, [FAQ](faq.md) và [Glossary](glossary.md) ở gần đó.
+
+**Tôi có một vấn đề nhưng chưa có kế hoạch.** Đây là trường hợp phổ biến, và nó có câu trả lời riêng: [Explore First](explore.md). Sử dụng `/opsx:explore` để suy nghĩ về nó với AI trước khi cam kết bất cứ điều gì.
+
+**Tôi có một cơ sở mã lớn đã tồn tại.** Bạn không cần tài liệu hóa tất cả chúng. [Using OpenSpec in an Existing Project](existing-projects.md) cho biết cách bắt đầu trên mã thực tế, "brownfield" mà không cố gắng giải quyết mọi thứ cùng một lúc.
+
+**Tôi chỉ muốn nó hoạt động.** [Install](installation.md), chạy `openspec init`, sau đó đọc [How Commands Work](how-commands-work.md) để lệnh gạch chéo đầu tiên của bạn được thực hiện đúng chỗ.
+
+**Tôi học qua ví dụ.** Trang [Examples & Recipes](examples.md) trình bày các thay đổi thực tế từ đầu đến cuối: một tính năng nhỏ, sửa lỗi, tái cấu trúc (refactor), và khám phá.
+
+**Tôi đang chuyển từ quy trình làm việc cũ.** [Migration Guide](migration-guide.md) giải thích những gì đã thay đổi và tại sao, đồng thời đảm bảo công việc hiện có của bạn được an toàn.
+
+**Tôi muốn điều chỉnh nó theo quy trình của nhóm mình.** [Customization](customization.md) đề cập đến cấu hình dự án, các schema tùy chỉnh và ngữ cảnh chia sẻ.
+
+**Có thứ gì đó bị hỏng.** [Troubleshooting](troubleshooting.md) tổng hợp những lỗi mà mọi người thực sự gặp phải, kèm theo cách khắc phục.
+
+## Toàn bộ bản đồ
+
+### Bắt đầu tại đây
+
+| Doc | Nội dung cung cấp |
+|-----|-------------------|
+| [Getting Started](getting-started.md) | Cài đặt, khởi tạo và chạy thay đổi đầu tiên của bạn từ đầu đến cuối |
+| [Explore First](explore.md) | Sử dụng `/opsx:explore` để suy nghĩ về một ý tưởng trước khi cam kết |
+| [How Commands Work](how-commands-work.md) | Nơi các lệnh gạch chéo được chạy, "chế độ tương tác" có nghĩa là gì, terminal so với chat |
+| [Core Concepts at a Glance](overview.md) | Toàn bộ mô hình tư duy trên một trang: đặc tả (specs), thay đổi (changes), delta, kho lưu trữ (archive) |
+| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix và cách xác minh nó đã hoạt động |
+
+### Sử dụng hàng ngày
+
+| Doc | Nội dung cung cấp |
+|-----|-------------------|
+| [Workflows](workflows.md) | Các mẫu phổ biến và khi nào nên sử dụng từng lệnh |
+| [Examples & Recipes](examples.md) | Hướng dẫn đầy đủ về các thay đổi thực tế, có thể sao chép |
+| [Using OpenSpec in an Existing Project](existing-projects.md) | Áp dụng OpenSpec trên một cơ sở mã lớn (brownfield codebase) |
+| [Editing & Iterating on a Change](editing-changes.md) | Cập nhật các sản phẩm, quay lại và hòa giải các chỉnh sửa thủ công |
+| [Commands](commands.md) | Tài liệu tham khảo cho mọi lệnh gạch chéo `/opsx:*` |
+| [CLI](cli.md) | Tài liệu tham khảo cho mọi lệnh terminal `openspec` |
+
+### Hiểu sâu về nó
+
+| Doc | Nội dung cung cấp |
+|-----|-------------------|
+| [Concepts](concepts.md) | Giải thích chi tiết về đặc tả, thay đổi, sản phẩm (artifacts), schema và kho lưu trữ |
+| [OPSX Workflow](opsx.md) | Lý do tại sao quy trình làm việc lại linh hoạt thay vì khóa theo giai đoạn, cùng với một phân tích kiến trúc chuyên sâu |
+| [Glossary](glossary.md) | Mọi thuật ngữ được định nghĩa ở một nơi |
+
+### Tùy chỉnh cho bạn
+
+| Doc | Nội dung cung cấp |
+|-----|-------------------|
+| [Customization](customization.md) | Cấu hình dự án, các schema tùy chỉnh, ngữ cảnh chia sẻ |
+| [Multi-Language](multi-language.md) | Tạo ra các sản phẩm bằng ngôn ngữ khác ngoài tiếng Anh |
+| [Supported Tools](supported-tools.md) | Hơn 25 công cụ AI mà OpenSpec tích hợp, và nơi các tệp được lưu trữ |
+
+### Khi bạn cần trợ giúp
+
+| Doc | Nội dung cung cấp |
+|-----|-------------------|
+| [FAQ](faq.md) | Các câu trả lời nhanh cho những câu hỏi mọi người thường hỏi nhất |
+| [Troubleshooting](troubleshooting.md) | Các bản sửa lỗi cụ thể cho các thất bại cụ thể |
+| [Migration Guide](migration-guide.md) | Chuyển đổi từ quy trình làm việc cũ sang OPSX |
+
+### Phối hợp giữa các repo (beta)
+
+| Doc | Nội dung cung cấp |
+|-----|-------------------|
+| [Stores: User Guide](stores-beta/user-guide.md) | Lên kế hoạch trong repo riêng khi công việc của bạn trải rộng qua nhiều repo hoặc nhóm |
+| [Agent Contract](agent-contract.md) | Các giao diện CLI có thể đọc được bằng máy mà các tác nhân (agents) điều khiển |
+
+## Phiên bản ba mươi giây
 
 ```text
-→ linh hoạt không cứng nhắc
-→ lặp đi lặp lại không theo thác nước
-→ đơn giản không phức tạp
-→ xây dựng cho dự án cũ không chỉ dự án mới
-→ có thể mở rộng từ dự án cá nhân đến doanh nghiệp
+1. Install        npm install -g @fission-ai/openspec@latest
+2. Initialize     cd your-project && openspec init
+3. Explore        (in your AI chat)  /opsx:explore           ← tùy chọn, nhưng là một thói quen tuyệt vời
+4. Propose        (in your AI chat)  /opsx:propose add-dark-mode
+5. Build          (in your AI chat)  /opsx:apply
+6. Archive        (in your AI chat)  /opsx:archive
 ```
 
-> [!TIP]
-> **Quy trình làm việc mới hiện đã có sẵn!** Chúng tôi đã xây dựng lại OpenSpec với một quy trình mới được hướng dẫn bởi các sản phẩm.
->
-> Chạy `/opsx:propose "ý tưởng của bạn"` để bắt đầu. → [Tìm hiểu thêm tại đây](opsx.md)
+Các bước 1 và 2 diễn ra trong terminal của bạn. Phần còn lại diễn ra trong cuộc trò chuyện với trợ lý AI của bạn. Sự phân chia này là điều đáng ghi nhớ, và [How Commands Work](how-commands-work.md) giải thích chính xác tại sao. Bước 3 là tùy chọn, nhưng bắt đầu bằng `/opsx:explore` khi bạn không chắc chắn là thói quen đáng được hình thành nhất.
 
-<p align="center">
-  Theo dõi <a href="https://x.com/0xTab">@0xTab trên X</a> để cập nhật · Tham gia <a href="https://discord.gg/YctCnvvshC">Discord OpenSpec</a> để được trợ giúp và giải đáp thắc mắc.
-</p>
+## Nơi khác để nhận trợ giúp
 
-## Xem nó hoạt động
+- **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) để hỏi đáp, ý tưởng và hỗ trợ.
+- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) để báo cáo lỗi và yêu cầu tính năng.
+- **`openspec feedback "tin nhắn của bạn"`** gửi phản hồi trực tiếp từ terminal của bạn (nó mở một vấn đề trên GitHub).
 
-```text
-You: /opsx:propose add-dark-mode
-AI:  Đã tạo openspec/changes/add-dark-mode/
-     ✓ proposal.md — lý do thực hiện, những thay đổi
-     ✓ specs/       — yêu cầu và kịch bản
-     ✓ design.md    — cách tiếp cận kỹ thuật
-     ✓ tasks.md     — danh sách công việc triển khai
-     Sẵn sàng để triển khai!
-
-You: /opsx:apply
-AI:  Đang triển khai các công việc...
-     ✓ 1.1 Thêm nhà cung cấp ngữ cảnh chủ đề
-     ✓ 1.2 Tạo thành phần chuyển đổi
-     ✓ 2.1 Thêm biến CSS
-     ✓ 2.2 Kết nối localStorage
-     Tất cả công việc đã hoàn thành!
-
-You: /opsx:archive
-AI:  Đã lưu trữ vào openspec/changes/archive/2025-01-23-add-dark-mode/
-     Đặc tả đã được cập nhật. Sẵn sàng cho tính năng tiếp theo.
-```
-
-<details>
-<summary><strong>Bảng điều khiển OpenSpec</strong></summary>
-</details>
-
-## Bắt đầu nhanh
-
-**Yêu cầu Node.js 20.19.0 hoặc cao hơn.**
-
-Cài đặt OpenSpec toàn cục:
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-Sau đó điều hướng đến thư mục dự án của bạn và khởi tạo:
-
-```bash
-cd your-project
-openspec init
-```
-
-Bây giờ nói với AI của bạn: `/opsx:propose <điều-bạn-muốn-xây-dựng>`
-
-Nếu bạn muốn quy trình mở rộng (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:sync`, `/opsx:bulk-archive`, `/opsx:onboard`), hãy chọn nó với `openspec config profile` và áp dụng với `openspec update`.
-
-> [!NOTE]
-> Không chắc công cụ của bạn có được hỗ trợ không? [Xem danh sách đầy đủ](supported-tools.md) – chúng tôi hỗ trợ hơn 25 công cụ và đang tiếp tục tăng.
->
-> Cũng hoạt động với pnpm, yarn, bun và nix. [Xem các tùy chọn cài đặt](installation.md).
-
-## Tài liệu
-
-→ **[Bắt đầu](getting-started.md)**: các bước đầu tiên<br>
-→ **[Quy trình làm việc](workflows.md)**: các tổ hợp và mẫu<br>
-→ **[Các lệnh](commands.md)**: lệnh gạch chéo & kỹ năng<br>
-→ **[CLI](cli.md)**: tham chiếu dòng lệnh<br>
-→ **[Công cụ được hỗ trợ](supported-tools.md)**: tích hợp công cụ & đường dẫn cài đặt<br>
-→ **[Khái niệm](concepts.md)**: cách mọi thứ hoạt động<br>
-→ **[Đa ngôn ngữ](multi-language.md)**: hỗ trợ đa ngôn ngữ<br>
-→ **[Tùy chỉnh](customization.md)**: làm cho nó của bạn
-
-
-## Tại sao chọn OpenSpec?
-
-Các trợ lý lập trình AI rất mạnh mẽ nhưng khó dự đoán khi các yêu cầu chỉ tồn tại trong lịch sử trò chuyện. OpenSpec thêm một lớp đặc tả nhẹ để bạn thống nhất về những gì cần xây dựng trước khi bất kỳ mã nào được viết.
-
-- **Thống nhất trước khi xây dựng** — con người và AI thống nhất về đặc tả trước khi mã được viết
-- **Giữ ngăn nắp** — mỗi thay đổi có thư mục riêng với đề xuất, đặc tả, thiết kế và công việc
-- **Làm việc linh hoạt** — cập nhật bất kỳ sản phẩm nào bất cứ lúc nào, không có giai đoạn cứng nhắc
-- **Sử dụng công cụ của bạn** — hoạt động với hơn 20 trợ lý AI thông qua các lệnh gạch chéo
-
-### So sánh với chúng tôi
-
-**vs. [Spec Kit](https://github.com/github/spec-kit)** (GitHub) — Kỹ lưỡng nhưng nặng nề. Các giai đoạn cứng nhắc, nhiều Markdown, thiết lập Python. OpenSpec nhẹ hơn và cho phép bạn lặp lại tự do.
-
-**vs. [Kiro](https://kiro.dev)** (AWS) — Mạnh mẽ nhưng bạn bị khóa vào IDE của họ và giới hạn ở các mô hình Claude. OpenSpec hoạt động với các công cụ bạn đã sử dụng.
-
-**vs. không có gì** — Lập trình AI mà không có đặc tả có nghĩa là các lời nhắc mơ hồ và kết quả khó dự đoán. OpenSpec mang lại tính dự đoán mà không cần nghi thức.
-
-## Cập nhật OpenSpec
-
-**Nâng cấp gói**
-
-```bash
-npm install -g @fission-ai/openspec@latest
-```
-
-**Làm mới hướng dẫn tác nhân**
-
-Chạy lệnh này bên trong mỗi dự án để tạo lại hướng dẫn AI và đảm bảo các lệnh gạch chéo mới nhất đang hoạt động:
-
-```bash
-openspec update
-```
-
-## Ghi chú sử dụng
-
-**Lựa chọn mô hình**: OpenSpec hoạt động tốt nhất với các mô hình có khả năng suy luận cao. Chúng tôi khuyến nghị Opus 4.5 và GPT 5.2 cho cả lập kế hoạch và triển khai.
-
-**Vệ sinh ngữ cảnh**: OpenSpec được hưởng lợi từ cửa sổ ngữ cảnh sạch. Xóa ngữ cảnh của bạn trước khi bắt đầu triển khai và duy trì vệ sinh ngữ cảnh tốt trong suốt phiên làm việc của bạn.
-
-## Đóng góp
-
-**Sửa lỗi nhỏ** — Sửa lỗi, sửa lỗi chính tả và cải tiến nhỏ có thể được gửi trực tiếp dưới dạng PR.
-
-**Thay đổi lớn hơn** — Đối với các tính năng mới, tái cấu trúc quan trọng hoặc thay đổi kiến trúc, vui lòng gửi đề xuất thay đổi OpenSpec trước để chúng tôi có thể thống nhất về mục đích và mục tiêu trước khi bắt đầu triển khai.
-
-Khi viết đề xuất, hãy ghi nhớ triết lý OpenSpec: chúng tôi phục vụ nhiều loại người dùng khác nhau trên các tác nhân lập trình, mô hình và trường hợp sử dụng khác nhau. Các thay đổi nên hoạt động tốt cho tất cả mọi người.
-
-**Mã do AI tạo được chào đón** — miễn là nó đã được kiểm tra và xác minh. PR chứa mã do AI tạo nên đề cập đến tác nhân lập trình và mô hình đã sử dụng (ví dụ: "Được tạo với Claude Code sử dụng claude-opus-4-5-20251101").
-
-### Phát triển
-
-- Cài đặt các phụ thuộc: `pnpm install`
-- Xây dựng: `pnpm run build`
-- Kiểm thử: `pnpm test`
-- Phát triển CLI cục bộ: `pnpm run dev` hoặc `pnpm run dev:cli`
-- Cam kết thông thường (một dòng): `type(scope): subject`
-
-## Khác
-
-<details>
-<summary><strong>Telemetry</strong></summary>
-
-OpenSpec thu thập thống kê sử dụng ẩn danh.
-
-Chúng tôi chỉ thu thập tên lệnh và phiên bản để hiểu các mẫu sử dụng. Không có đối số, đường dẫn, nội dung hoặc PII. Tự động bị vô hiệu hóa trong CI.
-
-**Từ chối:** `export OPENSPEC_TELEMETRY=0` hoặc `export DO_NOT_TRACK=1`
-
-</details>
-
-<details>
-<summary><strong>Người bảo trì & Cố vấn</strong></summary>
-
-Xem [MAINTAINERS.md](https://github.com/Fission-AI/OpenSpec/blob/main/MAINTAINERS.md) để biết danh sách các người bảo trì cốt lõi và cố vấn giúp hướng dẫn dự án.
-
-</details>
-
-
-
-## Giấy phép
-
-MIT
+Bạn tìm thấy điều gì trong các tài liệu này là sai, cũ hoặc khó hiểu? Đó là một lỗi. Hãy mở một issue hoặc một PR. Cải thiện tài liệu là một trong những đóng góp giá trị nhất mà bạn có thể thực hiện.

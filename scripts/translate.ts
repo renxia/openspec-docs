@@ -2,9 +2,9 @@
 
 import { Command } from 'commander';
 import env from 'dotenv';
-import { md5, NLogger, color, concurrency } from '@lzwme/fe-utils';
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, cpSync, rmSync } from 'node:fs';
-import { join, dirname, relative, extname, sep } from 'node:path';
+import { md5, NLogger, color, concurrency, mkdirp } from '@lzwme/fe-utils';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, cpSync, rmSync, unlinkSync } from 'node:fs';
+import { join, dirname, relative, extname, sep, basename } from 'node:path';
 import build from './build';
 import { execSync } from 'node:child_process';
 
@@ -44,6 +44,31 @@ const LANGUAGE_NAMES: Record<string, { native: string; english: string }> = {
   'nl': { native: 'Nederlands', english: 'Dutch' },
   'uk': { native: 'Українська', english: 'Ukrainian' },
 }
+
+const INDEX_META = `---
+layout: home
+
+hero:
+  name: "OpenSpec"
+  text: "Specification-Driven Development for AI Assistants"
+  tagline: A lightweight spec for building and managing AI assistant projects.
+  actions:
+    - theme: brand
+      text: Get Started
+      link: ./getting-started
+    - theme: alt
+      text: Home
+      link: /
+
+features:
+  - title: Spec-First Workflow
+    details: Define requirements before writing code.
+  - title: AI-Native Design
+    details: Built for Claude Code, Cursor, Windsurf and more.
+  - title: Multi-Language
+    details: Documentation available in multiple languages.
+---
+`
 
 // 获取语言显示名称
 function getLanguageDisplayName(langCode: string, forSource = false): string {
@@ -198,7 +223,7 @@ async function translateSingleChunk(content: string, sourceLang: string, targetL
   const sourceLangDisplay = getLanguageDisplayName(sourceLang, true)
   const targetLangDisplay = getLanguageDisplayName(targetLang)
 
-  const prompt = `You are a professional technical documentation translator.
+  const systemPrompt = `You are a professional technical documentation translator.
 
 ## Task
 Translate the following markdown documentation from **${sourceLangDisplay}** to **${targetLangDisplay}**.
@@ -217,14 +242,22 @@ Translate the following markdown documentation from **${sourceLangDisplay}** to 
 6. **No extra content**: Do NOT add any explanations, comments, or notes outside the translated content.
 7. **Output format**: Output ONLY the translated markdown content, nothing else.
 
-## Text to translate:
+## Text to translate:`
 
-${content}`
-
-  const MAX_RETRIES = 10
+  const MAX_RETRIES = Number(process.env.TRANSLATE_MAX_RETRIES) || 3
   const BASE_DELAY_MS = 1000
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    const body = {
+      model: options.model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content },
+      ],
+      temperature: 0.3,
+    };
+    logger.debug('body:', body)
+
     try {
       const response = await fetch(`${options.baseUrl}/chat/completions`, {
         method: 'POST',
@@ -233,13 +266,7 @@ ${content}`
           'Content-Type': 'application/json',
           Authorization: `Bearer ${options.apiKey}`,
         },
-        body: JSON.stringify({
-          model: options.model,
-          messages: [
-            { role: 'user', content: prompt },
-          ],
-          temperature: 0.3,
-        }),
+        body: JSON.stringify(body),
       })
 
       if (response.ok) {
@@ -310,10 +337,12 @@ async function translateText(text: string, sourceLang: string, targetLang: strin
     const translatedChunks: string[] = [];
     for (let i = 0; i < finalChunks.length; i++) {
       const chunk = finalChunks[i];
+      let t = Date.now();
       logger.log(`  [${color.cyan(sourceLang)}->${color.green(targetLang)}]Translating chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars)... ${color.gray(id)}`);
 
       const translated = await translateSingleChunk(chunk, sourceLang, targetLang);
       translatedChunks.push(translated);
+      logger.log(`  -> [${color.cyan(sourceLang)}->${color.green(targetLang)}]Translated chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars) in ${color.magenta(Date.now() - t)}ms ${color.gray(id)}`);
     }
 
     // 拼接翻译结果
@@ -343,12 +372,12 @@ async function translateFile(srcFile: string, sourceLang: string, targetLang: st
 
   // 目标文件已存在，根据 translateRecord 判断是否需要更新
   if (existsSync(destFile) && translateRecords[fileCacheKey]?.srcMd5 === srcMd5 && translateRecords[fileCacheKey][targetLang]) {
-    console.log(`- [${idx}/${total}][${color.gray(srcFile)} -> ${color.cyan(targetLang)}] already exists, skipping...`);
+    if (options.debug) console.log(`- [${idx}/${total}][${color.gray(srcFile)} -> ${color.cyan(targetLang)}] already exists, skipping...`);
     return;
   }
 
 
-  console.log(`- [${idx}/${total}][${color.yellow(content.length)} chars] Translating ${color.cyan(srcFile)} ${sourceLang} -> ${targetLang}`);
+  console.log(`- [${idx}/${total}][${color.yellow(content.length)} chars] Translating ${color.cyan(srcFile)} ${sourceLang} -> ${targetLang}(${color.gray(getLanguageDisplayName(targetLang))}`);
   let translatedContent = await translateText(content, sourceLang, targetLang, srcFileRelative);
 
   if (!translatedContent) {
@@ -400,13 +429,25 @@ async function syncDocs() {
     process.exit(1)
   }
 
+  // 先删除目标目录，确保全量同步（避免孤儿文件残留）
+  if (existsSync(targetDocsDir)) {
+    rmSync(targetDocsDir, { recursive: true, force: true });
+    logger.log(`Removed existing ${color.yellow(targetDocsDir)} for clean sync`);
+  }
+
   const srcFiles = getAllMdFiles(sourceDocsDir);
   logger.log(`Copying ${color.yellow(sourceDocsDir)} to ${color.cyan(targetDocsDir)}. Found ${color.magenta(srcFiles.length)} files...`)
-  // cpSync(sourceDocsDir, sourceDocsDir, { force: true, recursive: true });
   console.log()
   for (const srcFile of srcFiles) {
-    const destFile = srcFile.replace(sourceDocsDir, targetDocsDir)
-    let content = readFileSync(srcFile, 'utf8').replaceAll('](docs/', '](').replace('../README.md', 'index.md')
+    let destFile = srcFile.replace(sourceDocsDir, targetDocsDir)
+    let content = readFileSync(srcFile, 'utf8').replaceAll('](docs/', '](').replace('README.md', 'index.md')
+    mkdirp(dirname(destFile));
+    // 如果是 README.md 文件，则写入 index.md
+    if (basename(srcFile) === 'README.md') {
+      destFile = destFile.replace('README.md', 'index.md')
+      content = `${INDEX_META}\n${content}`
+    }
+
     writeFileSync(destFile, content, 'utf8');
   }
 
@@ -423,8 +464,8 @@ function getAllMdFiles(dirPath = 'docs'): string[] {
       const fullPath = join(currentPath, item);
       const stat = statSync(fullPath);
       if (stat.isDirectory()) {
-        continue; // 只获取一级
-        // scanDir(fullPath);
+        // continue; // 只获取一级
+        scanDir(fullPath);
       } else if (['.md', '.json'].includes(extname(fullPath))) {
         files.push(fullPath);
       }
@@ -433,6 +474,45 @@ function getAllMdFiles(dirPath = 'docs'): string[] {
 
   scanDir(dirPath);
   return files;
+}
+
+/** 清理多语言目录中的孤儿文件（对应 en 源文件已不存在） */
+function cleanupOrphanFiles() {
+  let deletedCount = 0;
+  let recordsChanged = false;
+
+  for (const key of Object.keys(translateRecords)) {
+    // key 格式: "/docs/en/xxx.md"
+    const enPath = join(ROOT_DIR, key.replace(/^\//, ''));
+
+    // en 源文件仍存在，跳过
+    if (existsSync(enPath)) continue;
+
+    const record = translateRecords[key];
+
+    // 删除各语言对应的翻译文件
+    for (const lang of Object.keys(record).filter(k => k !== 'srcMd5')) {
+      const targetPath = enPath.replace(`/en/`, `/${lang}/`);
+      if (existsSync(targetPath)) {
+        unlinkSync(targetPath);
+        deletedCount++;
+        logger.log(`  [cleanup] Deleted orphan: ${color.yellow(relative(ROOT_DIR, targetPath).replace(/\\/g, '/'))}`);
+      }
+    }
+
+    // 删除记录
+    delete translateRecords[key];
+    recordsChanged = true;
+    logger.log(`  [cleanup] Removed stale record: ${color.yellow(key)}`);
+  }
+
+  if (recordsChanged) {
+    writeFileSync(RECORD_FILE, JSON.stringify(translateRecords, null, 2), 'utf-8');
+  }
+
+  if (deletedCount > 0 || recordsChanged) {
+    logger.log(color.green(`Cleanup completed: ${deletedCount} orphan files deleted`));
+  }
 }
 
 async function main(opts = options) {
@@ -515,6 +595,9 @@ async function main(opts = options) {
   await concurrency(tasks, Number(threads));
 
   logger.log(color.greenBright('Translation completed!'));
+
+  // 以 docs/en/ 为基准，清理多语言目录中的孤儿文件
+  cleanupOrphanFiles();
 
   if (opts.build) await build();
 }

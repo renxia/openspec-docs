@@ -1,41 +1,39 @@
 # Perintah
 
-Ini adalah referensi untuk perintah slash OpenSpec. Perintah-perintah ini dipanggil di antarmuka chat asisten pengkodean AI Anda (misalnya, Claude Code, Cursor, Windsurf).
+Ini adalah referensi untuk perintah slash dari OpenSpec. Perintah-perintah ini dipanggil di antarmuka obrol asisten pengkodean AI Anda (misalnya, Claude Code, Cursor, Windsurf).
 
-Untuk pola alur kerja dan kapan menggunakan setiap perintah, lihat [Alur Kerja](workflows.md). Untuk perintah CLI, lihat [CLI](cli.md).
+Untuk pola alur kerja dan kapan harus menggunakan setiap perintah, lihat [Workflows](workflows.md). Untuk perintah CLI, lihat [CLI](cli.md).
 
 ## Referensi Cepat
 
-### Jalur Cepat Default (profil `core`)
+### Jalur Cepat Standar (`core` profile)
 
-| Perintah | Tujuan |
-|----------|--------|
-| `/opsx:propose` | Buat perubahan dan hasilkan artefak perencanaan dalam satu langkah |
-| `/opsx:explore` | Pikirkan ide-ide sebelum berkomitmen pada perubahan |
-| `/opsx:apply` | Implementasikan tugas-tugas dari perubahan |
-| `/opsx:sync` | Gabungkan spesifikasi delta ke dalam spesifikasi utama |
-| `/opsx:archive` | Arsipkan perubahan yang telah selesai |
+| Command | Purpose |
+|---------|---------|
+| `/opsx:propose` | Membuat perubahan dan menghasilkan artefak perencanaan dalam satu langkah |
+| `/opsx:explore` | Memikirkan ide sebelum berkomitmen pada suatu perubahan |
+| `/opsx:apply` | Mengimplementasikan tugas dari perubahan tersebut |
+| `/opsx:sync` | Menggabungkan spesifikasi delta ke dalam spesifikasi utama |
+| `/opsx:archive` | Mengarsipkan perubahan yang telah selesai |
 
-### Perintah Alur Kerja yang Diperluas (pemilihan alur kerja kustom)
+### Perintah Alur Kerja yang Diperluas (pemilihan alur kerja khusus)
 
-| Perintah | Tujuan |
-|----------|--------|
-| `/opsx:new` | Mulai kerangka perubahan baru |
-| `/opsx:continue` | Buat artefak berikutnya berdasarkan dependensi |
-| `/opsx:ff` | Maju cepat: buat semua artefak perencanaan sekaligus |
-| `/opsx:verify` | Validasi bahwa implementasi sesuai dengan artefak |
-| `/opsx:bulk-archive` | Arsipkan beberapa perubahan sekaligus |
-| `/opsx:onboard` | Tutorial terpandu melalui alur kerja lengkap |
+| Command | Purpose |
+|---------|---------|
+| `/opsx:new` | Memulai kerangka perubahan baru |
+| `/opsx:continue` | Membuat artefak berikutnya berdasarkan dependensi |
+| `/opsx:ff` | Maju Cepat (Fast-forward): membuat semua artefak perencanaan sekaligus |
+| `/opsx:verify` | Memvalidasi bahwa implementasi sesuai dengan artefak |
+| `/opsx:bulk-archive` | Mengarsipkan beberapa perubahan sekaligus |
+| `/opsx:onboard` | Tutorial terpandu melalui seluruh alur kerja |
 
-Profil global default adalah `core`. Untuk mengaktifkan perintah alur kerja yang diperluas, jalankan `openspec config profile`, pilih alur kerja, lalu jalankan `openspec update` di proyek Anda.
-
----
+Profil global standarnya adalah `core`. Untuk mengaktifkan perintah alur kerja yang diperluas, jalankan `openspec config profile`, pilih alur kerja, lalu jalankan `openspec update` di proyek Anda.
 
 ## Referensi Perintah
 
 ### `/opsx:propose`
 
-Buat perubahan baru dan hasilkan artefak perencanaan dalam satu langkah. Ini adalah perintah awal default dalam profil `core`.
+Membuat perubahan baru dan menghasilkan artefak perencanaan dalam satu langkah. Ini adalah perintah awal default di profil `core`.
 
 **Sintaks:**
 ```text
@@ -43,36 +41,38 @@ Buat perubahan baru dan hasilkan artefak perencanaan dalam satu langkah. Ini ada
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name-or-description` | Tidak | Nama dalam format kebab-case atau deskripsi perubahan dalam bahasa sehari-hari |
+| `change-name-or-description` | Tidak | Nama kebab-case atau deskripsi perubahan dalam bahasa biasa |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Membuat `openspec/changes/<change-name>/`
-- Menghasilkan artefak yang diperlukan sebelum implementasi (untuk `spec-driven`: proposal, spesifikasi, desain, tugas)
+- Menghasilkan artefak yang diperlukan sebelum implementasi (untuk `spec-driven`: proposal, specs, desain, tugas)
 - Berhenti ketika perubahan siap untuk `/opsx:apply`
 
 **Contoh:**
 ```text
-Anda: /opsx:propose add-dark-mode
+You: /opsx:propose add-dark-mode
 
 AI:  Created openspec/changes/add-dark-mode/
      ✓ proposal.md
      ✓ specs/ui/spec.md
      ✓ design.md
      ✓ tasks.md
-     Ready for implementation. Run /opsx:apply.
+     Siap untuk implementasi. Jalankan /opsx:apply.
 ```
 
 **Tips:**
-- Gunakan ini untuk jalur ujung-ke-ujung tercepat
-- Jika Anda menginginkan kontrol artefak langkah demi langkah, aktifkan alur kerja yang diperluas dan gunakan `/opsx:new` + `/opsx:continue`
+- Gunakan ini untuk jalur *end-to-end* tercepat
+- Jika Anda ingin kontrol artefak langkah demi langkah, aktifkan alur kerja yang diperluas dan gunakan `/opsx:new` + `/opsx:continue`
 
 ---
 
 ### `/opsx:explore`
 
-Pikirkan ide-ide, investigasi masalah, dan klarifikasi persyaratan sebelum berkomitmen pada sebuah perubahan.
+> **Mulai di sini jika Anda tidak yakin.** Explore adalah mitra berpikir tanpa risiko: ia membaca *codebase* Anda, membandingkan opsi, dan memperjelas ide yang kabur menjadi rencana konkret sebelum perubahan apa pun ada. Ini disertakan dalam profil default. Untuk kasus lengkap dan lebih banyak contoh, lihat panduan [Explore First](explore.md).
+
+Pikirkan ide, selidiki masalah, dan perjelas persyaratan sebelum berkomitmen pada suatu perubahan.
 
 **Sintaks:**
 ```
@@ -80,55 +80,55 @@ Pikirkan ide-ide, investigasi masalah, dan klarifikasi persyaratan sebelum berko
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `topic` | Tidak | Apa yang ingin Anda eksplorasi atau investigasi |
+| `topic` | Tidak | Apa yang ingin Anda jelajahi atau selidiki |
 
-**Apa yang dilakukannya:**
-- Membuka percakapan eksplorasi tanpa struktur yang diperlukan
-- Menginvestigasi basis kode untuk menjawab pertanyaan
+**Fungsi:**
+- Membuka percakapan eksploratif tanpa memerlukan struktur
+- Menyelidiki *codebase* untuk menjawab pertanyaan
 - Membandingkan opsi dan pendekatan
 - Membuat diagram visual untuk memperjelas pemikiran
-- Dapat beralih ke `/opsx:propose` (default) atau `/opsx:new` (alur kerja yang diperluas) ketika wawasan sudah terbentuk
+- Dapat beralih ke `/opsx:propose` (default) atau `/opsx:new` (alur kerja yang diperluas) ketika wawasan terbentuk
 
 **Contoh:**
 ```text
-Anda: /opsx:explore
+You: /opsx:explore
 
-AI:  What would you like to explore?
+AI:  Apa yang ingin Anda jelajahi?
 
-Anda: How should we handle authentication for the mobile app?
+You: Bagaimana seharusnya kita menangani otentikasi untuk aplikasi seluler?
 
-AI:  Let me investigate your current auth setup...
-     [Analyzes codebase]
+AI:  Izinkan saya menyelidiki pengaturan auth Anda saat ini...
+     [Menganalisis codebase]
 
-     I see you're using session-based auth for the web app.
-     For mobile, we have three main options:
+     Saya lihat Anda menggunakan otentikasi berbasis sesi untuk aplikasi web.
+     Untuk seluler, kami memiliki tiga opsi utama:
 
-     1. JWT tokens (stateless, works offline)
-     2. OAuth2 (if you need third-party login)
-     3. Extend current sessions (simpler, but requires connectivity)
+     1. JWT tokens (stateless, berfungsi offline)
+     2. OAuth2 (jika Anda memerlukan login pihak ketiga)
+     3. Perluas sesi saat ini (lebih sederhana, tetapi membutuhkan konektivitas)
 
-     Your API already has CORS configured. Which direction interests you?
+     API Anda sudah dikonfigurasi CORS. Arah mana yang menarik bagi Anda?
 
-Anda: Let's go with JWT. Can we start a change for that?
+You: Mari kita gunakan JWT. Bisakah kita mulai perubahan untuk itu?
 
-AI:  Ready when you are. Run /opsx:propose add-jwt-auth to begin.
+AI:  Siap kapan pun Anda siap. Jalankan /opsx:propose add-jwt-auth untuk memulai.
 ```
 
 **Tips:**
-- Gunakan ketika persyaratan tidak jelas atau Anda perlu melakukan investigasi
+- Gunakan ketika persyaratan tidak jelas atau Anda perlu menyelidiki
 - Tidak ada artefak yang dibuat selama eksplorasi
 - Baik untuk membandingkan beberapa pendekatan sebelum memutuskan
-- Dapat membaca file dan mencari di basis kode
+- Dapat membaca file dan mencari di *codebase*
 
 ---
 
 ### `/opsx:new`
 
-Mulai kerangka perubahan baru. Membuat folder perubahan dan menunggu Anda menghasilkan artefak dengan `/opsx:continue` atau `/opsx:ff`.
+Memulai perancah (scaffold) perubahan baru. Membuat folder perubahan dan menunggu Anda menghasilkan artefak dengan `/opsx:continue` atau `/opsx:ff`.
 
-Perintah ini merupakan bagian dari set alur kerja yang diperluas (tidak termasuk dalam profil `core` default).
+Perintah ini adalah bagian dari set alur kerja yang diperluas (tidak termasuk dalam profil `core` default).
 
 **Sintaks:**
 ```
@@ -136,16 +136,16 @@ Perintah ini merupakan bagian dari set alur kerja yang diperluas (tidak termasuk
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name` | Tidak | Nama untuk folder perubahan (akan ditanyakan jika tidak disediakan) |
+| `change-name` | Tidak | Nama untuk folder perubahan (ditanyakan jika tidak disediakan) |
 | `--schema` | Tidak | Skema alur kerja yang akan digunakan (default: dari konfigurasi atau `spec-driven`) |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Membuat direktori `openspec/changes/<change-name>/`
 - Membuat file metadata `.openspec.yaml` di folder perubahan
-- Menampilkan template artefak pertama yang siap dibuat
-- Menanyakan nama perubahan dan skema jika tidak disediakan
+- Menampilkan templat artefak pertama yang siap dibuat
+- Meminta nama dan skema perubahan jika tidak disediakan
 
 **Apa yang dibuatnya:**
 ```
@@ -155,13 +155,13 @@ openspec/changes/<change-name>/
 
 **Contoh:**
 ```
-Anda: /opsx:new add-dark-mode
+You: /opsx:new add-dark-mode
 
 AI:  Created openspec/changes/add-dark-mode/
      Schema: spec-driven
 
-     Ready to create: proposal
-     Use /opsx:continue to create it, or /opsx:ff to create all artifacts.
+     Siap untuk membuat: proposal
+     Gunakan /opsx:continue untuk membuatnya, atau /opsx:ff untuk membuat semua artefak.
 ```
 
 **Tips:**
@@ -173,7 +173,7 @@ AI:  Created openspec/changes/add-dark-mode/
 
 ### `/opsx:continue`
 
-Buat artefak berikutnya dalam rantai dependensi. Membuat satu artefak pada satu waktu untuk kemajuan bertahap.
+Membuat artefak berikutnya dalam rantai dependensi. Membuat satu artefak pada satu waktu untuk kemajuan inkremental.
 
 **Sintaks:**
 ```
@@ -181,50 +181,50 @@ Buat artefak berikutnya dalam rantai dependensi. Membuat satu artefak pada satu 
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name` | Tidak | Perubahan mana yang akan dilanjutkan (disimpulkan dari konteks jika tidak disediakan) |
+| `change-name` | Tidak | Perubahan mana yang akan dilanjutkan (diinferensikan dari konteks jika tidak disediakan) |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Menanyakan grafik dependensi artefak
-- Menampilkan artefak mana yang siap vs terblokir
+- Menunjukkan artefak mana yang siap vs terblokir
 - Membuat artefak pertama yang siap
 - Membaca file dependensi untuk konteks
-- Menampilkan apa yang tersedia setelah pembuatan
+- Menunjukkan apa yang menjadi tersedia setelah pembuatan
 
 **Contoh:**
 ```
-Anda: /opsx:continue
+You: /opsx:continue
 
 AI:  Change: add-dark-mode
 
-     Artifact status:
-     ✓ proposal    (done)
-     ◆ specs       (ready)
-     ◆ design      (ready)
-     ○ tasks       (blocked - needs: specs)
+     Status artefak:
+     ✓ proposal    (selesai)
+     ◆ specs       (siap)
+     ◆ design      (siap)
+     ○ tasks       (terblokir - butuh: specs)
 
-     Creating specs...
+     Membuat specs...
 
-     [Reads proposal.md, creates specs based on requirements]
+     [Membaca proposal.md, membuat specs berdasarkan persyaratan]
 
      ✓ Created openspec/changes/add-dark-mode/specs/ui/spec.md
 
-     Now available: tasks
-     Run /opsx:continue to create the next artifact.
+     Sekarang tersedia: tasks
+     Jalankan /opsx:continue untuk membuat artefak berikutnya.
 ```
 
 **Tips:**
 - Gunakan ketika Anda ingin meninjau setiap artefak sebelum melanjutkan
-- Baik untuk perubahan kompleks di mana Anda menginginkan kontrol
-- Beberapa artefak mungkin menjadi siap secara bersamaan
-- Anda dapat mengedit artefak yang sudah dibuat sebelum melanjutkan
+- Baik untuk perubahan yang kompleks di mana Anda menginginkan kontrol
+- Beberapa artefak mungkin siap secara bersamaan
+- Anda dapat mengedit artefak yang dibuat sebelum melanjutkan
 
 ---
 
 ### `/opsx:ff`
 
-Maju cepat melalui pembuatan artefak. Membuat semua artefak perencanaan sekaligus.
+Melompat maju (Fast-forward) melalui pembuatan artefak. Membuat semua artefak perencanaan sekaligus.
 
 **Sintaks:**
 ```
@@ -232,34 +232,34 @@ Maju cepat melalui pembuatan artefak. Membuat semua artefak perencanaan sekaligu
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name` | Tidak | Perubahan mana yang akan dimajukan cepat (disimpulkan dari konteks jika tidak disediakan) |
+| `change-name` | Tidak | Perubahan mana yang akan dilompat maju (diinferensikan dari konteks jika tidak disediakan) |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Membuat semua artefak dalam urutan dependensi
-- Melacak kemajuan melalui daftar tugas
+- Melacak kemajuan melalui daftar tugas (*todo list*)
 - Berhenti ketika semua artefak `apply-required` selesai
 - Membaca setiap dependensi sebelum membuat artefak berikutnya
 
 **Contoh:**
 ```
-Anda: /opsx:ff add-dark-mode
+You: /opsx:ff add-dark-mode
 
-AI:  Fast-forwarding add-dark-mode...
+AI:  Melompat maju untuk add-dark-mode...
 
      ✓ Creating proposal.md
      ✓ Creating specs/ui/spec.md
      ✓ Creating design.md
      ✓ Creating tasks.md
 
-     All planning artifacts complete!
-     Ready for implementation. Run /opsx:apply to begin.
+     Semua artefak perencanaan selesai!
+     Siap untuk implementasi. Jalankan /opsx:apply untuk memulai.
 ```
 
 **Tips:**
 - Gunakan ketika Anda memiliki gambaran jelas tentang apa yang sedang dibangun
-- Lebih cepat dari `/opsx:continue` untuk perubahan yang sederhana
+- Lebih cepat daripada `/opsx:continue` untuk perubahan yang sederhana
 - Anda masih dapat mengedit artefak setelahnya
 - Baik untuk fitur kecil hingga menengah
 
@@ -267,7 +267,7 @@ AI:  Fast-forwarding add-dark-mode...
 
 ### `/opsx:apply`
 
-Implementasikan tugas dari perubahan. Bekerja melalui daftar tugas, menulis kode, dan mencentang item.
+Mengimplementasikan tugas dari perubahan. Bekerja melalui daftar tugas, menulis kode dan menandai item selesai.
 
 **Sintaks:**
 ```
@@ -275,49 +275,49 @@ Implementasikan tugas dari perubahan. Bekerja melalui daftar tugas, menulis kode
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name` | Tidak | Perubahan mana yang akan diimplementasikan (disimpulkan dari konteks jika tidak disediakan) |
+| `change-name` | Tidak | Perubahan mana yang akan diimplementasikan (diinferensikan dari konteks jika tidak disediakan) |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Membaca `tasks.md` dan mengidentifikasi tugas yang belum selesai
 - Bekerja melalui tugas satu per satu
-- Menulis kode, membuat file, menjalankan pengujian sesuai kebutuhan
+- Menulis kode, membuat file, menjalankan tes sesuai kebutuhan
 - Menandai tugas selesai dengan kotak centang `[x]`
 
 **Contoh:**
 ```
-Anda: /opsx:apply
+You: /opsx:apply
 
-AI:  Implementing add-dark-mode...
+AI:  Mengimplementasikan add-dark-mode...
 
-     Reading tasks.md:
+     Membaca tasks.md:
      - [ ] 1.1 Create ThemeContext
      - [ ] 1.2 Add CSS custom properties
      - [ ] 1.3 Implement localStorage persistence
 
-     Working on 1.1: Create ThemeContext...
-     [Creates src/context/ThemeContext.tsx]
+     Bekerja pada 1.1: Create ThemeContext...
+     [Membuat src/context/ThemeContext.tsx]
 
-     ✓ 1.1 Complete
+     ✓ 1.1 Selesai
 
-     Working on 1.2: Add CSS custom properties...
-     [Updates src/styles/globals.css]
+     Bekerja pada 1.2: Add CSS custom properties...
+     [Memperbarui src/styles/globals.css]
 
-     ✓ 1.2 Complete
+     ✓ 1.2 Selesai
      ...
 ```
 
 **Tips:**
-- Dapat melanjutkan dari tempat terakhir jika terganggu
-- Gunakan untuk perubahan paralel dengan menentukan nama perubahan
+- Dapat dilanjutkan dari tempat Anda berhenti jika terinterupsi
+- Gunakan untuk perubahan paralel dengan menentukan nama perubahannya
 - Status penyelesaian dilacak dalam kotak centang `tasks.md`
 
 ---
 
 ### `/opsx:verify`
 
-Validasi bahwa implementasi sesuai dengan artefak perubahan Anda. Memeriksa kelengkapan, kebenaran, dan koherensi.
+Memvalidasi bahwa implementasi sesuai dengan artefak perubahan Anda. Memeriksa kelengkapan, kebenaran, dan koherensi.
 
 **Sintaks:**
 ```
@@ -325,67 +325,67 @@ Validasi bahwa implementasi sesuai dengan artefak perubahan Anda. Memeriksa kele
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name` | Tidak | Perubahan mana yang akan diverifikasi (disimpulkan dari konteks jika tidak disediakan) |
+| `change-name` | Tidak | Perubahan mana yang akan diverifikasi (diinferensikan dari konteks jika tidak disediakan) |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Memeriksa tiga dimensi kualitas implementasi
-- Mencari basis kode untuk bukti implementasi
-- Melaporkan masalah yang dikategorikan sebagai KRITIS, PERINGATAN, atau SARAN
-- Tidak memblokir pengarsipan, tetapi menyoroti masalah
+- Mencari bukti implementasi di *codebase*
+- Melaporkan masalah yang dikategorikan sebagai CRITICAL, WARNING, atau SUGGESTION
+- Tidak memblokir pengarsipan, tetapi menampilkan masalah
 
-**Dimensi verifikasi:**
+**Dimensi Verifikasi:**
 
 | Dimensi | Apa yang divalidasi |
 |-----------|-------------------|
-| **Kelengkapan** | Semua tugas selesai, semua persyaratan diimplementasikan, skenario tercakup |
-| **Kebenaran** | Implementasi sesuai dengan maksud spesifikasi, kasus tepi ditangani |
-| **Koherensi** | Keputusan desain tercermin dalam kode, pola konsisten |
+| **Completeness** | Semua tugas selesai, semua persyaratan diimplementasikan, skenario tercakup |
+| **Correctness** | Implementasi sesuai dengan maksud spesifikasi, kasus tepi ditangani |
+| **Coherence** | Keputusan desain tercermin dalam kode, pola konsisten |
 
 **Contoh:**
 ```
-Anda: /opsx:verify
+You: /opsx:verify
 
-AI:  Verifying add-dark-mode...
+AI:  Memverifikasi add-dark-mode...
 
      COMPLETENESS
-     ✓ All 8 tasks in tasks.md are checked
-     ✓ All requirements in specs have corresponding code
-     ⚠ Scenario "System preference detection" has no test coverage
+     ✓ Semua 8 tugas di tasks.md telah dicentang
+     ✓ Semua persyaratan di specs memiliki kode yang sesuai
+     ⚠ Skenario "Deteksi preferensi sistem" tidak memiliki cakupan tes
 
      CORRECTNESS
-     ✓ Implementation matches spec intent
-     ✓ Edge cases from scenarios are handled
-     ✓ Error states match spec definitions
+     ✓ Implementasi sesuai dengan maksud spesifikasi
+     ✓ Kasus tepi dari skenario ditangani
+     ✓ Status kesalahan sesuai definisi spesifikasi
 
      COHERENCE
-     ✓ Design decisions reflected in code structure
-     ✓ Naming conventions consistent with design.md
-     ⚠ Design mentions "CSS variables" but implementation uses Tailwind classes
+     ✓ Keputusan desain tercermin dalam struktur kode
+     ✓ Konvensi penamaan konsisten dengan design.md
+     ⚠ Desain menyebutkan "CSS variables" tetapi implementasi menggunakan kelas Tailwind
 
      SUMMARY
      ─────────────────────────────
-     Critical issues: 0
-     Warnings: 2
-     Ready to archive: Yes (with warnings)
+     Masalah Kritis: 0
+     Peringatan: 2
+     Siap untuk diarsipkan: Ya (dengan peringatan)
 
-     Recommendations:
-     1. Add test for system preference detection
-     2. Update design.md to reflect Tailwind usage, or refactor to use CSS variables
+     Rekomendasi:
+     1. Tambahkan tes untuk deteksi preferensi sistem
+     2. Perbarui design.md untuk mencerminkan penggunaan Tailwind, atau refactor untuk menggunakan CSS variables
 ```
 
 **Tips:**
-- Jalankan sebelum mengarsipkan untuk menangkap ketidaksesuaian lebih awal
-- Peringatan tidak memblokir pengarsipan tetapi menunjukkan masalah potensial
+- Jalankan sebelum mengarsip untuk menangkap ketidaksesuaian sejak dini
+- Peringatan tidak memblokir pengarsipan tetapi menunjukkan potensi masalah
 - Baik untuk meninjau pekerjaan AI sebelum berkomitmen
-- Dapat mengungkap pergeseran antara artefak dan implementasi
+- Dapat mengungkapkan penyimpangan antara artefak dan implementasi
 
 ---
 
 ### `/opsx:sync`
 
-**Perintah opsional.** Menggabungkan spesifikasi delta dari sebuah perubahan ke dalam spesifikasi utama. Pengarsipan akan menanyakan untuk menyinkronkan jika diperlukan, jadi Anda biasanya tidak perlu menjalankan ini secara manual.
+**Perintah Opsional.** Menggabungkan spesifikasi delta dari suatu perubahan ke dalam spesifikasi utama. Pengarsipan akan meminta sinkronisasi jika diperlukan, jadi Anda biasanya tidak perlu menjalankannya secara manual.
 
 **Sintaks:**
 ```
@@ -393,56 +393,56 @@ AI:  Verifying add-dark-mode...
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name` | Tidak | Perubahan mana yang akan disinkronkan (disimpulkan dari konteks jika tidak disediakan) |
+| `change-name` | Tidak | Perubahan mana yang akan disinkronkan (diinferensikan dari konteks jika tidak disediakan) |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Membaca spesifikasi delta dari folder perubahan
-- Mengurai bagian DITAMBAHKAN/DIUBAH/DIHAPUS/DINAMAI ULANG
-- Menggabungkan perubahan ke direktori utama `openspec/specs/`
-- Mempertahankan konten yang ada yang tidak disebutkan dalam delta
+- Mengurai bagian ADDED/MODIFIED/REMOVED/RENAMED
+- Menggabungkan perubahan ke dalam direktori utama `openspec/specs/`
+- Mempertahankan konten yang sudah ada yang tidak disebutkan dalam delta
 - Tidak mengarsipkan perubahan (tetap aktif)
 
 **Contoh:**
 ```text
-Anda: /opsx:sync
+You: /opsx:sync
 
-AI:  Syncing add-dark-mode delta specs...
+AI:  Menyinkronkan spesifikasi delta add-dark-mode...
 
-     Reading: openspec/changes/add-dark-mode/specs/ui/spec.md
+     Membaca: openspec/changes/add-dark-mode/specs/ui/spec.md
      Target:  openspec/specs/ui/spec.md
 
-     Changes to apply:
-     ✓ ADDED: Theme Selection requirement (2 scenarios)
-     ✓ ADDED: Accessibility requirement (1 scenario)
+     Perubahan yang akan diterapkan:
+     ✓ ADDED: Persyaratan Pemilihan Tema (2 skenario)
+     ✓ ADDED: Persyaratan Aksesibilitas (1 skenario)
 
-     Merging...
-     ✓ openspec/specs/ui/spec.md updated
+     Menggabungkan...
+     ✓ openspec/specs/ui/spec.md diperbarui
 
-     Change remains active. Run /opsx:archive when ready to complete.
+     Perubahan tetap aktif. Jalankan /opsx:archive ketika siap untuk menyelesaikan.
 ```
 
-**Kapan menggunakannya secara manual:**
+**Kapan harus menggunakan secara manual:**
 
 | Skenario | Gunakan sync? |
 |----------|-----------|
-| Perubahan jangka panjang, ingin spesifikasi di utama sebelum mengarsipkan | Ya |
-| Beberapa perubahan paralel memerlukan basis spesifikasi yang diperbarui | Ya |
+| Perubahan jangka panjang, ingin spesifikasi ada di utama sebelum mengarsip | Ya |
+| Beberapa perubahan paralel membutuhkan spesifikasi dasar yang diperbarui | Ya |
 | Ingin melihat/meninjau penggabungan secara terpisah | Ya |
-| Perubahan cepat, langsung ke pengarsipan | Tidak (pengarsipan menanganinya) |
+| Perubahan cepat, langsung menuju arsip | Tidak (archive menanganinya) |
 
 **Tips:**
-- Sinkronisasi cerdas, bukan salin-tempel
-- Dapat menambahkan skenario ke persyaratan yang ada tanpa duplikasi
+- Sync cerdas, bukan salin-tempel
+- Dapat menambahkan skenario ke persyaratan yang sudah ada tanpa menduplikasi
 - Perubahan tetap aktif setelah sinkronisasi (tidak diarsipkan)
-- Sebagian besar pengguna tidak akan pernah perlu memanggil ini secara langsung—pengarsipan akan menanyakan jika diperlukan
+- Sebagian besar pengguna tidak akan pernah perlu memanggil ini secara langsung—archive akan meminta jika diperlukan
 
 ---
 
 ### `/opsx:archive`
 
-Arsipkan perubahan yang telah selesai. Menyelesaikan perubahan dan memindahkannya ke folder arsip.
+Mengarsipkan perubahan yang telah selesai. Menyelesaikan perubahan dan memindahkannya ke folder arsip.
 
 **Sintaks:**
 ```
@@ -450,51 +450,51 @@ Arsipkan perubahan yang telah selesai. Menyelesaikan perubahan dan memindahkanny
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-name` | Tidak | Perubahan mana yang akan diarsipkan (disimpulkan dari konteks jika tidak disediakan) |
+| `change-name` | Tidak | Perubahan mana yang akan diarsipkan (diinferensikan dari konteks jika tidak disediakan) |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Memeriksa status penyelesaian artefak
-- Memeriksa penyelesaian tugas (memperingatkan jika belum selesai)
+- Memeriksa penyelesaian tugas (memberi peringatan jika belum selesai)
 - Menawarkan untuk menyinkronkan spesifikasi delta jika belum disinkronkan
 - Memindahkan folder perubahan ke `openspec/changes/archive/YYYY-MM-DD-<name>/`
 - Mempertahankan semua artefak untuk jejak audit
 
 **Contoh:**
 ```text
-Anda: /opsx:archive
+You: /opsx:archive
 
-AI:  Archiving add-dark-mode...
+AI:  Mengarsipkan add-dark-mode...
 
-     Artifact status:
-     ✓ proposal.md exists
-     ✓ specs/ exists
-     ✓ design.md exists
-     ✓ tasks.md exists (8/8 tasks complete)
+     Status artefak:
+     ✓ proposal.md ada
+     ✓ specs/ ada
+     ✓ design.md ada
+     ✓ tasks.md ada (8/8 tugas selesai)
 
-     Delta specs: Not yet synced
-     → Sync now? (recommended)
+     Delta specs: Belum disinkronkan
+     → Sinkron sekarang? (direkomendasikan)
 
-Anda: Yes
+You: Yes
 
-AI:  ✓ Synced specs to openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
+AI:  ✓ Specs disinkronkan ke openspec/specs/ui/spec.md
+     ✓ Dipindahkan ke openspec/changes/archive/2025-01-24-add-dark-mode/
 
-     Change archived successfully.
+     Perubahan berhasil diarsipkan.
 ```
 
 **Tips:**
-- Pengarsipan tidak akan memblokir tugas yang belum selesai, tetapi akan memperingatkan
-- Spesifikasi delta dapat disinkronkan selama pengarsipan atau sebelumnya
-- Perubahan yang diarsipkan dipertahankan untuk riwayat
+- Archive tidak akan memblokir pada tugas yang belum selesai, tetapi akan memberi peringatan
+- Delta specs dapat disinkronkan selama pengarsipan atau sebelumnya
+- Perubahan yang diarsipkan dilestarikan untuk riwayat
 - Gunakan `/opsx:verify` terlebih dahulu untuk menangkap masalah
 
 ---
 
 ### `/opsx:bulk-archive`
 
-Arsipkan beberapa perubahan yang telah selesai sekaligus. Menangani konflik spesifikasi antar perubahan.
+Mengarsipkan beberapa perubahan yang telah selesai sekaligus. Menangani konflik spesifikasi antarperubahan.
 
 **Sintaks:**
 ```
@@ -502,75 +502,75 @@ Arsipkan beberapa perubahan yang telah selesai sekaligus. Menangani konflik spes
 ```
 
 **Argumen:**
-| Argumen | Diperlukan | Deskripsi |
+| Argumen | Wajib | Deskripsi |
 |----------|----------|-------------|
-| `change-names` | Tidak | Perubahan spesifik yang akan diarsipkan (menanyakan untuk memilih jika tidak disediakan) |
+| `change-names` | Tidak | Perubahan spesifik untuk diarsipkan (meminta pilihan jika tidak disediakan) |
 
-**Apa yang dilakukannya:**
+**Fungsi:**
 - Mendaftar semua perubahan yang telah selesai
-- Memvalidasi setiap perubahan sebelum mengarsipkan
-- Mendeteksi konflik spesifikasi di seluruh perubahan
-- Menyelesaikan konflik dengan memeriksa apa yang benar-benar diimplementasikan
+- Memvalidasi setiap perubahan sebelum pengarsipan
+- Mendeteksi konflik spesifikasi antarperubahan
+- Menyelesaikan konflik dengan memeriksa apa yang sebenarnya diimplementasikan
 - Mengarsipkan dalam urutan kronologis
 
 **Contoh:**
 ```
-Anda: /opsx:bulk-archive
+You: /opsx:bulk-archive
 
-AI:  Found 3 completed changes:
-     - add-dark-mode (8/8 tasks complete)
-     - fix-login-bug (3/3 tasks complete)
-     - update-footer (2/2 tasks complete)
+AI:  Ditemukan 3 perubahan yang selesai:
+     - add-dark-mode (8/8 tugas selesai)
+     - fix-login-bug (3/3 tugas selesai)
+     - update-footer (2/2 tugas selesai)
 
-     Checking for spec conflicts...
-     ⚠ add-dark-mode and update-footer both touch specs/ui/
+     Memeriksa konflik spesifikasi...
+     ⚠ add-dark-mode dan update-footer keduanya menyentuh specs/ui/
 
-     Inspecting codebase to resolve...
-     Both changes are implemented. Will merge in chronological order:
-     1. add-dark-mode (created Jan 20)
-     2. update-footer (created Jan 22)
+     Menginspeksi codebase untuk menyelesaikan...
+     Kedua perubahan telah diimplementasikan. Akan digabungkan dalam urutan kronologis:
+     1. add-dark-mode (dibuat Jan 20)
+     2. update-footer (dibuat Jan 22)
 
-     Archive all 3 changes?
+     Arsipkan ketiga perubahan?
 
-Anda: Yes
+You: Yes
 
 AI:  ✓ Archived add-dark-mode
      ✓ Archived fix-login-bug
      ✓ Archived update-footer
-     Specs merged: add-dark-mode → update-footer
+     Specs digabungkan: add-dark-mode → update-footer
 ```
 
 **Tips:**
 - Baik untuk alur kerja paralel
-- Penyelesaian konflik bersifat agen (memeriksa basis kode)
-- Perubahan diarsipkan berdasarkan urutan pembuatan
-- Menanyakan sebelum menimpa konten spesifikasi
+- Penyelesaian konflik bersifat *agentic* (memeriksa *codebase*)
+- Perubahan diarsipkan dalam urutan pembuatan
+- Meminta sebelum menimpa konten spesifikasi
 
 ---
 
 ### `/opsx:onboard`
 
-Panduan orientasi melalui alur kerja OpenSpec secara lengkap. Tutorial interaktif menggunakan basis kode Anda yang sebenarnya.
+Orientasi terpandu melalui Alur Kerja OpenSpec yang lengkap. Tutorial interaktif menggunakan *codebase* Anda yang sebenarnya.
 
 **Sintaks:**
 ```
 /opsx:onboard
 ```
 
-**Apa yang dilakukannya:**
-- Menjelajahi siklus alur kerja lengkap dengan narasi
-- Memindai basis kode Anda untuk peluang peningkatan nyata
+**Fungsi:**
+- Memandu melalui siklus alur kerja yang lengkap dengan narasi
+- Memindai *codebase* Anda untuk peluang perbaikan nyata
 - Membuat perubahan aktual dengan artefak nyata
-- Mengimplementasikan pekerjaan aktual (perubahan kecil, aman)
-- Mengarsipkan perubahan yang telah selesai
-- Menjelaskan setiap langkah saat terjadi
+- Mengimplementasikan pekerjaan nyata (perubahan kecil, aman)
+- Mengarsipkan perubahan yang selesai
+- Menjelaskan setiap langkah saat hal itu terjadi
 
 **Fase:**
-1. Selamat datang dan analisis basis kode
-2. Menemukan peluang peningkatan
+1. Selamat datang dan analisis *codebase*
+2. Menemukan peluang perbaikan
 3. Membuat perubahan (`/opsx:new`)
 4. Menulis proposal
-5. Membuat spesifikasi
+5. Membuat specs
 6. Menulis desain
 7. Membuat tugas
 8. Mengimplementasikan tugas (`/opsx:apply`)
@@ -580,94 +580,92 @@ Panduan orientasi melalui alur kerja OpenSpec secara lengkap. Tutorial interakti
 
 **Contoh:**
 ```
-Anda: /opsx:onboard
+You: /opsx:onboard
 
-AI:  Welcome to OpenSpec!
+AI:  Selamat datang di OpenSpec!
 
-     I'll walk you through the complete workflow using your actual codebase.
-     We'll find something small to improve, create a proper change for it,
-     implement it, and archive it.
+     Saya akan memandu Anda melalui alur kerja lengkap menggunakan *codebase* Anda yang sebenarnya.
+     Kita akan menemukan sesuatu yang kecil untuk diperbaiki, membuat perubahan yang layak untuk itu,
+     mengimplementasikannya, dan mengarsipkannya.
 
-     Let me scan your codebase for opportunities...
+     Izinkan saya memindai *codebase* Anda untuk peluang...
 
-     [Analyzes codebase]
+     [Menganalisis codebase]
 
-     I found a few things we could work on:
-     1. Add input validation to the contact form
-     2. Improve error messages in the auth flow
-     3. Add loading states to async buttons
+     Saya menemukan beberapa hal yang dapat kami kerjakan:
+     1. Tambahkan validasi input ke formulir kontak
+     2. Tingkatkan pesan kesalahan di alur otentikasi
+     3. Tambahkan status pemuatan pada tombol asinkron
 
-     Which interests you? (or suggest something else)
+     Mana yang menarik bagi Anda? (atau sarankan hal lain)
 ```
 
 **Tips:**
 - Terbaik untuk pengguna baru yang mempelajari alur kerja
 - Menggunakan kode nyata, bukan contoh mainan
-- Membuat perubahan nyata yang dapat Anda pertahankan atau buang
-- Membutuhkan waktu 15-30 menit untuk menyelesaikan
+- Membuat perubahan nyata yang dapat Anda simpan atau buang
+- Membutuhkan 15-30 menit untuk diselesaikan
 
----
+## Sintaks Perintah Berdasarkan Alat AI
 
-## Sintaks Perintah berdasarkan Alat AI
+Berbagai alat AI menggunakan sintaks perintah yang sedikit berbeda. Gunakan format yang sesuai dengan alat Anda:
 
-Alat AI yang berbeda menggunakan sintaks perintah yang sedikit berbeda. Gunakan format yang sesuai dengan alat Anda:
-
-| Alat | Contoh Sintaks |
+| Tool | Syntax Example |
 |------|----------------|
 | Claude Code | `/opsx:propose`, `/opsx:apply` |
 | Cursor | `/opsx-propose`, `/opsx-apply` |
 | Windsurf | `/opsx-propose`, `/opsx-apply` |
 | Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
-| Kimi CLI | Invokasi berbasis Skill seperti `/skill:openspec-propose`, `/skill:openspec-apply-change` (tidak ada file perintah `opsx-*` yang dihasilkan) |
-| Trae | Invokasi berbasis Skill seperti `/openspec-propose`, `/openspec-apply-change` (tidak ada file perintah `opsx-*` yang dihasilkan) |
+| Kimi CLI | Skill-based invocations such as `/skill:openspec-propose`, `/skill:openspec-apply-change` (no generated `opsx-*` command files) |
+| Trae | Skill-based invocations such as `/openspec-propose`, `/openspec-apply-change` (no generated `opsx-*` command files) |
 
-Intensinya sama di semua alat, tetapi cara perintah disajikan dapat berbeda tergantung pada integrasinya.
+Maksudnya sama di semua alat, tetapi cara perintah ditampilkan dapat berbeda tergantung integrasi.
 
-> **Catatan:** Perintah GitHub Copilot (`.github/prompts/*.prompt.md`) hanya tersedia di ekstensi IDE (VS Code, JetBrains, Visual Studio). GitHub Copilot CLI saat ini tidak mendukung file prompt kustom — lihat [Alat yang Didukung](supported-tools.md) untuk detail dan solusi alternatif.
+> **Catatan:** Perintah GitHub Copilot (`.github/prompts/*.prompt.md`) hanya tersedia di ekstensi IDE (VS Code, JetBrains, Visual Studio). GitHub Copilot CLI saat ini tidak mendukung file prompt khusus — lihat [Supported Tools](supported-tools.md) untuk detail dan solusi sementara.
 
 ---
 
-## Perintah Legacy
+## Perintah Warisan (Legacy)
 
-Perintah-perintah ini menggunakan alur kerja lama "all-at-once" (semua sekaligus). Perintah-perintah ini masih berfungsi tetapi perintah OPSX direkomendasikan.
+Perintah ini menggunakan alur kerja "sekaligus" yang lebih lama. Perintah tersebut masih berfungsi tetapi perintah OPSX direkomendasikan.
 
-| Perintah | Fungsinya |
+| Command | What it does |
 |---------|--------------|
 | `/openspec:proposal` | Membuat semua artefak sekaligus (proposal, spesifikasi, desain, tugas) |
 | `/openspec:apply` | Mengimplementasikan perubahan |
 | `/openspec:archive` | Mengarsipkan perubahan |
 
-**Kapan menggunakan perintah legacy:**
-- Proyek yang sudah ada menggunakan alur kerja lama
-- Perubahan sederhana di mana Anda tidak memerlukan pembuatan artefak secara bertahap
-- Preferensi untuk pendekatan semua-atau-tidak sama sekali
+**Kapan menggunakan perintah warisan:**
+- Proyek yang sudah ada yang menggunakan alur kerja lama
+- Perubahan sederhana di mana Anda tidak memerlukan pembuatan artefak inkremental
+- Preferensi untuk pendekatan serba-serbi (all-or-nothing)
 
-**Bermigrasi ke OPSX:**
-Perubahan legacy dapat dilanjutkan dengan perintah OPSX. Struktur artefaknya kompatibel.
+**Migrasi ke OPSX:**
+Perubahan warisan dapat dilanjutkan dengan perintah OPSX. Struktur artefak tersebut kompatibel.
 
 ---
 
-## Pemecahan Masalah
+## Pemecahan Masalah (Troubleshooting)
 
-### "Change not found" (Perubahan tidak ditemukan)
+### "Change not found"
 
-Perintah tidak dapat mengidentifikasi perubahan mana yang akan dikerjakan.
+Perintah tersebut tidak dapat mengidentifikasi perubahan mana yang harus dikerjakan.
 
 **Solusi:**
 - Tentukan nama perubahan secara eksplisit: `/opsx:apply add-dark-mode`
 - Periksa apakah folder perubahan ada: `openspec list`
-- Verifikasi Anda berada di direktori proyek yang benar
+- Verifikasi bahwa Anda berada di direktori proyek yang benar
 
-### "No artifacts ready" (Tidak ada artefak yang siap)
+### "No artifacts ready"
 
-Semua artefak sudah selesai atau terblokir oleh dependensi yang hilang.
+Semua artefak baik sudah selesai atau diblokir oleh dependensi yang hilang.
 
 **Solusi:**
 - Jalankan `openspec status --change <name>` untuk melihat apa yang memblokir
 - Periksa apakah artefak yang diperlukan ada
 - Buat artefak dependensi yang hilang terlebih dahulu
 
-### "Schema not found" (Skema tidak ditemukan)
+### "Schema not found"
 
 Skema yang ditentukan tidak ada.
 
@@ -681,25 +679,25 @@ Skema yang ditentukan tidak ada.
 Alat AI tidak mengenali perintah OpenSpec.
 
 **Solusi:**
-- Pastikan OpenSpec sudah diinisialisasi: `openspec init`
-- Buat ulang skill: `openspec update`
+- Pastikan OpenSpec telah diinisialisasi: `openspec init`
+- Regenerasi skill: `openspec update`
 - Periksa apakah direktori `.claude/skills/` ada (untuk Claude Code)
-- Mulai ulang alat AI Anda untuk mengambil skill baru
+- Mulai ulang alat AI Anda untuk mengambil skill yang baru
 
-### Artefak tidak dihasilkan dengan benar
+### Artefak tidak dibuat dengan benar
 
 AI membuat artefak yang tidak lengkap atau salah.
 
 **Solusi:**
 - Tambahkan konteks proyek di `openspec/config.yaml`
-- Tambahkan aturan per artefak untuk panduan spesifik
+- Tambahkan aturan per-artefak untuk panduan spesifik
 - Berikan lebih banyak detail dalam deskripsi perubahan Anda
-- Gunakan `/opsx:continue` alih-alih `/opsx:ff` untuk kontrol lebih
+- Gunakan `/opsx:continue` alih-alih `/opsx:ff` untuk kontrol yang lebih baik
 
 ---
 
 ## Langkah Selanjutnya
 
-- [Alur Kerja](workflows.md) - Pola umum dan kapan menggunakan setiap perintah
+- [Alur Kerja (Workflows)](workflows.md) - Pola umum dan kapan harus menggunakan setiap perintah
 - [CLI](cli.md) - Perintah terminal untuk manajemen dan validasi
-- [Kustomisasi](customization.md) - Membuat skema dan alur kerja kustom
+- [Kustomisasi (Customization)](customization.md) - Membuat skema dan alur kerja khusus

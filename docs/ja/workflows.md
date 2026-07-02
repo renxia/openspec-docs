@@ -1,12 +1,12 @@
 # ワークフロー
 
-このガイドでは、OpenSpec の一般的なワークフローパターンと、それぞれの使用場面について説明します。基本的なセットアップについては、[Getting Started](getting-started.md) を参照してください。コマンドリファレンスについては、[Commands](commands.md) を参照してください。
+このガイドでは、OpenSpecの一般的なワークフローパターンと、それぞれの使用場面について説明します。基本的なセットアップについては、[Getting Started](getting-started.md)を参照してください。コマンドリファレンスについては、[Commands](commands.md)を参照してください。
 
-## 哲学: フェーズではなくアクション
+## 考え方：フェーズではなくアクション
 
-従来のワークフローでは、計画、実装、完了というフェーズを順に進める必要があります。しかし、実際の作業はそのような箱にはきれいに収まりません。
+従来のワークフローは、計画→実装→完了といったフェーズを強制します。しかし、実際の作業はきっちりとした箱に収まるものではありません。
 
-OPSX は異なるアプローチをとります。
+OPSXは異なるアプローチを取ります。
 
 ```text
 Traditional (phase-locked):
@@ -21,44 +21,66 @@ OPSX (fluid actions):
   proposal ──► specs ──► design ──► tasks ──► implement
 ```
 
-**主要な原則:**
+**主な原則:**
 
-- **フェーズではなくアクション** - コマンドは、あなたが行えるアクションであり、囚われるべきステージではありません
-- **依存関係はイネーブラー** - 次に何が必要かではなく、何が可能かを示します
+- **フェーズではなくアクション** - コマンドは、行き詰まる段階ではなく、実行できることそのものです。
+- **依存関係はイネーブラ（実現要因）である** - それらは次に何が必要かを規定するのではなく、何が可能かを示します。
 
-> **カスタマイズ:** OPSX のワークフローは、成果物のシーケンスを定義するスキーマによって駆動されます。カスタムスキーマの作成の詳細については、[Customization](customization.md) を参照してください。
+> **カスタマイズ:** OPSXのワークフローは、アーティファクトのシーケンスを定義するスキーマによって駆動されます。カスタムスキーマの作成方法については、[Customization](customization.md)を参照してください。
 
 ## 2つのモード
 
-### デフォルトのクイックパス (`core` プロファイル)
+### デフォルトのクイックパス（`core`プロファイル）
 
-新規インストールでは `core` がデフォルトとなり、以下が提供されます:
-- `/opsx:propose`
+新規インストールでは`core`がデフォルトとなり、以下の機能を提供します。
 - `/opsx:explore`
+- `/opsx:propose`
 - `/opsx:apply`
 - `/opsx:sync`
 - `/opsx:archive`
 
-一般的なフロー:
+一般的なフロー：
 
 ```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+  (オプション)
 ```
 
-### 拡張/フルワークフロー (カスタム選択)
+#### まず探索から始める（身につけるべき習慣）
 
-明示的なスキャフォールドおよびビルドコマンド (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`) を使用したい場合は、以下で有効にします:
+`/opsx:explore`は高度なアドオンではなく、デフォルトプロファイルの一部です。これは、問題はあるもののまだ計画がない場合に取るべき行動であり、AIアシスタントがいる現代ではほとんどの場合に該当します。
+
+```text
+You: /opsx:explore
+
+AI:  何を探索したいですか？
+
+You: 検索結果が陳腐に感じます。キャッシュの問題なのか、インデックスの問題なのか、それともクエリ自体に問題があるのか確信が持てません。
+
+AI:  確認してみましょう... [検索サービスとキャッシュレイヤーを読み込む]
+     原因はインデックスです。これは夜間に一度だけ再構築されるため、編集内容は翌日まで表示されません。2つの選択肢があります。書き込み時に再構築する（シンプルだが負荷大）か、短いTTLのキャッシュ無効化を行う（要素が多くなるが負荷小）。書き込み量が少ないことを考慮すると、書き込み時再構築がよりクリーンな解決策です。スコープを絞りますか？
+
+You: はい。
+
+You: /opsx:propose rebuild-search-index-on-write
+```
+
+Exploreはアーティファクトを作成せず、コードも一切書きません。これは漠然とした懸念を正確な変更へと変えるための無料のノーリスクな会話であり、その結果として続く提案が明確になります。すでに何が欲しいか完全に分かっている場合は、これをスキップして`/opsx:propose`に直接進んでください。完全ガイド：[Explore First](explore.md)。
+
+### 拡張/フルワークフロー（カスタム選択）
+
+明示的なスキャフォールドおよびビルドコマンド（`/opsx:new`、`/opsx:continue`、`/opsx:ff`、`/opsx:verify`、`/opsx:bulk-archive`、`/opsx:onboard`）が必要な場合は、以下で有効にします。
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## ワークフローパターン (拡張モード)
+## ワークフローパターン（拡張モード）
 
-### クイック機能
+### クイックフィーチャー
 
-構築したいものが明確で、実行するだけの場合:
+何を構築したいか分かっており、実行に移すだけでよい場合：
 
 ```text
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
@@ -69,37 +91,37 @@ openspec update
 ```text
 You: /opsx:new add-logout-button
 
-AI:  Created openspec/changes/add-logout-button/
-     Ready to create: proposal
+AI:  openspec/changes/add-logout-button/ を作成しました。
+     提案の作成準備ができています。
 
 You: /opsx:ff
 
-AI:  Creating all planning artifacts...
+AI:  すべての計画アーティファクトを作成中...
      ✓ proposal.md
      ✓ specs/
      ✓ design.md
      ✓ tasks.md
-     Ready for implementation!
+     実装の準備ができました！
 
 You: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ Added logout button to header
-     ✓ Implemented session clearing
-     ✓ Added confirmation dialog
-     All tasks complete!
+AI:  タスクを実行中です...
+     ✓ ヘッダーへのログアウトボタン追加
+     ✓ セッションクリアの実装
+     ✓ 確認ダイアログの追加
+     すべてのタスクが完了しました！
 
 You: /opsx:archive
 
-AI:  ✓ Merged specs
-     ✓ Archived change
+AI:  ✓ 仕様書のマージ
+     ✓ 変更のアーカイブ
 ```
 
-**最適な用途:** 小規模から中規模の機能、バグ修正、単純な変更。
+**最適な用途:** 小〜中規模のフィーチャー、バグ修正、単純な変更。
 
-### 探索的
+### 探索的（Exploratory）
 
-要件が不明確な場合や、まず調査が必要な場合:
+要件が不明確であるか、まず調査する必要がある場合：
 
 ```text
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
@@ -110,51 +132,48 @@ AI:  ✓ Merged specs
 ```text
 You: /opsx:explore
 
-AI:  What would you like to explore?
+AI:  何を探索したいですか？
 
-You: I want to improve page load performance but I'm not sure
-     where the bottlenecks are.
+You: ページロードのパフォーマンスを改善したいのですが、どこにボトルネックがあるのか分かりません。
 
-AI:  Let me help investigate...
-     [Analyzes bundle sizes, identifies slow queries, reviews
-     component render patterns]
+AI:  調査をお手伝いします...
+     [バンドルサイズを分析し、遅いクエリを特定し、コンポーネントのレンダリングパターンを確認]
 
-     I found three main bottlenecks:
-     1. Large unoptimized images
-     2. Synchronous data fetching in ProductList
-     3. Re-renders from context changes
+     3つの主なボトルネックを発見しました：
+     1. 大量の最適化されていない画像
+     2. ProductListにおける同期的なデータ取得
+     3. コンテキスト変更による再レンダリング
 
-     Which would you like to address first?
+     どれから対処しますか？
 
-You: Let's tackle the data fetching issue.
+You: データ取得の問題に対処しましょう。
 
 You: /opsx:new optimize-product-list-fetching
 
-AI:  Created change. Ready to create: proposal
+AI:  変更を作成しました。提案の作成準備ができています。
 
 You: /opsx:continue
 
-AI:  Creating proposal based on our exploration...
-     [Writes proposal incorporating investigation insights]
+AI:  調査結果に基づいた提案書の作成中...
+     [調査結果を取り入れた提案書を記述]
 
-     Ready to create: specs, design
-     Which would you like next?
+     仕様、デザインの作成準備ができました。次に何をしますか？
 
 You: /opsx:continue
 
-AI:  Creating specs...
+AI:  仕様書の作成中...
 ```
 
-**最適な用途:** パフォーマンス最適化、デバッグ、アーキテクチャの決定、要件が不明確な場合。
+**最適な用途:** パフォーマンス最適化、デバッグ、アーキテクチャ設計、不明確な要件。
 
-### 並列変更
+### 並行作業（Parallel Changes）
 
-複数の変更を同時に作業する:
+複数の変更を同時に進める場合：
 
 ```text
-Change A: /opsx:new ──► /opsx:ff ──► /opsx:apply (in progress)
+Change A: /opsx:new ──► /opsx:ff ──► /opsx:apply (進行中)
                                          │
-                                    context switch
+                                    コンテキストスイッチ
                                          │
 Change B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
@@ -162,266 +181,264 @@ Change B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 **会話例:**
 
 ```text
-You: I'm working on add-dark-mode but got pulled into a bug fix
+You: add-dark-modeに取り組んでいますが、バグ修正に割り込まれました。
 
 You: /opsx:new fix-login-redirect
 
-AI:  Created openspec/changes/fix-login-redirect/
+AI:  openspec/changes/fix-login-redirect/ を作成しました。
 
 You: /opsx:ff
 
-AI:  ✓ Created planning artifacts
+AI:  ✓ 計画アーティファクトを作成しました。
 
 You: /opsx:apply
 
-AI:  Working on fix-login-redirect...
-     [Implements the fix]
-     All tasks complete!
+AI:  fix-login-redirectに取り組んでいます...
+     [修正を実装]
+     すべてのタスクが完了しました！
 
 You: /opsx:archive
 
-AI:  ✓ Archived fix-login-redirect
+AI:  ✓ fix-login-redirect をアーカイブ
 
-You: Let's get back to dark mode
+You: ダークモードに戻りましょう。
 
 You: /opsx:apply add-dark-mode
 
-AI:  Resuming add-dark-mode...
-     Picking up at task 2.3: Update Header...
+AI:  add-dark-mode の再開...
+     タスク2.3：ヘッダーの更新から再開...
 ```
 
-**最適な用途:** 並列作業ストリーム、緊急の割り込み、チームコラボレーション。
+**最適な用途:** 並行する作業ストリーム、緊急割り込み、チームコラボレーション。
 
-複数の完了した変更がある場合は、`/opsx:bulk-archive` を使用します:
+完了した複数の変更がある場合は、`/opsx:bulk-archive`を使用します。
 
 ```text
 You: /opsx:bulk-archive
 
-AI:  Found 3 completed changes:
-     - add-dark-mode (all tasks done)
-     - fix-login-redirect (all tasks done)
-     - update-footer (all tasks done)
+AI:  3つの完了済み変更が見つかりました：
+     - add-dark-mode (すべてのタスクが完了)
+     - fix-login-redirect (すべてのタスクが完了)
+     - update-footer (すべてのタスクが完了)
 
-     Checking for spec conflicts...
-     ⚠ add-dark-mode and update-footer both touch specs/ui/
+     仕様の競合を確認中...
+     ⚠ add-dark-mode と update-footer の両方が specs/ui/ に影響を与えています。
 
-     Inspecting codebase to resolve...
-     Both changes are implemented. Will apply in chronological order.
+     解決のためにコードベースを検査中...
+     両方の変更は実装されています。時系列順に適用します。
 
-     Archive all 3 changes?
+     3つの変更すべてをアーカイブしますか？
 
-You: Yes
+You: はい
 
-AI:  ✓ Archived add-dark-mode
-     ✓ Archived fix-login-redirect
-     ✓ Archived update-footer
-     Specs merged in order: add-dark-mode → update-footer
+AI:  ✓ add-dark-mode をアーカイブ
+     ✓ fix-login-redirect をアーカイブ
+     ✓ update-footer をアーカイブ
+     仕様書は順番にマージされました：add-dark-mode → update-footer
 ```
 
-一括アーカイブは、複数の変更が同じ仕様に触れた場合を検出し、実際に実装されている内容を確認して競合を解決します。
+Bulk archiveは、複数の変更が同じ仕様に影響を与えていることを検知し、実際に何が実装されているかをチェックすることで競合を解決します。
 
 ### 変更の完了
 
-推奨される完了フロー:
+推奨される完了フロー：
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              validates          prompts to sync
-              implementation     if needed
+              検証          同期を促す
+              実装の確認     必要な場合
 ```
 
-#### 検証: 作業を確認する
+#### Verify（検証）：作業のチェック
 
-`/opsx:verify` は、3つの側面で実装をアーティファクトに対して検証します:
+`/opsx:verify`は、3つの側面からアーティファクトに対する実装を検証します。
 
 ```text
 You: /opsx:verify
 
-AI:  Verifying add-auth...
+AI:  add-auth の検証中...
 
-     COMPLETENESS
-     ✓ All 12 tasks in tasks.md are checked
-     ✓ All requirements in specs have corresponding code
-     ⚠ Scenario "Session timeout after inactivity" not tested
+     完全性 (COMPLETENESS)
+     ✓ tasks.md にある12個のタスクすべてがチェック済み
+     ✓ 仕様書にあるすべての要件に対応するコードが存在します
+     ⚠ 「非アクティブ状態でのセッションタイムアウト」シナリオはテストされていません
 
-     CORRECTNESS
-     ✓ Implementation matches spec intent
-     ✓ Edge cases from scenarios are handled
-     ✓ Error states match spec definitions
+     正確性 (CORRECTNESS)
+     ✓ 実装が仕様の意図と一致しています
+     ✓ シナリオからのエッジケースが処理されています
+     ✓ エラー状態が仕様定義と一致しています
 
-     COHERENCE
-     ✓ Design decisions reflected in code structure
-     ✓ Naming conventions consistent with design.md
-     ⚠ Design mentions "event-driven" but implementation uses polling
+     一貫性 (COHERENCE)
+     ✓ デザイン上の決定事項がコード構造に反映されています
+     ✓ 命名規則がdesign.mdと一貫しています
+     ⚠ デザインでは「イベント駆動」を言及していますが、実装はポーリングを使用しています
 
-     SUMMARY
+     サマリー (SUMMARY)
      ─────────────────────────────
-     Critical issues: 0
-     Warnings: 2
-     Ready to archive: Yes (with warnings)
+     重大な問題: 0
+     警告: 2
+     アーカイブ可能か: はい（警告あり）
 
-     Recommendations:
-     1. Add test for session timeout scenario
-     2. Consider refactoring to event-driven as designed, or update design.md
+     推奨事項：
+     1. セッションタイムアウトシナリオのテストを追加すること
+     2. 設計通りイベント駆動へのリファクタリングを検討するか、design.mdを更新すること
 ```
 
-**検証がチェックする内容:**
+**Verifyがチェックするもの:**
 
 | 側面 | 検証内容 |
-|-----------|------------------|
-| 完全性 | すべてのタスクが完了し、すべての要件が実装され、シナリオがカバーされている |
-| 正確性 | 実装が仕様の意図と一致し、エッジケースが処理されている |
-| 一貫性 | 設計決定がコードに反映され、パターンが一貫している |
+|---|---|
+| 完全性 (Completeness) | すべてのタスク完了、すべての要件実装済み、シナリオカバー済み |
+| 正確性 (Correctness) | 実装が仕様の意図と一致、エッジケースを処理済み |
+| 一貫性 (Coherence) | デザイン上の決定事項がコードに反映、パターンが一貫している |
 
-検証はアーカイブをブロックしませんが、まず対処したい問題を表面化させます。
+Verifyはアーカイブをブロックしませんが、先に解決したい可能性のある問題を表面化させます。
 
-#### アーカイブ: 変更を確定する
+#### Archive（アーカイブ）：変更の確定
 
-`/opsx:archive` は変更を完了し、アーカイブに移動します:
+`/opsx:archive`は変更を完了し、アーカイブに移動させます。
 
 ```text
 You: /opsx:archive
 
-AI:  Archiving add-auth...
+AI:  add-auth のアーカイブ中...
 
-     Artifact status:
-     ✓ proposal.md exists
-     ✓ specs/ exists
-     ✓ design.md exists
-     ✓ tasks.md exists (12/12 tasks complete)
+     アーティファクトの状態：
+     ✓ proposal.md が存在します
+     ✓ specs/ が存在します
+     ✓ design.md が存在します
+     ✓ tasks.md が存在します（12/12タスク完了）
 
-     Delta specs: Not yet synced to main
-     → Would you like to sync now?
+     仕様書のデルタ: まだメインに同期されていません
+     → 今すぐ同期しますか？
 
-You: Yes
+You: はい
 
-AI:  ✓ Synced specs to openspec/specs/auth/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-auth/
+AI:  ✓ openspec/specs/auth/spec.md に仕様書を同期しました
+     ✓ openspec/changes/archive/2025-01-24-add-auth/ へ移動しました
 
-     Change archived successfully.
+     変更は正常にアーカイブされました。
 ```
 
-アーカイブは、仕様が同期されていない場合にプロンプトを表示します。未完了のタスクではブロックしませんが、警告は表示します。
+Archiveは、仕様が同期されていない場合にプロンプトを表示します。未完了のタスクでブロックすることはありませんが、警告を発します。
 
-## いつ何を使うか
+## どちらを使うべきか
 
 ### `/opsx:ff` vs `/opsx:continue`
 
-| 状況 | 使用するコマンド |
-|-----------|-----|
+| 状況 | 使用するもの |
+|---|---|
 | 要件が明確で、構築準備ができている | `/opsx:ff` |
-| 探索中で、各ステップを確認したい | `/opsx:continue` |
-| 仕様の前に提案を反復したい | `/opsx:continue` |
-| 時間的制約があり、迅速に進める必要がある | `/opsx:ff` |
-| 複雑な変更で、制御したい | `/opsx:continue` |
+| 探索しており、各ステップを確認したい場合 | `/opsx:continue` |
+| 仕様書作成前に提案を反復させたい場合 | `/opsx:continue` |
+| 時間的制約があり、迅速に進めたい場合 | `/opsx:ff` |
+| 複雑な変更で、コントロールを握りたい場合 | `/opsx:continue` |
 
-**経験則:** 全体のスコープを事前に説明できる場合は `/opsx:ff` を使用します。進行中に詰めていく場合は `/opsx:continue` を使用します。
+**経験則:** 全体のスコープを事前に説明できる場合は`/opsx:ff`を使用します。進めながら解決策を見つけている場合は`/opsx:continue`を使用します。
 
-### 更新するか、新規に始めるか
+### 更新するべきか、ゼロから始めるべきか
 
-よくある質問: 既存の変更を更新するのはいつか、新規に始めるのはいつか？
+よくある質問：既存の変更を更新するのはいつで、新しいものを開始すべきですか？
 
 **既存の変更を更新する場合:**
 
-- 同じ意図で、実行を洗練している
-- スコープが狭まる (まずMVP、残りは後で)
-- 学習に基づく修正 (コードベースが予想と違った)
-- 実装の発見に基づく設計の微調整
+- 意図は同じだが実行方法を洗練させた場合
+- スコープが絞られた場合（MVPを先に作り、残りは後で対応）
+- 学習に基づいた修正（コードベースが期待通りではなかった場合）
+- 実装上の発見に基づくデザインの調整
 
-**新規の変更を始める場合:**
+**新しい変更を開始する場合:**
 
-- 意図が根本的に変わった
-- スコープがまったく異なる作業に爆発的に拡大した
-- 元の変更を単独で「完了」としてマークできる
-- パッチが明確にするより混乱させる
+- 意図が根本的に変わった場合
+- スコープが完全に異なる作業にまで肥大化した場合
+- 元の変更を単独で「完了」とマークできる場合
+- パッチが明確にするよりも混乱させる可能性が高い場合
 
 ```text
                      ┌─────────────────────────────────────┐
-                     │     Is this the same work?          │
+                     │     これは同じ作業ですか？          │
                      └──────────────┬──────────────────────┘
                                     │
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          Same intent?      >50% overlap?      Can original
-          Same problem?     Same scope?        be "done" without
-                 │                  │          these changes?
+          同じ意図か?      >50%の重複があるか?      元の変更がこれらの変更なしで「完了」できるか?
                  │                  │                  │
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
       YES               NO YES           NO  NO              YES
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    UPDATE            NEW  UPDATE       NEW  UPDATE          NEW
+    更新 (UPDATE)        新規 (NEW)  更新 (UPDATE)       新規 (NEW)  更新 (UPDATE)  新規 (NEW)
 ```
 
-**例: 「ダークモードを追加」**
+**例：「ダークモードの追加」**
 
-- 「カスタムテーマもサポートする必要がある」→ 新規の変更 (スコープが爆発的に拡大)
-- 「システム設定の検出が予想より難しい」→ 更新 (同じ意図)
-- 「まずトグルを出荷し、設定は後で追加」→ 更新、アーカイブ、その後新規の変更
+- 「カスタムテーマのサポートも必要」→ 新規変更（スコープが肥大化）
+- 「システム設定の検出は予想以上に難しい」→ 更新（意図は同じ）
+- 「まずトグルをリリースし、後で設定を追加する」→ 更新してからアーカイブし、その後新規変更を作成
 
 ## ベストプラクティス
 
-### 変更を焦点を絞って保つ
+### 変更に焦点を絞る
 
-変更ごとに1つの論理的な作業単位。「機能Xを追加し、同時にYをリファクタリングしている」場合は、2つの別々の変更を検討してください。
+1つの論理的な作業単位を1つの変更としてください。もし「機能Xの追加とYのリファクタリングの両方を行う」のであれば、2つの別々の変更を検討してください。
 
 **重要な理由:**
-- レビューと理解が容易
-- よりクリーンなアーカイブ履歴
-- 独立して出荷可能
-- 必要に応じてロールバックがより簡単
+- レビューし理解するのが容易
+- アーカイブ履歴がクリーンになる
+- 単独でリリースできる
+- 必要であればロールバックが簡単
 
-### 不明確な要件には `/opsx:explore` を使用する
+### 要件が不明確な場合は`/opsx:explore`を使用する
 
-変更にコミットする前に、問題空間を探索します:
+変更にコミットする前に、問題領域を探索してください。
 
 ```text
 You: /opsx:explore
 
-AI:  What would you like to explore?
+AI:  何を探索したいですか？
 
-You: How should we handle rate limiting for our API?
+You: APIのレート制限をどのように処理すべきでしょうか？
 
-AI:  Let me investigate your current setup and options...
-     [Researches codebase, considers patterns]
+AI:  現在のセットアップとオプションについて調査します...
+     [コードベースをリサーチし、パターンを考慮]
 
-     I see three approaches we could take:
-     1. Middleware-based (simple, per-endpoint)
-     2. Redis-backed (scalable, shared state)
-     3. Token bucket per user (fair, complex)
+     取り得る可能性のある3つのアプローチが見つかりました：
+     1. ミドルウェアベース（シンプル、エンドポイントごと）
+     2. Redisバック（スケーラブル、共有状態）
+     3. ユーザーごとのトークンバケット（公平、複雑）
 
-     Your current stack suggests #1 or #2. What's your scale?
+     現在のスタックは#1または#2を示唆しています。スケール感はいかがですか？
 ```
 
-探索により、アーティファクトを作成する前に思考が明確になります。
+探索を行うことで、アーティファクトを作成する前に思考を明確にします。
 
-### アーカイブ前に検証する
+### アーカイブする前に検証する
 
-`/opsx:verify` を使用して、実装がアーティファクトと一致していることを確認します:
+`/opsx:verify`を使用して、実装がアーティファクトと一致しているかを確認してください。
 
 ```text
 You: /opsx:verify
 
-AI:  Verifying add-dark-mode...
+AI:  add-dark-mode の検証中...
 
-     ✓ All tasks in tasks.md are checked
-     ✓ Requirements in specs have corresponding code
-     ✓ Design decisions are reflected in implementation
+     ✓ tasks.md にあるすべてのタスクがチェック済み
+     ✓ 仕様書にある要件が対応するコードを持っている
+     ✓ デザイン上の決定事項が実装に反映されている
 
-     Ready to archive!
+     アーカイブ準備完了！
 ```
 
-変更を閉じる前に、不一致を捕捉します。
+変更をクローズする前に、不一致点を検出します。
 
-### 変更に明確な名前を付ける
+### 変更名を明確にする
 
-良い名前は `openspec list` を役立たせます:
+良い名前は`openspec list`を役立てます：
 
 ```text
-Good:                          Avoid:
+良い例:                          避けるべき例:
 add-dark-mode                  feature-1
 fix-login-redirect             update
 optimize-product-query         changes
@@ -430,23 +447,23 @@ implement-2fa                  wip
 
 ## コマンドクイックリファレンス
 
-完全なコマンド詳細とオプションについては、[コマンド](commands.md) を参照してください。
+完全なコマンドの詳細とオプションについては、[Commands](commands.md)を参照してください。
 
-| コマンド | 目的 | 使用タイミング |
+| Command | 目的 | 使用するタイミング |
 |---------|---------|-------------|
-| `/opsx:propose` | 変更と計画成果物を作成 | 高速デフォルトパス（`core` プロファイル） |
-| `/opsx:explore` | アイデアを検討 | 要件が不明瞭な場合、調査時 |
-| `/opsx:new` | 変更スキャフォールドを開始 | 拡張モード、明示的な成果物制御 |
-| `/opsx:continue` | 次の成果物を作成 | 拡張モード、段階的な成果物作成 |
-| `/opsx:ff` | すべての計画成果物を作成 | 拡張モード、明確なスコープ |
-| `/opsx:apply` | タスクを実装 | コード記述の準備完了時 |
-| `/opsx:verify` | 実装を検証 | 拡張モード、アーカイブ前 |
-| `/opsx:sync` | デルタ仕様をマージ | 拡張モード、オプション |
-| `/opsx:archive` | 変更を完了 | すべての作業完了時 |
-| `/opsx:bulk-archive` | 複数の変更をアーカイブ | 拡張モード、並行作業 |
+| `/opsx:propose` | 変更および計画アーティファクトの作成 | 標準的な高速パス（`core`プロファイル） |
+| `/opsx:explore` | AIによるアイデアの検討 | 不明な要件、調査、オプション比較がある場合 |
+| `/opsx:new` | 変更スキャフォールドの開始 | 詳細モード、明示的なアーティファクト制御が必要な場合 |
+| `/opsx:continue` | 次のアーティファクト作成 | 詳細モード、ステップバイステップでのアーティファクト作成 |
+| `/opsx:ff` | すべての計画アーティファクト作成 | 詳細モード、スコープが明確な場合 |
+| `/opsx:apply` | タスクの実装 | コードを記述する準備ができている場合 |
+| `/opsx:verify` | 実装の検証 | アーカイブする前の詳細モード |
+| `/opsx:sync` | デルタ仕様のマージ | 詳細モード、オプション |
+| `/opsx:archive` | 変更の完了 | すべての作業が完了したとき |
+| `/opsx:bulk-archive` | 複数の変更をアーカイブ | 詳細モード、並行作業を行う場合 |
 
 ## 次のステップ
 
-- [コマンド](commands.md) - オプション付きの完全なコマンドリファレンス
-- [コンセプト](concepts.md) - スペック、成果物、スキーマの詳細解説
-- [カスタマイズ](customization.md) - カスタムワークフローの作成
+- [Commands](commands.md) - オプションを含む完全なコマンドリファレンス
+- [Concepts](concepts.md) - 仕様、アーティファクト、スキーマに関する詳細な解説
+- [Customization](customization.md) - カスタムワークフローの作成

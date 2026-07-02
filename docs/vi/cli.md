@@ -1,113 +1,110 @@
-# Tham chiếu CLI
+# Tài liệu Tham khảo CLI
 
-CLI của OpenSpec (`openspec`) cung cấp các lệnh terminal để thiết lập dự án, kiểm tra trạng thái và quản lý. Các lệnh này bổ sung cho các lệnh slash AI (như `/opsx:propose`) được ghi lại trong [Lệnh](commands.md).
+OpenSpec CLI (`openspec`) cung cấp các lệnh terminal để thiết lập dự án, xác thực, kiểm tra trạng thái và quản lý. Các lệnh này bổ sung cho các lệnh AI slash (như `/opsx:propose`) được tài liệu hóa trong [Commands](commands.md).
 
-## Tổng quan
+## Tóm tắt
 
-| Danh mục | Lệnh | Mục đích |
-|----------|------|----------|
+| Category | Commands | Purpose |
+|----------|----------|---------|
 | **Thiết lập** | `init`, `update` | Khởi tạo và cập nhật OpenSpec trong dự án của bạn |
-| **Không gian làm việc (beta)** | `workspace setup`, `workspace list`, `workspace ls`, `workspace link`, `workspace relink`, `workspace doctor`, `workspace update`, `workspace open` | Thiết lập các chế độ xem cục bộ trên các kho lưu trữ hoặc thư mục được liên kết |
-| **Ngữ cảnh chia sẻ (beta)** | `context-store setup`, `context-store register`, `context-store unregister`, `context-store remove`, `context-store list`, `context-store doctor`, `initiative create`, `initiative show`, `initiative list` | Quản lý đăng ký context-store cục bộ và ngữ cảnh sáng kiến bền vững |
-| **Duyệt** | `list`, `view`, `show` | Khám phá các thay đổi và spec |
-| **Xác thực** | `validate` | Kiểm tra vấn đề trong các thay đổi và spec |
-| **Vòng đời** | `archive` | Hoàn thành các thay đổi đã hoàn tất |
-| **Quy trình làm việc** | `new change`, `set change`, `status`, `instructions`, `templates`, `schemas` | Hỗ trợ quy trình làm việc dựa trên tài liệu |
-| **Sơ đồ (Schema)** | `schema init`, `schema fork`, `schema validate`, `schema which` | Tạo và quản lý các quy trình làm việc tùy chỉnh |
-| **Cấu hình** | `config` | Xem và chỉnh sửa cài đặt |
+| **Kho lưu trữ (OpenSpec độc lập)** | `store setup`, `store register`, `store unregister`, `store remove`, `store list`, `store doctor` | Quản lý các kho lưu trữ — các repo OpenSpec độc lập mà bạn đã đăng ký |
+| **Sức khỏe** | `doctor` | Báo cáo tình trạng mối quan hệ cho gốc đã được giải quyết |
+| **Ngữ cảnh làm việc** | `context` | Tập hợp bộ làm việc (gốc + các kho lưu trữ tham chiếu) |
+| **Bộ làm việc cá nhân** | `workset create`, `workset list`, `workset open`, `workset remove` | Giữ và mở các chế độ xem cục bộ, cá nhân trong công cụ của bạn |
+| **Duyệt** | `list`, `view`, `show` | Khám phá các thay đổi và thông số kỹ thuật |
+| **Xác thực** | `validate` | Kiểm tra các thay đổi và thông số kỹ thuật xem có vấn đề gì không |
+| **Vòng đời** | `archive` | Hoàn tất các thay đổi đã hoàn thành |
+| **Quy trình làm việc** | `new change`, `status`, `instructions`, `templates`, `schemas` | Hỗ trợ quy trình làm việc dựa trên artifact |
+| **Schema** | `schema init`, `schema fork`, `schema validate`, `schema which` | Tạo và quản lý các quy trình làm việc tùy chỉnh |
+| **Cấu hình** | `config` | Xem và sửa đổi cài đặt |
 | **Tiện ích** | `feedback`, `completion` | Phản hồi và tích hợp shell |
 
----
+## Lệnh dành cho Người dùng và Tác nhân
 
-## So sánh Lệnh Dành cho Con người và Đại lý (Agent)
+Hầu hết các lệnh CLI được thiết kế để sử dụng bởi **người dùng** trên terminal. Một số lệnh cũng hỗ trợ **sử dụng bởi tác nhân/script** thông qua đầu ra JSON.
 
-Hầu hết các lệnh CLI được thiết kế để **con người sử dụng** trong terminal. Một số lệnh cũng hỗ trợ **sử dụng bởi đại lý/script** thông qua đầu ra JSON.
+### Các Lệnh Chỉ Dành Cho Người Dùng
 
-### Lệnh Chỉ dành cho Con người
+Các lệnh này mang tính tương tác và được thiết kế cho việc sử dụng trên terminal:
 
-Các lệnh này mang tính tương tác và được thiết kế để sử dụng trong terminal:
-
-| Mục đích lệnh | Mô tả |
-|---------------|---------|
-| `openspec init` | Khởi tạo dự án (gợi ý tương tác) |
+| Command | Mục đích |
+|---------|---------|
+| `openspec init` | Khởi tạo dự án (các lời nhắc tương tác) |
 | `openspec view` | Bảng điều khiển tương tác |
-| `openspec config edit` | Mở tệp cấu hình trong trình soạn thảo |
+| `openspec workset open <name>` | Mở một workset đã lưu (cửa sổ trình soạn thảo hoặc phiên tác nhân terminal) |
+| `openspec config edit` | Mở cấu hình trong trình soạn thảo |
 | `openspec feedback` | Gửi phản hồi qua GitHub |
-| `openspec completion install` | Cài đặt bổ sung cho shell |
+| `openspec completion install` | Cài đặt các tính năng hoàn thành shell |
 
-### Lệnh Tương thích với Đại lý (Agent)
+### Các Lệnh Tương Thích Với Tác Nhân
 
-Các lệnh này hỗ trợ đầu ra `--json` để sử dụng theo chương trình bởi các đại lý AI và script:
+Các lệnh này hỗ trợ đầu ra `--json` để sử dụng theo chương trình bởi các tác nhân AI và script:
 
-| Lệnh | Sử dụng bởi Con người | Sử dụng bởi Đại lý |
-|-------|------------------------|---------------------|
-| `openspec list` | Duyệt các thay đổi/specs | `--json` cho dữ liệu có cấu trúc |
-| `openspec show <item>` | Đọc nội dung | `--json` để phân tích |
-| `openspec validate` | Kiểm tra các vấn đề | `--all --json` để kiểm tra hàng loạt |
-| `openspec status` | Xem tiến độ sản phẩm | `--json` cho trạng thái có cấu trúc |
-| `openspec instructions` | Nhận các bước tiếp theo | `--json` cho hướng dẫn của đại lý |
-| `openspec templates` | Tìm đường dẫn mẫu | `--json` để phân giải đường dẫn |
-| `openspec schemas` | Liệt kê các lược đồ có sẵn | `--json` để khám phá lược đồ |
-| `openspec workspace setup --no-interactive` | Tạo không gian làm việc với đầu vào rõ ràng | `--json` cho đầu ra thiết lập có cấu trúc |
-| `openspec workspace list` | Duyệt các không gian làm việc đã biết | `--json` cho các đối tượng không gian làm việc có kiểu |
-| `openspec workspace link` | Liên kết một kho hoặc thư mục | `--json` cho đầu ra liên kết có cấu trúc |
-| `openspec workspace relink` | Sửa chữa một đường dẫn đã liên kết | `--json` cho đầu ra liên kết có cấu trúc |
-| `openspec workspace doctor` | Kiểm tra một không gian làm việc | `--json` cho đầu ra trạng thái có cấu trúc |
-| `openspec workspace update` | Làm mới hướng dẫn cục bộ của không gian làm việc và kỹ năng của đại lý | `--tools` chọn đại lý; profile chọn quy trình làm việc |
-| `openspec context-store setup <id>` | Tạo một kho ngữ cảnh cục bộ | `--json` với đầu vào rõ ràng cho đầu ra thiết lập có cấu trúc |
-| `openspec context-store register <path>` | Đăng ký một kho ngữ cảnh hiện có | `--json` cho đầu ra đăng ký có cấu trúc |
-| `openspec context-store unregister <id>` | Quên một đăng ký kho ngữ cảnh cục bộ | `--json` cho đầu ra dọn dẹp có cấu trúc |
-| `openspec context-store remove <id>` | Xóa một thư mục kho ngữ cảnh cục bộ đã đăng ký | `--yes --json` để xóa không tương tác |
-| `openspec context-store list` | Duyệt các kho ngữ cảnh đã đăng ký | `--json` cho các đăng ký có cấu trúc |
-| `openspec context-store doctor` | Kiểm tra thiết lập kho cục bộ | `--json` cho chẩn đoán có cấu trúc |
-| `openspec initiative list` | Duyệt các sáng kiến chung | `--json` cho các bản ghi sáng kiến có cấu trúc |
-| `openspec initiative show <id>` | Phân giải một sáng kiến | `--json` cho các đường dẫn chính tắc và siêu dữ liệu |
-| `openspec new change <id>` | Tạo khung thay đổi cục bộ trong kho | `--json`, cộng thêm `--initiative` cho các liên kết điều phối chung |
-| `openspec set change <id>` | Cập nhật siêu dữ liệu thay đổi đã lưu trữ | `--json`, cộng thêm `--initiative` cho các liên kết điều phối chung |
+| Command | Sử dụng của Người dùng | Sử dụng của Tác nhân |
+|---------|-----------|-----------|
+| `openspec list` | Duyệt các thay đổi/spec | `--json` cho dữ liệu có cấu trúc |
+| `openspec show <item>` | Đọc nội dung | `--json` để phân tích cú pháp |
+| `openspec validate` | Kiểm tra sự cố | `--all --json` để xác thực hàng loạt |
+| `openspec status` | Xem tiến trình artifact | `--json` cho trạng thái có cấu trúc |
+| `openspec instructions` | Lấy các bước tiếp theo | `--json` cho hướng dẫn của tác nhân |
+| `openspec templates` | Tìm đường dẫn template | `--json` để phân giải đường dẫn |
+| `openspec schemas` | Liệt kê các schema khả dụng | `--json` để khám phá schema |
+| `openspec store setup <id>` | Tạo và đăng ký một kho lưu trữ cục bộ | `--json` với các đầu vào tường minh cho đầu ra thiết lập có cấu trúc |
+| `openspec store register <path>` | Đăng ký một kho lưu trữ hiện có | `--json` cho đầu ra đăng ký có cấu trúc |
+| `openspec store unregister <id>` | Quên việc đăng ký một kho lưu trữ cục bộ | `--json` cho đầu ra dọn dẹp có cấu trúc |
+| `openspec store remove <id>` | Xóa thư mục kho lưu trữ đã đăng ký | `--yes --json` cho việc xóa không tương tác |
+| `openspec store list` | Duyệt các kho lưu trữ đã đăng ký | `--json` cho các bản ghi có cấu trúc |
+| `openspec store doctor` | Kiểm tra thiết lập kho lưu trữ cục bộ | `--json` cho chẩn đoán có cấu trúc |
+| `openspec new change <id>` | Tạo khung thay đổi cục bộ của repo | `--json`, cộng với `--store <id>` để sử dụng một kho lưu trữ đã đăng ký làm gốc OpenSpec |
+| `openspec workset create [name]` | Soạn thảo một chế độ xem công việc cá nhân | `--member <path> --json` cho việc soạn thảo không tương tác |
+| `openspec workset list` | Duyệt các workset đã lưu | `--json` cho các chế độ xem có cấu trúc |
+| `openspec workset remove <name>` | Xóa một chế độ xem đã lưu | `--yes --json` cho việc xóa không tương tác |
 
 ---
 
-## Các Tùy chọn Toàn cục
+## Tùy chọn Toàn cục
 
 Các tùy chọn này hoạt động với tất cả các lệnh:
 
-| Tùy chọn | Mô tả |
-|-----------|---------|
+| Option | Mô tả |
+|--------|-------------|
 | `--version`, `-V` | Hiển thị số phiên bản |
-| `--no-color` | Tắt đầu ra màu |
+| `--no-color` | Vô hiệu hóa đầu ra màu |
 | `--help`, `-h` | Hiển thị trợ giúp cho lệnh |
 
 ---
 
-## Các lệnh Thiết lập
+## Các Lệnh Thiết Lập
 
 ### `openspec init`
 
-Khởi tạo OpenSpec trong dự án của bạn. Tạo cấu trúc thư mục và cấu hình tích hợp công cụ AI.
+Khởi tạo OpenSpec trong dự án của bạn. Tạo cấu trúc thư mục và cấu hình các tích hợp công cụ AI.
 
-Hành vi mặc định sử dụng các giá trị mặc định từ cấu hình toàn cục: profile `core`, delivery `both`, workflows `propose, explore, apply, sync, archive`.
+Hành vi mặc định sử dụng các giá trị mặc định cấu hình toàn cục: hồ sơ `core`, giao hàng `both`, quy trình làm việc `propose, explore, apply, sync, archive`.
 
 ```
 openspec init [path] [options]
 ```
 
-**Đối số:**
+**Arguments (Đối số):**
 
-| Đối số | Bắt buộc | Mô tả |
-|--------|-----------|---------|
+| Argument | Bắt buộc | Mô tả |
+|----------|----------|-------------|
 | `path` | Không | Thư mục đích (mặc định: thư mục hiện tại) |
 
-**Tùy chọn:**
+**Options (Tùy chọn):**
 
-| Tùy chọn | Mô tả |
-|-----------|---------|
-| `--tools <list>` | Cấu hình công cụ AI không tương tác. Sử dụng `all`, `none`, hoặc danh sách ngăn cách bằng dấu phẩy |
-| `--force` | Tự động dọn dẹp các tệp cũ mà không cần hỏi |
-| `--profile <profile>` | Ghi đè profile toàn cục cho lần chạy init này (`core` hoặc `custom`) |
+| Option | Mô tả |
+|--------|-------------|
+| `--tools <list>` | Cấu hình các công cụ AI không tương tác. Sử dụng `all`, `none`, hoặc danh sách phân cách bằng dấu phẩy |
+| `--force` | Tự động dọn dẹp các tệp cũ mà không cần nhắc nhở |
+| `--profile <profile>` | Ghi đè hồ sơ toàn cục cho lần chạy init này (`core` hoặc `custom`) |
 
-`--profile custom` sử dụng bất kỳ quy trình làm việc nào hiện đang được chọn trong cấu hình toàn cục (`openspec config profile`).
+`--profile custom` sử dụng bất kỳ quy trình làm việc nào hiện được chọn trong cấu hình toàn cục (`openspec config profile`).
 
-**ID công cụ được hỗ trợ (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `opencode`, `pi`, `qoder`, `lingma`, `qwen`, `roocode`, `trae`, `windsurf`
+**Các ID công cụ được hỗ trợ (`--tools`):** `amazon-q`, `antigravity`, `auggie`, `bob`, `claude`, `cline`, `codex`, `forgecode`, `codebuddy`, `continue`, `costrict`, `crush`, `cursor`, `factory`, `gemini`, `github-copilot`, `iflow`, `junie`, `kilocode`, `kimi`, `kiro`, `lingma`, `vibe`, `opencode`, `pi`, `qoder`, `qwen`, `roocode`, `trae`, `windsurf`
+
+> Danh sách này phản ánh `AI_TOOLS` trong `src/core/config.ts`. Xem [Supported Tools](supported-tools.md) để biết kỹ năng và đường dẫn lệnh của từng công cụ.
 
 **Ví dụ:**
 
@@ -124,24 +121,24 @@ openspec init --tools claude,cursor
 # Cấu hình cho tất cả các công cụ được hỗ trợ
 openspec init --tools all
 
-# Ghi đè profile cho lần chạy này
+# Ghi đè hồ sơ cho lần chạy này
 openspec init --profile core
 
-# Bỏ qua các lời nhắc và tự động dọn dẹp các tệp cũ
+# Bỏ qua lời nhắc và tự động dọn dẹp các tệp cũ
 openspec init --force
 ```
 
-**Những gì nó tạo ra:**
+**Nó tạo ra:**
 
 ```
 openspec/
-├── specs/              # Các đặc tả của bạn (nguồn sự thật)
+├── specs/              # Các thông số kỹ thuật của bạn (nguồn sự thật)
 ├── changes/            # Các thay đổi được đề xuất
 └── config.yaml         # Cấu hình dự án
 
-.claude/skills/         # Kỹ năng Claude Code (nếu đã chọn claude)
-.cursor/skills/         # Kỹ năng Cursor (nếu đã chọn cursor)
-.cursor/commands/       # Lệnh OPSX của Cursor (nếu delivery bao gồm lệnh)
+.claude/skills/         # Kỹ năng Claude Code (nếu chọn claude)
+.cursor/skills/         # Kỹ năng Cursor (nếu chọn cursor)
+.cursor/commands/       # Các lệnh OPSX của Cursor (nếu giao hàng bao gồm các lệnh)
 ... (các cấu hình công cụ khác)
 ```
 
@@ -149,23 +146,23 @@ openspec/
 
 ### `openspec update`
 
-Cập nhật các tệp hướng dẫn của OpenSpec sau khi nâng cấp CLI. Tạo lại các tệp cấu hình công cụ AI sử dụng profile toàn cục hiện tại, các quy trình làm việc đã chọn và chế độ delivery.
+Cập nhật các tệp hướng dẫn OpenSpec sau khi nâng cấp CLI. Tái tạo các tệp cấu hình công cụ AI bằng cách sử dụng hồ sơ toàn cục hiện tại, quy trình làm việc đã chọn và chế độ giao hàng của bạn.
 
 ```
 openspec update [path] [options]
 ```
 
-**Đối số:**
+**Arguments (Đối số):**
 
-| Đối số | Bắt buộc | Mô tả |
-|--------|-----------|---------|
+| Argument | Bắt buộc | Mô tả |
+|----------|----------|-------------|
 | `path` | Không | Thư mục đích (mặc định: thư mục hiện tại) |
 
-**Tùy chọn:**
+**Options (Tùy chọn):**
 
-| Tùy chọn | Mô tả |
-|-----------|---------|
-| `--force` | Buộc cập nhật ngay cả khi các tệp đã cập nhật |
+| Option | Mô tả |
+|--------|-------------|
+| `--force` | Buộc cập nhật ngay cả khi các tệp đã được cập nhật |
 
 **Ví dụ:**
 
@@ -177,331 +174,211 @@ openspec update
 
 ---
 
-## Các lệnh Không gian làm việc (Workspace)
+## Các Kho Lưu Trữ (OpenSpec độc lập)
 
-Các lệnh Không gian làm việc đang trong giai đoạn beta. Mô hình cục bộ dưới đây là hướng đi hiện tại, nhưng các tự động hóa bên ngoài, tích hợp và quy trình làm việc lâu dài vẫn nên coi hành vi lệnh, tệp trạng thái và đầu ra JSON là đang phát triển.
+> **Beta.** Các kho lưu trữ và các tính năng được xây dựng trên chúng (tham chiếu, ngữ cảnh làm việc, worksets) là mới; tên lệnh, cờ, định dạng tệp và đầu ra JSON có thể thay đổi giữa các bản phát hành. Đối với hướng dẫn theo vấn đề trước, xem [stores guide](stores-beta/user-guide.md).
 
-Các không gian làm việc điều phối là các chế độ xem cục bộ trên máy tính so với các kho hoặc thư mục đã liên kết. Tính khả thi của không gian làm việc không phải là cam kết thay đổi: hãy liên kết các kho hoặc thư mục mà OpenSpec cần biết, sau đó tạo các thay đổi khi bạn sẵn sàng lên kế hoạch cho công việc cụ thể.
+Một kho lưu trữ (store) là một repo OpenSpec độc lập mà bạn đã đăng ký trên máy này — ví dụ: một repo lập kế hoạch hoặc một repo hợp đồng. Việc đăng ký một kho lưu trữ cho phép các lệnh thông thường (`list`, `show`, `status`, `validate`, `new change`, `archive`, ...) hoạt động trong đó từ bất kỳ đâu bằng cách truyền `--store <id>`.
 
-### `openspec workspace setup`
+### `openspec store setup`
 
-Tạo một không gian làm việc trong vị trí không gian làm việc OpenSpec tiêu chuẩn và liên kết ít nhất một kho hoặc thư mục hiện có.
-
-```bash
-openspec workspace setup [options]
-```
-
-**Tùy chọn:**
-
-| Tùy chọn | Mô tả |
-|-----------|---------|
-| `--name <name>` | Tên không gian làm việc. Tên phải ở dạng kebab-case |
-| `--link <path>` | Liên kết một kho hoặc thư mục hiện có và suy ra tên liên kết từ tên thư mục |
-| `--link <name>=<path>` | Liên kết một kho hoặc thư mục hiện có với tên liên kết rõ ràng |
-| `--opener <id>` | Lưu một trình mở ưa thích trong quá trình thiết lập không tương tác: `codex-cli`, `claude`, `github-copilot`, hoặc `editor` |
-| `--tools <tools>` | Cài đặt các kỹ năng OpenSpec cục bộ trong không gian làm việc cho các đại lý. Sử dụng `all`, `none`, hoặc danh sách ID công cụ ngăn cách bằng dấu phẩy |
-| `--no-interactive` | Tắt các lời nhắc; yêu cầu `--name` và ít nhất một `--link` |
-| `--json` | Xuất JSON; yêu cầu `--no-interactive` |
-
-**Ví dụ:**
+Tạo và đăng ký một kho lưu trữ cục bộ. Nếu không có đối số nào trên terminal, OpenSpec sẽ hướng dẫn người dùng qua quá trình thiết lập. Các tác nhân và script nên cung cấp các đầu vào tường minh và sử dụng `--json`.
 
 ```bash
-openspec workspace setup
-openspec workspace setup --no-interactive --name platform --link /repos/api --link web=/repos/web
-openspec workspace setup --no-interactive --name platform --link /repos/api --opener codex-cli
-openspec workspace setup --no-interactive --name platform --link /repos/api --tools codex,claude
-openspec workspace setup --no-interactive --json --name checkout --link /repos/platform/apps/checkout
+openspec store setup [id] [options]
 ```
 
-Thiết lập tương tác hỏi về trình mở ưa thích và có thể cài đặt các kỹ năng OpenSpec cục bộ trong không gian làm việc cho các đại lý đã chọn. Thiết lập không tương tác chỉ lưu trình mở ưa thích khi cung cấp `--opener`; nếu không, `workspace open` sẽ nhắc sau trong các terminal tương tác khi có trình mở được hỗ trợ, hoặc yêu cầu các script truyền `--agent <tool>` hoặc `--editor`.
+**Options (Tùy chọn):**
 
-Việc cài đặt kỹ năng không gian làm việc chỉ là kỹ năng trong lát cắt beta này: ngay cả khi delivery toàn cục là `commands` hoặc `both`, thiết lập không gian làm việc ghi các thư mục kỹ năng của đại lý vào gốc không gian làm việc và không tạo các tệp lệnh slash. Profile toàn cục hoạt động chọn kỹ năng quy trình làm việc nào được cài đặt; `--tools` chọn đại lý nào nhận chúng. Nếu `--tools` bị bỏ qua trong thiết lập không tương tác, không có kỹ năng nào được cài đặt và `workspace update --tools <ids>` có thể thêm chúng sau.
-
-### `openspec workspace list`
-
-Liệt kê các không gian làm việc OpenSpec đã biết từ sổ đăng ký cục bộ.
-
-```bash
-openspec workspace list [--json]
-openspec workspace ls [--json]
-```
-
-Danh sách hiển thị vị trí và các kho hoặc thư mục đã liên kết của mỗi không gian làm việc. Các bản ghi sổ đăng ký cũ kỹ được báo cáo nhưng không thay đổi.
-
-### `openspec workspace link`
-
-Ghi lại một kho hoặc thư mục hiện có cho một không gian làm việc.
-
-```bash
-openspec workspace link [name] <path> [options]
-```
-
-**Tùy chọn:**
-
-| Tùy chọn | Mô tả |
-|-----------|---------|
-| `--workspace <name>` | Chọn một không gian làm việc đã biết từ sổ đăng ký cục bộ |
-| `--json` | Xuất JSON |
-| `--no-interactive` | Tắt các lời nhắc chọn không gian làm việc |
-
-**Ví dụ:**
-
-```bash
-openspec workspace link /repos/api
-openspec workspace link api-service /repos/api
-openspec workspace link --workspace platform /repos/platform/apps/checkout
-```
-
-Đường dẫn phải đã tồn tại. Các đường dẫn tương đối được phân giải so với thư mục hiện tại của lệnh trước khi OpenSpec lưu đường dẫn tuyệt đối đã xác minh vào trạng thái không gian làm việc cục bộ trên máy. Các đường dẫn đã liên kết có thể là toàn bộ kho, gói, dịch vụ, ứng dụng hoặc thư mục không có trạng thái `openspec/` cục bộ trong kho.
-
-### `openspec workspace relink`
-
-Sửa chữa hoặc thay đổi đường dẫn cục bộ cho một liên kết hiện có.
-
-```bash
-openspec workspace relink <name> <path> [options]
-```
-
-Đường dẫn phải đã tồn tại. Relink chỉ cập nhật đường dẫn cục bộ trên máy cho tên liên kết ổn định.
-
-### `openspec workspace doctor`
-
-Kiểm tra xem một không gian làm việc có thể phân giải những gì trên máy hiện tại.
-
-```bash
-openspec workspace doctor [options]
-```
-
-Doctor hiển thị vị trí không gian làm việc, các kho hoặc thư mục đã liên kết, các đường dẫn bị thiếu, đường dẫn specs cục bộ trong kho khi có, và các đề xuất sửa chữa. Đầu ra JSON cũng bao gồm đường dẫn lập kế hoạch không gian làm việc để tương thích. Nó chỉ báo cáo vấn đề; nó không tự động sửa chữa chúng.
-
-Các lệnh cần một không gian làm việc sử dụng không gian làm việc hiện tại khi chạy từ bên trong một thư mục hoặc thư mục con của không gian làm việc. Từ nơi khác, truyền `--workspace <name>`, chọn từ bộ chọn trong terminal tương tác, hoặc dựa vào không gian làm việc duy nhất đã biết khi chỉ có một. Trong chế độ `--json` hoặc `--no-interactive`, lựa chọn không rõ ràng sẽ thất bại với lỗi trạng thái có cấu trúc và đề xuất `--workspace <name>`.
-
-Các phản hồi JSON sử dụng các đối tượng có kiểu cộng thêm mảng `status`. Dữ liệu chính nằm trong `workspace`, `workspaces` hoặc `link`; cảnh báo và lỗi nằm trong `status`.
-
-### `openspec workspace update`
-
-Làm mới hướng dẫn OpenSpec cục bộ trong không gian làm việc và kỹ năng của đại lý.
-
-```bash
-openspec workspace update [name] [options]
-```
-
-**Tùy chọn:**
-
-| Tùy chọn | Mô tả |
-|-----------|---------|
-| `--workspace <name>` | Chọn một không gian làm việc đã biết từ sổ đăng ký cục bộ |
-| `--tools <tools>` | Chọn đại lý cho các kỹ năng không gian làm việc. Sử dụng `all`, `none`, hoặc danh sách ID công cụ ngăn cách bằng dấu phẩy |
-| `--json` | Xuất JSON |
-| `--no-interactive` | Tắt các lời nhắc chọn không gian làm việc |
-
-**Ví dụ:**
-
-```bash
-openspec workspace update
-openspec workspace update platform
-openspec workspace update --workspace platform --tools codex,claude
-openspec workspace update --workspace platform --tools none
-```
-
-`workspace update` làm mới khối hướng dẫn không gian làm việc được tạo và bề mặt mở cục bộ. Đối với kỹ năng của đại lý, nó tái sử dụng lựa chọn đại lý kỹ năng không gian làm việc đã lưu khi `--tools` bị bỏ qua. Truyền `--tools` sẽ thay thế lựa chọn đã lưu đó. Nó chỉ làm mới các thư mục kỹ năng quy trình làm việc do OpenSpec quản lý trong gốc không gian làm việc, xóa các kỹ năng quy trình làm việc đã bị hủy chọn và để nguyên các kho và thư mục đã liên kết.
-
-Chạy `openspec update` từ bên trong một không gian làm việc sẽ chuyển hướng sang `openspec workspace update`; chạy `openspec update` bên trong các dự án cục bộ trong kho khi bạn muốn các tệp công cụ thuộc sở hữu của kho được cập nhật.
-
-### `openspec workspace open`
-
-Mở một tập hợp làm việc của không gian làm việc thông qua trình mở ưa thích đã lưu, ghi đè đại lý cho một phiên, hoặc chế độ trình soạn thảo VS Code.
-
-```bash
-openspec workspace open [name] [options]
-```
-
-**Tùy chọn:**
-
-| Tùy chọn | Mô tả |
-|-----------|---------|
-| `--workspace <name>` | Bí danh cho tên không gian làm việc vị trí |
-| `--initiative <id>` | Mở một sáng kiến dưới dạng chế độ xem không gian làm việc cục bộ. Chấp nhận `<id>` hoặc `<store>/<id>` |
-| `--store <id>` | ID kho ngữ cảnh đã đăng ký cho `--initiative` |
-| `--store-path <path>` | Gốc kho ngữ cảnh cục bộ hiện có cho `--initiative` |
-| `--agent <tool>` | Ghi đè đại lý cho một phiên: `codex-cli`, `claude`, hoặc `github-copilot` |
-| `--editor` | Mở tệp không gian làm việc VS Code được duy trì dưới dạng không gian làm việc trình soạn thảo bình thường |
-| `--no-interactive` | Tắt các lời nhắc chọn không gian làm việc và trình mở |
-
-**Ví dụ:**
-
-```bash
-openspec workspace open
-openspec workspace open platform
-openspec workspace open platform --agent github-copilot
-openspec workspace open --agent codex-cli
-openspec workspace open --editor
-openspec workspace open --initiative billing-launch --store platform
-openspec workspace open --initiative platform/billing-launch
-```
-
-`workspace open` sử dụng không gian làm việc hiện tại khi chạy bên trong một cái, tự động chọn không gian làm việc duy nhất đã biết khi chạy từ nơi khác, và yêu cầu người dùng chọn khi có nhiều không gian làm việc đã biết. `--agent` và `--editor` không thay đổi trình mở ưa thích đã lưu. Truyền cả hai ghi đè trình mở là lỗi; chọn hoặc `--agent <tool>` hoặc `--editor`.
-
-Khi sử dụng `--initiative`, OpenSpec chuẩn bị hoặc chọn một chế độ xem không gian làm việc cục bộ riêng tư cho sáng kiến đó. Các kho được chọn từ sổ đăng ký được lưu theo id; `--store-path` lưu một trình chọn đường dẫn cục bộ tại thời gian chạy vì các chế độ xem không gian làm việc là trạng thái cục bộ riêng tư.
-
-OpenSpec duy trì `<workspace-name>.code-workspace` ở gốc không gian làm việc cho việc mở trình soạn thảo VS Code và GitHub Copilot-in-VS-Code. Tệp đó là trạng thái chế độ xem không gian làm việc cục bộ trên máy.
-
-Không gian làm việc VS Code được duy trì liệt kê các kho hoặc thư mục đã liên kết hợp lệ trước, sau đó là ngữ cảnh sáng kiện khi được đính kèm, sau đó là các tệp không gian làm việc OpenSpec. VS Code hiển thị các mục đó dưới dạng không gian làm việc đa gốc.
-
-Mở không gian làm việc gốc làm cho các kho hoặc thư mục đã liên kết hiển thị để khám phá và ngữ cảnh. Các chỉnh sửa triển khai chỉ nên bắt đầu sau yêu cầu rõ ràng của người dùng và quy trình làm việc triển khai OpenSpec bình thường.
-
-## Lệnh Bối Cảnh Chia Sẻ
-
-Các kho bối cảnh và sáng kiến là các bề mặt điều phối phiên bản beta. Kho bối cảnh là một đăng ký cục bộ cho bối cảnh chia sẻ bền vững, thường là một thư mục hoặc bản sao được hỗ trợ bởi Git. Sáng kiến là bối cảnh điều phối chia sẻ bên trong một kho bối cảnh; các thay đổi cục bộ của kho mã có thể liên kết đến nó mà không cần sao chép kế hoạch chia sẻ vào mọi kho mã.
-
-### `openspec context-store setup`
-
-Tạo và đăng ký một kho bối cảnh cục bộ. Khi chạy trong terminal mà không có đối số, OpenSpec sẽ hướng dẫn người dùng qua quá trình thiết lập. Các tác nhân và script nên truyền đầu vào rõ ràng và sử dụng `--json`.
-
-```bash
-openspec context-store setup [id] [options]
-```
-
-**Tùy chọn:**
-
-| Tùy chọn | Mô tả |
+| Option | Mô tả |
 |--------|-------------|
-| `--path <path>` | Đường dẫn thư mục kho bối cảnh; mặc định là thư mục dữ liệu cục bộ được quản lý bởi OpenSpec |
-| `--init-git` | Khởi tạo kho Git trong kho bối cảnh |
-| `--no-init-git` | Không khởi tạo kho Git |
-| `--json` | Xuất đầu ra dạng JSON |
+| `--path <path>` | Thư mục nơi kho lưu trữ nên tồn tại (ví dụ: `~/openspec/<id>`) |
+| `--remote <url>` | Ghi lại nguồn từ xa chuẩn trong tệp `store.yaml` của kho lưu trữ mới |
+| `--init-git` | Khởi tạo một repository Git với commit ban đầu (mặc định) |
+| `--no-init-git` | Bỏ qua mọi hành động Git: không khởi tạo, không commit ban đầu |
+| `--json` | Đầu ra JSON |
 
-Khi bỏ qua `--path`, lệnh setup sẽ tạo kho trong `getGlobalDataDir()/context-stores/<id>`: `$XDG_DATA_HOME/openspec/context-stores/<id>` khi `XDG_DATA_HOME` được đặt, hoặc `~/.local/share/openspec/context-stores/<id>` trên các hệ thống Unix dự phòng. Truyền `--path` khi bạn muốn kho nằm trong một bản sao hoặc thư mục dành riêng cho nhóm.
+Các lần chạy không tương tác (`--json`, script, tác nhân) phải cung cấp cả ID kho lưu trữ và `--path`. Trong một terminal tương tác, quá trình thiết lập sẽ nhắc về vị trí với một gợi ý có thể chỉnh sửa tại một nơi hiển thị, thuộc sở hữu của người dùng (ví dụ: `~/openspec/<id>`); nó không bao giờ mặc định vào thư mục dữ liệu được quản lý của OpenSpec.
 
 Ví dụ:
 
 ```bash
-openspec context-store setup
-openspec context-store setup team-context
-openspec context-store setup team-context --path /repos/team-context --no-init-git
-openspec context-store setup team-context --json --no-init-git
+openspec store setup
+openspec store setup team-context
+openspec store setup team-context --path ~/openspec/team-context --no-init-git
+openspec store setup team-context --path ~/openspec/team-context --no-init-git --json
 ```
 
-### `openspec context-store register`
+### `openspec store register`
 
-Đăng ký một thư mục kho bối cảnh cục bộ hiện có.
+Đăng ký một thư mục kho lưu trữ cục bộ hiện có.
 
 ```bash
-openspec context-store register [path] [options]
+openspec store register [path] [options]
 ```
 
-**Tùy chọn:**
+**Options (Tùy chọn):**
 
-| Tùy chọn | Mô tả |
+| Option | Mô tả |
 |--------|-------------|
-| `--id <id>` | Mã định danh kho bối cảnh; mặc định lấy từ siêu dữ liệu của kho hoặc tên thư mục |
-| `--json` | Xuất đầu ra dạng JSON |
+| `--id <id>` | ID kho lưu trữ; mặc định là siêu dữ liệu kho lưu trữ hoặc tên thư mục |
+| `--yes` | Xác nhận tạo siêu dữ liệu danh tính kho lưu trữ cho một gốc OpenSpec lành mạnh |
+| `--json` | Đầu ra JSON |
 
-### `openspec context-store unregister`
+### `openspec store unregister`
 
-Xóa đăng ký kho bối cảnh cục bộ mà không xóa các tệp.
-
-```bash
-openspec context-store unregister <id> [--json]
-```
-
-Sử dụng lệnh này khi kho đã được di chuyển, sao chép sang nơi khác, hoặc không còn muốn hiển thị trong OpenSpec trên máy này.
-
-### `openspec context-store remove`
-
-Xóa đăng ký kho bối cảnh cục bộ và xóa thư mục cục bộ của nó.
+Quên việc đăng ký một kho lưu trữ cục bộ mà không xóa các tệp.
 
 ```bash
-openspec context-store remove <id> [--yes] [--json]
+openspec store unregister <id> [--json]
 ```
 
-Lệnh `remove` hiển thị chính xác thư mục trước khi xóa trong terminal tương tác. Các tác nhân, script và trình gọi JSON phải truyền `--yes` để xác nhận xóa. OpenSpec từ chối xóa thư mục không chứa siêu dữ liệu kho bối cảnh phù hợp.
+Sử dụng lệnh này khi một kho lưu trữ đã được di chuyển, sao chép sang nơi khác, hoặc không còn nên được hiển thị bởi OpenSpec trên máy này.
 
-### `openspec context-store list`
+### `openspec store remove`
 
-Liệt kê các kho bối cảnh đã đăng ký cục bộ.
+Quên việc đăng ký một kho lưu trữ cục bộ và xóa thư mục cục bộ của nó.
 
 ```bash
-openspec context-store list [--json]
-openspec context-store ls [--json]
+openspec store remove <id> [--yes] [--json]
 ```
 
-### `openspec context-store doctor`
+`remove` hiển thị chính xác thư mục trước khi xóa trong terminal tương tác. Các tác nhân, script và người gọi JSON phải cung cấp `--yes` để xác nhận việc xóa. OpenSpec từ chối xóa một thư mục không chứa siêu dữ liệu kho lưu trữ khớp.
 
-Kiểm tra đăng ký, siêu dữ liệu và trạng thái Git của kho bối cảnh cục bộ.
+### `openspec store list`
+
+Liệt kê các kho lưu trữ đã đăng ký cục bộ.
 
 ```bash
-openspec context-store doctor [id] [--json]
+openspec store list [--json]
+openspec store ls [--json]
 ```
 
-Doctor chỉ có chức năng chẩn đoán; nó báo cáo các thư mục gốc bị thiếu, siêu dữ liệu không khớp và trạng thái đăng ký cục bộ không hợp lệ mà không sửa đổi kho.
+### `openspec store doctor`
 
-### `openspec initiative create`
-
-Tạo một sáng kiến trong kho bối cảnh.
+Kiểm tra việc đăng ký kho lưu trữ cục bộ, siêu dữ liệu và sự hiện diện của Git.
 
 ```bash
-openspec initiative create <id> --title <title> --summary <summary> [options]
+openspec store doctor [id] [--json]
 ```
 
-**Tùy chọn:**
+Doctor chỉ mang tính chẩn đoán; nó báo cáo các gốc bị thiếu, sự không khớp về siêu dữ liệu và trạng thái sổ đăng ký cục bộ không hợp lệ mà không sửa đổi kho lưu trữ.
 
-| Tùy chọn | Mô tả |
-|--------|-------------|
-| `--store <id>` | Mã định danh kho bối cảnh từ sổ đăng ký cục bộ |
-| `--store-path <path>` | Đường dẫn gốc kho bối cảnh cục bộ hiện có |
-| `--title <title>` | Tiêu đề sáng kiến |
-| `--summary <summary>` | Tóm tắt sáng kiến |
-| `--json` | Xuất đầu ra dạng JSON |
+### Tham chiếu các kho lưu trữ từ một dự án
 
-### `openspec initiative list`
+Một repo dự án có thể khai báo những kho lưu trữ mà công việc của nó sử dụng trong `openspec/config.yaml`:
 
-Liệt kê các sáng kiến. Khi không có bộ chọn, lệnh này tìm kiếm tất cả các kho bối cảnh đã đăng ký và báo cáo các cảnh báo đọc một phần trong `status`.
+```yaml
+schema: spec-driven
+references:
+  - team-context
+```
+
+Kể từ đó, đầu ra `openspec instructions` trong repo đó (cả ở cấp độ artifact và bề mặt `apply`, chế độ JSON và người dùng) mang một chỉ mục của các thông số kỹ thuật của từng kho lưu trữ được tham chiếu — ID spec, tóm tắt một dòng từ phần Mục đích của mỗi spec, và lệnh fetch (`openspec show <spec-id> --type spec --store <id>`). Chỉ mục được xây dựng trực tiếp từ bản sao lưu đã đăng ký trong mỗi lần chạy; nội dung spec không bao giờ được sao chép vào đầu ra.
+
+Các tham chiếu là ngữ cảnh chỉ đọc. Chúng không bao giờ thay đổi nơi các lệnh hoạt động: công việc vẫn nằm ở gốc của repo, và việc ghi vào một kho lưu trữ được tham chiếu vẫn là hành động `--store` tường minh. Một tham chiếu không thể được phân giải (ví dụ: một kho lưu trữ chưa được đăng ký trên máy này) sẽ giảm xuống thành cảnh báo trong chỉ mục với cách khắc phục chính xác, và hướng dẫn vẫn được tạo ra. `openspec doctor` báo cáo tình trạng của tham chiếu ở một nơi.
+
+### Ghi lại nguồn sao chép của một kho lưu trữ
+
+Một kho lưu trữ có thể ghi lại nguồn clone chuẩn của nó trong tệp danh tính đã cam kết, để quá trình onboarding không bao giờ bị mắc kẹt ở "đăng ký kho lưu trữ":
 
 ```bash
-openspec initiative list [options]
-openspec initiative ls [options]
+openspec store setup team-context --path ~/openspec/team-context \
+  --remote git@github.com:acme/team-context.git
 ```
 
-**Tùy chọn:**
+Nguồn từ xa được đặt trong `.openspec-store/store.yaml` bên trong commit ban đầu, vì vậy mọi bản sao lưu đều biết điều đó khi sinh ra. Đối với một kho lưu trữ hiện có, hãy chỉnh sửa `store.yaml` bằng tay và cam kết. `store doctor` hiển thị nguồn từ xa đã ghi lại (và nguồn Git được quan sát của bản sao lưu); setup/register đặt tên nó theo hướng dẫn; và register ghi lại nguồn của bản sao lưu trong sổ đăng ký cục bộ của máy.
 
-| Tùy chọn | Mô tả |
-|--------|-------------|
-| `--store <id>` | Liệt kê một kho bối cảnh đã đăng ký |
-| `--store-path <path>` | Liệt kê một thư mục gốc kho bối cảnh cục bộ hiện có |
-| `--json` | Xuất đầu ra dạng JSON |
+Một khai báo tham chiếu cũng có thể mang nguồn clone, để một đồng nghiệp chưa có kho lưu trữ nhận được một bản sửa lỗi hoàn chỉnh, có thể dán (`git clone <remote> <path> && openspec store register <path> --id <id>`):
 
-### `openspec initiative show`
+```yaml
+references:
+  - { id: team-context, remote: "git@github.com:acme/team-context.git" }
+```
 
-Phân giải một sáng kiến và in ra vị trí chính thức của nó.
+Việc ghi lại nguồn không phải là đồng bộ hóa: OpenSpec không bao giờ clone, pull hoặc push của riêng nó.
+
+### Khai báo một kho lưu trữ mặc định
+
+Một repo mà việc lập kế hoạch hoàn toàn được ngoại vi — không có `openspec/specs/` hoặc `openspec/changes/` cục bộ — có thể khai báo kho lưu trữ của mình một lần thay vì truyền `--store` trong mọi lệnh:
+
+```yaml
+# openspec/config.yaml (tệp duy nhất dưới openspec/)
+store: team-context
+```
+
+Các lệnh thông thường sau đó sẽ tự động phân giải sang kho lưu trữ đã khai báo; banner gốc và khối `root` JSON báo cáo `source: "declared"` với ID kho lưu trữ, và các gợi ý được in vẫn mang `--store <id>`. Việc khai báo là một cơ chế dự phòng, không bao giờ là ghi đè: `--store` tường minh luôn thắng, và một thư mục với các thư mục lập kế hoạch thực tế sẽ bỏ qua con trỏ (với một cảnh báo). Để chuyển đổi một repo con trỏ thành gốc OpenSpec cục bộ, hãy xóa dòng `store:` và chạy `openspec init` — init từ chối tạo khung khi khai báo vẫn còn.
+
+## Trạng thái kiểm tra (sức khỏe mối quan hệ)
+
+Một câu hỏi chỉ đọc, một nơi duy nhất: liệu gốc OpenSpec có khỏe mạnh không, và các kho lưu trữ mà nó tham chiếu có sẵn trên máy này không?
 
 ```bash
-openspec initiative show <id> [options]
-openspec initiative show <store>/<id> [options]
+openspec doctor [--store <id>] [--json]
 ```
 
-Nếu không có `--store`, OpenSpec sẽ tìm kiếm trong các kho bối cảnh đã đăng ký. Nếu cùng một mã sáng kiến tồn tại trong nhiều kho, hãy truyền `--store <id>` hoặc sử dụng dạng `<store>/<id>`.
+Báo cáo tách biệt sức khỏe của gốc, sức khỏe siêu dữ liệu kho lưu trữ (bao gồm ghi chú khi remote được ghi lại và nguồn gốc của checkout khác nhau), và sức khỏe tham chiếu (hiển thị các hướng dẫn chẩn đoán tương tự, với các bản sửa lỗi clone cho các tham chiếu chưa được giải quyết). Các phát hiện về sức khỏe ở bất kỳ mức độ nào đều thoát bằng 0 — các agent đọc các mảng `status`; chỉ các lỗi lệnh (không có gốc, kho lưu trữ không xác định) mới thoát bằng 1. Doctor không bao giờ clone, đồng bộ hóa hoặc sửa chữa. Để lấy tập hợp đã được lắp ráp thay vì sức khỏe của nó, hãy sử dụng `openspec context`.
+
+## Ngữ cảnh làm việc (tập hợp đã được lắp ráp)
+
+Mọi thứ mà công việc này liên quan thông qua các khai báo OpenSpec, trong một tập hợp làm việc: gốc OpenSpec và các kho lưu trữ mà nó tham chiếu.
+
+```bash
+openspec context [--store <id>] [--json] [--code-workspace <path> [--force]]
+```
+
+Bản tóm tắt JSON có thể được agent sử dụng (mỗi kho lưu trữ tham chiếu khả dụng mang theo công thức fetch của nó; các thành viên chưa được giải quyết mang theo cùng các hướng dẫn sửa lỗi và hiển thị doctor). `--code-workspace` bổ sung việc ghi một tệp workspace VS Code chứa gốc cộng với các kho lưu trữ tham chiếu khả dụng (`ref:<id>` thư mục) — đây là thao tác ghi mà lệnh này thực hiện, bị từ chối nếu tệp đã tồn tại mà không có `--force`. Các thành viên không khả dụng được báo cáo, không bao giờ được đoán.
+
+"Ngữ cảnh làm việc" là tập hợp đã được lắp ráp; trường `context:` trong `openspec/config.yaml` là bối cảnh dự án được tiêm vào các hướng dẫn — hai thứ khác nhau. `openspec doctor` trả lời liệu tập hợp có khỏe mạnh không; `openspec context` trả lời tập hợp đó là gì.
+
+## Các workset cá nhân
+
+> **Beta.** Worksets là một phần của bề mặt beta mới; các lệnh, cờ và định dạng tệp có thể thay đổi hình dạng giữa các bản phát hành. Để xem hướng dẫn chi tiết, hãy tham khảo [stores guide](stores-beta/user-guide.md#worksets-reopen-the-folders-you-work-on-together).
+
+Một workset là một chế độ xem được đặt tên và cá nhân hóa của các thư mục mà bạn cùng làm việc — một gốc lập kế hoạch cộng với bất cứ thứ gì khác mà bạn chọn — được lưu trên máy của bạn và mở lại bằng tên trong công cụ của bạn. Nó hoàn toàn cục bộ: không bao giờ được commit, không bao giờ được chia sẻ, không bao giờ được suy ra từ các khai báo, và việc xóa nó sẽ không bao giờ chạm vào một thư mục thành viên.
+
+```bash
+openspec workset create [name] [--member <path> | --member <name>=<path>]... [--tool <id>] [--json]
+openspec workset list [--json]
+openspec workset open <name> [--tool <id>]
+openspec workset remove <name> [--yes] [--json]
+```
+
+`create` chạy một luồng hướng dẫn ngắn (hoặc nhận các cờ `--member` không tương tác; thành viên đầu tiên là chính — các phiên bắt đầu từ đó). `open` khởi chạy công cụ đã chọn: trình soạn thảo (VS Code, Cursor) mở một cửa sổ với mọi thành viên và trả về; các tác nhân CLI (Claude Code, codex) tiếp quản terminal này như một phiên với mọi thành viên được đính kèm và không có lời nhắc nào được điền sẵn, kết thúc khi bạn thoát. Một thư mục thành viên bị thiếu tại thời điểm mở sẽ bị bỏ qua cùng với một ghi chú; phần còn lại sẽ mở. Tùy chọn công cụ đã lưu có thể bị ghi đè theo từng lần mở bằng `--tool`.
+
+Hỗ trợ một công cụ mới là cấu hình, không phải mã. Mỗi công cụ là một trong hai kiểu khởi chạy — `workspace-file` (được khởi chạy với `.code-workspace` được tạo) hoặc `attach-dirs` (một cờ đính kèm cho mỗi thành viên) — và khóa `openers` trong `config.json` toàn cục (mở nó bằng `openspec config edit`) thêm các công cụ hoặc điều chỉnh các tính năng tích hợp theo trường:
+
+```json
+{
+  "openers": {
+    "zed": { "style": "workspace-file" },
+    "claude": { "attach_flag": "--dir" }
+  }
+}
+```
+
+Tất cả trạng thái workset được lưu trong thư mục `worksets/` của thư mục dữ liệu toàn cục (các chế độ xem đã lưu cộng với các tệp `<name>.code-workspace` được tạo, được tái tạo lại khi mở); xóa thư mục đó sẽ loại bỏ mọi dấu vết.
 
 ---
 
-## Các lệnh duyệt
+## Các Lệnh Duyệt (Browsing Commands)
 
 ### `openspec list`
 
-Liệt kê các thay đổi hoặc đặc tả trong dự án của bạn.
+Liệt kê các thay đổi hoặc thông số kỹ thuật trong dự án của bạn.
 
 ```
 openspec list [options]
 ```
 
-**Tùy chọn:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--specs` | Liệt kê các đặc tả thay vì thay đổi |
+| `--specs` | Liệt kê các thông số kỹ thuật thay vì các thay đổi |
 | `--changes` | Liệt kê các thay đổi (mặc định) |
-| `--sort <thứ_tự>` | Sắp xếp theo `recent` (mặc định) hoặc `name` |
-| `--json` | Xuất ra dưới dạng JSON |
+| `--sort <order>` | Sắp xếp theo `recent` (gần đây nhất - mặc định) hoặc `name` (tên) |
+| `--json` | Xuất dưới dạng JSON |
 
 **Ví dụ:**
 
@@ -509,117 +386,116 @@ openspec list [options]
 # Liệt kê tất cả các thay đổi đang hoạt động
 openspec list
 
-# Liệt kê tất cả các đặc tả
+# Liệt kê tất cả các thông số kỹ thuật
 openspec list --specs
 
-# Xuất JSON cho script
+# Đầu ra JSON cho các script
 openspec list --json
 ```
 
 **Đầu ra (văn bản):**
 
 ```
-Các thay đổi đang hoạt động:
-  add-dark-mode     Hỗ trợ chuyển đổi giao diện người dùng
-  fix-login-bug     Xử lý hết thời gian phiên làm việc
+Changes:
+  add-dark-mode     No tasks      just now
 ```
 
 ---
 
 ### `openspec view`
 
-Hiển thị bảng điều khiển tương tác để khám phá các đặc tả và thay đổi.
+Hiển thị một bảng điều khiển tương tác để khám phá các thông số kỹ thuật và thay đổi.
 
 ```
 openspec view
 ```
 
-Mở giao diện dựa trên thiết bị đầu cuối để điều hướng qua các đặc tả và thay đổi trong dự án của bạn.
+Mở giao diện dựa trên terminal để điều hướng qua các thông số kỹ thuật và thay đổi của dự án của bạn.
 
 ---
 
 ### `openspec show`
 
-Hiển thị chi tiết của một thay đổi hoặc đặc tả.
+Hiển thị chi tiết về một thay đổi hoặc thông số kỹ thuật.
 
 ```
-openspec show [tên-mục] [options]
+openspec show [item-name] [options]
 ```
 
 **Đối số:**
 
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-mục` | Không | Tên của thay đổi hoặc đặc tả (sẽ được nhắc nếu không chỉ định) |
+| `item-name` | Không | Tên của thay đổi hoặc thông số kỹ thuật (sẽ nhắc nếu bị bỏ qua) |
 
-**Tùy chọn:**
-
-| Tùy chọn | Mô tả |
-|--------|-------------|
-| `--type <loại>` | Chỉ định loại: `change` hoặc `spec` (tự động phát hiện nếu rõ ràng) |
-| `--json` | Xuất ra dưới dạng JSON |
-| `--no-interactive` | Tắt nhắc |
-
-**Tùy chọn dành riêng cho thay đổi:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--deltas-only` | Chỉ hiển thị các đặc tả delta (chế độ JSON) |
+| `--type <type>` | Chỉ định loại: `change` (thay đổi) hoặc `spec` (thông số kỹ thuật) (tự động phát hiện nếu không mơ hồ) |
+| `--json` | Xuất dưới dạng JSON |
+| `--no-interactive` | Vô hiệu hóa lời nhắc |
 
-**Tùy chọn dành riêng cho đặc tả:**
+**Các tùy chọn dành riêng cho thay đổi:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--requirements` | Chỉ hiển thị các yêu cầu, loại trừ kịch bản (chế độ JSON) |
+| `--deltas-only` | Chỉ hiển thị các thông số kỹ thuật delta (chế độ JSON) |
+
+**Các tùy chọn dành riêng cho thông số kỹ thuật:**
+
+| Tùy chọn | Mô tả |
+|--------|-------------|
+| `--requirements` | Chỉ hiển thị các yêu cầu, loại trừ các kịch bản (chế độ JSON) |
 | `--no-scenarios` | Loại trừ nội dung kịch bản (chế độ JSON) |
-| `-r, --requirement <id>` | Hiển thị yêu cầu cụ thể theo chỉ số bắt đầu từ 1 (chế độ JSON) |
+| `-r, --requirement <id>` | Hiển thị một yêu cầu cụ thể bằng chỉ mục 1 (chế độ JSON) |
 
 **Ví dụ:**
 
 ```bash
-# Chọn tương tác
+# Lựa chọn tương tác
 openspec show
 
 # Hiển thị một thay đổi cụ thể
 openspec show add-dark-mode
 
-# Hiển thị một đặc tả cụ thể
+# Hiển thị một thông số kỹ thuật cụ thể
 openspec show auth --type spec
 
-# Xuất JSON để phân tích
+# Đầu ra JSON để phân tích cú pháp
 openspec show add-dark-mode --json
 ```
 
 ---
 
-## Các lệnh xác thực
+## Các Lệnh Xác Thực (Validation Commands)
 
 ### `openspec validate`
 
-Xác thực các thay đổi và đặc tả để tìm các vấn đề về cấu trúc.
+Xác thực các thay đổi và thông số kỹ thuật về các vấn đề cấu trúc.
 
 ```
-openspec validate [tên-mục] [options]
+openspec validate [item-name] [options]
 ```
 
 **Đối số:**
 
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-mục` | Không | Mục cụ thể cần xác thực (sẽ được nhắc nếu không chỉ định) |
+| `item-name` | Không | Mục cụ thể cần xác thực (sẽ nhắc nếu bị bỏ qua) |
 
-**Tùy chọn:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--all` | Xác thực tất cả các thay đổi và đặc tả |
+| `--all` | Xác thực tất cả các thay đổi và thông số kỹ thuật |
 | `--changes` | Xác thực tất cả các thay đổi |
-| `--specs` | Xác thực tất cả các đặc tả |
-| `--type <loại>` | Chỉ định loại khi tên không rõ ràng: `change` hoặc `spec` |
+| `--specs` | Xác thực tất cả các thông số kỹ thuật |
+| `--type <type>` | Chỉ định loại khi tên không rõ ràng: `change` hoặc `spec` |
 | `--strict` | Bật chế độ xác thực nghiêm ngặt |
-| `--json` | Xuất ra dưới dạng JSON |
+| `--json` | Xuất dưới dạng JSON |
 | `--concurrency <n>` | Số lượng xác thực song song tối đa (mặc định: 6, hoặc biến môi trường `OPENSPEC_CONCURRENCY`) |
-| `--no-interactive` | Tắt nhắc |
+| `--no-interactive` | Vô hiệu hóa lời nhắc |
 
 **Ví dụ:**
 
@@ -633,22 +509,22 @@ openspec validate add-dark-mode
 # Xác thực tất cả các thay đổi
 openspec validate --changes
 
-# Xác thực tất cả với đầu ra JSON (dành cho CI/script)
+# Xác thực mọi thứ với đầu ra JSON (cho CI/script)
 openspec validate --all --json
 
-# Xác thực nghiêm ngặt với độ song song tăng cường
+# Xác thực nghiêm ngặt với khả năng song song tăng cường
 openspec validate --all --strict --concurrency 12
 ```
 
 **Đầu ra (văn bản):**
 
 ```
-Đang xác thực add-dark-mode...
-  ✓ proposal.md hợp lệ
-  ✓ specs/ui/spec.md hợp lệ
+Validating add-dark-mode...
+  ✓ proposal.md valid
+  ✓ specs/ui/spec.md valid
   ⚠ design.md: thiếu phần "Technical Approach"
 
-Tìm thấy 1 cảnh báo
+1 warning found
 ```
 
 **Đầu ra (JSON):**
@@ -675,28 +551,28 @@ Tìm thấy 1 cảnh báo
 
 ---
 
-## Các lệnh vòng đời
+## Các Lệnh Vòng Đời (Lifecycle Commands)
 
 ### `openspec archive`
 
-Lưu trữ một thay đổi đã hoàn thành và hợp nhất các đặc tả delta vào các đặc tả chính.
+Lưu trữ một thay đổi đã hoàn thành và hợp nhất các thông số kỹ thuật delta vào các thông số kỹ thuật chính.
 
 ```
-openspec archive [tên-thay-đổi] [options]
+openspec archive [change-name] [options]
 ```
 
 **Đối số:**
 
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tên-thay-đổi` | Không | Thay đổi cần lưu trữ (sẽ được nhắc nếu không chỉ định) |
+| `change-name` | Không | Thay đổi cần lưu trữ (sẽ nhắc nếu bị bỏ qua) |
 
-**Tùy chọn:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `-y, --yes` | Bỏ qua lời nhắc xác nhận |
-| `--skip-specs` | Bỏ qua cập nhật đặc tả (dành cho các thay đổi chỉ liên quan đến hạ tầng/công cụ/tài liệu) |
+| `-y, --yes` | Bỏ qua các lời nhắc xác nhận |
+| `--skip-specs` | Bỏ qua cập nhật thông số kỹ thuật (cho các thay đổi chỉ về cơ sở hạ tầng/công cụ/tài liệu) |
 | `--no-validate` | Bỏ qua xác thực (yêu cầu xác nhận) |
 
 **Ví dụ:**
@@ -705,91 +581,69 @@ openspec archive [tên-thay-đổi] [options]
 # Lưu trữ tương tác
 openspec archive
 
-# Lưu trữ thay đổi cụ thể
+# Lưu trữ một thay đổi cụ thể
 openspec archive add-dark-mode
 
-# Lưu trữ không cần nhắc (CI/script)
+# Lưu trữ mà không có lời nhắc (CI/script)
 openspec archive add-dark-mode --yes
 
-# Lưu trữ một thay đổi công cụ không ảnh hưởng đến đặc tả
+# Lưu trữ một thay đổi công cụ không ảnh hưởng đến thông số kỹ thuật
 openspec archive update-ci-config --skip-specs
 ```
 
-**Cách thực hiện:**
+**Nó làm gì:**
 
 1. Xác thực thay đổi (trừ khi có `--no-validate`)
 2. Nhắc xác nhận (trừ khi có `--yes`)
-3. Hợp nhất các đặc tả delta vào `openspec/specs/`
-4. Di chuyển thư mục thay đổi đến `openspec/changes/archive/YYYY-MM-DD-<tên>/`
+3. Hợp nhất các thông số kỹ thuật delta vào `openspec/specs/`
+4. Di chuyển thư mục thay đổi đến `openspec/changes/archive/YYYY-MM-DD-<name>/`
 
 ---
 
-## Các lệnh quy trình làm việc
+## Các Lệnh Quy Trình Làm Việc (Workflow Commands)
 
-Những lệnh này hỗ trợ quy trình làm việc OPSX hướng theo tác phẩm. Chúng hữu ích cho cả người kiểm tra tiến độ và các tác tử xác định bước tiếp theo.
+Các lệnh này hỗ trợ quy trình OPSX dựa trên artifact. Chúng hữu ích cho cả con người kiểm tra tiến độ và các tác nhân xác định bước tiếp theo.
 
 ### `openspec new change`
 
-Tạo một thư mục thay đổi cục bộ trong repo và metadata tùy chọn được cam kết.
+Tạo một thư mục thay đổi và siêu dữ liệu đã được check-in tùy chọn trong gốc OpenSpec đã giải quyết.
 
 ```bash
-openspec new change <tên> [options]
+openspec new change <name> [options]
 ```
 
-**Tùy chọn:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--description <văn_bản>` | Mô tả thêm vào `README.md` |
-| `--goal <văn_bản>` | Mục tiêu sản phẩm của không gian làm việc để lưu trữ cùng thay đổi |
-| `--areas <các_tên>` | Tên liên kết không gian làm việc bị ảnh hưởng, cách nhau bằng dấu phẩy |
-| `--initiative <id>` | Liên kết thay đổi repo cục bộ với một sáng kiến |
-| `--store <id>` | ID kho ngữ cảnh cho `--initiative` |
-| `--store-path <đường_dẫn>` | Gốc kho ngữ cảnh cục bộ hiện có cho `--initiative` |
-| `--schema <tên>` | Schema quy trình làm việc sử dụng |
+| `--description <text>` | Mô tả để thêm vào `index.md` |
+| `--goal <text>` | Siêu dữ liệu mục tiêu tùy chọn để lưu cùng với thay đổi |
+| `--schema <name>` | Schema quy trình làm việc cần sử dụng |
+| `--store <id>` | ID kho lưu trữ (store) được sử dụng làm gốc OpenSpec (một store là một repo OpenSpec độc lập mà bạn đã đăng ký) |
 | `--json` | Xuất JSON |
 
 Ví dụ:
 
 ```bash
-openspec new change add-billing-api --initiative billing-launch --store platform
-openspec new change add-billing-api --initiative platform/billing-launch --json
+openspec new change add-billing-api
+openspec new change add-billing-api --store team-context --json
 ```
-
-### `openspec set change`
-
-Cập nhật metadata thay đổi repo cục bộ đã cam kết mà không cần tạo lại thay đổi.
-
-```bash
-openspec set change <tên> [options]
-```
-
-**Tùy chọn:**
-
-| Tùy chọn | Mô tả |
-|--------|-------------|
-| `--initiative <id>` | Liên kết thay đổi repo cục bộ với một sáng kiến |
-| `--store <id>` | ID kho ngữ cảnh cho `--initiative` |
-| `--store-path <đường_dẫn>` | Gốc kho ngữ cảnh cục bộ hiện có cho `--initiative` |
-| `--json` | Xuất JSON |
-
-`set change --initiative` là idempotent khi liên kết yêu cầu đã tồn tại và từ chối thay thế một liên kết sáng kiến hiện có khác.
 
 ### `openspec status`
 
-Hiển thị trạng thái hoàn thành tác phẩm cho một thay đổi.
+Hiển thị trạng thái hoàn thành artifact cho một thay đổi.
 
 ```
 openspec status [options]
 ```
 
-**Tùy chọn:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--change <id>` | Tên thay đổi (sẽ được nhắc nếu không chỉ định) |
-| `--schema <tên>` | Ghi đè schema (tự động phát hiện từ cấu hình của thay đổi) |
-| `--json` | Xuất ra dưới dạng JSON |
+| `--change <id>` | Tên thay đổi (sẽ nhắc nếu bị bỏ qua) |
+| `--schema <name>` | Ghi đè schema (tự động phát hiện từ cấu hình của thay đổi) |
+| `--json` | Xuất dưới dạng JSON |
 
 **Ví dụ:**
 
@@ -797,24 +651,24 @@ openspec status [options]
 # Kiểm tra trạng thái tương tác
 openspec status
 
-# Trạng thái cho thay đổi cụ thể
+# Trạng thái cho một thay đổi cụ thể
 openspec status --change add-dark-mode
 
-# JSON cho tác tử sử dụng
+# JSON để tác nhân sử dụng
 openspec status --change add-dark-mode --json
 ```
 
 **Đầu ra (văn bản):**
 
 ```
-Thay đổi: add-dark-mode
+Change: add-dark-mode
 Schema: spec-driven
-Tiến độ: 2/4 tác phẩm hoàn thành
+Progress: 2/4 artifacts complete
 
 [x] proposal
 [ ] design
 [x] specs
-[-] tasks (bị chặn bởi: design)
+[-] tasks (blocked by: design)
 ```
 
 **Đầu ra (JSON):**
@@ -838,67 +692,67 @@ Tiến độ: 2/4 tác phẩm hoàn thành
 
 ### `openspec instructions`
 
-Nhận hướng dẫn chi tiết để tạo một tác phẩm hoặc áp dụng các tác vụ. Được các tác tử AI sử dụng để hiểu cần tạo gì tiếp theo.
+Nhận các hướng dẫn được làm giàu để tạo một artifact hoặc áp dụng các tác vụ. Được sử dụng bởi các tác nhân AI để hiểu cần tạo gì tiếp theo.
 
 ```
-openspec instructions [tác-phẩm] [options]
+openspec instructions [artifact] [options]
 ```
 
 **Đối số:**
 
 | Đối số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `tác-phẩm` | Không | ID tác phẩm: `proposal`, `specs`, `design`, `tasks`, hoặc `apply` |
+| `artifact` | Không | ID artifact: `proposal`, `specs`, `design`, `tasks`, hoặc `apply` |
 
-**Tùy chọn:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--change <id>` | Tên thay đổi (bắt buộc ở chế độ không tương tác) |
-| `--schema <tên>` | Ghi đè schema |
-| `--json` | Xuất ra dưới dạng JSON |
+| `--change <id>` | Tên thay đổi (bắt buộc trong chế độ không tương tác) |
+| `--schema <name>` | Ghi đè schema |
+| `--json` | Xuất dưới dạng JSON |
 
-**Trường hợp đặc biệt:** Sử dụng `apply` làm tác phẩm để nhận hướng dẫn thực hiện tác vụ.
+**Trường hợp đặc biệt:** Sử dụng `apply` làm artifact để nhận hướng dẫn triển khai tác vụ.
 
 **Ví dụ:**
 
 ```bash
-# Nhận hướng dẫn cho tác phẩm tiếp theo
+# Nhận hướng dẫn cho artifact tiếp theo
 openspec instructions --change add-dark-mode
 
-# Nhận hướng dẫn cho tác phẩm cụ thể
+# Nhận hướng dẫn artifact cụ thể
 openspec instructions design --change add-dark-mode
 
-# Nhận hướng dẫn áp dụng/thực hiện
+# Nhận hướng dẫn áp dụng/triển khai
 openspec instructions apply --change add-dark-mode
 
-# JSON cho tác tử tiêu thụ
+# JSON để tác nhân tiêu thụ
 openspec instructions design --change add-dark-mode --json
 ```
 
 **Đầu ra bao gồm:**
 
-- Nội dung mẫu cho tác phẩm
+- Nội dung mẫu cho artifact
 - Ngữ cảnh dự án từ cấu hình
-- Nội dung từ các tác phẩm phụ thuộc
-- Các quy tắc riêng cho từng tác phẩm từ cấu hình
+- Nội dung từ các artifact phụ thuộc
+- Các quy tắc theo từng artifact từ cấu hình
 
 ---
 
 ### `openspec templates`
 
-Hiển thị đường dẫn mẫu đã giải quyết cho tất cả các tác phẩm trong một schema.
+Hiển thị các đường dẫn mẫu đã được giải quyết cho tất cả các artifact trong một schema.
 
 ```
 openspec templates [options]
 ```
 
-**Tùy chọn:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--schema <tên>` | Schema cần kiểm tra (mặc định: `spec-driven`) |
-| `--json` | Xuất ra dưới dạng JSON |
+| `--schema <name>` | Schema cần kiểm tra (mặc định: `spec-driven`) |
+| `--json` | Xuất dưới dạng JSON |
 
 **Ví dụ:**
 
@@ -906,7 +760,7 @@ openspec templates [options]
 # Hiển thị đường dẫn mẫu cho schema mặc định
 openspec templates
 
-# Hiển thị mẫu cho schema tùy chỉnh
+# Hiển thị các mẫu cho schema tùy chỉnh
 openspec templates --schema my-workflow
 
 # JSON để sử dụng theo chương trình
@@ -918,7 +772,7 @@ openspec templates --json
 ```
 Schema: spec-driven
 
-Mẫu:
+Templates:
   proposal  → ~/.openspec/schemas/spec-driven/templates/proposal.md
   specs     → ~/.openspec/schemas/spec-driven/templates/specs.md
   design    → ~/.openspec/schemas/spec-driven/templates/design.md
@@ -929,17 +783,17 @@ Mẫu:
 
 ### `openspec schemas`
 
-Liệt kê các schema quy trình làm việc có sẵn cùng với mô tả và luồng tác phẩm của chúng.
+Liệt kê các schema quy trình làm việc có sẵn cùng với mô tả và luồng artifact của chúng.
 
 ```
 openspec schemas [options]
 ```
 
-**Tùy chọn:**
+**Các Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--json` | Xuất ra dưới dạng JSON |
+| `--json` | Xuất dưới dạng JSON |
 
 **Ví dụ:**
 
@@ -950,45 +804,45 @@ openspec schemas
 **Đầu ra:**
 
 ```
-Các schema có sẵn:
+Available schemas:
 
-  spec-driven (gói)
-    Quy trình làm việc phát triển hướng theo đặc tả mặc định
+  spec-driven (package)
+    Quy trình phát triển spec-driven mặc định
     Luồng: proposal → specs → design → tasks
 
-  my-custom (dự án)
+  my-custom (project)
     Quy trình làm việc tùy chỉnh cho dự án này
     Luồng: research → proposal → tasks
 ```
 
-## Các lệnh Schema
+## Các Lệnh về Schema
 
-Các lệnh để tạo và quản lý schema workflow tùy chỉnh.
+Các lệnh để tạo và quản lý các schema quy trình làm việc tùy chỉnh.
 
 ### `openspec schema init`
 
-Tạo một schema mới cục bộ cho dự án.
+Tạo một schema cục bộ cho dự án.
 
 ```
 openspec schema init <name> [options]
 ```
 
-**Đối số:**
+**Tham số:**
 
-| Đối số | Bắt buộc | Mô tả |
+| Tham số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `name` | Có | Tên schema (viết thường, dùng gạch nối) |
+| `name` | Có | Tên schema (kebab-case) |
 
 **Tùy chọn:**
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--description <text>` | Mô tả schema |
-| `--artifacts <list>` | Danh sách ID artifact, cách nhau bằng dấu phẩy (mặc định: `proposal,specs,design,tasks`) |
+| `--description <text>` | Mô tả của Schema |
+| `--artifacts <list>` | ID artifact phân tách bằng dấu phẩy (mặc định: `proposal,specs,design,tasks`) |
 | `--default` | Đặt làm schema mặc định của dự án |
 | `--no-default` | Không nhắc đặt làm mặc định |
-| `--force` | Ghi đè schema đã tồn tại |
-| `--json` | Xuất ra dạng JSON |
+| `--force` | Ghi đè lên schema hiện có |
+| `--json` | Xuất dưới dạng JSON |
 
 **Ví dụ:**
 
@@ -996,20 +850,20 @@ openspec schema init <name> [options]
 # Tạo schema tương tác
 openspec schema init research-first
 
-# Tạo không tương tác với các artifact cụ thể
+# Không tương tác với các artifact cụ thể
 openspec schema init rapid \
   --description "Quy trình lặp lại nhanh" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
-**Những gì nó tạo ra:**
+**Nó tạo ra:**
 
 ```
 openspec/schemas/<name>/
-├── schema.yaml           # Định nghĩa schema
+├── schema.yaml           # Định nghĩa Schema
 └── templates/
-    ├── proposal.md       # Mẫu cho mỗi artifact
+    ├── proposal.md       # Template cho mỗi artifact
     ├── specs.md
     ├── design.md
     └── tasks.md
@@ -1025,9 +879,9 @@ Sao chép một schema hiện có vào dự án của bạn để tùy chỉnh.
 openspec schema fork <source> [name] [options]
 ```
 
-**Đối số:**
+**Tham số:**
 
-| Đối số | Bắt buộc | Mô tả |
+| Tham số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
 | `source` | Có | Schema cần sao chép |
 | `name` | Không | Tên schema mới (mặc định: `<source>-custom`) |
@@ -1036,13 +890,13 @@ openspec schema fork <source> [name] [options]
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--force` | Ghi đè điểm đến đã tồn tại |
-| `--json` | Xuất ra dạng JSON |
+| `--force` | Ghi đè lên đích đến hiện có |
+| `--json` | Xuất dưới dạng JSON |
 
 **Ví dụ:**
 
 ```bash
-# Fork schema spec-driven có sẵn
+# Fork schema spec-driven tích hợp sẵn
 openspec schema fork spec-driven my-workflow
 ```
 
@@ -1056,9 +910,9 @@ Xác thực cấu trúc và các template của một schema.
 openspec schema validate [name] [options]
 ```
 
-**Đối số:**
+**Tham số:**
 
-| Đối số | Bắt buộc | Mô tả |
+| Tham số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
 | `name` | Không | Schema cần xác thực (xác thực tất cả nếu bỏ qua) |
 
@@ -1067,7 +921,7 @@ openspec schema validate [name] [options]
 | Tùy chọn | Mô tả |
 |--------|-------------|
 | `--verbose` | Hiển thị các bước xác thực chi tiết |
-| `--json` | Xuất ra dạng JSON |
+| `--json` | Xuất dưới dạng JSON |
 
 **Ví dụ:**
 
@@ -1075,7 +929,7 @@ openspec schema validate [name] [options]
 # Xác thực một schema cụ thể
 openspec schema validate my-workflow
 
-# Xác thực tất cả schema
+# Xác thực tất cả các schemas
 openspec schema validate
 ```
 
@@ -1083,15 +937,15 @@ openspec schema validate
 
 ### `openspec schema which`
 
-Hiển thị nơi một schema được giải quyết từ đâu (hữu ích để gỡ lỗi độ ưu tiên).
+Hiển thị nơi một schema được phân giải (hữu ích cho việc gỡ lỗi thứ tự ưu tiên).
 
 ```
 openspec schema which [name] [options]
 ```
 
-**Đối số:**
+**Tham số:**
 
-| Đối số | Bắt buộc | Mô tả |
+| Tham số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
 | `name` | Không | Tên schema |
 
@@ -1099,61 +953,61 @@ openspec schema which [name] [options]
 
 | Tùy chọn | Mô tả |
 |--------|-------------|
-| `--all` | Liệt kê tất cả schema cùng với nguồn của chúng |
-| `--json` | Xuất ra dạng JSON |
+| `--all` | Liệt kê tất cả các schemas cùng với nguồn của chúng |
+| `--json` | Xuất dưới dạng JSON |
 
 **Ví dụ:**
 
 ```bash
-# Kiểm tra schema đến từ đâu
+# Kiểm tra một schema đến từ đâu
 openspec schema which spec-driven
 ```
 
-**Đầu ra:**
+**Kết quả:**
 
 ```
-spec-driven resolves from: package
-  Source: /usr/local/lib/node_modules/@fission-ai/openspec/schemas/spec-driven
+spec-driven được phân giải từ: package
+  Nguồn: /usr/local/lib/node_modules/@fission-ai/openspec/schemas/spec-driven
 ```
 
-**Độ ưu tiên của Schema:**
+**Thứ tự ưu tiên của Schema:**
 
 1. Dự án: `openspec/schemas/<name>/`
 2. Người dùng: `~/.local/share/openspec/schemas/<name>/`
-3. Gói: Các schema có sẵn
+3. Gói (Package): Các schema tích hợp sẵn
 
 ---
 
-## Các lệnh Cấu hình
+## Các Lệnh Cấu Hình
 
 ### `openspec config`
 
-Xem và sửa đổi cấu hình toàn cục của OpenSpec.
+Xem và sửa đổi cấu hình OpenSpec toàn cục.
 
 ```
 openspec config <subcommand> [options]
 ```
 
-**Lệnh con:**
+**Các lệnh phụ:**
 
-| Lệnh con | Mô tả |
+| Lệnh phụ | Mô tả |
 |------------|-------------|
-| `path` | Hiển thị vị trí file cấu hình |
-| `list` | Hiển thị tất cả cài đặt hiện tại |
+| `path` | Hiển thị vị trí tệp cấu hình |
+| `list` | Hiển thị tất cả các cài đặt hiện tại |
 | `get <key>` | Lấy một giá trị cụ thể |
 | `set <key> <value>` | Đặt một giá trị |
 | `unset <key>` | Xóa một khóa |
 | `reset` | Đặt lại về mặc định |
-| `edit` | Mở trong `$EDITOR` |
-| `profile [preset]` | Cấu hình profile workflow một cách tương tác hoặc thông qua preset |
+| `edit` | Mở bằng `$EDITOR` |
+| `profile [preset]` | Cấu hình hồ sơ quy trình làm việc tương tác hoặc qua preset |
 
 **Ví dụ:**
 
 ```bash
-# Hiển thị đường dẫn file cấu hình
+# Hiển thị đường dẫn tệp cấu hình
 openspec config path
 
-# Liệt kê tất cả cài đặt
+# Liệt kê tất cả các cài đặt
 openspec config list
 
 # Lấy một giá trị cụ thể
@@ -1162,53 +1016,53 @@ openspec config get telemetry.enabled
 # Đặt một giá trị
 openspec config set telemetry.enabled false
 
-# Đặt rõ ràng một giá trị chuỗi
-openspec config set user.name "Tên Của Tôi" --string
+# Thiết lập một giá trị chuỗi một cách rõ ràng
+openspec config set user.name "My Name" --string
 
 # Xóa một cài đặt tùy chỉnh
 openspec config unset user.name
 
-# Đặt lại toàn bộ cấu hình
+# Đặt lại tất cả cấu hình
 openspec config reset --all --yes
 
-# Chỉnh sửa cấu hình trong trình soạn thảo của bạn
+# Chỉnh sửa cấu hình bằng trình soạn thảo của bạn
 openspec config edit
 
-# Cấu hình profile với trình hướng dẫn dựa trên hành động
+# Cấu hình hồ sơ với wizard dựa trên hành động
 openspec config profile
 
-# Preset nhanh: chuyển workflow sang core (giữ nguyên chế độ giao hàng)
+# Preset nhanh: chuyển đổi quy trình làm việc sang core (giữ chế độ delivery)
 openspec config profile core
 ```
 
-`openspec config profile` bắt đầu với tóm tắt trạng thái hiện tại, sau đó cho phép bạn chọn:
-- Thay đổi giao hàng + workflow
-- Chỉ thay đổi giao hàng
-- Chỉ thay đổi workflow
-- Giữ cài đặt hiện tại (thoát)
+`openspec config profile` bắt đầu bằng một bản tóm tắt trạng thái hiện tại, sau đó cho phép bạn chọn:
+- Thay đổi delivery + workflows
+- Chỉ thay đổi delivery
+- Chỉ thay đổi workflows
+- Giữ nguyên cài đặt hiện tại (thoát)
 
-Nếu bạn giữ cài đặt hiện tại, không có thay đổi nào được ghi và không có lời nhắc cập nhật được hiển thị.
-Nếu không có thay đổi cấu hình nhưng dự án hoặc workspace hiện tại không đồng bộ với profile/chế độ giao hàng toàn cục của bạn, OpenSpec sẽ hiển thị cảnh báo và đề xuất `openspec update` cho các dự án cục bộ hoặc `openspec workspace update` cho hướng dẫn và kỹ năng cục bộ của workspace.
-Nhấn `Ctrl+C` cũng sẽ hủy luồng một cách sạch sẽ (không có stack trace) và thoát với mã `130`.
-Trong danh sách kiểm tra workflow, `[x]` có nghĩa là workflow được chọn trong cấu hình toàn cục. Để áp dụng các lựa chọn đó vào file dự án, chạy `openspec update` (hoặc chọn `Áp dụng thay đổi vào dự án này ngay?` khi được nhắc bên trong một dự án). Từ bên trong một workspace, sử dụng `openspec workspace update` để làm mới hướng dẫn và kỹ năng cục bộ của workspace; điều này vẫn chỉ dành cho kỹ năng đối với các file workflow agent được tạo và không tạo các lệnh slash của workspace.
+Nếu bạn giữ nguyên cài đặt hiện tại, không có thay đổi nào được ghi và không hiển thị lời nhắc cập nhật.
+Nếu không có thay đổi cấu hình nào nhưng các tệp dự án hiện tại chưa đồng bộ với hồ sơ/delivery toàn cục của bạn, OpenSpec sẽ hiển thị cảnh báo và đề xuất `openspec update`.
+Nhấn `Ctrl+C` cũng hủy quy trình một cách sạch sẽ (không có stack trace) và thoát bằng mã `130`.
+Trong danh sách kiểm tra quy trình làm việc, `[x]` nghĩa là quy trình làm việc đã được chọn trong cấu hình toàn cục. Để áp dụng các lựa chọn đó vào tệp dự án, hãy chạy `openspec update` (hoặc chọn `Apply changes to this project now?` khi được nhắc bên trong một dự án).
 
 **Ví dụ tương tác:**
 
 ```bash
-# Cập nhật chỉ chế độ giao hàng
+# Cập nhật chỉ delivery
 openspec config profile
-# chọn: Chỉ thay đổi giao hàng
-# chọn giao hàng: Chỉ Kỹ năng
+# chọn: Chỉ thay đổi delivery
+# chọn delivery: Skills only
 
-# Cập nhật chỉ workflow
+# Cập nhật chỉ workflows
 openspec config profile
-# chọn: Chỉ thay đổi workflow
-# chuyển đổi workflow trong danh sách kiểm tra, sau đó xác nhận
+# chọn: Chỉ thay đổi workflows
+# bật/tắt các workflow trong danh sách kiểm tra, sau đó xác nhận
 ```
 
 ---
 
-## Các lệnh Tiện ích
+## Các Lệnh Tiện Ích
 
 ### `openspec feedback`
 
@@ -1218,11 +1072,11 @@ Gửi phản hồi về OpenSpec. Tạo một issue trên GitHub.
 openspec feedback <message> [options]
 ```
 
-**Đối số:**
+**Tham số:**
 
-| Đối số | Bắt buộc | Mô tả |
+| Tham số | Bắt buộc | Mô tả |
 |----------|----------|-------------|
-| `message` | Có | Thông điệp phản hồi |
+| `message` | Có | Tin nhắn phản hồi |
 
 **Tùy chọn:**
 
@@ -1230,39 +1084,39 @@ openspec feedback <message> [options]
 |--------|-------------|
 | `--body <text>` | Mô tả chi tiết |
 
-**Yêu cầu:** GitHub CLI (`gh`) phải được cài đặt và xác thực.
+**Yêu cầu:** Cần cài đặt và xác thực GitHub CLI (`gh`).
 
 **Ví dụ:**
 
 ```bash
-openspec feedback "Thêm hỗ trợ cho các loại artifact tùy chỉnh" \
-  --body "Tôi muốn tự định nghĩa các loại artifact của riêng mình ngoài những loại có sẵn."
+openspec feedback "Add support for custom artifact types" \
+  --body "I'd like to define my own artifact types beyond the built-in ones."
 ```
 
 ---
 
 ### `openspec completion`
 
-Quản lý hoàn thành tự động cho shell của CLI OpenSpec.
+Quản lý các tính năng tự động hoàn thành (completion) cho CLI OpenSpec.
 
 ```
 openspec completion <subcommand> [shell]
 ```
 
-**Lệnh con:**
+**Các lệnh phụ:**
 
-| Lệnh con | Mô tả |
+| Lệnh phụ | Mô tả |
 |------------|-------------|
 | `generate [shell]` | Xuất script hoàn thành ra stdout |
 | `install [shell]` | Cài đặt hoàn thành cho shell của bạn |
-| `uninstall [shell]` | Gỡ bỏ hoàn thành đã cài đặt |
+| `uninstall [shell]` | Gỡ bỏ các tính năng hoàn thành đã cài đặt |
 
 **Các shell được hỗ trợ:** `bash`, `zsh`, `fish`, `powershell`
 
 **Ví dụ:**
 
 ```bash
-# Cài đặt hoàn thành (tự động nhận diện shell)
+# Cài đặt completions (tự động phát hiện shell)
 openspec completion install
 
 # Cài đặt cho shell cụ thể
@@ -1277,30 +1131,30 @@ openspec completion uninstall
 
 ---
 
-## Mã thoát
+## Mã Thoát (Exit Codes)
 
-| Ý nghĩa |
+| Mã | Ý nghĩa |
 |------|---------|
 | `0` | Thành công |
-| `1` | Lỗi (xác thực thất bại, file bị thiếu, v.v.) |
+| `1` | Lỗi (lỗi xác thực, thiếu tệp, v.v.) |
 
 ---
 
-## Biến môi trường
+## Các Biến Môi Trường
 
-| Mô tả |
+| Biến | Mô tả |
 |----------|-------------|
-| `OPENSPEC_TELEMETRY` | Đặt thành `0` để tắt telemetry |
-| `DO_NOT_TRACK` | Đặt thành `1` để tắt telemetry (tín hiệu DNT tiêu chuẩn) |
-| `OPENSPEC_CONCURRENCY` | Số luồng mặc định cho xác thực hàng loạt (mặc định: 6) |
+| `OPENSPEC_TELEMETRY` | Đặt thành `0` để vô hiệu hóa telemetry |
+| `DO_NOT_TRACK` | Đặt thành `1` để vô hiệu hóa telemetry (tín hiệu DNT tiêu chuẩn) |
+| `OPENSPEC_CONCURRENCY` | Số lượng đồng thời mặc định cho việc xác thực hàng loạt (mặc định: 6) |
 | `EDITOR` hoặc `VISUAL` | Trình soạn thảo cho `openspec config edit` |
-| `NO_COLOR` | Tắt màu sắc khi được đặt |
+| `NO_COLOR` | Vô hiệu hóa đầu ra màu khi được đặt |
 
 ---
 
-## Tài liệu liên quan
+## Tài Liệu Liên Quan
 
-- [Commands](commands.md) - Các lệnh slash của AI (`/opsx:propose`, `/opsx:apply`, v.v.)
-- [Workflows](workflows.md) - Các mẫu phổ biến và khi nào nên sử dụng mỗi lệnh
-- [Customization](customization.md) - Tạo schema và template tùy chỉnh
-- [Getting Started](getting-started.md) - Hướng dẫn cài đặt lần đầu
+- [Commands](commands.md) - Các lệnh AI (`/opsx:propose`, `/opsx:apply`, v.v.)
+- [Workflows](workflows.md) - Các mẫu phổ biến và thời điểm sử dụng từng lệnh
+- [Customization](customization.md) - Tạo các schema và template tùy chỉnh
+- [Getting Started](getting-started.md) - Hướng dẫn thiết lập lần đầu

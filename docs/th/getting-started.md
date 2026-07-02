@@ -1,32 +1,59 @@
 # เริ่มต้นใช้งาน
 
-คู่มือนี้อธิบายวิธีการทำงานของ OpenSpec หลังจากที่คุณติดตั้งและเริ่มต้นใช้งานแล้ว สำหรับคำแนะนำการติดตั้ง โปรดดูที่ [README หลัก](index.md#quick-start)
+คู่มือนี้อธิบายว่า OpenSpec ทำงานอย่างไรหลังจากที่คุณติดตั้งและเริ่มต้นใช้งานแล้ว สำหรับคำแนะนำการติดตั้ง โปรดดูที่ [main README](../index.md#quick-start) หรือ [Installation guide](installation.md) หากคุณใหม่กับชุดเอกสารทั้งหมด [documentation home](index.md) จะช่วยแมปทุกอย่าง
+
+> **ฉันพิมพ์คำสั่งเหล่านี้ที่ไหน?** สองที่ และการสับสนเป็นข้อผิดพลาดในช่วงแรกที่พบบ่อยที่สุด
+>
+> - คำสั่ง `openspec ...` (เช่น `openspec init`) ทำงานใน **เทอร์มินัล** ของคุณ
+> - คำสั่ง `/opsx:...` (เช่น `/opsx:propose`) ทำงานใน **แชทของผู้ช่วย AI** ซึ่งเป็นช่องเดียวกับที่คุณขอให้มันเขียนโค้ด
+>
+> ไม่มี "โหมดโต้ตอบ" แยกต่างหากเพื่อเริ่มต้น คุณเพียงแค่พิมพ์คำสั่งสแลชในแชท และผู้ช่วยของคุณจะดำเนินการต่อ คำอธิบายฉบับเต็ม: [How Commands Work](how-commands-work.md)
+
+## ห้านาทีแรกของคุณ
+
+ลูปทั้งหมด โดยระบุขั้นตอนด้วยสถานที่ที่ดำเนินการ:
+
+```text
+TERMINAL   $ npm install -g @fission-ai/openspec@latest
+TERMINAL   $ cd your-project && openspec init
+AI CHAT      /opsx:explore                    (ทางเลือก: คิดให้รอบคอบก่อน)
+AI CHAT      /opsx:propose add-dark-mode      (AI ร่างแผน; คุณตรวจสอบมัน)
+AI CHAT      /opsx:apply                      (AI สร้างมัน)
+AI CHAT      /opsx:archive                    (specs อัปเดต, การเปลี่ยนแปลงถูกจัดเก็บไว้)
+```
+
+มีสองขั้นตอนในเทอร์มินัลเพื่อตั้งค่า จากนั้นคุณจะทำงานในแชท ส่วนที่เหลือของคู่มือนี้จะอธิบายว่าแต่ละขั้นตอนทำอะไรและสิ่งที่คุณจะเห็นคืออะไร
+
+> **ยังไม่แน่ใจว่าจะสร้างอะไร? ให้เริ่มต้นด้วย `/opsx:explore`** นี่คือเพื่อนร่วมคิดที่ไม่ต้องกังวล ซึ่งอ่านโค้ดเบสของคุณ ชั่งน้ำหนักตัวเลือก และปรับแนวคิดที่คลุมเครือให้เป็นแผนที่เป็นรูปธรรม ทั้งหมดนี้ก่อนที่จะมีอาร์ติแฟกต์หรือโค้ดใดๆ ปรากฏขึ้น เมื่อภาพชัดเจนแล้ว มันจะส่งต่อให้กับ `/opsx:propose` นี่คือนิสัยที่ดีที่สุดเพียงอย่างเดียวสำหรับการทำงานกับ AI ที่อาจสร้างสิ่งผิดได้อย่างมั่นใจ ดู [Explore guide](explore.md)
 
 ## วิธีการทำงาน
 
-OpenSpec ช่วยให้คุณและผู้ช่วยเขียนโค้ด AI ของคุณตกลงกันว่าจะสร้างอะไรก่อนที่จะเขียนโค้ดใดๆ
+OpenSpec ช่วยให้คุณและผู้ช่วยเขียนโค้ด AI ตกลงกันได้ว่าจะสร้างอะไรก่อนที่จะมีการเขียนโค้ดใดๆ
 
-**เส้นทางเริ่มต้นแบบเร็ว (โปรไฟล์หลัก):**
-
-```text
-/opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
-```
-
-**เส้นทางแบบขยาย (การเลือกเวิร์กโฟลว์ที่กำหนดเอง):**
+**เส้นทางด่วนเริ่มต้น (โปรไฟล์หลัก):**
 
 ```text
-/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
+   (ทางเลือก)
 ```
 
-โปรไฟล์เริ่มต้นแบบทั่วไปคือ `core` ซึ่งรวมถึง `propose`, `explore`, `apply`, `sync` และ `archive` คุณสามารถเปิดใช้งานคำสั่งเวิร์กโฟลว์แบบขยายได้ด้วย `openspec config profile` แล้วตามด้วย `openspec update`
+เริ่มต้นด้วย `/opsx:explore` เมื่อคุณกำลังคิดว่าจะทำอะไร หรือข้ามไปยัง `/opsx:propose` ทันทีเมื่อคุณรู้แล้ว Explore อยู่ในโปรไฟล์เริ่มต้น ดังนั้นมันจึงมีอยู่เสมอเมื่อคุณต้องการมัน
 
-## สิ่งที่ OpenSpec สร้างขึ้น
+**เส้นทางที่ขยายออกไป (การเลือกเวิร์กโฟลว์แบบกำหนดเอง):**
+
+```text
+/opsx:new ──► /opsx:ff หรือ /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+```
+
+โปรไฟล์ระดับโลกเริ่มต้นคือ `core` ซึ่งรวมถึง `propose`, `explore`, `apply`, `sync`, และ `archive` คุณสามารถเปิดใช้งานคำสั่งเวิร์กโฟลว์ที่ขยายออกไปได้ด้วย `openspec config profile` และจากนั้นใช้ `openspec update`
+
+## OpenSpec สร้างอะไรขึ้นบ้าง
 
 หลังจากรัน `openspec init` โปรเจกต์ของคุณจะมีโครงสร้างดังนี้:
 
 ```
 openspec/
-├── specs/              # แหล่งข้อมูลจริง (พฤติกรรมของระบบของคุณ)
+├── specs/              # แหล่งความจริง (พฤติกรรมของระบบคุณ)
 │   └── <domain>/
 │       └── spec.md
 ├── changes/            # การอัปเดตที่เสนอ (หนึ่งโฟลเดอร์ต่อการเปลี่ยนแปลง)
@@ -34,220 +61,227 @@ openspec/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # สเปกเดลต้า (สิ่งที่กำลังเปลี่ยนแปลง)
+│       └── specs/      # Delta specs (สิ่งที่กำลังเปลี่ยน)
 │           └── <domain>/
 │               └── spec.md
-└── config.yaml         # การกำหนดค่าโปรเจกต์ (ไม่บังคับ)
+└── config.yaml         # การกำหนดค่าโปรเจกต์ (ทางเลือก)
 ```
 
-**สองไดเรกทอรีหลัก:**
+**สองไดเร็กทอรีหลัก:**
 
-- **`specs/`** - แหล่งข้อมูลจริง สเปกเหล่านี้อธิบายพฤติกรรมปัจจุบันของระบบของคุณ จัดระเบียบตามโดเมน (เช่น `specs/auth/`, `specs/payments/`)
+- **`specs/`** - แหล่งความจริง Specs เหล่านี้อธิบายว่าระบบของคุณทำงานอย่างไร จัดระเบียบตามโดเมน (เช่น `specs/auth/`, `specs/payments/`)
 
-- **changes/`** - การแก้ไขที่เสนอ การเปลี่ยนแปลงแต่ละรายการจะมีโฟลเดอร์ของตัวเองพร้อมสิ่งประดิษฐ์ที่เกี่ยวข้องทั้งหมด เมื่อการเปลี่ยนแปลงเสร็จสมบูรณ์ สเปกของมันจะถูกรวมเข้ากับไดเรกทอรี `specs/` หลัก
+- **`changes/`** - การแก้ไขที่เสนอ แต่ละการเปลี่ยนแปลงจะมีโฟลเดอร์ของตัวเองพร้อมอาร์ติแฟกต์ทั้งหมด เมื่อการเปลี่ยนแปลงเสร็จสมบูรณ์ specs ของมันจะถูกรวมเข้ากับไดเร็กทอรีหลัก `specs/`
 
-## ทำความเข้าใจสิ่งประดิษฐ์
+## ทำความเข้าใจอาร์ติแฟกต์
 
-โฟลเดอร์การเปลี่ยนแปลงแต่ละโฟลเดอร์มีสิ่งประดิษฐ์ที่ช่วยแนะนำการทำงาน:
+โฟลเดอร์การเปลี่ยนแปลงแต่ละอันมีอาร์ติแฟกต์ที่นำทางการทำงาน:
 
-| สิ่งประดิษฐ์ | วัตถุประสงค์ |
+| อาร์ติแฟกต์ | วัตถุประสงค์ |
 |----------|---------|
 | `proposal.md` | "ทำไม" และ "อะไร" - บันทึกเจตนา ขอบเขต และแนวทาง |
-| `specs/` | สเปกเดลต้าที่แสดงข้อกำหนดที่เพิ่ม/แก้ไข/ลบ |
-| `design.md` | "อย่างไร" - แนวทางทางเทคนิคและการตัดสินใจด้านสถาปัตยกรรม |
-| `tasks.md` | รายการตรวจสอบการใช้งานพร้อมช่องทำเครื่องหมาย |
+| `specs/` | Delta specs ที่แสดงข้อกำหนดที่ถูกเพิ่ม/แก้ไข/ลบ |
+| `design.md` | "อย่างไร" - แนวทางด้านเทคนิคและการตัดสินใจสถาปัตยกรรม |
+| `tasks.md` | รายการตรวจสอบการนำไปใช้พร้อมช่องทำเครื่องหมาย |
 
-**สิ่งประดิษฐ์สร้างขึ้นซึ่งกันและกัน:**
+**อาร์ติแฟกต์สร้างบนกัน:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            อัปเดตเมื่อคุณเรียนรู้
+            อัปเดตตามที่คุณเรียนรู้
 ```
 
-คุณสามารถย้อนกลับและปรับปรุงสิ่งประดิษฐ์ก่อนหน้าได้เสมอเมื่อคุณเรียนรู้เพิ่มเติมในระหว่างการใช้งาน
+คุณสามารถย้อนกลับและปรับปรุงอาร์ติแฟกต์ก่อนหน้าได้เสมอเมื่อคุณเรียนรู้มากขึ้นในระหว่างการนำไปใช้
 
-## วิธีการทำงานของสเปกเดลต้า
+## Delta Specs ทำงานอย่างไร
 
-สเปกเดลต้าเป็นแนวคิดหลักใน OpenSpec มันแสดงให้เห็นว่ามีการเปลี่ยนแปลงอะไรบ้างเมื่อเทียบกับสเปกปัจจุบันของคุณ
+Delta specs เป็นแนวคิดหลักใน OpenSpec พวกมันแสดงสิ่งที่กำลังเปลี่ยนแปลงเทียบกับ specs ปัจจุบันของคุณ
 
 ### รูปแบบ
 
-สเปกเดลต้าใช้ส่วนเพื่อระบุประเภทของการเปลี่ยนแปลง:
+Delta specs ใช้ส่วนต่างๆ เพื่อระบุประเภทของการเปลี่ยนแปลง:
 
 ```markdown
-# Delta for Auth
+# Delta สำหรับ Auth
 
-## ADDED Requirements
+## ข้อกำหนดที่ถูกเพิ่ม (ADDED Requirements)
 
-### Requirement: Two-Factor Authentication
-The system MUST require a second factor during login.
+### ข้อกำหนด: การยืนยันตัวตนสองปัจจัย
+ระบบจะต้องต้องการปัจจัยที่สองระหว่างการเข้าสู่ระบบ
 
-#### Scenario: OTP required
-- GIVEN a user with 2FA enabled
-- WHEN the user submits valid credentials
-- THEN an OTP challenge is presented
+#### สถานการณ์: ต้องใช้ OTP
+- GIVEN ผู้ใช้ที่มี 2FA เปิดใช้งานอยู่
+- WHEN ผู้ใช้ส่งข้อมูลรับรองที่ถูกต้อง
+- THEN จะมีการนำเสนอความท้าทาย OTP
 
-## MODIFIED Requirements
+## ข้อกำหนดที่ถูกแก้ไข (MODIFIED Requirements)
 
-### Requirement: Session Timeout
-The system SHALL expire sessions after 30 minutes of inactivity.
-(Previously: 60 minutes)
+### ข้อกำหนด: การหมดอายุของเซสชัน
+ระบบจะต้องยกเลิกเซสชันหลังจากไม่มีกิจกรรมเป็นเวลา 30 นาที
+(ก่อนหน้านี้: 60 นาที)
 
-#### Scenario: Idle timeout
-- GIVEN an authenticated session
-- WHEN 30 minutes pass without activity
-- THEN the session is invalidated
+#### สถานการณ์: หมดเวลาจากการไม่ได้ใช้งาน
+- GIVEN เซสชันที่ได้รับการรับรองความถูกต้อง
+- WHEN ผ่านไป 30 นาทีโดยไม่มีกิจกรรม
+- THEN เซสชันจะถูกทำให้เป็นโมฆะ
 
-## REMOVED Requirements
+## ข้อกำหนดที่ถูกลบ (REMOVED Requirements)
 
-### Requirement: Remember Me
-(Deprecated in favor of 2FA)
+### ข้อกำหนด: จำฉันไว้ (Remember Me)
+(เลิกใช้เพื่อแทนที่ด้วย 2FA)
 ```
 
-### สิ่งที่เกิดขึ้นเมื่อจัดเก็บ
+### เกิดอะไรขึ้นเมื่อทำการเก็บถาวร (Archive)
 
 เมื่อคุณจัดเก็บการเปลี่ยนแปลง:
 
-1. ข้อกำหนดที่ **เพิ่ม** จะถูกเพิ่มต่อท้ายสเปกหลัก
-2. ข้อกำหนดที่ **แก้ไข** จะแทนที่เวอร์ชันที่มีอยู่
-3. ข้อกำหนดที่ **ลบ** จะถูกลบออกจากสเปกหลัก
+1. ข้อกำหนด **ADDED** จะถูกต่อท้ายใน spec หลัก
+2. ข้อกำหนด **MODIFIED** จะเข้ามาแทนที่เวอร์ชันที่มีอยู่
+3. ข้อกำหนด **REMOVED** จะถูกลบออกจาก spec หลัก
 
-โฟลเดอร์การเปลี่ยนแปลงจะถูกย้ายไปที่ `openspec/changes/archive/` เพื่อเก็บประวัติการตรวจสอบ
+โฟลเดอร์การเปลี่ยนแปลงจะย้ายไปยัง `openspec/changes/archive/` สำหรับประวัติการตรวจสอบ
 
 ## ตัวอย่าง: การเปลี่ยนแปลงครั้งแรกของคุณ
 
-เรามาเดินผ่านขั้นตอนการเพิ่มโหมดมืดให้กับแอปพลิเคชัน
+มาดูขั้นตอนการเพิ่ม dark mode ให้กับแอปพลิเคชันกัน
 
-### 1. เริ่มการเปลี่ยนแปลง (ค่าเริ่มต้น)
+### 1. เริ่มต้นการเปลี่ยนแปลง (ค่าเริ่มต้น)
 
 ```text
-You: /opsx:propose add-dark-mode
+คุณ: /opsx:propose add-dark-mode
 
-AI:  Created openspec/changes/add-dark-mode/
-     ✓ proposal.md — why we're doing this, what's changing
-     ✓ specs/       — requirements and scenarios
-     ✓ design.md    — technical approach
-     ✓ tasks.md     — implementation checklist
-     Ready for implementation!
+AI:  สร้าง openspec/changes/add-dark-mode/
+     ✓ proposal.md — เหตุผลที่เราทำสิ่งนี้ สิ่งที่กำลังเปลี่ยน
+     ✓ specs/       — ข้อกำหนดและสถานการณ์
+     ✓ design.md    — แนวทางด้านเทคนิค
+     ✓ tasks.md     — รายการตรวจสอบการนำไปใช้
+     พร้อมสำหรับการนำไปใช้!
 ```
 
-หากคุณเปิดใช้งานโปรไฟล์เวิร์กโฟลว์แบบขยาย คุณยังสามารถทำสิ่งนี้เป็นสองขั้นตอนได้: `/opsx:new` แล้วตามด้วย `/opsx:ff` (หรือ `/opsx:continue` เพิ่มเติมทีละนิด)
+หากคุณเปิดใช้งานโปรไฟล์เวิร์กโฟลว์ที่ขยายออก คุณยังสามารถทำสิ่งนี้ได้ในสองขั้นตอน: `/opsx:new` จากนั้น `/opsx:ff` (หรือ `/opsx:continue` แบบเพิ่มขึ้น)
 
 ### 2. สิ่งที่ถูกสร้างขึ้น
 
 **proposal.md** - บันทึกเจตนา:
 
 ```markdown
-# Proposal: Add Dark Mode
+# ข้อเสนอ: เพิ่ม Dark Mode
 
-## Intent
-Users have requested a dark mode option to reduce eye strain
-during nighttime usage.
+## เจตนา
+ผู้ใช้ได้ร้องขอตัวเลือก dark mode เพื่อลดความเมื่อยล้าของดวงตา
+ในระหว่างการใช้งานเวลากลางคืน
 
-## Scope
-- Add theme toggle in settings
-- Support system preference detection
-- Persist preference in localStorage
+## ขอบเขต
+- เพิ่มสวิตช์ธีมในการตั้งค่า
+- รองรับการตรวจจับการตั้งค่าระบบ
+- บันทึกการตั้งค่าใน localStorage
 
-## Approach
-Use CSS custom properties for theming with a React context
-for state management.
+## แนวทาง
+ใช้ CSS custom properties สำหรับการกำหนดธีมพร้อมกับ React context
+สำหรับการจัดการสถานะ
 ```
 
-**specs/ui/spec.md** - เดลต้าที่แสดงข้อกำหนดใหม่:
+**specs/ui/spec.md** - Delta ที่แสดงข้อกำหนดใหม่:
 
 ```markdown
-# Delta for UI
+# Delta สำหรับ UI
 
-## ADDED Requirements
+## ข้อกำหนดที่ถูกเพิ่ม (ADDED Requirements)
 
-### Requirement: Theme Selection
-The system SHALL allow users to choose between light and dark themes.
+### ข้อกำหนด: การเลือกธีม
+ระบบจะต้องอนุญาตให้ผู้ใช้เลือกระหว่างธีมสว่างและธีมมืด
 
-#### Scenario: Manual toggle
-- GIVEN a user on any page
-- WHEN the user clicks the theme toggle
-- THEN the theme switches immediately
-- AND the preference persists across sessions
+#### สถานการณ์: สวิตช์ด้วยตนเอง
+- GIVEN ผู้ใช้อยู่ในหน้าใดๆ
+- WHEN ผู้คลิกที่สวิตช์ธีม
+- THEN ธีมจะเปลี่ยนทันที
+- และการตั้งค่าจะคงอยู่ข้ามเซสชัน
 
-#### Scenario: System preference
-- GIVEN a user with no saved preference
-- WHEN the application loads
-- THEN the system's preferred color scheme is used
+#### สถานการณ์: การตั้งค่าระบบ
+- GIVEN ผู้ใช้ที่ไม่มีการตั้งค่าที่บันทึกไว้
+- WHEN แอปพลิเคชันโหลด
+- THEN จะมีการใช้รูปแบบสีที่กำหนดโดยระบบ
 ```
 
-**tasks.md** - รายการตรวจสอบการใช้งาน:
+**tasks.md** - รายการตรวจสอบการนำไปใช้:
 
 ```markdown
-# Tasks
+# งาน
 
-## 1. Theme Infrastructure
-- [ ] 1.1 Create ThemeContext with light/dark state
-- [ ] 1.2 Add CSS custom properties for colors
-- [ ] 1.3 Implement localStorage persistence
+## 1. โครงสร้างพื้นฐานของธีม
+- [ ] 1.1 สร้าง ThemeContext พร้อมสถานะ light/dark
+- [ ] 1.2 เพิ่ม CSS custom properties สำหรับสี
+- [ ] 1.3 นำการบันทึก localStorage ไปใช้
 
-## 2. UI Components
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Add toggle to settings page
-- [ ] 2.3 Update Header to include quick toggle
+## 2. ส่วนประกอบ UI
+- [ ] 2.1 สร้างส่วนประกอบ ThemeToggle
+- [ ] 2.2 เพิ่มสวิตช์ในหน้าการตั้งค่า
+- [ ] 2.3 อัปเดต Header เพื่อรวมสวิตช์ด่วน
 
-## 3. Styling
-- [ ] 3.1 Define dark theme color palette
-- [ ] 3.2 Update components to use CSS variables
+## 3. การจัดรูปแบบ
+- [ ] 3.1 กำหนดจานสีธีมมืด
+- [ ] 3.2 อัปเดตส่วนประกอบเพื่อใช้ตัวแปร CSS
 ```
 
-### 3. ใช้งาน
+### 3. นำไปใช้ (Implement)
 
 ```
-You: /opsx:apply
+คุณ: /opsx:apply
 
-AI:  Working through tasks...
-     ✓ 1.1 Created ThemeContext with light/dark state
-     ✓ 1.2 Added CSS custom properties to globals.css
-     ✓ 1.3 Implemented localStorage persistence
-     ✓ 2.1 Created ThemeToggle component
+AI:  กำลังดำเนินการตามงาน...
+     ✓ 1.1 สร้าง ThemeContext พร้อมสถานะ light/dark
+     ✓ 1.2 เพิ่ม CSS custom properties ใน globals.css
+     ✓ 1.3 นำการบันทึก localStorage ไปใช้
+     ✓ 2.1 สร้างส่วนประกอบ ThemeToggle
      ...
-     All tasks complete!
+     งานทั้งหมดเสร็จสมบูรณ์!
 ```
 
-ในระหว่างการใช้งาน หากคุณพบว่าการออกแบบต้องมีการปรับเปลี่ยน เพียงแค่อัปเดตสิ่งประดิษฐ์แล้วดำเนินการต่อ
+ในระหว่างการนำไปใช้ หากคุณพบว่าการออกแบบจำเป็นต้องมีการปรับเปลี่ยน เพียงแค่อัปเดตอาร์ติแฟกต์และดำเนินการต่อ
 
-### 4. จัดเก็บ
+### 4. จัดเก็บถาวร (Archive)
 
 ```
-You: /opsx:archive
+คุณ: /opsx:archive
 
-AI:  Archiving add-dark-mode...
-     ✓ Merged specs into openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
-     Done! Ready for the next feature.
+AI:  กำลังจัดเก็บ add-dark-mode...
+     ✓ รวม specs เข้ากับ openspec/specs/ui/spec.md
+     ✓ ย้ายไปยัง openspec/changes/archive/2025-01-24-add-dark-mode/
+     เสร็จสิ้น! พร้อมสำหรับฟีเจอร์ถัดไป
 ```
 
-สเปกเดลต้าของคุณตอนนี้เป็นส่วนหนึ่งของสเปกหลัก ซึ่งบันทึกวิธีการทำงานของระบบของคุณ
+Delta specs ของคุณเป็นส่วนหนึ่งของ main specs ซึ่งบันทึกว่าระบบของคุณทำงานอย่างไร
 
-## การตรวจสอบและทบทวน
+## การตรวจสอบและรีวิว
 
 ใช้ CLI เพื่อตรวจสอบการเปลี่ยนแปลงของคุณ:
 
 ```bash
-# รายการการเปลี่ยนแปลงที่ใช้งานอยู่
+# แสดงรายการการเปลี่ยนแปลงที่ใช้งานอยู่
 openspec list
 
 # ดูรายละเอียดการเปลี่ยนแปลง
 openspec show add-dark-mode
 
-# ตรวจสอบรูปแบบสเปก
+# ตรวจสอบรูปแบบ spec
 openspec validate add-dark-mode
 
 # แดชบอร์ดแบบโต้ตอบ
 openspec view
 ```
 
-## ขั้นตอนถัดไป
+## ขั้นตอนต่อไป
 
-- [เวิร์กโฟลว์](workflows.md) - รูปแบบทั่วไปและเมื่อใดควรใช้คำสั่งแต่ละคำสั่ง
-- [คำสั่ง](commands.md) - การอ้างอิงแบบเต็มสำหรับคำสั่งทั้งหมด
-- [แนวคิด](concepts.md) - ความเข้าใจที่ลึกซึ้งยิ่งขึ้นเกี่ยวกับสเปก การเปลี่ยนแปลง และสคีมา
-- [การปรับแต่ง](customization.md) - ทำให้ OpenSpec ทำงานในแบบของคุณ
+- [Explore First](explore.md) - ใช้ `/opsx:explore` เพื่อคิดเกี่ยวกับแนวคิดก่อนที่คุณจะยืนยัน
+- [Using OpenSpec in an Existing Project](existing-projects.md) - เริ่มต้นในโค้ดเบส brownfield ขนาดใหญ่
+- [Editing & Iterating on a Change](editing-changes.md) - อัปเดตอาร์ติแฟกต์ ย้อนกลับ และกระทบยอดการแก้ไขด้วยตนเอง
+- [Core Concepts at a Glance](overview.md) - โมเดลความคิดทั้งหมดในหน้าเดียว
+- [Examples & Recipes](examples.md) - การเปลี่ยนแปลงจริง ตั้งแต่ต้นจนจบ
+- [Workflows](workflows.md) - รูปแบบทั่วไปและเมื่อใดที่ควรใช้แต่ละคำสั่ง
+- [Commands](commands.md) - เอกสารอ้างอิงฉบับเต็มสำหรับทุกสแลชคอมมานด์
+- [Concepts](concepts.md) - ความเข้าใจเชิงลึกเกี่ยวกับ specs, changes และ schemas
+- [Customization](customization.md) - ทำให้ OpenSpec ทำงานตามที่คุณต้องการ
+- [Stores](stores-beta/user-guide.md) - การวางแผนที่ครอบคลุมรีโพซิทอรีหรือทีม? เก็บไว้ในรีโพซิทอรีของตัวเอง (เบต้า)
+- [FAQ](faq.md) และ [Troubleshooting](troubleshooting.md) - เมื่อคุณติดปัญหา
