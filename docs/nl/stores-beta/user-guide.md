@@ -1,30 +1,30 @@
-# Stores: Plan in Eigen Repo
+# Stores: Plan in een eigen repo
 
-> **Beta.** Stores, referenties (references), werkcontext (working context) en worksets zijn nieuw. Commando-namen, vlaggen, bestandformaten en JSON-output kunnen nog veranderen tussen releases. Elke walkthrough hieronder is uitgevoerd tegen de huidige build, maar lees deze handleiding opnieuw na een upgrade.
+> **Beta.** Stores, referenties, werkcontext en werksets zijn nieuw. Commandonamen, vlaggen, bestandsformaten en JSON-uitvoer kunnen tussen releases nog van vorm veranderen. Elke onderstaande walkthrough is uitgevoerd met de huidige build, maar lees deze gids opnieuw na een upgrade.
 
 ## Het probleem dat dit oplost
 
-OpenSpec leeft normaal gesproken binnen één code repo: een `openspec/` map naast uw code, die de specificaties en wijzigingen voor die repo bevat.
+OpenSpec leeft normaal gesproken binnen één code-repo: een map `openspec/` naast uw code, die specs en wijzigingen voor die repo bevat.
 
-Dit past niet meer wanneer uw planning groter is dan één repo:
+Dat past niet meer zodra uw planning groter is dan één repo:
 
-- Uw werk beslaat meerdere repos — één feature raakt het API server, de webapp en een gedeelde bibliotheek. In welke `openspec/` map leeft het plan?
-- Uw team plant voordat er code bestaat, of plant dingen die nooit in *deze* repo worden omgezet naar code.
-- Eisen worden bezeten door één team en gebruikt door andere teams. De wiki-versie raakt verouderd, en uw coding agent kan deze toch niet lezen.
+- Uw werk beslaat meerdere repo's — één functie raakt de API-server, de webapp en een gedeelde bibliotheek. In wiens `openspec/`-map moet het plan komen?
+- Uw team plant voordat code bestaat, of plant dingen die nooit code worden in *deze* repo.
+- Vereisten zijn eigendom van één team en worden door anderen gebruikt. De wiki-versie wijkt af, en uw coding-agent kan het toch niet lezen.
 
-Een **store** is het antwoord: een standalone repo waarvan de volledige taak planning is. Het heeft dezelfde `openspec/` vorm die u al kent — specificaties en wijzigingen — plus één klein identificatiebestand. U registreert het op uw machine één keer, naar naam, en vervolgens kan elk normaal OpenSpec commando hiermee van elke locatie worden uitgevoerd.
+Een **store** is het antwoord: een zelfstandige repo waarvan het enige doel plannen is. Het heeft dezelfde `openspec/`-vorm die u al kent — specs en wijzigingen — plus een klein identiteitsbestand. U registreert het eenmalig op uw machine, op naam, en dan kan elk normaal OpenSpec-commando er vanaf elke locatie in werken.
 
 ## De structuur
 
 ```
-            team-plans  (een store: planning in zijn eigen repo)
-            ├── .openspec-store/store.yaml     identity: "Ik ben team-plans"
+            team-plans  (a store: planning in its own repo)
+            ├── .openspec-store/store.yaml     identity: "I am team-plans"
             └── openspec/
-                ├── specs/      wat waar is
-                └── changes/    wat in beweging is
+                ├── specs/      what is true
+                └── changes/    what is in motion
                       ▲
-                      │ geregistreerd op elke machine door naam;
-                      │ gedeeld door pushen/clonen zoals een gewone repo
+                      │ registered on each machine by name;
+                      │ shared by pushing/cloning like any repo
         ┌─────────────┼─────────────┐
         │             │             │
     web-app       api-server     mobile-app
@@ -33,26 +33,26 @@ Een **store** is het antwoord: een standalone repo waarvan de volledige taak pla
 
 Twee regels houden dit eenvoudig:
 
-1. **Een store is slechts een git repo.** Je committet, pusht, pullt en beoordeelt deze zelf. OpenSpec klont, synchroniseert of pusht niets van zichzelf.
-2. **Declaraties, geen machinerie.** Repos kunnen *declareren* hoe ze zich verhouden tot stores (zie hieronder). Declaraties wijzigen wat OpenSpec je kan vertellen — nooit waar jouw commando's op werken.
+1. **Een store is gewoon een git-repo.** Je commit, pusht, pulled en beoordeelt het zelf. OpenSpec cloneert, synchroniseert of pusht nooit iets op eigen initiatief.
+2. **Declaraties, geen machines.** Repos kunnen *declareren* hoe ze zich verhouden tot stores (hieronder getoond). Declaraties veranderen wat OpenSpec je kan vertellen — nooit waar je commando's op werken.
 
 ## Vijf minuten naar je eerste store
 
-Twee commando's brengen je van niets naar een werkende, door de store omvattende wijziging:
+Twee commando's brengen je van niets naar een werkende, store-georiënteerde change:
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans
 ```
 
 ```
-Store klaar: team-plans
+Store gereed: team-plans
 Locatie: /Users/you/openspec/team-plans
-OpenSpec root: klaar
-Registry: geregistreerd
+OpenSpec root: gereed
+Register: geregistreerd
 
-Volgende stap: voer normale OpenSpec commando's uit tegen deze store, bijvoorbeeld:
+Volgende: voer normale OpenSpec-commando's uit op deze store, bijvoorbeeld:
   openspec new change <change-id> --store team-plans
-Deel deze store door hem te committen en te pushen alsof het een Git repo is.
+Deel deze store door deze te committen en te pushen zoals elke Git-repo.
 ```
 
 ```bash
@@ -60,19 +60,19 @@ openspec new change add-login --store team-plans
 ```
 
 ```
-Gebruik OpenSpec root: team-plans (/Users/you/openspec/team-plans)
-Gecreëerde change 'add-login' op /Users/you/openspec/team-plans/openspec/changes/add-login/
+Gebruikmakend van OpenSpec root: team-plans (/Users/you/openspec/team-plans)
+Change 'add-login' aangemaakt op /Users/you/openspec/team-plans/openspec/changes/add-login/
 Schema: spec-driven
-Volgende stap: openspec status --change add-login --store team-plans
+Volgende: openspec status --change add-login --store team-plans
 ```
 
-Dat is het hele model. Vanaf hier is de levenscyclus precies wat je weet — `status`, `instructions`, `validate`, `archive` — met `--store team-plans` bij elk commando, en elke getoonde hint draagt de vlag voor jou. De `Using OpenSpec root:` regel vertelt altijd waar een commando opwerkt.
+Dat is het hele model. Vanaf hier is de levenscyclus precies wat je weet — `status`, `instructions`, `validate`, `archive` — met `--store team-plans` bij elk commando, en elke afgedrukte hint draagt de vlag voor je. De `Using OpenSpec root:` regel vertelt je altijd waar een commando op werkt.
 
-## Verhaal: één team, één planning repo
+## Verhaal: één team, één planningrepo
 
-Een team houdt zijn specs en changes in `team-plans` in plaats van ze te verspreiden over code repos.
+Een team bewaart zijn specs en changes in `team-plans` in plaats van ze over code-repos te verspreiden.
 
-**Dag één (wie het ook instelt):**
+**Dag een (wie het ook opzet):**
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans \
@@ -80,32 +80,32 @@ openspec store setup team-plans --path ~/openspec/team-plans \
 git -C ~/openspec/team-plans push -u origin main
 ```
 
-Het doorgeven van `--remote` registreert de clone URL in het identiteitsbestand van de store zelf (`.openspec-store/store.yaml`), bij de initiële commit. Elke toekomstige clone wordt geboren met kennis van waar hij vandaan komt, zodat gezondheidscontroles en foutmeldingen een compleet, plakbaar bestanddeel kunnen tonen voor teamgenoten die het nog niet hebben.
+Door `--remote` mee te geven wordt de clone-URL opgeslagen in het eigen identiteitsbestand van de store (`.openspec-store/store.yaml`), in de eerste commit. Elke toekomstige clone weet waar hij vandaan kwam, dus gezondheidschecks en foutmeldingen kunnen een complete, plakbare oplossing afdrukken voor teamleden die het nog niet hebben.
 
-**Elke teamgenoot (één keer per machine):**
+**Elk teamlid (eenmalig per machine):**
 
 ```bash
 git clone git@github.com:acme/team-plans.git ~/openspec/team-plans
 openspec store register ~/openspec/team-plans
 ```
 
-Vanaf dat moment werkt iedereen in dezelfde planning repo op basis van naam:
+Vanaf dan werkt iedereen in dezelfde planningrepo op naam:
 
 ```bash
 openspec status --store team-plans --change add-login
 openspec show add-login --store team-plans
 ```
 
-**Het delen van werk is git, en dat is de bedoeling.** Een change die je creëert bestaat alleen in jouw checkout totdat je deze committet en pusht — hetzelfde als code. Plannen krijgen branches, pull requests en beoordelingen gratis, omdat een store een gewone repo is.
+**Werk delen is git, opzettelijk.** Een change die je maakt bestaat alleen in je checkout totdat je het commit en pushed — net als code. Plannen krijgen branches, pull requests en review gratis, omdat een store een gewone repo is.
 
-**Het verbinden van de code repos van het team.** Een code repo waarvan de planning volledig extern is gezet, heeft precies één regel in `openspec/config.yaml`:
+**Koppelen van de code-repos van het team.** Een code-repo waarvan de planning volledig is geëxternaliseerd heeft precies één regel nodig, in `openspec/config.yaml`:
 
 ```yaml
 # web-app/openspec/config.yaml
 store: team-plans
 ```
 
-Nu werkt elk OpenSpec commando uitgevoerd binnen `web-app` op `team-plans` zonder enige vlag:
+Nu voert elk OpenSpec-commando dat binnen `web-app` wordt uitgevoerd, zonder vlaggen uit op `team-plans`:
 
 ```bash
 cd ~/src/web-app
@@ -113,48 +113,56 @@ openspec status --change add-login
 ```
 
 ```
-Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
+Gebruikmakend van OpenSpec root: team-plans (/Users/you/openspec/team-plans)
 ...
 ```
 
-De pointer is een fallback, nooit een override: een expliciet `--store` wint altijd, en als de repo echt planningmappen van zijn eigen krijgt, dan winnen die (met een waarschuwing om de verouderde pointer te verwijderen).
+De pointer is een terugval, nooit een overschrijving: een expliciete `--store` wint altijd, en als de repo zelf echte planningmappen krijgt, winnen die (met een waarschuwing om de verouderde pointer te verwijderen).
 
-## Verhaal: vereisten die teamgrenzen overstijgen
+**Eén standaard voor elke repo op je machine.** Als je over veel code-repos werkt die allemaal in dezelfde store plannen, stel het eenmalig globaal in, in plaats van de `store:` regel aan elke repo toe te voegen:
 
-Een platformteam bezit de vereisten. Productteams bouwen hierop, in hun eigen repos, met hun eigen ontwerpen. Een referentie beschrijft deze relatie zonder iemands werk te verplaatsen.
+```bash
+openspec config set defaultStore team-plans
+```
+
+Nu lost elk commando dat buiten een planningroot wordt uitgevoerd — en zonder `--store` en zonder projectpointer — op naar `team-plans`. Het staat onderaan de prioriteitslijst, dus `--store`, een lokale root en een project `store:` pointer winnen allemaal nog steeds. De rootbanner en JSON `root` blok rapporteren `source: "global_default"` met de store-id, zodat je altijd een machinebrede standaard kunt onderscheiden van de eigen pointer van een repo. Wis het met `openspec config unset defaultStore`. Als de id niet is geregistreerd, geven commando's een foutmelding en vertellen ze je om het te registreren of de verouderde standaard te wissen.
+
+## Verhaal: vereisten die teambarrières overschrijden
+
+Een platformteam bezit de vereisten. Productteams bouwen erop, in hun eigen repos, met hun eigen ontwerpen. Een referentie beschrijft die relatie zonder het werk van iemand te verplaatsen.
 
 ```
    platform-reqs (store)                 api-server (code repo)
-   bezeten door het platformteam            bezeten door een productteam
+   owned by the platform team            owned by a product team
    ┌──────────────────────────┐          ┌──────────────────────────┐
    │ openspec/specs/          │ ◀────────│ openspec/config.yaml     │
-   │   payments/spec.md       │ leest    │   references:            │
+   │   payments/spec.md       │ reads    │   references:            │
    │   auth/spec.md           │          │     - platform-reqs      │
    │                          │          │ openspec/specs/          │
-   │ openspec/changes/        │          │   (hun eigen ontwerpen)    │
-   │   platform werk          │          │ openspec/changes/        │
-   │                          │          │   (hun eigen werk)       │
-   │                          │          │ └──────────────────────────┘
+   │ openspec/changes/        │          │   (their own designs)    │
+   │   platform work          │          │ openspec/changes/        │
+   │                          │          │   (their own work)       │
+   │                          │          └──────────────────────────┘
    └──────────────────────────┘
 ```
 
-**Het productteam declareert waarop het zich baseert** in de `openspec/config.yaml` van zijn repo:
+**Het productteam declareert waar het op bouwt** in de `openspec/config.yaml` van zijn repo:
 
 ```yaml
 references:
   - platform-reqs
 ```
 
-Referenties zijn leesbare context. De repo behoudt zijn eigen `openspec/` root; het werk blijft daar. Wat verandert is dat `openspec instructions` in die repo nu een index bevat van de specs van de referentieerde store — elk met een één-regelige samenvatting en het exacte fetch commando (`openspec show <spec-id> --type spec --store platform-reqs`). Een agent werkend in `api-server` kan de upstream betaalvereisten vinden, ze citeren en zijn laag-niveau ontwerp opstellen in de eigen root van de repo — zonder dat iemand context eromheen plakt.
+Referenties zijn alleen-lezen context. De repo behoudt zijn eigen `openspec/` root; werk blijft daar. Wat verandert: `openspec instructions` in die repo bevat nu een index van de specs van de gerefereerde store — elk met een eenregelige samenvatting en het exacte fetch-commando (`openspec show <spec-id> --type spec --store platform-reqs`). Een agent die in `api-server` werkt kan de upstream-betalingsvereisten vinden, citeren en zijn low-level ontwerp in de eigen root van de repo schrijven — zonder dat iemand context hoeft te plakken.
 
-Een referentie kan zijn clonebron dragen, zodat teamgenoten die de store nog niet hebben een compleet bestanddeel krijgen in plaats van een doodlopende weg:
+Een referentie kan zijn clone-bron dragen, dus teamleden die de store nog niet hebben krijgen een complete oplossing in plaats van een doodlopend pad:
 
 ```yaml
 references:
   - { id: platform-reqs, remote: "git@github.com:acme/platform-reqs.git" }
 ```
 
-**Wanneer je het plan en de code samen wilt hebben, maak dan een workset.** Dit is persoonlijk en expliciet: elk persoon kiest de mappen waarmee hij daadwerkelijk werkt op zijn machine. Niets over die lokale checkout paden wordt gecommitteerd naar de gedeelde planning repo.
+**Wanneer je het plan en de code samen open wilt hebben, maak een werkset.** Dit is persoonlijk en expliciet: elke persoon kiest de mappen die hij/zij daadwerkelijk op zijn/haar machine gebruikt. Niets van die lokale checkoutpaden wordt gecommit naar de gedeelde planningrepo.
 
 ```bash
 openspec workset create platform \
@@ -165,7 +173,7 @@ openspec workset create platform \
 
 ## Twee vragen die je altijd kunt stellen
 
-**"Is mijn setup gezond?"** — `openspec doctor` controleert de huidige root en de door deze gerelateerde stores, leesbaar, met een plakbaar bestanddeel per bevinding:
+**"Is mijn installatie gezond?"** — `openspec doctor` controleert de huidige root en zijn gerefereerde stores, alleen-lezen, met een plakbare oplossing per bevinding:
 
 ```
 Doctor
@@ -174,37 +182,37 @@ Root
   Locatie: /Users/you/src/api-server
   OpenSpec root: ok
 
-References
+Referenties
   - platform-reqs: ok (/Users/you/openspec/platform-reqs)
-  - design-system: De referentieerde store 'design-system' is niet geregistreerd op deze machine.
-    Fix: git clone -- git@github.com:acme/design-system.git '/Users/you/openspec/design-system' && openspec store register '/Users/you/openspec/design-system' --id design-system
+  - design-system: Gerefereerde store 'design-system' is niet geregistreerd op deze machine.
+    Oplossing: git clone -- git@github.com:acme/design-system.git '/Users/you/openspec/design-system' && openspec store register '/Users/you/openspec/design-system' --id design-system
 
 ```
 
-**"Waar werk ik mee?"** — `openspec context` verzamelt de werkset uit de OpenSpec declaraties: de root en de stores die deze referentieert.
+**"Waar werk ik mee?"** — `openspec context` stelt de werkset samen uit OpenSpec-declaraties: de root en de stores die het refereert.
 
 ```
-Werkende context voor api-server (/Users/you/src/api-server)
+Werkcontext voor api-server (/Users/you/src/api-server)
 
 OpenSpec root
   api-server  /Users/you/src/api-server
 
-Referentieerde stores
+Gerefereerde stores
   platform-reqs  /Users/you/openspec/platform-reqs
-    Fetch: openspec show <spec-id> --type spec --store platform-reqs
+    Ophalen: openspec show <spec-id> --type spec --store platform-reqs
 ```
 
-Beide ondersteunen `--json` voor agents. `openspec context --code-workspace <pad>` schrijft bovendien een VS Code workspace bestand dat de volledige set bevat — dit is het enige wat dit commando doet.
+Beide ondersteunen `--json` voor agents. `openspec context --code-workspace <pad>` schrijft daarnaast een VS Code-werkruimtebestand dat de hele set bevat — de enige schrijfoperatie die dit commando uitvoert.
 
-## Worksets: heropen de mappen waar je samen aan werkt
+## Werksets: heropen de mappen die je samen gebruikt
 
-Los van alles hierboven: de meeste mensen openen dezelfde paar mappen elke sessie — de planning repo plus twee of drie code repos. Een **workset** is een persoonlijke, benoemde weergave hiervan, opnieuw geopend met één commando in jouw tool van keuze.
+Los van het bovenstaande: de meeste mensen openen elke sessie dezelfde paar mappen samen — de planningrepo plus twee of drie code-repos. Een **werkset** is een persoonlijke, benoemde weergave van precies dat, heropend met één commando in je tool van keuze.
 
 ```
-  workset "platform"                 openspec workset open platform
+  werkset "platform"                 openspec workset open platform
   ├── team-plans   ~/openspec/team-plans         │
   ├── api-server   ~/src/api-server              ▼
-  └── web-app      ~/src/web-app       alle drie geopend in je tool
+  └── web-app      ~/src/web-app       alle drie open in je tool
 ```
 
 ```bash
@@ -215,53 +223,63 @@ openspec workset list
 ```
 
 ```
-platform  (geopend in VS Code)
+platform  (opent in VS Code)
   team-plans  /Users/you/openspec/team-plans
   api-server  /Users/you/src/api-server
 ```
 
-`openspec workset open platform` start vervolgens de opgeslagen tool: editors (VS Code, Cursor) openen één venster met elk lid en keren terug. Het eerste lid is het primaire. Override de tool altijd met `--tool <id>`.
+`openspec workset open platform` start dan de opgeslagen tool: editors (VS Code, Cursor) openen één venster met alle leden en keren terug. Het eerste lid is het primaire. Overschrijf de tool op elk moment met `--tool <id>`.
 
-Worksets zijn opzettelijk *geen* gedeelde staat. Ze bestaan op jouw machine, worden nooit gecommitteerd en maken geen claims over het werk — ze registreren alleen wat je graag samen open hebt staan. Het verwijderen van één lid raakt de ledenmappen niet aan. Nieuwe tools zijn configuratie, geen code: alles gelanceerd via een workspace bestand of per-map attach vlaggen kan worden toegevoegd onder de `openers` sleutel in de globale config (`openspec config edit`).
+Werksets zijn opzettelijk *geen* gedeelde staat. Ze leven op je machine, worden nooit gecommit en maken geen aanspraken op het werk — ze registreren alleen wat je graag samen open hebt. Eén verwijderen raakt nooit de ledenmappen. Nieuwe tools zijn configuratie, geen code: alles wat wordt gestart via een werkruimtebestand of per-map-koppelvlaggen kan worden toegevoegd onder de `openers` sleutel in de globale config (`openspec config edit`).
 
-## Hoe commando's beslissen waar ze opwerken
+## Hoe commando's beslissen waar ze op werken
 
-Elk normaal commando lost zijn root op dezelfde manier, in deze volgorde:
+Elk normaal commando lost zijn root op dezelfde manier op, in deze volgorde:
 
 ```
-1. --store <id>          jij zei het expliciet        → die store
-2. nabijste openspec/     een echte planning root hier   → deze repo
-   (omhoog lopen vanaf cwd)
-3. store: pointer        config.yaml declareert een store  → die store
-4. geen van bovenstaande    stores geregistreerd op deze machine?         → fout met een selectiehint
-                         geen stores geregistreerd?         → de huidige
-                                                          directory
-                                                          (klassiek gedrag)
+1. --store <id>          je zei het expliciet           → die store
+2. dichtstbijzijnde       een echte planningroot hier    → deze repo
+   openspec/             (lopend omhoog vanaf cwd)
+3. store: pointer        config.yaml declareert een      → die store
+                         store
+4. defaultStore          globale config stelt een         → die store
+                         machinestandaard in
+5. geen van het           stores geregistreerd op deze    → fout met een
+   bovenstaande           machine?                         selectiehint
+                         geen stores                      → de huidige
+                         geregistreerd?                   map
+                                                   (standaardgedrag)
 ```
 
-De `Using OpenSpec root:` regel (en het `root` blok in de `--json` output) vertelt je in welke situatie je zit.
+De `Using OpenSpec root:` regel (en het `root` blok in `--json` output) vertelt je in welke geval je zit.
 
 ## Bekende beperkingen
 
-- **Beta structuur.** Alles op deze pagina kan veranderen tussen releases — namen, vlaggen, bestandsvormaten, JSON sleutels.
-- **Eén checkout per store id per machine.** Het registreren van een tweede checkout onder dezelfde ID mislukt met een hint om eerst `store unregister` uit te voeren.
-- **Nooit synchroniseren — dat is het ontwerp.** OpenSpec klont, pullt of pusht nooit. Een verouderde checkout toont verouderde specs totdat *jij* pullt; referenties worden live geïndexeerd van wat er op de schijf staat.
-- **Sommige commando's blijven waar ze zijn.** `view`, `templates`, `schemas` en de verouderde zelfstandig naamwoorden (`openspec change show`, ...) werken alleen op de huidige directory — geen `--store`.
-- **Per-machine staat is per machine.** De store registry en worksets zijn lokale instellingen. Niets over het layout van jouw machine wordt ooit gecommitteerd naar gedeelde planning.
-- **Twee launchstijlen voor worksets.** Een tool die niet met een workspace bestand of per-map attach vlaggen gelanceerd kan worden, kan niet worden toegevoegd als opener.
-- **Agent JSON heeft een bekende casing split** (store-family sleutels zijn snake_case, workflow-family camelCase). Gedocumenteerd in de [agent contract](../agent-contract.md); het uniform maken is uitgesteld tot een versie-gecontroleerde release.
+- **Beta-vorm.** Alles op deze pagina kan veranderen tussen releases — namen, vlaggen, bestandsformaten, JSON-sleutels.
+- **Eén checkout per store-id per machine.** Het registreren van een tweede checkout onder dezelfde id mislukt met een hint om eerst `store unregister` uit te voeren.
+- **Nooit synchroniseren — opzettelijk.** OpenSpec cloneert, pulled of pushed nooit. Een verouderde checkout toont verouderde specs totdat *jij* pulled; referenties worden live geïndexeerd van wat er op schijf staat.
+- **Lege planningmappen kunnen ontbreken.** Een nieuwe store heeft mogelijk nog geen `openspec/changes/`, `openspec/specs/` of `openspec/changes/archive/` in Git. Dat wordt geaccepteerd tijdens de beta; die mappen verschijnen zodra normale commando's er bestanden voor aanmaken.
+- **Pointer-repos blijven pointers.** Een config-only repo waarvan de `openspec/config.yaml` `store: <id>` declareert, wordt behandeld als geëxternaliseerde planning, niet als een store-checkout om te registreren. Verwijder eerst de `store:` regel als je die repo opzettelijk wilt omzetten naar een lokale storeroot.
+- **Sommige commando's blijven waar ze zijn.** `view`, `templates`, `schemas` en de verouderde zelfstandig naamwoorden (`openspec change show`, ...) werken alleen op de huidige map — geen `--store`.
+- **Per-machine staat is per-machine.** De storeregister en werksets zijn lokale instellingen. Niets over de indeling van je machine wordt ooit gecommit naar gedeelde planning.
+- **Twee lanceerstijlen voor werksets.** Een tool die niet kan worden gestart met een werkruimtebestand of per-map-koppelvlaggen kan niet worden toegevoegd als opener.
+- **Agent JSON heeft een bekende casing-splitsing** (store-familie sleutels zijn snake_case, workflow-familie camelCase). Gedocumenteerd in het [agent contract](../agent-contract.md); de unificatie ervan is uitgesteld tot een uitgave met versiebeheer.
 
-## Waar dingen staan
+## Waar dingen zich bevinden
 
 | Wat | Waar | Gedeeld? |
 |---|---|---|
-| De planning van een store | `<store>/openspec/` (specs, changes) | Ja — committeer en push het |
-| Het identiteit van een store | `<store>/.openspec-store/store.yaml` | Ja — gecommitteerd met de store |
-| De store registry | `<data dir>/openspec/stores/registry.yaml` | Nee — dit is alleen voor deze machine |
-| Worksets | `<data dir>/openspec/worksets/` | Nee — dit is alleen voor deze machine |
+| De planning van een store | `<store>/openspec/` (specs, changes) | Ja — commit en push het |
+| De identiteit van een store | `<store>/.openspec-store/store.yaml` | Ja — gecommit met de store |
+| Het store-register | `<data dir>/openspec/stores/registry.yaml` | Nee — alleen deze machine |
+| Werksets | `<data dir>/openspec/worksets/` | Nee — alleen deze machine |
 
-`<data dir>` is `~/.local/share/openspec` op macOS en Linux (of `$XDG_DATA_HOME/openspec` wanneer ingesteld), en `%LOCALAPPDATA%\openspec` op Windows.
+`<data dir>` is `~/.local/share/openspec` op macOS en Linux (of
+`$XDG_DATA_HOME/openspec` indien ingesteld), en `%LOCALAPPDATA%\openspec` op
+Windows.
+
 ## Referentie
 
-Exacte vlaggen en JSON vormen voor elk commando op deze pagina:
-[CLI reference](../cli.md) (Stores, Doctor, Werkende context, Persoonlijke worksets) en het [agent contract](../agent-contract.md).
+Exacte flags en JSON-structuren voor elke opdracht op deze pagina:
+[CLI-referentie](../cli.md) (Stores, Doctor, Werkcontext, Persoonlijke
+werksets) en het [agentcontract](../agent-contract.md).

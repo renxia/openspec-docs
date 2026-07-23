@@ -1,39 +1,42 @@
 # Commando's
 
-Dit is de referentie voor de slash-commando's van OpenSpec. Deze commando's worden aangeroepen in het chatinterface van uw AI-coderingassistent (bijv. Claude Code, Cursor, Windsurf).
+Dit is de referentie voor OpenSpec's slash-commando's. Deze commando's worden aangeroepen in de chatinterface van jouw AI-codeerassistent (bijv. Claude Code, Cursor, Windsurf).
 
-Voor workflowpatronen en wanneer u elk commando moet gebruiken, zie [Workflows](workflows.md). Voor CLI-commando's, zie [CLI](cli.md).
+Voor werkstroompatronen en wanneer elk commando te gebruiken, zie [Werkstromen](workflows.md). Voor CLI-commando's, zie [CLI](cli.md).
 
 ## Snelle Referentie
 
-### Standaard Snel Pad (`core` profiel)
+### Standaard Snelle Pad (`core` profiel)
 
-| Command | Doel |
+| Commando | Doel |
 |---------|---------|
-| `/opsx:propose` | Creëer een wijziging en genereer planningsartefacten in één stap. |
-| `/opsx:explore` | Denk door over ideeën voordat u een wijziging vastlegt. |
-| `/opsx:apply` | Implementeer taken uit de wijziging. |
-| `/opsx:sync` | Voeg delta-specificaties samen met hoofdspecificaties. |
-| `/opsx:archive` | Archiveer een voltooide wijziging. |
+| `/opsx:propose` | Maak een wijziging aan en genereer planning-artefacten in één stap |
+| `/opsx:explore` | Denk na over ideeën voordat je een wijziging doorvoert |
+| `/opsx:apply` | Implementeer taken uit de wijziging |
+| `/opsx:update` | Herschrijf de planning-artefacten van een wijziging en houd ze coherent |
+| `/opsx:sync` | Voeg delta-specificaties samen met hoofdspecificaties |
+| `/opsx:archive` | Archiveer een voltooide wijziging |
 
-### Uitgebreide Workflow Commando's (aanpassing van workflowselectie)
+### Uitgebreide Werkstroomcommando's (aangepaste werkstroomselectie)
 
-| Command | Doel |
+| Commando | Doel |
 |---------|---------|
-| `/opsx:new` | Start een nieuw wijzigingsskelet. |
-| `/opsx:continue` | Maak het volgende artefact op basis van afhankelijkheden. |
-| `/opsx:ff` | Fast-forward: creëer alle planningsartefacten in één keer. |
-| `/opsx:verify` | Valideer of de implementatie overeenkomt met de artefacten. |
-| `/opsx:bulk-archive` | Archiveer meerdere wijzigingen tegelijkertijd. |
-| `/opsx:onboard` | Geleide tutorial door het volledige workflow. |
+| `/opsx:new` | Start een nieuwe wijzigingsscaffold |
+| `/opsx:continue` | Maak het volgende artefact op basis van afhankelijkheden |
+| `/opsx:ff` | Snel vooruit: maak alle planning-artefacten in één keer aan |
+| `/opsx:verify` | Valideer of de implementatie overeenkomt met de artefacten |
+| `/opsx:bulk-archive` | Archiveer meerdere wijzigingen tegelijk |
+| `/opsx:onboard` | Begeleide tutorial door de volledige werkstroom |
 
-Het standaard globale profiel is `core`. Om uitgebreide workflowcommando's te activeren, voer `openspec config profile` uit, selecteer de workflows en voer vervolgens `openspec update` uit in uw project.
+Het standaard globale profiel is `core`. Om uitgebreide werkstroomcommando's in te schakelen, voer `openspec config profile` uit, selecteer werkstromen, en voer vervolgens `openspec update` uit in jouw project.
 
-## Commando Referentie
+---
+
+## Command Reference
 
 ### `/opsx:propose`
 
-Creëer een nieuwe wijziging en genereer planningsartefacten in één stap. Dit is het standaard startcommando in het `core`-profiel.
+Maak een nieuwe wijziging en genereer in één stap planning-artefacten. Dit is het standaard startcommando in het `core` profiel.
 
 **Syntaxis:**
 ```text
@@ -42,12 +45,12 @@ Creëer een nieuwe wijziging en genereer planningsartefacten in één stap. Dit 
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-name-or-description` | Nee | Naam in kebab-case of een beschrijving van de wijziging in gewone taal |
+|----------|---------|--------------|
+| `change-name-or-description` | Nee | Kebab-case naam of eenvoudige taalwijzigingsbeschrijving |
 
 **Wat het doet:**
-- Creëert `openspec/changes/<change-name>/`
-- Genereert artefacten die nodig zijn vóór implementatie (voor `spec-driven`: proposal, specs, design, tasks)
+- Maakt `openspec/changes/<change-name>/`
+- Genereert artefacten die nodig zijn vóór implementatie (voor `spec-driven`: voorstel, specificaties, ontwerp, taken)
 - Stopt wanneer de wijziging klaar is voor `/opsx:apply`
 
 **Voorbeeld:**
@@ -64,15 +67,15 @@ AI:  Created openspec/changes/add-dark-mode/
 
 **Tips:**
 - Gebruik dit voor de snelste end-to-end route
-- Als u stapsgewijze controle over artefacten wilt, schakel dan uitgebreide workflows in en gebruik `/opsx:new` + `/opsx:continue`
+- Als u stap-voor-stap artefactcontrole wilt, schakel uitgebreide workflows in en gebruik `/opsx:new` + `/opsx:continue`
 
 ---
 
 ### `/opsx:explore`
 
-> **Begin hier als u zich onzeker voelt.** Explore is een denkpartner zonder risico's: het leest uw codebase, vergelijkt opties en maakt van een vage gedachte een concreet plan voordat er enige wijziging bestaat. Het is opgenomen in het standaardprofiel. Voor de volledige casus en meer voorbeelden, zie de [Explore First](explore.md) handleiding.
+> **Begin hier als u onzeker bent.** Explore is een denkpartner zonder risico: het leest uw codebase, vergelijkt opties en scherpt een vaag idee af tot een concreet plan voordat er een wijziging bestaat. Het wordt geleverd in het standaard profiel. Voor het volledige geval en meer voorbeelden, zie de [Explore First](explore.md) gids.
 
-Denk door over ideeën, onderzoek problemen en verduidelijk vereisten voordat u zich committeert aan een wijziging.
+Denk ideeën na, onderzoek problemen en verduidelijk vereisten voordat u zich vastlegt op een wijziging.
 
 **Syntaxis:**
 ```
@@ -81,14 +84,14 @@ Denk door over ideeën, onderzoek problemen en verduidelijk vereisten voordat u 
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
+|----------|---------|--------------|
 | `topic` | Nee | Wat u wilt verkennen of onderzoeken |
 
 **Wat het doet:**
-- Opent een exploratieve conversatie zonder dat er structuur nodig is
+- Opent een verkennend gesprek zonder dat structuur vereist is
 - Onderzoekt de codebase om vragen te beantwoorden
 - Vergelijkt opties en benaderingen
-- Creëert visuele diagrammen om denken te verduidelijken
+- Maakt visuele diagrammen om het denken te verduidelijken
 - Kan overgaan naar `/opsx:propose` (standaard) of `/opsx:new` (uitgebreide workflow) wanneer inzichten kristalliseren
 
 **Voorbeeld:**
@@ -117,18 +120,18 @@ AI:  Ready when you are. Run /opsx:propose add-jwt-auth to begin.
 ```
 
 **Tips:**
-- Gebruik dit wanneer de vereisten onduidelijk zijn of u onderzoek nodig heeft
-- Er worden geen artefacten gecreëerd tijdens het verkennen
-- Goed voor het vergelijken van meerdere benaderingen voordat u beslist
+- Gebruik wanneer vereisten onduidelijk zijn of u onderzoek moet doen
+- Er worden geen artefacten gemaakt tijdens de verkenning
+- Goed voor het vergelijken van meerdere benaderingen voordat u besluit
 - Kan bestanden lezen en de codebase doorzoeken
 
 ---
 
 ### `/opsx:new`
 
-Start een nieuwe wijzigingsopzet (scaffold). Creëert de change map en wacht op u om artefacten te genereren met `/opsx:continue` of `/opsx:ff`.
+Start een nieuw wijzigingsframe. Maakt de wijzigingsmap en wacht tot u artefacten genereert met `/opsx:continue` of `/opsx:ff`.
 
-Dit commando maakt deel uit van de uitgebreide workflow set (niet inbegrepen in het standaard `core`-profiel).
+Dit commando is onderdeel van de set met uitgebreide workflows (niet inbegrepen in het standaard `core` profiel).
 
 **Syntaxis:**
 ```
@@ -137,20 +140,20 @@ Dit commando maakt deel uit van de uitgebreide workflow set (niet inbegrepen in 
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-name` | Nee | Naam voor de change map (gevraagd als deze niet wordt verstrekt) |
-| `--schema` | Nee | Workflow schema om te gebruiken (standaard: uit config of `spec-driven`) |
+|----------|---------|--------------|
+| `change-name` | Nee | Naam voor de wijzigingsmap (wordt gevraagd indien niet opgegeven) |
+| `--schema` | Nee | Workflowschema om te gebruiken (standaard: uit config of `spec-driven`) |
 
 **Wat het doet:**
-- Creëert de directory `openspec/changes/<change-name>/`
-- Creëert het metadata bestand `.openspec.yaml` in de change map
-- Toont het eerste artefact template klaar voor creatie
-- Vraagt om de wijzigingsnaam en het schema als deze niet worden verstrekt
+- Maakt de map `openspec/changes/<change-name>/`
+- Maakt het metadata-bestand `.openspec.yaml` in de wijzigingsmap
+- Toont het eerste artefactsjabloon klaar voor aanmaken
+- Vraagt naar wijzigingsnaam en schema indien niet opgegeven
 
-**Wat het creëert:**
+**Wat het maakt:**
 ```
 openspec/changes/<change-name>/
-└── .openspec.yaml    # Wijzigingsmetadata (schema, creatiedatum)
+└── .openspec.yaml    # Wijzigingsmetadata (schema, aanmaakdatum)
 ```
 
 **Voorbeeld:**
@@ -167,13 +170,13 @@ AI:  Created openspec/changes/add-dark-mode/
 **Tips:**
 - Gebruik beschrijvende namen: `add-feature`, `fix-bug`, `refactor-module`
 - Vermijd generieke namen zoals `update`, `changes`, `wip`
-- Het schema kan ook worden ingesteld in de projectconfiguratie (`openspec/config.yaml`)
+- Schema kan ook worden ingesteld in de projectconfig (`openspec/config.yaml`)
 
 ---
 
 ### `/opsx:continue`
 
-Creëer het volgende artefact in de afhankelijkheidsketen. Creëert één artefact tegelijk voor incrementele voortgang.
+Maak het volgende artefact in de afhankelijkheidsketen. Maakt één artefact tegelijk voor incrementele voortgang.
 
 **Syntaxis:**
 ```
@@ -182,15 +185,15 @@ Creëer het volgende artefact in de afhankelijkheidsketen. Creëert één artefa
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-name` | Nee | Welke wijziging moet worden voortgezet (afgeleid uit de context als deze niet wordt verstrekt) |
+|----------|---------|--------------|
+| `change-name` | Nee | Welke wijziging voort te zetten (wordt afgeleid uit de context indien niet opgegeven) |
 
 **Wat het doet:**
-- Vraagt naar de artefactafhankelijkheidsgraaf
+- Vraagt de artefactafhankelijkheidsgrafiek op
 - Toont welke artefacten klaar zijn versus geblokkeerd
-- Creëert het eerste beschikbare artefact
+- Maakt het eerste klaar artefact
 - Leest afhankelijkheidsbestanden voor context
-- Toont wat beschikbaar wordt na creatie
+- Toont wat beschikbaar wordt na aanmaken
 
 **Voorbeeld:**
 ```
@@ -215,16 +218,16 @@ AI:  Change: add-dark-mode
 ```
 
 **Tips:**
-- Gebruik dit wanneer u elk artefact wilt beoordelen voordat u verdergaat
+- Gebruik wanneer u elk artefact wilt beoordelen voordat u verdergaat
 - Goed voor complexe wijzigingen waarbij u controle wilt
-- Meerdere artefacten kunnen tegelijkertijd klaar worden
-- U kunt de gecreëerde artefacten bewerken voordat u doorgaat
+- Meerdere artefacten kunnen tegelijk klaar worden
+- U kunt aangemaakte artefacten bewerken voordat u verdergaat
 
 ---
 
 ### `/opsx:ff`
 
-Fast-forward (versnellen) van artefactcreatie. Creëert alle planningsartefacten in één keer.
+Snel door artefactaanmaak heen. Maakt alle planningartefacten in één keer.
 
 **Syntaxis:**
 ```
@@ -233,14 +236,14 @@ Fast-forward (versnellen) van artefactcreatie. Creëert alle planningsartefacten
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-name` | Nee | Welke wijziging moet worden versneld (afgeleid uit de context als deze niet wordt verstrekt) |
+|----------|---------|--------------|
+| `change-name` | Nee | Welke wijziging snel door te voeren (wordt afgeleid uit de context indien niet opgegeven) |
 
 **Wat het doet:**
-- Creëert alle artefacten in volgorde van afhankelijkheid
-- Houdt de voortgang bij via een todo lijst
-- Stopt wanneer alle `apply-required` artefacten zijn voltooid
-- Leest elke afhankelijkheid voordat het volgende artefact wordt gecreëerd
+- Maakt alle artefacten in afhankelijkheidsvolgorde
+- Houdt voortgang bij via een takenlijst
+- Stopt wanneer alle `apply-required` artefacten compleet zijn
+- Leest elke afhankelijkheid voordat het volgende artefact wordt aangemaakt
 
 **Voorbeeld:**
 ```
@@ -258,16 +261,16 @@ AI:  Fast-forwarding add-dark-mode...
 ```
 
 **Tips:**
-- Gebruik dit wanneer u een duidelijk beeld heeft van wat u bouwt
-- Snellere dan `/opsx:continue` voor eenvoudige wijzigingen
-- U kunt de artefacten nog steeds bewerken daarna
-- Goed voor kleine tot middelgrote features
+- Gebruik wanneer u een duidelijk beeld hebt van wat u bouwt
+- Sneller dan `/opsx:continue` voor eenvoudige wijzigingen
+- U kunt artefacten nog steeds achteraf bewerken
+- Goed voor kleine tot middelgrote functies
 
 ---
 
 ### `/opsx:apply`
 
-Implementeer taken uit de wijziging. Werkt door de takenlijst, schrijft code en vinkt items af.
+Implementeer taken uit de wijziging. Werkt de takenlijst af, schrijft code en vinkt items af.
 
 **Syntaxis:**
 ```
@@ -276,14 +279,14 @@ Implementeer taken uit de wijziging. Werkt door de takenlijst, schrijft code en 
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-name` | Nee | Welke wijziging moet worden geïmplementeerd (afgeleid uit de context als deze niet wordt verstrekt) |
+|----------|---------|--------------|
+| `change-name` | Nee | Welke wijziging te implementeren (wordt afgeleid uit de context indien niet opgegeven) |
 
 **Wat het doet:**
-- Leest `tasks.md` en identificeert onvoltooide taken
-- Werkt door de taken één voor één
-- Schrijft code, creëert bestanden, voert tests uit indien nodig
-- Markeert taken als voltooid met checkboxes `[x]`
+- Leest `tasks.md` en identificeert onvolledige taken
+- Werkt taken één voor één af
+- Schrijft code, maakt bestanden, voert tests uit indien nodig
+- Markeert taken als voltooid met selectievakjes `[x]`
 
 **Voorbeeld:**
 ```
@@ -309,15 +312,64 @@ AI:  Implementing add-dark-mode...
 ```
 
 **Tips:**
-- Kan hervatten waar u gebleven bent als er onderbrekingen waren
-- Gebruik voor parallelle wijzigingen door de naam van de wijziging te specificeren
-- De voltooiingsstatus wordt bijgehouden in de `tasks.md` checkboxes
+- Kan hervatten waar u was gebleven indien onderbroken
+- Gebruik voor parallelle wijzigingen door de wijzigingsnaam op te geven
+- Voltooiingsstatus wordt bijgehouden in de selectievakjes van `tasks.md`
+
+---
+
+### `/opsx:update`
+
+Herschrijf de bestaande planningartefacten van een wijziging en houd ze coherent met elkaar. Alleen planningartefacten - het bewerkt nooit code.
+
+**Syntaxis:**
+
+```text
+/opsx:update [change-name]
+```
+
+**Argumenten:**
+
+| Argument | Vereist | Beschrijving |
+|----------|---------|--------------|
+| `change-name` | Nee | Welke wijziging bij te werken (wordt afgeleid uit de context indien niet opgegeven) |
+
+**Wat het doet:**
+
+- Leest de artefacten van de wijziging via `openspec status --change <name> --json`
+- Past uw gevraagde revisie toe, of beoordeelt de artefacten op tegenstrijdigheden als u er geen hebt genoemd
+- Verzoent de andere bestaande artefacten in elke richting (een ontwerpwijziging kan terugwerken naar het voorstel)
+- Bevestigt elke bewerking met u voordat het wordt geschreven, één artefact tegelijk
+- Eindigt met het aanbevelen van de volgende stap: `/opsx:continue` (artefacten ontbreken), `/opsx:apply` (voer een herzien plan uit in code), of `/opsx:archive` (alles klaar)
+
+**Voorbeeld:**
+
+```text
+You: /opsx:update add-dark-mode - we're storing the theme in a cookie now, not localStorage
+
+AI:  Reading add-dark-mode artifacts...
+
+     The design references localStorage in two places; tasks 1.3 covers
+     localStorage persistence; the proposal doesn't mention storage.
+
+     Proposed revisions:
+     1. design.md - swap localStorage decision for cookie storage
+     2. tasks.md - reword task 1.3 to cookie persistence
+
+     Apply revision 1? (design.md)
+```
+
+**Tips:**
+
+- Het maakt geen ontbrekende artefacten aan - dat is `/opsx:continue`
+- Als de wijziging al is geïmplementeerd, volg op met `/opsx:apply` zodat de code overeenkomt met het herziene plan
+- Als uw revisie de *intentie* van de wijziging verandert, begin dan opnieuw met een nieuwe wijziging (zie [When to Update vs. Start Fresh](opsx.md#when-to-update-vs-start-fresh))
 
 ---
 
 ### `/opsx:verify`
 
-Valideer dat de implementatie overeenkomt met uw wijzigingsartefacten. Controleert volledigheid, correctheid en coherentie.
+Valideer dat de implementatie overeenkomt met uw wijzigingsartefacten. Controleert volledigheid, juistheid en coherentie.
 
 **Syntaxis:**
 ```
@@ -326,22 +378,22 @@ Valideer dat de implementatie overeenkomt met uw wijzigingsartefacten. Controlee
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-name` | Nee | Welke wijziging moet worden gevalideerd (afgeleid uit de context als deze niet wordt verstrekt) |
+|----------|---------|--------------|
+| `change-name` | Nee | Welke wijziging te verifiëren (wordt afgeleid uit de context indien niet opgegeven) |
 
 **Wat het doet:**
 - Controleert drie dimensies van implementatiekwaliteit
-- Zoekt in de codebase naar bewijs van de implementatie
-- Rapporteert problemen gecategoriseerd als CRITICAL, WARNING of SUGGESTION
-- Blokkeert het archiveren niet, maar toont problemen
+- Doorzoekt codebase naar implementatiebewijs
+- Rapporteert problemen gecategoriseerd als CRITISCH, WAARSCHUWING of SUGGESTIE
+- Blokkeert archivering niet, maar brengt problemen aan het licht
 
 **Verificatiedimensies:**
 
 | Dimensie | Wat het valideert |
 |-----------|-------------------|
-| **Completeness** | Alle taken zijn voltooid, alle vereisten zijn geïmplementeerd, scenario's zijn gedekt |
-| **Correctness** | Implementatie komt overeen met de intentie van de specificatie, randgevallen zijn afgehandeld |
-| **Coherence** | Ontwerpbeslissingen worden weerspiegeld in de code, patronen zijn consistent |
+| **Volledigheid** | Alle taken gedaan, alle vereisten geïmplementeerd, scenario's gedekt |
+| **Juistheid** | Implementatie komt overeen met specificatie-intentie, randgevallen behandeld |
+| **Coherentie** | Ontwerpbeslissingen weerspiegeld in code, patronen consistent |
 
 **Voorbeeld:**
 ```
@@ -376,16 +428,16 @@ AI:  Verifying add-dark-mode...
 ```
 
 **Tips:**
-- Voer uit vóór het archiveren om mismatches vroegtijdig op te sporen
-- Waarschuwingen blokkeren het archiveren niet, maar wijzen op mogelijke problemen
-- Goed voor het beoordelen van het werk van de AI voordat u committeert
-- Kan drift onthullen tussen artefacten en implementatie
+- Voer uit vóór archivering om mismatches vroeg te vangen
+- Waarschuwingen blokkeren archivering niet maar geven potentiële problemen aan
+- Goed voor het beoordelen van het werk van AI voordat u het vastlegt
+- Kan afwijking tussen artefacten en implementatie onthullen
 
 ---
 
 ### `/opsx:sync`
 
-**Optioneel commando.** Merge delta specs van een wijziging in de hoofdspecs. Archiveren zal vragen om te synchroniseren indien nodig, dus u hoeft dit doorgaans niet handmatig uit te voeren.
+**Optioneel commando.** Voeg delta-specificaties van een wijziging samen met hoofdspecificaties. Archivering zal vragen om te synchroniseren indien nodig, dus u hoeft dit meestal niet handmatig uit te voeren.
 
 **Syntaxis:**
 ```
@@ -394,14 +446,14 @@ AI:  Verifying add-dark-mode...
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-name` | Nee | Welke wijziging moet worden gesynchroniseerd (afgeleid uit de context als deze niet wordt verstrekt) |
+|----------|---------|--------------|
+| `change-name` | Nee | Welke wijziging te synchroniseren (wordt afgeleid uit de context indien niet opgegeven) |
 
 **Wat het doet:**
-- Leest delta specs van de change folder
-- Parses ADDED/MODIFIED/REMOVED/RENAMED secties
-- Mergt wijzigingen in de hoofdmap `openspec/specs/`
-- Behoudt bestaande inhoud die niet wordt genoemd in de delta
+- Leest delta-specificaties uit de wijzigingsmap
+- Parseert ADDED/MODIFIED/REMOVED/RENAMED secties
+- Voegt wijzigingen samen in de hoofdmap `openspec/specs/`
+- Behoudt bestaande inhoud die niet in de delta is vermeld
 - Archiveert de wijziging niet (blijft actief)
 
 **Voorbeeld:**
@@ -423,26 +475,26 @@ AI:  Syncing add-dark-mode delta specs...
      Change remains active. Run /opsx:archive when ready to complete.
 ```
 
-**Wanneer handmatig te gebruiken:**
+**Wanneer handmatig gebruiken:**
 
-| Scenario | Gebruik sync? |
-|----------|--------------|
-| Langlopende wijziging, wil specs in de hoofdmap vóór archiveren | Ja |
-| Meerdere parallelle wijzigingen hebben de bijgewerkte basisspecs nodig | Ja |
-| Wil de merge apart beoordelen/bekijken | Ja |
-| Snelle wijziging, gaat direct naar archiveren | Nee (archive regelt dit) |
+| Scenario | Synchroniseren gebruiken? |
+|----------|---------------------------|
+| Langlopende wijziging, wilt specificaties in hoofd voordat u archiveert | Ja |
+| Meerdere parallelle wijzigingen hebben de bijgewerkte basisspecificaties nodig | Ja |
+| Wilt de samenvoeging apart voorvertonen/beoordelen | Ja |
+| Snelle wijziging, gaat direct naar archivering | Nee (archivering behandelt het) |
 
 **Tips:**
-- Sync is intelligent, geen copy-paste
-- Kan scenario's toevoegen aan bestaande vereisten zonder duplicatie
-- De wijziging blijft actief na sync (niet gearchiveerd)
-- De meeste gebruikers zullen dit nooit direct hoeven aanroepen—archive vraagt indien nodig
+- Synchronisatie is intelligent, geen kopiëren-plakken
+- Kan scenario's toevoegen aan bestaande vereisten zonder te dupliceren
+- Wijziging blijft actief na synchronisatie (niet gearchiveerd)
+- De meeste gebruikers hoeven dit nooit direct aan te roepen—archivering vraagt erom indien nodig
 
 ---
 
 ### `/opsx:archive`
 
-Archiveer een voltooide wijziging. Finaliseert de wijziging en verplaatst deze naar de archive map.
+Archiveer een voltooide wijziging. Finaliseert de wijziging en verplaatst het naar de archiefmap.
 
 **Syntaxis:**
 ```
@@ -451,15 +503,15 @@ Archiveer een voltooide wijziging. Finaliseert de wijziging en verplaatst deze n
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-name` | Nee | Welke wijziging moet worden gearchiveerd (afgeleid uit de context als deze niet wordt verstrekt) |
+|----------|---------|--------------|
+| `change-name` | Nee | Welke wijziging te archiveren (wordt afgeleid uit de context indien niet opgegeven) |
 
 **Wat het doet:**
 - Controleert de voltooiingsstatus van artefacten
-- Controleert de taakvoltooiing (waarschuwt indien onvolledig)
-- Biedt aan om delta specs te synchroniseren indien nog niet gesynchroniseerd
-- Verplaatst de change map naar `openspec/changes/archive/YYYY-MM-DD-<name>/`
-- Behoudt alle artefacten voor het auditspoor
+- Controleert taakvoltooiing (waarschuwt indien onvolledig)
+- Biedt aan om delta-specificaties te synchroniseren als die nog niet zijn gesynchroniseerd
+- Verplaatst de wijzigingsmap naar `openspec/changes/archive/YYYY-MM-DD-<name>/`
+- Bewaart alle artefacten voor auditpad
 
 **Voorbeeld:**
 ```text
@@ -485,16 +537,16 @@ AI:  ✓ Synced specs to openspec/specs/ui/spec.md
 ```
 
 **Tips:**
-- Archiveren zal niet blokkeren op onvoltooide taken, maar wel waarschuwen
-- Delta specs kunnen worden gesynchroniseerd tijdens het archiveren of daarvoor
+- Archivering blokkeert niet op onvolledige taken, maar waarschuwt
+- Delta-specificaties kunnen tijdens archivering of van tevoren worden gesynchroniseerd
 - Gearchiveerde wijzigingen worden bewaard voor de geschiedenis
-- Gebruik `/opsx:verify` eerst om problemen te vangen
+- Gebruik eerst `/opsx:verify` om problemen te vangen
 
 ---
 
 ### `/opsx:bulk-archive`
 
-Archiveer meerdere voltooide wijzigingen in één keer. Behandelt specconflicten tussen wijzigingen.
+Archiveer meerdere voltooide wijzigingen in één keer. Verwerkt specificatieconflicten tussen wijzigingen.
 
 **Syntaxis:**
 ```
@@ -503,14 +555,14 @@ Archiveer meerdere voltooide wijzigingen in één keer. Behandelt specconflicten
 
 **Argumenten:**
 | Argument | Vereist | Beschrijving |
-|----------|---------|-------------|
-| `change-names` | Nee | Specifieke wijzigingen om te archiveren (vraagt om selectie indien niet verstrekt) |
+|----------|---------|--------------|
+| `change-names` | Nee | Specifieke wijzigingen om te archiveren (vraagt om selectie indien niet opgegeven) |
 
 **Wat het doet:**
-- Lijst alle voltooide wijzigingen op
-- Valideert elke wijziging vóór het archiveren
-- Detecteert specconflicten over de wijzigingen heen
-- Lost conflicten op door te controleren wat er daadwerkelijk is geïmplementeerd
+- Toont alle voltooide wijzigingen
+- Valideert elke wijziging vóór archivering
+- Detecteert specificatieconflicten tussen wijzigingen
+- Lost conflicten op door te controleren wat daadwerkelijk is geïmplementeerd
 - Archiveert in chronologische volgorde
 
 **Voorbeeld:**
@@ -542,15 +594,15 @@ AI:  ✓ Archived add-dark-mode
 
 **Tips:**
 - Goed voor parallelle werkstromen
-- Conflictresolutie is agentisch (controleert de codebase)
-- Wijzigingen worden gearchiveerd in volgorde van creatie
-- Vraagt voordat het spec content wordt overschreven
+- Conflictoplossing is agentisch (controleert codebase)
+- Wijzigingen worden gearchiveerd in volgorde van aanmaak
+- Vraagt voordat specificatie-inhoud wordt overschreven
 
 ---
 
 ### `/opsx:onboard`
 
-Geleide onboarding door de volledige OpenSpec workflow. Een interactieve tutorial met gebruikmaking van uw eigen codebase.
+Begeleide onboarding door de volledige OpenSpec-workflow. Een interactieve tutorial die uw daadwerkelijke codebase gebruikt.
 
 **Syntaxis:**
 ```
@@ -558,24 +610,24 @@ Geleide onboarding door de volledige OpenSpec workflow. Een interactieve tutoria
 ```
 
 **Wat het doet:**
-- Loopt een complete workflow cyclus door met narratie
-- Scant uw codebase voor echte verbeteringsmogelijkheden
-- Creëert een daadwerkelijke wijziging met echte artefacten
-- Implementeert echt werk (kleine, veilige wijzigingen)
+- Loopt door een volledige workflowcyclus met uitleg
+- Scant uw codebase naar echte verbeteringsmogelijkheden
+- Maakt een daadwerkelijke wijziging met echte artefacten
+- Implementeert daadwerkelijk werk (kleine, veilige wijzigingen)
 - Archiveert de voltooide wijziging
-- Legt elke stap uit terwijl deze plaatsvindt
+- Legt elke stap uit terwijl het gebeurt
 
 **Fasen:**
-1. Welkom en codebase analyse
+1. Welkom en codebase-analyse
 2. Een verbeteringsmogelijkheid vinden
-3. Creëren van een wijziging (`/opsx:new`)
-4. Schrijven van het proposal
-5. Creëren van specs
-6. Schrijven van het design
-7. Creëren van taken
-8. Implementeren van taken (`/opsx:apply`)
-9. Verifiëren van de implementatie
-10. Archiveren van de wijziging
+3. Een wijziging aanmaken (`/opsx:new`)
+4. Het voorstel schrijven
+5. Specificaties aanmaken
+6. Het ontwerp schrijven
+7. Taken aanmaken
+8. Taken implementeren (`/opsx:apply`)
+9. Implementatie verifiëren
+10. De wijziging archiveren
 11. Samenvatting en volgende stappen
 
 **Voorbeeld:**
@@ -602,102 +654,105 @@ AI:  Welcome to OpenSpec!
 
 **Tips:**
 - Het beste voor nieuwe gebruikers die de workflow leren
-- Gebruikt echte code, geen speelvoorbeelden
-- Creëert een echte wijziging die u kunt behouden of weggooien
-- Kost 15-30 minuten om te voltooien
+- Gebruikt echte code, geen speelgoedvoorbeelden
+- Maakt een echte wijziging die u kunt bewaren of weggooien
+- Duurt 15-30 minuten om te voltooien
 
 ## Opdrachtsyntaxis per AI-tool
 
-Verschillende AI-tools gebruiken enigszal verschillende opdrachtsyntaxis. Gebruik het formaat dat overeenkomt met uw tool:
+Verschillende AI-tools gebruiken iets andere opdrachtsyntaxis. Gebruik het formaat dat bij uw tool past:
 
-| Tool | Syntax Example |
-|------|----------------|
+| Tool | Syntaxisvoorbeeld |
+|------|-------------------|
 | Claude Code | `/opsx:propose`, `/opsx:apply` |
 | Cursor | `/opsx-propose`, `/opsx-apply` |
 | Windsurf | `/opsx-propose`, `/opsx-apply` |
 | Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
-| Kimi CLI | Skill-based invocations such as `/skill:openspec-propose`, `/skill:openspec-apply-change` (no generated `opsx-*` command files) |
-| Trae | Skill-based invocations such as `/openspec-propose`, `/openspec-apply-change` (no generated `opsx-*` command files) |
+| CodeArts | Oproepen op basis van vaardigheden, zoals `/openspec-propose`, `/openspec-apply-change` (geen gegenereerde `opsx-*` opdrachtbestanden) |
+| Codex | Oproepen op basis van vaardigheden vanuit `.codex/skills/openspec-*` (geen gegenereerde `opsx-*` promptbestanden) |
+| Oh My Pi | `/opsx-propose`, `/opsx-apply` |
+| Kimi Code | Oproepen op basis van vaardigheden, zoals `/skill:openspec-propose`, `/skill:openspec-apply-change` (geen gegenereerde `opsx-*` opdrachtbestanden) |
+| Trae | `/opsx-propose`, `/opsx-apply` |
 
-De intentie is overal bij de tools hetzelfde, maar hoe commando's worden gepresenteerd kan verschillen per integratie.
+De bedoeling is hetzelfde voor alle tools, maar hoe opdrachten worden aangeboden kan verschillen per integratie.
 
-> **Opmerking:** GitHub Copilot commands (`.github/prompts/*.prompt.md`) zijn alleen beschikbaar in IDE-extensies (VS Code, JetBrains, Visual Studio). De GitHub Copilot CLI ondersteunt momenteel geen aangepaste promptbestanden — zie [Supported Tools](supported-tools.md) voor details en omzeilmethoden.
+> **Opmerking:** GitHub Copilot-opdrachten (`.github/prompts/*.prompt.md`) zijn alleen beschikbaar in IDE-extensies (VS Code, JetBrains, Visual Studio). GitHub Copilot CLI ondersteunt momenteel geen aangepaste promptbestanden — zie [Ondersteunde Tools](supported-tools.md) voor details en tijdelijke oplossingen.
 
 ---
 
-## Legacy Opdrachten
+## Verouderde Opdrachten
 
-Deze opdrachten gebruiken de oudere "alles-in-één" workflow. Ze werken nog steeds, maar OPSX commando's worden aanbevolen.
+Deze opdrachten gebruiken de oudere "alles-in-een-keer" workflow. Ze werken nog steeds, maar OPSX-opdrachten worden aanbevolen.
 
-| Command | Wat het doet |
+| Opdracht | Wat het doet |
 |---------|--------------|
-| `/openspec:proposal` | Creëert alle artefacten tegelijk (voorstel, specificaties, ontwerp, taken) |
-| `/openspec:apply` | Implementeert de wijziging |
-| `/openspec:archive` | Archiveert de wijziging |
+| `/openspec:proposal` | Alle artefacten tegelijk aanmaken (voorstel, specificaties, ontwerp, taken) |
+| `/openspec:apply` | De wijziging implementeren |
+| `/openspec:archive` | De wijziging archiveren |
 
-**Wanneer legacy opdrachten gebruiken:**
+**Wanneer verouderde opdrachten te gebruiken:**
 - Bestaande projecten die de oude workflow gebruiken
-- Eenvoudige wijzigingen waarbij u geen incrementele artefactcreatie nodig heeft
-- De voorkeur voor een alles-of-niets benadering
+- Eenvoudige wijzigingen waarbij u geen incrementele artefactcreatie nodig hebt
+- Voorkeur voor de alles-of-nietsaanpak
 
 **Migreren naar OPSX:**
-Legacy wijzigingen kunnen worden voortgezet met OPSX commando's. De artefactstructuur is compatibel.
+Verouderde wijzigingen kunnen worden voortgezet met OPSX-opdrachten. De artefactstructuur is compatibel.
 
 ---
 
-## Probleemoplossing (Troubleshooting)
+## Problemen Oplossen
 
-### "Change not found" (Wijziging niet gevonden)
+### "Wijziging niet gevonden"
 
-Het commando kon niet bepalen welke wijziging het moest behandelen.
+De opdracht kon niet identificeren aan welke wijziging gewerkt moet worden.
 
 **Oplossingen:**
 - Specificeer de wijzigingsnaam expliciet: `/opsx:apply add-dark-mode`
 - Controleer of de wijzigingsmap bestaat: `openspec list`
-- Verifieer dat u zich in de juiste projectmap bevindt
+- Controleer of u in de juiste projectmap bent
 
-### "No artifacts ready" (Geen artefacten klaar)
+### "Geen artefacten klaar"
 
-Alle artefacten zijn ofwel voltooid, of worden geblokkeerd door ontbrekende afhankelijkheden.
+Alle artefacten zijn ofwel voltooid ofwel geblokkeerd door ontbrekende afhankelijkheden.
 
 **Oplossingen:**
 - Voer `openspec status --change <name>` uit om te zien wat blokkeert
-- Controleer of de vereiste artefacten bestaan
-- Creëer eerst de ontbrekende afhankelijkheidsartefacten
+- Controleer of vereiste artefacten bestaan
+- Maak eerst ontbrekende afhankelijkheidsartefacten aan
 
-### "Schema not found" (Schema niet gevonden)
+### "Schema niet gevonden"
 
-Het gespecificeerde schema bestaat niet.
+Het opgegeven schema bestaat niet.
 
 **Oplossingen:**
-- Liste beschikbare schemas: `openspec schemas`
-- Controleer de spelling van de schemaname
-- Creëer het schema als dit een aangepaste is: `openspec schema init <name>`
+- Lijst van beschikbare schemas: `openspec schemas`
+- Controleer de spelling van de schemanaam
+- Maak het schema aan als het aangepast is: `openspec schema init <name>`
 
-### Commands not recognized (Opdrachten niet herkend)
+### Opdrachten niet herkend
 
-De AI-tool herkent OpenSpec commando's niet.
+De AI-tool herkent OpenSpec-opdrachten niet.
 
 **Oplossingen:**
 - Zorg ervoor dat OpenSpec is geïnitialiseerd: `openspec init`
-- Genereer de skills opnieuw: `openspec update`
+- Regenereer vaardigheden: `openspec update`
 - Controleer of de map `.claude/skills/` bestaat (voor Claude Code)
-- Herstart uw AI-tool om de nieuwe skills te laden
+- Herstart uw AI-tool om nieuwe vaardigheden op te pakken
 
-### Artifacts not generating properly (Artefacten genereren niet correct)
+### Artefacten worden niet correct gegenereerd
 
-De AI creëert onvolledige of incorrecte artefacten.
+De AI maakt onvolledige of onjuiste artefacten aan.
 
 **Oplossingen:**
-- Voeg projectcontext toe aan `openspec/config.yaml`
-- Voeg per-artefact regels toe voor specifieke begeleiding
-- Geef meer details in uw wijzigingsbeschrijving
+- Voeg projectcontext toe in `openspec/config.yaml`
+- Voeg regels per artefact toe voor specifieke begeleiding
+- Geef meer detail in uw wijzigingsbeschrijving
 - Gebruik `/opsx:continue` in plaats van `/opsx:ff` voor meer controle
 
 ---
 
-## Volgende Stappen (Next Steps)
+## Volgende Stappen
 
-- [Workflows](workflows.md) - Algemene patronen en wanneer u elk commando moet gebruiken
-- [CLI](cli.md) - Terminalcommando's voor beheer en validatie
-- [Customization](customization.md) - Creëer aangepaste schemas en workflows
+- [Workflows](workflows.md) - Veelvoorkomende patronen en wanneer elke opdracht te gebruiken
+- [CLI](cli.md) - Terminalopdrachten voor beheer en validatie
+- [Aanpassing](customization.md) - Maak aangepaste schemas en workflows aan

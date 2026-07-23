@@ -1,166 +1,168 @@
 # トラブルシューティング
 
-確実な問題に対する具体的な解決策。各項目は症状を提示し、考えられる原因を1文で説明し、修正方法を提供します。ここで問題が見つからない場合は、[FAQ](faq.md)が役立つ可能性があり、[Discord](https://discord.gg/YctCnvvshC)が間違いなくお役に立ちます。
+具体的な問題に対する具体的な修正策です。各エントリは症状を記載し、考えられる原因を1文で説明し、修正方法を提示します。ここに記載されていない問題については、[FAQ](faq.md) が役立つ場合があり、[Discord](https://discord.gg/YctCnvvshC) は確実に役立ちます。
 
 ## インストールとセットアップ
 
 ### `openspec: command not found`
 
-CLIがインストールされていないか、シェルが見つけられていません。グローバルにインストールし、確認してください。
+CLIがインストールされていないか、シェルが認識できていません。グローバルにインストールして確認してください：
 
 ```bash
 npm install -g @fission-ai/openspec@latest
 openspec --version
 ```
 
-インストールされたにもかかわらず見つからない場合は、グローバルの npm bin ディレクトリが `PATH` に含まれていない可能性があります。`npm bin -g` を実行してグローバルバイナリの場所を確認し、そのパスがシェルのプロファイルに含まれていることを確認してください。
+インストールされているのに見つからない場合、グローバルnpmのbinディレクトリが`PATH`に含まれていない可能性があります。`npm bin -g`を実行してグローバルバイナリの場所を確認し、そのパスがシェルプロファイルに含まれていることを確認してください。
 
 ### "Requires Node.js 20.19.0 or higher"
 
-OpenSpec は Node 20.19.0 以降で動作します。バージョンを確認し、必要に応じてアップグレードしてください。
+OpenSpecはNode 20.19.0以上で動作します。バージョンを確認し、必要に応じてアップグレードしてください：
 
 ```bash
 node --version
 ```
 
-bun を使用して OpenSpec をインストールする場合、OpenSpec は引き続き Node で*実行される*ため、いずれにせよ `PATH` に Node 20.19.0+ が利用可能である必要があります。[Installation](installation.md)を参照してください。
+bunを使用してOpenSpecをインストールする場合、OpenSpecは依然としてNode上で実行されるため、`PATH`にNode 20.19.0以上が設定されている必要があります。詳細は[インストール](installation.md)を参照してください。
 
-### `openspec init` で AI ツールが設定されませんでした
+### `openspec init`がAIツールを設定しなかった
 
-Init はどのツールを設定するかを尋ねます。ツールをスキップしたか、別のツールを追加したい場合は、再度実行するか、非対話形式を使用してください。
+Initはセットアップするツールを尋ねます。ツールをスキップした場合や別のツールを追加したい場合は、再度実行するか、非対話形式を使用してください：
 
 ```bash
 openspec init --tools claude,cursor
 ```
 
-すべてのツール ID の完全なリストは [Supported Tools](supported-tools.md) にあります。すべてに `--tools all` を使用し、ツール設定をスキップするには `--tools none` を使用します。
+ツールIDの完全なリストは[サポートツール](supported-tools.md)に記載されています。すべてのツールには`--tools all`、ツールセットアップをスキップするには`--tools none`を使用してください。
 
 ## コマンドが表示されない
 
-`/opsx:propose` (またはツールの同等機能) が表示されないか、何も実行しない場合は、このリストを順にご確認ください。チェックすべき順番は早いものからとなっています。
+`/opsx:propose`（またはツールの同等コマンド）が表示されない、または動作しない場合は、以下のリストを順番に確認してください。最も速く確認できる順に並んでいます。
 
-1. **間違った場所にいます。** スラッシュコマンドはターミナルではなく AI アシスタントのチャットに入力します。シェルに `/opsx:propose` と入力したのが問題です。[How Commands Work](how-commands-work.md) を参照してください。
+1. **場所が間違っている可能性があります。** スラッシュコマンドはAIアシスタントのチャットで使用し、ターミナルでは使用しません。シェルに`/opsx:propose`と入力した場合は、それが原因です。[コマンドの仕組み](how-commands-work.md)を参照してください。
 
-2. **ファイルを再生成してください。** プロジェクトルートから実行します。
+2. **ファイルを再生成してください。** プロジェクトルートから：
 
    ```bash
    openspec update
    ```
 
-   これにより、設定したすべてのツールに対するスキルおよびコマンドファイルが書き換えられます。
+   これにより、設定したすべてのツールのスキルファイルとコマンドファイルが再書き込みされます。
 
-3. **アシスタントを再起動してください。** ほとんどのツールは起動時にスキルとコマンドをスキャンします。新しいウィンドウを開くことで解決することが多いです。
+3. **アシスタントを再起動してください。** ほとんどのツールは起動時にスキルとコマンドをスキャンします。新しいウィンドウで開くと解決することがよくあります。
 
-4. **ファイルが存在することを確認してください。** Claude Code の場合、`.claude/skills/` に `openspec-*` フォルダが含まれているか確認してください。他のツールは独自のディレクトリを使用しており、すべて [Supported Tools](supported-tools.md) にリストされています。
+4. **ファイルが存在することを確認してください。** Claude Codeの場合、`.claude/skills/`に`openspec-*`フォルダが含まれていることを確認してください。その他のツールは独自のディレクトリを使用し、すべて[サポートツール](supported-tools.md)に記載されています。
 
-5. **このプロジェクトを初期化したことを確認してください。** スキルはプロジェクトごとに記述されます。リポジトリをクローンしたか、フォルダを切り替えた場合は、そこで `openspec init` (または `openspec update`) を実行してください。
+5. **このプロジェクトを初期化したことを確認してください。** スキルはプロジェクトごとに書き込まれます。リポジトリをクローンした場合やフォルダを切り替えた場合は、その場所で`openspec init`（または`openspec update`）を実行してください。
 
-6. **ツールがコマンドファイルをサポートしていることを確認してください。** いくつかのツール（Kimi CLI, Trae, ForgeCode, Mistral Vibe）は `opsx-*` コマンドファイルの生成を受けず、スキルベースの呼び出しを使用します。形式はツールごとに異なります。詳細は [Supported Tools](supported-tools.md) および [How Commands Work](how-commands-work.md#slash-command-syntax-by-tool) を参照してください。
+6. **ツールがコマンドファイルをサポートしていることを確認してください。** Codexといくつかのツール（CodeArts、Kimi CLI、ForgeCode、Mistral Vibe）は`opsx-*`コマンドファイルが生成されず、スキルベースの呼び出しを使用します。Codexの場合は`.codex/skills/openspec-*`を確認してください。形式はツールごとに異なります。[サポートツール](supported-tools.md)と[コマンドの仕組み](how-commands-work.md#slash-command-syntax-by-tool)を参照してください。
 
-## 変更による作業
+## 変更の操作
 
-### "Change not found" (変更が見つかりません)
+### "Change not found"
 
-コマンドがどの変更を意図しているのか伝えられませんでした。明示的に名前を付けるか、存在するものを確認してください。
+コマンドがどの変更を指しているか識別できませんでした。明示的に名前を指定するか、存在する変更を確認してください：
 
 ```bash
 openspec list                    # アクティブな変更を表示
-/opsx:apply add-dark-mode        # チャットで変更名を指定する
+/opsx:apply add-dark-mode        # チャットで変更名を指定
 ```
 
 また、正しいプロジェクトディレクトリにいることを確認してください。
 
-### "No artifacts ready" (アーティファクトが準備できていません)
+### "No artifacts ready"
 
-すべてのアーティファクトはすでに作成されているか、依存関係を待機してブロックされています。何がブロックしているかを確認してください。
+すべてのアーティファクトは、すでに作成されているか、依存関係の待機中でブロックされています。何がブロックしているか確認してください：
 
 ```bash
 openspec status --change <name>
 ```
 
-その後、不足している依存関係を先に作成してください。順序を覚えておいてください：提案（proposal）がspecとdesignを可能にし、specとdesignが一緒にタスク（tasks）を可能にします。
+次に、不足している依存関係を先に作成してください。順序を覚えておいてください：提案書が仕様と設計を有効にし、仕様と設計がタスクを有効にします。
 
-### `openspec validate` が警告またはエラーを報告します
+### `openspec validate`が警告またはエラーを報告する
 
-Validation は構造的な問題について spec と変更を確認します。メッセージを読んでください。ファイル名と問題点が記載されています。
+検証は、仕様と変更の構造的問題をチェックします。メッセージを読んでください。ファイル名と問題が記載されています。
 
 ```bash
 openspec validate <name>           # 1つの項目を検証
 openspec validate --all            # すべてを検証
-openspec validate --all --strict   # より厳格なチェック（CIに適しています）
+openspec validate --all --strict   # より厳格なチェック、CIに適している
 ```
 
-一般的な原因は、必要なセクションの欠落（シナリオのない spec など）または不正なデルタヘッダーです。ファイルを修正し、再実行してください。[CLI reference](cli.md#openspec-validate) で出力形式が文書化されています。
+一般的な原因は、必須セクションの欠落（シナリオのない仕様など）または不正なデルタヘッダーです。ファイルを修正して再実行してください。[CLIリファレンス](cli.md#openspec-validate)に出力形式が記載されています。
 
-### AI が不完全または間違ったアーティファクトを作成しました
+### AIが不完全または不正なアーティファクトを作成した
 
-AI に十分なコンテキストがありませんでした。いくつかの対策があります。
+AIに十分なコンテキストがありませんでした。いくつかの調整方法があります：
 
-*   `openspec/config.yaml` にプロジェクトコンテキストを追加し、スタックと規約をすべてのリクエストに注入します。[Customization](customization.md#project-configuration) を参照してください。
-*   特定の spec などにのみ適用されるガイダンスとして、アーティファクトごとの `rules:` を追加します。
-*   提案を行う際に、より詳細な説明を提供します。
-*   すべてを一度に行う `/opsx:ff` の代わりに、`/opsx:continue` の拡張機能を使用して一つずつアーティファクトを作成し、それぞれを確認します。
+- `openspec/config.yaml`にプロジェクトコンテキストを追加すると、スタックと規約がすべてのリクエストに挿入されます。[カスタマイズ](customization.md#project-configuration)を参照してください。
+- 仕様など特定のアーティファクトにのみ適用されるガイダンスとして、アーティファクトごとに`rules:`を追加してください。
+- 提案時により詳細な説明を記載してください。
+- 拡張版`/opsx:continue`を使用して1つのアーティファクトずつ作成し、各アーティファクトを確認してください。`/opsx:ff`ですべて一度に作成する代わりに。
 
-### Archive が完了しません、または不完全なタスクについて警告します
+### アーカイブが完了しない、または未完了タスクについて警告する
 
-Archive は不完全なタスクで*ブロック*することはありませんが、通常アーカイブは作業が完了したことを意味するため、警告を出します。タスクが意図的に残っている場合（部分的な変更を提出している場合）は続行してください。そうでない場合は、まずタスクを完了させてください。Archive は、まだ同期していない場合、デルタ spec をメインの spec に同期することを提案することもあります。理由がない限り「はい」と答えてください。
+アーカイブは未完了タスクでブロックされませんが、警告を表示します。なぜならアーカイブは通常、作業が完了したことを意味するからです。意図的にタスクが残っている場合（部分的な変更を提出している場合）は、そのまま進めてください。それ以外の場合は、まずタスクを完了させてください。アーカイブは、デルタ仕様をメインの仕様に同期していない場合、同期を提案します。理由がない限り、はいと答えてください。
 
 ## 設定
 
-### `config.yaml` が適用されていません
+### `config.yaml`が適用されない
 
-一般的な3つの容疑者です。
+3つの一般的な原因：
 
-1. **ファイル名が間違っています。** `.yml` ではなく `openspec/config.yaml` でなければなりません。
-2. **YAML が無効です。** 任意の YAML バリデーターで実行してください。CLI は行番号とともに構文エラーも報告します。
-3. **再起動が必要だと期待していました。** 必要ありません。設定の変更は即座に効果があります。
+1. **ファイル名が間違っています。** `openspec/config.yaml`である必要があり、`.yml`ではありません。
+2. **YAMLが不正です。** 任意のYAMLバリデーターで確認してください。CLIも行番号付きで構文エラーを報告します。
+3. **再起動が必要だと思い込んでいます。** 必要ありません。設定変更は即座に反映されます。
 
-### "Unknown artifact ID in rules: X" (rules 内の不明なアーティファクトID: X)
+### "Unknown artifact ID in rules: X"
 
-`rules:` の下のキーが、スキーマ内のどのアーティファクトとも一致していません。デフォルトの `spec-driven` スキーマにおける有効な ID は `proposal`, `specs`, `design`, `tasks` です。任意のスキーマの ID を表示するには、以下を実行します。
+`rules:`の下のキーがスキーマ内のアーティファクトと一致しません。デフォルトの`spec-driven`スキーマの場合、有効なIDは`proposal`、`specs`、`design`、`tasks`です。任意のスキーマのIDを表示するには：
 
 ```bash
 openspec schemas --json
 ```
 
-### "Context too large" (コンテキストが大きすぎます)
+### "Context too large"
 
-`context:` フィールドは意図的に 50KB に制限されています。これはすべてのリクエストに注入されるためです。要約するか、貼り付ける代わりにより長いドキュメントへのリンクを付けてください。簡潔なコンテキストの方が、より速く良い結果をもたらします。
+`context:`フィールドは意図的に50KBに制限されています。すべてのリクエストに挿入されるためです。要約するか、長いドキュメントを貼り付けるのではなく、リンクを記載してください。コンテキストが少ないほど、より良い、より高速な結果が得られます。
 
-### "Schema not found" (スキーマが見つかりません)
+### "Schema not found"
 
-参照したスキーマ名が存在しません。利用可能なものをリスト表示し、スペルを確認してください。
+参照したスキーマ名が存在しません。利用可能なスキーマを一覧表示し、スペルを確認してください：
 
 ```bash
 openspec schemas                    # 利用可能なスキーマを一覧表示
-openspec schema which <name>        # スキーマがどこから解決されるかを表示
-openspec schema init <name>         # カスタムスキーマを作成する
+openspec schema which <name>        # スキーマがどこから解決されるか確認
+openspec schema init <name>         # カスタムスキーマを作成
 ```
 
-[Customization](customization.md#custom-schemas) を参照してください。
+[カスタマイズ](customization.md#custom-schemas)を参照してください。
 
 ## レガシーワークフローからの移行
 
-### "Legacy files detected in non-interactive mode" (非対話モードでレガシーファイルが検出されました)
+### "Legacy files detected in non-interactive mode"
 
-CI または非対話シェルのため、OpenSpec は古いファイルをクリーンアップできるものの、プロンプトを表示できません。自動承認を実行します。
+CIまたは非対話シェルを使用しており、OpenSpecがクリーンアップする古いファイルを検出しましたが、プロンプトを表示できません。自動的に承認してください：
 
 ```bash
 openspec init --force
 ```
 
-### 移行後にコマンドが表示されませんでした
+Codexの場合、OpenSpecは`$CODEX_HOME/prompts`または`~/.codex/prompts`の古い管理プロンプトファイルを検出する場合があります。このクリーンアップはOpenSpecの許可リストに登録されたレガシーCodexプロンプトファイル名に限定され、非対話`openspec init`は置換先の`.codex/skills/openspec-*`スキルが存在するファイルのみを削除します。非対話`openspec update`は、`--force`を渡さない限り、レガシークリーンアップをすべてそのままにします。
 
-IDE を再起動してください。スキルは起動時に検出されます。それでも表示されない場合は、`openspec update` を実行し、[Supported Tools](supported-tools.md) でファイルの位置を確認してください。
+### 移行後にコマンドが表示されない
 
-### 古い `project.md` が移行されませんでした
+IDEを再起動してください。スキルは起動時に検出されます。それでも表示されない場合は、`openspec update`を実行し、[サポートツール](supported-tools.md)のファイル場所を確認してください。
 
-これは意図的なものです。OpenSpec は、あなたが記述したコンテキストを含んでいる可能性があるため、`project.md` を自動的に削除しません。有用な部分を `config.yaml` の `context:` セクションに移動し、その後自分で削除してください。[Migration Guide](migration-guide.md#migrating-projectmd-to-configyaml) がこれを案内します。AI に依頼できる蒸留作業のプロンプトも含まれています。
+### 古い`project.md`が移行されなかった
 
-## まだ行き詰まっていますか？
+意図的な動作です。OpenSpecは`project.md`を自動的に削除しません。なぜなら、そこに記載したコンテキストが含まれている可能性があるからです。有用な部分を`config.yaml`の`context:`セクションに移動し、自分で削除してください。[移行ガイド](migration-guide.md#migrating-projectmd-to-configyaml)に、この処理の手順と、AIにこの蒸留作業を依頼できるプロンプトが記載されています。
 
-*   **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
-*   **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
-*   **ターミナルから:** `openspec feedback "what went wrong"` を実行すると、問題に関する Issue が作成されます。
+## まだ解決しない場合？
 
-問題を報告する際は、OpenSpec のバージョン（`openspec --version`）、Node のバージョン（`node --version`）、使用した AI ツール、正確なコマンドと出力を含めてください。これにより、サポートがはるかに迅速になります。
+- **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
+- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
+- **ターミナルから:** `openspec feedback "what went wrong"`でissueを自動的に作成できます。
+
+問題を報告する際は、OpenSpecのバージョン（`openspec --version`）、Nodeのバージョン（`node --version`）、使用中のAIツール、および実行したコマンドと出力結果を含めてください。これにより、サポートが迅速化されます。

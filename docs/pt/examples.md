@@ -1,29 +1,29 @@
-# Exemplos e Receitas
+# Exemplos & Receitas
 
-Mudanças reais, do início ao fim. Cada receita mostra os comandos que você digitaria e o que veria em retorno, para que possa mapear sua situação a um padrão e copiá-lo. Estes utilizam os comandos **core** padrão (`propose`, `explore`, `apply`, `sync`, `archive`); quando o conjunto expandido ajuda, isso é notado.
+Mudanças reais, do início ao fim. Cada receita mostra os comandos que você digitaria e o que veria de volta, para que você possa comparar sua situação com um padrão e copiá-lo. Estas usam os comandos **principais** padrão (`propose`, `explore`, `apply`, `sync`, `archive`); onde o conjunto expandido ajuda, isso é observado.
 
-Um lembrete antes de começar: comandos slash como `/opsx:propose` vão no **chat do assistente AI**, e comandos `openspec` vão no seu **terminal**. Se isso for novo, leia [Como os Comandos Funcionam](how-commands-work.md) primeiro. Nas transcrições abaixo, `You:` e `AI:` são o chat, e as linhas que começam com `$` são o terminal.
+Um lembrete antes de começar: comandos de barra como `/opsx:propose` vão no **chat do seu assistente de IA**, e comandos `openspec` vão no seu **terminal**. Se isso é novo, leia [How Commands Work](how-commands-work.md) primeiro. Nas transcrições abaixo, `You:` e `AI:` são o chat, e linhas começando com `$` são o terminal.
 
-> **Não tem certeza do que está construindo ainda?** A maioria destas receitas é mais clara se você começar com `/opsx:explore` para pensar sobre isso primeiro. [Recipe 3](#recipe-3-exploring-before-you-commit) mostra isso em ação, e o guia [Explore First](explore.md) apresenta o caso completo.
+> **Ainda não tem certeza do que está construindo?** A maioria dessas receitas é mais eficaz se você começar com `/opsx:explore` para pensar sobre isso primeiro. A [Receita 3](#recipe-3-exploring-before-you-commit) mostra isso em ação, e o guia [Explore First](explore.md) apresenta o caso completo.
 
-## Recipe 1: Um pequeno recurso, o caminho rápido
+## Receita 1: Uma pequena funcionalidade, o caminho rápido
 
-**Quando usar:** você sabe o que quer e é um trabalho contido. Esta é a receita mais comum.
+**Quando usar:** você sabe o que quer, e é um trabalho contido. Esta é a receita mais comum.
 
-O processo inteiro consiste em três comandos. Propor, construir, arquivar.
+Tudo isso são três comandos. Propose, build, archive.
 
 ```text
 You: /opsx:propose add-logout-button
 
 AI:  Created openspec/changes/add-logout-button/
-     ✓ proposal.md — why and what
-     ✓ specs/      — the new requirement and its scenarios
-     ✓ design.md   — technical approach
-     ✓ tasks.md    — implementation checklist
+     ✓ proposal.md — porquê e o quê
+     ✓ specs/      — o novo requisito e seus cenários
+     ✓ design.md   — abordagem técnica
+     ✓ tasks.md    — lista de verificação de implementação
      Ready for implementation. Run /opsx:apply.
 ```
 
-Agora, leia o plano. Abra a proposta e o delta spec. Este é o momento para o OpenSpec: pegar uma suposição errada enquanto ela ainda é um parágrafo, não 400 linhas de código. Edite qualquer artefato diretamente se algo estiver errado, e então continue.
+Agora leia o plano. Abra a proposta e a especificação delta. Este é o momento para o qual o OpenSpec foi construído: capturar uma suposição errada enquanto ainda é um parágrafo, não 400 linhas de código. Edite qualquer artefato diretamente se algo estiver errado, e depois continue.
 
 ```text
 You: /opsx:apply
@@ -42,13 +42,13 @@ AI:  Archiving add-logout-button...
      Done. Ready for the next change.
 ```
 
-É isso. O comportamento de logout agora faz parte dos seus specs, e a mudança está arquivada com seu contexto completo.
+É isso. O comportamento de logout agora faz parte de suas especificações, e a alteração foi arquivada com seu contexto completo.
 
-## Recipe 2: Um bug fix
+## Receita 2: Uma correção de bug
 
-**Quando usar:** algo está quebrado e você quer que o conserto seja registrado como uma mudança deliberada no comportamento, não um commit misterioso.
+**Quando usar:** algo está quebrado e você quer que a correção seja registrada como uma alteração deliberada de comportamento, não um commit misterioso.
 
-Os bug fixes funcionam exatamente como recursos (features). A diferença está em como você enquadra a proposta: descreva o comportamento *correto*, não apenas "consertar o bug".
+Correções de bug funcionam exatamente como funcionalidades. A diferença está em como você enquadra a proposta: descreva o comportamento *correto*, não apenas "corrija o bug".
 
 ```text
 You: /opsx:propose fix-login-redirect-loop
@@ -60,15 +60,15 @@ AI:  Created openspec/changes/fix-login-redirect-loop/
      Ready for implementation.
 ```
 
-Como o conserto é registrado como um requisito `MODIFIED` com um cenário fresco, a próxima pessoa (ou a próxima sessão do AI) verá não apenas que você corrigiu, mas o que significa "correto". Em seguida, `/opsx:apply` e `/opsx:archive` como de costume.
+Como a correção resulta em um requisito `MODIFIED` com um cenário novo, a próxima pessoa (ou a próxima sessão de IA) vê não apenas que você corrigiu, mas o que "correto" significa. Depois `/opsx:apply` e `/opsx:archive` como de costume.
 
-Dica: para um conserto, um bom cenário é o teste de regressão em prosa. "GIVEN um usuário deslogado, WHEN ele envia credenciais válidas, THEN ele cai no painel e não é redirecionado novamente." Escreva isso, e a implementação terá um alvo claro.
+Dica: para uma correção, um bom cenário é o teste de regressão em prosa. "GIVEN a logged-out user, WHEN they submit valid credentials, THEN they land on the dashboard and are not redirected again." Escreva isso, e a implementação terá um alvo claro.
 
-## Recipe 3: Explorando antes de comitar
+## Receita 3: Explorando antes de confirmar
 
-**Quando usar:** você tem um problema, mas ainda não um plano. Você não sabe o que construir ou qual abordagem é a correta.
+**Quando usar:** você tem um problema mas ainda não um plano. Você não tem certeza do que construir, ou qual abordagem é a correta.
 
-Comece com `/opsx:explore`. É um parceiro de pensamento sem estrutura e sem criação de artefatos. Ele lê sua codebase e ajuda você a decidir.
+Comece com `/opsx:explore`. É um parceiro de pensamento sem estrutura e sem artefatos criados. Ele lê seu codebase e ajuda você a decidir.
 
 ```text
 You: /opsx:explore
@@ -91,13 +91,13 @@ AI:  Created the change, with a proposal informed by what we just
      found. Ready for implementation.
 ```
 
-A exploração esclarece seu pensamento *antes* de você gastar uma mudança nisso. Quando o insight se cristaliza, proponha, e o AI carrega o contexto adiante.
+A exploração clarifica seu pensamento *antes* de você gastar uma alteração nisso. Quando o insight cristalizar, proponha, e a IA carrega o contexto adiante.
 
-## Recipe 4: Gerenciando duas mudanças ao mesmo tempo
+## Receita 4: Lidando com duas alterações ao mesmo tempo
 
-**Quando usar:** você está no meio de um recurso (feature) e um conserto urgente pula a fila.
+**Quando usar:** você está no meio de uma funcionalidade e uma correção urgente pula a fila.
 
-As mudanças são pastas independentes, então o trabalho paralelo não entra em conflito. Inicie o conserto, envie-o (ship it), e depois retorne ao recurso onde parou.
+As alterações são pastas independentes, então o trabalho paralelo não conflita. Inicie a correção, envie-a, e depois retorne à funcionalidade exatamente onde você parou.
 
 ```text
 You: I'm partway through add-dark-mode, but I need to fix a login bug now.
@@ -121,15 +121,15 @@ You: /opsx:apply add-dark-mode
 AI:  Resuming add-dark-mode. Picking up at task 2.3: Update Header...
 ```
 
-Nomear a mudança em `/opsx:apply add-dark-mode` é como você aponta o AI para uma mudança específica quando mais de uma está ativa. Como as tarefas rastreiam a conclusão em `tasks.md`, o AI sabe exatamente onde você parou.
+Nomear a alteração em `/opsx:apply add-dark-mode` é como você aponta a IA para uma alteração específica quando mais de uma está ativa. Como as tarefas rastreiam a conclusão em `tasks.md`, a IA sabe exatamente onde você parou.
 
-Quando várias mudanças são feitas ao mesmo tempo, o expandido `/opsx:bulk-archive` arquiva tudo junto e resolve conflitos de especificação verificando o que foi realmente implementado. Veja [Workflows](workflows.md#parallel-changes).
+Quando várias alterações são feitas de uma vez, o `/opsx:bulk-archive` expandido arquiva-as juntas e resolve conflitos de especificação verificando o que está realmente implementado. Veja [Workflows](workflows.md#parallel-changes).
 
-## Recipe 5: Um refator sem mudança de comportamento
+## Receita 5: Uma refatoração sem mudança de comportamento
 
-**Quando usar:** você está reestruturando código, e o comportamento externamente visível deve permanecer idêntico.
+**Quando usar:** você está reestruturando código, e o comportamento visível externamente deve permanecer idêntico.
 
-Este é o caso interessante, porque um refator puro não tem *nada para adicionar aos seus specs*. O contrato de comportamento não muda; apenas a implementação muda. Portanto, o trabalho reside no design e nas tarefas, e o delta do spec está vazio ou ausente.
+Este é o caso interessante, porque uma refatoração pura não tem *nada a adicionar às suas especificações*. O contrato de comportamento não muda; apenas a implementação muda. Então o trabalho reside no design e nas tarefas, e o delta de especificação está vazio ou ausente.
 
 ```text
 You: /opsx:propose refactor-payment-module
@@ -140,26 +140,35 @@ AI:  Created the change. The proposal states the goal (split the
      Ready for implementation.
 ```
 
-Quando você arquiva uma mudança que não toca nos specs, você pode dizer ao comando do terminal para pular a etapa de especificação:
+Declare o delta vazio explicitamente definindo `skip_specs: true` no `.openspec.yaml` da alteração:
+
+```yaml
+schema: spec-driven
+skip_specs: true
+```
+
+Sem o marcador, `openspec validate` rejeita uma alteração com zero deltas (para que uma fase de especificações esquecida ainda seja detectada); com ele, a validação passa e `openspec status` mostra o estágio de especificações como explicitamente pulado em vez de pendente. Se a refatoração acabar mudando o comportamento afinal, remova `skip_specs` de `.openspec.yaml` e escreva as especificações delta — o validate trata o marcador mais os arquivos de especificação como um conflito, para que o marcador obsoleto não permaneça silenciosamente.
+
+Arquivar uma alteração marcada não precisa de flags extras (não há deltas para mesclar). Independentemente, a flag `--skip-specs` diz ao comando do terminal para pular a etapa de especificação explicitamente:
 
 ```bash
 $ openspec archive refactor-payment-module --skip-specs
 ```
 
-A mesma flag é útil para ferramentas (tooling), CI e mudanças apenas de documentação. O princípio é: os specs descrevem o comportamento, então se o comportamento não mudou, o spec também não deveria mudar. Veja [Concepts](concepts.md#what-a-spec-is-and-is-not).
+A mesma flag é útil para ferramentas, CI e alterações apenas de documentação. O princípio: especificações descrevem comportamento, então se o comportamento não mudou, a especificação também não deveria. Veja [Concepts](concepts.md#what-a-spec-is-and-is-not).
 
-## Recipe 6: Controle passo a passo (comandos expandidos)
+## Receita 6: Controle passo a passo (comandos expandidos)
 
-**Quando usar:** uma mudança complexa ou arriscada na qual você deseja revisar cada artefato antes de prosseguir.
+**Quando usar:** uma alteração complexa ou arriscada onde você quer revisar cada artefato antes de prosseguir.
 
-O `/opsx:propose` core rascunha tudo de uma vez. Quando você prefere ir um passo de cada vez, ative os comandos expandidos:
+O `/opsx:propose` core rascunha tudo de uma vez. Quando você prefere ir passo a passo, ative os comandos expandidos:
 
 ```bash
-$ openspec config profile      # select the expanded workflows
-$ openspec update              # apply them to this project
+$ openspec config profile      # selecione os fluxos de trabalho expandidos
+$ openspec update              # aplique-os a este projeto
 ```
 
-Agora você pode criar e construir incrementalmente:
+Agora você pode criar a estrutura e construir incrementalmente:
 
 ```text
 You: /opsx:new add-2fa
@@ -175,13 +184,13 @@ You: /opsx:continue
 AI:  Created specs/auth/spec.md. Now available: design.
 ```
 
-Revise cada artefato à medida que ele é gerado, edite livremente e continue quando estiver satisfeito. Quando você quiser o restante rascunhado de uma vez, `/opsx:ff` avança (fast-forwards) através dos artefatos de planejamento restantes. Antes de arquivar, `/opsx:verify` verifica se a implementação realmente corresponde aos specs. Veja [Workflows](workflows.md#opsxff-vs-opsxcontinue).
+Revise cada artefato conforme ele é criado, edite livremente e continue quando estiver satisfeito. Quando quiser que o restante seja rascunhado de uma vez, `/opsx:ff` avança rapidamente pelos artefatos de planejamento restantes. Antes de arquivar, `/opsx:verify` verifica se a implementação realmente corresponde às especificações. Veja [Workflows](workflows.md#opsxff-vs-opsxcontinue).
 
-## Recipe 7: Aprendendo o ciclo completo na prática
+## Receita 7: Aprendendo todo o ciclo na prática
 
 **Quando usar:** você instalou o OpenSpec e quer *sentir* o fluxo de trabalho no seu próprio código, não em um exemplo de brinquedo.
 
-Ative os comandos expandidos (veja Recipe 6), e então:
+Ative os comandos expandidos (veja Receita 6), então:
 
 ```text
 You: /opsx:onboard
@@ -191,25 +200,25 @@ AI:  Welcome to OpenSpec! I'll walk you through a complete change
      improvement we can make together...
 ```
 
-`/opsx:onboard` encontra uma melhoria real (pequena), cria uma mudança para ela, implementa e arquiva, narrando cada passo. Leva de 15 a 30 minutos e deixa você com uma mudança real que pode manter ou descartar. É a maneira mais suave de aprender. Veja [Commands](commands.md#opsxonboard).
+`/opsx:onboard` encontra uma melhoria real (pequena), cria uma alteração para ela, implementa-a e arquiva-a, narrando cada passo. Leva de 15 a 30 minutos e deixa você com uma alteração real que você pode manter ou descartar. É a maneira mais suave de aprender. Veja [Commands](commands.md#opsxonboard).
 
-## Verificando seu trabalho pelo terminal
+## Verificando seu trabalho no terminal
 
-A qualquer momento, a partir do seu terminal, você pode inspecionar o estado das coisas:
+A qualquer momento, do seu terminal, você pode inspecionar o estado das coisas:
 
 ```bash
-$ openspec list                      # mudanças ativas
-$ openspec show add-dark-mode        # uma mudança em detalhes
+$ openspec list                      # alterações ativas
+$ openspec show add-dark-mode        # uma alteração em detalhe
 $ openspec validate add-dark-mode    # verificar estrutura
 $ openspec view                      # painel interativo
 ```
 
-Estes são ferramentas de leitura e inspeção. A proposição e a construção ainda acontecem através dos comandos slash no chat. Detalhes completos na [CLI reference](cli.md).
+Estas são ferramentas de leitura e inspeção. A proposta e a construção ainda acontecem através de comandos de barra no chat. Detalhes completos na [referência CLI](cli.md).
 
-## Para onde ir em seguida
+## Para onde ir a seguir
 
 - [Explore First](explore.md): a maneira recomendada de começar quando você não tem certeza
 - [Workflows](workflows.md): os padrões acima, com orientação de decisão sobre quando usar cada um
-- [Commands](commands.md): todos os comandos slash em detalhes
-- [Getting Started](getting-started.md): o walkthrough canônico da primeira mudança
-- [Concepts](concepts.md): por que as peças se encaixam da maneira que se encaixam
+- [Commands](commands.md): todos os comandos de barra em detalhe
+- [Getting Started](getting-started.md): o passeio canônico da primeira alteração
+- [Concepts](concepts.md): por que as peças se encaixam da maneira que o fazem

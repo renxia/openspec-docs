@@ -1,34 +1,34 @@
 # Memulai
 
-Panduan ini menjelaskan cara kerja OpenSpec setelah Anda menginstalnya dan menginisialisasinya. Untuk instruksi instalasi, lihat [README utama](../index.md#quick-start) atau [panduan Instalasi](installation.md). Baru mengenal seluruh kumpulan dokumentasi? [Beranda dokumentasi](index.md) memetakan segalanya.
+Panduan ini menjelaskan cara kerja OpenSpec setelah Anda menginstal dan menginisialisasinya. Untuk instruksi instalasi, lihat [README utama](../index.md#quick-start) atau [Panduan Instalasi](installation.md). Baru mengenal seluruh set dokumen? [Beranda dokumentasi](index.md) memetakan semuanya.
 
-> **Di mana saya mengetik perintah ini?** Dua tempat, dan mencampurnya adalah kesalahan awal yang paling umum.
+> **Di mana saya harus mengetik perintah-perintah ini?** Ada dua tempat, dan mencampurkannya adalah kesalahan paling umum di awal.
 >
-> - Perintah `openspec ...` (seperti `openspec init`) dijalankan di **terminal** Anda.
-> - Perintah `/opsx:...` (seperti `/opsx:propose`) dijalankan di **obrolan asisten AI** Anda, kotak yang sama tempat Anda memintanya untuk menulis kode.
+> - Perintah `openspec ...` (seperti `openspec init`) berjalan di **terminal** Anda.
+> - Perintah `/opsx:...` (seperti `/opsx:propose`) berjalan di **obrolan asisten AI** Anda, kotak yang sama tempat Anda memintanya untuk menulis kode.
 >
-> Tidak ada "mode interaktif" terpisah untuk memulai. Anda hanya mengetik perintah garis miring di obrolan dan asisten Anda melanjutkan dari sana. Penjelasan lengkap: [Cara Kerja Perintah](how-commands-work.md).
+> Tidak ada "mode interaktif" terpisah untuk dimulai. Anda cukup mengetik perintah slash di obrolan dan asisten Anda akan menanganinya dari sana. Penjelasan lengkap: [Cara Kerja Perintah](how-commands-work.md).
 
 ## Lima Menit Pertama Anda
 
-Seluruh siklus, dengan setiap langkah diberi label berdasarkan tempat ia terjadi:
+Seluruh loop, dengan setiap langkah dilabeli oleh tempatnya terjadi:
 
 ```text
 TERMINAL   $ npm install -g @fission-ai/openspec@latest
 TERMINAL   $ cd your-project && openspec init
-AI CHAT      /opsx:explore                    (opsional: pikirkan dulu)
-AI CHAT      /opsx:propose add-dark-mode      (AI membuat draf rencana; Anda meninjaunya)
+AI CHAT      /opsx:explore                    (opsional: pikirkan terlebih dahulu)
+AI CHAT      /opsx:propose add-dark-mode      (AI membuat draf rencana; Anda meninjunya)
 AI CHAT      /opsx:apply                      (AI membangunnya)
-AI CHAT      /opsx:archive                    (spesifikasi diperbarui, perubahan diarsipkan)
+AI CHAT      /opsx:archive                    (spesifikasi diperbarui, perubahan disimpan)
 ```
 
-Dua langkah terminal untuk penyiapan, kemudian Anda hidup di obrolan. Sisa panduan ini menguraikan apa yang dilakukan setiap langkah dan apa yang akan Anda lihat.
+Dua langkah terminal untuk menyiapkan, kemudian Anda tinggal di obrolan. Sisa panduan ini akan menguraikan apa yang dilakukan setiap langkah dan apa yang akan Anda lihat.
 
-> **Belum yakin ingin membangun apa? Mulailah dengan `/opsx:explore`.** Ini adalah mitra berpikir tanpa risiko yang membaca basis kode Anda, menimbang pilihan, dan mempertajam ide yang samar menjadi rencana konkret, semua sebelum artefak atau kode apa pun ada. Ketika gambaran sudah jelas, ia menyerahkan tugas ke `/opsx:propose`. Ini adalah kebiasaan terbaik untuk bekerja dengan AI yang jika tidak, akan secara percaya diri membangun hal yang salah. Lihat [panduan Explore](explore.md).
+> **Tidak yakin harus membangun apa? Mulailah dengan `/opsx:explore`.** Ini adalah mitra berpikir tanpa risiko yang membaca basis kode Anda, menimbang opsi, dan mengasah ide yang samar menjadi rencana yang konkret, semua sebelum ada artefak atau kode yang dibuat. Ketika gambaran sudah jelas, ia menyerahkan ke `/opsx:propose`. Ini adalah kebiasaan terbaik untuk bekerja dengan AI yang otherwise akan dengan percaya diri membangun hal yang salah. Lihat [Panduan Explore](explore.md).
 
-## Cara Kerjanya
+## Bagaimana Cara Kerjanya
 
-OpenSpec membantu Anda dan asisten pengkodean AI Anda menyepakati apa yang harus dibangun sebelum kode apa pun ditulis.
+OpenSpec membantu Anda dan asisten pengkodean AI Anda sepakat tentang apa yang harus dibangun sebelum ada kode yang ditulis.
 
 **Jalur cepat default (profil inti):**
 
@@ -37,17 +37,17 @@ OpenSpec membantu Anda dan asisten pengkodean AI Anda menyepakati apa yang harus
    (opsional)
 ```
 
-Mulai dengan `/opsx:explore` ketika Anda mencari tahu apa yang harus dilakukan, atau langsung melompat ke `/opsx:propose` ketika Anda sudah tahu. Explore ada di profil default, jadi selalu tersedia saat Anda menginginkannya.
+Mulailah dengan `/opsx:explore` ketika Anda sedang mencari tahu apa yang harus dilakukan, atau lompat langsung ke `/opsx:propose` ketika Anda sudah tahu. Explore ada di profil default, jadi selalu ada ketika Anda membutuhkannya.
 
 **Jalur yang diperluas (pemilihan alur kerja kustom):**
 
 ```text
-/opsx:new ──► /opsx:ff atau /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
 Profil global default adalah `core`, yang mencakup `propose`, `explore`, `apply`, `sync`, dan `archive`. Anda dapat mengaktifkan perintah alur kerja yang diperluas dengan `openspec config profile` dan kemudian `openspec update`.
 
-## Apa yang Diciptakan OpenSpec
+## Apa yang Dibuat OpenSpec
 
 Setelah menjalankan `openspec init`, proyek Anda memiliki struktur ini:
 
@@ -61,7 +61,7 @@ openspec/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Delta specs (apa yang berubah)
+│       └── specs/      # Spesifikasi delta (yang berubah)
 │           └── <domain>/
 │               └── spec.md
 └── config.yaml         # Konfigurasi proyek (opsional)
@@ -69,9 +69,9 @@ openspec/
 
 **Dua direktori utama:**
 
-- **`specs/`** - Sumber kebenaran. Spesifikasi ini menjelaskan bagaimana sistem Anda berperilaku saat ini. Diatur berdasarkan domain (misalnya, `specs/auth/`, `specs/payments/`).
+- **`specs/`** - Sumber kebenaran. Spesifikasi ini mendeskripsikan bagaimana sistem Anda saat ini berperilaku. Dikelompokkan berdasarkan domain (misalnya, `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** - Modifikasi yang diusulkan. Setiap perubahan mendapatkan foldernya sendiri dengan semua artefak terkait. Ketika sebuah perubahan selesai, spesifikasinya digabungkan ke direktori utama `specs/`.
+- **`changes/`** - Modifikasi yang diusulkan. Setiap perubahan mendapatkan folder sendiri dengan semua artefak terkait. Ketika perubahan selesai, spesifikasinya digabungkan ke direktori `specs/` utama.
 
 ## Memahami Artefak
 
@@ -79,209 +79,211 @@ Setiap folder perubahan berisi artefak yang memandu pekerjaan:
 
 | Artefak | Tujuan |
 |----------|---------|
-| `proposal.md` | "mengapa" dan "apa" - menangkap niat, ruang lingkup, dan pendekatan |
-| `specs/` | Delta specs yang menunjukkan persyaratan yang DITAMBAHKAN/DIMODIFIKASI/DIHAPUS |
-| `design.md` | "bagaimana" - pendekatan teknis dan keputusan arsitektur |
-| `tasks.md` | daftar periksa implementasi dengan kotak centang |
+| `proposal.md` | "Mengapa" dan "Apa" - menangkap niat, ruang lingkup, dan pendekatan |
+| `specs/` | Spesifikasi delta yang menunjukkan persyaratan DITAMBAHKAN/DIUBAH/DIHAPUS |
+| `design.md` | "Bagaimana" - pendekatan teknis dan keputusan arsitektur |
+| `tasks.md` | Daftar periksa implementasi dengan kotak centang |
 
-**Artefak dibangun satu sama lain:**
+**Artefak saling membangun:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            diperbarui seiring Anda belajar
+            perbarui saat Anda belajar
 ```
 
-Anda selalu dapat kembali dan menyempurnakan artefak sebelumnya saat Anda mempelajari lebih lanjut selama implementasi.
+Anda selalu dapat kembali dan menyempurnakan artefak sebelumnya saat Anda mempelajari lebih banyak selama implementasi.
 
-## Cara Kerja Delta Specs
+## Bagaimana Cara Kerja Spesifikasi Delta
 
-Delta specs adalah konsep kunci dalam OpenSpec. Mereka menunjukkan apa yang berubah relatif terhadap spesifikasi Anda saat ini.
+Spesifikasi delta adalah konsep kunci di OpenSpec. Mereka menunjukkan apa yang berubah relatif terhadap spesifikasi Anda saat ini.
 
-### Formatnya
+### Format
 
-Delta specs menggunakan bagian untuk menunjukkan jenis perubahan:
+Spesifikasi delta menggunakan bagian untuk menunjukkan jenis perubahan:
 
 ```markdown
 # Delta untuk Auth
 
 ## Persyaratan DITAMBAHKAN
 
-### Persyaratan: Otentikasi Dua Faktor
+### Persyaratan: Two-Factor Authentication
 Sistem HARUS memerlukan faktor kedua selama login.
 
 #### Skenario: OTP diperlukan
-- GIVEN pengguna dengan 2FA diaktifkan
-- WHEN pengguna mengirim kredensial yang valid
-- THEN tantangan OTP disajikan
+- DENGAN pengguna dengan 2FA diaktifkan
+- KETIKA pengguna mengirimkan kredensial yang valid
+- MAKA tantangan OTP disajikan
 
-## Persyaratan DIMODIFIKASI
+## Persyaratan DIUBAH
 
-### Persyaratan: Batas Waktu Sesi
-Sistem HARUS mengakhiri sesi setelah 30 menit tidak aktif.
+### Persyaratan: Session Timeout
+Sistem AKAN mengakhiri sesi setelah 30 menit tidak aktif.
 (Sebelumnya: 60 menit)
 
-#### Skenario: Timeout diam
-- GIVEN sesi yang diautentikasi
-- WHEN 30 menit berlalu tanpa aktivitas
-- THEN sesi dinonaktifkan
+#### Skenario: Timeout tidak aktif
+- DENGAN sesi yang terautentikasi
+- KETIKA 30 menit berlalu tanpa aktivitas
+- MAKA sesi dibatalkan
 
 ## Persyaratan DIHAPUS
 
-### Persyaratan: Ingat Saya
-(Usang demi 2FA)
+### Persyaratan: Remember Me
+(Digantikan oleh 2FA)
 ```
 
-### Apa yang Terjadi saat Arsip?
+### Yang Terjadi saat Arsip
 
-Ketika Anda mengarsipkan sebuah perubahan:
+Ketika Anda mengarsipkan perubahan:
 
 1. Persyaratan **DITAMBAHKAN** ditambahkan ke spesifikasi utama
-2. Persyaratan **DIMODIFIKASI** mengganti versi yang ada
+2. Persyaratan **DIUBAH** menggantikan versi yang ada
 3. Persyaratan **DIHAPUS** dihapus dari spesifikasi utama
 
 Folder perubahan dipindahkan ke `openspec/changes/archive/` untuk riwayat audit.
 
 ## Contoh: Perubahan Pertama Anda
 
-Mari kita bahas penambahan mode gelap pada sebuah aplikasi.
+Mari kita jalankan menambahkan mode gelap ke aplikasi.
 
-### 1. Memulai Perubahan (Default)
+### 1. Mulai Perubahan (Default)
 
 ```text
-Anda: /opsx:propose add-dark-mode
+You: /opsx:propose add-dark-mode
 
-AI:  Membuat openspec/changes/add-dark-mode/
-     ✓ proposal.md — mengapa kita melakukan ini, apa yang berubah
-     ✓ specs/       — persyaratan dan skenario
-     ✓ design.md    — pendekatan teknis
-     ✓ tasks.md     — daftar periksa implementasi
-     Siap untuk diimplementasikan!
+AI:  Created openspec/changes/add-dark-mode/
+     ✓ proposal.md — why we're doing this, what's changing
+     ✓ specs/       — requirements and scenarios
+     ✓ design.md    — technical approach
+     ✓ tasks.md     — implementation checklist
+     Ready for implementation!
 ```
 
-Jika Anda telah mengaktifkan profil alur kerja yang diperluas, Anda juga dapat melakukan ini sebagai dua langkah: `/opsx:new` lalu `/opsx:ff` (atau `/opsx:continue` secara bertahap).
+Jika Anda telah mengaktifkan profil alur kerja yang diperluas, Anda juga dapat melakukan ini dalam dua langkah: `/opsx:new` kemudian `/opsx:ff` (atau `/opsx:continue` secara bertahap).
 
 ### 2. Apa yang Dibuat
 
 **proposal.md** - Menangkap niat:
 
 ```markdown
-# Proposal: Tambahkan Mode Gelap
+# Proposal: Add Dark Mode
 
-## Niat
-Pengguna telah meminta opsi mode gelap untuk mengurangi ketegangan mata
-selama penggunaan malam hari.
+## Intent
+Users have requested a dark mode option to reduce eye strain
+during nighttime usage.
 
-## Ruang Lingkup
-- Tambahkan sakelar tema di pengaturan
-- Dukungan deteksi preferensi sistem
-- Simpan preferensi di localStorage
+## Scope
+- Add theme toggle in settings
+- Support system preference detection
+- Persist preference in localStorage
 
-## Pendekatan
-Gunakan properti kustom CSS untuk penentuan tema dengan konteks React
-untuk manajemen status.
+## Approach
+Use CSS custom properties for theming with a React context
+for state management.
 ```
 
 **specs/ui/spec.md** - Delta yang menunjukkan persyaratan baru:
 
 ```markdown
-# Delta untuk UI
+# Delta for UI
 
-## Persyaratan DITAMBAHKAN
+## ADDED Requirements
 
-### Persyaratan: Pemilihan Tema
-Sistem HARUS mengizinkan pengguna memilih antara tema terang dan gelap.
+### Requirement: Theme Selection
+The system SHALL allow users to choose between light and dark themes.
 
-#### Skenario: Sakelar manual
-- GIVEN pengguna di halaman apa pun
-- WHEN pengguna mengklik sakelar tema
-- THEN temanya langsung beralih
-- DAN preferensi bertahan di seluruh sesi
+#### Scenario: Manual toggle
+- GIVEN a user on any page
+- WHEN the user clicks the theme toggle
+- THEN the theme switches immediately
+- AND the preference persists across sessions
 
-#### Skenario: Preferensi sistem
-- GIVEN pengguna tanpa preferensi yang disimpan
-- WHEN aplikasi dimuat
-- THEN skema warna pilihan sistem digunakan
+#### Scenario: System preference
+- GIVEN a user with no saved preference
+- WHEN the application loads
+- THEN the system's preferred color scheme is used
 ```
 
 **tasks.md** - Daftar periksa implementasi:
 
 ```markdown
-# Tugas
+# Tasks
 
-## 1. Infrastruktur Tema
-- [ ] 1.1 Buat ThemeContext dengan status terang/gelap
-- [ ] 1.2 Tambahkan properti kustom CSS untuk warna
-- [ ] 1.3 Implementasikan persistensi localStorage
+## 1. Theme Infrastructure
+- [ ] 1.1 Create ThemeContext with light/dark state
+- [ ] 1.2 Add CSS custom properties for colors
+- [ ] 1.3 Implement localStorage persistence
 
-## 2. Komponen UI
-- [ ] 2.1 Buat komponen ThemeToggle
-- [ ] 2.2 Tambahkan sakelar ke halaman pengaturan
-- [ ] 2.3 Perbarui Header untuk menyertakan sakelar cepat
+## 2. UI Components
+- [ ] 2.1 Create ThemeToggle component
+- [ ] 2.2 Add toggle to settings page
+- [ ] 2.3 Update Header to include quick toggle
 
-## 3. Penataan Gaya
-- [ ] 3.1 Tentukan palet warna tema gelap
-- [ ] 3.2 Perbarui komponen untuk menggunakan variabel CSS
+## 3. Styling
+- [ ] 3.1 Define dark theme color palette
+- [ ] 3.2 Update components to use CSS variables
 ```
 
 ### 3. Implementasi
 
 ```
-Anda: /opsx:apply
+You: /opsx:apply
 
-AI:  Mengerjakan tugas...
-     ✓ 1.1 Dibuat ThemeContext dengan status terang/gelap
-     ✓ 1.2 Ditambahkan properti kustom CSS ke globals.css
-     ✓ 1.3 Diimplementasikan persistensi localStorage
-     ✓ 2.1 Dibuat komponen ThemeToggle
+AI:  Working through tasks...
+     ✓ 1.1 Created ThemeContext with light/dark state
+     ✓ 1.2 Added CSS custom properties to globals.css
+     ✓ 1.3 Implemented localStorage persistence
+     ✓ 2.1 Created ThemeToggle component
      ...
-     Semua tugas selesai!
+     All tasks complete!
 ```
 
-Selama implementasi, jika Anda menemukan desain memerlukan penyesuaian, cukup perbarui artefak dan lanjutkan.
+Selama implementasi, jika Anda menemukan bahwa desain perlu disesuaikan, cukup perbarui artefak dan lanjutkan.
 
 ### 4. Arsip
 
 ```
-Anda: /opsx:archive
+You: /opsx:archive
 
-AI:  Mengarsipkan add-dark-mode...
-     ✓ Menggabungkan spesifikasi ke openspec/specs/ui/spec.md
-     ✓ Dipindahkan ke openspec/changes/archive/2025-01-24-add-dark-mode/
-     Selesai! Siap untuk fitur berikutnya.
+AI:  Archiving add-dark-mode...
+     ✓ Merged specs into openspec/specs/ui/spec.md
+     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
+     Done! Ready for the next feature.
 ```
 
-Delta specs Anda sekarang menjadi bagian dari spesifikasi utama, mendokumentasikan cara kerja sistem Anda.
+Spesifikasi delta Anda sekarang menjadi bagian dari spesifikasi utama, mendokumentasikan bagaimana sistem Anda bekerja.
 
-## Verifikasi dan Tinjauan
+## Memverifikasi dan Meninjau
 
 Gunakan CLI untuk memeriksa perubahan Anda:
 
 ```bash
-# Daftar perubahan aktif
+# List active changes
 openspec list
 
-# Lihat detail perubahan
+# View change details
 openspec show add-dark-mode
 
-# Validasi pemformatan spec
+# Validate spec formatting
 openspec validate add-dark-mode
 
-# Dasbor interaktif
+# Interactive dashboard
 openspec view
 ```
 
-## Langkah Selanjutnya
+## Langkah Berikutnya
 
-- [Explore First](explore.md) - Gunakan `/opsx:explore` untuk memikirkan ide sebelum Anda berkomitmen
-- [Menggunakan OpenSpec dalam Proyek yang Sudah Ada](existing-projects.md) - Mulai pada basis kode brownfield yang besar
-- [Mengedit & Mengiterasi Perubahan](editing-changes.md) - Perbarui artefak, kembali, rekonsiliasi pengeditan manual
-- [Konsep Inti Sekilas](overview.md) - Seluruh model mental dalam satu halaman
-- [Contoh & Resep](examples.md) - Perubahan nyata, dari awal hingga akhir
-- [Alur Kerja](workflows.md) - Pola umum dan kapan harus menggunakan setiap perintah
-- [Perintah](commands.md) - Referensi lengkap untuk semua perintah garis miring
+- [Jelajah Terlebih Dahulu](explore.md) - Gunakan `/opsx:explore` untuk berpikir melalui ide sebelum Anda berkomitmen
+- [Meninjau Perubahan](reviewing-changes.md) - Apa yang harus diperiksa dalam rencana yang dibuat AI, sebelum ada kode
+- [Menulis Spesifikasi yang Baik](writing-specs.md) - Bagaimana persyaratan dan skenario yang kuat terlihat
+- [Menggunakan OpenSpec di Proyek yang Sudah Ada](existing-projects.md) - Mulai di basis kode brownfield yang besar
+- [Mengedit & Mengulangi Perubahan](editing-changes.md) - Perbarui artefak, kembali, rekonsiliasi edit manual
+- [Konsep Inti sekilas](overview.md) - Seluruh model mental di satu halaman
+- [Contoh & Resep](examples.md) - Perubahan nyata, dari awal sampai akhir
+- [Alur Kerja](workflows.md) - Pola umum dan kapan menggunakan setiap perintah
+- [Perintah](commands.md) - Referensi lengkap untuk semua perintah slash
 - [Konsep](concepts.md) - Pemahaman yang lebih dalam tentang spesifikasi, perubahan, dan skema
-- [Kustomisasi](customization.md) - Buat OpenSpec bekerja sesuai cara Anda
-- [Penyimpanan](stores-beta/user-guide.md) - Perencanaan yang mencakup repositori atau tim? Simpan di repo sendiri (beta)
-- [FAQ](faq.md) dan [Pemecahan Masalah](troubleshooting.md) - Saat Anda buntu
+- [Kustomisasi](customization.md) - Buat OpenSpec bekerja sesuai keinginan Anda
+- [Toko](stores-beta/user-guide.md) - Perencanaan yang mencakup repo atau tim? Simpan di repo sendiri sendiri (beta)
+- [FAQ](faq.md) dan [Pemecahan Masalah](troubleshooting.md) - Ketika Anda mengalami kesulitan

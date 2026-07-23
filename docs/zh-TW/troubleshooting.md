@@ -1,166 +1,168 @@
-# 問題排查
+# 故障排除
 
-針對具體問題提供具體的解決方案。每一項都列出了一個症狀、解釋可能的原因，並提供了解決方法。如果您沒有看到自己的問題，[FAQ](faq.md) 可能會有幫助，而 [Discord](https://discord.gg/YctCnvvshC) 絕對會。
+針對具體問題提供具體解決方案。每個條目都會說明症狀、用一句話解釋可能的原因，並提供修復方法。如果這裡沒有看到你遇到的問題，[常見問題集](faq.md) 或許能幫上忙，而 [Discord](https://discord.gg/YctCnvvshC) 肯定可以。
 
 ## 安裝與設定
 
 ### `openspec: command not found`
 
-CLI 未安裝，或者您的 shell 無法找到它。請進行全域性（global）安裝並檢查：
+CLI 尚未安裝，或是你的 Shell 找不到該指令。請全域安裝並執行以下檢查：
 
 ```bash
 npm install -g @fission-ai/openspec@latest
 openspec --version
 ```
 
-如果已安裝但仍找不到，那麼您的 global npm bin 目錄可能不在 `PATH` 中。請執行 `npm bin -g` 來查看全域性二進位檔案（binaries）的存放位置，並確保該路徑包含在您的 shell 設定檔中。
+如果已經安裝但仍然找不到，代表你的全域 npm bin 目錄可能沒有加入 `PATH` 環境變數。執行 `npm bin -g` 查看全域二進制檔案的存放位置，並確認該路徑已加入你的 Shell 設定檔中。
 
 ### "Requires Node.js 20.19.0 or higher"
 
-OpenSpec 在 Node 20.19.0 及以上版本上運行。請檢查您的版本並按需升級：
+OpenSpec 需要運行在 Node 20.19.0 及以上版本。請檢查你的版本，必要時升級：
 
 ```bash
 node --version
 ```
 
-如果您使用 bun 來安裝 OpenSpec，請注意 OpenSpec 仍然是在 Node 上*運作*的，因此無論如何，您都需要在 `PATH` 中有 Node 20.19.0+ 可用。請參閱 [Installation](installation.md)。
+如果你使用 bun 安裝 OpenSpec，請注意 OpenSpec 依然*運行*在 Node 上，因此無論如何你的 `PATH` 中都必須要有 Node 20.19.0+ 版本。詳情請見 [安裝指南](installation.md)。
 
-### `openspec init` 未為我的 AI 工具進行配置
+### `openspec init` 沒有設定我的 AI 工具
 
-Init 會詢問需要設定哪些工具。如果您跳過了某個工具或想新增其他工具，只需再次執行它，或使用非互動式（non-interactive）形式：
+執行 init 時會詢問要設定哪些工具。如果你跳過了你的工具，或是想要新增其他工具，只要重新執行一次即可，或是使用非互動式模式：
 
 ```bash
 openspec init --tools claude,cursor
 ```
 
-完整的工具 ID 清單請參閱 [Supported Tools](supported-tools.md)。要所有功能請使用 `--tools all`，要跳過工具設定請使用 `--tools none`。
+完整的工具 ID 列表請見 [支援的工具](supported-tools.md)。使用 `--tools all` 可設定所有工具，使用 `--tools none` 可跳過工具設定。
 
-## 命令未顯示
+## 指令沒有顯示出來
 
-如果 `/opsx:propose`（或您工具的等效命令）沒有出現或沒有任何反應，請依序檢查以下清單。它們是從最快檢查到需要更深入排查的順序排列的。
+如果 `/opsx:propose`（或是你所用工具的對應指令）沒有出現，或是執行後沒有反應，請依序排查以下項目。列表已按照檢查速度從快到慢排序：
 
-1. **您可能處於錯誤的位置。** 斜線命令（Slash commands）應在 AI 助理的聊天中輸入，而不是在您的終端機（terminal）。如果您將 `/opsx:propose` 輸入到 shell 中，那就是問題所在。請參閱 [How Commands Work](how-commands-work.md)。
+1. **你可能在錯誤的位置執行。** 斜線指令要在你的 AI 助理的對話視窗中使用，而不是在終端機執行。如果你在 Shell 中輸入了 `/opsx:propose`，那就是問題所在。詳情請見 [指令運作方式](how-commands-work.md)。
 
-2. **重新生成檔案。** 在專案根目錄下執行：
+2. **重新產生檔案。** 從你的專案根目錄執行：
 
    ```bash
    openspec update
    ```
 
-   這會為您配置的每個工具重寫技能（skill）和命令檔案。
+   這會重新寫入你已設定的所有工具的指令碼與指令檔案。
 
-3. **重新啟動您的助理。** 大多數工具會在啟動時掃描技能和命令。一個全新的視窗通常就能做到這一點。
+3. **重新啟動你的 AI 助理。** 大多數工具會在啟動時掃描指令碼與指令，開啟新視窗通常就能解決問題。
 
-4. **確認檔案存在。** 對於 Claude Code，請檢查 `.claude/skills/` 中是否包含 `openspec-*` 資料夾。其他工具使用自己的目錄，詳見 [Supported Tools](supported-tools.md)。
+4. **確認檔案是否存在。** 以 Claude Code 為例，請檢查 `.claude/skills/` 目錄下是否有 `openspec-*` 資料夾。其他工具會使用各自的目錄，完整列表請見 [支援的工具](supported-tools.md)。
 
-5. **確認您已初始化此專案。** 技能是針對每個專案編寫的。如果您克隆（cloned）了一個 repo 或切換了資料夾，請在該處執行 `openspec init`（或 `openspec update`）。
+5. **確認你已經初始化這個專案。** 指令碼會依專案分別寫入。如果你複製了儲存庫或是切換了資料夾，請在該目錄下執行 `openspec init`（或是 `openspec update`）。
 
-6. **確認您的工具支援命令檔案。** 少數工具（Kimi CLI, Trae, ForgeCode, Mistral Vibe）不會生成 `opsx-*` 命令檔案；它們而是使用基於技能的調用（skill-based invocations）。不同工具的形式有所差異：請參閱 [Supported Tools](supported-tools.md) 和 [How Commands Work](how-commands-work.md#slash-command-syntax-by-tool)。
+6. **確認你的工具支援指令檔案。** Codex 以及部分其他工具（CodeArts、Kimi CLI、ForgeCode、Mistral Vibe）不會生成 `opsx-*` 指令檔案，而是使用基於指令碼的調用方式。以 Codex 為例，請檢查 `.codex/skills/openspec-*`。不同工具的調用方式有所差異，詳情請見 [支援的工具](supported-tools.md) 與 [指令運作方式](how-commands-work.md#slash-command-syntax-by-tool)。
 
-## 處理變更 (Working with changes)
+## 處理變更
 
-### "Change not found"（找不到變更）
+### "Change not found"
 
-命令無法判斷您指的是哪個變更。請明確命名它，或檢查現有的變更：
+指令無法判斷你指的是哪個變更。請明確指定變更名稱，或是查看現有變更：
 
 ```bash
-openspec list                    # 查看活躍的變更
-/opsx:apply add-dark-mode        # 在聊天中命名該變更
+openspec list                    # 查看進行中的變更
+/opsx:apply add-dark-mode        # 在對話中指定變更名稱
 ```
 
-同時確認您位於正確的專案目錄下。
+同時請確認你當前位於正確的專案目錄下。
 
-### "No artifacts ready"（沒有 Artifacts 準備就緒）
+### "No artifacts ready"
 
-每個 artifact 要麼已經被創建，要麼正在等待某個依賴項（dependency）。請查看哪些東西在阻塞：
+每個產出物要麼已經建立完成，要麼因為等待依賴項而被阻擋。請查看阻擋原因：
 
 ```bash
 openspec status --change <name>
 ```
 
-然後先創建缺失的依賴項。請記住順序：提案（proposal）會啟用規格（specs）和設計（design）；規格和設計一起會啟用任務（tasks）。
+請先建立缺少的依賴項。請記住順序：提案完成後才能建立規格與設計；規格與設計都完成後才能建立任務。
 
-### `openspec validate` 報告警告或錯誤
+### `openspec validate` 回報警告或錯誤
 
-Validation 用來檢查您的 specs 和變更是否存在結構性問題。閱讀訊息：它會指出檔案名和問題所在。
+驗證功能會檢查你的規格與變更是否存在結構性問題。請閱讀回報訊息：其中會標註問題所在的檔案與具體問題。
 
 ```bash
 openspec validate <name>           # 驗證單一項目
-openspec validate --all            # 驗證所有內容
-openspec validate --all --strict   # 更嚴格的檢查，適合 CI
+openspec validate --all            # 驗證所有項目
+openspec validate --all --strict   # 更嚴格的檢查，適合用於 CI 流程
 ```
 
-常見的原因是缺少必需的部分（例如沒有情境（scenarios）的 spec），或 delta header 格式錯誤。請修復檔案並重新執行。[CLI reference](cli.md#openspec-validate) 會記錄輸出格式。
+常見原因包括缺少必要區塊（例如規格中沒有場景說明），或是 delta 標頭格式錯誤。修復檔案後重新執行即可。[CLI 參考文件](cli.md#openspec-validate) 說明了輸出格式。
 
-### AI 創建了不完整或錯誤的 Artifacts
+### AI 建立了不完整或錯誤的產出物
 
-AI 沒有足夠的上下文資訊。以下幾點可以提供幫助：
+AI 沒有取得足夠的上下文資訊。你可以透過以下方式調整：
 
-*   在 `openspec/config.yaml` 中加入專案上下文（project context），以便將您的技術棧和慣例注入到每個請求中。請參閱 [Customization](customization.md#project-configuration)。
-*   為每個 artifact 加入 `rules:` 以提供僅適用於特定項目（例如 specs）的指導方針。
-*   在您提出需求時給出更詳細的描述。
-*   使用擴展版的 `/opsx:continue` 來一次一個地創建 artifact，並審查每一個，而不是讓 `/opsx:ff` 一次性完成所有事情。
+- 在 `openspec/config.yaml` 中加入專案上下文資訊，讓你的技術棧與規範被注入到所有請求中。詳情請見 [自訂設定](customization.md#project-configuration)。
+- 為不同產出物加入對應的 `rules:` 設定，提供僅適用於特定產出物（例如規格）的指引。
+- 在提出變更時提供更詳細的描述。
+- 使用展開版的 `/opsx:continue` 一次建立一個產出物並逐一審查，不要使用一次建立所有產出物的 `/opsx:ff`。
 
-### Archive 無法完成，或警告任務不完整
+### 封存無法完成，或是警告有未完成的任務
 
-Archive 不會因為任務不完整而 *阻塞*，但它會發出警告，因為歸檔（archiving）通常意味著工作已經完成。如果任務是故意保留的（您正在提交一個部分變更），請繼續進行。否則請先完成這些任務。如果您尚未同步 delta specs 到主規格中，Archive 也會提供將其同步的選項；除非有理由不執行，否則請選擇「是」。
+封存功能不會因為有未完成的任務而*阻擋*執行，但會發出警告，因為封存通常代表工作已經完成。如果任務是刻意保留的（例如你要提交部分變更），可以繼續執行。否則請先完成所有任務。如果你還沒有同步 delta 規格到主規格，封存時也會提示你進行同步；除非有特殊理由，否則請選擇同意。
 
-## 配置 (Configuration)
+## 設定
 
-### 我的 `config.yaml` 沒有被應用
+### 我的 `config.yaml` 沒有生效
 
-有三個常見嫌疑對象：
+通常有以下三個原因：
 
-1. **檔名錯誤。** 它必須是 `openspec/config.yaml`，而不是 `.yml`。
-2. **YAML 無效。** 請使用任何 YAML 驗證器進行檢查；CLI 也會報告帶有行號的語法錯誤。
-3. **您預期需要重啟。** 您不需要。配置變更會立即生效。
+1. **檔案名稱錯誤。** 檔案必須命名為 `openspec/config.yaml`，不能是 `.yml`。
+2. **YAML 格式無效。** 請使用任何 YAML 驗證工具檢查格式；CLI 也會回報帶有行號的語法錯誤。
+3. **你以為需要重新啟動。** 不需要。設定變更會立即生效。
 
-### "Unknown artifact ID in rules: X"（Rules 中未知 Artifact ID: X）
+### "Unknown artifact ID in rules: X"
 
-`rules:` 下的一個鍵（key）與您的 schema 中的任何 artifact 都不匹配。對於預設的 `spec-driven` schema，有效的 ID 包括 `proposal`, `specs`, `design`, `tasks`。要查看任何 schema 的 ID，請執行：
+`rules:` 下的鍵值與你的 schema 中的任何產出物 ID 都不匹配。對於預設的 `spec-driven` schema，有效的 ID 為 `proposal`、`specs`、`design`、`tasks`。要查看任何 schema 的 ID 列表：
 
 ```bash
 openspec schemas --json
 ```
 
-### "Context too large"（上下文過大）
+### "Context too large"
 
-`context:` 欄位被限制在 50KB，這是故意的，因為它會被注入到每個請求中。請進行摘要，或者提供外部的更長文件來替代貼上內容。簡潔的上下文也能產生更好、更快的结果。
+`context:` 欄位的上限為 50KB，這是刻意設定的限制，因為該欄位的內容會被注入到所有請求中。請摘要化內容，或是連結到較長的文件，不要直接貼上完整內容。較精簡的上下文也能產生更好、更快的結果。
 
-### "Schema not found"（未找到 Schema）
+### "Schema not found"
 
-您引用的 schema 名稱不存在。請列出所有可用的 schema 並檢查拼寫：
+你參照的 schema 名稱不存在。請列出可用的 schema 並檢查拼寫：
 
 ```bash
-openspec schemas                    # 列出可用 schema
-openspec schema which <name>        # 查看某個 schema 是從哪裡解析出來的
-openspec schema init <name>         # 創建一個自定義 schema
+openspec schemas                    # 列出可用的 schema
+openspec schema which <name>        # 查看 schema 的解析來源
+openspec schema init <name>         # 建立自訂 schema
 ```
 
-請參閱 [Customization](customization.md#custom-schemas)。
+詳情請見 [自訂設定](customization.md#custom-schemas)。
 
-## 從舊版工作流程遷移 (Migration from the legacy workflow)
+## 從舊版工作流程遷移
 
-### "Legacy files detected in non-interactive mode"（在非互動模式下偵測到舊檔案）
+### "Legacy files detected in non-interactive mode"
 
-您正在 CI 或非互動式 shell 中運行，OpenSpec 找到了需要清理的舊檔案但無法提示您。請自動批准：
+你正在使用 CI 或非互動式 Shell，OpenSpec 偵測到有舊檔案需要清理，但無法向你發出提示。請自動批准清理：
 
 ```bash
 openspec init --force
 ```
 
-### 遷移後命令仍未出現
+針對 Codex，OpenSpec 可能會在 `$CODEX_HOME/prompts` 或 `~/.codex/prompts` 中偵測到舊的受管理提示檔案。該清理作業僅限於 OpenSpec 允許清單中的舊版 Codex 提示檔案名稱，非互動式 `openspec init` 只會刪除已有對應替代 `.codex/skills/openspec-*` 指令碼的檔案。除非你加上 `--force` 參數，否則非互動式 `openspec update` 不會動用任何舊版清理作業。
 
-重新啟動您的 IDE。技能會在啟動時被偵測到。如果它們仍然沒有出現，請執行 `openspec update` 並檢查 [Supported Tools](supported-tools.md) 中的檔案位置。
+### 遷移後指令沒有出現
+
+請重新啟動你的 IDE。指令碼會在啟動時被偵測。如果仍然沒有出現，請執行 `openspec update` 並在 [支援的工具](supported-tools.md) 中查看檔案位置。
 
 ### 我的舊版 `project.md` 沒有被遷移
 
-這是故意的。OpenSpec 不會自動刪除 `project.md`，因為它可能包含您撰寫的上下文資訊。請將有用的部分移動到 `config.yaml` 的 `context:` 區塊中，然後自行刪除該檔案。[Migration Guide](migration-guide.md#migrating-projectmd-to-configyaml) 會逐步指導這一過程，其中包含一個您可以提供給 AI 以進行提煉（distilling）的提示。
+這是刻意設計的行為。OpenSpec 永遠不會自動刪除 `project.md`，因為該檔案可能包含你寫入的上下文資訊。請將有用的內容移到 `config.yaml` 的 `context:` 區塊中，之後再自行刪除該檔案。[遷移指南](migration-guide.md#migrating-projectmd-to-configyaml) 說明了完整步驟，其中包含你可以交給 AI 執行的提問提示，用於提煉內容。
 
-## 仍然卡住？
+## 還是遇到問題？
 
-*   **Discord：** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
-*   **GitHub Issues：** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
-*   **從您的終端機執行：** `openspec feedback "what went wrong"` 會為您開立一個 issue。
+- **Discord：** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
+- **GitHub 問題回報：** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
+- **從終端機執行：** 執行 `openspec feedback "what went wrong"` 可自動為你建立問題回報單。
 
-當您報告問題時，請包含您的 OpenSpec 版本（`openspec --version`）、您的 Node 版本（`node --version`）、您的 AI 工具，以及確切的命令和輸出結果。這能讓幫助過程快得多。
+回報問題時，請附上你的 OpenSpec 版本（執行 `openspec --version` 查看）、Node 版本（執行 `node --version` 查看）、使用的 AI 工具，以及確切的指令與輸出內容。這能大幅加快協助的速度。

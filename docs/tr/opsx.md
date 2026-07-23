@@ -1,81 +1,81 @@
 # OPSX İş Akışı
 
-> [Discord](https://discord.gg/YctCnvvshC) üzerinden geri bildirimlerinizi bekliyoruz.
+> Geri bildirimlerinizi [Discord](https://discord.gg/YctCnvvshC) üzerinden iletebilirsiniz.
 
 ## Nedir?
 
 OPSX artık OpenSpec için standart iş akışıdır.
 
-Bu, OpenSpec değişiklikleri için **akıcı, yinelemeli bir iş akışıdır**. Katı aşamalar yok — sadece istediğiniz zaman yapabileceğiniz eylemler var.
+OpenSpec değişiklikleri için **akışkan, yinelemeli bir iş akışıdır**. Artık katı fazlar yok — istediğiniz zaman gerçekleştirebileceğiniz eylemler var.
 
-## Neden Var
+## Neden Var?
 
-Eski OpenSpec iş akışı çalışıyor, ancak **kilitli**:
+Eski OpenSpec iş akışı çalışıyor, ancak **kilitli durumda**:
 
-- **Talimatlar sabit kodlanmış** — TypeScript'e gömülmüş, değiştiremezsiniz
-- **Hep ya da hiç** — tek bir büyük komut her şeyi oluşturuyor, parçaları ayrı ayrı test edemezsiniz
+- **Talimatlar sabit kodlanmış** — TypeScript içine gömülü, değiştiremezsiniz
+- **Ya hep ya hiç** — tek büyük komut her şeyi oluşturur, parçaları tek tek test edemezsiniz
 - **Sabit yapı** — herkes için aynı iş akışı, özelleştirme yok
 - **Kara kutu** — AI çıktısı kötü olduğunda, istemleri ayarlayamazsınız
 
-**OPSX bunu açıyor.** Artık herkes:
+**OPSX bunu açıyor.** Artık herkes şunları yapabilir:
 
-1. **Talimatlarla deney yapabilir** — bir şablonu düzenleyin, AI daha iyi yapıp yapmadığını görün
-2. **Ayrıntılı test edebilir** — her ürünün talimatlarını bağımsız olarak doğrulayabilir
-3. **İş akışlarını özelleştirebilir** — kendi ürünlerinizi ve bağımlılıklarınızı tanımlayabilir
-4. **Hızlıca yineleyebilir** — bir şablonu değiştirin, hemen test edin, yeniden oluşturma yok
+1. **Talimatlarla deney yapın** — bir şablonu düzenleyin, AI'ın daha iyi çalışıp çalışmadığını görün
+2. **Ayrıntılı test edin** — her bir yapıtın talimatlarını bağımsız olarak doğrulayın
+3. **İş akışlarını özelleştirin** — kendi yapıtlarınızı ve bağımlılıklarınızı tanımlayın
+4. **Hızlı yineleme yapın** — bir şablonu değiştirin, hemen test edin, yeniden derleme gerekmez
 
 ```
 Eski iş akışı:                      OPSX:
 ┌────────────────────────┐           ┌────────────────────────┐
-│  Pakette sabit kodlanmış│           │  schema.yaml           │◄── Bunu düzenlersiniz
-│  (değiştirilemez)       │           │  templates/*.md        │◄── Ya da bunu
+│  Pakette sabit kodlanmış  │           │  schema.yaml           │◄── Bunu düzenlersiniz
+│  (değiştirilemez)        │           │  templates/*.md        │◄── Ya da bunu
 │        ↓               │           │        ↓               │
-│  Yeni sürümü bekleyin  │           │  Anında etki           │
+│  Yeni sürüm bekle       │           │  Anlık etki            │
 │        ↓               │           │        ↓               │
-│  Umarız daha iyi olur  │           │  Kendiniz test edin    │
+│  Daha iyi olmasını um   │           │  Kendi test et         │
 └────────────────────────┘           └────────────────────────┘
 ```
 
-**Bu herkes içindir:**
-- **Ekipler** — gerçekten nasıl çalışıyorsanız ona uygun iş akışları oluşturun
-- **Güçlü kullanıcılar** — kod tabanınız için daha iyi AI çıktıları almak üzere istemleri ayarlayın
-- **OpenSpec katkıda bulunanlar** — sürümler olmadan yeni yaklaşımlarla deney yapın
+**Bu herkes için:**
+- **Ekipler** — gerçekte çalıştığınız şekilde eşleşen iş akışları oluşturun
+- **Güç kullanıcıları** — kod tabanınız için daha iyi AI çıktıları almak üzere istemleri ayarlayın
+- **OpenSpec katkıda bulunanları** — sürüm yayınlamadan yeni yaklaşımlarla deney yapın
 
-Hepimiz hâlâ neyin en iyi olduğunu öğreniyoruz. OPSX birlikte öğrenmemizi sağlar.
+Hepimiz hala en iyi çalışan şeyleri öğreniyoruz. OPSX birlikte öğrenmemizi sağlıyor.
 
 ## Kullanıcı Deneyimi
 
 **Doğrusal iş akışlarının sorunu:**
-"Planlama aşamasındasınız", sonra "uygulama aşamasındasınız", sonra "bitti". Ancak gerçek iş böyle yürümez. Bir şey uygularsınız, tasarımınızın yanlış olduğunu fark edersiniz, spesifikasyonları güncellemeniz gerekir, uygulamaya devam edersiniz. Doğrusal aşamalar, işin gerçekten nasıl yürüdüğüne karşı savaşır.
+Önce "planlama aşamasındasınız", sonra "uygulama aşamasındasınız", sonra "bitti". Ancak gerçek iş bu şekilde çalışmaz. Bir şey uygularsınız, tasarımınızın yanlış olduğunu fark edersiniz, spesifikasyonları güncellemeniz gerekir, uygulamaya devam edersiniz. Doğrusal aşamalar, işin gerçekte nasıl gerçekleştiğiyle çelişir.
 
 **OPSX yaklaşımı:**
-- **Aşamalar değil, eylemler** — oluştur, uygula, güncelle, arşivle — herhangi birini istediğiniz zaman yapın
-- **Bağımlılıklar etkinleştiricilerdir** — neyin gerekli olduğunu değil, neyin mümkün olduğunu gösterirler
+- **Eylemler, aşamalar değil** — oluştur, uygula, güncelle, arşivle — bunlardan herhangi birini istediğiniz zaman yapın
+- **Bağımlılıklar mümkün kılan şeylerdir** — sıradaki gerekenleri değil, mümkün olanları gösterirler
 
 ```
-  teklif ──→ spesifikasyonlar ──→ tasarım ──→ görevler ──→ uygula
+  proposal ──→ specs ──→ design ──→ tasks ──→ implement
 ```
 
 ## Kurulum
 
 ```bash
-# openspec'in kurulu olduğundan emin olun — beceriler otomatik olarak oluşturulur
+# openspec yüklü olduğundan emin olun — skills otomatik olarak oluşturulur
 openspec init
 ```
 
-Bu, `.claude/skills/` (veya eşdeğeri) içinde AI kodlama yardımcılarının otomatik olarak algıladığı beceriler oluşturur.
+Bu, `.claude/skills/` (veya eşdeğeri) konumunda skills oluşturur, AI kod asistanları bunları otomatik olarak algılar.
 
-Varsayılan olarak OpenSpec, `core` iş akışı profilini kullanır (`propose`, `explore`, `apply`, `sync`, `archive`). Genişletilmiş iş akışı komutlarını (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) istiyorsanız, bunları `openspec config profile` ile yapılandırın ve `openspec update` ile uygulayın.
+Varsayılan olarak OpenSpec, `core` iş akışı profilini (`propose`, `explore`, `apply`, `sync`, `archive`) kullanır. Genişletilmiş iş akışı komutlarını (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`) kullanmak istiyorsanız, `openspec config profile` ile yapılandırın ve `openspec update` ile uygulayın.
 
-Kurulum sırasında bir **proje yapılandırması** (`openspec/config.yaml`) oluşturmanız istenecektir. Bu isteğe bağlıdır ancak önerilir.
+Kurulum sırasında bir **proje yapılandırması** (`openspec/config.yaml`) oluşturmanız istenir. Bu isteğe bağlıdır ancak önerilir.
 
 ## Proje Yapılandırması
 
-Proje yapılandırması, varsayılanları ayarlamanıza ve projiye özgü bağlamı tüm ürünlerde kullanmanıza olanak tanır.
+Proje yapılandırması, tüm yapıtlara ön tanımlar ayarlamanızı ve proje özel bağlam eklemenizi sağlar.
 
 ### Yapılandırma Oluşturma
 
-Yapılandırma `openspec init` sırasında veya manuel olarak oluşturulur:
+Yapılandırma, `openspec init` sırasında veya elle oluşturulur:
 
 ```yaml
 # openspec/config.yaml
@@ -83,71 +83,71 @@ schema: spec-driven
 
 context: |
   Teknoloji yığını: TypeScript, React, Node.js
-  API sözleşmeleri: RESTful, JSON yanıtları
+  API kuralları: RESTful, JSON yanıtları
   Test: Birim testleri için Vitest, e2e için Playwright
-  Stil: Prettier ile ESLint, katı TypeScript
+  Stil: ESLint ve Prettier ile, katı TypeScript
 
 rules:
   proposal:
-    - Geri alma planı dahil edin
-    - Etkilenen ekipleri belirleyin
+    - Geri dönüş planı ekle
+    - Etkilenen ekipleri belirle
   specs:
-    - Senaryolar için Given/When/Then biçimini kullanın
+    - Senaryolar için Given/When/Then formatını kullan
   design:
-    - Karmaşık akışlar için sıra diyagramları dahil edin
+    - Karmaşık akışlar için sıra diyagramları ekle
 ```
 
 ### Yapılandırma Alanları
 
-| Alan | Tür | Açıklama |
-|------|-----|----------|
-| `schema` | string | Yeni değişiklikler için varsayılan şema (ör. `spec-driven`) |
-| `context` | string | Tüm ürün talimatlarına eklenen proje bağlamı |
-| `rules` | object | Ürün kimliğine göre anahtarlanan, ürüne özel kurallar |
+| Alan | Türü | Açıklama |
+|------|------|----------|
+| `schema` | dize | Yeni değişiklikler için varsayılan şema (ör. `spec-driven`) |
+| `context` | dize | Tüm yapıt talimatlarına eklenen proje bağlamı |
+| `rules` | nesne | Yapıt kimliğine göre anahtarlanmış, yapıt başına kurallar |
 
-### Nasıl Çalışır
+### Nasıl Çalışır?
 
-**Şema önceliği** (en yükseğe en düşüğe):
+**Şema önceliği** (yüksekten düşüğe):
 1. CLI bayrağı (`--schema <ad>`)
-2. Değişiklik meta verisi (değişiklik dizinindeki `.openspec.yaml`)
+2. Değişiklik meta verileri (değişiklik dizinindeki `.openspec.yaml`)
 3. Proje yapılandırması (`openspec/config.yaml`)
 4. Varsayılan (`spec-driven`)
 
-**Bağlam enjeksiyonu:**
-- Bağlam, her ürünün talimatlarının başına eklenir
+**Bağlam ekleme:**
+- Bağlam, her yapıtın talimatlarının başına eklenir
 - `<context>...</context>` etiketleriyle sarılır
-- AI'ın projenizin sözleşmelerini anlamasına yardımcı olur
+- AI'ın proje kurallarınızı anlamasına yardımcı olur
 
-**Kural enjeksiyonu:**
-- Kurallar yalnızca eşleşen ürünler için enjekte edilir
+**Kural ekleme:**
+- Kurallar yalnızca eşleşen yapıtlar için eklenir
 - `<rules>...</rules>` etiketleriyle sarılır
-- Bağlamdan sonra, şablondan önce görünür
+- Bağlamdan sonra, şablonlardan önce görünür
 
-### Şemaya Göre Ürün Kimlikleri
+### Şemaya Göre Yapıt Kimlikleri
 
 **spec-driven** (varsayılan):
-- `proposal` — Değişiklik teklifi
+- `proposal` — Değişiklik önerisi
 - `specs` — Spesifikasyonlar
 - `design` — Teknik tasarım
 - `tasks` — Uygulama görevleri
 
-### Yapılandırma Doğrulaması
+### Yapılandırma Doğrulama
 
-- `rules`'daki bilinmeyen ürün kimlikleri uyarı üretir
-- Şema adları mevcut şemalara karşı doğrulanır
+- `rules` içindeki bilinmeyen yapıt kimlikleri uyarı üretir
+- Şema adları, mevcut şemalara göre doğrulanır
 - Bağlamın 50KB boyut sınırı vardır
-- Geçersiz YAML satır numaralarıyla rapor edilir
+- Geçersiz YAML, satır numaralarıyla raporlanır
 
 ### Sorun Giderme
 
-**"rules'da bilinmeyen ürün kimliği: X"**
-- Ürün kimliklerinin şemanızla eşleştiğini kontrol edin (yukarıdaki listeye bakın)
-- Her şema için ürün kimliklerini görmek üzere `openspec schemas --json` komutunu çalıştırın
+**"rules içinde bilinmeyen yapıt kimliği: X"**
+- Yapıt kimliklerinin şemanızla eşleştiğinden emin olun (yukarıdaki listeye bakın)
+- Her şema için yapıt kimliklerini görmek üzere `openspec schemas --json` komutunu çalıştırın
 
 **Yapılandırma uygulanmıyor:**
-- Dosyanın `openspec/config.yaml` (`.yml` değil) konumunda olduğundan emin olun
-- YAML sözdizimini bir doğrulayıcıyla kontrol edin
-- Yapılandırma değişiklikleri hemen geçerli olur (yeniden başlatma gerekmez)
+- Dosyanın `openspec/config.yaml` konumunda olduğundan emin olun (`.yml` değil)
+- Bir doğrulayıcı ile YAML sözdizimini kontrol edin
+- Yapılandırma değişiklikleri hemen etkili olur (yeniden başlatma gerekmez)
 
 **Bağlam çok büyük:**
 - Bağlam 50KB ile sınırlıdır
@@ -157,17 +157,18 @@ rules:
 
 | Komut | Ne yapar |
 |-------|----------|
-| `/opsx:propose` | Bir değişiklik oluşturun ve planlama ürünlerini tek adımda oluşturun (varsayılan hızlı yol) |
-| `/opsx:explore` | Fikirler üzerinde düşünün, sorunları araştırın, gereksinimleri netleştirin |
-| `/opsx:new` | Yeni bir değişiklik iskelesi başlatın (genişletilmiş iş akışı) |
-| `/opsx:continue` | Bir sonraki ürünü oluşturun (genişletilmiş iş akışı) |
-| `/opsx:ff` | Planlama ürünlerini hızlıca ileri sarın (genişletilmiş iş akışı) |
-| `/opsx:apply` | Görevleri uygulayın, ürünleri gerektiği gibi güncelleyin |
-| `/opsx:verify` | Uygulamayı ürünlere karşı doğrulayın (genişletilmiş iş akışı) |
-| `/opsx:sync` | Delta spesifikasyonlarını ana dal ile senkronize edin (varsayılan iş akışı, isteğe bağlı) |
-| `/opsx:archive` | Bittiğinde arşivleyin |
-| `/opsx:bulk-archive` | Tamamlanmış birden fazla değişikliği arşivleyin (genişletilmiş iş akışı) |
-| `/opsx:onboard` | Uçtan uca bir değişiklik için yönlendirmeli yürüyüş (genişletilmiş iş akışı) |
+| `/opsx:propose` | Tek adımda bir değişiklik oluştur ve planlama yapıtlarını üret (varsayılan hızlı yol) |
+| `/opsx:explore` | Fikirleri düşün, sorunları araştır, gereksinimleri netleştir |
+| `/opsx:new` | Yeni bir değişiklik iskeleti başlat (genişletilmiş iş akışı) |
+| `/opsx:continue` | Sonraki yapıtı oluştur (genişletilmiş iş akışı) |
+| `/opsx:ff` | Planlama yapıtlarını hızlı ilerlet (genişletilmiş iş akışı) |
+| `/opsx:apply` | Görevleri uygula, gerekli olduğunda yapıtları güncelle |
+| `/opsx:update` | Bir değişikliğin planlama yapıtlarını düzelt ve tutarlı kalmasını sağla |
+| `/opsx:verify` | Uygulamayı yapıtlara göre doğrula (genişletilmiş iş akışı) |
+| `/opsx:sync` | Delta specs'i ana dala senkronize et (varsayılan iş akışı, isteğe bağlı) |
+| `/opsx:archive` | Bittiğinde arşivle |
+| `/opsx:bulk-archive` | Birden fazla tamamlanmış değişikliği arşivle (genişletilmiş iş akışı) |
+| `/opsx:onboard` | Uçtan uca bir değişikliğin yönlendirilmiş ilerlemesi (genişletilmiş iş akışı) |
 
 ## Kullanım
 
@@ -175,90 +176,96 @@ rules:
 ```
 /opsx:explore
 ```
-Fikirler üzerinde düşünün, sorunları araştırın, seçenekleri karşılaştırın. Yapı gerekmez - sadece bir düşünme ortağı. İçgörüler netleştiğinde, `/opsx:propose`'a (varsayılan) veya `/opsx:new`/`/opsx:ff`'ye (genişletilmiş) geçin.
+Fikirleri düşünün, sorunları araştırın, seçenekleri karşılaştırın. Hiçbir yapı gerektirmez - sadece bir düşünme ortağı. İçgörüler netleştiğinde, `/opsx:propose` (varsayılan) veya `/opsx:new`/`/opsx:ff` (genişletilmiş) komutlarına geçin.
 
-### Yeni bir değişiklik başlatın
+### Yeni bir değişiklik başlat
 ```
 /opsx:propose
 ```
-Değişikliği oluşturur ve uygulamadan önce gerekli planlama ürünlerini üretir.
+Değişikliği oluşturur ve uygulamadan önce gerekli planlama yapıtlarını üretir.
 
 Genişletilmiş iş akışlarını etkinleştirdiyseniz, bunun yerine şunları kullanabilirsiniz:
 
 ```text
-/opsx:new        # yalnızca iskele
-/opsx:continue   # seferde bir ürün oluşturun
-/opsx:ff         # tüm planlama ürünlerini bir kerede oluşturun
+/opsx:new        # yalnızca iskelet
+/opsx:continue   # tek seferde bir yapıt oluştur
+/opsx:ff         # tüm planlama yapıtlarını tek seferde oluştur
 ```
 
-### Ürünler oluşturun
+### Yapıtlar oluştur
 ```
 /opsx:continue
 ```
-Bağımlılıklara göre neyin oluşturulmaya hazır olduğunu gösterir, ardından bir ürün oluşturur. Değişikliğinizi adım adım oluşturmak için tekrar tekrar kullanın.
+Bağımlılıklara göre oluşturulmaya hazır olanları gösterir, ardından tek bir yapıt oluşturur. Değişikliğinizi kademeli olarak oluşturmak için tekrar tekrar kullanın.
 
 ```
 /opsx:ff add-dark-mode
 ```
-Tüm planlama ürünlerini bir kerede oluşturur. Ne inşa ettiğiniz konusunda net bir resminiz olduğunda kullanın.
+Tüm planlama yapıtlarını tek seferde oluşturur. Ne inşa ettiğiniz konusunda net bir görüğünüz olduğunda kullanın.
 
-### Uygulayın (akışkan kısım)
+### Uygula (akışkan kısım)
 ```
 /opsx:apply
 ```
-Görevler üzerinde çalışır, ilerledikçe bunları işaretler. Birden fazla değişiklikle uğraşıyorsanız, `/opsx:apply <ad>` komutunu çalıştırabilirsiniz; aksi takdirde konuşmadan çıkarmalı ve belirleyemiyorsa sizi seçmeye yönlendirmelidir.
+Görevler üzerinden geçer, ilerledikçe onları işaretler. Birden fazla değişikliği aynı anda yürütüyorsanız `/opsx:apply <ad>` komutunu çalıştırabilirsiniz; aksi takdirde konuşmadan yorum yapmalı ve seçmenizi istemelidir.
 
-### Bitirin
+### Bir değişikliği güncelleme
 ```
-/opsx:archive   # Bittiğinde arşive taşıyın (gerekirse spesifikasyonları senkronize etmenizi ister)
+/opsx:update add-dark-mode - we're storing the theme in a cookie now
+```
+Değişikliğin mevcut planlama yapıtlarını düzeltir ve her yönde tutarlı kalmasını sağlar - herhangi bir yönde (bir tasarım düzenlemesi öneriye geri yansıyabilir). Yalnızca planlama yapıtları: hiç kod düzenlemez ve eksik yapıtlar oluşturmaz (bunun için `/opsx:continue` kullanın). Her düzenleme öncelikle sizinle onaylanır. Değişiklik zaten uygulandıysa, düzeltilen plana kodun yetişmesi için `/opsx:apply` önerir. Düzenlemeniz değişikliğin *niyetini* değiştiriyorsa, bunun yerine sıfırdan başlayın - bkz. [Güncelleme vs. Sıfırdan Başlama](#when-to-update-vs-start-fresh).
+
+### Bitirme
+```
+/opsx:archive   # Bittiğinde arşive taşı (gerekirse specs'i senkronize etmek için sorar)
 ```
 
-## Ne Zaman Güncelleyin vs. Sıfırdan Başlayın
+## Güncelleme vs. Sıfırdan Başlama Ne Zaman
 
-Uygulamadan önce her zaman teklifinizi veya spesifikasyonlarınızı düzenleyebilirsiniz. Ancak iyileştirme ne zaman "bu farklı bir iş" haline gelir?
+Uygulamadan önce her zaman önerinizi veya specs'inizi düzenleyebilirsiniz. Ancak iyileştirme ne zaman "bu farklı iş" haline gelir?
 
-### Bir Teklifin Yakaladıkları
+### Bir Önerinin Ne Yakaladığı
 
-Bir teklif üç şeyi tanımlar:
+Bir öneri üç şey tanımlar:
 1. **Niyet** — Hangi sorunu çözüyorsunuz?
-2. **Kapsam** — Sınırların içinde ve dışında ne var?
+2. **Kapsam** — Sınırların içinde/ dışında ne var?
 3. **Yaklaşım** — Bunu nasıl çözeceksiniz?
 
-Soru şu: hangisi değişti ve ne kadar?
+Soru şu: hangisi değişti ve ne kadar değişti?
 
-### Mevcut Değişikliği Şu Durumlarda Güncelleyin:
+### Mevcut Değişikliği Ne Zaman Güncelleyin:
 
 **Aynı niyet, iyileştirilmiş uygulama**
-- Dikkate almadığınız kenar durumlarını keşfedersiniz
-- Yaklaşımın ayarlanması gerekir ama hedef değişmez
-- Uygulama, tasarımın biraz hatalı olduğunu ortaya çıkarır
+- Düşünmediğiniz kenar durumları keşfedersiniz
+- Yaklaşımda küçük ayarlar gerekir ama hedef değişmez
+- Uygulama tasarımın biraz yanlış olduğunu ortaya çıkarır
 
 **Kapsam daralır**
-- Tam kapsamın çok büyük olduğunu fark edersiniz, önce MVP'yi göndermek istersiniz
-- "Karanlık mod ekle" → "Karanlık mod geçişi ekle (v2'de sistem tercihi)"
+- Tam kapsamın çok büyük olduğunu fark edersiniz, önce MVP'yi yayınlamak istersiniz
+- "Karanlık mod ekle" → "Karanlık mod anahtarı ekle (v2'de sistem tercihi)"
 
-**Öğrenmeye dayalı düzeltmeler**
-- Kod tabanı düşündüğünüz gibi yapılandırılmamış
-- Bir bağımlılık beklendiği gibi çalışmıyor
-- "CSS değişkenleri kullan" → "Bunun yerine Tailwind'in dark: önekini kullanın"
+**Öğrenme odaklı düzeltmeler**
+- Kod tabanı düşündüğünüz gibi yapılandırılmamıştır
+- Bir bağımlılık beklenildiği gibi çalışmıyor
+- "CSS değişkenleri kullan" → "Bunun yerine Tailwind'un dark: önekini kullan"
 
-### Yeni Bir Değişikliği Şu Durumlarda Başlatın:
+### Yeni Bir Değişikliği Ne Zaman Başlatın:
 
 **Niyet temel olarak değişti**
-- Sorunun kendisi artık farklı
+- Sorunun kendisi şimdi farklı
 - "Karanlık mod ekle" → "Özel renkler, yazı tipleri, boşluklarla kapsamlı tema sistemi ekle"
 
 **Kapsam patladı**
-- Değişiklik o kadar büyüdü ki esasen farklı bir iş
-- Orijinal teklif güncellemelerden sonra tanınmaz olur
+- Değişiklik o kadar çok büyüdü ki temel olarak farklı iş haline geldi
+- Orijinal öneri güncellemelerden sonra tanınmaz hale gelir
 - "Giriş hatasını düzelt" → "Kimlik doğrulama sistemini yeniden yaz"
 
-**Orijinal tamamlanabilir**
-- Orijinal değişiklik "bitti" olarak işaretlenebilir
-- Yeni iş tek başına durur, bir iyileştirme değil
-- "Karanlık mod MVP'si ekle"yi tamamlayın → Arşivleyin → "Karanlık modu geliştir" yeni değişikliği
+**Orijinal tamamlanabilir durumda**
+- Orijinal değişiklik "tamamlandı" olarak işaretlenebilir
+- Yeni iş tek başına durur, bir iyileştirme değildir
+- "Karanlık mod MVP'sini tamamla" → Arşivle → Yeni değişiklik "Karanlık modu geliştir"
 
-### Sezgisel Kurallar
+### Kılavuzlar
 
 ```
                         ┌─────────────────────────────────────┐
@@ -268,79 +275,77 @@ Soru şu: hangisi değişti ve ne kadar?
                     ┌──────────────────┼──────────────────┐
                     │                  │                  │
                     ▼                  ▼                  ▼
-             Aynı niyet?      >%50 örtüşme?    Orijinal bu
-             Aynı sorun?      Aynı kapsam?     değişiklikler
-                    │                  │          olmadan "bitti"
-                    │                  │          olabilir mi?
+             Aynı niyet?      >%50 örtüşme?      Orijinal bu
+             Aynı sorun?     Aynı kapsam?        değişiklikler olmadan
+                    │                  │          "tamamlanabilir" mi?
+                    │                  │                  │
           ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
           │                 │  │             │   │               │
-         EVET              HAYIR EVET       HAYIR HAYIR          EVET
+         EVET              HAYIR EVET        HAYIR HAYIR         EVET
           │                 │  │             │   │               │
           ▼                 ▼  ▼             ▼   ▼               ▼
-       GÜNCELLE          YENİ GÜNCELLE     YENİ GÜNCELLE       YENİ
+       GÜNCELLE          YENİ  GÜNCELLE    YENİ  GÜNCELLE       YENİ
 ```
 
 | Test | Güncelleme | Yeni Değişiklik |
 |------|------------|-----------------|
-| **Kimlik** | "Aynı şey, iyileştirilmiş" | "Farklı iş" |
-| **Kapsam örtüşmesi** | >%50 örtüşür | <%50 örtüşür |
-| **Tamamlanma** | Değişiklikler olmadan "bitti" olamaz | Orijinali bitirebilir, yeni iş tek başına durur |
-| **Hikaye** | Güncelleme zinciri tutarlı bir hikaye anlatır | Yamalar netleştirmekten çok kafa karıştırır |
+| **Kimlik** | "Aynı şey, iyileştirilmiş hali" | "Farklı iş" |
+| **Kapsam örtüşmesi** | >%50 örtüşme | <%50 örtüşme |
+| **Tamamlanma** | Değişiklikler olmadan "tamamlanamaz" | Orijinali bitirebilir, yeni iş tek başına durur |
+| **Hikaye** | Güncelleme zinciri tutarlı bir hikaye anlatır | Yamalar, netleştirmekten çok kafa karıştırır |
 
 ### İlke
 
 > **Güncelleme bağlamı korur. Yeni değişiklik netlik sağlar.**
 >
-> Düşünme geçmişiniz değerli olduğunda güncellemeyi seçin.
-> Yamalamaktan daha net olacağı için sıfırdan başlamayı seçin.
+> Düşünce geçmişiniz değerli olduğunda güncellemeyi seçin.
+> Yamalama yerine sıfırdan başlamanın daha net olacağı durumlarda yeni seçin.
 
 Bunu git dalları gibi düşünün:
-- Aynı özellik üzerinde çalışırken komit atmaya devam edin
-- Gerçekten yeni bir iş olduğunda yeni bir dal başlatın
-- Bazen kısmi bir özelliği birleştirin ve aşama 2 için sıfırdan başlayın
+- Aynı özellik üzerinde çalışırken commit yapmaya devam edin
+- Gerçekten yeni iş olduğunda yeni bir dal başlatın
+- Bazen kısmi bir özelliği birleştirin ve 2. aşama için sıfırdan başlayın
 
-## Fark Nedir?
+## Farklı Neler Var?
 
 | | Eski (`/openspec:proposal`) | OPSX (`/opsx:*`) |
 |---|---|---|
-| **Yapı** | Tek büyük teklif belgesi | Bağımlılıklara sahip ayrı ayrı eserler |
-| **İş Akışı** | Doğrusal aşamalar: planla → uygula → arşivle | Akıcı eylemler — istediğiniz zaman her şeyi yapın |
-| **Yineleme** | Geri dönmek zahmetli | Öğrendikçe eserleri güncelleyin |
-| **Özelleştirme** | Sabit yapı | Şema odaklı (kendi eserlerinizi tanımlayın) |
+| **Yapı** | Tek büyük öneri belgesi | Bağımlılıkları olan ayrı yapıtlar |
+| **İş akışı** | Doğrusal aşamalar: planla → uygula → arşivle | Akışkan eylemler — istediğiniz zaman istediğiniz şeyi yapın |
+| **Yineleme** | Geri dönmek garip durur | Öğrendikçe yapıtları güncelleyin |
+| **Özelleştirme** | Sabit yapı | Şema odaklı (kendi yapıtlarınızı tanımlayın) |
 
-**Temel içgörü:** iş doğrusal değildir. OPSX, öyleymiş gibi yapmayı bırakır.
+**Temel içgörü:** iş doğrusal değildir. OPSX öyle olduğu iddiasında bulunmayı bırakır.
 
 ## Mimari Derinlemesine İnceleme
 
-Bu bölüm, OPSX'in arka planda nasıl çalıştığını ve eski iş akışıyla nasıl karşılaştırıldığını açıklar.
-Bu bölümdeki örnekler genişletilmiş komut setini (`new`, `continue`, vb.) kullanır; varsayılan `core` kullanıcıları aynı akışı `propose → apply → sync → archive` olarak eşleştirebilir.
+Bu bölüm, OPSX'nin arka planda nasıl çalıştığını ve eski iş akışıyla nasıl karşılaştığını açıklar. Bu bölümdeki örnekler, genişletilmiş komut setini (`new`, `continue` vb.) kullanır; varsayılan `core` kullanıcıları aynı akışı `propose → apply → sync → archive` olarak eşleştirebilir.
 
 ### Felsefe: Aşamalar vs Eylemler
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                         ESKİ İŞ AKIŞI                                      │
-│                    (Aşama Kilitli, Hep ya da Hiç)                           │
+│                    (Aşama Kilitli, Ya Hep Ya Hiç)                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │   ┌──────────────┐      ┌──────────────┐      ┌──────────────┐             │
-│   │   PLANLAMA   │ ───► │ UYGULAMA     │ ───► │  ARŞİVLEME   │             │
+│   │  PLANLAMA    │ ───► │  UYGULAMA    │ ───► │  ARŞİVLEME   │             │
 │   │    AŞAMASI   │      │    AŞAMASI   │      │    AŞAMASI   │             │
 │   └──────────────┘      └──────────────┘      └──────────────┘             │
 │         │                     │                     │                       │
 │         ▼                     ▼                     ▼                       │
 │   /openspec:proposal   /openspec:apply      /openspec:archive              │
 │                                                                             │
-│   • Tüm eserleri tek seferde oluşturur                                    │
-│   • Uygulama sırasında spesifikasyonları güncellemeye geri dönemez        │
-│   • Aşama kapıları doğrusal ilerlemeyi zorunlu kılar                       │
+│   • Tüm yapıtları bir kerede oluşturur                                     │
+│   • Uygulama sırasında spesifikasyonları güncellemek için geri dönülemez    │
+│   • Aşama geçitleri doğrusal ilerlemeyi zorunlu kılar                       │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            OPSX İŞ AKIŞI                                     │
-│                      (Akıcı Eylemler, Yinelemeli)                           │
+│                      (Esnek Eylemler, Yinelemeli)                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │              ┌────────────────────────────────────────────┐                 │
@@ -349,47 +354,47 @@ Bu bölümdeki örnekler genişletilmiş komut setini (`new`, `continue`, vb.) k
 │              │   new ◄──► continue ◄──► apply ◄──► archive │                 │
 │              │    │          │           │           │    │                 │
 │              │    └──────────┴───────────┴───────────┘    │                 │
-│              │              herhangi bir sıra             │                 │
+│              │              istediğiniz sırayla           │                 │
 │              └────────────────────────────────────────────┘                 │
 │                                                                             │
-│   • Eserleri tek tek oluşturun VEYA hızlı ileri sarın                      │
-│   • Uygulama sırasında spesifikasyonları/tasarımları/görevleri güncelleyin │
-│   • Bağımlılıklar ilerlemeyi sağlar, aşamalar yoktur                       │
+│   • Yapıtları tek tek oluşturun VEYA hızlı ilerleyin                       │
+│   • Uygulama sırasında spesifikasyonları/tasarımları/görevleri güncelleyin  │
+│   • Bağımlılıklar ilerlemeyi sağlar, aşamalar mevcut değildir               │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Bileşen Mimarisi
+### Bileşen Mimari
 
-**Eski iş akışı**, TypeScript'te kodlanmış şablonlar kullanır:
+**Eski iş akışı**, TypeScript'de sabit kodlanmış şablonlar kullanır:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                      ESKİ İŞ AKIŞI BİLEŞENLERİ                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   Kodlanmış Şablonlar (TypeScript dizeleri)                                 │
+│   Sabit Kodlanmış Şablonlar (TypeScript dizeleri)                            │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Araç özel yapılandırıcılar/adaptörler                                    │
+│   Araç özel yapılandırıcılar/uyumlayıcılar                                   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Oluşturulan Komut Dosyaları (.claude/commands/openspec/*.md)              │
+│   Oluşturulan Komut Dosyaları (.claude/commands/openspec/*.md)               │
 │                                                                             │
-│   • Sabit yapı, eser farkındalığı yok                                      │
-│   • Değişiklik, kod değişikliği + yeniden derleme gerektirir               │
+│   • Sabit yapı, yapıt farkındalığı yok                                      │
+│   • Değişiklik yapmak için kod değişikliği + yeniden derleme gerekir         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**OPSX**, harici şemalar ve bir bağımlılık grafik motoru kullanır:
+**OPSX**, harici şemalar ve bir bağımlılık grafiği motoru kullanır:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         OPSX BİLEŞENLERİ                                      │
+│                         OPSX BİLEŞENLERİ                                     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   Şema Tanımları (YAML)                                                    │
+│   Şema Tanımları (YAML)                                                     │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
 │   │  name: spec-driven                                                  │   │
 │   │  artifacts:                                                         │   │
@@ -397,31 +402,31 @@ Bu bölümdeki örnekler genişletilmiş komut setini (`new`, `continue`, vb.) k
 │   │      generates: proposal.md                                         │   │
 │   │      requires: []              ◄── Bağımlılıklar                    │   │
 │   │    - id: specs                                                      │   │
-│   │      generates: specs/**/*.md  ◄── Glob desenleri                   │   │
-│   │      requires: [proposal]      ◄── proposal'dan sonra etkinleşir    │   │
+│   │      generates: specs/**/*.md  ◄── Glob kalıpları                   │   │
+│   │      requires: [proposal]      ◄── Tekliften sonra etkinleştirir     │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Eser Grafik Motoru                                                        │
+│   Yapıt Grafiği Motoru                                                      │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
 │   │  • Topolojik sıralama (bağımlılık sıralaması)                       │   │
 │   │  • Durum algılama (dosya sistemi varlığı)                           │   │
-│   │  • Zengin talimat oluşturma (şablonlar + bağlam)                    │   │
+│   │  • Zengin talimat üretimi (şablonlar + bağlam)                      │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Yetenek Dosyaları (.claude/skills/openspec-*/SKILL.md)                    │
+│   Beceri Dosyaları (.claude/skills/openspec-*/SKILL.md)                     │
 │                                                                             │
-│   • Editörler arası uyumlu (Claude Code, Cursor, Windsurf)                 │
-│   • Yetenekler yapılandırılmış veri için CLI'yi sorgular                   │
-│   • Şema dosyaları aracılığıyla tamamen özelleştirilebilir                 │
+│   • Çapak düzenleyici uyumlu (Claude Code, Cursor, Windsurf)                │
+│   • Yapılandırılmış veri için Beceri sorgulama CLI'sı                       │
+│   • Şema dosyaları aracılığıyla tamamen özelleştirilebilir                  │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Bağımlılık Grafik Modeli
+### Bağımlılık Grafiği Modeli
 
-Eserler yönlü döngüsel olmayan bir grafik (DAG) oluşturur. Bağımlılıklar **etkinleştiricilerdir**, kapılar değil:
+Yapıtlar yönlü asiklik grafiği (DAG) oluşturur. Bağımlılıklar **etkinleştiriciler**dir, geçitler değildir:
 
 ```
                               proposal
@@ -431,21 +436,20 @@ Eserler yönlü döngüsel olmayan bir grafik (DAG) oluşturur. Bağımlılıkla
                     │                           │
                     ▼                           ▼
                  specs                       design
-              (requires:                  (requires:
+              (bağımlılık:                  (bağımlılık:
                proposal)                   proposal)
                     │                           │
                     └─────────────┬─────────────┘
                                   │
                                   ▼
                                tasks
-                           (requires:
+                           (bağımlılık:
                            specs, design)
                                   │
                                   ▼
                           ┌──────────────┐
-                          │ UYGULAMA     │
-                          │ AŞAMASI      │
-                          │ (requires:   │
+                          │ APPLY PHASE  │
+                          │ (bağımlılık: │
                           │  tasks)      │
                           └──────────────┘
 ```
@@ -453,11 +457,10 @@ Eserler yönlü döngüsel olmayan bir grafik (DAG) oluşturur. Bağımlılıkla
 **Durum geçişleri:**
 
 ```
-   ENGELLİ ────────────────► HAZIR ────────────────► TAMAMLANDI
+   BLOKE ────────────────► HAZIR ────────────────► TAMAMLANDI
       │                        │                       │
-   Eksik                    Tüm bağımlılıklar       Dosya
-   bağımlılıklar            TAMAMLANDI              dosya sisteminde
-                                                    mevcut
+   Eksik                   Tüm bağımlılıklar        Dosya dosya
+   bağımlılıklar           TAMAMLANDI               sisteminde mevcut
 ```
 
 ### Bilgi Akışı
@@ -465,7 +468,7 @@ Eserler yönlü döngüsel olmayan bir grafik (DAG) oluşturur. Bağımlılıkla
 **Eski iş akışı** — ajan statik talimatlar alır:
 
 ```
-  Kullanıcı: "/openspec:proposal"
+  User: "/openspec:proposal"
            │
            ▼
   ┌─────────────────────────────────────────┐
@@ -475,70 +478,69 @@ Eserler yönlü döngüsel olmayan bir grafik (DAG) oluşturur. Bağımlılıkla
   │  • design.md oluştur                    │
   │  • specs/<capability>/spec.md oluştur   │
   │                                         │
-  │  Neyin mevcut olduğunun veya            │
-  │  eserler arası bağımlılıkların          │
-  │  farkında değil                         │
+  │  Mevcut olanlar veya yapıtlar arasındaki│
+  │  bağımlılıklar konusunda farkındalık yok│
   └─────────────────────────────────────────┘
            │
            ▼
-  Ajan TÜM eserleri tek seferde oluşturur
+  Ajan TÜM yapıtları tek seferde oluşturur
 ```
 
 **OPSX** — ajan zengin bağlam için sorgular:
 
 ```
-  Kullanıcı: "/opsx:continue"
+  User: "/opsx:continue"
            │
            ▼
   ┌──────────────────────────────────────────────────────────────────────────┐
-  │  Adım 1: Mevcut durumu sorgula                                          │
+  │  Adım 1: Mevcut durumu sorgula                                           │
   │  ┌────────────────────────────────────────────────────────────────────┐  │
   │  │  $ openspec status --change "add-auth" --json                      │  │
   │  │                                                                    │  │
   │  │  {                                                                 │  │
   │  │    "artifacts": [                                                  │  │
   │  │      {"id": "proposal", "status": "done"},                         │  │
-  │  │      {"id": "specs", "status": "ready"},      ◄── İlk hazır olan   │  │
+  │  │      {"id": "specs", "status": "ready"},      ◄── İlk hazır         │  │
   │  │      {"id": "design", "status": "ready"},                          │  │
   │  │      {"id": "tasks", "status": "blocked", "missingDeps": ["specs"]}│  │
   │  │    ]                                                               │  │
   │  │  }                                                                 │  │
   │  └────────────────────────────────────────────────────────────────────┘  │
-│                                                                          │
-│  Adım 2: Hazır eser için zengin talimatlar al                            │
-│  ┌────────────────────────────────────────────────────────────────────┐  │
-│  │  $ openspec instructions specs --change "add-auth" --json          │  │
-│  │                                                                    │  │
-│  │  {                                                                 │  │
-│  │    "template": "# Specification\n\n## ADDED Requirements...",      │  │
-│  │    "dependencies": [{"id": "proposal", "path": "...", "done": true}│  │
-│  │    "unlocks": ["tasks"]                                            │  │
-│  │  }                                                                 │  │
-│  └────────────────────────────────────────────────────────────────────┘  │
-│                                                                          │
-│  Adım 3: Bağımlılıkları oku → BİR eser oluştur → Neyin kilidinin açıldığını göster │
-└──────────────────────────────────────────────────────────────────────────┘
+  │                                                                          │
+  │  Adım 2: Hazır yapıt için zengin talimatları al                          │
+  │  ┌────────────────────────────────────────────────────────────────────┐  │
+  │  │  $ openspec instructions specs --change "add-auth" --json          │  │
+  │  │                                                                    │  │
+  │  │  {                                                                 │  │
+  │  │    "template": "# Specification\n\n## ADDED Requirements...",      │  │
+  │  │    "dependencies": [{"id": "proposal", "path": "...", "done": true}│  │
+  │  │    "unlocks": ["tasks"]                                            │  │
+  │  │  }                                                                 │  │
+  │  └────────────────────────────────────────────────────────────────────┘  │
+  │                                                                          │
+  │  Adım 3: Bağımlılıkları oku → TEK yapıt oluştur → Nevin etkinleştirildiğini göster  │
+  └──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Yineleme Modeli
 
-**Eski iş akışı** — yineleme yapmak hantal:
+**Eski iş akışı** — yinelemek için garip:
 
 ```
   ┌─────────┐     ┌─────────┐     ┌─────────┐
   │/proposal│ ──► │ /apply  │ ──► │/archive │
   └─────────┘     └─────────┘     └─────────┘
        │               │
-       │               ├── "Bekle, tasarım yanlış"
+       │               ├── "Tasarım yanlış"
        │               │
        │               ├── Seçenekler:
        │               │   • Dosyaları manuel düzenle (bağlamı bozar)
        │               │   • Vazgeç ve yeniden başla
-       │               │   • Devam et ve sonra düzelt
+       │               │   • İlerle ve sonra düzelt
        │               │
        │               └── Resmi bir "geri dön" mekanizması yok
        │
-       └── TÜM eserleri tek seferde oluşturur
+       └── Tüm kalıpları tek seferde oluşturur
 ```
 
 **OPSX** — doğal yineleme:
@@ -549,37 +551,36 @@ Eserler yönlü döngüsel olmayan bir grafik (DAG) oluşturur. Bağımlılıkla
       │                │                  ├── "Tasarım yanlış"
       │                │                  │
       │                │                  ▼
-      │                │            Sadece design.md'yi düzenle
+      │                │            Sadece design.md dosyasını düzenle
       │                │            ve devam et!
       │                │                  │
       │                │                  ▼
-      │                │         /opsx:apply kaldığınız yerden
-      │                │         devam eder
+      │                │         /opsx:apply, bıraktığınız yerden devam eder
       │                │
-      │                └── BİR eser oluşturur, neyin kilidinin açıldığını gösterir
+      │                └── TEK kalıp oluşturur, neyin kilidini açtığını gösterir
       │
-      └── Değişikliği iskeletler, yön için bekler
+      └── Değişikliğin iskeletini oluşturur, yön bekler
 ```
 
 ### Özel Şemalar
 
-Şema yönetim komutlarını kullanarak özel iş akışları oluşturun:
+Şema yönetimi komutlarını kullanarak özel iş akışları oluşturun:
 
 ```bash
 # Sıfırdan yeni bir şema oluştur (etkileşimli)
 openspec schema init my-workflow
 
-# Veya mevcut bir şemayı başlangıç noktası olarak çatalla
+# Veya başlangıç noktası olarak mevcut bir şemayı fork'la
 openspec schema fork spec-driven my-workflow
 
 # Şema yapınızı doğrulayın
 openspec schema validate my-workflow
 
-# Bir şemanın nereden çözümlendiğini görün (hata ayıklama için kullanışlı)
+# Bir şemanın nereden çözüldüğünü görün (hata ayıklama için kullanışlı)
 openspec schema which my-workflow
 ```
 
-Şemalar `openspec/schemas/` (proje yerel, sürüm kontrolü altında) veya `~/.local/share/openspec/schemas/` (kullanıcı global) dizinlerinde saklanır.
+Şemalar `openspec/schemas/` (proje yerel, sürüm kontrolü altında) veya `~/.local/share/openspec/schemas/` (kullanıcı genel) dizinlerinde saklanır.
 
 **Şema yapısı:**
 ```
@@ -595,13 +596,13 @@ openspec/schemas/research-first/
 ```yaml
 name: research-first
 artifacts:
-  - id: research        # proposal'dan önce eklenir
+  - id: research        # Öneri'den önce eklendi
     generates: research.md
     requires: []
 
   - id: proposal
     generates: proposal.md
-    requires: [research]  # Şimdi research'e bağımlı
+    requires: [research]  # Artık araştırma'ya bağımlı
 
   - id: tasks
     generates: tasks.md
@@ -615,32 +616,32 @@ artifacts:
 
 ### Özet
 
-| Yön | Eski | OPSX |
+| Özellik | Eski | OPSX |
 |--------|----------|------|
-| **Şablonlar** | Kodlanmış TypeScript | Harici YAML + Markdown |
-| **Bağımlılıklar** | Yok (hepsi birden) | Topolojik sıralamalı DAG |
-| **Durum** | Aşama tabanlı zihinsel model | Dosya sistemi varlığı |
+| **Şablonlar** | Sabitlenmiş TypeScript | Harici YAML + Markdown |
+| **Bağımlılıklar** | Yok (hepsi tek seferde) | Topolojik sıralama ile DAG |
+| **Durum** | Evre tabanlı zihinsel model | Dosya sistemi varlığı |
 | **Özelleştirme** | Kaynağı düzenle, yeniden derle | schema.yaml oluştur |
-| **Yineleme** | Aşama kilitli | Akıcı, her şeyi düzenleyin |
-| **Editör Desteği** | Araç özel yapılandırıcı/adaptörler | Tek yetenekler dizini |
+| **Yineleme** | Evreye kilitli | Akışkan, her şeyi düzenle |
+| **Editör Desteği** | Araca özel yapılandırıcı/bağdaştırıcılar | Tek beceri dizini |
 
 ## Şemalar
 
-Şemalar hangi yapıtların var olduğunu ve bunların bağımlılıklarını tanımlar. Şu anda mevcut olanlar:
+Şemalar, hangi kalıpların var olduğunu ve bağımlılıklarını tanımlar. Şu anda mevcut olanlar:
 
-- **spec-driven** (varsayılan): teklif → spesifikasyonlar → tasarım → görevler
+- **spec-driven** (varsayılan): proposal → specs → design → tasks
 
 ```bash
 # Mevcut şemaları listele
 openspec schemas
 
-# Tüm şemaları ve çözüm kaynaklarını göster
+# Tüm şemaları çözüm kaynaklarıyla birlikte görüntüle
 openspec schema which --all
 
 # Etkileşimli olarak yeni bir şema oluştur
 openspec schema init my-workflow
 
-# Özelleştirme için mevcut bir şemayı çatalla
+# Özelleştirme için mevcut bir şemayı fork'la
 openspec schema fork spec-driven my-workflow
 
 # Kullanmadan önce şema yapısını doğrula
@@ -649,14 +650,14 @@ openspec schema validate my-workflow
 
 ## İpuçları
 
-- Bir değişiklik yapmadan önce bir fikri düşünmek için `/opsx:explore` kullanın
-- Ne istediğinizi biliyorsanız `/opsx:ff`, keşif yapıyorsanız `/opsx:continue` kullanın
-- `/opsx:apply` sırasında bir şey yanlışsa — yapıtı düzeltin, ardından devam edin
-- Görevler, `tasks.md` dosyasındaki onay kutuları aracılığıyla ilerlemeyi takip eder
-- Durumu istediğiniz zaman kontrol edin: `openspec status --change "name"`
+- Bir değişikliğe başlamadan önce bir fikri düşünmek için `/opsx:explore` kullanın
+- Ne istediğinizi bildiğinizde `/opsx:ff`, keşfediyorken `/opsx:continue` kullanın
+- `/opsx:apply` sırasında bir şeyler yanlışsa — kalıbı düzeltin, sonra devam edin
+- Görevler, `tasks.md` içindeki onay kutuları ile ilerlemeyi takip eder
+- İstediğiniz zaman durumu kontrol edin: `openspec status --change "name"`
 
 ## Geri Bildirim
 
-Bu taslak bir çalışmadır. Bu kasıtlıdır — neyin işe yaradığını öğreniyoruz.
+Bu henüz kaba bir taslak. Bu kasıtlıdır — neyin işe yaradığını öğreniyoruz.
 
-Bir hata mı buldunuz? Fikirleriniz mi var? [Discord](https://discord.gg/YctCnvvshC)'da bize katılın veya [GitHub](https://github.com/Fission-AI/openspec/issues)'da bir sorun açın.
+Bir hata mı buldunuz? Fikirleriniz mi var? [Discord](https://discord.gg/YctCnvvshC) kanımıza katılın veya [GitHub](https://github.com/Fission-AI/openspec/issues) üzerinden bir sorun açın.

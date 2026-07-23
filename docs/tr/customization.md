@@ -2,21 +2,21 @@
 
 OpenSpec üç düzeyde özelleştirme sunar:
 
-| Düzey | Ne yapar | En uygun olan |
-|-------|----------|---------------|
-| **Proje Yapılandırması** | Varsayılanları ayarlayın, bağlam/kurallar ekleyin | Çoğu ekip |
-| **Özel Şemalar** | Kendi iş akışı eserlerinizi tanımlayın | Benzersiz süreçlere sahip ekipler |
-| **Genel Geçersiz Kılmalar** | Şemaları tüm projelerde paylaşın | Güçlü kullanıcılar |
+| Düzey | Ne işe yarar | Kimler için en uygun |
+|-------|--------------|----------------------|
+| **Proje Yapılandırması** | Varsayılanları ayarlar, bağlam/kurallar ekler | Çoğu ekip |
+| **Özel Şemalar** | Kendi iş akışı kalıplarınızı tanımlarsınız | Benzersiz süreçleri olan ekipler |
+| **Genel Geçersiz Kılmalar** | Şemaları tüm projeler arasında paylaşır | Güç kullanıcıları |
 
 ---
 
 ## Proje Yapılandırması
 
-`openspec/config.yaml` dosyası, OpenSpec'i ekibiniz için özelleştirmenin en kolay yoludur. Bu dosya şunları yapmanızı sağlar:
+`openspec/config.yaml` dosyası, ekibiniz için OpenSpec'ı özelleştirmenin en kolay yoludur. Size şunları yapma imkanı tanır:
 
-- **Varsayılan bir şema ayarlayın** - Her komutta `--schema` atlayın
-- **Proje bağlamı ekleyin** - AI teknoloji yığınınızı, kurallarınızı vb. görür
-- **Eser başına kurallar ekleyin** - Belirli eserler için özel kurallar
+- **Varsayılan şema ayarla** - Her komutta `--schema` parametresini kullanmayı atla
+- **Proje bağlamı ekle** - Yapay zeka teknoloji yığınınızı, kurallarınızı vb. görür
+- **Her kalıp için özel kural ekle** - Belirli kalıplar için özel kurallar
 
 ### Hızlı Kurulum
 
@@ -24,28 +24,28 @@ OpenSpec üç düzeyde özelleştirme sunar:
 openspec init
 ```
 
-Bu, interaktif olarak bir yapılandırma oluşturmanıza rehberlik eder. Veya manuel olarak oluşturun:
+Bu, yapılandırma oluşturma sürecinde size etkileşimli olarak rehberlik eder. Ya da manuel olarak bir tane oluşturabilirsiniz:
 
 ```yaml
 # openspec/config.yaml
 schema: spec-driven
 
 context: |
-  Teknoloji yığını: TypeScript, React, Node.js, PostgreSQL
-  API stili: RESTful, docs/api.md'de belgelenmiş
-  Test: Jest + React Testing Library
-  Tüm genel API'ler için geriye dönük uyumluluğa değer veriyoruz
+  Tech stack: TypeScript, React, Node.js, PostgreSQL
+  API style: RESTful, documented in docs/api.md
+  Testing: Jest + React Testing Library
+  We value backwards compatibility for all public APIs
 
 rules:
   proposal:
-    - Geri alma planı ekleyin
-    - Etkilenen ekipleri belirleyin
+    - Include rollback plan
+    - Identify affected teams
   specs:
-    - Given/When/Then formatını kullanın
-    - Yeni kalıplar icat etmeden önce mevcut kalıplara atıfta bulunun
+    - Use Given/When/Then format
+    - Reference existing patterns before inventing new ones
 ```
 
-### Nasıl Çalışır
+### Nasıl Çalışır?
 
 **Varsayılan şema:**
 
@@ -57,35 +57,35 @@ openspec new change my-feature --schema spec-driven
 openspec new change my-feature
 ```
 
-**Bağlam ve kuralların eklenmesi:**
+**Bağlam ve kural ekleme:**
 
-Herhangi bir eser oluşturulurken, bağlamınız ve kurallarınız AI istemine eklenir:
+Herhangi bir kalıp oluştururken, bağlamınız ve kurallarınız yapay zeka istemine eklenir:
 
 ```xml
 <context>
-Teknoloji yığını: TypeScript, React, Node.js, PostgreSQL
+Tech stack: TypeScript, React, Node.js, PostgreSQL
 ...
 </context>
 
 <rules>
-- Geri alma planı ekleyin
-- Etkilenen ekipleri belirleyin
+- Include rollback plan
+- Identify affected teams
 </rules>
 
 <template>
-[Şemanın yerleşik şablonu]
+[Schema's built-in template]
 </template>
 ```
 
-- **Bağlam** TÜM eserlerde görünür
-- **Kurallar** SADECE eşleşen eser için görünür
+- **Bağlam** TÜM kalıplarda görünür
+- **Kurallar** SADECE eşleşen kalıpta görünür
 
 ### Şema Çözümleme Sırası
 
-OpenSpec bir şemaya ihtiyaç duyduğunda, şu sırayla kontrol eder:
+OpenSpec bir şemaya ihtiyaç duyduğunda, bu sırayla kontrol eder:
 
 1. CLI bayrağı: `--schema <name>`
-2. Değişiklik meta verisi (değişiklik klasöründeki `.openspec.yaml`)
+2. Değişiklik meta verileri (değişiklik klasöründeki `.openspec.yaml`)
 3. Proje yapılandırması (`openspec/config.yaml`)
 4. Varsayılan (`spec-driven`)
 
@@ -93,13 +93,13 @@ OpenSpec bir şemaya ihtiyaç duyduğunda, şu sırayla kontrol eder:
 
 ## Özel Şemalar
 
-Proje yapılandırması yeterli olmadığında, tamamen özel bir iş akışıyla kendi şemanızı oluşturun. Özel şemalar, projenizin `openspec/schemas/` dizininde yaşar ve kodunuzla birlikte sürüm kontrolüne tabi tutulur.
+Proje yapılandırması yeterli olmadığında, tamamen özel bir iş akışıyla kendi şemanızı oluşturun. Özel şemalar projenizin `openspec/schemas/` klasöründe bulunur ve kodunuzla birlikte sürüm kontrolü altında tutulur.
 
 ```text
 your-project/
 ├── openspec/
 │   ├── config.yaml        # Proje yapılandırması
-│   ├── schemas/           # Özel şemalar burada yaşar
+│   ├── schemas/           # Özel şemalar burada bulunur
 │   │   └── my-workflow/
 │   │       ├── schema.yaml
 │   │       └── templates/
@@ -107,77 +107,77 @@ your-project/
 └── src/
 ```
 
-### Mevcut Bir Şemayı Çatallayın
+### Mevcut Bir Şemayı Fork'la
 
-Özelleştirmenin en hızlı yolu, yerleşik bir şemayı çatallamaktır:
+Özelleştirme yapmanın en hızlı yolu, yerleşik bir şemayı fork'lamaktır:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-Bu, tüm `spec-driven` şemasını `openspec/schemas/my-workflow/` dizinine kopyalar ve burada serbestçe düzenleyebilirsiniz.
+Bu, tüm `spec-driven` şemasını `openspec/schemas/my-workflow/` klasörüne kopyalar, burada istediğiniz gibi düzenleyebilirsiniz.
 
-**Neler elde edersiniz:**
+**Elde edeceğiniz şey:**
 
 ```text
 openspec/schemas/my-workflow/
 ├── schema.yaml           # İş akışı tanımı
 └── templates/
-    ├── proposal.md       # Teklif eseri için şablon
-    ├── spec.md           # Spesifikasyonlar için şablon
-    ├── design.md         # Tasarım için şablon
-    └── tasks.md          # Görevler için şablon
+    ├── proposal.md       # Teklif kalıbı şablonu
+    ├── spec.md           # Şartname şablonu
+    ├── design.md         # Tasarım şablonu
+    └── tasks.md          # Görev şablonu
 ```
 
-Şimdi iş akışını değiştirmek için `schema.yaml` dosyasını düzenleyin veya AI'nın oluşturduklarını değiştirmek için şablonları düzenleyin.
+Şimdi iş akışını değiştirmek için `schema.yaml` dosyasını düzenleyin, ya da yapay zekanın üreteceği içeriği değiştirmek için şablonları düzenleyin.
 
-### Sıfırdan Şema Oluşturun
+### Sıfırdan Şema Oluşturma
 
 Tamamen yeni bir iş akışı için:
 
 ```bash
-# İnteraktif
+# Etkileşimli
 openspec schema init research-first
 
-# İnteraktif olmayan
+# Etkileşimsiz
 openspec schema init rapid \
-  --description "Hızlı yineleme iş akışı" \
+  --description "Rapid iteration workflow" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
 ### Şema Yapısı
 
-Bir şema, iş akışınızdaki eserleri ve bunların birbirlerine nasıl bağımlı olduğunu tanımlar:
+Bir şema, iş akışınızdaki kalıpları ve birbirlerine olan bağımlılıklarını tanımlar:
 
 ```yaml
 # openspec/schemas/my-workflow/schema.yaml
 name: my-workflow
 version: 1
-description: Ekibimin özel iş akışı
+description: My team's custom workflow
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: İlk teklif belgesi
+    description: Initial proposal document
     template: proposal.md
     instruction: |
-      Bu değişikliğe NEDEN ihtiyaç duyulduğunu açıklayan bir teklif oluşturun.
-      Çözüme değil, soruna odaklanın.
+      Create a proposal that explains WHY this change is needed.
+      Focus on the problem, not the solution.
     requires: []
 
   - id: design
     generates: design.md
-    description: Teknik tasarım
+    description: Technical design
     template: design.md
     instruction: |
-      NASIL uygulanacağını açıklayan bir tasarım belgesi oluşturun.
+      Create a design document explaining HOW to implement.
     requires:
-      - proposal    # Teklif oluşturulmadan tasarım oluşturulamaz
+      - proposal    # Tasarım oluşturmak için önce teklif kalıbının mevcut olması gerekir
 
   - id: tasks
     generates: tasks.md
-    description: Uygulama kontrol listesi
+    description: Implementation checklist
     template: tasks.md
     requires:
       - design
@@ -187,79 +187,79 @@ apply:
   tracks: tasks.md
 ```
 
-**Anahtar alanlar:**
+**Önemli alanlar:**
 
 | Alan | Amaç |
 |------|------|
-| `id` | Benzersiz tanımlayıcı, komutlarda ve kurallarda kullanılır |
-| `generates` | Çıktı dosya adı (`specs/**/*.md` gibi glob'ları destekler) |
-| `template` | `templates/` dizinindeki şablon dosyası |
-| `instruction` | Bu eseri oluşturmak için AI talimatları |
-| `requires` | Bağımlılıklar - hangi eserlerin önce mevcut olması gerektiği |
+| `id` | Komutlarda ve kurallarda kullanılan benzersiz tanımlayıcı |
+| `generates` | Çıktı dosya adı (`specs/**/*.md` gibi glob desenlerini destekler) |
+| `template` | `templates/` klasöründeki şablon dosyası |
+| `instruction` | Bu kalıbı oluşturmak için yapay zeka yönergeleri |
+| `requires` | Bağımlılıklar - önce mevcut olması gereken kalıplar |
 
 ### Şablonlar
 
-Şablonlar, AI'ya rehberlik eden markdown dosyalarıdır. Bu eser oluşturulurken isteme eklenirler.
+Şablonlar, yapay zekaya rehberlik eden markdown dosyalarıdır. İlgili kalıbı oluştururken isteme eklenirler.
 
 ```markdown
 <!-- templates/proposal.md -->
-## Neden
+## Why
 
-<!-- Bu değişikliğin motivasyonunu açıklayın. Bu hangi sorunu çözüyor? -->
+<!-- Bu değişikliğin gerekçesini açıklayın. Hangi sorunu çözmektedir? -->
 
-## Ne Değişecek
+## What Changes
 
-<!-- Ne değişeceğini tanımlayın. Yeni yetenekler veya değişiklikler hakkında spesifik olun. -->
+<!-- Ne değişeceğini açıklayın. Yeni yetenekler veya değişiklikler konusunda spesifik olun. -->
 
-## Etki
+## Impact
 
-<!-- Etkilenen kod, API'ler, bağımlılıklar, sistemler -->
+<!-- Etkilenen kod, API'lar, bağımlılıklar, sistemler -->
 ```
 
 Şablonlar şunları içerebilir:
-- AI'nın doldurması gereken bölüm başlıkları
-- AI için rehberlik içeren HTML yorumları
+- Yapay zekanın dolduracağı bölüm başlıkları
+- Yapay zeka için rehberlik içeren HTML yorumları
 - Beklenen yapıyı gösteren örnek formatlar
 
 ### Şemanızı Doğrulayın
 
-Özel bir şemayı kullanmadan önce doğrulayın:
+Özel bir şema kullanmadan önce doğrulayın:
 
 ```bash
 openspec schema validate my-workflow
 ```
 
-Bu şunları kontrol eder:
+Bu kontrolleri yapar:
 - `schema.yaml` sözdizimi doğru mu
-- Atıfta bulunulan tüm şablonlar mevcut mu
+- Tüm referans verilen şablonlar var mı
 - Döngüsel bağımlılık yok mu
-- Eser kimlikleri geçerli mi
+- Kalıp kimlikleri geçerli mi
 
 ### Özel Şemanızı Kullanın
 
-Oluşturulduktan sonra, şemanızı şu şekilde kullanın:
+Oluşturulduktan sonra şemanızı şu şekilde kullanın:
 
 ```bash
 # Komutta belirtin
 openspec new change feature --schema my-workflow
 
-# Veya config.yaml'da varsayılan olarak ayarlayın
+# Ya da config.yaml'da varsayılan olarak ayarlayın
 schema: my-workflow
 ```
 
 ### Şema Çözümlemesini Hata Ayıklayın
 
-Hangi şemanın kullanıldığından emin değil misiniz? Şununla kontrol edin:
+Hangi şemanın kullanıldığından emin değil misiniz? Şu komutla kontrol edin:
 
 ```bash
 # Belirli bir şemanın nereden çözümlendiğini görün
 openspec schema which my-workflow
 
-# Mevcut tüm şemaları listeleyin
+# Tüm kullanılabilir şemaları listele
 openspec schema which --all
 ```
 
-Çıktı, projenizden mi, kullanıcı dizininden mi yoksa paketten mi geldiğini gösterir:
+Çıktı, şemanın projenizden, kullanıcı dizininden mi yoksa paketten mi geldiğini gösterir:
 
 ```text
 Schema: my-workflow
@@ -269,35 +269,35 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 ---
 
-> **Not:** OpenSpec ayrıca projeler arasında paylaşım için `~/.local/share/openspec/schemas/` konumunda kullanıcı düzeyinde şemaları destekler, ancak kodunuzla birlikte sürüm kontrolüne tabi oldukları için `openspec/schemas/` içindeki proje düzeyindeki şemalar önerilir.
+> **Not:** OpenSpec ayrıca projeler arasında paylaşım için `~/.local/share/openspec/schemas/` konumunda kullanıcı düzeyinde şemaları da destekler, ancak kodunuzla birlikte sürüm kontrolü altında tutuldukları için `openspec/schemas/` konumundaki proje düzeyinde şemalar önerilir.
 
 ---
 
 ## Örnekler
 
-### Hızlı Yineleme İş Akışı
+### Hızlı İterasyon İş Akışı
 
-Hızlı yinelemeler için minimal bir iş akışı:
+Hızlı iterasyonlar için minimalist bir iş akışı:
 
 ```yaml
 # openspec/schemas/rapid/schema.yaml
 name: rapid
 version: 1
-description: Minimum yük ile hızlı yineleme
+description: Fast iteration with minimal overhead
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Hızlı teklif
+    description: Quick proposal
     template: proposal.md
     instruction: |
-      Bu değişiklik için kısa bir teklif oluşturun.
-      Ne ve neden olduğuna odaklanın, ayrıntılı spesifikasyonları atlayın.
+      Create a brief proposal for this change.
+      Focus on what and why, skip detailed specs.
     requires: []
 
   - id: tasks
     generates: tasks.md
-    description: Uygulama kontrol listesi
+    description: Implementation checklist
     template: tasks.md
     requires: [proposal]
 
@@ -306,24 +306,24 @@ apply:
   tracks: tasks.md
 ```
 
-### Bir İnceleme Eseri Eklemek
+### İnceleme Kalıbı Ekleme
 
-Varsayılanı çatallayın ve bir inceleme adımı ekleyin:
+Varsayılanı fork'layın ve bir inceleme adımı ekleyin:
 
 ```bash
 openspec schema fork spec-driven with-review
 ```
 
-Ardından `schema.yaml` dosyasını düzenleyerek şunu ekleyin:
+Ardından eklemek için `schema.yaml` dosyasını düzenleyin:
 
 ```yaml
   - id: review
     generates: review.md
-    description: Uygulama öncesi inceleme kontrol listesi
+    description: Pre-implementation review checklist
     template: review.md
     instruction: |
-      Tasarıma dayalı bir inceleme kontrol listesi oluşturun.
-      Güvenlik, performans ve test hususlarını dahil edin.
+      Create a review checklist based on the design.
+      Include security, performance, and testing considerations.
     requires:
       - design
 
@@ -332,25 +332,27 @@ Ardından `schema.yaml` dosyasını düzenleyerek şunu ekleyin:
     requires:
       - specs
       - design
-      - review    # Şimdi görevler de inceleme gerektiriyor
+      - review    # Artık görevler için inceleme de gerekli
 ```
 
 ---
 
 ## Topluluk Şemaları
 
-OpenSpec ayrıca bağımsız depolar aracılığıyla dağıtılan topluluk tarafından sürdürülen şemaları da destekler. Bunlar, OpenSpec'i diğer araçlar veya sistemlerle entegre eden, [github/spec-kit'in topluluk uzantı kataloğu](https://github.com/github/spec-kit/tree/main/extensions)'nun spec-kit için çalıştığı şekilde, görüşlü iş akışları sağlar.
+OpenSpec ayrıca bağımsız depolar aracılığıyla dağıtılan topluluk tarafından bakılan şemaları da destekler. Bu şemalar, OpenSpec'ı diğer araçlar veya sistemlerle entegre eden, fikir beyan eden iş akışları sunar. Bu, [github/spec-kit topluluk uzantı kataloğunun](https://github.com/github/spec-kit/tree/main/extensions) spec-kit için çalışma şekline benzer şekildedir.
 
-Topluluk şemaları OpenSpec çekirdeğine dahil edilmez — kendi depolarında kendi yayın döngüleriyle yaşarlar. Birini kullanmak için, şema paketini projenizin `openspec/schemas/<schema-name>/` dizinine kopyalayın (her deposunun README'sinde kurulum talimatları bulunur).
+Topluluk şemaları OpenSpec çekirdeğine dahil edilmez — kendi yayınlama döngüleri olan kendi depolarında bulunurlar. Birini kullanmak için şema paketini projenizin `openspec/schemas/<şema-adı>/` klasörüne kopyalayın (her deponun README dosyasında kurulum yönergeleri bulunur).
 
-| Şema | Sorumlu | Depo | Açıklama |
-|------|---------|------|----------|
-| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | OpenSpec'in eser yönetimini [obra/superpowers](https://github.com/obra/superpowers) yürütme becerileri (beyin fırtınası, plan yazma, alt temsilciler aracılığıyla TDD, kod incelemesi, tamamlama) ile entegre eder. Superpowers'ın yerel olarak kapsamadığı bir boşluğu dolduran kanıt odaklı bir `retrospective` eseri ekler. |
+| Şema | Sorumlu Kişi | Depo | Açıklama |
+|------|--------------|------|----------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | OpenSpec'ın kalıp yönetişimini [obra/superpowers](https://github.com/obra/superpowers) yürütme becerileri ( beyin fırtınası, plan yazma, alt aracılar aracılığıyla TDD, kod incelemesi, tamamlama) ile entegre eder. Superpowers'in doğrudan desteklemediği bir boşluğu dolduran kanıt öncelikli `retrospective` kalıbı ekler. |
+| `nanopm` | @nmrtn | [nmrtn/nanopm](https://github.com/nmrtn/nanopm/tree/main/openspec-schema) | PM öncelikli iş akışı. Uygulama öncesinde [nanopm](https://github.com/nmrtn/nanopm)'ın planlama hattını (denetim → strateji → yol haritası → PRD) çalıştırır. Ürün planlamasını OpenSpec'ın şartname odaklı mühendislik iş akışına köprüyler. Eğer `.nanopm/` klasörü mevcutsa kalıplar oradan okunur: teklif kalıbı denetimi kaynağı olarak, tasarım stratejiyi, görevler PRD ayrıştırmasını kaynak olarak kullanır. |
+| `e2e-runbooks` | @Lukk17 | [Lukk17/openspec-schemas](https://github.com/Lukk17/openspec-schemas/tree/master/openspec/schemas/e2e-runbooks) | Yetenek düzeyinde uçtan uca test çalışma kitapçıkları. Her yetenek için değiştirilemez bir şartname, değiştirilemez bir görev şablonu ve her çalıştırma için bir zaman damgalı çalıştırma kaydı alır. İddialar sadece gözlemlenebilir davranıştır (HTTP durumu, yanıt gövdesi, kalıcı durum — asla log alt dizeleri değil); her çalıştırma başlangıç/bitiş UTC, süre ve en iyi tahmin LLM jeton tüketimi kaydeder. |
 
-> Bir topluluk şeması katkıda bulunmak ister misiniz? Deponuza bir bağlantı içeren bir sorun açın veya bu tabloya bir satır ekleyen bir PR gönderin.
+> Topluluk şeması katkıda bulunmak ister misiniz? Deponuza bir bağlantı ekleyerek bir konu açın, ya da bu tabloya bir satır ekleyerek bir PR gönderin.
 
 ---
 
 ## Ayrıca Bakınız
 
-- [CLI Referansı: Şema Komutları](cli.md#schema-commands) - Komut belgelerinin tamamı
+- [CLI Referansı: Şema Komutları](cli.md#schema-commands) - Tam komut belgelendirmesi

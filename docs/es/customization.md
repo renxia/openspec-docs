@@ -2,11 +2,11 @@
 
 OpenSpec proporciona tres niveles de personalización:
 
-| Nivel | Qué hace | Ideal para |
+| Nivel | Qué hace | Mejor para |
 |-------|----------|------------|
-| **Configuración del Proyecto** | Establece valores predeterminados, inyecta contexto/reglas | La mayoría de los equipos |
-| **Esquemas Personalizados** | Define tus propios artefactos de flujo de trabajo | Equipos con procesos únicos |
-| **Anulaciones Globales** | Comparte esquemas entre todos los proyectos | Usuarios avanzados |
+| **Configuración del Proyecto** | Establecer valores predeterminados, inyectar contexto/reglas | La mayoría de los equipos |
+| **Esquemas Personalizados** | Definir tus propios artefactos de flujo de trabajo | Equipos con procesos únicos |
+| **Anulaciones Globales** | Compartir esquemas en todos los proyectos | Usuarios avanzados |
 
 ---
 
@@ -16,7 +16,7 @@ El archivo `openspec/config.yaml` es la forma más sencilla de personalizar Open
 
 - **Establecer un esquema predeterminado** - Omitir `--schema` en cada comando
 - **Inyectar contexto del proyecto** - La IA ve tu stack tecnológico, convenciones, etc.
-- **Añadir reglas por artefacto** - Reglas personalizadas para artefactos específicos
+- **Agregar reglas por artefacto** - Reglas personalizadas para artefactos específicos
 
 ### Configuración Rápida
 
@@ -33,15 +33,15 @@ schema: spec-driven
 context: |
   Stack tecnológico: TypeScript, React, Node.js, PostgreSQL
   Estilo de API: RESTful, documentado en docs/api.md
-  Testing: Jest + React Testing Library
-  Valoramos la compatibilidad hacia atrás para todas las APIs públicas
+  Pruebas: Jest + React Testing Library
+  Valoramos la compatibilidad con versiones anteriores para todas las APIs públicas
 
 rules:
   proposal:
     - Incluir plan de reversión
     - Identificar equipos afectados
   specs:
-    - Usar formato Given/When/Then
+    - Usar formato Dado/Cuando/Entonces
     - Referenciar patrones existentes antes de inventar nuevos
 ```
 
@@ -77,14 +77,14 @@ Stack tecnológico: TypeScript, React, Node.js, PostgreSQL
 </template>
 ```
 
-- El **Contexto** aparece en TODOS los artefactos
-- Las **Reglas** SOLO aparecen para el artefacto correspondiente
+- **Contexto** aparece en TODOS los artefactos
+- **Reglas** aparecen SOLO para el artefacto correspondiente
 
-### Orden de Resolución del Esquema
+### Orden de Resolución de Esquemas
 
-Cuando OpenSpec necesita un esquema, verifica en este orden:
+Cuando OpenSpec necesita un esquema, lo verifica en este orden:
 
-1. Flag de CLI: `--schema <nombre>`
+1. Bandera CLI: `--schema <name>`
 2. Metadatos del cambio (`.openspec.yaml` en la carpeta del cambio)
 3. Configuración del proyecto (`openspec/config.yaml`)
 4. Predeterminado (`spec-driven`)
@@ -93,34 +93,34 @@ Cuando OpenSpec necesita un esquema, verifica en este orden:
 
 ## Esquemas Personalizados
 
-Cuando la configuración del proyecto no es suficiente, crea tu propio esquema con un flujo de trabajo completamente personalizado. Los esquemas personalizados residen en el directorio `openspec/schemas/` de tu proyecto y se controlan de versiones con tu código.
+Cuando la configuración del proyecto no es suficiente, crea tu propio esquema con un flujo de trabajo completamente personalizado. Los esquemas personalizados residen en el directorio `openspec/schemas/` de tu proyecto y están controlados por versiones junto con tu código.
 
 ```text
 tu-proyecto/
 ├── openspec/
 │   ├── config.yaml        # Configuración del proyecto
-│   ├── schemas/           # Los esquemas personalizados viven aquí
-│   │   └── mi-flujo/
+│   ├── schemas/           # Los esquemas personalizados residen aquí
+│   │   └── my-workflow/
 │   │       ├── schema.yaml
 │   │       └── templates/
 │   └── changes/           # Tus cambios
 └── src/
 ```
 
-### Hacer Fork de un Esquema Existente
+### Bifurcar un Esquema Existente
 
-La forma más rápida de personalizar es hacer fork de un esquema integrado:
+La forma más rápida de personalizar es bifurcar un esquema integrado:
 
 ```bash
-openspec schema fork spec-driven mi-flujo
+openspec schema fork spec-driven my-workflow
 ```
 
-Esto copia el esquema completo `spec-driven` a `openspec/schemas/mi-flujo/` donde puedes editarlo libremente.
+Esto copia todo el esquema `spec-driven` a `openspec/schemas/my-workflow/` donde puedes editarlo libremente.
 
 **Lo que obtienes:**
 
 ```text
-openspec/schemas/mi-flujo/
+openspec/schemas/my-workflow/
 ├── schema.yaml           # Definición del flujo de trabajo
 └── templates/
     ├── proposal.md       # Plantilla para el artefacto de propuesta
@@ -129,7 +129,7 @@ openspec/schemas/mi-flujo/
     └── tasks.md          # Plantilla para tareas
 ```
 
-Ahora edita `schema.yaml` para cambiar el flujo de trabajo, o edita las plantillas para cambiar lo que la IA genera.
+Ahora edita `schema.yaml` para cambiar el flujo de trabajo, o edita las plantillas para cambiar lo que genera la IA.
 
 ### Crear un Esquema desde Cero
 
@@ -148,11 +148,11 @@ openspec schema init rapid \
 
 ### Estructura del Esquema
 
-Un esquema define los artefactos en tu flujo de trabajo y cómo dependen unos de otros:
+Un esquema define los artefactos en tu flujo de trabajo y cómo dependen entre sí:
 
 ```yaml
-# openspec/schemas/mi-flujo/schema.yaml
-name: mi-flujo
+# openspec/schemas/my-workflow/schema.yaml
+name: my-workflow
 version: 1
 description: Flujo de trabajo personalizado de mi equipo
 
@@ -163,7 +163,7 @@ artifacts:
     template: proposal.md
     instruction: |
       Crea una propuesta que explique POR QUÉ se necesita este cambio.
-      Céntrate en el problema, no en la solución.
+      Enfócate en el problema, no en la solución.
     requires: []
 
   - id: design
@@ -191,10 +191,10 @@ apply:
 
 | Campo | Propósito |
 |-------|-----------|
-| `id` | Identificador único, usado en comandos y reglas |
-| `generates` | Nombre del archivo de salida (soporta globs como `specs/**/*.md`) |
+| `id` | Identificador único, utilizado en comandos y reglas |
+| `generates` | Nombre de archivo de salida (admite patrones glob como `specs/**/*.md`) |
 | `template` | Archivo de plantilla en el directorio `templates/` |
-| `instruction` | Instrucciones de la IA para crear este artefacto |
+| `instruction` | Instrucciones para la IA para crear este artefacto |
 | `requires` | Dependencias - qué artefactos deben existir primero |
 
 ### Plantillas
@@ -219,41 +219,41 @@ Las plantillas son archivos markdown que guían a la IA. Se inyectan en el promp
 Las plantillas pueden incluir:
 - Encabezados de sección que la IA debe completar
 - Comentarios HTML con orientación para la IA
-- Formatos de ejemplo que muestren la estructura esperada
+- Formatos de ejemplo que muestran la estructura esperada
 
-### Validar Tu Esquema
+### Validar tu Esquema
 
 Antes de usar un esquema personalizado, valídalo:
 
 ```bash
-openspec schema validate mi-flujo
+openspec schema validate my-workflow
 ```
 
 Esto verifica:
 - La sintaxis de `schema.yaml` es correcta
 - Todas las plantillas referenciadas existen
 - No hay dependencias circulares
-- Los IDs de los artefactos son válidos
+- Los IDs de artefactos son válidos
 
-### Usar Tu Esquema Personalizado
+### Usar tu Esquema Personalizado
 
 Una vez creado, usa tu esquema con:
 
 ```bash
 # Especificar en el comando
-openspec new change feature --schema mi-flujo
+openspec new change feature --schema my-workflow
 
 # O establecer como predeterminado en config.yaml
-schema: mi-flujo
+schema: my-workflow
 ```
 
-### Depurar la Resolución del Esquema
+### Depurar la Resolución de Esquemas
 
-¿No estás seguro de qué esquema se está usando? Verifícalo con:
+¿No estás seguro de qué esquema se está usando? Verifica con:
 
 ```bash
-# Ver de dónde se resuelve un esquema específico
-openspec schema which mi-flujo
+# Ver desde dónde se resuelve un esquema específico
+openspec schema which my-workflow
 
 # Listar todos los esquemas disponibles
 openspec schema which --all
@@ -262,14 +262,14 @@ openspec schema which --all
 La salida muestra si proviene de tu proyecto, directorio de usuario o del paquete:
 
 ```text
-Schema: mi-flujo
-Source: project
-Path: /ruta/al/proyecto/openspec/schemas/mi-flujo
+Esquema: my-workflow
+Fuente: proyecto
+Ruta: /path/to/project/openspec/schemas/my-workflow
 ```
 
 ---
 
-> **Nota:** OpenSpec también soporta esquemas a nivel de usuario en `~/.local/share/openspec/schemas/` para compartir entre proyectos, pero se recomiendan los esquemas a nivel de proyecto en `openspec/schemas/` ya que se controlan de versiones con tu código.
+> **Nota:** OpenSpec también admite esquemas a nivel de usuario en `~/.local/share/openspec/schemas/` para compartir entre proyectos, pero se recomiendan los esquemas a nivel de proyecto en `openspec/schemas/` ya que están controlados por versiones junto con tu código.
 
 ---
 
@@ -283,7 +283,7 @@ Un flujo de trabajo mínimo para iteraciones rápidas:
 # openspec/schemas/rapid/schema.yaml
 name: rapid
 version: 1
-description: Iteración rápida con mínima sobrecarga
+description: Iteración rápida con sobrecarga mínima
 
 artifacts:
   - id: proposal
@@ -292,7 +292,7 @@ artifacts:
     template: proposal.md
     instruction: |
       Crea una propuesta breve para este cambio.
-      Céntrate en el qué y el por qué, omite especificaciones detalladas.
+      Enfócate en qué y por qué, omite especificaciones detalladas.
     requires: []
 
   - id: tasks
@@ -306,15 +306,15 @@ apply:
   tracks: tasks.md
 ```
 
-### Añadir un Artefacto de Revisión
+### Agregar un Artefacto de Revisión
 
-Haz fork del predeterminado y añade un paso de revisión:
+Bifurca el predeterminado y agrega un paso de revisión:
 
 ```bash
 openspec schema fork spec-driven with-review
 ```
 
-Luego edita `schema.yaml` para añadir:
+Luego edita `schema.yaml` para agregar:
 
 ```yaml
   - id: review
@@ -328,7 +328,7 @@ Luego edita `schema.yaml` para añadir:
       - design
 
   - id: tasks
-    # ... configuración existente de tasks ...
+    # ... configuración existente de tareas ...
     requires:
       - specs
       - design
@@ -339,15 +339,17 @@ Luego edita `schema.yaml` para añadir:
 
 ## Esquemas de la Comunidad
 
-OpenSpec también soporta esquemas mantenidos por la comunidad y distribuidos a través de repositorios independientes. Estos proporcionan flujos de trabajo con opiniones que integran OpenSpec con otras herramientas o sistemas, de manera similar a cómo funciona el [catálogo de extensiones de la comunidad de github/spec-kit](https://github.com/github/spec-kit/tree/main/extensions) para spec-kit.
+OpenSpec también admite esquemas mantenidos por la comunidad distribuidos a través de repositorios independientes. Estos proporcionan flujos de trabajo con opiniones formadas que integran OpenSpec con otras herramientas o sistemas, de manera similar a como funciona el [catálogo de extensiones comunitarias de github/spec-kit](https://github.com/github/spec-kit/tree/main/extensions) para spec-kit.
 
-Los esquemas de la comunidad no están incluidos en el núcleo de OpenSpec — residen en sus propios repositorios con su propio ciclo de lanzamiento. Para usar uno, copia el paquete del esquema en el directorio `openspec/schemas/<nombre-del-esquema>/` de tu proyecto (el README de cada repositorio tiene instrucciones de instalación).
+Los esquemas de la comunidad no se incluyen en el núcleo de OpenSpec — residen en sus propios repositorios con su propio ciclo de lanzamiento. Para usar uno, copia el paquete de esquema en el directorio `openspec/schemas/<schema-name>/` de tu proyecto (el README de cada repositorio tiene instrucciones de instalación).
 
 | Esquema | Mantenedor | Repositorio | Descripción |
-|---------|-----------|-------------|-------------|
-| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Integra la gobernanza de artefactos de OpenSpec con las habilidades de ejecución de [obra/superpowers](https://github.com/obra/superpowers) (lluvia de ideas, escritura de planes, TDD a través de subagentes, revisión de código, finalización). Añade un artefacto `retrospective` basado en evidencia que llena un vacío que Superpowers no cubre de forma nativa. |
+|--------|-----------|------------|-------------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Integra la gobernanza de artefactos de OpenSpec con las habilidades de ejecución de [obra/superpowers](https://github.com/obra/superpowers) (lluvia de ideas, writing-plans, TDD mediante subagentes, revisión de código, finalización). Agrega un artefacto `retrospective` centrado en evidencia que cubre un vacío que Superpowers no cubre de forma nativa. |
+| `nanopm` | @nmrtn | [nmrtn/nanopm](https://github.com/nmrtn/nanopm/tree/main/openspec-schema) | Flujo de trabajo primero para PM. Ejecuta el pipeline de planificación de [nanopm](https://github.com/nmrtn/nanopm) (auditoría → estrategia → hoja de ruta → PRD) antes de la implementación. Conecta la planificación de productos con el flujo de trabajo de ingeniería impulsado por especificaciones de OpenSpec. Los artefactos se leen desde `.nanopm/` si está presente — la propuesta toma la auditoría, el diseño toma la estrategia y las tareas toman el desglose del PRD. |
+| `e2e-runbooks` | @Lukk17 | [Lukk17/openspec-schemas](https://github.com/Lukk17/openspec-schemas/tree/master/openspec/schemas/e2e-runbooks) | Runbooks de pruebas de extremo a extremo a nivel de capacidad. Cada capacidad obtiene una especificación inmutable, una plantilla de tareas inmutable y un registro de ejecución con marca de tiempo por ejecución. Las aserciones son solo comportamiento observable (estado HTTP, cuerpo de respuesta, estado persistido — nunca subcadenas de registro); cada ejecución registra UTC de inicio/fin, duración y consumo estimado de tokens LLM. |
 
-> ¿Quieres contribuir con un esquema de la comunidad? Abre un issue con un enlace a tu repositorio, o envía un PR añadiendo una fila a esta tabla.
+> ¿Quieres contribuir un esquema de la comunidad? Abre un issue con un enlace a tu repositorio, o envía un PR agregando una fila a esta tabla.
 
 ---
 

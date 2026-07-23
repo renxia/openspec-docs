@@ -1,58 +1,58 @@
-# Stores: Kế Hoạch Trong Repo Riêng
+# Stores: Lập kế hoạch trong repo riêng
 
-> **Beta.** Stores, references, working context, và worksets là mới. Tên lệnh, cờ (flags), định dạng tệp và đầu ra JSON vẫn có thể thay đổi giữa các bản phát hành. Mọi hướng dẫn sử dụng bên dưới đều được chạy trên bản dựng hiện tại, nhưng hãy đọc lại hướng dẫn này sau khi nâng cấp.
+> **Beta.** Stores, references, working context, và worksets là các tính năng mới. Tên lệnh, cờ, định dạng tệp và đầu ra JSON có thể vẫn thay đổi giữa các bản phát hành. Mọi hướng dẫn bên dưới đều được chạy trên bản dựng hiện tại, nhưng bạn nên đọc lại hướng dẫn này sau khi nâng cấp.
 
-## Vấn Đề Cần Giải Quyết
+## Vấn đề mà giải pháp này giải quyết
 
-OpenSpec thường nằm bên trong một repo mã nguồn: một thư mục openspec/ bên cạnh mã của bạn, chứa các thông số kỹ thuật (specs) và thay đổi cho repo đó.
+OpenSpec thường nằm trong một repo duy nhất: thư mục `openspec/` cạnh mã nguồn của bạn, chứa các specs và changes cho repo đó.
 
-Điều này không còn phù hợp khi việc lập kế hoạch của bạn lớn hơn một repo:
+Điều đó không còn phù hợp khi kế hoạch của bạn lớn hơn một repo:
 
-- Công việc của bạn trải rộng trên nhiều repo — một tính năng chạm đến API server, ứng dụng web và một thư viện dùng chung. Kế hoạch nên nằm trong thư mục openspec/ nào?
-- Nhóm của bạn lập kế hoạch trước khi mã tồn tại, hoặc lập kế hoạch những thứ sẽ không bao giờ trở thành mã trong *repo này*.
-- Các yêu cầu do một nhóm sở hữu và được các nhóm khác sử dụng. Phiên bản trên wiki bị lệch, và tác nhân mã hóa (coding agent) của bạn cũng không thể đọc nó.
+- Công việc của bạn trải rộng trên nhiều repo — một tính năng tác động đến máy chủ API, ứng dụng web và thư viện dùng chung. Thư mục `openspec/` của repo nào sẽ lưu kế hoạch đó?
+- Nhóm của bạn lập kế hoạch trước khi có mã nguồn, hoặc lập kế hoạch những thứ không bao giờ trở thành mã nguồn trong *repo này*.
+- Yêu cầu được sở hữu bởi một nhóm và được các nhóm khác sử dụng. Phiên bản wiki bị lệch, và coding agent của bạn cũng không thể đọc được nó dù sao.
 
-Một **store** là câu trả lời: một repo độc lập có nhiệm vụ duy nhất là lập kế hoạch. Nó có cùng cấu trúc openspec/ mà bạn đã biết — các thông số kỹ thuật và thay đổi — cộng thêm một tệp định danh nhỏ. Bạn chỉ cần đăng ký nó trên máy của mình một lần, bằng tên, và sau đó mọi lệnh OpenSpec thông thường đều có thể hoạt động trong đó từ bất kỳ đâu.
+Một **store** là câu trả lời: một repo độc lập có nhiệm vụ duy nhất là lập kế hoạch. Nó có cấu trúc `openspec/` giống như bạn đã biết — gồm specs và changes — cùng với một tệp định danh nhỏ. Bạn đăng ký store trên máy của mình một lần, theo tên, và sau đó mọi lệnh OpenSpec thông thường đều có thể hoạt động với store đó từ mọi vị trí.
 
-## Hình dạng (The shape)
+## Cấu trúc
 
 ```
-            team-plans  (a store: planning in its own repo)
-            ├── .openspec-store/store.yaml     identity: "I am team-plans"
+            team-plans  (một kho lưu trữ: lập kế hoạch trong repo riêng của nó)
+            ├── .openspec-store/store.yaml     identity: "Tôi là team-plans"
             └── openspec/
-                ├── specs/      what is true
-                └── changes/    what is in motion
+                ├── specs/      những gì là đúng
+                └── changes/    những gì đang diễn ra
                       ▲
-                      │ registered on each machine by name;
-                      │ shared by pushing/cloning like any repo
+                      │ được đăng ký trên từng máy theo tên;
+                      │ được chia sẻ bằng cách đẩy/nhân bản như mọi repo khác
         ┌─────────────┼─────────────┐
         │             │             │
     web-app       api-server     mobile-app
-   (code repo)   (code repo)    (code repo)
+   (repo mã nguồn)   (repo mã nguồn)    (repo mã nguồn)
 ```
 
-Hai quy tắc giữ cho điều này đơn giản:
+Hai quy tắc giữ cho mô hình này đơn giản:
 
-1. **Một store chỉ là một git repo.** Bạn tự commit, push, pull và review nó. OpenSpec không bao giờ tự động clone, sync hay push bất cứ thứ gì.
-2. **Các khai báo (Declarations), chứ không phải cơ chế vận hành (machinery).** Các repos có thể *khai báo* mối quan hệ của chúng với các stores (như minh họa bên dưới). Các khai báo thay đổi những gì OpenSpec có thể nói cho bạn — nhưng không bao giờ thay đổi nơi các lệnh của bạn hoạt động.
+1. **Một kho lưu trữ chỉ đơn giản là một repo git.** Bạn tự commit, đẩy, kéo và xem xét nó. OpenSpec không bao giờ tự động nhân bản, đồng bộ hoặc đẩy bất kỳ thứ gì.
+2. **Khai báo, không phải cơ chế hoạt động.** Các repo có thể *khai báo* mối quan hệ của chúng với các kho lưu trữ (được hiển thị bên dưới). Các khai báo thay đổi những gì OpenSpec có thể nói với bạn — không bao giờ thay đổi nơi các lệnh của bạn tác động.
 
-## Năm phút để có store đầu tiên
+## Năm phút để có kho lưu trữ đầu tiên của bạn
 
-Hai lệnh đưa bạn từ trạng thái chưa có gì đến một sự thay đổi đã sẵn sàng và thuộc phạm vi của store:
+Hai lệnh đưa bạn từ không có gì đến một thay đổi hoạt động, có phạm vi kho lưu trữ:
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans
 ```
 
 ```
-Store ready: team-plans
-Location: /Users/you/openspec/team-plans
-OpenSpec root: ready
-Registry: registered
+Kho lưu trữ đã sẵn sàng: team-plans
+Vị trí: /Users/you/openspec/team-plans
+Gốc OpenSpec: sẵn sàng
+Danh sách đăng ký: đã đăng ký
 
-Next: run normal OpenSpec commands against this store, for example:
+Tiếp theo: chạy các lệnh OpenSpec thông thường đối với kho lưu trữ này, ví dụ:
   openspec new change <change-id> --store team-plans
-Share this store by committing and pushing it like any Git repo.
+Chia sẻ kho lưu trữ này bằng cách commit và đẩy nó như mọi repo Git khác.
 ```
 
 ```bash
@@ -60,19 +60,19 @@ openspec new change add-login --store team-plans
 ```
 
 ```
-Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
-Created change 'add-login' at /Users/you/openspec/team-plans/openspec/changes/add-login/
-Schema: spec-driven
-Next: openspec status --change add-login --store team-plans
+Đang sử dụng gốc OpenSpec: team-plans (/Users/you/openspec/team-plans)
+Đã tạo thay đổi 'add-login' tại /Users/you/openspec/team-plans/openspec/changes/add-login/
+Lược đồ: spec-driven
+Tiếp theo: openspec status --change add-login --store team-plans
 ```
 
-Đó là toàn bộ mô hình. Từ đây, vòng đời (lifecycle) hoàn toàn giống như những gì bạn biết — `status`, `instructions`, `validate`, `archive` — với `--store team-plans` trên mỗi lệnh, và mọi gợi ý được in ra đều mang cờ đó cho bạn. Dòng `Using OpenSpec root:` luôn cho bạn biết một lệnh đang hoạt động ở đâu.
+Đó là toàn bộ mô hình. Từ đây, vòng đời hoạt động hoàn toàn giống như bạn đã biết — `status`, `instructions`, `validate`, `archive` — với cờ `--store team-plans` trên mỗi lệnh, và mọi gợi ý in ra đều mang theo cờ này cho bạn. Dòng `Using OpenSpec root:` luôn cho bạn biết lệnh đang tác động ở đâu.
 
-## Câu chuyện: một đội nhóm, một repo lập kế hoạch (planning)
+## Câu chuyện: một nhóm, một repo lập kế hoạch
 
-Một đội nhóm giữ các spec và thay đổi của họ trong `team-plans` thay vì phân tán chúng qua nhiều code repos.
+Một nhóm lưu giữ các đặc tả và thay đổi của mình trong `team-plans` thay vì phân tán chúng trên các repo mã nguồn khác nhau.
 
-**Ngày đầu tiên (ai thiết lập):**
+**Ngày đầu (người thiết lập nó):**
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans \
@@ -80,32 +80,32 @@ openspec store setup team-plans --path ~/openspec/team-plans \
 git -C ~/openspec/team-plans push -u origin main
 ```
 
-Việc truyền `--remote` ghi lại URL clone bên trong file identity của chính store (`.openspec-store/store.yaml`), ngay từ lần commit đầu tiên. Mọi lần clone sau đều được sinh ra với sự hiểu biết về nguồn gốc của nó, vì vậy các kiểm tra sức khỏe (health checks) và thông báo lỗi có thể in ra một bản sửa chữa hoàn chỉnh, sẵn sàng để dán cho đồng đội chưa có nó.
+Truyền vào `--remote` sẽ ghi URL nhân bản vào trong tệp định danh riêng của kho lưu trữ (`.openspec-store/store.yaml`), trong lần commit đầu tiên. Mọi lần nhân bản sau này đều biết nguồn gốc của nó, do đó các kiểm tra tình trạng và thông báo lỗi có thể in ra một giải pháp hoàn chỉnh, có thể dán được cho các thành viên trong nhóm chưa có kho lưu trữ này.
 
-**Mỗi thành viên trong đội (một lần trên mỗi máy):**
+**Mỗi thành viên trong nhóm (một lần trên mỗi máy):**
 
 ```bash
 git clone git@github.com:acme/team-plans.git ~/openspec/team-plans
 openspec store register ~/openspec/team-plans
 ```
 
-Từ đó trở đi, mọi người đều làm việc trong cùng một repo lập kế hoạch theo tên gọi:
+Từ đó, mọi người làm việc trong cùng một repo lập kế hoạch theo tên:
 
 ```bash
 openspec status --store team-plans --change add-login
 openspec show add-login --store team-plans
 ```
 
-**Chia sẻ công việc là git, cố ý mà thôi.** Một thay đổi bạn tạo ra chỉ tồn tại trong checkout của bạn cho đến khi bạn commit và push nó — giống như code. Các kế hoạch có nhánh (branches), pull request và quy trình review miễn phí, bởi vì một store là một repo thông thường.
+**Chia sẻ công việc bằng git, có chủ đích.** Một thay đổi bạn tạo chỉ tồn tại trong bản nhân bản cục bộ của bạn cho đến khi bạn commit và đẩy nó — giống như mã nguồn. Các kế hoạch tự động có nhánh, yêu cầu kéo và quy trình xem xét miễn phí, vì một kho lưu trữ chỉ là một repo bình thường.
 
-**Kết nối các code repos của đội nhóm.** Một code repo mà công tác lập kế hoạch đã được ngoại hóa hoàn toàn cần đúng một dòng trong `openspec/config.yaml`:
+**Kết nối các repo mã nguồn của nhóm.** Một repo mã nguồn có kế hoạch được hoàn toàn tách bên ngoài chỉ cần đúng một dòng, trong tệp `openspec/config.yaml`:
 
 ```yaml
-# web-app/openspec/config.yaml
+# Cấu hình của repo web-app: openspec/config.yaml
 store: team-plans
 ```
 
-Giờ đây, mọi lệnh OpenSpec chạy bên trong `web-app` đều hoạt động trên `team-plans` mà không cần bất kỳ cờ nào:
+Bây giờ mọi lệnh OpenSpec chạy bên trong `web-app` đều tác động lên `team-plans` mà không cần bất kỳ cờ nào:
 
 ```bash
 cd ~/src/web-app
@@ -113,48 +113,56 @@ openspec status --change add-login
 ```
 
 ```
-Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
+Đang sử dụng gốc OpenSpec: team-plans (/Users/you/openspec/team-plans)
 ...
 ```
 
-Con trỏ (pointer) là một giải pháp dự phòng, không bao giờ là sự ghi đè: `--store` tường minh luôn thắng thế, và nếu repo phát triển các thư mục lập kế hoạch thực sự của riêng nó, thì những thư mục đó sẽ thắng (với cảnh báo để xóa con trỏ cũ).
+Con trỏ này chỉ là lựa chọn dự phòng, không bao giờ ghi đè: một cờ `--store` rõ ràng luôn được ưu tiên, và nếu repo tự phát triển các thư mục lập kế hoạch thực tế của riêng nó, thì các thư mục đó được ưu tiên (kèm cảnh báo để xóa con trỏ cũ).
 
-## Câu chuyện: các yêu cầu vượt qua ranh giới đội nhóm
+**Một mặc định cho mọi repo trên máy của bạn.** Nếu bạn làm việc trên nhiều repo mã nguồn khác nhau đều lập kế hoạch vào cùng một kho lưu trữ, hãy thiết lập nó một lần, toàn cục, thay vì thêm dòng `store:` vào từng repo:
 
-Một đội nền tảng (platform team) sở hữu các yêu cầu. Các đội sản phẩm xây dựng dựa trên chúng, trong repo của riêng họ, với thiết kế của riêng họ. Một tham chiếu mô tả mối quan hệ đó mà không di chuyển công việc của bất kỳ ai.
+```bash
+openspec config set defaultStore team-plans
+```
+
+Bây giờ mọi lệnh chạy bên ngoài gốc lập kế hoạch — và không có `--store` cũng không có con trỏ dự án — sẽ được giải quyết thành `team-plans`. Nó nằm ở cuối danh sách ưu tiên, do đó `--store`, một gốc cục bộ và con trỏ `store:` của dự án vẫn luôn được ưu tiên. Dòng tiêu đề gốc và khối JSON `root` báo cáo `source: "global_default"` cùng với id kho lưu trữ, do đó bạn luôn có thể phân biệt mặc định toàn máy với con trỏ riêng của repo. Xóa nó bằng lệnh `openspec config unset defaultStore`. Nếu id chưa được đăng ký, các lệnh sẽ báo lỗi và yêu cầu bạn đăng ký nó hoặc xóa mặc định cũ.
+
+## Câu chuyện: các yêu cầu vượt qua ranh giới nhóm
+
+Một nhóm nền tảng sở hữu các yêu cầu. Các nhóm sản phẩm xây dựng dựa trên các yêu cầu đó, trong các repo riêng của họ, với các thiết kế riêng. Một tham chiếu mô tả mối quan hệ đó mà không di chuyển công việc của bất kỳ ai.
 
 ```
-   platform-reqs (store)                 api-server (code repo)
-   owned by the platform team            owned by a product team
+   platform-reqs (kho lưu trữ)                 api-server (repo mã nguồn)
+   thuộc sở hữu của nhóm nền tảng            thuộc sở hữu của nhóm sản phẩm
    ┌──────────────────────────┐          ┌──────────────────────────┐
    │ openspec/specs/          │ ◀────────│ openspec/config.yaml     │
-   │   payments/spec.md       │ reads    │   references:            │
+   │   payments/spec.md       │ đọc    │   references:            │
    │   auth/spec.md           │          │     - platform-reqs      │
    │                          │          │ openspec/specs/          │
-   │ openspec/changes/        │          │   (their own designs)    │
-   │   platform work          │          │ openspec/changes/        │
-   │                          │          │   (their own work)       │
-   │                          │          │          └──────────────────────────┘
+   │ openspec/changes/        │          │   (các thiết kế riêng của họ)    │
+   │   công việc nền tảng          │          │ openspec/changes/        │
+   │                          │          │   (công việc riêng của họ)       │
+   │                          │          └──────────────────────────┘
    └──────────────────────────┘
 ```
 
-**Đội sản phẩm khai báo những gì họ dựa vào** trong `openspec/config.yaml` của repo:
+**Nhóm sản phẩm khai báo những gì họ dựa vào** trong tệp `openspec/config.yaml` của repo của họ:
 
 ```yaml
 references:
   - platform-reqs
 ```
 
-Các tham chiếu là ngữ cảnh chỉ đọc (read-only context). Repo giữ nguyên gốc `openspec/` của riêng nó; công việc vẫn ở đó. Điều gì thay đổi: `openspec instructions` trong repo đó giờ đây bao gồm một mục lục các spec được tham chiếu — mỗi spec đều có một bản tóm tắt một dòng và lệnh fetch chính xác (`openspec show <spec-id> --type spec --store platform-reqs`). Một agent làm việc trong `api-server` có thể tìm thấy các yêu cầu thanh toán (payment requirements) thượng nguồn, trích dẫn chúng, và viết thiết kế cấp thấp của mình vào gốc repo — mà không cần ai dán ngữ cảnh.
+Các tham chiếu là ngữ cảnh chỉ đọc. Repo giữ gốc `openspec/` riêng của nó; công việc vẫn được thực hiện ở đó. Điều thay đổi là: lệnh `openspec instructions` trong repo đó bây giờ bao gồm chỉ mục các đặc tả của kho lưu trữ được tham chiếu — mỗi đặc tả có tóm tắt một dòng và lệnh lấy chính xác (`openspec show <spec-id> --type spec --store platform-reqs`). Một tác nhân làm việc trong `api-server` có thể tìm thấy các yêu cầu thanh toán nguồn, trích dẫn chúng, và viết thiết kế chi tiết của mình ở gốc riêng của repo — mà không cần bất kỳ ai phải dán ngữ cảnh xung quanh.
 
-Một tham chiếu có thể mang nguồn clone của nó, vì vậy những thành viên trong đội chưa có store vẫn nhận được một bản sửa chữa hoàn chỉnh thay vì bị tắc đường:
+Một tham chiếu có thể mang theo nguồn nhân bản của nó, do đó các thành viên trong nhóm chưa có kho lưu trữ sẽ nhận được giải pháp hoàn chỉnh thay vì đường cụt:
 
 ```yaml
 references:
   - { id: platform-reqs, remote: "git@github.com:acme/platform-reqs.git" }
 ```
 
-**Khi bạn muốn kế hoạch và code mở cùng nhau, hãy tạo một workset.** Điều này mang tính cá nhân và tường minh: mỗi người chọn các thư mục mà họ thực sự làm việc trên máy của mình. Không có gì về những đường dẫn checkout cục bộ đó được commit vào repo lập kế hoạch chung.
+**Khi bạn muốn mở kế hoạch và mã nguồn cùng lúc, hãy tạo một bộ làm việc (workset).** Điều này là cá nhân và rõ ràng: mỗi người chọn các thư mục họ thực sự làm việc với trên máy của mình. Không có gì về các đường dẫn bản nhân bản cục bộ đó được commit vào repo lập kế hoạch chia sẻ.
 
 ```bash
 openspec workset create platform \
@@ -163,104 +171,109 @@ openspec workset create platform \
   --member ~/src/web-app
 ```
 
-## Hai câu hỏi bạn luôn có thể đặt ra
+## Hai câu hỏi bạn luôn có thể đặt
 
-**"Cấu hình của tôi có khỏe mạnh không?"** — `openspec doctor` kiểm tra gốc hiện tại và các store được tham chiếu, chỉ đọc, với một bản sửa chữa sẵn sàng để dán cho mỗi phát hiện:
-
-```
-Doctor
-
-Root
-  Location: /Users/you/src/api-server
-  OpenSpec root: ok
-
-References
-  - platform-reqs: ok (/Users/you/openspec/platform-reqs)
-  - design-system: Referenced store 'design-system' is not registered on this machine.
-    Fix: git clone -- git@github.com:acme/design-system.git '/Users/you/openspec/design-system' && openspec store register '/Users/you/openspec/design-system' --id design-system
+**"Thiết lập của tôi có hoạt động bình thường không?"** — `openspec doctor` kiểm tra gốc hiện tại và các kho lưu trữ được tham chiếu của nó, chỉ đọc, với một giải pháp có thể dán được cho mỗi phát hiện:
 
 ```
+Kiểm tra tình trạng
 
-**"Tôi đang làm việc với cái gì?"** — `openspec context` tập hợp workset từ các khai báo của OpenSpec: gốc và các stores mà nó tham chiếu.
+Gốc
+  Vị trí: /Users/you/src/api-server
+  Gốc OpenSpec: bình thường
+
+Các tham chiếu
+  - platform-reqs: bình thường (/Users/you/openspec/platform-reqs)
+  - design-system: Kho lưu trữ được tham chiếu 'design-system' chưa được đăng ký trên máy này.
+    Giải pháp: git clone -- git@github.com:acme/design-system.git '/Users/you/openspec/design-system' && openspec store register '/Users/you/openspec/design-system' --id design-system
 
 ```
-Working context for api-server (/Users/you/src/api-server)
 
-OpenSpec root
+**"Tôi đang làm việc với những gì?"** — `openspec context` tập hợp bộ làm việc từ các khai báo OpenSpec: gốc và các kho lưu trữ được tham chiếu của nó.
+
+```
+Ngữ cảnh làm việc cho api-server (/Users/you/src/api-server)
+
+Gốc OpenSpec
   api-server  /Users/you/src/api-server
 
-Referenced stores
+Các kho lưu trữ được tham chiếu
   platform-reqs  /Users/you/openspec/platform-reqs
-    Fetch: openspec show <spec-id> --type spec --store platform-reqs
+    Lấy: openspec show <spec-id> --type spec --store platform-reqs
 ```
 
-Cả hai đều hỗ trợ `--json` cho các agent. `openspec context --code-workspace <path>` còn ghi thêm một file workspace của VS Code chứa toàn bộ set — đây là hành động ghi duy nhất mà lệnh này thực hiện.
+Cả hai đều hỗ trợ cờ `--json` cho các tác nhân. Lệnh `openspec context --code-workspace <path>` bổ sung ghi một tệp không gian làm việc VS Code chứa toàn bộ bộ làm việc — đây là thao tác ghi duy nhất mà lệnh này thực hiện.
 
-## Worksets: mở lại những thư mục bạn làm việc cùng nhau
+## Bộ làm việc (Workset): mở lại các thư mục bạn làm việc cùng nhau
 
-Tách biệt với tất cả những điều trên: hầu hết mọi người đều mở cùng vài thư mục trong mỗi phiên — repo lập kế hoạch cộng thêm hai hoặc ba code repos. Một **workset** là một chế độ xem cá nhân, có tên gọi về chính xác điều đó, được mở lại bằng một lệnh duy nhất trong công cụ bạn chọn.
+Khác với tất cả các phần trên: hầu hết mọi người mở cùng vài thư mục trong mỗi phiên làm việc — repo lập kế hoạch cộng với hai hoặc ba repo mã nguồn. Một **bộ làm việc (workset)** là một chế độ xem cá nhân, có tên của chính xác các thư mục đó, có thể mở lại chỉ với một lệnh trong công cụ bạn chọn.
 
 ```
   workset "platform"                 openspec workset open platform
   ├── team-plans   ~/openspec/team-plans         │
   ├── api-server   ~/src/api-server              ▼
-  └── web-app      ~/src/web-app       all three open in your tool
+  └── web-app      ~/src/web-app       cả ba được mở trong công cụ của bạn
 ```
 
 ```bash
 openspec workset create platform \
   --member ~/openspec/team-plans --member ~/src/api-server \
-  --member ~/src/web-app
+  --tool code
 openspec workset list
 ```
 
 ```
-platform  (opens in VS Code)
+platform  (mở trong VS Code)
   team-plans  /Users/you/openspec/team-plans
   api-server  /Users/you/src/api-server
 ```
 
-`openspec workset open platform` sau đó sẽ khởi chạy công cụ đã lưu: các trình soạn thảo (VS Code, Cursor) mở một cửa sổ với mọi thành viên và trả về. Thành viên đầu tiên là chính yếu (primary). Có thể ghi đè công cụ bất cứ lúc nào bằng `--tool <id>`.
+Lệnh `openspec workset open platform` sau đó khởi chạy công cụ đã lưu: các trình soạn thảo (VS Code, Cursor) mở một cửa sổ với tất cả các thành viên và trả về kết quả. Thành viên đầu tiên là thành viên chính. Bạn có thể ghi đè công cụ bất kỳ lúc nào bằng cờ `--tool <id>`.
 
-Worksets cố ý *không* phải là trạng thái được chia sẻ. Chúng tồn tại trên máy của bạn, không bao giờ được commit, và không đưa ra bất kỳ tuyên bố nào về công việc — chúng chỉ ghi lại những gì bạn thích mở cùng nhau. Việc xóa một workset sẽ không chạm vào các thư mục thành viên. Các công cụ mới là cấu hình, không phải code: bất cứ thứ gì được khởi chạy thông qua file workspace hoặc cờ gắn theo từng thư mục đều có thể được thêm dưới khóa `openers` trong cấu hình toàn cục (`openspec config edit`).
+Các bộ làm việc có chủ đích *không phải* là trạng thái chia sẻ. Chúng tồn tại trên máy của bạn, không bao giờ được commit, và không đưa ra bất kỳ tuyên bố nào về công việc — chúng chỉ ghi lại những gì bạn thích mở cùng nhau. Xóa một bộ làm việc không bao giờ ảnh hưởng đến các thư mục thành viên. Các công cụ mới là cấu hình, không phải mã nguồn: bất kỳ thứ gì được khởi chạy thông qua tệp không gian làm việc hoặc các cờ đính kèm theo thư mục có thể được thêm vào khóa `openers` trong cấu hình toàn cục (`openspec config edit`).
 
-## Cách các lệnh quyết định nơi để hoạt động
+## Các lệnh quyết định tác động ở đâu như thế nào
 
-Mọi lệnh thông thường đều giải quyết gốc của nó theo cùng một cách, theo thứ tự này:
+Mọi lệnh thông thường đều giải quyết gốc của nó theo cùng một cách, theo thứ tự sau:
 
 ```
-1. --store <id>          bạn đã nói rõ ràng        → store đó
-2. nearest openspec/     một gốc lập kế hoạch thực sự ở đây     → repo này
-   (đi lên từ cwd)
-3. store: pointer        config.yaml khai báo một store  → store đó
-4. không có cái nào ở trên     các stores đã được đăng ký trên máy này?     → lỗi với gợi ý lựa chọn
-                         không có store nào được đăng ký?         → thư mục hiện tại
+1. `--store <id>`          bạn đã chỉ định rõ ràng        → kho lưu trữ đó
+2. thư mục openspec/ gần nhất     một gốc lập kế hoạch thực tế ở đây     → repo này
+   (đi lên từ thư mục làm việc hiện tại)
+3. con trỏ store:        config.yaml khai báo một kho lưu trữ  → kho lưu trữ đó
+4. defaultStore          cấu hình toàn cục đặt một mặc định toàn máy  → kho lưu trữ đó
+5. không có gì ở trên     các kho lưu trữ đã đăng ký trên máy này?     → báo lỗi với một
+                         máy?                        gợi ý lựa chọn
+                         không có kho lưu trữ nào được đăng ký?         → thư mục
+                                                          hiện tại
                                                           (hành vi cổ điển)
 ```
 
-Dòng `Using OpenSpec root:` (và khối `root` trong đầu ra `--json`) cho bạn biết bạn đang ở trường hợp nào.
+Dòng `Using OpenSpec root:` (và khối `root` trong output `--json`) cho bạn biết bạn đang ở trường hợp nào.
 
-## Các giới hạn đã biết đến
+## Hạn chế đã biết
 
-- **Hình dạng Beta.** Mọi thứ trên trang này đều có thể thay đổi giữa các bản phát hành — tên, cờ, định dạng file, khóa JSON.
-- **Một checkout cho mỗi ID store trên mỗi máy.** Việc đăng ký một checkout thứ hai dưới cùng một ID sẽ thất bại với gợi ý phải `store unregister` trước.
-- **Không đồng bộ hóa (sync), mãi mãi — theo thiết kế.** OpenSpec không bao giờ clone, pull hay push. Một checkout cũ sẽ hiển thị các spec cũ cho đến khi *bạn* pull; các tham chiếu được lập chỉ mục trực tiếp từ bất cứ thứ gì có trên đĩa.
-- **Một số lệnh vẫn giữ nguyên vị trí của chúng.** `view`, `templates`, `schemas`, và các dạng danh từ đã lỗi thời (`openspec change show`, ...) chỉ hoạt động trên thư mục hiện tại — không cần `--store`.
-- **Trạng thái trên từng máy là riêng của từng máy.** Registry store và worksets là cài đặt cục bộ. Không có gì về bố cục máy của bạn bao giờ được commit vào lập kế hoạch chung.
-- **Hai kiểu khởi chạy cho worksets.** Một công cụ không thể được khởi chạy bằng file workspace hoặc cờ gắn theo từng thư mục thì không thể được thêm làm opener (người mở).
-- **JSON Agent có sự phân chia về cách viết (casing) đã biết đến** (các khóa thuộc gia đình store là snake_case, các khóa thuộc gia đình workflow là camelCase). Được tài liệu hóa trong [agent contract](../agent-contract.md); việc thống nhất nó được hoãn lại cho một bản phát hành có phiên bản.
+- **Hình thái beta.** Mọi thứ trên trang này có thể thay đổi giữa các bản phát hành — tên, cờ, định dạng tệp, khóa JSON.
+- **Một bản nhân bản cục bộ cho mỗi id kho lưu trữ trên mỗi máy.** Việc đăng ký một bản nhân bản cục bộ thứ hai với cùng id sẽ thất bại với gợi ý chạy `store unregister` trước.
+- **Không bao giờ đồng bộ — theo thiết kế.** OpenSpec không bao giờ nhân bản, kéo hoặc đẩy. Một bản nhân bản cũ sẽ hiển thị các đặc tả cũ cho đến khi *bạn* kéo; các tham chiếu được lập chỉ mục trực tiếp từ mọi thứ có trên đĩa.
+- **Các thư mục lập kế hoạch trống có thể không tồn tại.** Một kho lưu trữ mới có thể chưa có các thư mục `openspec/changes/`, `openspec/specs/` hoặc `openspec/changes/archive/` trong Git. Điều này được chấp nhận trong giai đoạn beta; các thư mục đó sẽ xuất hiện một khi các lệnh thông thường tạo tệp cho chúng.
+- **Các repo con trỏ giữ nguyên trạng thái con trỏ.** Một repo chỉ chứa cấu hình có tệp `openspec/config.yaml` khai báo `store: <id>` được xem là kế hoạch được tách bên ngoài, không phải là bản nhân bản kho lưu trữ để đăng ký. Xóa dòng `store:` trước nếu bạn có chủ đích chuyển đổi repo đó thành gốc kho lưu trữ cục bộ.
+- **Một số lệnh vẫn hoạt động ở vị trí hiện tại.** Các lệnh `view`, `templates`, `schemas` và các dạng danh từ đã lỗi thời (`openspec change show`, ...) chỉ tác động trên thư mục hiện tại — không hỗ trợ `--store`.
+- **Trạng thái từng máy là riêng của từng máy.** Danh sách đăng ký kho lưu trữ và các bộ làm việc là cài đặt cục bộ. Không có gì về bố cục máy của bạn bao giờ được commit vào kế hoạch chia sẻ.
+- **Hai phong cách khởi chạy cho bộ làm việc.** Một công cụ không thể khởi chạy bằng tệp không gian làm việc hoặc các cờ đính kèm theo thư mục không thể được thêm vào làm trình mở.
+- **JSON của tác nhân có sự phân chia kiểu chữ hoa/thường đã biết** (các khóa thuộc họ store là snake_case, các khóa thuộc họ workflow là camelCase). Được ghi chú trong [hợp đồng tác nhân](../agent-contract.md); việc thống nhất chúng được hoãn lại cho bản phát hành có phiên bản.
 
-## Mọi thứ ở đâu
+## Vị trí lưu trữ các thành phần
 
-| Cái gì | Ở đâu | Có chia sẻ không? |
+| Thành phần | Vị trí | Có chia sẻ không? |
 |---|---|---|
-| Công tác lập kế hoạch của một store | `<store>/openspec/` (specs, changes) | Có — commit và push nó |
-| Identity của một store | `<store>/.openspec-store/store.yaml` | Có — được commit cùng với store |
-| Registry store | `<data dir>/openspec/stores/registry.yaml` | Không — chỉ máy này thôi |
-| Worksets | `<data dir>/openspec/worksets/` | Không — chỉ máy này thôi |
+| Kế hoạch của cửa hàng | `<store>/openspec/` (đặc tả, thay đổi) | Có — commit và push |
+| Định danh của cửa hàng | `<store>/.openspec-store/store.yaml` | Có — được commit cùng với cửa hàng |
+| Danh sách đăng ký cửa hàng | `<data dir>/openspec/stores/registry.yaml` | Không — chỉ trên máy tính này |
+| Bộ công việc | `<data dir>/openspec/worksets/` | Không — chỉ trên máy tính này |
 
-`<data dir>` là `~/.local/share/openspec` trên macOS và Linux (hoặc `$XDG_DATA_HOME/openspec` khi được đặt), và `%LOCALAPPDATA%\openspec` trên Windows.
-## Tài liệu tham khảo (Reference)
+`<data dir>` là `~/.local/share/openspec` trên macOS và Linux (hoặc `$XDG_DATA_HOME/openspec` khi được thiết lập), và `%LOCALAPPDATA%\openspec` trên Windows.
 
-Các cờ chính xác và hình dạng JSON cho mọi lệnh trên trang này:
-[CLI reference](../cli.md) (Stores, Doctor, Working context, Personal worksets) và [agent contract](../agent-contract.md).
+## Tài liệu tham khảo
+
+Các cờ chính xác và cấu trúc JSON cho mọi lệnh trên trang này: [Tài liệu tham khảo CLI](../cli.md) (Cửa hàng, Doctor, Ngữ cảnh làm việc, Bộ công việc cá nhân) và [Hợp đồng tác nhân](../agent-contract.md).

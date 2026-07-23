@@ -2,11 +2,11 @@
 
 OpenSpec cung cấp ba cấp độ tùy chỉnh:
 
-| Cấp độ | Chức năng | Phù hợp nhất cho |
-|--------|-----------|-------------------|
+| Cấp độ | Chức năng | Phù hợp với |
+|-------|------------|-------------|
 | **Cấu hình dự án** | Đặt giá trị mặc định, chèn ngữ cảnh/quy tắc | Hầu hết các nhóm |
-| **Schema tùy chỉnh** | Định nghĩa các thành phần quy trình làm việc của riêng bạn | Các nhóm có quy trình độc đáo |
-| **Ghi đè toàn cục** | Chia sẻ schema cho tất cả dự án | Người dùng nâng cao |
+| **Schema tùy chỉnh** | Định nghĩa tác phẩm quy trình làm việc của riêng bạn | Các nhóm có quy trình làm việc độc đáo |
+| **Ghi đè toàn cục** | Chia sẻ schema trên tất cả các dự án | Người dùng nâng cao |
 
 ---
 
@@ -14,9 +14,9 @@ OpenSpec cung cấp ba cấp độ tùy chỉnh:
 
 Tệp `openspec/config.yaml` là cách dễ nhất để tùy chỉnh OpenSpec cho nhóm của bạn. Nó cho phép bạn:
 
-- **Đặt schema mặc định** - Bỏ qua `--schema` trên mỗi lệnh
+- **Đặt schema mặc định** - Bỏ qua cờ `--schema` trên mọi lệnh
 - **Chèn ngữ cảnh dự án** - AI sẽ thấy ngăn xếp công nghệ, quy ước, v.v. của bạn
-- **Thêm quy tắc cho từng thành phần** - Quy tắc tùy chỉnh cho các thành phần cụ thể
+- **Thêm quy tắc theo từng tác phẩm** - Quy tắc tùy chỉnh cho các tác phẩm cụ thể
 
 ### Thiết lập nhanh
 
@@ -24,28 +24,28 @@ Tệp `openspec/config.yaml` là cách dễ nhất để tùy chỉnh OpenSpec c
 openspec init
 ```
 
-Lệnh này sẽ hướng dẫn bạn tạo cấu hình một cách tương tác. Hoặc tạo thủ công:
+Lệnh này sẽ hướng dẫn bạn tạo cấu hình một cách tương tác. Hoặc bạn có thể tạo thủ công:
 
 ```yaml
 # openspec/config.yaml
 schema: spec-driven
 
 context: |
-  Tech stack: TypeScript, React, Node.js, PostgreSQL
-  API style: RESTful, documented in docs/api.md
-  Testing: Jest + React Testing Library
-  We value backwards compatibility for all public APIs
+  Ngăn xếp công nghệ: TypeScript, React, Node.js, PostgreSQL
+  Phong cách API: RESTful, được ghi chú trong docs/api.md
+  Kiểm thử: Jest + React Testing Library
+  Chúng tôi coi trọng khả năng tương thích ngược cho tất cả các API công cộng
 
 rules:
   proposal:
-    - Include rollback plan
-    - Identify affected teams
+    - Bao gồm kế hoạch khôi phục
+    - Xác định các nhóm bị ảnh hưởng
   specs:
-    - Use Given/When/Then format
-    - Reference existing patterns before inventing new ones
+    - Sử dụng định dạng Given/When/Then
+    - Tham khảo các mẫu hiện có trước khi tạo ra mẫu mới
 ```
 
-### Cách thức hoạt động
+### Cách hoạt động
 
 **Schema mặc định:**
 
@@ -53,39 +53,39 @@ rules:
 # Không có cấu hình
 openspec new change my-feature --schema spec-driven
 
-# Có cấu hình - schema được áp dụng tự động
+# Có cấu hình - schema được tự động áp dụng
 openspec new change my-feature
 ```
 
 **Chèn ngữ cảnh và quy tắc:**
 
-Khi tạo bất kỳ thành phần nào, ngữ cảnh và quy tắc của bạn sẽ được chèn vào prompt của AI:
+Khi tạo bất kỳ tác phẩm nào, ngữ cảnh và quy tắc của bạn sẽ được chèn vào lời nhắc AI:
 
 ```xml
 <context>
-Tech stack: TypeScript, React, Node.js, PostgreSQL
+Ngăn xếp công nghệ: TypeScript, React, Node.js, PostgreSQL
 ...
 </context>
 
 <rules>
-- Include rollback plan
-- Identify affected teams
+- Bao gồm kế hoạch khôi phục
+- Xác định các nhóm bị ảnh hưởng
 </rules>
 
 <template>
-[Schema's built-in template]
+[Mẫu tích hợp sẵn của schema]
 </template>
 ```
 
-- **Ngữ cảnh** xuất hiện trong TẤT CẢ các thành phần
-- **Quy tắc** CHỈ xuất hiện cho thành phần phù hợp
+- **Ngữ cảnh** xuất hiện trong TẤT CẢ các tác phẩm
+- **Quy tắc** CHỈ xuất hiện đối với tác phẩm tương ứng
 
-### Thứ tự phân giải schema
+### Thứ tự giải quyết schema
 
-Khi OpenSpec cần một schema, nó kiểm tra theo thứ tự sau:
+Khi OpenSpec cần một schema, nó sẽ kiểm tra theo thứ tự sau:
 
 1. Cờ CLI: `--schema <name>`
-2. Metadata của thay đổi (`.openspec.yaml` trong thư mục thay đổi)
+2. Siêu dữ liệu thay đổi (tệp `.openspec.yaml` trong thư mục thay đổi)
 3. Cấu hình dự án (`openspec/config.yaml`)
 4. Mặc định (`spec-driven`)
 
@@ -93,13 +93,13 @@ Khi OpenSpec cần một schema, nó kiểm tra theo thứ tự sau:
 
 ## Schema tùy chỉnh
 
-Khi cấu hình dự án không đủ, hãy tạo schema của riêng bạn với quy trình làm việc hoàn toàn tùy chỉnh. Các schema tùy chỉnh nằm trong thư mục `openspec/schemas/` của dự án bạn và được kiểm soát phiên bản cùng với mã nguồn.
+Khi cấu hình dự án không đủ, bạn có thể tạo schema riêng với quy trình làm việc hoàn toàn tùy chỉnh. Các schema tùy chỉnh nằm trong thư mục `openspec/schemas/` của dự án và được kiểm soát phiên bản cùng với mã nguồn của bạn.
 
 ```text
 your-project/
 ├── openspec/
 │   ├── config.yaml        # Cấu hình dự án
-│   ├── schemas/           # Schema tùy chỉnh nằm ở đây
+│   ├── schemas/           # Các schema tùy chỉnh nằm ở đây
 │   │   └── my-workflow/
 │   │       ├── schema.yaml
 │   │       └── templates/
@@ -107,33 +107,33 @@ your-project/
 └── src/
 ```
 
-### Phân nhánh từ một schema có sẵn
+### Sao chép (fork) một schema có sẵn
 
-Cách nhanh nhất để tùy chỉnh là phân nhánh từ một schema tích hợp sẵn:
+Cách nhanh nhất để tùy chỉnh là sao chép một schema tích hợp sẵn:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-Lệnh này sao chép toàn bộ schema `spec-driven` sang `openspec/schemas/my-workflow/` nơi bạn có thể chỉnh sửa tự do.
+Lệnh này sao chép toàn bộ schema `spec-driven` vào thư mục `openspec/schemas/my-workflow/` nơi bạn có thể chỉnh sửa tự do.
 
-**Những gì bạn nhận được:**
+**Bạn nhận được:**
 
 ```text
 openspec/schemas/my-workflow/
 ├── schema.yaml           # Định nghĩa quy trình làm việc
 └── templates/
-    ├── proposal.md       # Mẫu cho thành phần đề xuất
+    ├── proposal.md       # Mẫu cho tác phẩm đề xuất
     ├── spec.md           # Mẫu cho đặc tả
     ├── design.md         # Mẫu cho thiết kế
-    └── tasks.md          # Mẫu cho danh sách công việc
+    └── tasks.md          # Mẫu cho nhiệm vụ
 ```
 
-Bây giờ hãy chỉnh sửa `schema.yaml` để thay đổi quy trình làm việc, hoặc chỉnh sửa các mẫu để thay đổi những gì AI tạo ra.
+Bây giờ chỉnh sửa tệp `schema.yaml` để thay đổi quy trình làm việc, hoặc chỉnh sửa các mẫu để thay đổi nội dung AI tạo ra.
 
 ### Tạo schema từ đầu
 
-Để tạo một quy trình làm việc hoàn toàn mới:
+Đối với quy trình làm việc hoàn toàn mới:
 
 ```bash
 # Tương tác
@@ -141,43 +141,43 @@ openspec schema init research-first
 
 # Không tương tác
 openspec schema init rapid \
-  --description "Rapid iteration workflow" \
+  --description "Quy trình làm việc lặp lại nhanh" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
 ### Cấu trúc schema
 
-Một schema định nghĩa các thành phần trong quy trình làm việc của bạn và cách chúng phụ thuộc lẫn nhau:
+Một schema định nghĩa các tác phẩm trong quy trình làm việc của bạn và cách chúng phụ thuộc vào nhau:
 
 ```yaml
 # openspec/schemas/my-workflow/schema.yaml
 name: my-workflow
 version: 1
-description: My team's custom workflow
+description: Quy trình làm việc tùy chỉnh của nhóm tôi
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Initial proposal document
+    description: Tài liệu đề xuất ban đầu
     template: proposal.md
     instruction: |
-      Create a proposal that explains WHY this change is needed.
-      Focus on the problem, not the solution.
+      Tạo một đề xuất giải thích TẠI SAO thay đổi này cần thiết.
+      Tập trung vào vấn đề, không phải giải pháp.
     requires: []
 
   - id: design
     generates: design.md
-    description: Technical design
+    description: Thiết kế kỹ thuật
     template: design.md
     instruction: |
-      Create a design document explaining HOW to implement.
+      Tạo tài liệu thiết kế giải thích CÁCH thực hiện.
     requires:
-      - proposal    # Can't create design until proposal exists
+      - proposal    # Không thể tạo thiết kế cho đến khi đề xuất tồn tại
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist
+    description: Danh sách kiểm tra thực hiện
     template: tasks.md
     requires:
       - design
@@ -190,36 +190,36 @@ apply:
 **Các trường chính:**
 
 | Trường | Mục đích |
-|--------|----------|
-| `id` | Định danh duy nhất, được sử dụng trong các lệnh và quy tắc |
-| `generates` | Tên tệp đầu ra (hỗ trợ glob như `specs/**/*.md`) |
+|-------|---------|
+| `id` | Định danh duy nhất, được sử dụng trong lệnh và quy tắc |
+| `generates` | Tên file đầu ra (hỗ trợ glob như `specs/**/*.md`) |
 | `template` | Tệp mẫu trong thư mục `templates/` |
-| `instruction` | Hướng dẫn cho AI để tạo thành phần này |
-| `requires` | Các phụ thuộc - những thành phần nào phải tồn tại trước |
+| `instruction` | Lời nhắc AI để tạo tác phẩm này |
+| `requires` | Phụ thuộc - các tác phẩm phải tồn tại trước |
 
-### Các mẫu
+### Mẫu
 
-Các mẫu là các tệp markdown hướng dẫn AI. Chúng được chèn vào prompt khi tạo thành phần đó.
+Các mẫu là tệp markdown hướng dẫn AI. Chúng được chèn vào lời nhắc khi tạo tác phẩm tương ứng.
 
 ```markdown
 <!-- templates/proposal.md -->
 ## Why
 
-<!-- Explain the motivation for this change. What problem does this solve? -->
+<!-- Giải thích động lực của thay đổi này. Vấn đề này giải quyết điều gì? -->
 
 ## What Changes
 
-<!-- Describe what will change. Be specific about new capabilities or modifications. -->
+<!-- Mô tả những gì sẽ thay đổi. Cụ thể về các khả năng mới hoặc sửa đổi. -->
 
 ## Impact
 
-<!-- Affected code, APIs, dependencies, systems -->
+<!-- Mã nguồn, API, phụ thuộc, hệ thống bị ảnh hưởng -->
 ```
 
 Các mẫu có thể bao gồm:
-- Các tiêu đề phần mà AI cần điền vào
-- Các chú thích HTML với hướng dẫn cho AI
-- Các định dạng ví dụ cho thấy cấu trúc mong đợi
+- Tiêu đề phần mà AI cần điền vào
+- Chú thích HTML có hướng dẫn cho AI
+- Định dạng ví dụ hiển thị cấu trúc mong đợi
 
 ### Xác thực schema của bạn
 
@@ -230,14 +230,14 @@ openspec schema validate my-workflow
 ```
 
 Lệnh này kiểm tra:
-- Cú pháp `schema.yaml` là chính xác
+- Cú pháp tệp `schema.yaml` chính xác
 - Tất cả các mẫu được tham chiếu đều tồn tại
-- Không có phụ thuộc vòng
-- Các ID thành phần là hợp lệ
+- Không có phụ thuộc vòng tròn
+- Các id tác phẩm hợp lệ
 
 ### Sử dụng schema tùy chỉnh của bạn
 
-Sau khi tạo, hãy sử dụng schema của bạn với:
+Sau khi tạo, bạn có thể sử dụng schema với:
 
 ```bash
 # Chỉ định trên lệnh
@@ -247,19 +247,19 @@ openspec new change feature --schema my-workflow
 schema: my-workflow
 ```
 
-### Gỡ lỗi phân giải schema
+### Gỡ lỗi giải quyết schema
 
-Không chắc chắn schema nào đang được sử dụng? Kiểm tra với:
+Không chắc chắn đang sử dụng schema nào? Kiểm tra với:
 
 ```bash
-# Xem một schema cụ thể được phân giải từ đâu
+# Xem schema cụ thể được giải quyết từ đâu
 openspec schema which my-workflow
 
 # Liệt kê tất cả các schema có sẵn
 openspec schema which --all
 ```
 
-Đầu ra cho biết nó đến từ dự án, thư mục người dùng hay gói của bạn:
+Kết quả hiển thị xem schema đến từ dự án của bạn, thư mục người dùng hay gói phần mềm:
 
 ```text
 Schema: my-workflow
@@ -269,35 +269,35 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 ---
 
-> **Lưu ý:** OpenSpec cũng hỗ trợ schema cấp người dùng tại `~/.local/share/openspec/schemas/` để chia sẻ giữa các dự án, nhưng schema cấp dự án trong `openspec/schemas/` được khuyến nghị vì chúng được kiểm soát phiên bản cùng với mã nguồn của bạn.
+> **Lưu ý:** OpenSpec cũng hỗ trợ schema cấp người dùng tại thư mục `~/.local/share/openspec/schemas/` để chia sẻ trên nhiều dự án, nhưng các schema cấp dự án trong thư mục `openspec/schemas/` được khuyến nghị vì chúng được kiểm soát phiên bản cùng với mã nguồn của bạn.
 
 ---
 
 ## Ví dụ
 
-### Quy trình làm việc lặp nhanh
+### Quy trình làm việc lặp lại nhanh
 
-Một quy trình làm việc tối giản cho các lần lặp nhanh:
+Một quy trình làm việc tối thiểu cho các lần lặp nhanh:
 
 ```yaml
 # openspec/schemas/rapid/schema.yaml
 name: rapid
 version: 1
-description: Fast iteration with minimal overhead
+description: Lặp lại nhanh với chi phí tối thiểu
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Quick proposal
+    description: Đề xuất nhanh
     template: proposal.md
     instruction: |
-      Create a brief proposal for this change.
-      Focus on what and why, skip detailed specs.
+      Tạo đề xuất ngắn gọn cho thay đổi này.
+      Tập trung vào cái gì và tại sao, bỏ qua các đặc tả chi tiết.
     requires: []
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist
+    description: Danh sách kiểm tra thực hiện
     template: tasks.md
     requires: [proposal]
 
@@ -306,51 +306,53 @@ apply:
   tracks: tasks.md
 ```
 
-### Thêm một thành phần đánh giá
+### Thêm tác phẩm đánh giá
 
-Phân nhánh từ mặc định và thêm một bước đánh giá:
+Sao chép schema mặc định và thêm bước đánh giá:
 
 ```bash
 openspec schema fork spec-driven with-review
 ```
 
-Sau đó chỉnh sửa `schema.yaml` để thêm:
+Sau đó chỉnh sửa tệp `schema.yaml` để thêm:
 
 ```yaml
   - id: review
     generates: review.md
-    description: Pre-implementation review checklist
+    description: Danh sách kiểm tra đánh giá trước khi thực hiện
     template: review.md
     instruction: |
-      Create a review checklist based on the design.
-      Include security, performance, and testing considerations.
+      Tạo danh sách kiểm tra đánh giá dựa trên thiết kế.
+      Bao gồm các cân nhắc về bảo mật, hiệu suất và kiểm thử.
     requires:
       - design
 
   - id: tasks
-    # ... existing tasks config ...
+    # ... cấu hình nhiệm vụ hiện có ...
     requires:
       - specs
       - design
-      - review    # Now tasks require review too
+      - review    # Bây giờ nhiệm vụ cũng yêu cầu đánh giá
 ```
 
 ---
 
 ## Schema cộng đồng
 
-OpenSpec cũng hỗ trợ các schema do cộng đồng duy trì được phân phối thông qua các kho lưu trữ độc lập. Chúng cung cấp các quy trình làm việc có quan điểm tích hợp OpenSpec với các công cụ hoặc hệ thống khác, tương tự như cách [danh mục tiện ích mở rộng cộng đồng của github/spec-kit](https://github.com/github/spec-kit/tree/main/extensions) hoạt động cho spec-kit.
+OpenSpec cũng hỗ trợ các schema được cộng đồng duy trì, phân phối thông qua các kho lưu trữ độc lập. Các schema này cung cấp các quy trình làm việc có định hướng, tích hợp OpenSpec với các công cụ hoặc hệ thống khác, tương tự như [catalog tiện ích mở rộng cộng đồng của github/spec-kit](https://github.com/github/spec-kit/tree/main/extensions) hoạt động đối với spec-kit.
 
-Các schema cộng đồng không được tích hợp vào lõi OpenSpec — chúng nằm trong các kho lưu trữ riêng với lịch phát hành riêng. Để sử dụng một schema, hãy sao chép gói schema vào thư mục `openspec/schemas/<schema-name>/` của dự án bạn (README của mỗi kho có hướng dẫn cài đặt).
+Các schema cộng đồng không được nhúng vào lõi OpenSpec — chúng nằm trong các kho lưu trữ riêng với chu kỳ phát hành riêng. Để sử dụng một schema, hãy sao chép gói schema vào thư mục `openspec/schemas/<tên-schema>/` của dự án (tệp README của mỗi kho lưu trữ có hướng dẫn cài đặt).
 
 | Schema | Người duy trì | Kho lưu trữ | Mô tả |
-|--------|---------------|-------------|-------|
-| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Tích hợp quản trị thành phần của OpenSpec với các kỹ năng thực thi của [obra/superpowers](https://github.com/obra/superpowers) (brainstorming, viết kế hoạch, TDD thông qua subagent, đánh giá mã, hoàn thiện). Thêm một thành phần `retrospective` ưu tiên bằng chứng lấp đầy khoảng trống mà Superpowers không tự nhiên bao phủ. |
+|--------|--------------|-------------|---------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Tích hợp quản trị tác phẩm của OpenSpec với các kỹ năng thực thi của [obra/superpowers](https://github.com/obra/superpowers) (động não, viết kế hoạch, TDD qua subagent, xem xét mã nguồn, hoàn thành). Thêm tác phẩm `retrospective` ưu tiên bằng chứng, lấp đầy khoảng trống mà Superpowers không hỗ trợ sẵn. |
+| `nanopm` | @nmrtn | [nmrtn/nanopm](https://github.com/nmrtn/nanopm/tree/main/openspec-schema) | Quy trình làm việc ưu tiên quản lý dự án. Chạy đường ống lập kế hoạch của [nanopm](https://github.com/nmrtn/nanopm) (kiểm toán → chiến lược → lộ trình → PRD) phía trước giai đoạn thực hiện. Kết nối lập kế hoạch sản phẩm với quy trình kỹ thuật theo đặc tả của OpenSpec. Các tác phẩm đọc từ thư mục `.nanopm/` nếu tồn tại — đề xuất lấy nguồn từ kiểm toán, thiết kế lấy nguồn từ chiến lược, nhiệm vụ lấy nguồn từ phân rã PRD. |
+| `e2e-runbooks` | @Lukk17 | [Lukk17/openspec-schemas](https://github.com/Lukk17/openspec-schemas/tree/master/openspec/schemas/e2e-runbooks) | Sổ tay kiểm thử đầu cuối cấp khả năng. Mỗi khả năng nhận được một đặc tả không thay đổi, một mẫu nhiệm vụ không thay đổi và một bản ghi thực thi có dấu thời gian cho mỗi lần chạy. Các khẳng định chỉ là hành vi có thể quan sát được (mã trạng thái HTTP, nội dung phản hồi, trạng thái được lưu trữ — không bao giờ là chuỗi con trong nhật ký); mỗi lần chạy ghi lại thời gian bắt đầu/kết thúc UTC, thời lượng và ước tính mức tiêu thụ token LLM tốt nhất. |
 
-> Bạn muốn đóng góp một schema cộng đồng? Hãy mở một issue với liên kết đến kho lưu trữ của bạn, hoặc gửi một PR thêm một hàng vào bảng này.
+> Muốn đóng góp một schema cộng đồng? Hãy mở một vấn đề với liên kết đến kho lưu trữ của bạn, hoặc gửi một PR thêm một dòng vào bảng này.
 
 ---
 
 ## Xem thêm
 
-- [Tham khảo CLI: Các lệnh Schema](cli.md#schema-commands) - Tài liệu đầy đủ về các lệnh
+- [Tài liệu tham khảo CLI: Lệnh Schema](cli.md#schema-commands) - Tài liệu lệnh đầy đủ

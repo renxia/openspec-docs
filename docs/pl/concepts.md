@@ -1,31 +1,31 @@
 # Koncepcje
 
-Ten przewodnik wyjaśnia podstawowe idee OpenSpec i to, jak one się ze sobą łączą. Do praktycznego użytkowania zobacz [Getting Started](getting-started.md) oraz [Workflows](workflows.md).
+Ten przewodnik wyjaśnia podstawowe idee stojące za OpenSpec oraz sposób ich wzajemnego powiązania. W celu uzyskania praktycznych informacji dotyczących użycia zobacz [Pierwsze kroki](getting-started.md) i [Przepływy pracy](workflows.md).
 
 ## Filozofia
 
-OpenSpec opiera się na czterech zasadach:
+OpenSpec jest oparty na czterech zasadach:
 
 ```
-fluid not rigid         — no phase gates, work on what makes sense
-iterative not waterfall — learn as you build, refine as you go
-easy not complex        — lightweight setup, minimal ceremony
-brownfield-first        — works with existing codebases, not just greenfield
+płynny a nie sztywny         — brak bram fazowych, pracuj nad tym, co ma sens
+iteracyjny a nie kaskadowy — ucz się podczas tworzenia, udoskonalaj w miarę postępów
+prosty a nie złożony        — lekka konfiguracja, minimalne formalności
+pierwszeństwo dla istniejących systemów        — współpracuje z istniejącymi bazami kodu, a nie tylko z projektami greenfield
 ```
 
 ### Dlaczego te zasady są ważne
 
-**Fluid not rigid.** Tradycyjne systemy specyfikacji zmuszają Cię do przestrzegania faz: najpierw planujesz, potem implementujesz, a na koniec kończysz. OpenSpec jest bardziej elastyczny — możesz tworzyć artefakty w dowolnej kolejności, która ma sens dla Twojej pracy.
+**Płynny a nie sztywny.** Tradycyjne systemy specyfikacji zamykają cię w fazach: najpierw planujesz, potem implementujesz, a potem jest koniec. OpenSpec jest znacznie bardziej elastyczny — możesz tworzyć artefakty w dowolnej kolejności, która ma sens w kontekście twojej pracy.
 
-**Iterative not waterfall.** Wymagania się zmieniają. Zrozumienie pogłębia się. To, co wydawało się dobrym podejściem na początku, może nie wytrzymać po przejrzeniu codebase. OpenSpec akceptuje tę rzeczywistość.
+**Iteracyjny a nie kaskadowy.** Wymagania się zmieniają. Zrozumienie pogłębia się. To, co na początku wydawało się dobrym podejściem, może nie sprawdzić się po zapoznaniu się z bazą kodu. OpenSpec akceptuje tę rzeczywistość.
 
-**Easy not complex.** Niektóre frameworki do specyfikacji wymagają rozbudowanego setupu, sztywnych formatów lub ciężkich procesów. OpenSpec nie przeszkadza. Zainicjuj w kilka sekund, zacznij pracę natychmiast, dostosowując tylko wtedy, gdy jest to konieczne.
+**Prosty a nie złożony.** Niektóre frameworki do tworzenia specyfikacji wymagają rozbudowanej konfiguracji, sztywnych formatów lub ciężkich procesów. OpenSpec nie wchodzi ci w drogę. Inicjalizacja trwa sekundy, możesz od razu rozpocząć pracę, a dostosowywanie jest możliwe tylko wtedy, gdy jest to potrzebne.
 
-**Brownfield-first.** Większość pracy nad oprogramowaniem nie polega na budowaniu od zera – polega na modyfikowaniu istniejących systemów. Podejście OpenSpec oparte na delta (delta-based approach) ułatwia określanie zmian w istniejącym zachowaniu, a nie tylko opisywanie nowych systemów.
+**Pierwszeństwo dla istniejących systemów (brownfield).** Większość pracy w zakresie oprogramowania nie polega na budowie od zera — polega na modyfikowaniu istniejących systemów. Podejście OpenSpec oparte na deltach ułatwia określanie zmian w istniejącym zachowaniu, a nie tylko opisywanie nowych systemów (greenfield).
 
-## Całościowy Obraz
+## Ogólny zarys
 
-OpenSpec organizuje Twoją pracę w dwa główne obszary:
+OpenSpec organizuje Twoją pracę w dwóch głównych obszarach:
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -34,260 +34,261 @@ OpenSpec organizuje Twoją pracę w dwa główne obszary:
 │   ┌─────────────────────┐      ┌───────────────────────────────┐   │
 │   │       specs/        │      │         changes/              │   │
 │   │                     │      │                               │   │
-│   │  Źródło prawdy     │◄─────│    Proponowane modyfikacje      │   │
-│   │  Jak działa Twój system │      │  Każda zmiana = jeden folder  │   │
-│   │                     │      │  Zawiera artefakty + delty  │   │
+│   │  Source of truth    │◄─────│  Proposed modifications       │   │
+│   │  How your system    │ merge│  Each change = one folder     │   │
+│   │  currently works    │      │  Contains artifacts + deltas  │   │
 │   │                     │      │                               │   │
 │   └─────────────────────┘      └───────────────────────────────┘   │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs** to źródło prawdy — opisują one, jak obecnie działa Twój system.
+**Specyfikacje (specs)** są źródłem prawdy – opisują, jak Twój system działa obecnie.
 
-**Changes** są proponowanymi modyfikacjami — znajdują się w oddzielnych folderach do momentu ich scalenia.
+**Zmiany (changes)** to proponowane modyfikacje – przechowywane są w oddzielnych folderach, dopóki nie będziesz gotów je scalić.
 
-To rozdzielenie jest kluczowe. Możesz pracować nad wieloma zmianami równolegle bez konfliktów. Możesz przejrzeć daną zmianę, zanim wpłynie ona na główne specsy. A gdy zarchiwizujesz zmianę, jej delty płynnie integrują się ze źródłem prawdy.
+To rozdzielenie jest kluczowe. Możesz pracować nad wieloma zmianami jednocześnie bez konfliktów. Możesz sprawdzić zmianę zanim wpłynie na główne specyfikacje. A gdy zarchiwizujesz zmianę, jej delta czysto scala się ze źródłem prawdy.
 
-## Specs
+## Specyfikacje (specs)
 
-Specs opisują zachowanie Twojego systemu, używając ustrukturyzowanych wymagań i scenariuszy.
+Specyfikacje opisują zachowanie Twojego systemu za pomocą ustrukturyzowanych wymagań i scenariuszy.
 
 ### Struktura
 
 ```
 openspec/specs/
 ├── auth/
-│   └── spec.md           # Zachowanie uwierzytelniania
+│   └── spec.md           # Authentication behavior
 ├── payments/
-│   └── spec.md           # Przetwarzanie płatności
+│   └── spec.md           # Payment processing
 ├── notifications/
-│   └── spec.md           # System powiadomień
+│   └── spec.md           # Notification system
 └── ui/
-    └── spec.md           # Zachowanie UI i motywy
+    └── spec.md           # UI behavior and themes
 ```
 
-Organizuj specs według domeny — logicznych grupowań, które mają sens dla Twojego systemu. Typowe wzorce:
+Organizuj specyfikacje według domeny – logicznych grup, które mają sens dla Twojego systemu. Typowe wzorce:
 
 - **Według obszaru funkcjonalnego**: `auth/`, `payments/`, `search/`
 - **Według komponentu**: `api/`, `frontend/`, `workers/`
-- **Według ograniczonego kontekstu (bounded context)**: `ordering/`, `fulfillment/`, `inventory/`
+- **Według ograniczonego kontekstu**: `ordering/`, `fulfillment/`, `inventory/`
 
-### Format Specyfikacji
+### Format specyfikacji
 
-Spec zawiera wymagania, a każde wymaganie ma scenariusze:
+Specyfikacja zawiera wymagania, a każde wymaganie ma scenariusze:
 
 ```markdown
-# Specyfikacja Auth
+# Auth Specification
 
-## Cel (Purpose)
-Uwierzytelnianie i zarządzanie sesjami dla aplikacji.
+## Purpose
+Authentication and session management for the application.
 
-## Wymagania
+## Requirements
 
-### Wymaganie: Uwierzytelnianie użytkownika
-System POWINIEN BEZWARUNKOWO wydać token JWT po pomyślnym zalogowaniu.
+### Requirement: User Authentication
+The system SHALL issue a JWT token upon successful login.
 
-#### Scenariusz: Prawidłowe dane uwierzytelniające
-- ZAŁOŻONO, że użytkownik posiada prawidłowe dane uwierzytelniające
-- GDY użytkownik przesyła formularz logowania
-- Wtedy zwrócony jest token JWT
-- I użytkownik zostaje przekierowany na pulpit nawigacyjny
+#### Scenario: Valid credentials
+- GIVEN a user with valid credentials
+- WHEN the user submits login form
+- THEN a JWT token is returned
+- AND the user is redirected to dashboard
 
-#### Scenariusz: Nieprawidłowe dane uwierzytelniające
-- ZAŁOŻONO, że dane uwierzytelniające są nieprawidłowe
-- GDY użytkownik przesyła formularz logowania
-- Wtedy wyświetlany jest komunikat o błędzie
-- I żaden token nie zostaje wydany
+#### Scenario: Invalid credentials
+- GIVEN invalid credentials
+- WHEN the user submits login form
+- THEN an error message is displayed
+- AND no token is issued
 
-### Wymaganie: Wygaśnięcie sesji
-System MUSI wygaszać sesje po 30 minutach bezczynności.
+### Requirement: Session Expiration
+The system MUST expire sessions after 30 minutes of inactivity.
 
-#### Scenariusz: Timeout bezczynności
-- ZAŁOŻONO, że istnieje uwierzytelniona sesja
-- GDY miną 30 minut bez aktywności
-- Wtedy sesja zostaje unieważniona
-- I użytkownik musi ponownie się zalogować
+#### Scenario: Idle timeout
+- GIVEN an authenticated session
+- WHEN 30 minutes pass without activity
+- THEN the session is invalidated
+- AND the user must re-authenticate
 ```
 
 **Kluczowe elementy:**
 
 | Element | Cel |
-|---------|---------|
-| `## Purpose` | Wysokopoziomowy opis domeny tej specyfikacji |
-| `### Requirement:` | Konkretne zachowanie, które system musi posiadać |
-| `#### Scenario:` | Konkretny przykład danego wymagania w działaniu |
-| SHALL/MUST/SHOULD | Słowa kluczowe RFC 2119 wskazujące siłę wymogu |
+|---------|-----|
+| `## Purpose` | Ogólny opis domeny tej specyfikacji |
+| `### Requirement:` | Określone zachowanie, jakie system musi mieć |
+| `#### Scenario:` | Konkretny przykład działania wymagania |
+| SHALL/MUST/SHOULD | Słowa kluczowe RFC 2119 określające siłę wymagania |
 
-### Dlaczego tak skonstruować Specsy
+### Dlaczego strukturyować specyfikacje w ten sposób
 
-**Wymagania to „co”** — określają, co system powinien zrobić, bez specyfikowania implementacji.
+**Wymagania to "co"** – określają, co system powinien robić, bez podawania implementacji.
 
-**Scenariusze to „kiedy”** — dostarczają konkretnych przykładów, które można zweryfikować. Dobre scenariusze:
-- Są testowalne (można dla nich napisać automatyczny test)
-- Obejmują zarówno ścieżkę szczęśliwą (happy path), jak i przypadki brzegowe (edge cases)
-- Używają formatu Given/When/Then lub podobnego
+**Scenariusze to "kiedy"** – dostarczają konkretnych przykładów, które można zweryfikować. Dobre scenariusze:
+- Są testowalne (można dla nich napisać test automatyczny)
+- Obejmują zarówno ścieżkę szczęśliwą, jak i przypadki brzegowe
+- Używają struktury Given/When/Then lub podobnego ustrukturyzowanego formatu
 
-**Słowa kluczowe RFC 2119** (SHALL, MUST, SHOULD, MAY) komunikują intencję:
-- **MUST/SHALL** — absolutny wymóg
-- **SHOULD** — zalecany, ale istnieją wyjątki
-- **MAY** — opcjonalny
+**Słowa kluczowe RFC 2119** (SHALL, MUST, SHOULD, MAY) przekazują intencję:
+- **MUST/SHALL** – bezwzględne wymaganie
+- **SHOULD** – zalecane, ale istnieją wyjątki
+- **MAY** – opcjonalne
 
-### Czym jest Specyfikacja (a czym nie jest)
+### Czym jest (i czym nie jest) specyfikacja
 
-Specyfikacja to **kontrakt behawioralny**, a nie plan implementacji.
+Specyfikacja jest **kontraktem zachowania**, a nie planem implementacji.
 
 Dobra zawartość specyfikacji:
-- Obserwowalne zachowanie, na którym polegają użytkownicy lub systemy docelowe
-- Dane wejściowe, dane wyjściowe i warunki błędów
+- Obserwowalne zachowanie, na którym polegają użytkownicy lub systemy podrzędne
+- Wejścia, wyjścia i warunki błędów
 - Zewnętrzne ograniczenia (bezpieczeństwo, prywatność, niezawodność, kompatybilność)
-- Scenariusze, które mogą być przetestowane lub wyraźnie zweryfikowane
+- Scenariusze, które można przetestować lub wyraźnie zweryfikować
 
-Czego unikać w specyfikacjach:
-- Wewnętrzne nazwy klasy/funkcji
-- Wybory bibliotek czy frameworków
-- Szczegółowe szczegóły implementacji krok po kroku
-- Szczegółowe plany wykonania (one należą do `design.md` lub `tasks.md`)
+Unikaj w specyfikacjach:
+- Nazw wewnętrznych klas/funkcji
+- Wyboru bibliotek lub frameworków
+- Szczegółów implementacji krok po kroku
+- Szczegółowych planów wykonania (należą one do plików `design.md` lub `tasks.md`)
 
 Szybki test:
-- Jeśli implementacja może się zmienić bez zmiany zewnętrznie widocznego zachowania, prawdopodobnie nie należy tego włączać do specyfikacji.
+- Jeśli implementacja może ulec zmianie bez zmiany obserwowalnego zewnętrznie zachowania, prawdopodobnie nie należy jej umieszczać w specyfikacji.
 
-### Utrzymuj Lekkość: Progresywna Rygorystyczność (Progressive Rigor)
+### Utrzymuj lekkość: Stopniowa rygorystyczność
 
-OpenSpec dąży do unikania biurokracji. Używaj najniższego poziomu, który nadal umożliwia weryfikację zmiany.
+OpenSpec ma na celu uniknięcie biurokracji. Używaj najlżejszego poziomu, który nadal sprawia, że zmiana jest weryfikowalna.
 
-**Lite spec (domyślny):**
-- Krótkie wymagania zorientowane na zachowanie
-- Jasny zakres i cele, których nie należy realizować (non-goals)
-- Kilka konkretnych kontroli akceptacji
+**Lekka specyfikacja (domyślna):**
+- Krótkie wymagania skupione na zachowaniu
+- Jasny zakres i cele nieobjęte pracą
+- Kilka konkretnych sprawdzeń akceptacyjnych
 
-**Full spec (dla wyższego ryzyka):**
-- Zmiany między zespołami lub repozytoriami
-- Zmiany API/kontraktów, migracje, obawy dotyczące bezpieczeństwa/prywatności
-- Zmiany, w których niejasność może prowadzić do kosztownej odbudowy
+**Pełna specyfikacja (dla zmian o wyższym ryzyku):**
+- Zmiany międzyzespołowe lub międzyrepozytoryjne
+- Zmiany API/kontraktów, migracje, kwestie bezpieczeństwa/prywatności
+- Zmiany, w których niejasności mogą spowodować kosztowną ponowną pracę
 
-Większość zmian powinna pozostać w trybie Lite.
+Większość zmian powinna pozostać w trybie lekkim.
 
-### Współpraca Człowiek + Agent
+### Współpraca człowieka i agenta
 
-W wielu zespołach ludzie eksplorują, a agenci tworzą artefakty. Zamierzony cykl wygląda następująco:
+W wielu zespołach ludzie badają problem, a agenci tworzą wstępne wersje artefaktów. Planowany cykl wygląda tak:
 
 1. Człowiek dostarcza intencję, kontekst i ograniczenia.
-2. Agent przekształca to w wymagania zorientowane na zachowanie i scenariusze.
-3. Agent przechowuje szczegóły implementacji w `design.md` i `tasks.md`, a nie w `spec.md`.
-4. Walidacja potwierdza strukturę i jasność przed implementacją.
+2. Agent przekształca to w wymagania i scenariusze skupione na zachowaniu.
+3. Agent umieszcza szczegóły implementacji w plikach `design.md` i `tasks.md`, a nie w `spec.md`.
+4. Walidacja potwierdza strukturę i jasność przed rozpoczęciem implementacji.
 
-Pozwala to, aby specsy były czytelne dla ludzi i spójne dla agentów.
+Zapewnia to, że specyfikacje są czytelne dla ludzi i spójne dla agentów.
 
-## Changes
+## Zmiany
 
-Change jest proponowaną modyfikacją Twojego systemu, zapakowaną jako folder zawierający wszystko, co niezbędne do zrozumienia i wdrożenia jej.
+Zmiana to proponowana modyfikacja Twojego systemu, spakowana jako folder z wszystkim, co potrzebne do zrozumienia i wdrożenia jej.
 
-### Struktura Zmiany
+### Struktura zmiany
 
 ```
 openspec/changes/add-dark-mode/
-├── proposal.md           # Dlaczego i co
-├── design.md             # Jak (podejście techniczne)
-├── tasks.md              # Lista kontrolna implementacji
-├── .openspec.yaml        # Metadane zmiany (opcjonalnie)
-└── specs/                # Specyfikacje delta
+├── proposal.md           # Why and what
+├── design.md             # How (technical approach)
+├── tasks.md              # Implementation checklist
+├── .openspec.yaml        # Change metadata (optional): schema, created, skip_specs
+└── specs/                # Delta specs
     └── ui/
-        └── spec.md       # Co zmienia się w ui/spec.md
+        └── spec.md       # What's changing in ui/spec.md
 ```
 
-Każda zmiana jest samowystarczalna. Posiada:
-- **Artefakty** — dokumenty, które opisują intencję, projekt i zadania
-- **Delta specs** — specyfikacje dotyczące tego, co jest dodawane, modyfikowane lub usuwane
-- **Metadane** — opcjonalna konfiguracja dla tej konkretnej zmiany
+Każda zmiana jest samodzielna. Zawiera:
+- **Artefakty** – dokumenty, które przechwytują intencję, projekt i zadania
+- **Delta specyfikacji** – specyfikacje tego, co jest dodawane, modyfikowane lub usuwane
+- **Metadane** – opcjonalna konfiguracja dla tej konkretnej zmiany
 
-### Dlaczego Zmiany Są Folderami
+### Dlaczego zmiany są folderami
 
-Pakowanie zmiany jako folder niesie ze sobą wiele korzyści:
+Spakowanie zmiany jako folderu ma kilka korzyści:
 
-1. **Wszystko w jednym miejscu.** Propozycja, projekt, zadania i specsy znajdują się w jednym miejscu. Nie trzeba szukać w różnych lokalizacjach.
-
-2. **Praca równoległa.** Wiele zmian może istnieć jednocześnie bez konfliktów. Pracuj nad `add-dark-mode`, podczas gdy `fix-auth-bug` jest również w trakcie realizacji.
-
-3. **Czysta historia.** Po archiwizacji zmiany przenosi się do `changes/archive/`, zachowując pełny kontekst. Możesz cofnąć się i zrozumieć nie tylko co zostało zmienione, ale też dlaczego.
-
-4. **Przyjazne dla recenzji.** Folder zmiany jest łatwy do przejścia — otwórz go, przeczytaj propozycję, sprawdź projekt, zobacz delty specsów.
+1. **Wszystko w jednym miejscu.** Propozycja, projekt, zadania i specyfikacje znajdują się w jednym miejscu. Nie trzeba przeszukiwać różnych lokalizacji.
+2. **Praca równoległa.** Wiele zmian może istnieć jednocześnie bez konfliktów. Możesz pracować nad `add-dark-mode` podczas gdy `fix-auth-bug` jest również w toku.
+3. **Czysta historia.** Gdy zmiana jest archiwizowana, przenosi się do `changes/archive/` z zachowanym pełnym kontekstem. Możesz spojrzeć wstecz i zrozumieć nie tylko to, co się zmieniło, ale dlaczego.
+4. **Przyjazne do sprawdzania.** Folder zmiany jest łatwy do sprawdzenia – otwórz go, przeczytaj propozycję, sprawdź projekt, zobacz delta specyfikacji.
 
 ## Artefakty
 
-Artefakty to dokumenty w ramach zmiany, które kierują pracą.
+Artefakty to dokumenty w obrębie zmiany, które kierują pracą.
 
-### Przepływ Artefaktów
+### Przepływ artefaktów
 
 ```
 proposal ──────► specs ──────► design ──────► tasks ──────► implement
     │               │             │              │
-   dlaczego        co           jak          kroki do wykonania
- + zakres       zmiany      podejście     do zrealizowania
+   why            what           how          steps
+ + scope        changes       approach      to take
 ```
 
-Artefakty budują na sobie. Każdy artefakt dostarcza kontekst dla kolejnego.
+Artefakty budują się na sobie. Każdy artefakt dostarcza kontekstu dla następnego.
 
-### Typy Artefaktów
+### Typy artefaktów
 
 #### Propozycja (`proposal.md`)
 
-Propozycja opisuje **intencję**, **zakres** i **podejście** na wysokim poziomie.
+Propozycja przechwytuje **intencję**, **zakres** i **podejście** na wysokim poziomie.
 
 ```markdown
-# Propozycja: Dodanie trybu ciemnego
+# Proposal: Add Dark Mode
 
-## Intencja (Intent)
-Użytkownicy poprosili o opcję trybu ciemnego, aby zmniejszyć zmęczenie oczu podczas użytkowania w nocy i dopasować się do preferencji systemu.
+## Intent
+Users have requested a dark mode option to reduce eye strain
+during nighttime usage and match system preferences.
 
-## Zakres (Scope)
-W zakresie:
-- Przełącznik motywu w ustawieniach
-- Wykrywanie preferencji systemu
-- Utrzymywanie preferencji w localStorage
+## Scope
+In scope:
+- Theme toggle in settings
+- System preference detection
+- Persist preference in localStorage
 
-Poza zakresem:
-- Spersonalizowane motywy kolorów (praca przyszła)
-- Nadpisywanie motywów na poziomie strony
+Out of scope:
+- Custom color themes (future work)
+- Per-page theme overrides
 
-## Podejście (Approach)
-Użycie niestandardowych właściwości CSS do tematyzacji z kontekstem React do zarządzania stanem. Wykrycie preferencji systemu przy pierwszym załadowaniu, zezwolenie na ręczne nadpisanie.
+## Approach
+Use CSS custom properties for theming with a React context
+for state management. Detect system preference on first load,
+allow manual override.
 ```
 
 **Kiedy aktualizować propozycję:**
-- Zmiany w zakresie (ograniczenie lub rozszerzenie)
-- Uściślenie intencji (lepsze zrozumienie problemu)
-- Fundamentalna zmiana podejścia
+- Zmienia się zakres (zwężanie lub rozszerzanie)
+- Intencja się wyjaśnia (lepsze zrozumienie problemu)
+- Podejście ulega fundamentalnej zmianie
 
-#### Specsy (delta specs w `specs/`)
+#### Specyfikacje (delta specyfikacji w folderze `specs/`)
 
-Delta specs opisują **co się zmienia** w stosunku do obecnych specyfikacji. Zobacz poniżej [Delta Specs](#delta-specs).
+Delta specyfikacji opisują **co się zmienia** względem obecnych specyfikacji. Zobacz sekcję [Delta specyfikacji](#delta-specs) poniżej.
 
 #### Projekt (`design.md`)
 
-Projekt opisuje **podejście techniczne** i **decyzje architektoniczne**.
+Projekt przechwytuje **podejście techniczne** i **decyzje architektoniczne**.
 
 ````markdown
-# Projekt: Dodanie trybu ciemnego
+# Design: Add Dark Mode
 
-## Podejście Techniczne (Technical Approach)
-Stan motywu zarządzany za pomocą Context React, aby uniknąć prop drilling. Niestandardowe właściwości CSS umożliwiają przełączanie w czasie rzeczywistym bez przełączania klas.
+## Technical Approach
+Theme state managed via React Context to avoid prop drilling.
+CSS custom properties enable runtime switching without class toggling.
 
-## Decyzje Architektoniczne (Architecture Decisions)
+## Architecture Decisions
 
-### Decyzja: Context zamiast Redux
-Użycie Context React dla stanu motywu, ponieważ:
-- Prosty stan binarny (jasny/ciemny)
-- Brak skomplikowanych przejść stanu
-- Unikanie dodawania zależności Redux
+### Decision: Context over Redux
+Using React Context for theme state because:
+- Simple binary state (light/dark)
+- No complex state transitions
+- Avoids adding Redux dependency
 
-### Decyzja: Niestandardowe Właściwości CSS
-Użycie zmiennych CSS zamiast CSS-in-JS, ponieważ:
-- Działa z istniejącym arkuszem stylów
-- Brak narzutu w czasie wykonania (runtime overhead)
-- Rozwiązanie natywne dla przeglądarki
+### Decision: CSS Custom Properties
+Using CSS variables instead of CSS-in-JS because:
+- Works with existing stylesheet
+- No runtime overhead
+- Browser-native solution
 
-## Przepływ Danych (Data Flow)
+## Data Flow
 ```
 ThemeProvider (context)
        │
@@ -295,116 +296,116 @@ ThemeProvider (context)
 ThemeToggle ◄──► localStorage
        │
        ▼
-CSS Variables (zaaplikowane do :root)
+CSS Variables (applied to :root)
 ```
 
-## Zmiany Plików (File Changes)
-- `src/contexts/ThemeContext.tsx` (nowy)
-- `src/components/ThemeToggle.tsx` (nowy)
-- `src/styles/globals.css` (zmodyfikowany)
+## File Changes
+- `src/contexts/ThemeContext.tsx` (new)
+- `src/components/ThemeToggle.tsx` (new)
+- `src/styles/globals.css` (modified)
 ````
 
 **Kiedy aktualizować projekt:**
 - Implementacja ujawnia, że podejście nie zadziała
-- Odkrycie lepszego rozwiązania
-- Zmiana zależności lub ograniczeń
+- Odkryto lepsze rozwiązanie
+- Zmieniają się zależności lub ograniczenia
 
 #### Zadania (`tasks.md`)
 
-Zadania to **lista kontrolna implementacji** — konkretne kroki z checklistami.
+Zadania to **lista kontrolna implementacji** – konkretne kroki z polami wyboru.
 
 ```markdown
-# Zadania
+# Tasks
 
-## 1. Infrastruktura Motywu
-- [ ] 1.1 Utworzenie ThemeContext ze stanem jasny/ciemny
-- [ ] 1.2 Dodanie niestandardowych właściwości CSS dla kolorów
-- [ ] 1.3 Implementacja trwałości w localStorage
-- [ ] 1.4 Dodanie wykrywania preferencji systemu
+## 1. Theme Infrastructure
+- [ ] 1.1 Create ThemeContext with light/dark state
+- [ ] 1.2 Add CSS custom properties for colors
+- [ ] 1.3 Implement localStorage persistence
+- [ ] 1.4 Add system preference detection
 
-## 2. Komponenty UI
-- [ ] 2.1 Utworzenie komponentu ThemeToggle
-- [ ] 2.2 Dodanie przełącznika do strony ustawień
-- [ ] 2.3 Aktualizacja nagłówka, aby zawierał szybki przełącznik
+## 2. UI Components
+- [ ] 2.1 Create ThemeToggle component
+- [ ] 2.2 Add toggle to settings page
+- [ ] 2.3 Update Header to include quick toggle
 
-## 3. Stylizacja
-- [ ] 3.1 Określenie palety kolorów dla ciemnego motywu
-- [ ] 3.2 Aktualizacja komponentów w celu używania zmiennych CSS
-- [ ] 3.3 Testowanie współczynników kontrastu pod kątem dostępności
+## 3. Styling
+- [ ] 3.1 Define dark theme color palette
+- [ ] 3.2 Update components to use CSS variables
+- [ ] 3.3 Test contrast ratios for accessibility
 ```
 
 **Najlepsze praktyki dotyczące zadań:**
-- Grupowanie powiązanych zadań pod nagłówkami
-- Używanie numeracji hierarchicznej (1.1, 1.2 itd.)
-- Utrzymywanie zadań na tyle małych, aby można je ukończyć w jednej sesji
-- Odznaczanie zadań po ich wykonaniu
+- Grupuj powiązane zadania pod nagłówkami
+- Używaj numeracji hierarchicznej (1.1, 1.2 itd.)
+- Utrzymuj zadania na tyle małe, aby można je było ukończyć w jednej sesji
+- Oznaczaj zadania jako wykonane po ich ukończeniu
 
-## Delta Specsy
+## Delta specyfikacji
 
-Delta specs to kluczowe pojęcie, które sprawia, że OpenSpec działa dla rozwoju systemów istniejących (brownfield development). Opisują **co się zmienia**, zamiast powtarzać całą specyfikację.
+Delta specyfikacji są kluczowym pojęciem, które sprawia, że OpenSpec działa przy rozwoju istniejących systemów (brownfield). Opisują **co się zmienia**, zamiast powtarzać całej specyfikacji.
 
 ### Format
 
 ```markdown
-# Delta dla Auth
+# Delta for Auth
 
-## DODANE Wymagania
+## ADDED Requirements
 
-### Wymaganie: Uwierzytelnianie dwuskładnikowe (Two-Factor Authentication)
-System MUSI obsługiwać uwierzytelnianie dwuskładnikowe oparte na TOTP.
+### Requirement: Two-Factor Authentication
+The system MUST support TOTP-based two-factor authentication.
 
-#### Scenariusz: Rejestracja 2FA
-- ZAŁOŻONO, że użytkownik nie ma włączonego 2FA
-- GDY użytkownik włącza 2FA w ustawieniach
-- Wtedy wyświetlany jest kod QR do konfiguracji aplikacji uwierzytelniającej
-- I użytkownik musi zweryfikować się za pomocą kodu przed aktywacją
+#### Scenario: 2FA enrollment
+- GIVEN a user without 2FA enabled
+- WHEN the user enables 2FA in settings
+- THEN a QR code is displayed for authenticator app setup
+- AND the user must verify with a code before activation
 
-#### Scenariusz: Logowanie z 2FA
-- ZAŁOŻONO, że użytkownik ma włączone 2FA
-- GDY użytkownik przesyła prawidłowe dane uwierzytelniające
-- Wtedy prezentowane jest wyzwanie OTP
-- I logowanie kończy się dopiero po podaniu poprawnego OTP
+#### Scenario: 2FA login
+- GIVEN a user with 2FA enabled
+- WHEN the user submits valid credentials
+- THEN an OTP challenge is presented
+- AND login completes only after valid OTP
 
-## ZMIENIONE Wymagania
+## MODIFIED Requirements
 
-### Wymaganie: Wygaśnięcie sesji
-System MUSI wygaszać sesje po 15 minutach bezczynności.
-(Wcześniej: 30 minut)
+### Requirement: Session Expiration
+The system MUST expire sessions after 15 minutes of inactivity.
+(Previously: 30 minutes)
 
-#### Scenariusz: Timeout bezczynności
-- ZAŁOŻONO, że istnieje uwierzytelniona sesja
-- GDY minie 15 minut bez aktywności
-- Wtedy sesja zostaje unieważniona
+#### Scenario: Idle timeout
+- GIVEN an authenticated session
+- WHEN 15 minutes pass without activity
+- THEN the session is invalidated
 
-## USUNIĘTE Wymagania
+## REMOVED Requirements
 
-### Wymaganie: Pamiętaj mnie (Remember Me)
-(Przestarzałe na rzecz 2FA. Użytkownicy powinni ponownie się zalogować za każdą sesję.)
+### Requirement: Remember Me
+(Deprecated in favor of 2FA. Users should re-authenticate each session.)
 ```
 
-### Sekcje Delta
+### Sekcje delty
 
-| Sekcja | Znaczenie | Co dzieje się po archiwizacji |
-|---------|---------|-----------------------------|
-| `## DODANE Wymagania` | Nowe zachowanie | Dołączane do głównej specyfikacji |
-| `## ZMIENIONE Wymagania` | Zmienione zachowanie | Zastępuje istniejące wymaganie |
-| `## USUNIĘTE Wymagania` | Przestarzałe zachowanie | Usuwane z głównej specyfikacji |
+| Sekcja | Znaczenie | Co się dzieje po archiwizacji |
+|---------|---------|------------------------|
+| `## ADDED Requirements` | Nowe zachowanie | Dołączane do głównej specyfikacji |
+| `## MODIFIED Requirements` | Zmienione zachowanie | Zastępuje istniejące wymaganie |
+| `## REMOVED Requirements` | Przestarzałe zachowanie | Usuwane z głównej specyfikacji |
 
-### Dlaczego Deltas zamiast Pełnych Specyfikacji
+### Dlaczego delty zamiast pełnych specyfikacji
 
-**Jasność.** Delta pokazuje dokładnie, co się zmienia. Czytając pełną specyfikację, musiałbyś mentalnie porównywać ją z obecną wersją.
+**Jasność.** Delta pokazuje dokładnie, co się zmienia. Czytając pełną specyfikację, musiałbyś mentalnie porównać ją z obecną wersją.
 
-**Unikanie konfliktów.** Dwie zmiany mogą dotykać tego samego pliku specyfikacji bez konfliktu, pod warunkiem, że modyfikują różne wymagania.
+**Uniknięcie konfliktów.** Dwie zmiany mogą dotyczyć tego samego pliku specyfikacji bez konfliktów, o ile modyfikują różne wymagania.
 
-**Efektywność recenzji.** Recenzenci widzą zmianę, a nie niezmieniony kontekst. Skupiają się na tym, co jest istotne.
+**Wydajność sprawdzania.** Osoby sprawdzające widzą zmianę, a nie niezmieniony kontekst. Skupiają się na tym, co ma znaczenie.
 
-**Dopasowanie do systemów istniejących (Brownfield fit).** Większość pracy polega na modyfikowaniu istniejącego zachowania. Deltas sprawiają, że modyfikacje są klasą pierwszą, a nie czymś, co przychodzi na końcu.
+**Dopasowanie do rozwoju istniejących systemów (brownfield).** Większość pracy modyfikuje istniejące zachowanie. Delta sprawia, że modyfikacje są traktowane priorytetowo, a nie jako przydatek.
 
-## Schemasy
+## Schematy
 
-Schemas definiują typy artefaktów i ich zależności dla przepływu pracy (workflow).
+Schematy definiują typy artefaktów i ich zależności dla przepływu pracy.
 
-### Jak działają Schematy
+### Jak działają schematy
 
 ```yaml
 # openspec/schemas/spec-driven/schema.yaml
@@ -412,7 +413,7 @@ name: spec-driven
 artifacts:
   - id: proposal
     generates: proposal.md
-    requires: []              # Brak zależności, może być stworzony jako pierwszy
+    requires: []              # Brak zależności, można utworzyć jako pierwszy
 
   - id: specs
     generates: specs/**/*.md
@@ -420,61 +421,61 @@ artifacts:
 
   - id: design
     generates: design.md
-    requires: [proposal]      # Może być tworzony równolegle z specs
+    requires: [proposal]      # Można tworzyć równolegle z specs
 
   - id: tasks
     generates: tasks.md
-    requires: [specs, design] # Wymaga zarówno specs, jak i design
+    requires: [specs, design] # Wymaga zarówno specs, jak i design jako pierwsze
 ```
 
 **Artefakty tworzą graf zależności:**
 
 ```
                     proposal
-                   (główny węzeł)
+                   (węzeł główny)
                        │
          ┌─────────────┴─────────────┐
          │                           │
          ▼                           ▼
       specs                       design
-   (wymaga:                  (wymaga:
+   (requires:                  (requires:
     proposal)                   proposal)
          │                           │
          └─────────────┬─────────────┘
                        │
                        ▼
                     tasks
-                (wymaga:
+                (requires:
                 specs, design)
 ```
 
-**Zależności są umożliwiajączeniami (enablers), a nie bramami.** Pokazują, co jest możliwe do stworzenia, a nie co musisz stworzyć jako następne. Możesz pominąć design, jeśli go nie potrzebujesz. Możesz utworzyć specs przed lub po designie — oba zależą tylko od proposal.
+**Zależności są umożliwiającymi czynnikami, a nie bramami.** Określają, co można utworzyć, a nie co należy utworzyć jako następne. Możesz pominąć etap design, jeśli nie jest potrzebny. Możesz tworzyć specs przed lub po etapie design – oba zależą wyłącznie od proposal.
 
-### Wbudowane Schematy
+### Wbudowane schematy
 
 **spec-driven** (domyślny)
 
-Standardowy przepływ pracy dla rozwoju opartego na specyfikacji:
+Standardowy przepływ pracy dla rozwoju opartego na specyfikacjach (spec-driven):
 
 ```
 proposal → specs → design → tasks → implement
 ```
 
-Najlepsze do: Większości prac funkcjonalnych, w których chcesz zgodzić się na specyfikacje przed implementacją.
+Najlepszy do: Większości prac nad funkcjami, w przypadku których chcesz uzgodnić specyfikacje przed wdrożeniem.
 
-### Niestandardowe Schematy (Custom Schemas)
+### Niestandardowe schematy
 
-Utwórz niestandardowe schematy dla swojego zespołu:
+Utwórz niestandardowe schematy dla przepływu pracy swojego zespołu:
 
 ```bash
-# Utworzenie od podstaw
+# Utwórz od zera
 openspec schema init research-first
 
-# Lub forkowanie istniejącego
+# Lub skopiuj istniejący
 openspec schema fork spec-driven research-first
 ```
 
-**Przykład niestandardowego schematu:**
+**Przykładowy niestandardowy schemat:**
 
 ```yaml
 # openspec/schemas/research-first/schema.yaml
@@ -482,24 +483,24 @@ name: research-first
 artifacts:
   - id: research
     generates: research.md
-    requires: []           # Najpierw przeprowadź badania
+    requires: []           # Najpierw wykonaj badania
 
   - id: proposal
     generates: proposal.md
-    requires: [research]   # Proposal oparty na badaniach
+    requires: [research]   # Wniosek (proposal) oparty na badaniach
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # Pomijamy specs/design, przechodzimy bezpośrednio do zadań
+    requires: [proposal]   # Pomiń specs/design, przejdź od razu do tasks
 ```
 
-Zobacz [Customization](customization.md) po pełne szczegóły dotyczące tworzenia i używania niestandardowych schematów.
+Pełne informacje o tworzeniu i używaniu niestandardowych schematów znajdziesz w sekcji [Dostosowywanie](customization.md).
 
-## Archiwizacja (Archive)
+## Archiwum
 
-Archiwizacja kończy zmianę poprzez scalenie jej delta-specyfikacji z głównymi specyfikacjami, zachowując jednocześnie tę zmianę dla historii.
+Archiwizacja kończy zmianę przez scalenie jej specyfikacji delta z głównymi specyfikacjami i zachowanie zmiany w celach historycznych.
 
-### Co dzieje się podczas archiwizacji
+### Co się dzieje podczas archiwizacji
 
 ```
 Przed archiwizacją:
@@ -511,7 +512,7 @@ openspec/
 └── changes/                         │
     └── add-2fa/                     │
         ├── proposal.md              │
-        ├── design.md                │ scalenie (merge)
+        ├── design.md                │ scal
         ├── tasks.md                 │
         └── specs/                   │
             └── auth/                │
@@ -526,7 +527,7 @@ openspec/
 │       └── spec.md        # Teraz zawiera wymagania dotyczące 2FA
 └── changes/
     └── archive/
-        └── 2025-01-24-add-2fa/    # Zachowane dla historii
+        └── 2025-01-24-add-2fa/    # Zachowane w celach historycznych
             ├── proposal.md
             ├── design.md
             ├── tasks.md
@@ -537,85 +538,85 @@ openspec/
 
 ### Proces archiwizacji
 
-1. **Scalenie delt.** Każda sekcja delta-specyfikacji (DODANE/ZMIEŃCZONE/USUCONE) jest aplikowana do odpowiadającej głównej specyfikacji.
-2. **Przeniesienie do archiwum.** Folder zawierający zmianę przenosi się do `changes/archive/` z prefiksem daty, aby zapewnić porządek chronologiczny.
-3. **Zachowanie kontekstu.** Wszystkie artefakty pozostają nienaruszone w archiwum. Zawsze możesz cofnąć się, aby zrozumieć, dlaczego dokonano danej zmiany.
+1. **Scal specyfikacje delta.** Każda sekcja specyfikacji delta (ADDED/MODIFIED/REMOVED) jest stosowana do odpowiedniej głównej specyfikacji.
+2. **Przenieś do archiwum.** Folder zmiany jest przenoszony do `changes/archive/` z prefiksem daty w celu sortowania chronologicznego.
+3. **Zachowaj kontekst.** Wszystkie artefakty pozostają nietknięte w archiwum. Zawsze możesz wrócić do poprzednich wersji, aby zrozumieć, dlaczego wprowadzono daną zmianę.
 
-### Dlaczego Archwizacja jest Ważna
+### Dlaczego archiwizacja jest ważna
 
-**Czysty stan.** Aktywne zmiany (`changes/`) pokazują tylko pracę w toku. Ukończona praca zostaje przeniesiona poza ten obszar.
+**Czysty stan.** Aktywne zmiany (`changes/`) wyświetlają tylko pracę w toku. Ukończona praca jest przenoszona na bok, aby nie przeszkadzała.
 
-**Ślad audytowy (Audit trail).** Archiwum zachowuje pełny kontekst każdej zmiany — nie tylko co się zmieniło, ale także proposal wyjaśniający dlaczego, design wyjaśniający jak i zadania pokazujące wykonaną pracę.
+**Ślad audytu.** Archiwum zachowuje pełny kontekst każdej zmiany – nie tylko to, co zostało zmienione, ale również proposal wyjaśniający dlaczego, design wyjaśniający jak oraz tasks pokazujące wykonaną pracę.
 
-**Ewolucja specyfikacji.** Specyfikacje rozwijają się organicznie w miarę archiwizowania zmian. Każde archiwum scalia swoje delty, budując kompleksową specyfikację na przestrzeni czasu.
+**Ewolucja specyfikacji.** Specs rozwijają się organicznie podczas archiwizacji zmian. Każda archiwizacja scala jej delta specs, budując z czasem kompleksową specyfikację.
 
-## Jak to wszystko działa razem
+## Jak to wszystko się łączy
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              OPENSPEC FLOW                                   │
+│                              PRZEPŁYW OPENSPEC                               │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. START      │  /opsx:propose (core) lub /opsx:new (expanded)           │
-│   │     CHANGE     │                                                         │
+│   │  1. ROZPOCZNIJ │  /opsx:propose (podstawowy) lub /opsx:new (rozszerzony)  │
+│   │     ZMIANĘ     │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. CREATE     │  /opsx:ff lub /opsx:continue (expanded workflow)         │
-│   │     ARTIFACTS  │  Tworzy proposal → specs → design → tasks              │
-│   │                │  (oparte na zależnościach schematu)                         │
+│   │  2. UTWÓRZ     │  /opsx:ff lub /opsx:continue (rozszerzony przepływ pracy)│
+│   │     ARTEFAKTY  │  Tworzy proposal → specs → design → tasks                │
+│   │                │  (na podstawie zależności schematu)                     │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  3. IMPLEMENT  │  /opsx:apply                                            │
-│   │     TASKS      │  Pracowanie nad zadaniami, odznaczanie ich                  │
-│   │                │◄──── Aktualizowanie artefaktów w miarze nauki                      │
+│   │  3. WDROŻ      │  /opsx:apply                                            │
+│   │     ZADANIA    │  Przejdź przez tasks, oznaczając je jako wykonane        │
+│   │                │◄──── Aktualizuj artefakty w miarę zdobywania wiedzy     │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. VERIFY     │  /opsx:verify (opcjonalne)                                │
-│   │     WORK       │  Sprawdzenie, czy implementacja odpowiada specyfikacjom      │
+│   │  4. SPRAWDŹ    │  /opsx:verify (opcjonalnie)                             │
+│   │     PRACĘ      │  Sprawdź, czy implementacja odpowiada specs              │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. ARCHIVE    │────►│  Delta-specyfikacje scalane z głównymi specyfikacjami │    │
-│   │     CHANGE     │     │  Folder zmiany przenoszony do archive/             │    │
-│   └────────────────┘     │  Specyfikacje są teraz aktualnym źródłem prawdy (source of truth)   │    │
+│   │  5. ARCHIWIZUJ │────►│  Delta specs są scalane z głównymi specs        │    │
+│   │     ZMIANĘ     │     │  Folder zmiany jest przenoszony do archive/     │    │
+│   └────────────────┘     │  Specs są teraz zaktualizowanym źródłem prawdy  │    │
+│                          └──────────────────────────────────────────────┘    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Cnotliwy cykl:**
+**Pozytywny cykl:**
+1. Specs opisują obecne zachowanie systemu
+2. Zmiany proponują modyfikacje (jako delta specs)
+3. Implementacja wprowadza zmiany w życie
+4. Archiwizacja scala delta specs z głównymi specs
+5. Specs opisują teraz nowe zachowanie systemu
+6. Następna zmiana buduje na zaktualizowanych specs
 
-1. Specs opisują obecne zachowanie.
-2. Zmiany proponują modyfikacje (jako delty).
-3. Implementacja realizuje zmiany.
-4. Archiwizacja scalia delty z głównymi specyfikacjami.
-5. Specs opisują nowe zachowanie.
-6. Następna zmiana opiera się na zaktualizowanych specsach.
+## Słowniczek
 
-## Słowniczek (Glossary)
-
-| Termin | Definicja |
-|------|------------|
-| **Artifact** | Dokument w ramach zmiany (proposal, design, tasks lub delta specs) |
-| **Archive** | Proces kończenia zmiany i scalania jej delt z głównymi specyfikacjami |
-| **Change** | Proponowana modyfikacja systemu, spakowana jako folder zawierający artefakty |
-| **Delta spec** | Specyfikacja opisująca zmiany (DODANE/ZMIEŃCZONE/USUCONE) względem obecnych specsów |
-| **Domain** | Logiczna grupa dla specyfikacji (np. `auth/`, `payments/`) |
-| **Requirement** | Konkretne zachowanie, jakie musi posiadać system |
-| **Scenario** | Konkretny przykład wymagania, zazwyczaj w formacie Given/When/Then |
-| **Schema** | Definicja typów artefaktów i ich zależności |
+| Term | Definicja |
+|------|-----------|
+| **Artefakt** | Dokument w ramach zmiany (proposal, design, tasks lub delta specs) |
+| **Archiwizacja** | Proces ukończenia zmiany i scalenia jej delta specs z głównymi specs |
+| **Zmiana** | Proponowana modyfikacja systemu, spakowana jako folder z artefaktami |
+| **Delta spec** | Specyfikacja opisująca zmiany (ADDED/MODIFIED/REMOVED) względem bieżących specs |
+| **Domena** | Logiczna grupa dla specs (np. `auth/`, `payments/`) |
+| **Wymaganie** | Określone zachowanie, jakie musi mieć system |
+| **Scenariusz** | Konkretny przykład wymagania, zazwyczaj w formacie Given/When/Then |
+| **Schemat** | Definicja typów artefaktów i ich zależności |
 | **Spec** | Specyfikacja opisująca zachowanie systemu, zawierająca wymagania i scenariusze |
-| **Source of truth** | Katalog `openspec/specs/`, zawierający aktualnie uzgodnione zachowanie |
+| **Źródło prawdy** | Katalog `openspec/specs/`, zawierający obecne uzgodnione zachowanie systemu |
 
-## Następne Kroki (Next Steps)
+## Następne kroki
 
-- [Getting Started](getting-started.md) - Praktyczne pierwsze kroki
-- [Workflows](workflows.md) - Typowe wzorce i kiedy ich używać
-- [Commands](commands.md) - Pełna referencja poleceń
-- [Customization](customization.md) - Tworzenie niestandardowych schematów i konfiguracja projektu
+- [Pierwsze kroki](getting-started.md) - Praktyczne pierwsze kroki
+- [Przepływy pracy](workflows.md) - Typowe wzorce i wskazówki, kiedy używać każdego z nich
+- [Polecenia](commands.md) - Pełna dokumentacja poleceń
+- [Dostosowywanie](customization.md) - Tworzenie niestandardowych schematów i konfiguracja projektu

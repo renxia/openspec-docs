@@ -1,159 +1,161 @@
 # Komutlar Nasıl Çalışır
 
-**Bilinmesi gereken tek bir şey: OpenSpec'in iki tür komutu vardır ve bunlar iki farklı yerde çalışır.**
+**Bilmeniz gereken tek şey: OpenSpec'ın iki tür komutu var ve bunlar iki farklı yerde çalışıyor.**
 
 - `openspec ...` komutları **terminalinizde** çalışır. (Örnek: `openspec init`.)
 - `/opsx:...` komutları **AI asistanınızın sohbetinde** çalışır. (Örnek: `/opsx:propose`.)
 
-Eğer hiç terminal'e `/opsx:propose` yazarsanız ve hiçbir şey olmazsa, bu sayfa size yardımcı olacaktır. Bu bir yanlış anlaşılmadır. Onlar terminaller komutu değildir. Bunlar, AI kodlama asistanınıza verdiğiniz talimatlardır; normalde "bir giriş formu ekle" yazdığınız sohbet kutusunda verirsiniz.
+Eğer bir zamanlar `/opsx:propose` komutunu terminalinize yazıp hiçbir şey olmazsa bunun nedeni bu sayfadadır. OpenSpec'ın yanlış yarısıyla konuşuyorsunuz demektir. Slash komutları terminal komutları değildir. Bunlar, normalde "bir giriş formu ekle" yazdığınız sohbet kutusuna AI kodlama asistanınıza verdiğiniz talimatlardır.
 
-Bu tek ayrım, yeni kullanıcıların en çok takıldığı nokta olduğu için, bunu netleştirelim.
+Bu tek ayrım, yeni kullanıcılar için en yaygın takılma noktasıdır, o yüzden bunu son derece net hale getirelim.
 
-## İki Yarı
+## İki yarı
 
-OpenSpec iki şapka takan bir projedir.
+OpenSpec, iki şapka takan tek bir projedir.
 
-**CLI (Terminal Yarısı).** Shell'den kurup çalıştırdığınız `openspec` adlı bir programdır. Projenizi hazırlar, değişiklikleri listeler ve doğrular, bir kontrol paneli gösterir ve bitmiş işleri arşivler. Bunları iTerm'e, VS Code terminaline, PowerShell'a veya `git` ya da `npm` çalıştırdığınız herhangi bir yere yazarsınız.
+**CLI (terminal yarısı).** Kabuğunuzdan yükleyip çalıştırdığınız `openspec` adlı bir program. Projenizi kurar, değişiklikleri listeler ve doğrular, bir gösterge paneli açar ve bitmiş işleri arşivler. Bu komutları iTerm, VS Code terminali, PowerShell, `git` veya `npm` çalıştırdığınız herhangi bir yere yazabilirsiniz.
 
 ```bash
-openspec init        # bu projede OpenSpec kurar
-openspec list        # aktif değişiklikleri görür
-openspec view        # etkileşimli kontrol panelini açar
+openspec init        # bu projede OpenSpec'ı kur
+openspec list        # aktif değişiklikleri görüntüle
+openspec view        # etkileşimli gösterge panelini aç
 ```
 
-**Slash Komutları (Sohbet Yarısı).** AI asistanınıza yazdığınız `/opsx:propose` ve `/opsx:apply` gibi kısa komutlardır. Bunlar, yapay zekanın OpenSpec iş akışını takip etmesini söylerler: bir teklif taslağı hazırlama, özellik yazma, görev listesinden oluşturma, bitince arşivleme. Bunları Claude Code, Cursor, Windsurf, Copilot veya kullandığınız herhangi bir asistanta yazarsınız.
+**Slash komutları (sohbet yarısı).** AI asistanınıza yazdığınız `/opsx:propose` ve `/opsx:apply` gibi kısa komutlar. Bunlar AI'ya OpenSpec iş akışını takip etmesini söyler: bir öneri taslağı oluştur, özellik belgeleri yaz, görev listesinden oluştur, bittiğinde arşivle. Bu komutları Claude Code, Cursor, Windsurf, Copilot veya kullandığınız herhangi bir asistanın sohbetine yazabilirsiniz.
 
 ```text
-/opsx:propose add-dark-mode    (AI sohbetinde yazıldı)
-/opsx:apply                    (AI sohbetinde yazıldı)
-/opsx:archive                  (AI sohbetinde yazıldı)
+/opsx:propose add-dark-mode    (AI sohbetinize yazıldı)
+/opsx:apply                    (AI sohbetinize yazıldı)
+/opsx:archive                  (AI sohbetinize yazıldı)
 ```
 
-İşte tek bir resimde mental model:
+İşte tek bir resimde zihinsel model:
 
 ```text
-        SİZİN TERMINALİN                         SİZİN AI ASİSTANINIZIN SOHBETİ
+        TERMINALİNİZ                         AI ASİSTANINIZIN SOHBETİ
    ┌──────────────────────┐               ┌──────────────────────────────┐
-   │  $ openspec init     │   komutları    │  /opsx:propose add-dark-mode  │
+   │  $ openspec init     │   yükler      │  /opsx:propose add-dark-mode  │
    │  $ openspec list     │  ──────────►  │  /opsx:apply                  │
-   │  $ openspec view     │   çalıştır      │  /opsx:archive                │
-   └──────────────────────┘    & beceri   └──────────────────────────────┘
-        burada openspec çalıştır                       burada /opsx:* çalıştır
+   │  $ openspec view     │   komutlar     │  /opsx:archive                │
+   └──────────────────────┘    & beceriler └──────────────────────────────┘
+        openspec'ı burada çalıştır                       /opsx:* komutlarını burada çalıştır
 ```
 
-Ok işaretine dikkat edin. Terminal'de `openspec init` çalıştırmak, slash komutlarını AI aracınıza *yükleyen* şeydir. Terminal yarısı sohbet yarısını hazırlar. Bundan sonra günlük çalışma büyük ölçüde sohbette gerçekleşir.
+Okuyu fark edin. Terminalinizde `openspec init` çalıştırmak, slash komutlarını AI aracınıza *yükleyen* eylemdir. Terminal yarısı, sohbet yarısını kurar. Bundan sonra günlük kullanım büyük ölçüde sohbette gerçekleşir.
 
-## "Etkileşimli Moda Nasıl Başlarım?"
+## "Etkileşimli modu nasıl başlatırım?"
 
-**Başlatılacak ayrı bir etkileşimli mod yoktur.** Bu soru sıkça sorulduğu için, buna net bir cevap vermek gerekir.
+**Başlatılacak ayrı bir etkileşimli mod yoktur.** Bu soru çok sık sorulur, o yüzden net bir cevap verme hakkımız var.
 
-Özel bir OpenSpec moduna girmiyorsunuz. Siz sadece her zaman yaptığınız gibi AI kodlama asistanınızı açar ve sohbete bir slash komutu yazarsınız. Slash komutu, OpenSpec'e "girmek" yöntemidir. Asistanınız bunu tanır, eşleşen OpenSpec becerisini yükler ve iş akışını takip etmeye başlar.
+Özel bir OpenSpec moduna girmenize gerek yoktur. Her zaman yaptığınız gibi AI kodlama asistanınızı açın ve sohbete bir slash komutu yazın. Slash komutu, OpenSpec'a "girdiğiniz" yoldur. Asistanınız bunu tanır, eşleşen OpenSpec becerisini yükler ve iş akışını takip etmeye başlar.
 
-Gerçek talimatlar şunlardır:
+O halde gerçek talimatlar şunlardır:
+1. Projenizde AI kodlama asistanınızı (Claude Code, Cursor, Windsurf vb.) açın.
+2. Sohbetine `/opsx:propose` yazın, başka herhangi bir isteği yazdığınız aynı yere.
+3. Otomatik tamamlamayı izleyin: OpenSpec yüklüyse, slash yazdığınızda `/opsx:propose`, `/opsx:apply` ve benzeri komutlar görünecektir.
 
-1. Projenizde AI kodlama asistanınızı açın (Claude Code, Cursor, Windsurf vb.).
-2. Sohbetine `/opsx:propose` yazın; başka herhangi bir istek yazdığınız yer burasıdır.
-3. Otomatik tamamlama özelliğini izleyin: OpenSpec kuruluysa, slash'ı yazarken `/opsx:propose`, `/opsx:apply` ve benzerlerinin göründüğünü göreceksiniz.
+İşte bu kadar. Açıp kapatacağınız bir mod yok, başlatılacak bir arka plan programı yok, ayrı bir pencere yok.
 
-Hepsi bu kadar. Açıp kapatılacak bir mod yok, başlatılacak bir daemon yok, ayrı bir pencere yok.
+Gerçekten etkileşimli olan tek şey terminaldedir: `openspec view`. Özellik belgelerinizi ve değişikliklerinizi görmek için bir gösterge paneli açar. Ancak bu bir görüntüleyicidir, öneri yapıp üzerinde çalıştığınız araç değildir. Yapılandırma işlemi sohbetteki slash komutlarıyla gerçekleşir.
 
-Gerçekten etkileşimli olan tek bir şey terminalde yer alır: `openspec view`. Bu, özelliklerinizi ve değişikliklerinizi göz atmak için bir kontrol paneli açar. Ancak bu bir görüntüleyicidir; teklif verdiğiniz ve oluşturduğunuz şey değildir. Oluşturma işlemi sohbetteki slash komutları aracılığıyla gerçekleşir.
+## Bu ayrımın neden var olduğu
 
-## Bu Ayrımın Nedeni
+Bunu anlamak değerli, çünkü OpenSpec'ın 25'ten fazla farklı AI aracıyla çalışmasının nedenini açıklar.
 
-Bu, OpenSpec'in 25'ten fazla farklı AI aracıyla neden çalıştığını açıkladığı için anlamaya değerdir.
+CLI **mottordur**. Kuralları bilir: bir değişiklik klasörünün nasıl göründüğü, hangi ürünlerin birbirine bağlı olduğu, bir delta özellik belgesini kaynak gerçeğinize nasıl birleştireceğiniz. Her yerde aynıdır.
 
-CLI, **motorudur**. Kuralları bilir: bir değişiklik klasörünün nasıl göründüğünü, hangi eserlerin hangilerine bağlı olduğunu, bir delta spec'i doğru kaynağa nasıl birleştireceğini. Her yerde aynıdır.
+Slash komutları **direksiyondur** ve her AI aracının kendine özgü biraz farklı bir direksiyonu vardır. Claude Code bunlara komut der. Cursor ve Windsurf kendi formatlarına sahiptir. Bazı araçlar bunlara beceri der. `openspec init` çalıştırdığınızda OpenSpec, seçtiğiniz her araç için doğru türde dosyaları oluşturur, bu sayede tercih ettiğiniz asistan ne olursa olsun aynı `/opsx:propose` amacı çalışır.
 
-Slash komutları ise **direksiyon simididir** ve her AI aracının biraz farklı olanı vardır. Claude Code onlara komut der. Cursor ve Windsurf kendi formatlarına sahiptir. Bazı araçlar onları beceri (skill) olarak adlandırır. `openspec init` çalıştırdığınızda, OpenSpec seçtiğiniz her araç için doğru türden bir dosya oluşturur, böylece hangi asistanı tercih ederseniz edin aynı `/opsx:propose` niyetinin işe yaramasını sağlar.
+Bu tasarımın gücü: iş akışını bir kez öğrenir ve araçlar arasında taşırısınız. Değiş tokuş: bir komutun tam sözdizimi araçlar arasında biraz farklılık gösterebilir, bu konu bir sonraki bölümde ele alınacaktır.
 
-Bu tasarımın gücü şudur: İş akışını bir kez öğrenirsiniz ve bunu tüm araçlara taşırsınız. Dezavantajı ise şudur: Bir komutun tam sözdizimi, araçlar arasında biraz farklılık gösterebilir; bu da sonraki bölümdür.
+## Araçlara göre slash komut sözdizimi
 
-## Araçlara Göre Slash Komutu Sözdizimi
+Amaç her yerde aynıdır. Noktalama işaretleri farklıdır. Asistanınıza uyan formu kullanın.
 
-Amaç her yerde aynıdır. Noktalama işaretleri farklılık gösterir. Asistanınızla eşleşen formu kullanın.
-
-| Tool | How you type it |
+| Araç | Nasıl yazarsınız |
 |------|-----------------|
 | Claude Code | `/opsx:propose`, `/opsx:apply` |
 | Cursor | `/opsx-propose`, `/opsx-apply` |
 | Windsurf | `/opsx-propose`, `/opsx-apply` |
 | GitHub Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
-| Kimi CLI | skill-style, e.g. `/skill:openspec-propose` |
-| Trae | skill-style, e.g. `/openspec-propose` |
+| CodeArts | beceri tarzı, örn. `/openspec-propose` |
+| Codex | `.codex/skills/openspec-*` üzerinden beceri tarzı |
+| Oh My Pi | `/opsx-propose`, `/opsx-apply` |
+| Kimi CLI | beceri tarzı, örn. `/skill:openspec-propose` |
+| Trae | `/opsx-propose`, `/opsx-apply` |
 
-Çoğu araç ya iki nokta üstü formunu (`/opsx:propose`) ya da tireli formu (`/opsx-propose`) kullanır. Birkaç araç OpenSpec'i slash komutu yerine adlandırılmış bir beceri olarak gösterir; bu durumlar için beceriyi adıyla çağırırsınız. Tam, araç bazlı liste, tam olarak hangi dosyaların nereye yazılacağını içeren [Supported Tools](supported-tools.md)'da yer alır.
+Çoğu araç ya iki nokta üst üste formunu (`/opsx:propose`) ya da tire formunu (`/opsx-propose`) kullanır. Birkaç araç, OpenSpec'ı slash komutları yerine adlandırılmış beceriler olarak sunar; bunlar için beceriyi adıyla çağırırsınız. Tam araç listesi, dosyaların tam olarak nereye yazıldığı dahil, [Desteklenen Araçlar](supported-tools.md) sayfasında yer alır.
 
-Şüpheye düştüğünüzde, AI sohbetinize bir slash yazın ve otomatik tamamlamaya bakın. Aracınız beklediği formu size gösterecektir.
+Şüpheye düştüğünüzde AI sohbetinize bir slash yazın ve otomatik tamamlamaya bakın. Aracınız beklediği formu size gösterecektir.
 
-## Komutlar Nasıl Oluştu: Skills ve Commands
+## Komutlar nasıl oraya geldi: beceriler ve komutlar
 
-`openspec init` (veya `openspec update`) çalıştırdığınızda, OpenSpec, AI aracınızın iş akışını bulabilmesi için projenize küçük dosyalar yazar. Aracınıza ve ayarlarına bağlı olarak bunlar **skills**, **commands** veya her ikisi olabilir.
+`openspec init` (veya `openspec update`) çalıştırdığınızda OpenSpec, AI aracınızın iş akışını bulabilmesi için projenize küçük dosyalar yazar. Aracınıza ve ayarlarınıza bağlı olarak bunlar **beceriler**, **komutlar** veya her ikisidir.
 
-- **Skills**, `.claude/skills/openspec-*/SKILL.md` gibi yerlerde bulunur. Bunlar, asistanınızın otomatik olarak algıladığı bir talimatlar klasörü olan ortaya çıkan çapraz araç standardıdır.
-- **Commands**, `.claude/commands/opsx/<id>.md` gibi yerlerde bulunur. Bunlar eski, araç bazlı slash komutu dosyalarıdır.
+- **Beceriler** `.claude/skills/openspec-*/SKILL.md` gibi yerlerde bulunur. Bunlar, yükselen çapraz araç standardıdır: asistanınızın otomatik olarak algıladığı bir talimatlar klasörüdür.
+- **Komutlar** `.claude/commands/opsx/<id>.md` gibi yerlerde bulunur. Bunlar, daha eski araç özel slash komut dosyalarıdır. Codex için üretilmiş komut dosyaları yoktur; `.codex/skills/openspec-*` kullanın.
 
-Aracınızın hangisini kullandığını dert etmenize gerek yok. Siz sadece slash komutunu yazarsınız ve işe yarar. Ancak bu dosyaların var olduğunu bilmek bir şey ters gittiğinde yardımcı olur: eğer komutlarınız kaybolursa, genellikle bu dosyalar eksik veya eskimiş demektir ve `openspec update` onları yeniden oluşturur.
+Aracınızın hangisini kullandığıyla ilgilenmenize gerek yoktur. Sadece slash komutunu yazın ve çalışsın. Ancak bu dosyaların var olduğunu bilmek, bir şeyler ters gittiğinde yardımcı olur: komutlarınız kaybolursa bunun genellikle bu dosyaların eksik veya eski olduğu anlamına gelir ve `openspec update` bunları yeniden üretir.
 
-Araç bazlı tam yollar için [Supported Tools](supported-tools.md)'a, skills'in eski komut odaklı yaklaşımı nasıl değiştirdiğine dair ise [Migration Guide](migration-guide.md)'a bakın.
+Her araç için tam yollar için [Desteklenen Araçlar](supported-tools.md) sayfasına ve becerilerin daha eski yalnızca komut yaklaşımını nasıl değiştirdiğini görmek için [Geçiş Kılavuzu](migration-guide.md) sayfasına bakın.
 
-## Kurulduğunu Doğrulama
+## Yüklü olduğunu doğrulama
 
-Hızlı kontroller, en hızlısı önce:
+Hızlı kontroller, en hızlısından başlayarak:
 
-1. **AI sohbetinize bir slash yazın.** `/opsx` yazmaya başlayın ve otomatik tamamlama önerilerini izleyin. Eğer bunlar görünüyorsa, hazırsınız demektir.
-2. **Dosyaları arayın.** Claude Code için, `.claude/skills/` içinde `openspec-*` klasörleri olup olmadığını kontrol edin. Diğer araçlar kendi dizinlerini kullanır ([Supported Tools](supported-tools.md) bunları listeler).
-3. **Kurulumu tekrar çalıştırın.** Proje kökünden `openspec update` komutunu çalıştırın. Bu, yapılandırdığınız araçlar için beceri ve komut dosyalarını yeniden oluşturur.
-4. **Asistanınızı yeniden başlatın.** Birçok araç başlangıçta becerileri ve komutları tarar, bu yüzden taze bir pencere eksik olan adım olabilir.
+1. **AI sohbetinize bir slash yazın.** `/opsx` yazmaya başlayın ve otomatik tamamlama önerilerini izleyin. Bunlar görünüyorsa her şey hazırdır.
+2. **Dosyalara bakın.** Claude Code için `.claude/skills/` klasörünün `openspec-*` klasörleri içerdiğinden emin olun. Diğer araçlar kendi dizinlerini kullanır ([Desteklenen Araçlar](supported-tools.md) listeler).
+3. **Kurulumu yeniden çalıştırın.** Proje kök dizininden `openspec update` komutunu çalıştırın. Bu, yapılandırdığınız araçlar için beceri ve komut dosyalarını yeniden üretir.
+4. **Asistanınızı yeniden başlatın.** Birçok araç, beceri ve komutları başlangıçta tarar, bu yüzden yeni bir pencere eksik adım olabilir.
 
-## Hangi Komutlara Sahibim?
+## Hangi komutlara sahibim?
 
-Varsayılan olarak OpenSpec, **temel** slash komut seti'ni kurar:
+Varsayılan olarak OpenSpec, slash komutlarının **çekirdek** kümesini yükler:
 
-- `/opsx:explore`: Bir değişikliğe karar vermeden önce AI ile bir fikri düşünme (kararsız olduğunuzda harika bir ilk adımdır)
-- `/opsx:propose`: Bir değişiklik oluşturma ve tüm planlama eserlerini tek adımda taslak haline getirme
-- `/opsx:apply`: Görev listesinden geçerek değişikliği oluşturma
-- `/opsx:sync`: Bir değişikliğin spec güncellemelerini ana özelliklerinize birleştirme (genellikle otomatik)
-- `/opsx:archive`: Bir değişikliği bitirip arşivleme
+- `/opsx:explore`: bir değişikliğe bağlanmadan önce AI ile bir fikri düşünmek için (emin değilseniz harika bir ilk adımdır)
+- `/opsx:propose`: bir değişiklik oluşturun ve tüm planlama ürünlerini tek adımda taslağını oluşturun
+- `/opsx:apply`: görev listesinden geçerek değişikliği oluşturun
+- `/opsx:sync`: bir değişikliğin özellik belgesi güncellemelerini ana özellik belgelerinizle birleştirin (genellikle otomatiktir)
+- `/opsx:archive`: bir değişikliği bitirin ve arşivleyin
 
-İyi bir varsayılan ritim: Ne yapacağını çözüyorsanız `explore`, ardından `propose`, `apply`, `archive`. [Explore First](explore.md) rehberi bu başlangıç adımının neden faydalı olduğunu açıklar.
+İyi bir varsayılan ritim: ne yapacağınızı anlamaya çalıştığınızda `explore`, sonra `propose`, `apply`, `archive`. [Önce Keşfet](explore.md) kılavuzu, bu açılış adımının neden değerli olduğunu açıklar.
 
-Daha ince kontrol isteyenler için **genişletilmiş** bir set de vardır (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`). Bunu `openspec config profile` ile açar, ardından `openspec update` ile uygularsınız.
+Daha ince kontrol istiyorsanız **genişletilmiş** bir küme de vardır (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`). Bunu `openspec config profile` komutuyla etkinleştirirsiniz, ardından `openspec update` ile uygularsınız.
 
-Tüm bunlara yeni misiniz? `/opsx:onboard` (genişletilmiş sette) kendi kod tabanınız üzerinde tam bir değişikliği size anlatarak adım adım sizi yönlendirir. Bu, mümkün olan en samimi tanımdır.
+Buna yeni misiniz? `/opsx:onboard` (genişletilmiş kümede) kendi kod tabanınızda tam bir değişiklik boyunca size rehberlik eder, her adımı anlatır. Mümkün olan en dostça giriştir.
 
-Her komutun ayrıntılığını ne yaptığını görmek için [Commands](commands.md)'a bakın. Hangisini ne zaman kullanmanız gerektiğini görmek için [Workflows](workflows.md)'a bakın.
+Her komutun ne yaptığını detaylı olarak görmek için [Komutlar](commands.md) sayfasına, hangisini ne zaman kullanacağınızı görmek için [İş Akışları](workflows.md) sayfasına bakın.
 
-## Temiz Bir İlk Çalıştırma
+## Temiz bir ilk çalıştırma
 
-Bunları bir araya getirerek, her adımın nerede gerçekleştiği etiketlenmiş tüm sırayı aşağıda bulabilirsiniz.
+Hepsi bir araya getirildiğinde, her adımın nerede gerçekleştiği etiketlenmiş tüm sıralama şu şekildedir:
 
 ```text
 TERMINAL   $ npm install -g @fission-ai/openspec@latest
 TERMINAL   $ cd your-project
 TERMINAL   $ openspec init
-              (AI aracınıza slash komutlarını kurar)
+              (slash komutlarını AI aracınıza yükler)
 
-AI CHAT      /opsx:explore
-              (isteğe bağlı: fikri önce AI ile düşünme)
+AI SOHBETİ      /opsx:explore
+              (isteğe bağlı: fikri önce AI ile düşünün)
 
-AI CHAT      /opsx:propose add-dark-mode
-              (AI teklif, özellikler, tasarım ve görevleri taslak haline getirir)
+AI SOHBETİ      /opsx:propose add-dark-mode
+              (AI öneri taslağı, özellik belgeleri, tasarım ve görevleri oluşturur)
 
-AI CHAT      /opsx:apply
-              (AI bunu oluşturur, görevleri işaretleyerek)
+AI SOHBETİ      /opsx:apply
+              (AI görevleri işaretleyerek oluşturur)
 
-AI CHAT      /opsx:archive
-              (değişiklik özelliklere birleştirilir ve arşivlenir)
+AI SOHBETİ      /opsx:archive
+              (değişiklik özellik belgelerinizle birleştirilir ve arşivlenir)
 ```
 
-Kurulum için iki terminal adımı. Sonra sohbette yaşıyorsunuz. İşte ritim bu.
+Kurulum için iki terminal adımı. Sonra sohbette yaşarsınız. İşte bu ritim.
 
 ## İlgili
 
-- [Getting Started](getting-started.md): tam ilk değişiklik rehberi
-- [Commands](commands.md): her slash komutu ayrıntılı olarak
-- [CLI](cli.md): her terminal komutu ayrıntılı olarak
-- [Supported Tools](supported-tools.md): araç bazlı sözdizimi ve dosya konumları
-- [FAQ](faq.md): daha fazla hızlı cevap
-- [Troubleshooting](troubleshooting.md): komutlar görünmediğinde çözümler
+- [Başlarken](getting-started.md): ilk değişiklik için tam adım adım rehber
+- [Komutlar](commands.md): her slash komutunun detaylı açıklaması
+- [CLI](cli.md): her terminal komutunun detaylı açıklaması
+- [Desteklenen Araçlar](supported-tools.md): araç özel sözdizimi ve dosya konumları
+- [SSS](faq.md): daha fazla hızlı cevap
+- [Sorun Giderme](troubleshooting.md): komutlar görünmeyince uygulanan düzeltmeler

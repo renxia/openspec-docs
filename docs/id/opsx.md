@@ -1,34 +1,30 @@
-# Alur Kerja OPSX
-
-> Umpan balik diterima di [Discord](https://discord.gg/YctCnvvshC).
-
+# OPSX Workflow
+> Kami menyambut masukan di [Discord](https://discord.gg/YctCnvvshC).
 ## Apa Itu?
-
 OPSX sekarang adalah alur kerja standar untuk OpenSpec.
+Ini adalah **alur kerja yang fleksibel dan iteratif** untuk perubahan pada OpenSpec. Tidak ada lagi fase yang kaku — Anda hanya perlu melakukan tindakan yang bisa dilakukan kapan saja.
 
-Ini adalah **alur kerja yang fleksibel dan iteratif** untuk perubahan OpenSpec. Tidak ada lagi fase yang kaku — hanya tindakan yang dapat Anda lakukan kapan saja.
+## Mengapa Hal Ini Ada
 
-## Mengapa Ini Ada
+Alur kerja OpenSpec legacy berfungsi, tetapi **terkunci**:
 
-Alur kerja OpenSpec lama berfungsi, tetapi **terkunci rapat**:
+- **Instruksi di-hardcode** — tertanam dalam TypeScript, Anda tidak dapat mengubahnya
+- **Semua atau tidak sama sekali** — satu perintah besar membuat semuanya, tidak dapat menguji bagian individual
+- **Struktur tetap** — alur kerja yang sama untuk semua orang, tidak ada penyesuaian
+- **Kotak hitam** — ketika output AI buruk, Anda tidak dapat menyesuaikan prompt
 
-- **Instruksi sudah tertanam** — terkubur dalam TypeScript, Anda tidak bisa mengubahnya
-- **Semua atau tidak sama sekali** — satu perintah besar membuat segalanya, tidak bisa menguji bagian individual
-- **Struktur tetap** — alur kerja yang sama untuk semua orang, tanpa kustomisasi
-- **Kotak hitam** — ketika output AI buruk, Anda tidak bisa menyesuaikan prompt-nya
+**OPSX membukanya.** Sekarang siapa pun dapat:
 
-**OPSX membukanya.** Sekarang siapa pun bisa:
-
-1. **Bereksperimen dengan instruksi** — edit template, lihat apakah AI bekerja lebih baik
-2. **Menguji secara granular** — validasi instruksi setiap artefak secara independen
-3. **Mengkustomisasi alur kerja** — definisikan artefak dan dependensi Anda sendiri
-4. **Iterasi dengan cepat** — ubah template, uji segera, tanpa rebuild
+1. **Bereksperimen dengan instruksi** — edit templat, lihat apakah AI bekerja lebih baik
+2. **Uji secara detail** — validasi instruksi setiap artefak secara independen
+3. **Sesuaikan alur kerja** — definisikan artefak dan dependensi Anda sendiri
+4. **Iterasi dengan cepat** — ubah templat, uji segera, tanpa rebuild
 
 ```
-Alur kerja lama:                      OPSX:
+Alur kerja legacy:                      OPSX:
 ┌────────────────────────┐           ┌────────────────────────┐
-│  Tertanam dalam paket  │           │  schema.yaml           │◄── Anda mengedit ini
-│  (tidak bisa diubah)   │           │  templates/*.md        │◄── Atau ini
+│  Di-hardcode di paket  │           │  schema.yaml           │◄── Anda edit ini
+│  (tidak dapat diubah)  │           │  templates/*.md        │◄── Atau ini
 │        ↓               │           │        ↓               │
 │  Tunggu rilis baru     │           │  Efek instan           │
 │        ↓               │           │        ↓               │
@@ -37,20 +33,20 @@ Alur kerja lama:                      OPSX:
 ```
 
 **Ini untuk semua orang:**
-- **Tim** — buat alur kerja yang sesuai dengan cara kerja Anda sebenarnya
+- **Tim** — buat alur kerja yang sesuai dengan cara Anda benar-benar bekerja
 - **Pengguna tingkat lanjut** — sesuaikan prompt untuk mendapatkan output AI yang lebih baik untuk basis kode Anda
 - **Kontributor OpenSpec** — bereksperimen dengan pendekatan baru tanpa rilis
 
-Kita semua masih belajar apa yang paling berhasil. OPSX memungkinkan kita belajar bersama.
+Kita semua masih belajar apa yang bekerja paling baik. OPSX memungkinkan kita belajar bersama.
 
 ## Pengalaman Pengguna
 
-**Masalah dengan alur kerja linear:**
-Anda "dalam fase perencanaan", lalu "dalam fase implementasi", lalu "selesai". Tetapi pekerjaan nyata tidak bekerja seperti itu. Anda mengimplementasikan sesuatu, menyadari desain Anda salah, perlu memperbarui spesifikasi, melanjutkan implementasi. Fase linear bertentangan dengan cara kerja yang sebenarnya terjadi.
+**Masalah dengan alur kerja linier:**
+Anda "dalam fase perencanaan", kemudian "dalam fase implementasi", kemudian "selesai". Tetapi pekerjaan nyata tidak bekerja seperti itu. Anda mengimplementasikan sesuatu, menyadari desain Anda salah, perlu memperbarui spesifikasi, melanjutkan implementasi. Fase linier melawan cara kerja yang sebenarnya terjadi.
 
 **Pendekatan OPSX:**
-- **Aksi, bukan fase** — buat, implementasikan, perbarui, arsipkan — lakukan kapan saja
-- **Dependensi adalah pemberdaya** — mereka menunjukkan apa yang mungkin, bukan apa yang diperlukan selanjutnya
+- **Tindakan, bukan fase** — buat, implementasi, perbarui, arsipkan — lakukan salah satunya kapan saja
+- **Dependensi adalah pemungkinkan** — mereka menunjukkan apa yang mungkin, bukan apa yang diperlukan selanjutnya
 
 ```
   proposal ──→ specs ──→ design ──→ tasks ──→ implement
@@ -59,19 +55,19 @@ Anda "dalam fase perencanaan", lalu "dalam fase implementasi", lalu "selesai". T
 ## Pengaturan
 
 ```bash
-# Pastikan Anda sudah menginstal openspec — skill akan dibuat secara otomatis
+# Pastikan Anda telah menginstal openspec — keterampilan dihasilkan secara otomatis
 openspec init
 ```
 
-Ini membuat skill di `.claude/skills/` (atau setara) yang dideteksi secara otomatis oleh asisten pengkodean AI.
+Ini membuat keterampilan di `.claude/skills/` (atau yang setara) yang secara otomatis terdeteksi oleh asisten koding AI.
 
-Secara default, OpenSpec menggunakan profil alur kerja `core` (`propose`, `explore`, `apply`, `sync`, `archive`). Jika Anda menginginkan perintah alur kerja yang diperluas (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`), konfigurasikan dengan `openspec config profile` dan terapkan dengan `openspec update`.
+Secara default, OpenSpec menggunakan profil alur kerja `core` (`propose`, `explore`, `apply`, `sync`, `archive`). Jika Anda ingin perintah alur kerja yang diperluas (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`), konfigurasikan dengan `openspec config profile` dan terapkan dengan `openspec update`.
 
 Selama pengaturan, Anda akan diminta untuk membuat **konfigurasi proyek** (`openspec/config.yaml`). Ini opsional tetapi direkomendasikan.
 
 ## Konfigurasi Proyek
 
-Konfigurasi proyek memungkinkan Anda mengatur default dan menyuntikkan konteks spesifik proyek ke dalam semua artefak.
+Konfigurasi proyek memungkinkan Anda mengatur default dan menyuntikkan konteks khusus proyek ke semua artefak.
 
 ### Membuat Konfigurasi
 
@@ -100,49 +96,49 @@ rules:
 ### Bidang Konfigurasi
 
 | Bidang | Tipe | Deskripsi |
-|--------|------|-----------|
-| `schema` | string | Schema default untuk perubahan baru (contoh: `spec-driven`) |
-| `context` | string | Konteks proyek yang disuntikkan ke dalam semua instruksi artefak |
+|-------|------|-------------|
+| `schema` | string | Skema default untuk perubahan baru (misalnya, `spec-driven`) |
+| `context` | string | Konteks proyek yang disuntikkan ke semua instruksi artefak |
 | `rules` | object | Aturan per artefak, dikunci berdasarkan ID artefak |
 
-### Cara Kerjanya
+### Bagaimana Cara Kerjanya
 
-**Prioritas schema** (tertinggi ke terendah):
-1. Flag CLI (`--schema <name>`)
+**Prioritas skema** (tertinggi ke terendah):
+1. Bendera CLI (`--schema <nama>`)
 2. Metadata perubahan (`.openspec.yaml` di direktori perubahan)
 3. Konfigurasi proyek (`openspec/config.yaml`)
 4. Default (`spec-driven`)
 
-**Suntikan konteks:**
-- Konteks ditambahkan di awal setiap instruksi artefak
+**Penyuntikan konteks:**
+- Konteks ditambahkan di depan setiap instruksi artefak
 - Dibungkus dalam tag `<context>...</context>`
 - Membantu AI memahami konvensi proyek Anda
 
-**Suntikan aturan:**
+**Penyuntikan aturan:**
 - Aturan hanya disuntikkan untuk artefak yang cocok
 - Dibungkus dalam tag `<rules>...</rules>`
-- Muncul setelah konteks, sebelum template
+- Muncul setelah konteks, sebelum templat
 
-### ID Artefak Berdasarkan Schema
+### ID Artefak berdasarkan Skema
 
 **spec-driven** (default):
-- `proposal` — Proposal perubahan
+- `proposal` — Usulan perubahan
 - `specs` — Spesifikasi
 - `design` — Desain teknis
 - `tasks` — Tugas implementasi
 
 ### Validasi Konfigurasi
 
-- ID artefak yang tidak dikenal di `rules` menghasilkan peringatan
-- Nama schema divalidasi terhadap schema yang tersedia
+- ID artefak yang tidak diketahui dalam `rules` menghasilkan peringatan
+- Nama skema divalidasi terhadap skema yang tersedia
 - Konteks memiliki batas ukuran 50KB
 - YAML yang tidak valid dilaporkan dengan nomor baris
 
 ### Pemecahan Masalah
 
-**"ID artefak tidak dikenal di rules: X"**
-- Periksa ID artefak sesuai dengan schema Anda (lihat daftar di atas)
-- Jalankan `openspec schemas --json` untuk melihat ID artefak untuk setiap schema
+**"ID artefak yang tidak diketahui dalam aturan: X"**
+- Periksa ID artefak cocok dengan skema Anda (lihat daftar di atas)
+- Jalankan `openspec schemas --json` untuk melihat ID artefak untuk setiap skema
 
 **Konfigurasi tidak diterapkan:**
 - Pastikan file berada di `openspec/config.yaml` (bukan `.yml`)
@@ -151,39 +147,40 @@ rules:
 
 **Konteks terlalu besar:**
 - Konteks dibatasi hingga 50KB
-- Ringkas atau tautkan ke dokumen eksternal sebagai gantinya
+- Merangkum atau menautkan ke dokumen eksternal sebagai gantinya
 
 ## Perintah
 
-| Perintah | Apa yang dilakukannya |
-|----------|----------------------|
-| `/opsx:propose` | Membuat perubahan dan menghasilkan artefak perencanaan dalam satu langkah (jalur cepat default) |
-| `/opsx:explore` | Memikirkan ide, menyelidiki masalah, memperjelas persyaratan |
-| `/opsx:new` | Memulai kerangka perubahan baru (alur kerja diperluas) |
-| `/opsx:continue` | Membuat artefak berikutnya (alur kerja diperluas) |
-| `/opsx:ff` | Mempercepat artefak perencanaan (alur kerja diperluas) |
-| `/opsx:apply` | Mengimplementasikan tugas, memperbarui artefak sesuai kebutuhan |
-| `/opsx:verify` | Memvalidasi implementasi terhadap artefak (alur kerja diperluas) |
-| `/opsx:sync` | Menyinkronkan spesifikasi delta ke utama (alur kerja default, opsional) |
-| `/opsx:archive` | Mengarsipkan saat selesai |
-| `/opsx:bulk-archive` | Mengarsipkan beberapa perubahan yang telah selesai (alur kerja diperluas) |
-| `/opsx:onboard` | Panduan langkah demi langkah untuk perubahan ujung-ke-ujung (alur kerja diperluas) |
+| Perintah | Apa yang dilakukan |
+|---------|--------------|
+| `/opsx:propose` | Buat perubahan dan hasilkan artefak perencanaan dalam satu langkah (jalur cepat default) |
+| `/opsx:explore` | Pikirkan ide, investigasi masalah, klarifikasi persyaratan |
+| `/opsx:new` | Mulai kerangka perubahan baru (alur kerja yang diperluas) |
+| `/opsx:continue` | Buat artefak berikutnya (alur kerja yang diperluas) |
+| `/opsx:ff` | Fast-forward artefak perencanaan (alur kerja yang diperluas) |
+| `/opsx:apply` | Implementasi tugas, memperbarui artefak sesuai kebutuhan |
+| `/opsx:update` | Revisi artefak perencanaan perubahan dan jaga agar tetap koheren |
+| `/opsx:verify` | Validasi implementasi terhadap artefak (alur kerja yang diperluas) |
+| `/opsx:sync` | Sinkronkan delta spesifikasi ke main (alur kerja default, opsional) |
+| `/opsx:archive` | Arsipkan ketika selesai |
+| `/opsx:bulk-archive` | Arsipkan banyak perubahan yang telah selesai (alur kerja yang diperluas) |
+| `/opsx:onboard` | Panduan langkah demi langkah perubahan end-to-end (alur kerja yang diperluas) |
 
 ## Penggunaan
 
-### Jelajahi sebuah ide
+### Jelajahi ide
 ```
 /opsx:explore
 ```
-Pikirkan ide, selidiki masalah, bandingkan opsi. Tidak diperlukan struktur - hanya mitra berpikir. Ketika wawasan mengkristal, transisikan ke `/opsx:propose` (default) atau `/opsx:new`/`/opsx:ff` (diperluas).
+Pikirkan ide, investigasi masalah, bandingkan opsi. Tidak ada struktur yang diperlukan - hanya mitra berpikir. Ketika wawasan mengkristal, transisi ke `/opsx:propose` (default) atau `/opsx:new`/`/opsx:ff` (diperluas).
 
 ### Mulai perubahan baru
 ```
 /opsx:propose
 ```
-Membuat perubahan dan menghasilkan artefak perencanaan yang diperlukan sebelum implementasi.
+Membuat perubahan dan menghasilkan artefak perencanaan yang dibutuhkan sebelum implementasi.
 
-Jika Anda telah mengaktifkan alur kerja diperluas, Anda dapat menggunakan:
+Jika Anda telah mengaktifkan alur kerja yang diperluas, Anda sebagai gantinya dapat menggunakan:
 
 ```text
 /opsx:new        # hanya kerangka
@@ -195,148 +192,153 @@ Jika Anda telah mengaktifkan alur kerja diperluas, Anda dapat menggunakan:
 ```
 /opsx:continue
 ```
-Menunjukkan apa yang siap dibuat berdasarkan dependensi, lalu membuat satu artefak. Gunakan berulang kali untuk membangun perubahan Anda secara bertahap.
+Menunjukkan apa yang siap dibuat berdasarkan dependensi, kemudian membuat satu artefak. Gunakan berulang kali untuk membangun perubahan Anda secara bertahap.
 
 ```
 /opsx:ff add-dark-mode
 ```
-Membuat semua artefak perencanaan sekaligus. Gunakan ketika Anda memiliki gambaran jelas tentang apa yang sedang Anda bangun.
+Membuat semua artefak perencanaan sekaligus. Gunakan ketika Anda memiliki gambaran yang jelas tentang apa yang Anda bangun.
 
-### Implementasikan (bagian yang fleksibel)
+### Implementasi (bagian yang fleksibel)
 ```
 /opsx:apply
 ```
-Mengerjakan tugas, mencentangnya saat Anda berjalan. Jika Anda menangani beberapa perubahan, Anda dapat menjalankan `/opsx:apply <name>`; jika tidak, itu harus menyimpulkan dari percakapan dan meminta Anda untuk memilih jika tidak bisa menentukan.
+Bekerja melalui tugas, menandai selesai saat Anda melakukannya. Jika Anda sedang menangani beberapa perubahan sekaligus, Anda dapat menjalankan `/opsx:apply <nama>`; jika tidak, seharusnya menyimpulkan dari percakapan dan meminta Anda untuk memilih jika tidak dapat menebak.
+
+### Memperbarui perubahan
+```
+/opsx:update add-dark-mode - we're storing the theme in a cookie now
+```
+Merevisi artefak perencanaan perubahan yang ada dan menjaganya tetap koheren - dalam segala arah (edit desain mungkin mempengaruhi kembali usulan). Hanya artefak perencanaan: tidak pernah mengedit kode, dan tidak pernah membuat artefak yang hilang (itu adalah `/opsx:continue`). Setiap edit dikonfirmasi dengan Anda terlebih dahulu. Jika perubahan telah diimplementasikan, itu merekomendasikan `/opsx:apply` agar kode mengejar rencana yang telah direvisi. Jika revisi Anda mengubah *tujuan* perubahan, mulailah dari awal sebagai gantinya - lihat [Kapan Memperbarui vs. Mulai dari Awal](#when-to-update-vs-start-fresh).
 
 ### Selesaikan
 ```
-/opsx:archive   # Pindahkan ke arsip saat selesai (meminta untuk menyinkronkan spesifikasi jika diperlukan)
+/opsx:archive   # Pindah ke arsip ketika selesai (meminta untuk menyinkronkan spesifikasi jika diperlukan)
 ```
 
-## Kapan Memperbarui vs. Memulai dari Awal
+## Kapan Memperbarui vs. Mulai dari Awal
 
-Anda selalu dapat mengedit proposal atau spesifikasi Anda sebelum implementasi. Tetapi kapan penyempurnaan menjadi "ini adalah pekerjaan yang berbeda"?
+Anda selalu dapat mengedit usulan atau spesifikasi Anda sebelum implementasi. Tetapi kapan penyempurnaan menjadi "ini pekerjaan yang berbeda"?
 
-### Apa yang Ditangkap oleh Proposal
+### Apa yang Ditangkap oleh Usulan
 
-Proposal mendefinisikan tiga hal:
-1. **Niat** — Masalah apa yang Anda selesaikan?
-2. **Cakupan** — Apa yang masuk/keluar dari batas?
+Usulan mendefinisikan tiga hal:
+1. **Tujuan** — Masalah apa yang sedang Anda selesaikan?
+2. **Ruang lingkup** — Apa yang ada di dalam/luar batas?
 3. **Pendekatan** — Bagaimana Anda akan menyelesaikannya?
 
 Pertanyaannya adalah: mana yang berubah, dan seberapa banyak?
 
 ### Perbarui Perubahan yang Ada Ketika:
 
-**Niat sama, eksekusi disempurnakan**
+**Tujuan yang sama, eksekusi yang disempurnakan**
 - Anda menemukan kasus tepi yang tidak Anda pertimbangkan
 - Pendekatan perlu disesuaikan tetapi tujuan tidak berubah
-- Implementasi mengungkapkan desain sedikit meleset
+- Implementasi menunjukkan desain sedikit tidak akurat
 
-**Cakupan menyempit**
-- Anda menyadari cakupan penuh terlalu besar, ingin mengirim MVP terlebih dahulu
-- "Tambahkan mode gelap" → "Tambahkan sakelar mode gelap (preferensi sistem di v2)"
+**Ruang lingkup menyempit**
+- Anda menyadari ruang lingkup penuh terlalu besar, ingin mengirim MVP terlebih dahulu
+- "Tambahkan mode gelap" → "Tambahkan tombol mode gelap (preferensi sistem di v2)"
 
-**Koreksi berbasis pembelajaran**
-- Basis kode tidak terstruktur seperti yang Anda kira
-- Dependensi tidak bekerja seperti yang diharapkan
-- "Gunakan variabel CSS" → "Gunakan awalan dark: Tailwind sebagai gantinya"
+**Koreksi yang didorong oleh pembelajaran**
+- Basis kode tidak terstruktur seperti yang Anda pikirkan
+- Dependensi tidak berfungsi seperti yang diharapkan
+- "Gunakan variabel CSS" → "Gunakan awalan `dark:` Tailwind sebagai gantinya"
 
 ### Mulai Perubahan Baru Ketika:
 
-**Niat berubah secara mendasar**
+**Tujuan berubah secara mendasar**
 - Masalah itu sendiri sekarang berbeda
-- "Tambahkan mode gelap" → "Tambahkan sistem tema komprehensif dengan warna, font, spasi kustom"
+- "Tambahkan mode gelap" → "Tambahkan sistem tema komprehensif dengan warna, font, spasi khusus"
 
-**Cakupan meledak**
-- Perubahan tumbuh begitu besar sehingga pada dasarnya pekerjaan yang berbeda
-- Proposal asli akan tidak dikenali setelah pembaruan
+**Ruang lingkup meledak**
+- Perubahan berkembang begitu banyak sehingga pada dasarnya pekerjaan yang berbeda
+- Usulan asli akan tidak dikenali setelah pembaruan
 - "Perbaiki bug login" → "Tulis ulang sistem autentikasi"
 
 **Asli dapat diselesaikan**
 - Perubahan asli dapat ditandai "selesai"
 - Pekerjaan baru berdiri sendiri, bukan penyempurnaan
-- Selesaikan "Tambahkan mode gelap MVP" → Arsipkan → Perubahan baru "Tingkatkan mode gelap"
+- Selesaikan "Tambahkan MVP mode gelap" → Arsipkan → Perubahan baru "Tingkatkan mode gelap"
 
 ### Heuristik
 
 ```
                         ┌─────────────────────────────────────┐
-                        │     Apakah ini pekerjaan yang sama? │
+                        │     Apakah ini pekerjaan yang sama?  │
                         └──────────────┬──────────────────────┘
                                        │
                     ┌──────────────────┼──────────────────┐
                     │                  │                  │
                     ▼                  ▼                  ▼
-             Niat sama?        >50% tumpang tindih?   Bisakah asli
-             Masalah sama?     Cakupan sama?          "selesai" tanpa
-                    │                  │               perubahan ini?
+             Tujuan sama?     >50% tumpang tindih? Dapat asli
+             Masalah sama?    Ruang lingkup sama?  diselesaikan tanpa
+                    │                  │          perubahan ini?
                     │                  │                  │
           ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
           │                 │  │             │   │               │
-         YA                TIDAK YA          TIDAK TIDAK           YA
+         YA               TIDAK YA          TIDAK TIDAK           YA
           │                 │  │             │   │               │
           ▼                 ▼  ▼             ▼   ▼               ▼
-       PERBARUI           BARU PERBARUI    BARU PERBARUI         BARU
+       PERBARUI          BARU PERBARUI      BARU PERBARUI        BARU
 ```
 
-| Uji | Perbarui | Perubahan Baru |
-|-----|----------|----------------|
-| **Identitas** | "Hal yang sama, disempurnakan" | "Pekerjaan berbeda" |
-| **Tumpang tindih cakupan** | >50% tumpang tindih | <50% tumpang tindih |
-| **Penyelesaian** | Tidak bisa "selesai" tanpa perubahan | Dapat menyelesaikan asli, pekerjaan baru berdiri sendiri |
-| **Cerita** | Rantai pembaruan menceritakan cerita yang koheren | Patch akan membingungkan lebih dari memperjelas |
+| Tes | Perbarui | Perubahan Baru |
+|------|--------|------------|
+| **Identitas** | "Hal yang sama, disempurnakan" | "Pekerjaan yang berbeda" |
+| **Tumpang tindih ruang lingkup** | >50% tumpang tindih | <50% tumpang tindih |
+| **Penyelesaian** | Tidak dapat "selesai" tanpa perubahan | Dapat menyelesaikan asli, pekerjaan baru berdiri sendiri |
+| **Cerita** | Rantai pembaruan menceritakan cerita yang koheren | Patch akan lebih membingungkan daripada menjelaskan |
 
 ### Prinsip
 
-> **Pembaruan melestarikan konteks. Perubahan baru memberikan kejelasan.**
+> **Pembaruan mempertahankan konteks. Perubahan baru memberikan kejelasan.**
 >
-> Pilih pembaruan ketika riwayat pemikiran Anda berharga.
-> Pilih baru ketika memulai dari awal akan lebih jelas daripada menambal.
+> Pilih pembaruan ketika sejarah pemikiran Anda berharga.
+> Pilih yang baru ketika memulai dari awal akan lebih jelas daripada menambal.
 
-Anggaplah seperti cabang git:
-- Terus commit saat mengerjakan fitur yang sama
+Pikirkan seperti cabang git:
+- Terus melakukan commit saat bekerja pada fitur yang sama
 - Mulai cabang baru ketika itu benar-benar pekerjaan baru
-- Terkadang gabungkan fitur parsial dan mulai dari awal untuk fase 2
+- Kadang-kadang gabungkan fitur parsial dan mulai dari awal untuk fase 2
 
-## Apa Perbedaannya?
+## Apa yang Berbeda?
 
 | | Legacy (`/openspec:proposal`) | OPSX (`/opsx:*`) |
 |---|---|---|
-| **Struktur** | Satu dokumen proposal besar | Artefak diskrit dengan dependensi |
-| **Alur Kerja** | Fase linear: rencana → implementasi → arsip | Tindakan fleksibel — lakukan apa saja kapan saja |
-| **Iterasi** | Canggung untuk kembali | Perbarui artefak seiring pembelajaran |
-| **Kustomisasi** | Struktur tetap | Didorong oleh skema (definisikan artefak Anda sendiri) |
+| **Struktur** | Satu dokumen usulan besar | Artefak terpisah dengan dependensi |
+| **Alur kerja** | Fase linier: rencanakan → implementasi → arsipkan | Tindakan fleksibel — lakukan apa saja kapan saja |
+| **Iterasi** | Tidak nyaman untuk kembali | Perbarui artefak saat Anda belajar |
+| **Penyesuaian** | Struktur tetap | Didorong oleh skema (definisikan artefak Anda sendiri) |
 
-**Wawasan kunci:** pekerjaan tidak bersifat linear. OPSX berhenti berpura-pura bahwa pekerjaan itu linear.
+**Wawasan kunci:** pekerjaan tidak linier. OPSX berhenti berpura-pura demikian.
 
-## Penelusuran Mendalam Arsitektur
+## Penelusuran Arsitektur
 
-Bagian ini menjelaskan cara kerja OPSX di balik layar dan perbandingannya dengan alur kerja lama.
-Contoh di bagian ini menggunakan kumpulan perintah yang diperluas (`new`, `continue`, dll.); pengguna default `core` dapat memetakan alur yang sama ke `propose → apply → sync → archive`.
+Bagian ini menjelaskan cara kerja OPSX di balik layar dan bagaimana perbandingannya dengan alur kerja legacy.
+Contoh dalam bagian ini menggunakan set perintah yang diperluas (`new`, `continue`, dll.); pengguna `core` default dapat memetakan alur yang sama ke `propose → apply → sync → archive`.
 
 ### Filosofi: Fase vs Aksi
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         ALUR KERJA LAMA                                      │
-│                    (Terkunci Fase, Semua-atau-Tidak Sama Sekali)            │
+│                         ALUR KERJA LEGACY                                    │
+│                    (Terikunci Fase, Semua atau Tidak Ada)                   │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │   ┌──────────────┐      ┌──────────────┐      ┌──────────────┐             │
-│   │   FASE       │ ───► │  FASE        │ ───► │   FASE       │             │
-│   │  PERENCANAAN │      │ PELAKSANAAN  │      │  PENGARSIPAN │             │
+│   │   FASE       │ ───► │   FASE       │ ───► │   FASE       │             │
+│   │ PERENCANAAN  │      │ IMPLEMENTASI │      │  ARSIP       │             │
 │   └──────────────┘      └──────────────┘      └──────────────┘             │
 │         │                     │                     │                       │
 │         ▼                     ▼                     ▼                       │
 │   /openspec:proposal   /openspec:apply      /openspec:archive              │
 │                                                                             │
-│   • Membuat SEMUA artefak sekaligus                                        │
-│   • Tidak dapat kembali memperbarui spesifikasi selama pelaksanaan         │
-│   • Gerbang fase memaksakan progresi linear                                 │
+│   • Membuat SEMUA artefak sekaligus                                         │
+│   • Tidak dapat kembali memperbarui spesifikasi selama implementasi         │
+│   • Gerbang fase memaksa kemajuan linear                                    │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
-
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            ALUR KERJA OPSX                                   │
@@ -344,7 +346,7 @@ Contoh di bagian ini menggunakan kumpulan perintah yang diperluas (`new`, `conti
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
 │              ┌────────────────────────────────────────────┐                 │
-│              │           AKSI (bukan fase)               │                 │
+│              │           AKSI (bukan fase)                │                 │
 │              │                                            │                 │
 │              │   new ◄──► continue ◄──► apply ◄──► archive │                 │
 │              │    │          │           │           │    │                 │
@@ -352,37 +354,37 @@ Contoh di bagian ini menggunakan kumpulan perintah yang diperluas (`new`, `conti
 │              │              urutan apa saja               │                 │
 │              └────────────────────────────────────────────┘                 │
 │                                                                             │
-│   • Membuat artefak satu per satu ATAU maju cepat                          │
-│   • Memperbarui spesifikasi/desain/tugas selama pelaksanaan                │
-│   • Dependensi mengaktifkan progres, fase tidak ada                        │
+│   • Buat artefak satu per satu ATAU fast-forward                           │
+│   • Perbarui spesifikasi/desain/tugas selama implementasi                   │
+│   • Dependensi memungkinkan kemajuan, fase tidak ada                        │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Arsitektur Komponen
 
-**Alur kerja lama** menggunakan templat yang dikodekan secara kaku dalam TypeScript:
+**Alur kerja legacy** menggunakan template hardcoded dalam TypeScript:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                      KOMPONEN ALUR KERJA LAMA                                │
+│                      KOMPONEN ALUR KERJA LEGACY                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   Templat Kaku (string TypeScript)                                          │
+│   Template Hardcoded (string TypeScript)                                    │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Konfigurator/adapter khusus alat                                          │
+│   Konfigurator/adaptir khusus alat                                          │
 │                    │                                                        │
 │                    ▼                                                        │
 │   File Perintah yang Dihasilkan (.claude/commands/openspec/*.md)            │
 │                                                                             │
-│   • Struktur tetap, tidak ada kesadaran artefak                            │
-│   • Perubahan memerlukan modifikasi kode + pembangunan ulang               │
+│   • Struktur tetap, tanpa kesadaran artefak                                 │
+│   • Perubahan memerlukan modifikasi kode + rebuild                          │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**OPSX** menggunakan skema eksternal dan mesin grafik dependensi:
+**OPSX** menggunakan skema eksternal dan mesin graf dependensi:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -398,69 +400,69 @@ Contoh di bagian ini menggunakan kumpulan perintah yang diperluas (`new`, `conti
 │   │      requires: []              ◄── Dependensi                       │   │
 │   │    - id: specs                                                      │   │
 │   │      generates: specs/**/*.md  ◄── Pola glob                        │   │
-│   │      requires: [proposal]      ◄── Diaktifkan setelah proposal      │   │
+│   │      requires: [proposal]      ◄── Diaktifkan setelah proposal       │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   Mesin Grafik Artefak                                                      │
+│   Mesin Graf Artefak                                                        │
 │   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │  • Pengurutan topologis (urutan dependensi)                         │   │
-│   │  • Deteksi status (keberadaan sistem file)                          │   │
-│   │  • Pembuatan instruksi kaya (templat + konteks)                     │   │
+│   │  • Pengurutan topologis (pengurutan dependensi)                     │   │
+│   │  • Deteksi keadaan (keberadaan filesystem)                          │   │
+│   │  • Generasi instruksi kaya (template + konteks)                      │   │
 │   └─────────────────────────────────────────────────────────────────────┘   │
 │                    │                                                        │
 │                    ▼                                                        │
-│   File Keahlian (.claude/skills/openspec-*/SKILL.md)                        │
+│   File Skill (.claude/skills/openspec-*/SKILL.md)                           │
 │                                                                             │
-│   • Kompatibel lintas editor (Claude Code, Cursor, Windsurf)               │
-│   • Keahlian mengkueri CLI untuk data terstruktur                          │
-│   • Dapat disesuaikan sepenuhnya melalui file skema                        │
+│   • Kompatibel lintas editor (Claude Code, Cursor, Windsurf)                │
+│   • Kueri skill CLI untuk data terstruktur                                  │
+│   • Sepenuhnya dapat disesuaikan melalui file skema                         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Model Grafik Dependensi
+### Model Graf Dependensi
 
-Artefak membentuk grafik asiklik terarah (DAG). Dependensi adalah **pengaktif**, bukan gerbang:
+Artefak membentuk graf arah tanpa siklus (DAG). Dependensi adalah **pengaktif**, bukan gerbang:
 
 ```
                               proposal
-                             (simpul akar)
+                             (node akar)
                                   │
                     ┌─────────────┴─────────────┐
                     │                           │
                     ▼                           ▼
-                 specs                       design
-              (memerlukan:                (memerlukan:
+                 specs                       desain
+              (memerlukan:                  (memerlukan:
                proposal)                   proposal)
                     │                           │
                     └─────────────┬─────────────┘
                                   │
                                   ▼
-                               tasks
+                               tugas
                            (memerlukan:
-                           specs, design)
+                           spesifikasi, desain)
                                   │
                                   ▼
                           ┌──────────────┐
-                          │ FASE APPLY   │
+                          │ FASE APLIKASI│
                           │ (memerlukan: │
-                          │  tasks)      │
+                          │  tugas)      │
                           └──────────────┘
 ```
 
-**Transisi status:**
+**Transisi keadaan:**
 
 ```
-   TERBLOKIR ────────────────► SIAP ────────────────► SELESAI
+   DIBLOKIR ────────────────► SIAP ────────────────► SELESAI
       │                        │                       │
-   Dependensi               Semua dependensi        File ada
-   hilang                   sudah SELESAI           di sistem file
+   Dependensi               Semua dependensi         File ada
+   yang hilang              adalah SELESAI           di filesystem
 ```
 
-### Alur Informasi
+### Aliran Informasi
 
-**Alur kerja lama** — agen menerima instruksi statis:
+**Alur kerja legacy** — agen menerima instruksi statis:
 
 ```
   Pengguna: "/openspec:proposal"
@@ -471,38 +473,38 @@ Artefak membentuk grafik asiklik terarah (DAG). Dependensi adalah **pengaktif**,
   │  • Buat proposal.md                     │
   │  • Buat tasks.md                        │
   │  • Buat design.md                       │
-  │  • Buat specs/<capability>/spec.md      │
+  │  • Buat specs/<kemampuan>/spec.md       │
   │                                         │
   │  Tidak ada kesadaran tentang apa yang   │
   │  ada atau dependensi antar artefak      │
   └─────────────────────────────────────────┘
            │
            ▼
-  Agen membuat SEMUA artefak dalam satu kali jalan
+  Agen membuat SEMUA artefak sekaligus
 ```
 
-**OPSX** — agen mengkueri untuk konteks kaya:
+**OPSX** — agen melakukan kueri untuk konteks yang kaya:
 
 ```
   Pengguna: "/opsx:continue"
            │
            ▼
   ┌──────────────────────────────────────────────────────────────────────────┐
-  │  Langkah 1: Kueri status saat ini                                        │
+  │  Langkah 1: Kueri keadaan saat ini                                       │
   │  ┌────────────────────────────────────────────────────────────────────┐  │
   │  │  $ openspec status --change "add-auth" --json                      │  │
   │  │                                                                    │  │
   │  │  {                                                                 │  │
   │  │    "artifacts": [                                                  │  │
   │  │      {"id": "proposal", "status": "done"},                         │  │
-  │  │      {"id": "specs", "status": "ready"},      ◄── Pertama siap     │  │
+  │  │      {"id": "specs", "status": "ready"},      ◄── Pertama siap      │  │
   │  │      {"id": "design", "status": "ready"},                          │  │
   │  │      {"id": "tasks", "status": "blocked", "missingDeps": ["specs"]}│  │
   │  │    ]                                                               │  │
   │  │  }                                                                 │  │
   │  └────────────────────────────────────────────────────────────────────┘  │
   │                                                                          │
-  │  Langkah 2: Dapatkan instruksi kaya untuk artefak yang siap             │
+  │  Langkah 2: Dapatkan instruksi kaya untuk artefak yang siap              │
   │  ┌────────────────────────────────────────────────────────────────────┐  │
   │  │  $ openspec instructions specs --change "add-auth" --json          │  │
   │  │                                                                    │  │
@@ -513,13 +515,14 @@ Artefak membentuk grafik asiklik terarah (DAG). Dependensi adalah **pengaktif**,
   │  │  }                                                                 │  │
   │  └────────────────────────────────────────────────────────────────────┘  │
   │                                                                          │
-  │  Langkah 3: Baca dependensi → Buat SATU artefak → Tampilkan yang diaktifkan│
+  │  Langkah 3: Baca dependensi → Buat SATU artefak → Tunjukkan apa yang     │
+  │             terbuka                                                      │
   └──────────────────────────────────────────────────────────────────────────┘
 ```
 
 ### Model Iterasi
 
-**Alur kerja lama** — canggung untuk beriterasi:
+**Alur kerja legacy** — sulit untuk mengiterasi:
 
 ```
   ┌─────────┐     ┌─────────┐     ┌─────────┐
@@ -530,10 +533,10 @@ Artefak membentuk grafik asiklik terarah (DAG). Dependensi adalah **pengaktif**,
        │               │
        │               ├── Opsi:
        │               │   • Edit file secara manual (merusak konteks)
-       │               │   • Batalkan dan mulai ulang
-       │               │   • Teruskan dan perbaiki nanti
+       │               │   • Batalkan dan mulai dari awal
+       │               │   • Lanjutkan dan perbaiki nanti
        │               │
-       │               └── Tidak ada mekanisme resmi "kembali"
+       │               └── Tidak ada mekanisme resmi untuk "kembali ke belakang"
        │
        └── Membuat SEMUA artefak sekaligus
 ```
@@ -551,11 +554,11 @@ Artefak membentuk grafik asiklik terarah (DAG). Dependensi adalah **pengaktif**,
       │                │                  │
       │                │                  ▼
       │                │         /opsx:apply melanjutkan
-      │                │         dari tempat terakhir
+      │                │         dari tempat Anda berhenti
       │                │
-      │                └── Membuat SATU artefak, menampilkan yang diaktifkan
+      │                └── Membuat SATU artefak, menampilkan artefak apa saja yang sudah tersedia
       │
-      └── Membangun kerangka perubahan, menunggu arahan
+      └── Membuat kerangka perubahan, menunggu arahan
 ```
 
 ### Skema Kustom
@@ -563,20 +566,23 @@ Artefak membentuk grafik asiklik terarah (DAG). Dependensi adalah **pengaktif**,
 Buat alur kerja kustom menggunakan perintah manajemen skema:
 
 ```bash
-# Buat skema baru dari awal (interaktif)
+# Tampilkan skema yang tersedia
+openspec schemas
+
+# Lihat semua skema beserta sumber resolusinya
+openspec schema which --all
+
+# Buat skema baru secara interaktif
 openspec schema init my-workflow
 
-# Atau forking skema yang ada sebagai titik awal
+# Fork skema yang ada untuk dikustomisasi
 openspec schema fork spec-driven my-workflow
 
-# Validasi struktur skema Anda
+# Validasi struktur skema sebelum digunakan
 openspec schema validate my-workflow
-
-# Lihat dari mana skema diselesaikan (berguna untuk debugging)
-openspec schema which my-workflow
 ```
 
-Skema disimpan di `openspec/schemas/` (lokal proyek, dikontrol versi) atau `~/.local/share/openspec/schemas/` (global pengguna).
+Skema disimpan di `openspec/schemas/` (lokal proyek, dikendalikan versi) atau `~/.local/share/openspec/schemas/` (global pengguna).
 
 **Struktur skema:**
 ```
@@ -605,55 +611,54 @@ artifacts:
     requires: [proposal]
 ```
 
-**Grafik Dependensi:**
+**Grafik Ketergantungan:**
 ```
    research ──► proposal ──► tasks
 ```
 
 ### Ringkasan
 
-| Aspek | Lama | OPSX |
+| Aspek | Legacy | OPSX |
 |--------|----------|------|
-| **Templat** | TypeScript kaku | YAML + Markdown eksternal |
-| **Dependensi** | Tidak ada (semua sekaligus) | DAG dengan pengurutan topologis |
+| **Templat** | TypeScript hardcoded | YAML + Markdown eksternal |
+| **Ketergantungan** | Tidak ada (semua sekaligus) | DAG dengan pengurutan topologi |
 | **Status** | Model mental berbasis fase | Keberadaan sistem file |
 | **Kustomisasi** | Edit sumber, bangun ulang | Buat schema.yaml |
 | **Iterasi** | Terkunci fase | Fleksibel, edit apa saja |
-| **Dukungan Editor** | Konfigurator/adapter khusus alat | Direktori keahlian tunggal |
-
+| **Dukungan Editor** | Konfigurator/adaptator khusus alat | Direktori skills tunggal |
 ## Skema
 
-Skema mendefinisikan artefak apa yang ada dan dependensinya. Saat ini tersedia:
+Skema mendefinisikan artefak apa saja yang ada dan ketergantungannya. Yang saat ini tersedia:
 
 - **spec-driven** (default): proposal → specs → design → tasks
 
 ```bash
-# List available schemas
+# Tampilkan skema yang tersedia
 openspec schemas
 
-# See all schemas with their resolution sources
+# Lihat semua skema beserta sumber resolusinya
 openspec schema which --all
 
-# Create a new schema interactively
+# Buat skema baru secara interaktif
 openspec schema init my-workflow
 
-# Fork an existing schema for customization
+# Fork skema yang ada untuk dikustomisasi
 openspec schema fork spec-driven my-workflow
 
-# Validate schema structure before use
+# Validasi struktur skema sebelum digunakan
 openspec schema validate my-workflow
 ```
 
 ## Tips
 
-- Gunakan `/opsx:explore` untuk memikirkan sebuah ide sebelum berkomitmen pada perubahan
-- `/opsx:ff` ketika Anda tahu apa yang Anda inginkan, `/opsx:continue` saat sedang mengeksplorasi
+- Gunakan `/opsx:explore` untuk memikirkan ide sebelum mengkomitmen perubahan
+- Gunakan `/opsx:ff` ketika Anda sudah tahu yang diinginkan, `/opsx:continue` ketika sedang mengeksplorasi
 - Selama `/opsx:apply`, jika ada yang salah — perbaiki artefaknya, lalu lanjutkan
-- Tugas melacak progres melalui kotak centang di `tasks.md`
+- Tugas melacak kemajuan melalui kotak centang di `tasks.md`
 - Periksa status kapan saja: `openspec status --change "name"`
 
 ## Umpan Balik
 
-Ini masih kasar. Itu disengaja — kami sedang belajar apa yang berhasil.
+Ini masih kasar. Itu sengaja — kami sedang mempelajari apa yang berfungsi.
 
 Menemukan bug? Punya ide? Bergabunglah dengan kami di [Discord](https://discord.gg/YctCnvvshC) atau buka isu di [GitHub](https://github.com/Fission-AI/openspec/issues).

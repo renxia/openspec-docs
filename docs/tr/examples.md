@@ -1,207 +1,224 @@
 # Örnekler ve Tarifler
 
-Gerçek değişiklikler, baştan sona. Her tarif, yazacağınız komutları ve geri alacağınız çıktıyı gösterir; böylece kendi durumunuzu bir kalıba benzetleyip kopyalayabilirsiniz. Bunlar varsayılan **core** komutlarını (`propose`, `explore`, `apply`, `sync`, `archive`) kullanır; genişletilmiş setin yardımcı olduğu yer belirtilmiştir.
+Gerçek değişiklikler, baştan sona. Her tarif, yazacağınız komutları ve geri döneceğiniz sonuçları gösterir, böylece durumunuzu bir kalıpla eşleştirebilir ve kopyalayabilirsiniz. Bunlar varsayılan **çekirdek** komutları (`propose`, `explore`, `apply`, `sync`, `archive`) kullanır; genişletilmiş komut setinin yardımcı olabileceği yerler belirtilmiştir.
 
-Başlamadan önce bir hatırlatma: `/opsx:propose` gibi eğik çizgi (slash) komutları **AI asistanınızın sohbetine**, `openspec` komutları ise **terminalinize** girer. Eğer bu size yeni ise, önce [How Commands Work](how-commands-work.md)'ü okuyun. Aşağıdaki transkriptlerde, `You:` ve `AI:` sohbeti temsil ederken, `$` ile başlayan satırlar terminaldir.
+Başlamadan önce bir hatırlatma: `/opsx:propose` gibi eğik çizgi komutları **AI asistanınızın sohbetine** girilir, `openspec` komutları ise **terminalinize** girilir. Bu yeniyseniz, önce [Komutlar Nasıl Çalışır](how-commands-work.md) belgesini okuyun. Aşağıdaki kayıtlarda, `You:` ve `AI:` sohbeti, `$` ile başlayan satırlar terminali temsil eder.
 
-> **Henüz ne inşa ettiğinizi bilmiyor musunuz?** Bu tariflerin çoğu, önce düşünmek için `/opsx:explore` ile başlamanız halinde daha keskin hale gelir. [Recipe 3](#recipe-3-exploring-before-you-commit) bunu uygulamalı olarak gösterir ve [Explore First](explore.md) rehberi tüm argümanı sunar.
+> **Henüz ne üreteceğinizden emin değil misiniz?** Bu tariflerin çoğu, önce `/opsx:explore` ile düşünerek başlarsanız daha etkili olur. [Tarif 3](#recipe-3-exploring-before-you-commit) bunu uygulamalı olarak gösterir ve [Önce Keşfet](explore.md) kılavuzu tüm durumu açıklar.
 
-## Recipe 1: Küçük bir özellik, hızlı yol
+## Tarif 1: Küçük bir özellik, hızlı yol
 
-**Ne zaman kullanılır:** Ne istediğinizi biliyorsunuz ve bu sınırlı bir çalışma parçasıdır. Bu en yaygın tariftir.
+**Ne zaman kullanılır:** İstediğiniz şeyi biliyorsunuz ve bu, kapsamı sınırlı bir iş parçasıdır. Bu en yaygın tariftir.
 
-Tüm süreç üç komuttan oluşur. Propose (Öneri), build (Oluşturma), archive (Arşivleme).
+Tüm bunlar üç komuttan ibarettir. Öner, oluştur, arşivle.
 
 ```text
 You: /opsx:propose add-logout-button
 
 AI:  Created openspec/changes/add-logout-button/
-     ✓ proposal.md — neden ve ne
-     ✓ specs/      — yeni gereksinim ve senaryoları
-     ✓ design.md   — teknik yaklaşım
-     ✓ tasks.md    — uygulama kontrol listesi
-     Implementation için hazır. /opsx:apply komutunu çalıştırın.
+     ✓ proposal.md — why and what
+     ✓ specs/      — the new requirement and its scenarios
+     ✓ design.md   — technical approach
+     ✓ tasks.md    — implementation checklist
+     Ready for implementation. Run /opsx:apply.
 ```
 
-Şimdi planı okuyun. Proposal'ı ve delta spec'i açın. OpenSpec'in yapıldığı an budur: yanlış bir varsayımı henüz 400 satır kod değil, tek bir paragraf iken yakalamak. Eğer bir şey yanlışsa herhangi bir artefaktı doğrudan düzenleyin, sonra devam edin.
+Şimdi planı okuyun. Öneriyi ve delta spec'i açın. OpenSpec'in tam olarak bu an için tasarlandığı andır: yanlış bir varsayımı 400 satır kod yerine hala bir paragraf iken yakalamak. Bir şeyler yanlışsa herhangi bir kalıbı doğrudan düzenleyin, sonra devam edin.
 
 ```text
 You: /opsx:apply
 
-AI:  Görevler üzerinde çalışılıyor...
-     ✓ 1.1 Header'a logout butonu ekle
-     ✓ 1.2 Tıklamada oturumu temizle
-     ✓ 1.3 Onaylama iletişim kutusu ekle
-     Tüm görevler tamamlandı!
+AI:  Working through tasks...
+     ✓ 1.1 Add logout button to header
+     ✓ 1.2 Clear session on click
+     ✓ 1.3 Add confirmation dialog
+     All tasks complete!
 
 You: /opsx:archive
 
-AI:  add-logout-button arşivleniyor...
-     ✓ Specs, openspec/specs/auth/spec.md içine birleştirildi
-     ✓ openspec/changes/archive/2026-06-22-add-logout-button/ içine taşındı
-     Bitti. Bir sonraki değişiklik için hazır.
+AI:  Archiving add-logout-button...
+     ✓ Merged specs into openspec/specs/auth/spec.md
+     ✓ Moved to openspec/changes/archive/2026-06-22-add-logout-button/
+     Done. Ready for the next change.
 ```
 
-Hepsi bu kadar. Logout davranışı artık specs'lerinizin bir parçası ve değişiklik, tam bağlamıyla birlikte dosyalandı.
+Hepsi bu. Çıkış davranışı artık spec'lerinizin bir parçası ve değişiklik tüm bağlamıyla birlikte arşivlendi.
 
-## Recipe 2: Bir hata düzeltme
+## Tarif 2: Hata düzeltmesi
 
-**Ne zaman kullanılır:** Bir şey bozuk ve bunu gizemli bir commit yerine kasıtlı bir davranış değişikliği olarak kaydetmek istiyorsunuz.
+**Ne zaman kullanılır:** Bir şey bozuk ve düzeltmeyi, davranışa yönelik kasıtlı bir değişiklik olarak kaydetmek istiyorsunuz, gizemli bir commit olarak değil.
 
-Hata düzeltmeleri özellikler gibi çalışır. Fark, öneriyi nasıl çerçevelediğinizdedir: sadece "hatayı düzelt" demek yerine *doğru* davranışı tanımlayın.
+Hata düzeltmeleri tam olarak özellikler gibi çalışır. Fark, öneriyi nasıl formülediğinizdedir: sadece "hatayı düzelt" demek yerine *doğru* davranışı tanımlayın.
 
 ```text
 You: /opsx:propose fix-login-redirect-loop
 
-AI:  openspec/changes/fix-login-redirect-loop/ oluşturuldu
-     Öneri, mevcut bozuk davranışı ve amaçlanan davranışı yakalar. Delta spec, yönlendirme gereksinimini MODİFIE ederek artık kesin ve test edilebilir hale getirir.
-     Implementation için hazır.
+AI:  Created openspec/changes/fix-login-redirect-loop/
+     The proposal captures the current broken behavior and the
+     intended behavior. The delta spec MODIFIES the redirect
+     requirement so it's now precise and testable.
+     Ready for implementation.
 ```
 
-Düzeltme bir `MODIFIED` gereksinimi olarak ve yeni bir senaryo ile geldiği için, sonraki kişi (veya sonraki AI oturumu) sadece düzelttiğinizi değil, "doğru"nun ne anlama geldiğini de görür. Ardından normal şekilde `/opsx:apply` ve `/opsx:archive`.
+Düzeltme, yeni bir senaryo ile birlikte `MODIFIED` gereksinimi olarak kaydedildiği için bir sonraki kişi (veya bir sonraki AI oturumu) sadece düzelttiğinizi değil, "doğru" olmanın ne anlama geldiğini de görür. Sonra her zamanki gibi `/opsx:apply` ve `/opsx:archive` komutlarını çalıştırın.
 
-İpucu: bir düzeltme için iyi bir senaryo, prozayla yazılmış regresyon testidir. "GİRİŞTE oturumu kapatılmış bir kullanıcı VARSA, GEÇERLİ kimlik bilgilerini GÖNDERİRSE, PANODAYA ulaşır ve tekrar yönlendirilmez." Bunu yazın ve uygulama net bir hedef edinir.
+İpucu: Bir düzeltme için iyi bir senaryo, metin halindeki geri dönüş testidir. "GIVEN oturumu kapatılmış bir kullanıcı, WHEN geçerli kimlik bilgilerini gönderir, THEN panele yönlendirilir ve tekrar yönlendirilmez." Bunu yazın, uygulamanın net bir hedefi olur.
 
-## Recipe 3: Commit etmeden önce keşfetme
+## Tarif 3: Taahhüt etmeden önce keşfetme
 
-**Ne zaman kullanılır:** Bir sorununuz var ama henüz bir planınız yok. Ne inşa edeceğinizden veya hangi yaklaşımın doğru olduğundan emin değilsiniz.
+**Ne zaman kullanılır:** Bir sorununuz var ama henüz bir planınız yok. Ne üreteceğinizden veya hangi yaklaşımın doğru olduğundan emin değilsiniz.
 
-`/opsx:explore` ile başlayın. Bu, yapısı olmayan ve herhangi bir artefakt oluşturmayan bir düşünce ortağıdır. Kod tabanınızı okur ve karar vermenize yardımcı olur.
+`/opsx:explore` komutuyla başlayın. Bu, yapılandırılmış olmayan, hiçbir kalıp oluşturmayan bir düşünme ortağıdır. Kod tabanınızı okur ve karar vermenize yardımcı olur.
 
 ```text
 You: /opsx:explore
 
-AI:  Ne keşfetmek istersiniz?
+AI:  What would you like to explore?
 
-You: Sayfa yüklenmesi yavaş geliyor ama zamanın nereye gittiğini bilmiyorum.
+You: Page loads feel slow but I don't know where the time goes.
 
-AI:  Bakmama izin verin... Üç olası suçlu buldum:
-     1. Ürün listesindeki büyük, optimize edilmemiş görseller
-     2. Render'ı engelleyen senkron veri çekme
-     3. Context değişiklikleri tarafından tetiklenen yeniden renderlar
-     Hangisine önce odaklanmalıyız?
+AI:  Let me look... I found three likely culprits:
+     1. Large unoptimized images on the product list
+     2. Synchronous data fetching that blocks render
+     3. Re-renders triggered by context changes
+     Which should we tackle first?
 
-You: Veri çekme olanına.
+You: The data fetching one.
 
 You: /opsx:propose optimize-product-list-fetching
 
-AI:  Yeni bulduklarımızla bilgilendirilmiş bir öneri ile değişikliği oluşturuldu. Implementation için hazır.
+AI:  Created the change, with a proposal informed by what we just
+     found. Ready for implementation.
 ```
 
-Keşfetme, bir değişiklik harcamadan *önce* düşüncenizi netleştirir. İçgörü kristalleştiğinde, öneriyi yapın ve AI bağlamı ileriye taşısın.
+Keşif, düşüncelerinizi bir değişikliğe harcamadan *önce* netleştirir. İçgörü netleştiğinde öneri yapın, AI bağlamı ilerletir.
 
-## Recipe 4: Aynı anda iki değişikliği yönetmek
+## Tarif 4: Aynı anda iki değişikliği yönetme
 
-**Ne zaman kullanılır:** Bir özelliğin ortasındasınız ve acil bir düzeltme sırayı atlıyor.
+**Ne zaman kullanılır:** Bir özellik üzerinde çalışırken acil bir düzeltme sıraya giriyor.
 
-Değişiklikler bağımsız klasörlerdir, bu yüzden paralel çalışma çakışmaz. Düzeltmeyi başlatın, gönderin, sonra kaldığınız yerden özelliğe geri dönün.
+Değişiklikler bağımsız klasörler olduğu için paralel çalışma çakışmaya neden olmaz. Düzeltmeyi başlatın, gönderin, sonra özelliğe bıraktığınız yerden dönün.
 
 ```text
-You: add-dark-mode üzerinde yarı yoldayım ama şimdi bir login hatasını düzeltmem gerekiyor.
+You: I'm partway through add-dark-mode, but I need to fix a login bug now.
 
 You: /opsx:propose fix-login-redirect
 
-AI:  openspec/changes/fix-login-redirect/ oluşturuldu. Implementation için hazır.
+AI:  Created openspec/changes/fix-login-redirect/. Ready for implementation.
 
 You: /opsx:apply
 
-AI:  Düzeltme uygulandı. Tüm görevler tamamlandı.
+AI:  Implemented the fix. All tasks complete.
 
 You: /opsx:archive
 
-AI:  ✓ fix-login-redirect arşivlendi.
+AI:  ✓ Archived fix-login-redirect.
 
-You: Dark mode'a geri dönüyorum.
+You: Back to dark mode.
 
 You: /opsx:apply add-dark-mode
 
-AI:  add-dark-mode devam ediyor. Görev 2.3: Header Güncelleme'den devam ediliyor...
+AI:  Resuming add-dark-mode. Picking up at task 2.3: Update Header...
 ```
 
-`/opsx:apply add-dark-mode` içinde değişikliğin adını vermek, birden fazla aktif değişiklik olduğunda AI'ı belirli bir değişikliğe yönlendirmenin yoludur. Görevler `tasks.md` içinde tamamlanmayı izlediği için, AI tam olarak nerede durduğunuzu bilir.
+Birden fazla değişiklik aktif olduğunda `/opsx:apply add-dark-mode` ile değişikliği adlandırmak, AI'ı belirli bir değişikliğe yönlendirmenin yoludur. Görevler `tasks.md` dosyasında tamamlanma durumunu takip ettiği için AI, bıraktığınız yeri tam olarak bilir.
 
-Birden fazla değişiklik aynı anda yapıldığında, genişletilmiş `/opsx:bulk-archive` onları birlikte arşivler ve neyin gerçekten uygulandığını kontrol ederek spec çakışmalarını çözer. [Workflows](workflows.md#parallel-changes)'e bakın.
+Birkaç değişiklik aynı anda tamamlandığında, genişletilmiş `/opsx:bulk-archive` komutu hepsini birlikte dosyalar ve gerçekten uygulananları kontrol ederek spec çakışmalarını çözer. Bkz. [İş Akışları](workflows.md#parallel-changes).
 
-## Recipe 5: Davranış değişikliği olmayan bir refactor (yeniden düzenleme)
+## Tarif 5: Davranış değişikliği olmayan bir yeniden düzenleme
 
-**Ne zaman kullanılır:** Kodu yeniden yapılandırıyorsunuz ve dışarıdan görünen davranışın aynı kalması gerekiyor.
+**Ne zaman kullanılır:** Kodu yeniden yapılandırıyorsunuz ve dışarıdan görülebilir davranışın aynı kalması gerekiyor.
 
-Bu ilginç durumdur, çünkü saf bir refactor'da *specs'lere ekleyecek hiçbir şey yoktur*. Davranış sözleşmesi değişmez; sadece uygulama değişir. Bu nedenle iş tasarım ve görevlerde yer alır ve spec delta boş veya yoktur.
+Bu ilginç durumdur, çünkü saf bir yeniden düzenleme, spec'lerinize *eklenecek hiçbir şey yoktur*. Davranış sözleşmesi değişmez; sadece uygulama değişir. Bu nedenle çalışma tasarım ve görevlerde yaşar, spec delta'sı boştur veya yoktur.
 
 ```text
 You: /opsx:propose refactor-payment-module
 
-AI:  Değişiklik oluşturuldu. Öneri, hedefi (ödeme modülünü ayırmak, davranış değişikliği yok) belirtir ve tasarım yeni yapıyı yakalar. Davranış aynı olduğu için spec değişikliği yok. Implementation için hazır.
+AI:  Created the change. The proposal states the goal (split the
+     payment module, no behavior change) and the design captures
+     the new structure. No spec changes, since behavior is identical.
+     Ready for implementation.
 ```
 
-Specs'lere dokunmayan bir değişikliği arşivlerken, terminal komutuna spec adımını atlamasını söyleyebilirsiniz:
+Değişikliğin `.openspec.yaml` dosyasına `skip_specs: true` ayarlayarak boş delta'yı açıkça bildirin:
+
+```yaml
+schema: spec-driven
+skip_specs: true
+```
+
+İşaret olmadan, `openspec validate` sıfır delta içeren bir değişikliği reddeder (böylece unutulmuş bir spec aşaması da yakalanır); işaret ile birlikte doğrulama geçer ve `openspec status` spec aşamasını beklemede yerine açıkça atlandı olarak gösterir. Yeniden düzenleme sonradan davranış değiştiriyorsa, `.openspec.yaml` dosyasından `skip_specs` ayarını kaldırın ve delta spec'leri yazın — doğrulama, işareti ve spec dosyalarını çakışma olarak değerlendirir, böylece eski işaret sessizce kalınamaz.
+
+İşaretli bir değişikliği arşivlemek için ek bayrak gerekmez (birleştirilecek delta yoktur). Bağımsız olarak, `--skip-specs` bayrağı terminal komutuna spec adımını açıkça atlamasını söyler:
 
 ```bash
 $ openspec archive refactor-payment-module --skip-specs
 ```
 
-Aynı bayrak, araçlar (tooling), CI ve sadece dokümantasyon değişiklikleri için de kullanışlıdır. Prensip şudur: specs davranışı tanımlar, bu yüzden davranış değişmediyse, spec de değişmemelidir. [Concepts](concepts.md#what-a-spec-is-and-is-not)'e bakın.
+Aynı bayrak, araçlar, CI ve sadece belge değişiklikleri için kullanışlıdır. İlke: spec'ler davranışı tanımlar, yani davranış değişmediyse spec de değişmemelidir. Bkz. [Kavramlar](concepts.md#what-a-spec-is-and-is-not).
 
-## Recipe 6: Adım adım kontrol (genişletilmiş komutlar)
+## Tarif 6: Adım adım kontrol (genişletilmiş komutlar)
 
-**Ne zaman kullanılır:** Bir sonraki adıma geçmeden önce her artefaktı gözden geçirmek istediğiniz karmaşık veya riskli bir değişiklik.
+**Ne zaman kullanılır:** İlerlemeden önce her kalıbı gözden geçirmek istediğiniz karmaşık veya riskli bir değişiklik.
 
-Temel `/opsx:propose` hepsini aynı anda taslak haline getirir. Teker teker ilerlemeyi tercih ediyorsanız, genişletilmiş komutları etkinleştirin:
+Çekirdek `/opsx:propose` komutu her şeyi bir kerede taslak olarak oluşturur. Adım adım gitmeyi tercih ediyorsanız, genişletilmiş komutları etkinleştirin:
 
 ```bash
 $ openspec config profile      # genişletilmiş iş akışlarını seç
 $ openspec update              # bunları bu projeye uygula
 ```
 
-Şimdi aşamalı olarak iskelet oluşturabilir ve inşa edebilirsiniz:
+Artık iskeleti oluşturabilir ve kademeli olarak geliştirebilirsiniz:
 
 ```text
 You: /opsx:new add-2fa
 
-AI:  openspec/changes/add-2fa/ oluşturuldu. proposal oluşturmaya hazır.
+AI:  Created openspec/changes/add-2fa/. Ready to create: proposal.
 
 You: /opsx:continue
 
-AI:  proposal.md oluşturuldu. Şimdi mevcut olanlar: specs, design.
+AI:  Created proposal.md. Now available: specs, design.
 
 You: /opsx:continue
 
-AI:  specs/auth/spec.md oluşturuldu. Şimdi mevcut olanlar: design.
+AI:  Created specs/auth/spec.md. Now available: design.
 ```
 
-Her artefakt geldiğinde gözden geçirin, özgürce düzenleyin ve memnun olduğunuzda devam edin. Geri kalanların hepsinin bir kerede taslak haline getirilmesini istiyorsanız, `/opsx:ff` kalan planlama artefaktlarını ileri sarar (fast-forwards). Arşivlemeden önce, `/opsx:verify` uygulamanın gerçekten specs'lere uyup uymadığını kontrol eder. [Workflows](workflows.md#opsxff-vs-opsxcontinue)'e bakın.
+Her kalıp oluşturulduğunda gözden geçirin, özgürce düzenleyin ve memnun olduğunuzda devam edin. Kalan planlama kalıplarını bir kerede taslak olarak oluşturmak istediğinizde `/opsx:ff` komutunu kullanın. Arşivlemeden önce `/opsx:verify` komutu uygulamanın gerçekten spec'lerle eşleştiğini kontrol eder. Bkz. [İş Akışları](workflows.md#opsxff-vs-opsxcontinue).
 
-## Recipe 7: Tüm döngüyü uygulamalı olarak öğrenme
+## Tarif 7: Tüm döngüyü uygulamalı öğrenme
 
-**Ne zaman kullanılır:** OpenSpec'i kurdunuz ve bir oyuncak örnek değil, kendi kodunuz üzerinde iş akışını *hissetmek* istiyorsunuz.
+**Ne zaman kullanılır:** OpenSpec'i yüklediniz ve iş akışını kendi kodunuz üzerinde *hissetmek* istiyorsunuz, oyuncağı örnek yerine.
 
-Genişletilmiş komutları etkinleştirin (Recipe 6'ya bakın), ardından:
+Genişletilmiş komutları etkinleştirin (Tarif 6'ya bakın), sonra:
 
 ```text
 You: /opsx:onboard
 
-AI:  OpenSpec'e hoş geldiniz! Gerçek kod tabanınızı kullanarak tam bir değişiklik üzerinden size rehberlik edeceğim. Birlikte yapabileceğimiz küçük, güvenli bir iyileştirme için tarama yapmama izin verin...
+AI:  Welcome to OpenSpec! I'll walk you through a complete change
+     using your actual codebase. Let me scan for a small, safe
+     improvement we can make together...
 ```
 
-`/opsx:onboard` gerçek (küçük) bir iyileştirme bulur, bunun için bir değişiklik oluşturur, uygular ve her adımı anlatarak arşivler. 15 ila 30 dakika sürer ve size tutabileceğiniz veya atabileceğiniz gerçek bir değişiklik bırakır. Bu öğrenmenin en nazik yoludur. [Commands](commands.md#opsxonboard)'a bakın.
+`/opsx:onboard` gerçek (küçük) bir iyileştirme bulur, bunun için bir değişiklik oluşturur, uygular ve her adımı anlatarak arşivler. 15 ila 30 dakika sürer ve size saklayabileceğiniz veya çıkarabileceğiniz gerçek bir değişiklik bırakır. Öğrenmenin en nazik yoludur. Bkz. [Komutlar](commands.md#opsxonboard).
 
-## Terminalden çalışmanızı kontrol etme
+## İşinizi terminalden kontrol etme
 
-İstediğiniz zaman, terminalinizden her şeyin durumunu inceleyebilirsiniz:
+İstediğiniz zaman, terminalinizden durumu kontrol edebilirsiniz:
 
 ```bash
 $ openspec list                      # aktif değişiklikler
-$ openspec show add-dark-mode        # bir değişikliği detaylı olarak
+$ openspec show add-dark-mode        # tek bir değişikliğin ayrıntıları
 $ openspec validate add-dark-mode    # yapıyı kontrol et
-$ openspec view                      # etkileşimli gösterge tablosu
+$ openspec view                      # etkileşimli kontrol paneli
 ```
 
-Bunlar okuma ve inceleme araçlarıdır. Öneri yapma ve inşa etme hala sohbet içindeki eğik çizgi komutları aracılığıyla yapılır. Tam ayrıntılar [CLI reference](cli.md)'da.
+Bunlar okuma ve denetleme araçlarıdır. Öneri yapma ve oluşturma işlemleri hala sohbetteki eğik çizgi komutlarıyla yapılır. Tüm ayrıntılar [CLI referansında](cli.md) bulunur.
 
-## Nereye devam edebilirsiniz?
+## Sonra nereye gidebilirsiniz
 
-- [Explore First](explore.md): Emin olmadığınızda başlamak için önerilen yol
-- [Workflows](workflows.md): Hangi durumda hangisini kullanacağınıza dair karar verme rehberliği ile yukarıdaki kalıplar
-- [Commands](commands.md): Her bir eğik çizgi komutunun ayrıntılı
-- [Getting Started](getting-started.md): Kanonik ilk değişiklik kılavuzu
-- [Concepts](concepts.md): Parçaların neden birlikte çalıştığı
+- [Önce Keşfet](explore.md): emin olmadığınızda başlamanız için önerilen yol
+- [İş Akışları](workflows.md): yukarıdaki kalıplar ve her birini ne zaman kullanacağınıza yönelik karar rehberliği
+- [Komutlar](commands.md): tüm eğik çizgi komutlarının ayrıntıları
+- [Başlarken](getting-started.md): standart ilk değişiklik yürütmesi
+- [Kavramlar](concepts.md): parçaların neden böyle bir şekilde bir araya geldiği

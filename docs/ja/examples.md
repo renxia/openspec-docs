@@ -1,215 +1,220 @@
 # 例とレシピ
 
-現実の変更を、最初から最後まで。各レシピは、入力すべきコマンドとその結果をすべて示しているため、ご自身の状況にパターンを当てはめ、それをコピーすることができます。これらはデフォルトの**core**コマンド（`propose`、`explore`、`apply`、`sync`、`archive`）を使用しており、拡張セットが役立つ場合はその旨が記載されています。
+実際の変更を、最初から最後まで。各レシピでは、入力するコマンドとその結果を表示するので、自分の状況に合わせてパターンを選んでコピーできます。ここではデフォルトの**コア**コマンド（`propose`、`explore`、`apply`、`sync`、`archive`）を使用しています。拡張コマンドセットが役立つ場合は、その旨を記載しています。
 
-始める前の注意点：`/opsx:propose`のようなスラッシュコマンドは**AIアシスタントのチャット**に入力し、`openspec`コマンドは**ターミナル**に入力します。これらが初めての場合は、まず[How Commands Work](how-commands-work.md)を読んでください。以下のトランスクリプトにおいて、「You:」と「AI:」がチャットであり、`$`で始まる行がターミナルの操作です。
+開始前の注意：`/opsx:propose`のようなスラッシュコマンドは**AIアシスタントのチャット**に入力し、`openspec`コマンドは**ターミナル**で実行します。これが初めての方は、まず[コマンドの仕組み](how-commands-work.md)をお読みください。以下の記録では、`You:`と`AI:`がチャットでのやり取りを、`$`で始まる行がターミナルでの実行を示しています。
 
-> **何を作っているのかまだ確信が持てない場合？** これらのレシピのほとんどは、まず`/opsx:explore`から始めて、考えを整理することによってより明確になります。[Recipe 3](#recipe-3-exploring-before-you-commit)でその様子を示しており、[Explore First](explore.md)ガイドがその完全な根拠を提供します。
+> **まだ何を作るか決まっていませんか？** ほとんどのレシピは、まず`/opsx:explore`で検討を始めるとより効果的です。[レシピ3](#recipe-3-exploring-before-you-commit)で実際の使い方を示しており、[最初に探索](explore.md)ガイドではその詳細を説明しています。
 
-## Recipe 1: 小規模な機能の高速パス
+## レシピ1：小さな機能、高速パス
 
-**使用するタイミング:** 何をしたいか分かっており、それが限定的な作業である場合。これが最も一般的なレシピです。
+**使用タイミング：** 作りたいものが明確で、作業範囲が限定されている場合。最も一般的なレシピです。
 
-全体は3つのコマンドで構成されます。提案（Propose）、構築（Build）、アーカイブ（Archive）。
+全体で3つのコマンドです。提案（propose）、構築（apply）、アーカイブ（archive）。
 
 ```text
 You: /opsx:propose add-logout-button
 
-AI:  Created openspec/changes/add-logout-button/
-     ✓ proposal.md — why and what (理由と内容)
-     ✓ specs/      — the new requirement and its scenarios (新しい要件とそのシナリオ)
-     ✓ design.md   — technical approach (技術的なアプローチ)
-     ✓ tasks.md    — implementation checklist (実装チェックリスト)
-     Ready for implementation. Run /opsx:apply.
+AI:  openspec/changes/add-logout-button/ を作成しました
+     ✓ proposal.md — 目的と内容
+     ✓ specs/      — 新しい要件とそのシナリオ
+     ✓ design.md   — 技術的アプローチ
+     ✓ tasks.md    — 実装チェックリスト
+     実装の準備ができました。/opsx:apply を実行してください。
 ```
 
-次に、計画を読んでください。提案書とデルタ仕様（delta spec）を開きます。OpenSpecが作られているのはこの瞬間です。まだ400行のコードではなく、たった一つの段落で間違った仮定を見つけ出すためです。もし何かおかしいと感じたら、任意のアーティファクト（artifact）を直接編集し、続けてください。
+次に計画を確認してください。提案書と差分仕様を開いてください。これこそがOpenSpecの真骨頂です：誤った前提を、400行のコードになってしまう前に、たった1段落の段階で捉えることができます。何かおかしい場合は、成果物を直接編集してから続行してください。
 
 ```text
 You: /opsx:apply
 
-AI:  Working through tasks... (タスクの処理中...)
-     ✓ 1.1 Add logout button to header (ヘッダーにログアウトボタンを追加)
-     ✓ 1.2 Clear session on click (クリック時にセッションをクリア)
-     ✓ 1.3 Add confirmation dialog (確認ダイアログを追加)
-     All tasks complete! (すべてのタスクが完了しました！)
+AI:  タスクを実行中...
+     ✓ 1.1 ヘッダーにログアウトボタンを追加
+     ✓ 1.2 クリック時にセッションをクリア
+     ✓ 1.3 確認ダイアログを追加
+     すべてのタスクが完了しました！
 
 You: /opsx:archive
 
-AI:  Archiving add-logout-button... (add-logout-buttonをアーカイブ中...)
-     ✓ Merged specs into openspec/specs/auth/spec.md (仕様をopenspec/specs/auth/spec.mdにマージ)
-     ✓ Moved to openspec/changes/archive/2026-06-22-add-logout-button/ (openspec/changes/archive/2026-06-22-add-logout-button/へ移動)
-     Done. Ready for the next change. (完了。次の変更の準備ができています。)
+AI:  add-logout-button をアーカイブしています...
+     ✓ 仕様を openspec/specs/auth/spec.md にマージ
+     ✓ openspec/changes/archive/2026-06-22-add-logout-button/ に移動
+     完了しました。次の変更の準備ができました。
 ```
 
-それだけです。ログアウトの動作はあなたの仕様の一部となり、その変更とその完全なコンテキストとともにファイルに保存されます。
+以上です。ログアウトの動作が仕様の一部となり、変更内容とその完全なコンテキストがアーカイブされました。
 
-## Recipe 2: バグ修正
+## レシピ2：バグ修正
 
-**使用するタイミング:** 何か壊れており、それを「ミステリアスなコミット」ではなく「意図的な振る舞いへの変更」として記録したい場合。
+**使用タイミング：** 何かが壊れており、その修正を「謎のコミット」ではなく、意図的な動作変更として記録したい場合。
 
-バグ修正は機能（フィーチャー）とまったく同じように動作します。違いは、提案をどのように構成するかです。「バグを直す」だけでなく、「*正しい*振る舞い」を記述する必要があります。
+バグ修正は機能と全く同じように動作します。違いは提案書の記載方法にあります：単に「バグを修正」と書くのではなく、*正しい*動作を説明してください。
 
 ```text
 You: /opsx:propose fix-login-redirect-loop
 
-AI:  Created openspec/changes/fix-login-redirect-loop/
-     The proposal captures the current broken behavior and the
-     intended behavior. The delta spec MODIFIES the redirect
-     requirement so it's now precise and testable.
-     Ready for implementation.
+AI:  openspec/changes/fix-login-redirect-loop/ を作成しました
+     提案書には、現在の壊れた動作と意図した動作の両方が記載されています。
+     差分仕様はリダイレクトの要件を MODIFY（変更）し、それが正確でテスト可能なものになっています。
+     実装の準備ができました。
 ```
 
-この修正が、新しいシナリオを持つ`MODIFIED`（変更済み）な要件として記録されるため、次の担当者（または次のAIセッション）は、単に「あなたがそれを直した」ということだけでなく、「*正しい*とはどういうことか」を知ることができます。その後、通常通り`/opsx:apply`と`/opsx:archive`を実行します。
+修正が`MODIFIED`要件として新しいシナリオとともに適用されるため、次の担当者（または次のAIセッション）は「修正した」という事実だけでなく、「正しい」とは何かを理解できます。その後は、通常通り`/opsx:apply`と`/opsx:archive`を実行してください。
 
-ヒント：修正の場合、良いシナリオとはプロセスの回帰テスト（regression test）を文章で記述することです。「ログアウト状態のユーザーが有効な認証情報を送信した場合、ダッシュボードに遷移し、再度リダイレクトされないこと。」これを記述すれば、実装は明確なターゲットを持てます。
+ヒント：修正の場合、良いシナリオとは回帰テストを文章で記述したものです。「前提：ログアウト状態のユーザー、条件：有効な認証情報を送信した場合、結果：ダッシュボードに遷移し、再びリダイレクトされない」と書けば、実装すべき明確な目標が定まります。
 
-## Recipe 3: コミットする前の探索
+## レシピ3：コミット前に探索する
 
-**使用するタイミング:** 問題はあるものの、まだ計画がない場合。何を作るべきか、どのアプローチが正しいのか確信が持てない場合です。
+**使用タイミング：** 問題はあるが計画が立っていない場合。何を作るべきか、どのアプローチが適しているか分からない場合。
 
-`/opsx:explore`から始めてください。これは構造やアーティファクト（成果物）を作成しない思考パートナーです。コードベースを読み込み、意思決定を支援します。
+`/opsx:explore`から始めましょう。これは構造がなく、成果物も作成しない思考パートナーです。コードベースを読み、意思決定を支援します。
 
 ```text
 You: /opsx:explore
 
-AI:  What would you like to explore? (何を探索したいですか？)
+AI:  何を探索しますか？
 
-You: Page loads feel slow but I don't know where the time goes. (ページの読み込みが遅いように感じるが、どこに時間がかかっているのか分からない。)
+You: ページの読み込みが遅いが、時間がかかっている箇所が分からない。
 
-AI:  Let me look... I found three likely culprits:
-     1. Large unoptimized images on the product list (製品リストの大きな最適化されていない画像)
-     2. Synchronous data fetching that blocks render (レンダリングをブロックする同期的なデータ取得)
-     3. Re-renders triggered by context changes (コンテキスト変更によって引き起こされる再レンダリング)
-     Which should we tackle first? (どれから取り組むべきでしょうか？)
+AI:  調べてみます... 以下の3つが考えられます：
+     1. 商品一覧の最適化されていない大きな画像
+     2. レンダリングをブロックする同期的なデータフェッチ
+     3. コンテキストの変更による再レンダリング
+     どれから対処しますか？
 
-You: The data fetching one. (データ取得の方です。)
+You: データフェッチの方です。
 
 You: /opsx:propose optimize-product-list-fetching
 
-AI:  Created the change, with a proposal informed by what we just
-     found. Ready for implementation. (先ほど見つけた情報に基づいた提案とともに変更を作成しました。実装の準備ができています。)
+AI:  変更を作成しました。先ほど見つかった内容に基づいた提案書です。
+     実装の準備ができました。
 ```
 
-探索は、その変更に時間をかける*前*に思考を明確にします。洞察が結晶化したら、提案し、AIにコンテキストを引き継がせます。
+探索により、変更に着手する*前に*思考を明確にできます。洞察が固まったら提案を行えば、AIがコンテキストを引き継ぎます。
 
-## Recipe 4: 複数の変更を同時に進める
+## レシピ4：2つの変更を同時に進める
 
-**使用するタイミング:** 機能の途中にいて、緊急の修正がキューを飛び越えてきた場合。
+**使用タイミング：** 機能開発の途中で、緊急の修正が割り込んできた場合。
 
-変更は独立したフォルダであるため、並行作業による衝突はありません。まず修正に着手し、それをリリースした後、元の機能に戻り、中断したところから再開します。
+変更は独立したフォルダーで管理されるため、並行作業が競合することはありません。修正を開始してリリースし、その後、中断した箇所から機能開発に戻れます。
 
 ```text
-You: I'm partway through add-dark-mode, but I need to fix a login bug now. (add-dark-modeの途中にいるが、今ログインバグを修正する必要がある。)
+You: add-dark-mode の途中だが、今すぐログインのバグを修正する必要がある。
 
 You: /opsx:propose fix-login-redirect
 
-AI:  Created openspec/changes/fix-login-redirect/. Ready for implementation. (実装の準備ができています。)
+AI:  openspec/changes/fix-login-redirect/ を作成しました。実装の準備ができました。
 
 You: /opsx:apply
 
-AI:  Implemented the fix. All tasks complete. (修正を実装しました。すべてのタスクが完了しました。)
+AI:  修正を実装しました。すべてのタスクが完了しました。
 
 You: /opsx:archive
 
-AI:  ✓ Archived fix-login-redirect. (fix-login-redirectをアーカイブしました。)
+AI:  ✓ fix-login-redirect をアーカイブしました。
 
-You: Back to dark mode. (ダークモードに戻る。)
+You: ダークモードに戻る。
 
 You: /opsx:apply add-dark-mode
 
-AI:  Resuming add-dark-mode. Picking up at task 2.3: Update Header... (add-dark-modeの再開。タスク2.3：ヘッダーの更新から再開...)
+AI:  add-dark-mode を再開します。タスク2.3「ヘッダーを更新」から再開します...
 ```
 
-`/opsx:apply add-dark-mode`で変更名を指定することが、複数の変更がアクティブな場合にAIに特定の変更を指し示す方法です。タスクが`tasks.md`で完了状況を追跡しているため、AIはあなたがどこで止まったかを正確に知っています。
+`/opsx:apply add-dark-mode`のように変更名を指定することで、複数の変更がアクティブな場合にAIを特定の変更に向けられます。タスクが`tasks.md`で完了状況を追跡するため、AIは正確に中断した箇所を把握しています。
 
-複数の変更を同時に行う場合、拡張された`/opsx:bulk-archive`がそれらをまとめてアーカイブし、実際に実装されている内容を確認することで仕様の衝突を解決します。[Workflows](workflows.md#parallel-changes)を参照してください。
+複数の変更を一度に完了させる場合、拡張コマンド`/opsx:bulk-archive`で一括してファイル化し、実際に実装された内容を確認して仕様の競合を解決します。[ワークフロー](workflows.md#parallel-changes)を参照してください。
 
-## Recipe 5: 振る舞いの変更を伴わないリファクタリング
+## レシピ5：動作を変更しないリファクタリング
 
-**使用するタイミング:** コードを再構築しているが、外部から見える振る舞いは同一でなければならない場合。
+**使用タイミング：** コードを再構成するが、外部から見える動作は同一に保ちたい場合。
 
-これは興味深いケースです。純粋なリファクタリングには「仕様に追加すべきもの」が*何もない*からです。振る舞いの契約は変わらず、実装だけが変わります。したがって、作業はデザインとタスクに存在し、仕様のデルタは空であるか、存在しません。
+これは興味深いケースです。純粋なリファクタリングは、仕様に*追加するものが何もない*からです。動作の契約は変更されず、実装だけが変わるためです。そのため、作業は設計とタスクに属し、仕様の差分は空か存在しません。
 
 ```text
 You: /opsx:propose refactor-payment-module
 
-AI:  Created the change. The proposal states the goal (split the
-     payment module, no behavior change) and the design captures
-     the new structure. No spec changes, since behavior is identical.
-     Ready for implementation. (変更を作成しました。提案では目標（支払いモジュールの分割、振る舞いの変更なし）を述べ、デザインが新しい構造を捉えています。振る舞いは同一であるため、仕様の変更はありません。実装の準備ができています。)
+AI:  変更を作成しました。提案書には目標（決済モジュールを分割、動作は変更しない）が記載され、設計には新しい構造が記録されています。動作は同一のため、仕様の変更はありません。
+     実装の準備ができました。
 ```
 
-仕様に触れない変更をアーカイブする場合、ターミナルコマンドで仕様ステップをスキップするように指示できます。
+変更の`.openspec.yaml`に`skip_specs: true`を設定することで、空の差分であることを明示的に宣言します：
+
+```yaml
+schema: spec-driven
+skip_specs: true
+```
+
+このマーカーがない場合、`openspec validate`は差分がゼロの変更を拒否します（仕様フェーズが忘れられても検出されるため）。マーカーがあると、検証が通り、`openspec status`は仕様ステージを「保留中」ではなく「明示的にスキップ」として表示します。リファクタリングの結果、動作が変わることが判明した場合は、`.openspec.yaml`から`skip_specs`を削除し、差分仕様を作成してください。検証機能はマーカーと仕様ファイルの両方が存在する場合を競合とみなすため、古いマーカーが静かに残り続けることはありません。
+
+マークされた変更をアーカイブする場合、追加のフラグは必要ありません（マージする差分がないため）。独立して、`--skip-specs`フラグはターミナルコマンドに対して仕様ステップを明示的にスキップするよう指示します：
 
 ```bash
 $ openspec archive refactor-payment-module --skip-specs
 ```
 
-このフラグは、ツール、CI（継続的インテグレーション）、ドキュメントのみの変更にも便利です。原則として：仕様は振る舞いを記述するため、振る舞いが変わらなければ、仕様も変えるべきではない。詳しくは[Concepts](concepts.md#what-a-spec-is-and-is-not)を参照してください。
+同じフラグは、ツール、CI、ドキュメントのみの変更にも便利です。原則：仕様は動作を記述するものなので、動作が変わらなければ仕様も変えるべきではありません。[コンセプト](concepts.md#what-a-spec-is-and-is-not)を参照してください。
 
-## Recipe 6: ステップごとの制御（拡張コマンド）
+## レシピ6：ステップバイステップの制御（拡張コマンド）
 
-**使用するタイミング:** 複雑でリスクの高い変更であり、次に進む前に各アーティファクトをレビューしたい場合。
+**使用タイミング：** 複雑またはリスクの高い変更で、次に進む前に各成果物を確認したい場合。
 
-コアの`/opsx:propose`はすべてを一括でドラフトします。一つずつ進めたい場合は、拡張コマンドを有効にします。
+コアの`/opsx:propose`はすべてを一度に下書きします。1ステップずつ進めたい場合は、拡張コマンドを有効にしてください：
 
 ```bash
 $ openspec config profile      # 拡張ワークフローを選択
-$ openspec update              # これらをこのプロジェクトに適用
+$ openspec update              # このプロジェクトに適用
 ```
 
-これで、段階的にスキャフォールド（scaffold）し、構築することができます。
+これで、段階的にスキャフォールド（土台）を構築し、作業を進められるようになります：
 
 ```text
 You: /opsx:new add-2fa
 
-AI:  Created openspec/changes/add-2fa/. Ready to create: proposal. (提案の作成準備ができています。)
+AI:  openspec/changes/add-2fa/ を作成しました。作成可能：提案書。
 
 You: /opsx:continue
 
-AI:  Created proposal.md. Now available: specs, design. (proposal.mdを作成しました。現在利用可能なもの：specs、design。)
+AI:  proposal.md を作成しました。利用可能：仕様、設計。
 
 You: /opsx:continue
 
-AI:  Created specs/auth/spec.md. Now available: design. (specs/auth/spec.mdを作成しました。現在利用可能なもの：design。)
+AI:  specs/auth/spec.md を作成しました。利用可能：設計。
 ```
 
-各アーティファクトが生成されるたびにレビューし、自由に編集し、満足できたら続行します。残りのものを一括でドラフトしたい場合は、`/opsx:ff`を使用して残りすべてを早送り（fast-forward）します。アーカイブする前に、`/opsx:verify`が実装が仕様と一致しているかを確認します。[Workflows](workflows.md#opsxff-vs-opsxcontinue)を参照してください。
+各成果物が作成されたら確認し、自由に編集して、満足したら続行してください。残りの計画成果物を一度に下書きしたい場合は、`/opsx:ff`でスキップできます。アーカイブする前に、`/opsx:verify`で実装が仕様と実際に一致するか確認します。[ワークフロー](workflows.md#opsxff-vs-opsxcontinue)を参照してください。
 
-## Recipe 7: 全てのループのハンズオン学習
+## レシピ7：全体のワークフローを実践で学ぶ
 
-**使用するタイミング:** OpenSpecをインストールし、おもちゃのような例ではなく、自分のコードでワークフローを*体感したい*場合。
+**使用タイミング：** OpenSpecをインストールし、サンプルではなく実際のコードでワークフローを*体感*したい場合。
 
-拡張コマンドを有効にし（Recipe 6を参照）、次に進みます。
+拡張コマンドを有効にしてから（レシピ6を参照）、以下を実行してください：
 
 ```text
 You: /opsx:onboard
 
-AI:  Welcome to OpenSpec! I'll walk you through a complete change
-     using your actual codebase. Let me scan for a small, safe
-     improvement we can make together... (OpenSpecへようこそ！実際のコードベースを使用して完全な変更を案内します。一緒にできる小さく安全な改善点をスキャンさせてください...)
+AI:  OpenSpecへようこそ！実際のコードベースを使用して、完全な変更を一緒に進めます。
+     小さく安全な改善点を探してみます...
 ```
 
-`/opsx:onboard`は、本物の（小さな）改善点を見つけ、それに対する変更を作成し、実装し、アーカイブし、すべてのステップをナレーションします。所要時間は15分から30分で、保持するか破棄できる実用的な変更を残します。これは最も優しい学習方法です。[Commands](commands.md#opsxonboard)を参照してください。
+`/opsx:onboard`は実際の（小さな）改善点を見つけ、変更を作成して実装し、アーカイブするまで、各ステップを説明しながら進めます。所要時間は15〜30分で、残る結果は保存または破棄できる実際の変更です。これが最も優しい学習方法です。[コマンド](commands.md#opsxonboard)を参照してください。
 
-## ターミナルからの作業確認
+## ターミナルから作業を確認する
 
-いつでも、ターミナルから物事の状態を検査できます。
+いつでもターミナルから、状態を確認できます：
 
 ```bash
 $ openspec list                      # アクティブな変更
-$ openspec show add-dark-mode        # 特定の変更の詳細
-$ openspec validate add-dark-mode    # 構造のチェック
-$ openspec view                      # インタラクティブダッシュボード
+$ openspec show add-dark-mode        # 変更の詳細
+$ openspec validate add-dark-mode    # 構造を確認
+$ openspec view                      # インタラクティブなダッシュボード
 ```
 
-これらは読み取りおよび検査のためのツールです。提案と構築は、引き続きチャット内のスラッシュコマンドで行います。詳細は[CLI reference](cli.md)を参照してください。
+これらは読み取り・確認用のツールです。提案と構築は、チャットのスラッシュコマンドで行います。詳細は[CLIリファレンス](cli.md)を参照してください。
 
-## 次にどこへ進むか
+## 次のステップ
 
-- [Explore First](explore.md): 不安な場合に推奨される開始方法
-- [Workflows](workflows.md): 使用すべきタイミングに関する意思決定ガイダンス付きの上記のパターン
-- [Commands](commands.md): すべてのスラッシュコマンドの詳細
-- [Getting Started](getting-started.md): 標準的な最初の変更ウォークスルー
-- [Concepts](concepts.md): なぜ各ピースがこのように組み合わさっているのか
+- [最初に探索](explore.md)：判断に迷った場合に推奨される開始方法
+- [ワークフロー](workflows.md)：上記のパターンと、それぞれを使用するタイミングの判断ガイダンス
+- [コマンド](commands.md)：すべてのスラッシュコマンドの詳細
+- [はじめに](getting-started.md)：最初の変更に関する標準的なチュートリアル
+- [コンセプト](concepts.md)：各要素がこのように組み合わされる理由

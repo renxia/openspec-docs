@@ -1,90 +1,91 @@
-# Modificare e Iterare su una Modifica
+# Modifica e iterazione di una modifica
 
-Ogni artefatto in una modifica è semplicemente un file Markdown che puoi modificare in qualsiasi momento. Non esiste una "fase di pianificazione" bloccata, nessun gate di approvazione, né una modalità di modifica speciale da attivare. Vuoi cambiare la proposta dopo aver iniziato a costruire? Apri `proposal.md` e modificalo. Hai realizzato che il design è sbagliato a metà dell'implementazione? Correggi `design.md` e continua. Questa è l'intera risposta, ed è intenzionale.
+**Ogni artefatto di una modifica è semplicemente un file Markdown che puoi modificare in qualsiasi momento.** Non esiste una "fase di pianificazione" bloccata, nessun gate di approvazione, nessuna modalità di modifica speciale da attivare. Vuoi modificare la proposta dopo aver iniziato la costruzione? Apri `proposal.md` e modificala. Ti accorgi che il design è sbagliato a metà dell'implementazione? Correggi `design.md` e continua. Questa è tutta la risposta, ed è una scelta di progettazione.
 
-Questa pagina serve per il momento in cui pensi: "Aspetta, posso tornare indietro e cambiare quella cosa?". Sì. Ecco come fare, per ogni caso comune.
+Questa pagina è per il momento in cui pensi "aspetta, posso tornare indietro e modificare quello?". Sì. Ecco come fare, per ogni caso comune.
 
 ## Due modi per modificare qualsiasi cosa
 
-Hai sempre entrambi a disposizione:
+Hai sempre entrambe le opzioni:
 
-1. **Modificare direttamente il file.** Gli artefatti sono Markdown semplice nella cartella `openspec/changes/<name>/`. Apri `proposal.md`, `design.md`, `tasks.md` o una delta spec sotto `specs/` nel tuo editor e modificalo. Niente di più è richiesto.
+1. **Modifica il file direttamente.** Gli artefatti sono semplici file Markdown in `openspec/changes/<name>/`. Apri `proposal.md`, `design.md`, `tasks.md` o una specifica delta nella cartella `specs/` con il tuo editor e modificala. Non è richiesto nient'altro.
 
-2. **Chiedere alla tua AI di rivederlo.** Nella chat, basta dire cosa vuoi: "Aggiorna la proposta per eliminare l'idea della cache e aggiungere una sezione sulla limitazione del tasso (rate-limit)," o "il design dovrebbe usare una coda, non il polling." L'AI modifica l'artefatto per te, utilizzando il resto della modifica come contesto.
+2. **Chiedi alla tua AI di revisionarlo.** In chat, basta dire cosa vuoi: "Aggiorna la proposta per rimuovere l'idea della cache e aggiungi una sezione sul rate-limit", oppure "il design deve usare una coda, non il polling". L'AI modifica l'artefatto per te, usando il resto della modifica come contesto.
 
-Usa quello che si adatta al momento. Una piccola rifinitura di testo? Modifica il file. Un ripensamento sostanziale? Lascia che l'AI riveda con il contesto completo.
+Usa quella che si adatta al momento. Piccola modifica alla formulazione? Modifica il file. Ripensamento sostanziale? Lascia che l'AI revisioni con tutto il contesto.
 
 ## "Come posso aggiornare la proposta (o le specifiche) dopo aver iniziato?"
 
-Aggiornala semplicemente. Stessa modifica, raffinata.
+Basta aggiornarla. Stessa modifica, perfezionata.
 
-Se stai utilizzando i comandi estesi, il flusso naturale è: modifica l'artefatto, quindi esegui `/opsx:continue` per riprendere dallo stato nuovo, o `/opsx:apply` per continuare a implementare rispetto al piano aggiornato. Se usi i comandi predefiniti `core`, modifica l'artefatto ed esegui `/opsx:apply`; legge i file attuali, quindi costruisce in base a ciò che gli artefatti dicono ora.
+Se stai usando i comandi estesi, il flusso naturale è: modifica l'artefatto, poi esegui `/opsx:continue` per riprendere dal nuovo stato, o `/opsx:apply` per continuare l'implementazione in base al piano aggiornato. Se stai usando i comandi `core` predefiniti, modifica l'artefatto ed esegui `/opsx:apply`; legge i file correnti, quindi costruisce in base a quello che dicono ora gli artefatti.
 
-Il modello mentale è questo: gli artefatti sono il piano attivo, non un contratto firmato. L'AI lavora sempre sui loro contenuti attuali, quindi modificarli indirizza il lavoro.
+Il modello mentale: gli artefatti sono il piano in tempo reale, non un contratto firmato. L'AI lavora sempre in base al loro contenuto corrente, quindi modificarli indirizza il lavoro.
 
 ```text
-Tu: Voglio cambiare l'approccio in questa modifica.
+Tu: Voglio modificare l'approccio in questa modifica.
 
 Tu: [modifica design.md, o dì all'AI:]
-     Aggiorna design.md per usare un background job invece di una chiamata sincrona.
+     Aggiorna design.md per usare un job in background invece di una chiamata sincrona.
 
-AI:  design.md aggiornato. La lista dei compiti è ancora valida; vuoi che continui ad applicare?
+AI:  design.md aggiornato. La lista delle attività si adatta ancora; vuoi che continui l'applicazione?
 
 Tu: /opsx:apply
 ```
 
 Questo risponde a una domanda molto comune: non esiste un comando separato "aggiorna proposta" perché non ne hai bisogno. Il file è la fonte di verità, e modificarlo (a mano o tramite l'AI) è l'aggiornamento.
 
-## "Come posso tornare a rivedere dopo aver implementato?"
+## "Come posso tornare indietro a fare la review dopo l'implementazione?"
 
-Non devi "tornare indietro", perché non sei mai andato via. Il flusso di lavoro è fluido: revisione, modifica e implementazione non sono fasi sequenziali in cui sei bloccato.
+Non devi "tornare indietro", perché non te ne sei mai andato. Il flusso di lavoro è fluido: review, modifica e implementazione non sono fasi sequenziali da cui sei intrappolato.
 
-In modo concreto, dopo un lavoro con `/opsx:apply`:
+Concretamente, dopo un po' di lavoro con `/opsx:apply`:
 
-- Vuoi riesaminare il piano? Apri gli artefatti e leggili, oppure esegui `openspec show <change>` nel tuo terminale per una visione consolidata.
-- Hai trovato qualcosa da cambiare? Modifica l'artefatto (o chiedi all'AI di farlo), quindi continua.
-- Vuoi un controllo strutturato che il codice corrisponda al piano? Esegui `/opsx:verify` (comando esteso). Esso riporta completezza, correttezza e coerenza senza bloccare nulla. Vedi [Workflows: Verify](workflows.md#verify-check-your-work).
+- Vuoi riesaminare il piano? Apri gli artefatti e leggili, oppure esegui `openspec show <modifica>` nel tuo terminale per una vista consolidata.
+- Hai trovato qualcosa da modificare? Modifica l'artefatto (o chiedi all'AI di farlo), poi continua.
+- Vuoi un controllo strutturato per verificare che il codice corrisponda al piano? Esegui `/opsx:verify` (comando esteso). Riporta completezza, correttezza e coerenza senza bloccare nulla. Vedi [Workflows: Verify](workflows.md#verify-check-your-work).
 
-Non c'è una "fase di revisione" a cui tornare, perché la revisione è qualcosa che puoi fare in qualsiasi momento, anche dopo l'implementazione.
+Non esiste una "fase di review" a cui tornare, perché la review è qualcosa che puoi fare in qualsiasi momento, anche dopo l'implementazione.
 
-## "Ho modificato il codice manualmente. Come posso conciliare questo con OpenSpec?"
+## "Ho modificato il codice a mano. Come posso riconciliarlo con OpenSpec?"
 
-Questo succede costantemente ed è normale. Hai modificato qualcosa nel tuo editor e ora il codice e gli artefatti non sono d'accordo. Riportali in sincronia nella direzione che sia vera:
+Succede costantemente e non è un problema. Hai modificato qualcosa nel tuo editor, e ora codice e artefatti non corrispondono. Riconciliali nella direzione corretta:
 
-- **Il codice è corretto, la specifica è obsoleta.** Aggiorna la delta spec (e i compiti, se rilevanti) per descrivere il comportamento che hai effettivamente rilasciato. La specifica dovrebbe corrispondere alla realtà prima di archiviare, perché l'archiviazione unisce la specifica alla tua fonte di verità.
-- **La specifica è corretta, il codice si è discostato.** Continua a costruire o a correggere finché il codice non corrisponde alla specifica.
+- **Il codice è ora corretto, la specifica è obsoleta.** Aggiorna la specifica delta (e le attività, se pertinente) per descrivere il comportamento che hai effettivamente rilasciato. La specifica deve corrispondere alla realtà prima di archiviare, perché l'archiviazione unisce la specifica alla tua fonte di verità.
+- **La specifica è corretta, il codice si è discostato.** Continua a costruire o correggere finché il codice non corrisponde alla specifica.
 
-Un modo rapido per rilevare le discrepanze è `/opsx:verify`: legge i tuoi artefatti e il tuo codice e ti dice dove divergono. Tratta il suo output come una lista di cose da fare per la riconciliazione, quindi archivia quando sono d'accordo.
+Un modo veloce per individuare le discrepanze è `/opsx:verify`: legge i tuoi artefatti e il tuo codice e ti dice dove divergono. Considera il suo output come una lista di cose da fare per la riconciliazione, poi archivia una volta che corrispondono.
 
-Il principio è questo: al momento dell'archiviazione, le tue specifiche diventano la verità del registro. Quindi, prima di archiviare, rendi le specifiche oneste riguardo a ciò che fa il codice. Le modifiche manuali sono benvenute; basta non permettere loro di disallineare silenziosamente la specifica.
+Il principio: al momento dell'archiviazione, le tue specifiche diventano la verità ufficiale. Quindi prima di archiviare, rendi le specifiche oneste rispetto a quello che fa il codice. Le modifiche manuali sono benvenute; non lasciare che desincronizzino la specifica in silenzio.
 
-## Affinare una proposta che non ti soddisfa
+## Perfezionare una proposta che non ti soddisfa
 
-Se una proposta generata non è all'altezza, hai tre mosse valide:
+Se una proposta generata non centra l'obiettivo, hai tre mosse valide:
 
-- **Iterare sul posto.** Di' all'AI cosa non va ("lo scopo è troppo ampio, elimina le funzionalità di amministrazione") e lascia che riveda. È la soluzione più economica e solitamente corretta.
-- **Esplorare prima, poi riproporre.** Se il problema è che l'idea stessa non è chiara, torna indietro a `/opsx:explore`, rifletti e lascia che ne emerga una proposta più nitida. Vedi [Explore First](explore.md).
-- **Iniziare da zero.** Se l'intento è cambiato in modo fondamentale, una nuova modifica può essere più chiara che patchare quella vecchia.
+- **Itera sul posto.** Dì all'AI cosa non va ("l'ambito è troppo ampio, rimuovi le funzionalità di amministrazione") e lascia che la revisioni. È la soluzione più economica e di solito è quella giusta.
+- **Esplora prima, poi riproponi.** Se il problema è che l'idea stessa non è chiara, fai un passo indietro con `/opsx:explore`, ragionaci sopra, e lascia che ne esca una proposta più precisa. Vedi [Esplora prima](explore.md).
+- **Ricomincia da zero.** Se l'intento è cambiato fondamentalmente, una nuova modifica può essere più chiara che modificare la vecchia.
 
-Questa ultima mossa ha la sua guida decisionale, prossimamente.
+L'ultima mossa ha la sua guida decisionale, qui sotto.
 
-## Quando aggiornare rispetto a iniziare una nuova modifica
+## Quando aggiornare vs. iniziare una nuova modifica
 
-Versione breve: **aggiorna quando si tratta dello stesso lavoro raffinato; inizia una nuova modifica quando l'intento è cambiato in modo fondamentale o lo scopo è esploso in un lavoro diverso.**
+Versione breve: **aggiorna quando si tratta dello stesso lavoro perfezionato; inizia una nuova modifica quando l'intento è cambiato fondamentalmente o l'ambito si è espanso in un lavoro diverso.**
 
 - Stesso obiettivo, approccio migliore? Aggiorna.
-- Riduzione dello scopo (rilasciare il MVP ora, altro dopo)? Aggiorna, poi archivia, e una nuova modifica per la fase due.
-- Il problema stesso è cambiato ("aggiungere dark mode" è diventato "costruire un sistema di tematizzazione completo")? Nuova modifica.
+- Restringimento dell'ambito (rilascia l'MVP ora, il resto dopo)? Aggiorna, poi archivia, poi una nuova modifica per la seconda fase.
+- Il problema stesso è cambiato ("aggiungi la modalità scura" è diventato "costruisci un sistema di temi completo")? Nuova modifica.
 
-C'è un flowchart completo ed esempi pratici in [Workflows: When to Update vs Start Fresh](workflows.md#when-to-update-vs-start-fresh) e una trattazione più approfondita in [OPSX: When to Update vs. Start Fresh](opsx.md#when-to-update-vs-start-fresh).
+Puoi trovare un diagramma di flusso completo e esempi svolti in [Workflows: Quando aggiornare vs. ricominciare da zero](workflows.md#when-to-update-vs-start-fresh) e un trattamento più approfondito in [OPSX: Quando aggiornare vs. ricominciare da zero](opsx.md#when-to-update-vs-start-fresh).
 
-## Una nota sui compiti
+## Una nota sulle attività
 
-`tasks.md` è un checklist vivente, non un piano congelato. Mentre implementi, puoi aggiungere i compiti che scopri, rimuovere quelli che si sono rivelati superflui o riordinarli. L'AI spunta gli elementi man mano che li completa durante `/opsx:apply`, e riprende dal primo compito non spuntato se torni in seguito. Modificare la lista a metà del processo è previsto.
+`tasks.md` è una lista di controllo dinamica, non un piano congelato. Durante l'implementazione, puoi aggiungere attività che scopri, rimuovere quelle che si sono rivelate non necessarie, o riordinarle. L'AI spunta le voci man mano che le completa durante `/opsx:apply`, e riprende dalla prima attività non spuntata se torni in un secondo momento. Modificare la lista durante il lavoro è previsto.
 
 ## Dove andare dopo
 
-- [Workflows](workflows.md) - schemi, più la guida decisionale aggiornare vs nuovo
-- [Explore First](explore.md) - il posto dove tornare quando un'idea necessita di essere ripensata
-- [Commands](commands.md) - `/opsx:continue`, `/opsx:apply` e `/opsx:verify` in dettaglio
+- [Workflows](workflows.md) - pattern, oltre alla guida decisionale aggiorna-vs-nuovo
+- [Reviewing a Change](reviewing-changes.md) - la revisione di due minuti di un piano prima di costruirlo
+- [Explore First](explore.md) - il punto a cui tornare quando un'idea ha bisogno di essere ripensata
+- [Commands](commands.md) - `/opsx:continue`, `/opsx:apply` e `/opsx:verify` nel dettaglio
 - [Concepts: Artifacts](concepts.md#artifacts) - a cosa serve ogni artefatto

@@ -1,133 +1,133 @@
 # Dépannage
 
-Des solutions concrètes pour des problèmes concrets. Chaque entrée nomme un symptôme, explique la cause probable en une phrase et vous donne la solution. Si vous ne trouvez pas votre problème ici, l'[FAQ](faq.md) peut aider, et [Discord](https://discord.gg/YctCnvvshC) le fera certainement.
+Des solutions concrètes pour des problèmes concrets. Chaque entrée décrit un symptôme, explique la cause probable en une phrase et vous donne la solution. Si vous ne trouvez pas votre problème ici, la [FAQ](faq.md) peut vous aider, et le [Discord](https://discord.gg/YctCnvvshC) vous aidera à coup sûr.
 
 ## Installation et configuration
 
 ### `openspec: command not found`
 
-Le CLI n'est pas installé ou votre shell ne parvient pas à le trouver. Installez-le globalement et vérifiez :
+L'interface en ligne de commande (CLI) n'est pas installée, ou votre shell ne la trouve pas. Installez-la globalement et vérifiez :
 
 ```bash
 npm install -g @fission-ai/openspec@latest
 openspec --version
 ```
 
-S'il a été installé mais qu'il n'est toujours pas trouvé, il est probable que votre répertoire binaire npm global ne soit pas dans votre `PATH`. Exécutez `npm bin -g` pour voir où se trouvent les binaires globaux et assurez-vous que ce chemin est présent dans le profil de votre shell.
+Si elle est installée mais toujours introuvable, c'est probablement que le répertoire `bin` global de npm n'est pas dans votre `PATH`. Exécutez `npm bin -g` pour voir où se trouvent les binaires globaux, et assurez-vous que ce chemin est présent dans le fichier de profil de votre shell.
 
 ### "Requires Node.js 20.19.0 or higher"
 
-OpenSpec fonctionne avec Node 20.19.0+. Vérifiez votre version et mettez à niveau si nécessaire :
+OpenSpec fonctionne sur Node 20.19.0 ou supérieur. Vérifiez votre version et mettez à jour si nécessaire :
 
 ```bash
 node --version
 ```
 
-Si vous utilisez bun pour installer OpenSpec, sachez que OpenSpec *s'exécute* toujours sur Node, vous avez donc besoin de Node 20.19.0+ disponible dans votre `PATH` en tout état de cause. Voir [Installation](installation.md).
+Si vous utilisez `bun` pour installer OpenSpec, notez qu'OpenSpec s'exécute toujours sur Node, vous avez donc besoin de Node 20.19.0 ou supérieur disponible dans votre `PATH` dans tous les cas. Consultez la page [Installation](installation.md).
 
-### `openspec init` n'a pas configuré mon outil IA
+### `openspec init` didn't configure my AI tool
 
-Init demande quels outils configurer. Si vous avez sauté l'étape de votre outil ou si vous souhaitez en ajouter un autre, exécutez-le à nouveau ou utilisez la forme non interactive :
+La commande `init` vous demande quels outils configurer. Si vous avez sauté votre outil ou si vous voulez en ajouter un autre, exécutez simplement la commande à nouveau, ou utilisez la version non interactive :
 
 ```bash
 openspec init --tools claude,cursor
 ```
 
-La liste complète des IDs d'outils se trouve dans [Supported Tools](supported-tools.md). Utilisez `--tools all` pour tout, et `--tools none` pour ignorer la configuration de l'outil.
+La liste complète des identifiants d'outils est disponible dans la page [Outils pris en charge](supported-tools.md). Utilisez `--tools all` pour tous les configurer, `--tools none` pour sauter la configuration des outils.
 
 ## Les commandes n'apparaissent pas
 
-Si `/opsx:propose` (ou l'équivalent de votre outil) n'apparaît pas ou ne fait rien, suivez cette liste. Elles sont ordonnées du plus rapide à vérifier au moins rapide.
+Si `/opsx:propose` (ou l'équivalent pour votre outil) n'apparaît pas ou ne fait rien, parcourez cette liste dans l'ordre. Les éléments sont classés du plus rapide au plus long à vérifier.
 
-1. **Vous êtes peut-être au mauvais endroit.** Les commandes slash doivent être utilisées dans le chat de votre assistant IA, et non dans votre terminal. Si vous avez tapé `/opsx:propose` dans votre shell, c'est là que se trouve le problème. Voir [How Commands Work](how-commands-work.md).
+1. **Vous êtes peut-être au mauvais endroit.** Les commandes slash s'utilisent dans le chat de votre assistant IA, pas dans votre terminal. Si vous avez tapé `/opsx:propose` dans votre shell, c'est là le problème. Consultez la page [Fonctionnement des commandes](how-commands-work.md).
 
-2. **Regénérez les fichiers.** À partir de la racine de votre projet :
+2. **Régénérez les fichiers.** Depuis la racine de votre projet :
 
    ```bash
    openspec update
    ```
 
-   Ceci réécrit les fichiers de compétences (skill) et de commandes pour chaque outil que vous avez configuré.
+   Cela réécrit les fichiers de compétences et de commandes pour tous les outils que vous avez configurés.
 
-3. **Redémarrez votre assistant.** La plupart des outils recherchent les compétences et les commandes au démarrage. Une nouvelle fenêtre le fait souvent.
+3. **Redémarrez votre assistant.** La plupart des outils analysent les compétences et les commandes au démarrage. Une nouvelle fenêtre résout souvent le problème.
 
-4. **Confirmez l'existence des fichiers.** Pour Claude Code, vérifiez que `.claude/skills/` contient des dossiers `openspec-*`. Les autres outils utilisent leurs propres répertoires, tous listés dans [Supported Tools](supported-tools.md).
+4. **Vérifiez que les fichiers existent.** Pour Claude Code, vérifiez que le dossier `.claude/skills/` contient des dossiers `openspec-*`. Les autres outils utilisent leurs propres répertoires, tous listés dans la page [Outils pris en charge](supported-tools.md).
 
-5. **Vérifiez avoir initialisé ce projet.** Les compétences sont écrites par projet. Si vous avez cloné un dépôt ou changé de dossier, exécutez `openspec init` (ou `openspec update`) à cet endroit.
+5. **Vérifiez que vous avez bien initialisé ce projet.** Les compétences sont écrites par projet. Si vous avez cloné un dépôt ou changé de dossier, exécutez `openspec init` (ou `openspec update`) à cet endroit.
 
-6. **Confirmez que votre outil prend en charge les fichiers de commandes.** Quelques outils (Kimi CLI, Trae, ForgeCode, Mistral Vibe) ne génèrent pas de fichiers de commandes `opsx-*`; ils utilisent plutôt des invocations basées sur les compétences. Les formes diffèrent par outil : voir [Supported Tools](supported-tools.md) et [How Commands Work](how-commands-work.md#slash-command-syntax-by-tool).
+6. **Vérifiez que votre outil prend en charge les fichiers de commande.** Codex et quelques autres outils (CodeArts, Kimi CLI, ForgeCode, Mistral Vibe) ne génèrent pas de fichiers de commande `opsx-*` ; ils utilisent des appels basés sur les compétences à la place. Pour Codex, vérifiez le dossier `.codex/skills/openspec-*`. Les formulaires diffèrent selon l'outil : consultez les pages [Outils pris en charge](supported-tools.md) et [Fonctionnement des commandes](how-commands-work.md#slash-command-syntax-by-tool).
 
-## Travailler avec les changements
+## Travail avec les modifications
 
-### "Change not found" (Changement non trouvé)
+### "Change not found"
 
-La commande n'a pas pu indiquer quel changement vous vouliez. Nommez-le explicitement ou vérifiez ce qui existe :
+La commande n'a pas pu déterminer quelle modification vous vouliez utiliser. Nommez-la explicitement, ou vérifiez ce qui existe :
 
 ```bash
-openspec list                    # voir les changements actifs
-/opsx:apply add-dark-mode        # nommer le changement dans le chat
+openspec list                    # voir les modifications actives
+/opsx:apply add-dark-mode        # nommer la modification dans le chat
 ```
 
-Confirmez également que vous êtes dans le bon répertoire de projet.
+Vérifiez également que vous êtes dans le bon répertoire de projet.
 
-### "No artifacts ready" (Aucun artefact prêt)
+### "No artifacts ready"
 
-Chaque artefact est soit déjà créé, soit bloqué en attendant une dépendance. Voir ce qui bloque :
+Chaque artefact est soit déjà créé, soit bloqué en attente d'une dépendance. Vérifiez ce qui bloque :
 
 ```bash
 openspec status --change <name>
 ```
 
-Ensuite, créez d'abord la dépendance manquante. Rappelez-vous l'ordre : proposition active les spécifications et le design ; les spécifications et le design ensemble activent les tâches.
+Créez ensuite d'abord la dépendance manquante. Rappelez-vous de l'ordre : la proposition active les spécifications et la conception ; les spécifications et la conception ensemble activent les tâches.
 
-### `openspec validate` signale des avertissements ou des erreurs
+### `openspec validate` reports warnings or errors
 
-La validation vérifie vos spécifications et changements pour des problèmes structurels. Lisez le message : il nomme le fichier et le problème.
+La validation vérifie vos spécifications et vos modifications pour détecter des problèmes structurels. Lisez le message : il indique le fichier et le problème.
 
 ```bash
-openspec validate <name>           # valider un élément
-openspec validate --all            # valider tout
-openspec validate --all --strict   # vérifications plus strictes, bon pour CI
+openspec validate <name>           # valider un seul élément
+openspec validate --all            # valider l'ensemble
+openspec validate --all --strict   # vérifications plus strictes, adaptées pour le CI
 ```
 
-Les causes courantes sont une section requise manquante (comme une spécification sans scénarios) ou un en-tête delta mal formé. Corrigez le fichier et réexécutez. La [CLI reference](cli.md#openspec-validate) documente le format de sortie.
+Les causes les plus courantes sont une section obligatoire manquante (comme une spécification sans scénarios) ou un en-tête delta malformé. Corrigez le fichier et réexécutez la commande. La [Référence de l'interface en ligne de commande](cli.md#openspec-validate) documente le format de sortie.
 
-### L'IA a créé des artefacts incomplets ou incorrects
+### The AI created incomplete or wrong artifacts
 
-L'IA n'avait pas assez de contexte. Quelques leviers peuvent aider :
+L'IA n'avait pas assez de contexte. Quelques leviers peuvent vous aider :
 
-- Ajoutez du contexte de projet dans `openspec/config.yaml` afin que votre pile technologique et vos conventions soient injectées dans chaque requête. Voir [Customization](customization.md#project-configuration).
-- Ajoutez des règles (`rules:`) par artefact pour un guide qui ne s'applique qu'à, par exemple, les spécifications.
-- Donnez une description plus détaillée lorsque vous proposez.
-- Utilisez le `/opsx:continue` étendu pour créer un artefact à la fois et en revoir chacun, au lieu de laisser `/opsx:ff` tout faire d'un coup.
+- Ajoutez du contexte de projet dans `openspec/config.yaml` pour que votre pile technique et vos conventions soient injectées dans chaque requête. Consultez la page [Personnalisation](customization.md#project-configuration).
+- Ajoutez des `rules:` par artefact pour des consignes qui ne s'appliquent qu'à, par exemple, les spécifications.
+- Donnez une description plus détaillée lors de la création d'une proposition.
+- Utilisez la version étendue de `/opsx:continue` pour créer un artefact à la fois et les examiner chacun, au lieu de `/opsx:ff` qui les crée tous d'un coup.
 
-### L'archivage ne se termine pas ou avertit sur des tâches incomplètes
+### Archive won't finish, or warns about incomplete tasks
 
-Archive ne va pas *bloquer* sur des tâches incomplètes, mais il vous avertit, car l'archivage signifie généralement que le travail est terminé. Si les tâches restent intentionnellement (vous soumettez un changement partiel), continuez. Sinon, terminez d'abord les tâches. Archive proposera également de synchroniser vos spécifications delta dans les spécifications principales si vous ne l'avez pas encore fait ; dites oui à moins que vous n'ayez une raison contraire.
+L'archivage ne *bloquera pas* sur des tâches incomplètes, mais il vous avertira, car l'archivage signifie généralement que le travail est terminé. Si des tâches restent intentionnellement (vous déposez une modification partielle), poursuivez. Sinon, terminez d'abord les tâches. L'archivage vous proposera également de synchroniser vos spécifications delta dans les spécifications principales si vous ne l'avez pas encore fait ; acceptez à moins que vous n'ayez une raison de refuser.
 
 ## Configuration
 
-### Mon `config.yaml` n'est pas appliqué
+### My `config.yaml` isn't being applied
 
-Trois suspects habituels :
+Trois causes les plus courantes :
 
-1. **Nom de fichier incorrect.** Il doit être `openspec/config.yaml`, et non `.yml`.
-2. **YAML invalide.** Exécutez-le à travers n'importe quel validateur YAML ; le CLI signale également les erreurs de syntaxe avec des numéros de ligne.
-3. **Vous attendiez un redémarrage.** Ce n'est pas nécessaire. Les changements de configuration prennent effet immédiatement.
+1. **Nom de fichier incorrect.** Il doit s'agir de `openspec/config.yaml`, pas `.yml`.
+2. **YAML invalide.** Exécutez-le dans n'importe quel validateur YAML ; l'interface en ligne de commande signale également les erreurs de syntaxe avec les numéros de ligne.
+3. **Vous vous attendiez à un redémarrage.** Ce n'est pas nécessaire. Les modifications de configuration prennent effet immédiatement.
 
-### "Unknown artifact ID in rules: X" (ID d'artefact inconnu dans les règles : X)
+### "Unknown artifact ID in rules: X"
 
-Une clé sous `rules:` ne correspond à aucun artefact de votre schéma. Pour le schéma par défaut `spec-driven`, les IDs valides sont `proposal`, `specs`, `design` et `tasks`. Pour voir les IDs pour n'importe quel schéma :
+Une clé dans `rules:` ne correspond à aucun artefact dans votre schéma. Pour le schéma par défaut `spec-driven`, les identifiants valides sont `proposal`, `specs`, `design`, `tasks`. Pour voir les identifiants de n'importe quel schéma :
 
 ```bash
 openspec schemas --json
 ```
 
-### "Context too large" (Contexte trop volumineux)
+### "Context too large"
 
-Le champ `context:` est limité à 50KB, intentionnellement, car il est injecté dans chaque requête. Résumez-le ou fournissez un lien vers une documentation plus longue au lieu d'en coller. Un contexte concis produit également de meilleurs résultats, plus rapides.
+Le champ `context:` est limité à 50 Ko volontairement, car il est injecté dans chaque requête. Résumez-le, ou ajoutez des liens vers des documents plus longs au lieu de les coller. Un contexte léger donne également des résultats meilleurs et plus rapides.
 
-### "Schema not found" (Schéma non trouvé)
+### "Schema not found"
 
 Le nom de schéma que vous avez référencé n'existe pas. Listez ce qui est disponible et vérifiez l'orthographe :
 
@@ -137,30 +137,32 @@ openspec schema which <name>        # voir d'où un schéma est résolu
 openspec schema init <name>         # créer un schéma personnalisé
 ```
 
-Voir [Customization](customization.md#custom-schemas).
+Consultez la page [Personnalisation](customization.md#custom-schemas).
 
-## Migration du flux de travail hérité (legacy)
+## Migration depuis l'ancien workflow
 
-### "Legacy files detected in non-interactive mode" (Fichiers hérités détectés en mode non interactif)
+### "Legacy files detected in non-interactive mode"
 
-Vous êtes dans une CI ou un shell non interactif, et OpenSpec a trouvé d'anciens fichiers à nettoyer mais ne peut pas vous demander confirmation. Approuvez automatiquement :
+Vous êtes dans un environnement CI ou un shell non interactif, et OpenSpec a trouvé d'anciens fichiers à nettoyer mais ne peut pas vous demander confirmation. Approuvez automatiquement :
 
 ```bash
 openspec init --force
 ```
 
-### Les commandes n'apparaissaient pas après la migration
+Pour Codex, OpenSpec peut détecter d'anciens fichiers de prompt gérés dans `$CODEX_HOME/prompts` ou `~/.codex/prompts`. Ce nettoyage est limité aux noms de fichiers de prompt Codex hérités autorisés par OpenSpec, et `openspec init` non interactif ne supprime que les fichiers dont les compétences de remplacement `.codex/skills/openspec-*` existent. `openspec update` non interactif laisse tout le nettoyage hérité intact sauf si vous passez l'option `--force`.
 
-Redémarrez votre IDE. Les compétences sont détectées au démarrage. Si elles n'apparaissent toujours pas, exécutez `openspec update` et vérifiez les emplacements des fichiers dans [Supported Tools](supported-tools.md).
+### Commands didn't appear after migrating
 
-### Mon ancien `project.md` n'a pas été migré
+Redémarrez votre IDE. Les compétences sont détectées au démarrage. Si elles n'apparaissent toujours pas, exécutez `openspec update` et vérifiez les emplacements des fichiers dans la page [Outils pris en charge](supported-tools.md).
 
-C'est intentionnel. OpenSpec ne supprime jamais automatiquement `project.md` car il pourrait contenir du contexte que vous avez écrit. Déplacez les parties utiles dans la section `context:` de `config.yaml`, puis supprimez-le vous-même. Le [Migration Guide](migration-guide.md#migrating-projectmd-to-configyaml) explique cela, y compris une invite que vous pouvez donner à votre IA pour faire le distillat.
+### My old `project.md` wasn't migrated
 
-## Toujours bloqué ?
+C'est intentionnel. OpenSpec ne supprime jamais `project.md` automatiquement car il peut contenir du contexte que vous avez écrit. Déplacez les parties utiles dans la section `context:` de `config.yaml`, puis supprimez-le vous-même. Le [Guide de migration](migration-guide.md#migrating-projectmd-to-configyaml) vous accompagne dans cette démarche, y compris un prompt que vous pouvez donner à votre IA pour effectuer la synthèse.
+
+## Vous êtes toujours bloqué ?
 
 - **Discord :** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
-- **GitHub Issues :** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
-- **Depuis votre terminal :** `openspec feedback "what went wrong"` ouvre un ticket pour vous.
+- **Problèmes GitHub :** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
+- **Depuis votre terminal :** `openspec feedback "ce qui a mal tourné"` ouvre un problème pour vous.
 
-Lorsque vous signalez un problème, incluez votre version d'OpenSpec (`openspec --version`), votre version de Node (`node --version`), votre outil IA et la commande exacte ainsi que le résultat. Cela rend l'aide beaucoup plus rapide.
+Lorsque vous signalez un problème, incluez votre version d'OpenSpec (`openspec --version`), votre version de Node (`node --version`), votre outil d'IA, ainsi que la commande et la sortie exactes. Cela permet d'obtenir de l'aide beaucoup plus rapidement.

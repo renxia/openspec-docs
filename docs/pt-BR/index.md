@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "Desenvolvimento Orientado por Especificação para Assistentes de IA"
+  text: "Desenvolvimento Orientado por Especificações para Assistentes de IA"
   tagline: Uma especificação leve para construir e gerenciar projetos de assistentes de IA.
   actions:
     - theme: brand
@@ -12,120 +12,126 @@ hero:
     - theme: alt
       text: Início
       link: /
-
 features:
-  - title: Fluxo de Trabalho Spec-First
-    details: Defina os requisitos antes de escrever o código.
+  - title: Fluxo de Trabalho com Especificação Primeiro
+    details: Defina os requisitos antes de escrever código.
   - title: Design Nativo para IA
-    details: Construído para Claude Code, Cursor, Windsurf e mais.
-  - title: Multi-Idioma
-    details: Documentação disponível em múltiplos idiomas.
+    details: Desenvolvido para Claude Code, Cursor, Windsurf e outros.
+  - title: Multilíngue
+    details: Documentação disponível em vários idiomas.
 ---
 
-# Documentação OpenSpec
+# Documentação do OpenSpec
 
-Bem-vindo. Este é o lar de tudo sobre OpenSpec.
+Bem-vindo. Esta é a página inicial com toda a documentação do OpenSpec.
 
-OpenSpec ajuda você e seu assistente de codificação de IA a **concordar no que construir antes que qualquer código seja escrito.** Você descreve a mudança, a IA rascunha uma especificação curta e uma lista de tarefas, ambos olham para o mesmo plano, e então o trabalho acontece. Chega de descobrir no meio do caminho que a IA construiu a coisa errada.
+O OpenSpec ajuda você e seu assistente de codificação com IA a **entrarem em acordo sobre o que construir antes que qualquer código seja escrito.** Você descreve a alteração, a IA cria um rascunho de uma especificação curta e uma lista de tarefas, vocês dois analisam o mesmo plano e, então, o trabalho é realizado. Não há mais risco de descobrir no meio do caminho que a IA construiu a coisa errada.
 
 Se você não ler mais nada, leia estas duas páginas:
 
-1. [Getting Started](getting-started.md): instale, inicialize e envie sua primeira mudança.
-2. [How Commands Work](how-commands-work.md): onde você realmente digita `/opsx:propose` (dica: no seu chat de IA, não no terminal). Isso confunde quase todo mundo uma vez.
+1. [Começar](getting-started.md): instale, inicialize e envie sua primeira alteração.
+2. [Como os Comandos Funcionam](how-commands-work.md): onde você realmente digita `/opsx:propose` (dica: no chat da sua IA, não no terminal). Isso causa confusão em quase todo mundo na primeira vez.
 
-A segunda é mais importante do que parece. OpenSpec tem duas metades: uma ferramenta de linha de comando que você executa no terminal e comandos slash que você dá ao seu assistente de IA. Saber qual é qual economiza o momento de confusão mais comum.
+Essa segunda página é mais importante do que parece. O OpenSpec tem duas partes: uma ferramenta de linha de comando que você executa no seu terminal, e comandos de barra que você envia para o seu assistente de IA. Saber qual é qual evita o momento de confusão mais comum.
 
-> **O melhor hábito para construir primeiro: quando você não tem certeza do que construir, comece com `/opsx:explore`.** É um parceiro de pensamento sem riscos que lê seu código, avalia opções e transforma uma ideia vaga em um plano concreto antes que qualquer artefato ou código exista. O guia [Explore First](explore.md) apresenta o caso.
+> **O melhor hábito para desenvolver primeiro: quando você não tiver certeza do que construir, comece com `/opsx:explore`.** É um parceiro de reflexão sem riscos que lê seu código, avalia opções e transforma uma ideia vaga em um plano concreto antes que qualquer artefato ou código exista. O guia [Explore Primeiro](explore.md) explica o porquê.
 
 ## Escolha seu caminho
 
-**Sou totalmente novo.** Comece com [Getting Started](getting-started.md), depois folheie [Core Concepts at a Glance](overview.md). Quando algo parecer misterioso, [FAQ](faq.md) e [Glossary](glossary.md) estão por perto.
+**Eu sou novo no assunto.** Comece por [Começar](getting-started.md), depois dê uma olhada rápida em [Conceitos Básicos de Relance](overview.md). Quando algo parecer misterioso, o [Perguntas Frequentes (FAQ)](faq.md) e o [Glossário](glossary.md) estão por perto.
 
-**Tenho um problema, mas não tenho um plano.** Este é o caso comum e tem uma resposta dedicada: [Explore First](explore.md). Use `/opsx:explore` para pensar sobre isso com a IA antes de se comprometer com qualquer coisa.
+**Eu tenho um problema, mas não tenho um plano.** Esse é o caso mais comum, e tem uma resposta dedicada: [Explore Primeiro](explore.md). Use `/opsx:explore` para pensar sobre ele com a IA antes de se comprometer com qualquer coisa.
 
-**Tenho uma base de código existente e grande.** Você não documenta tudo. [Using OpenSpec in an Existing Project](existing-projects.md) mostra como começar em um código real, "brownfield", sem tentar resolver o oceano inteiro.
+**Eu tenho uma base de código existente grande.** Você não precisa documentar tudo ela. [Usando o OpenSpec em um Projeto Existente](existing-projects.md) mostra como começar a trabalhar em código de legado real sem tentar fazer tudo de uma vez.
 
-**Eu só quero fazer funcionar.** [Install](installation.md), execute `openspec init`, depois leia [How Commands Work](how-commands-work.md) para que seu primeiro comando slash caia no lugar certo.
+**Eu só quero fazer funcionar.** [Instale](installation.md), execute `openspec init`, depois leia [Como os Comandos Funcionam](how-commands-work.md) para que seu primeiro comando de barra seja enviado para o lugar certo.
 
-**Aprendo por exemplo.** A página [Examples & Recipes](examples.md) percorre mudanças reais do início ao fim: um pequeno recurso, uma correção de bug, um refactor, uma exploração.
+**Eu aprendo por exemplo.** A página [Exemplos e Receitas](examples.md) percorre alterações reais do início ao fim: um pequeno recurso, uma correção de bug, uma refatoração, uma exploração.
 
-**Estou vindo do fluxo de trabalho antigo.** O [Migration Guide](migration-guide.md) explica o que mudou e por quê, e promete que seu trabalho existente está seguro.
+**A IA acabou de criar um rascunho de um plano — e agora?** Leia-o. [Revisando uma Alteração](reviewing-changes.md) mostra a verificação de dois minutos que captura um erro de rumo enquanto ainda é barato corrigir, e [Escrevendo Boas Especificações](writing-specs.md) aborda do que é feito um plano que vale a pena aprovar.
 
-**Quero adaptar ao processo da minha equipe.** [Customization](customization.md) cobre a configuração do projeto, esquemas personalizados e contexto compartilhado.
+**Eu trabalho em equipe.** [OpenSpec em Equipe](team-workflow.md) mostra como uma alteração se relaciona com um ramo e um pull request, e como os membros da equipe revisam um plano antes do código.
 
-**Algo está quebrado.** [Troubleshooting](troubleshooting.md) coleta as falhas reais que as pessoas encontram, com correções.
+**Eu venho do fluxo de trabalho antigo.** O [Guia de Migração](migration-guide.md) explica o que mudou e por quê, e garante que seu trabalho existente está seguro.
 
-## O mapa completo
+**Eu quero adaptá-lo ao processo da minha equipe.** [Personalização](customization.md) aborda a configuração do projeto, esquemas personalizados e contexto compartilhado.
 
-### Comece aqui
+**Algo está quebrado.** [Solução de Problemas](troubleshooting.md) reúne as falhas que as pessoas realmente encontram, com correções.
 
-| Doc | O que ele oferece |
-|-----|-------------------|
-| [Getting Started](getting-started.md) | Instalação, inicialização e execução da sua primeira mudança de ponta a ponta |
-| [Explore First](explore.md) | Use `/opsx:explore` para pensar sobre uma ideia antes de se comprometer |
-| [How Commands Work](how-commands-work.md) | Onde os comandos slash são executados, o que significa "modo interativo", terminal vs chat |
-| [Core Concepts at a Glance](overview.md) | Todo o modelo mental em uma página: especificações, mudanças, deltas, arquivo |
-| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix e como verificar se funcionou |
+## Mapa completo
 
-### Use dia após dia
+### Comece por aqui
 
-| Doc | O que ele oferece |
-|-----|-------------------|
-| [Workflows](workflows.md) | Padrões comuns e quando recorrer a cada comando |
-| [Examples & Recipes](examples.md) | Guias completos de mudanças reais, prontos para copiar e colar |
-| [Using OpenSpec in an Existing Project](existing-projects.md) | Adotando o OpenSpec em uma base de código "brownfield" grande |
-| [Editing & Iterating on a Change](editing-changes.md) | Atualizar artefatos, voltar atrás, reconciliar edições manuais |
-| [Commands](commands.md) | Referência para cada comando slash `/opsx:*` |
-| [CLI](cli.md) | Referência para cada comando de terminal `openspec` |
+| Documento | O que você obtém |
+|----------|------------------|
+| [Começar](getting-started.md) | Instale, inicialize e execute sua primeira alteração do início ao fim |
+| [Explore Primeiro](explore.md) | Use `/opsx:explore` para refletir sobre uma ideia antes de se comprometer com ela |
+| [Como os Comandos Funcionam](how-commands-work.md) | Onde os comandos de barra são executados, o que significa o "modo interativo", terminal vs chat |
+| [Conceitos Básicos de Relance](overview.md) | Todo o modelo mental em uma página: especificações, alterações, deltas, arquivamento |
+| [Instalação](installation.md) | npm, pnpm, yarn, bun, Nix e como verificar se funcionou |
 
-### Entenda profundamente
+### Use no dia a dia
 
-| Doc | O que ele oferece |
-|-----|-------------------|
-| [Concepts](concepts.md) | A explicação detalhada de especificações, mudanças, artefatos, esquemas e arquivo |
-| [OPSX Workflow](opsx.md) | Por que o fluxo de trabalho é fluido em vez de travado por fase, mais um mergulho na arquitetura |
-| [Glossary](glossary.md) | Todo termo definido em um só lugar |
+| Documento | O que você obtém |
+|----------|------------------|
+| [Fluxos de Trabalho](workflows.md) | Padrões comuns e quando usar cada comando |
+| [Exemplos e Receitas](examples.md) | Passo a passo completo de alterações reais, prontos para copiar e colar |
+| [Escrevendo Boas Especificações](writing-specs.md) | Como são um requisito e um cenário bem estruturados, e como definir o tamanho ideal de uma alteração |
+| [Revisando uma Alteração](reviewing-changes.md) | A verificação de dois minutos em um plano rascunhado antes que qualquer código seja escrito |
+| [OpenSpec em Equipe](team-workflow.md) | Como as alterações se encaixam em ramos, pull requests e revisões |
+| [Usando o OpenSpec em um Projeto Existente](existing-projects.md) | Como adotar o OpenSpec em uma base de código de legado grande |
+| [Editando e Iterando em uma Alteração](editing-changes.md) | Atualize artefatos, volte atrás, reconcilie edições manuais |
+| [Comandos](commands.md) | Referência para todos os comandos de barra `/opsx:*` |
+| [CLI](cli.md) | Referência para todos os comandos de terminal `openspec` |
 
-### Faça-o seu
+### Entenda em profundidade
 
-| Doc | O que ele oferece |
-|-----|-------------------|
-| [Customization](customization.md) | Configuração do projeto, esquemas personalizados, contexto compartilhado |
-| [Multi-Language](multi-language.md) | Gerar artefatos em idiomas diferentes de inglês |
-| [Supported Tools](supported-tools.md) | As 25+ ferramentas de IA com as quais o OpenSpec se integra e onde os arquivos são salvos |
+| Documento | O que você obtém |
+|----------|------------------|
+| [Conceitos](concepts.md) | A explicação longa de especificações, alterações, artefatos, esquemas e arquivamento |
+| [Fluxo de Trabalho OPSX](opsx.md) | Por que o fluxo de trabalho é fluido em vez de bloqueado por fases, além de um mergulho profundo na arquitetura |
+| [Glossário](glossary.md) | Todos os termos definidos em um só lugar |
+
+### Personalize para sua equipe
+
+| Documento | O que você obtém |
+|----------|------------------|
+| [Personalização](customization.md) | Configuração do projeto, esquemas personalizados e contexto compartilhado |
+| [Multilíngue](multi-language.md) | Gere artefatos em idiomas diferentes do inglês |
+| [Ferramentas Suportadas](supported-tools.md) | Os mais de 25 ferramentas de IA com as quais o OpenSpec se integra, e onde os arquivos são armazenados |
 
 ### Quando precisar de ajuda
 
-| Doc | O que ele oferece |
-|-----|-------------------|
-| [FAQ](faq.md) | Respostas rápidas às perguntas mais feitas |
-| [Troubleshooting](troubleshooting.md) | Correções concretas para falhas concretas |
-| [Migration Guide](migration-guide.md) | Migrando do fluxo de trabalho legado para OPSX |
+| Documento | O que você obtém |
+|----------|------------------|
+| [Perguntas Frequentes (FAQ)](faq.md) | Respostas rápidas para as perguntas mais feitas pelas pessoas |
+| [Solução de Problemas](troubleshooting.md) | Correções concretas para falhas concretas |
+| [Guia de Migração](migration-guide.md) | Migrando do fluxo de trabalho legado para o OPSX |
 
-### Coordenar entre repositórios (beta)
+### Coordenação entre repositórios (beta)
 
-| Doc | O que ele oferece |
-|-----|-------------------|
-| [Stores: User Guide](stores-beta/user-guide.md) | Planejar em seu próprio repo quando seu trabalho abrange vários repositórios ou equipes |
-| [Agent Contract](agent-contract.md) | As superfícies CLI legíveis por máquina que os agentes impulsionam |
+| Documento | O que você obtém |
+|----------|------------------|
+| [Stores: Guia do Usuário](stores-beta/user-guide.md) | Planeje em seu próprio repositório quando seu trabalho abranger vários repositórios ou equipes |
+| [Contrato de Agente](agent-contract.md) | As superfícies de CLI legíveis por máquina que os agentes utilizam |
 
 ## A versão de trinta segundos
 
 ```text
-1. Install        npm install -g @fission-ai/openspec@latest
-2. Initialize     cd your-project && openspec init
-3. Explore        (no seu chat de IA)  /opsx:explore           ← opcional, mas um ótimo hábito
-4. Propose        (no seu chat de IA)  /opsx:propose add-dark-mode
-5. Build          (no seu chat de IA)  /opsx:apply
-6. Archive        (no seu chat de IA)  /opsx:archive
+1. Instale        npm install -g @fission-ai/openspec@latest
+2. Inicialize     cd your-project && openspec init
+3. Explore        (no chat da sua IA)  /opsx:explore           ← opcional, mas um hábito muito útil
+4. Propose        (no chat da sua IA)  /opsx:propose add-dark-mode
+5. Build          (no chat da sua IA)  /opsx:apply
+6. Archive        (no chat da sua IA)  /opsx:archive
 ```
 
-Os passos 1 e 2 acontecem no seu terminal. O restante acontece no chat do seu assistente de IA. Essa divisão é a única coisa que vale a pena memorizar, e [How Commands Work](how-commands-work.md) explica exatamente por quê. O Passo 3 é opcional, mas começar com `/opsx:explore` quando você não tem certeza é o hábito mais valioso para formar.
+As etapas 1 e 2 acontecem no seu terminal. O resto acontece no chat do seu assistente de IA. Essa divisão é a única coisa que vale a pena memorizar, e [Como os Comandos Funcionam](how-commands-work.md) explica exatamente o porquê. A etapa 3 é opcional, mas começar com `/opsx:explore` quando você não tiver certeza é o hábito que mais vale a pena desenvolver.
 
-## Outros lugares para obter ajuda
+## Onde mais obter ajuda
 
 - **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) para perguntas, ideias e ajuda.
-- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) para bugs e solicitações de recursos.
-- **`openspec feedback "sua mensagem"`** envia feedback diretamente do seu terminal (ele abre um problema no GitHub).
+- **Issues do GitHub:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) para relatar bugs e solicitar recursos.
+- **`openspec feedback "sua mensagem"`** envia feedback diretamente do seu terminal (ele abre uma issue no GitHub).
 
-Encontrou algo nessas documentações que está errado, desatualizado ou confuso? Isso é um bug. Abra um problema ou um PR. Melhorias na documentação são algumas das contribuições mais valiosas que você pode fazer.
+Encontrou algo nestes documentos que está errado, desatualizado ou confuso? Isso é um bug. Abra uma issue ou um PR. Melhorias na documentação são algumas das contribuições mais valiosas que você pode fazer.

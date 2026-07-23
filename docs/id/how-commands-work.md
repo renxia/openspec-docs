@@ -1,27 +1,27 @@
-# Cara Kerja Perintah
+# Cara Perintah Bekerja
 
-**Satu hal yang perlu diketahui: OpenSpec memiliki dua jenis perintah, dan keduanya berjalan di tempat yang berbeda.**
+**Satu hal yang perlu diketahui: OpenSpec memiliki dua jenis perintah, dan keduanya berjalan di dua tempat yang berbeda.**
 
 - Perintah `openspec ...` berjalan di **terminal** Anda. (Contoh: `openspec init`.)
 - Perintah `/opsx:...` berjalan di **obrolan asisten AI** Anda. (Contoh: `/opsx:propose`.)
 
-Jika Anda pernah mengetik `/opsx:propose` ke dalam terminal dan tidak terjadi apa-apa, halaman ini adalah jawabannya. Anda sedang berbicara dengan bagian OpenSpec yang salah. Perintah slash bukanlah perintah terminal. Mereka adalah instruksi yang Anda berikan kepada asisten pengodean AI Anda, di kotak obrolan yang sama tempat Anda biasanya mengetik "tambahkan formulir login."
+Jika Anda pernah mengetik `/opsx:propose` di terminal Anda dan tidak terjadi apa-apa, halaman ini adalah alasannya. Anda sedang berbicara dengan setengah yang salah dari OpenSpec. Perintah slash bukan perintah terminal. Mereka adalah instruksi yang Anda berikan kepada asisten pengkodean AI Anda, di kotak obrolan yang sama tempat Anda biasanya mengetik "tambahkan formulir login".
 
-Perbedaan tunggal ini adalah hambatan paling umum bagi pengguna baru, jadi mari kita buat itu sangat jelas.
+Satu perbedaan itu adalah rintangan paling umum bagi pengguna baru, jadi mari kita buat sangat jelas.
 
-## Dua Bagiannya
+## Dua setengah
 
-OpenSpec adalah satu proyek yang mengenakan dua topi.
+OpenSpec adalah satu proyek yang memakai dua topi.
 
-**CLI (Bagian terminal).** Sebuah program bernama `openspec` yang Anda instal dan jalankan dari shell Anda. Ini menyiapkan proyek Anda, mencantumkan dan memvalidasi perubahan, menampilkan dasbor, dan mengarsipkan pekerjaan yang telah selesai. Anda mengetik ini ke iTerm, terminal VS Code, PowerShell, di mana pun Anda menjalankan `git` atau `npm`.
+**CLI (setengah terminal).** Program bernama `openspec` yang Anda instal dan jalankan dari shell Anda. Ia menyiapkan proyek Anda, mencantumkan dan memvalidasi perubahan, menampilkan dasbor, dan mengarsipkan pekerjaan yang selesai. Anda mengetik ini ke iTerm, terminal VS Code, PowerShell, atau tempat mana pun yang biasanya Anda jalankan `git` atau `npm`.
 
 ```bash
-openspec init        # siapkan OpenSpec dalam proyek ini
+openspec init        # siapkan OpenSpec di proyek ini
 openspec list        # lihat perubahan aktif
 openspec view        # buka dasbor interaktif
 ```
 
-**Perintah Slash (Bagian obrolan).** Perintah singkat seperti `/opsx:propose` dan `/opsx:apply` yang Anda ketik ke asisten AI Anda. Ini memberi tahu AI untuk mengikuti alur kerja OpenSpec: membuat draf proposal, menulis spesifikasi, membangun dari daftar tugas, mengarsipkan setelah selesai. Anda mengetik ini ke Claude Code, Cursor, Windsurf, Copilot, atau asisten mana pun yang Anda gunakan.
+**Perintah slash (setengah obrolan).** Perintah pendek seperti `/opsx:propose` dan `/opsx:apply` yang Anda ketik ke asisten AI Anda. Perintah ini memberi tahu AI untuk mengikuti alur kerja OpenSpec: buat draf proposal, tulis spesifikasi, bangun dari daftar tugas, arsipkan ketika selesai. Anda mengetik ini ke Claude Code, Cursor, Windsurf, Copilot, atau asisten mana pun yang Anda gunakan.
 
 ```text
 /opsx:propose add-dark-mode    (diketik di obrolan AI Anda)
@@ -29,131 +29,134 @@ openspec view        # buka dasbor interaktif
 /opsx:archive                  (diketik di obrolan AI Anda)
 ```
 
-Berikut adalah model mental dalam satu gambar:
+Berikut model mentalnya dalam satu gambar:
 
 ```text
         TERMINAL ANDA                         OBROLAN ASISTEN AI ANDA
    ┌──────────────────────┐               ┌──────────────────────────────┐
-   │  $ openspec init     │   menginstal    │  /opsx:propose add-dark-mode  │
+   │  $ openspec init     │   menginstal  │  /opsx:propose add-dark-mode  │
    │  $ openspec list     │  ──────────►  │  /opsx:apply                  │
-   │  $ openspec view     │   perintah      │  /opsx:archive                │
+   │  $ openspec view     │   perintah    │  /opsx:archive                │
    └──────────────────────┘    & skill   └──────────────────────────────┘
         jalankan openspec di sini                       jalankan /opsx:* di sini
 ```
 
-Perhatikan panah tersebut. Menjalankan `openspec init` di terminal Anda adalah yang *menginstal* perintah slash ke alat AI Anda. Bagian terminal menyiapkan bagian obrolan. Setelah itu, pengoperasian sehari-hari sebagian besar terjadi di obrolan.
+Perhatikan panah. Menjalankan `openspec init` di terminal Anda adalah yang *menginstal* perintah slash ke dalam alat AI Anda. Setengah terminal menyiapkan setengah obrolan. Setelah itu, pengoperasian sehari-hari sebagian besar terjadi di obrolan.
 
 ## "Bagaimana cara memulai mode interaktif?"
 
-**Tidak ada mode interaktif terpisah untuk dimulai.** Pertanyaan ini sering muncul, jadi ia pantas mendapatkan jawaban yang lugas.
+**Tidak ada mode interaktif terpisah yang perlu dimulai.** Pertanyaan ini sering muncul, jadi layak mendapatkan jawaban yang jelas.
 
-Anda tidak memasuki mode OpenSpec khusus. Anda cukup membuka asisten pengodean AI Anda seperti biasa, dan mengetik perintah slash ke dalam obrolan. Perintah slash *adalah* cara Anda "memasuki" OpenSpec. Asisten Anda mengenalinya, memuat skill OpenSpec yang sesuai, dan mulai mengikuti alur kerja.
+Anda tidak perlu masuk ke mode OpenSpec khusus. Anda hanya perlu membuka asisten pengkodean AI Anda seperti biasa, dan ketik perintah slash ke obrolan. Perintah slash *adalah* cara Anda "masuk" ke OpenSpec. Asisten Anda mengenalinya, memuat skill OpenSpec yang sesuai, dan mulai mengikuti alur kerja.
 
-Jadi instruksi sebenarnya adalah:
+Jadi instruksi yang sebenarnya adalah:
 
-1. Buka asisten pengodean AI Anda (Claude Code, Cursor, Windsurf, dan sejenisnya) di proyek Anda.
-2. Ketik `/opsx:propose` di obrolannya, di tempat yang sama saat Anda mengetik permintaan lainnya.
-3. Perhatikan saran otomatis (autocomplete): jika OpenSpec terinstal, Anda akan melihat `/opsx:propose`, `/opsx:apply`, dan teman-teman muncul saat Anda mengetik slash.
+1. Buka asisten pengkodean AI Anda (Claude Code, Cursor, Windsurf, dan seterusnya) di proyek Anda.
+2. Ketik `/opsx:propose` di obrolannya, tempat yang sama tempat Anda mengetik permintaan lain.
+3. Lihat autocomplete: jika OpenSpec terinstal, Anda akan melihat `/opsx:propose`, `/opsx:apply`, dan yang lainnya muncul saat Anda mengetik slash.
 
-Cuma itu. Tidak ada mode untuk diganti, tidak ada daemon untuk diluncurkan, tidak ada jendela terpisah.
+Itu saja. Tidak ada mode untuk di-toggle, tidak ada daemon untuk diluncurkan, tidak ada jendela terpisah.
 
-Satu hal yang *benar-benar* interaktif berada di terminal: `openspec view`. Ini membuka dasbor untuk menjelajahi spesifikasi dan perubahan Anda. Tetapi itu adalah penampil (viewer), bukan hal yang Anda usulkan dan bangun dengannya. Pembangunan terjadi melalui perintah slash di obrolan.
+Satu hal yang *benar-benar* interaktif ada di terminal: `openspec view`. Ia membuka dasbor untuk menelusuri spesifikasi dan perubahan Anda. Tapi itu adalah penampil, bukan hal yang Anda usulkan dan bangun. Pembangunan terjadi melalui perintah slash di obrolan.
 
-## Mengapa pembagian ini ada
+## Mengapa ada pembagian ini
 
-Penting untuk dipahami, karena ini menjelaskan mengapa OpenSpec bekerja dengan 25+ alat AI yang berbeda.
+Layak dipahami, karena ini menjelaskan mengapa OpenSpec bekerja dengan lebih dari 25 alat AI yang berbeda.
 
-CLI adalah **mesin**. Ia mengetahui aturannya: seperti apa tampilan folder perubahan, artefak mana yang bergantung pada mana, cara menggabungkan delta spec ke dalam sumber kebenaran Anda. Ini sama di mana pun.
+CLI adalah **mesin**. Ia tahu aturan: seperti apa folder perubahan, artefak mana yang bergantung pada artefak mana, cara menggabungkan spesifikasi delta ke dalam sumber kebenaran Anda. Ia sama di mana pun.
 
-Perintah slash adalah **setir**, dan setiap alat AI memiliki setirnya yang sedikit berbeda. Claude Code menyebutnya perintah. Cursor dan Windsurf memiliki format mereka sendiri. Beberapa alat menyebutnya skill. Ketika Anda menjalankan `openspec init`, OpenSpec menghasilkan jenis file yang tepat untuk setiap alat yang Anda pilih, sehingga niat `/opsx:propose` yang sama berfungsi terlepas dari asisten mana pun yang Anda sukai.
+Perintah slash adalah **setir**, dan setiap alat AI memiliki setir yang sedikit berbeda. Claude Code menyebutnya perintah. Cursor dan Windsurf memiliki format mereka sendiri. Beberapa alat menyebutnya skill. Saat Anda menjalankan `openspec init`, OpenSpec menghasilkan jenis file yang tepat untuk setiap alat yang Anda pilih, sehingga niat `/opsx:propose` yang sama bekerja tidak peduli asisten mana yang Anda gunakan.
 
-Kekuatan desain ini: Anda mempelajari alur kerja sekali dan membawanya ke berbagai alat. Komprominya: sintaks persis dari sebuah perintah dapat sedikit berbeda antar alat, yang merupakan bagian selanjutnya.
+Kekuatan desain ini: Anda mempelajari alur kerja sekali dan membawanya ke berbagai alat. Komprominya: sintaks perintah yang tepat bisa sedikit berbeda antar alat, yang akan dibahas di bagian berikutnya.
 
-## Sintaks Perintah Slash Berdasarkan Alat
+## Sintaks perintah slash per alat
 
-Niatnya identik di mana pun. Punctuation-nya berbeda. Gunakan format yang sesuai dengan asisten Anda.
+Niatnya identik di mana pun. Tanda baca berbeda. Gunakan formulir yang sesuai dengan asisten Anda.
 
-| Alat | Cara mengetiknya |
-|------|-----------------|
+| Alat | Cara mengetikkannya |
+|------|---------------------|
 | Claude Code | `/opsx:propose`, `/opsx:apply` |
 | Cursor | `/opsx-propose`, `/opsx-apply` |
 | Windsurf | `/opsx-propose`, `/opsx-apply` |
 | GitHub Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
-| Kimi CLI | skill-style, contohnya `/skill:openspec-propose` |
-| Trae | skill-style, contohnya `/openspec-propose` |
+| CodeArts | gaya skill, misal `/openspec-propose` |
+| Codex | gaya skill via `.codex/skills/openspec-*` |
+| Oh My Pi | `/opsx-propose`, `/opsx-apply` |
+| Kimi CLI | gaya skill, misal `/skill:openspec-propose` |
+| Trae | `/opsx-propose`, `/opsx:apply` |
 
-Sebagian besar alat menggunakan bentuk titik dua (`/opsx:propose`) atau bentuk tanda hubung (`/opsx-propose`). Beberapa alat menampilkan OpenSpec sebagai skill bernama alih-alih perintah slash; untuk mereka Anda memanggil skill berdasarkan nama. Daftar lengkap per alat, termasuk file mana yang ditulis persis di mana, terdapat di [Supported Tools](supported-tools.md).
+Sebagian besar alat menggunakan formulir titik dua (`/opsx:propose`) atau formulir garis (`/opsx-propose`). Beberapa alat menampilkan OpenSpec sebagai skill bernama bukan perintah slash; untuk itu Anda memanggil skill dengan nama. Daftar lengkap per alat, termasuk file mana yang ditulis di mana, ada di [Alat yang Didukung](supported-tools.md).
 
-Jika ragu, ketikkan sebuah slash di obrolan AI Anda dan lihat saran otomatisnya. Alat Anda akan menunjukkan format yang diharapkan.
+Jika ragu, ketik slash di obrolan AI Anda dan lihat autocomplete. Alat Anda akan menunjukkan formulir yang diharapkan.
 
-## Bagaimana Perintah Itu Ada: Skills dan Commands
+## Bagaimana perintah sampai di sana: skill dan perintah
 
-Ketika Anda menjalankan `openspec init` (atau `openspec update`), OpenSpec menulis file kecil ke dalam proyek Anda sehingga alat AI Anda dapat menemukan alur kerja. Tergantung pada alat dan pengaturan Anda, ini adalah **skills**, **commands**, atau keduanya.
+Saat Anda menjalankan `openspec init` (atau `openspec update`), OpenSpec menulis file kecil ke dalam proyek Anda agar alat AI Anda dapat menemukan alur kerja. Bergantung pada alat dan pengaturan Anda, ini adalah **skill**, **perintah**, atau keduanya.
 
-- **Skills** berada di tempat seperti `.claude/skills/openspec-*/SKILL.md`. Ini adalah standar lintas-alat yang sedang berkembang: folder instruksi yang secara otomatis dideteksi oleh asisten Anda.
-- **Commands** berada di tempat seperti `.claude/commands/opsx/<id>.md`. Ini adalah file perintah slash per alat yang lebih lama.
+- **Skill** berada di tempat seperti `.claude/skills/openspec-*/SKILL.md`. Mereka adalah standar lintas alat yang sedang muncul: folder instruksi yang asisten Anda deteksi otomatis.
+- **Perintah** berada di tempat seperti `.claude/commands/opsx/<id>.md`. Mereka adalah file perintah slash per alat yang lebih lama. Codex tidak mendapatkan file perintah yang dihasilkan; gunakan `.codex/skills/openspec-*`.
 
-Anda tidak perlu peduli mana yang digunakan alat Anda. Anda cukup mengetik perintah slash dan itu berfungsi. Tetapi mengetahui bahwa file-file ini ada membantu ketika sesuatu berjalan salah: jika perintah Anda hilang, biasanya berarti file-file ini hilang atau kedaluwarsa, dan `openspec update` akan meregenerasinya.
+Anda tidak perlu peduli alat mana yang menggunakan yang mana. Anda hanya perlu ketik perintah slash dan itu berfungsi. Tapi mengetahui file-file ini ada membantu ketika ada yang salah: jika perintah Anda hilang, biasanya berarti file ini hilang atau usang, dan `openspec update` membuatnya kembali.
 
-Lihat [Supported Tools](supported-tools.md) untuk jalur persis per alat, dan [Migration Guide](migration-guide.md) untuk bagaimana skill menggantikan pendekatan perintah yang lebih lama.
+Lihat [Alat yang Didukung](supported-tools.md) untuk jalur yang tepat per alat, dan [Panduan Migrasi](migration-guide.md) untuk cara skill menggantikan pendekatan hanya perintah yang lebih lama.
 
-## Mengonfirmasi bahwa itu terinstal
+## Memastikan itu terinstal
 
-Pemeriksaan cepat, tercepat dulu:
+Pemeriksaan cepat, yang tercepat terlebih dahulu:
 
-1. **Ketikkan sebuah slash di obrolan AI Anda.** Mulai mengetik `/opsx` dan perhatikan saran otomatisnya. Jika mereka muncul, Anda siap.
-2. **Cari file-file tersebut.** Untuk Claude Code, periksa apakah `.claude/skills/` berisi folder `openspec-*`. Alat lain menggunakan direktori mereka sendiri ([Supported Tools](supported-tools.md) mencantumkannya).
-3. **Jalankan ulang setup.** Dari root proyek Anda, jalankan `openspec update`. Ini meregenerasi file skill dan perintah untuk alat apa pun yang Anda konfigurasikan.
+1. **Ketik slash di obrolan AI Anda.** Mulai mengetik `/opsx` dan lihat saran autocomplete. Jika muncul, Anda siap.
+2. **Cari file.** Untuk Claude Code, periksa bahwa `.claude/skills/` berisi folder `openspec-*`. Alat lain menggunakan direktori mereka sendiri ([Alat yang Didukung](supported-tools.md) memuat daftarnya).
+3. **Jalankan ulang penyiapan.** Dari root proyek Anda, jalankan `openspec update`. Ini membuat kembali file skill dan perintah untuk alat apa pun yang Anda konfigurasi.
 4. **Mulai ulang asisten Anda.** Banyak alat memindai skill dan perintah saat startup, jadi jendela baru bisa menjadi langkah yang hilang.
 
-## Perintah Apa Saja yang Saya Miliki?
+## Perintah apa saja yang saya miliki?
 
-Secara default, OpenSpec menginstal set **inti** dari perintah slash:
+Secara default, OpenSpec menginstal set perintah slash **inti**:
 
-- `/opsx:explore`: pikirkan sebuah ide bersama AI sebelum berkomitmen pada perubahan (langkah pertama yang bagus saat Anda tidak yakin)
+- `/opsx:explore`: pikirkan ide dengan AI sebelum berkomitmen pada perubahan (langkah pertama yang bagus ketika Anda tidak yakin)
 - `/opsx:propose`: buat perubahan dan buat draf semua artefak perencanaannya dalam satu langkah
-- `/opsx:apply`: bangun perubahan dengan mengerjakan daftar tugasnya
-- `/opsx:sync`: gabungkan pembaruan spesifikasi suatu perubahan ke dalam spesifikasi utama Anda (biasanya otomatis)
-- `/opsx:archive`: selesaikan sebuah perubahan dan arsipkan
+- `/opsx:apply`: bangun perubahan dengan bekerja melalui daftar tugasnya
+- `/opsx:sync`: gabungkan pembaruan spesifikasi perubahan ke dalam spesifikasi utama Anda (biasanya otomatis)
+- `/opsx:archive`: selesaikan perubahan dan simpan di arsip
 
-Irama default yang baik: `explore` saat Anda mencari tahu apa yang harus dilakukan, lalu `propose`, `apply`, `archive`. Panduan [Explore First](explore.md) menjelaskan mengapa langkah pembuka ini bermanfaat.
+Irama default yang baik: `explore` ketika Anda menentukan apa yang harus dilakukan, kemudian `propose`, `apply`, `archive`. Panduan [Jelajahi Terlebih Dahulu](explore.md) menjelaskan mengapa langkah pembuka itu berharga.
 
-Ada juga set **diperluas** untuk orang-orang yang menginginkan kontrol yang lebih halus (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`). Anda mengaktifkannya dengan `openspec config profile`, lalu menerapkannya dengan `openspec update`.
+Ada juga set **diperluas** untuk orang yang ingin kontrol yang lebih halus (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`). Anda menyalakannya dengan `openspec config profile`, kemudian menerapkannya dengan `openspec update`.
 
-Baru dengan semua ini? `/opsx:onboard` (dalam set yang diperluas) memandu Anda melalui perubahan lengkap pada codebase Anda sendiri, menceritakan setiap langkah. Ini adalah perkenalan yang paling ramah.
+Baru pertama kali dengan semua ini? `/opsx:onboard` (di set diperluas) memandu Anda melalui perubahan lengkap di basis kode Anda sendiri, menceritakan setiap langkah. Ini adalah pengenalan yang paling ramah.
 
-Untuk apa yang dilakukan setiap perintah secara rinci, lihat [Commands](commands.md). Untuk kapan harus menggunakan yang mana, lihat [Workflows](workflows.md).
+Untuk detail apa yang dilakukan setiap perintah, lihat [Perintah](commands.md). Untuk kapan menggunakan yang mana, lihat [Alur Kerja](workflows.md).
 
-## Jalankan Pertama yang Bersih
+## Run pertama yang bersih
 
-Menggabungkan semuanya, berikut adalah seluruh urutan dengan setiap langkah diberi label di mana itu terjadi.
+Menggabungkannya, berikut seluruh urutan dengan setiap langkah diberi label tempat di mana itu terjadi.
 
 ```text
 TERMINAL   $ npm install -g @fission-ai/openspec@latest
 TERMINAL   $ cd your-project
 TERMINAL   $ openspec init
-              (menginstal perintah slash ke alat AI Anda)
+              (menginstal perintah slash ke dalam alat AI Anda)
 
 AI CHAT      /opsx:explore
-              (opsional: pikirkan ide bersama AI terlebih dahulu)
+              (opsional: pikirkan ide dengan AI terlebih dahulu)
 
 AI CHAT      /opsx:propose add-dark-mode
               (AI membuat draf proposal, spesifikasi, desain, tugas)
 
 AI CHAT      /opsx:apply
-              (AI membangunnya, mencentang tugas)
+              (AI membangunnya, menandai tugas selesai)
 
 AI CHAT      /opsx:archive
-              (perubahan digabungkan ke dalam spesifikasi Anda dan diarsipkan)
+              (perubahan digabungkan ke dalam spesifikasi Anda dan disimpan di arsip)
 ```
 
-Dua langkah terminal untuk menyiapkan. Kemudian Anda hidup di obrolan. Itulah iramanya.
+Dua langkah terminal untuk menyiapkan. Kemudian Anda tinggal di obrolan. Itu iramanya.
 
 ## Terkait
 
-- [Getting Started](getting-started.md): panduan walkthrough perubahan pertama yang lengkap
-- [Commands](commands.md): setiap perintah slash secara rinci
-- [CLI](cli.md): setiap perintah terminal secara rinci
-- [Supported Tools](supported-tools.md): sintaks dan lokasi file per alat
-- [FAQ](faq.md): jawaban cepat lainnya
-- [Troubleshooting](troubleshooting.md): perbaikan ketika perintah tidak muncul
+- [Memulai](getting-started.md): panduan lengkap perubahan pertama
+- [Perintah](commands.md): setiap perintah slash secara detail
+- [CLI](cli.md): setiap perintah terminal secara detail
+- [Alat yang Didukung](supported-tools.md): sintaks per alat dan lokasi file
+- [FAQ](faq.md): lebih banyak jawaban cepat
+- [Pemecahan Masalah](troubleshooting.md): perbaikan ketika perintah tidak muncul

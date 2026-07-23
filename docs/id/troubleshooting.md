@@ -1,21 +1,21 @@
 # Pemecahan Masalah
 
-Perbaikan konkret untuk masalah yang nyata. Setiap entri menyebutkan gejala, menjelaskan kemungkinan penyebab dalam satu kalimat, dan memberikan perbaikannya. Jika Anda tidak menemukan masalah Anda di sini, [FAQ](faq.md) mungkin membantu, dan [Discord](https://discord.gg/YctCnvvshC) pasti akan membantu.
+Perbaikan konkret untuk masalah konkret. Setiap entri menyebutkan gejala, menjelaskan kemungkinan penyebab dalam satu kalimat, dan memberikan perbaikan untuk Anda. Jika Anda tidak melihat masalah Anda di sini, [FAQ](faq.md) mungkin dapat membantu, dan [Discord](https://discord.gg/YctCnvvshC) pasti dapat membantu.
 
-## Instalasi dan Pengaturan
+## Instalasi dan pengaturan
 
-### `openspec: command not found`
+### `openspec: perintah tidak ditemukan`
 
-CLI belum terinstal, atau shell Anda tidak dapat menemukannya. Instal secara global dan periksa:
+CLI tidak terinstal, atau shell Anda tidak dapat menemukannya. Instal secara global dan periksa:
 
 ```bash
 npm install -g @fission-ai/openspec@latest
 openspec --version
 ```
 
-Jika sudah terinstal tetapi masih tidak ditemukan, kemungkinan direktori bin npm global Anda tidak ada di `PATH`. Jalankan `npm bin -g` untuk melihat lokasi biner global, dan pastikan jalur tersebut ada di profil shell Anda.
+Jika sudah terinstal tetapi masih tidak ditemukan, direktori bin npm global Anda kemungkinan tidak ada di `PATH` Anda. Jalankan `npm bin -g` untuk melihat lokasi biner global, dan pastikan jalur tersebut ada di profil shell Anda.
 
-### "Requires Node.js 20.19.0 or higher"
+### "Memerlukan Node.js 20.19.0 atau lebih tinggi"
 
 OpenSpec berjalan pada Node 20.19.0+. Periksa versi Anda dan tingkatkan jika diperlukan:
 
@@ -23,54 +23,54 @@ OpenSpec berjalan pada Node 20.19.0+. Periksa versi Anda dan tingkatkan jika dip
 node --version
 ```
 
-Jika Anda menggunakan bun untuk menginstal OpenSpec, perlu diketahui bahwa OpenSpec tetap *berjalan* di Node, jadi Anda memerlukan Node 20.19.0+ yang tersedia di `PATH` Anda terlepas dari itu. Lihat [Instalasi](installation.md).
+Jika Anda menggunakan bun untuk menginstal OpenSpec, perhatikan bahwa OpenSpec tetap *berjalan* pada Node, jadi Anda tetap memerlukan Node 20.19.0+ yang tersedia di `PATH` Anda. Lihat [Instalasi](installation.md).
 
 ### `openspec init` tidak mengonfigurasi alat AI saya
 
-Init menanyakan alat mana yang perlu disiapkan. Jika Anda melewatkan alat Anda atau ingin menambahkan yang lain, jalankan lagi, atau gunakan formulir non-interaktif:
+Init akan bertanya alat mana yang ingin disiapkan. Jika Anda melewatkan alat Anda atau ingin menambahkan alat lain, cukup jalankan lagi, atau gunakan formulir non-interaktif:
 
 ```bash
 openspec init --tools claude,cursor
 ```
 
-Daftar lengkap ID alat ada di [Supported Tools](supported-tools.md). Gunakan `--tools all` untuk semuanya, dan `--tools none` untuk melewati pengaturan alat.
+Daftar lengkap ID alat ada di [Alat yang Didukung](supported-tools.md). Gunakan `--tools all` untuk semua alat, `--tools none` untuk melewatkan penyiapan alat.
 
 ## Perintah tidak muncul
 
-Jika `/opsx:propose` (atau padanan alat Anda) tidak muncul atau tidak melakukan apa-apa, ikuti daftar ini. Mereka diurutkan dari yang tercepat diperiksa terlebih dahulu.
+Jika `/opsx:propose` (atau yang setara untuk alat Anda) tidak muncul atau tidak melakukan apa-apa, ikuti daftar ini. Daftar diurutkan dari yang tercepat untuk diperiksa terlebih dahulu.
 
-1. **Anda mungkin berada di tempat yang salah.** Perintah slash masuk ke obrolan asisten AI Anda, bukan terminal Anda. Jika Anda mengetik `/opsx:propose` ke dalam shell Anda, itulah masalahnya. Lihat [Cara Kerja Perintah](how-commands-work.md).
+1. **Anda mungkin berada di tempat yang salah.** Perintah slash harus digunakan di chat asisten AI Anda, bukan di terminal Anda. Jika Anda mengetik `/opsx:propose` di shell Anda, itu adalah masalahnya. Lihat [Cara Kerja Perintah](how-commands-work.md).
 
-2. **Buat ulang file.** Dari root proyek Anda:
+2. **Hasilkan ulang file.** Dari direktori root proyek Anda:
 
    ```bash
    openspec update
    ```
 
-   Ini menulis ulang file skill dan perintah untuk setiap alat yang telah Anda konfigurasikan.
+   Ini menulis ulang file keterampilan dan perintah untuk setiap alat yang telah Anda konfigurasi.
 
-3. **Mulai ulang asisten Anda.** Sebagian besar alat memindai keterampilan dan perintah saat startup. Jendela baru sering kali melakukannya.
+3. **Mulai ulang asisten Anda.** Kebanyakan alat memindai keterampilan dan perintah saat startup. Jendela baru seringkali dapat mengatasinya.
 
-4. **Konfirmasi bahwa file tersebut ada.** Untuk Claude Code, periksa apakah `.claude/skills/` berisi folder `openspec-*`. Alat lain menggunakan direktori mereka sendiri, yang semuanya tercantum di [Supported Tools](supported-tools.md).
+4. **Konfirmasikan file ada.** Untuk Claude Code, periksa bahwa `.claude/skills/` berisi folder `openspec-*`. Alat lain menggunakan direktori mereka sendiri, semuanya tercantum di [Alat yang Didukung](supported-tools.md).
 
-5. **Periksa apakah Anda menginisialisasi proyek ini.** Keterampilan ditulis per proyek. Jika Anda mengkloning repo atau beralih folder, jalankan `openspec init` (atau `openspec update`) di sana.
+5. **Periksa apakah Anda telah menginisialisasi proyek ini.** Keterampilan ditulis per proyek. Jika Anda mengkloning repo atau beralih folder, jalankan `openspec init` (atau `openspec update`) di sana.
 
-6. **Konfirmasi bahwa alat Anda mendukung file perintah.** Beberapa alat (Kimi CLI, Trae, ForgeCode, Mistral Vibe) tidak menghasilkan file perintah `opsx-*`; mereka menggunakan invokasi berbasis skill sebagai gantinya. Formulirnya berbeda per alat: lihat [Supported Tools](supported-tools.md) dan [How Commands Work](how-commands-work.md#slash-command-syntax-by-tool).
+6. **Konfirmasikan alat Anda mendukung file perintah.** Codex dan beberapa alat lain (CodeArts, Kimi CLI, ForgeCode, Mistral Vibe) tidak menghasilkan file perintah `opsx-*`; mereka menggunakan invokasi berbasis keterampilan sebagai gantinya. Untuk Codex, periksa `.codex/skills/openspec-*`. Bentuknya berbeda per alat: lihat [Alat yang Didukung](supported-tools.md) dan [Cara Kerja Perintah](how-commands-work.md#slash-command-syntax-by-tool).
 
-## Bekerja dengan Perubahan
+## Bekerja dengan perubahan
 
-### "Change not found" (Perubahan tidak ditemukan)
+### "Perubahan tidak ditemukan"
 
-Perintah tersebut tidak dapat memberi tahu perubahan mana yang Anda maksudkan. Sebutkan secara eksplisit, atau periksa apa yang ada:
+Perintah tidak dapat menentukan perubahan mana yang Anda maksud. Beri nama secara eksplisit, atau periksa apa yang ada:
 
 ```bash
 openspec list                    # lihat perubahan aktif
-/opsx:apply add-dark-mode        # sebutkan perubahan di obrolan
+/opsx:apply add-dark-mode        # beri nama perubahan di chat
 ```
 
-Pastikan juga Anda berada di direktori proyek yang benar.
+Juga konfirmasikan Anda berada di direktori proyek yang benar.
 
-### "No artifacts ready" (Tidak ada artefak siap)
+### "Tidak ada artefak yang siap"
 
 Setiap artefak sudah dibuat atau diblokir menunggu dependensi. Lihat apa yang memblokir:
 
@@ -82,85 +82,87 @@ Kemudian buat dependensi yang hilang terlebih dahulu. Ingat urutannya: proposal 
 
 ### `openspec validate` melaporkan peringatan atau kesalahan
 
-Validasi memeriksa spesifikasi dan perubahan Anda untuk masalah struktural. Baca pesannya: ia menyebutkan file dan masalahnya.
+Validasi memeriksa spesifikasi dan perubahan Anda untuk masalah struktural. Baca pesan: pesan tersebut menyebutkan file dan masalahnya.
 
 ```bash
 openspec validate <name>           # validasi satu item
 openspec validate --all            # validasi semuanya
-openspec validate --all --strict   # pemeriksaan yang lebih ketat, bagus untuk CI
+openspec validate --all --strict   # pemeriksaan lebih ketat, bagus untuk CI
 ```
 
-Penyebab umumnya adalah bagian wajib yang hilang (seperti spesifikasi tanpa skenario) atau header delta yang salah format. Perbaiki file dan jalankan lagi. [CLI reference](cli.md#openspec-validate) mendokumentasikan format outputnya.
+Penyebab umum adalah bagian yang diperlukan hilang (seperti spesifikasi tanpa skenario) atau header delta yang salah format. Perbaiki file dan jalankan lagi. [Referensi CLI](cli.md#openspec-validate) mendokumentasikan format keluaran.
 
 ### AI membuat artefak yang tidak lengkap atau salah
 
-AI tidak memiliki cukup konteks. Beberapa cara dapat membantu:
+AI tidak memiliki konteks yang cukup. Beberapa tuas dapat membantu:
 
-- Tambahkan konteks proyek di `openspec/config.yaml` sehingga tumpukan dan konvensi Anda disuntikkan ke dalam setiap permintaan. Lihat [Kustomisasi](customization.md#project-configuration).
-- Tambahkan `rules:` per artefak untuk panduan yang hanya berlaku, misalnya, untuk spesifikasi.
-- Berikan deskripsi yang lebih rinci saat Anda mengajukan proposal.
-- Gunakan `/opsx:continue` yang diperluas untuk membuat satu artefak pada satu waktu dan meninjau setiap satunya, alih-alih `/opsx:ff` melakukannya sekaligus.
+- Tambahkan konteks proyek di `openspec/config.yaml` agar tumpukan dan konvensi Anda disisipkan ke setiap permintaan. Lihat [Kustomisasi](customization.md#project-configuration).
+- Tambahkan `rules:` per-artefak untuk panduan yang hanya berlaku untuk, misalnya, spesifikasi.
+- Berikan deskripsi yang lebih detail saat Anda mengusulkan.
+- Gunakan `/opsx:continue` yang diperluas untuk membuat satu artefak pada satu waktu dan meninjau masing-masing, bukan `/opsx:ff` yang membuat semuanya sekaligus.
 
-### Archive tidak selesai, atau memperingatkan tentang tugas yang tidak lengkap
+### Arsip tidak akan selesai, atau memperingatkan tentang tugas yang tidak lengkap
 
-Archive tidak akan *memblokir* pada tugas yang tidak lengkap, tetapi ia memperingatkan Anda, karena pengarsipan biasanya berarti pekerjaan sudah selesai. Jika tugas tetap ada secara sengaja (Anda mengajukan perubahan parsial), lanjutkan. Jika tidak, selesaikan tugasnya terlebih dahulu. Archive juga akan menawarkan untuk menyinkronkan delta specs Anda ke dalam spesifikasi utama jika Anda belum melakukannya; katakan ya kecuali Anda punya alasan untuk tidak.
+Arsip tidak akan *memblokir* tugas yang tidak lengkap, tetapi akan memperingatkan Anda, karena mengarsipkan biasanya berarti pekerjaan sudah selesai. Jika tugas sengaja tetap ada (Anda mengajukan perubahan parsial), lanjutkan. Jika tidak, selesaikan tugas terlebih dahulu. Arsip juga akan menawarkan untuk menyinkronkan spesifikasi delta Anda ke spesifikasi utama jika Anda belum menyinkronkan; katakan ya kecuali Anda memiliki alasan untuk tidak melakukannya.
 
 ## Konfigurasi
 
 ### `config.yaml` saya tidak diterapkan
 
-Tiga tersangka umum:
+Tiga kandidat yang biasa:
 
-1. **Nama file yang salah.** Harus berupa `openspec/config.yaml`, bukan `.yml`.
-2. **YAML tidak valid.** Jalankan melalui validator YAML mana pun; CLI juga melaporkan kesalahan sintaks dengan nomor baris.
-3. **Anda mengharapkan restart.** Anda tidak memerlukannya. Perubahan konfigurasi berlaku segera.
+1. **Nama file salah.** Harus berupa `openspec/config.yaml`, bukan `.yml`.
+2. **YAML tidak valid.** Jalankan melalui validator YAML apa pun; CLI juga melaporkan kesalahan sintaks dengan nomor baris.
+3. **Anda mengharapkan restart.** Anda tidak membutuhkannya. Perubahan konfigurasi berlaku segera.
 
-### "Unknown artifact ID in rules: X" (ID artefak yang tidak diketahui dalam aturan: X)
+### "ID artefak tidak diketahui dalam rules: X"
 
-Sebuah kunci di bawah `rules:` tidak cocok dengan artefak apa pun dalam skema Anda. Untuk skema default `spec-driven`, ID yang valid adalah `proposal`, `specs`, `design`, `tasks`. Untuk melihat ID untuk skema apa pun:
+Kunci di bawah `rules:` tidak cocok dengan artefak apa pun di skema Anda. Untuk skema `spec-driven` default, ID yang valid adalah `proposal`, `specs`, `design`, `tasks`. Untuk melihat ID untuk skema apa pun:
 
 ```bash
 openspec schemas --json
 ```
 
-### "Context too large" (Konteks terlalu besar)
+### "Konteks terlalu besar"
 
-Bidang `context:` dibatasi hingga 50KB, dan itu disengaja, karena ia disuntikkan ke dalam setiap permintaan. Ringkaslah, atau tautkan ke dokumen yang lebih panjang alih-alih menempelkannya. Konteks yang ringkas juga menghasilkan hasil yang lebih baik dan lebih cepat.
+Bidang `context:` dibatasi pada 50KB, dengan sengaja, karena disisipkan ke setiap permintaan. Ringkaslah, atau tautkan ke dokumen yang lebih panjang alih-alih menempelkannya. Konteks yang ringkas juga menghasilkan hasil yang lebih baik dan lebih cepat.
 
-### "Schema not found" (Skema tidak ditemukan)
+### "Skema tidak ditemukan"
 
-Nama skema yang Anda rujuk tidak ada. Daftarkan apa yang tersedia dan periksa ejaan:
+Nama skema yang Anda referensikan tidak ada. Cantumkan yang tersedia dan periksa ejaan:
 
 ```bash
-openspec schemas                    # daftarkan skema yang tersedia
-openspec schema which <name>        # lihat dari mana sebuah skema diselesaikan
-openspec schema init <name>         # buat satu kustom
+openspec schemas                    # cantumkan skema yang tersedia
+openspec schema which <name>        # lihat dari mana skema diselesaikan
+openspec schema init <name>         # buat yang kustom
 ```
 
 Lihat [Kustomisasi](customization.md#custom-schemas).
 
 ## Migrasi dari alur kerja lama
 
-### "Legacy files detected in non-interactive mode" (File warisan terdeteksi dalam mode non-interaktif)
+### "File lama terdeteksi dalam mode non-interaktif"
 
-Anda berada di CI atau shell non-interaktif, dan OpenSpec menemukan file lama untuk dibersihkan tetapi tidak dapat meminta Anda. Setujui secara otomatis:
+Anda berada di CI atau shell non-interaktif, dan OpenSpec menemukan file lama untuk dibersihkan tetapi tidak dapat meminta persetujuan Anda. Setujui secara otomatis:
 
 ```bash
 openspec init --force
 ```
 
+Untuk Codex, OpenSpec mungkin mendeteksi file prompt lama yang dikelola di `$CODEX_HOME/prompts` atau `~/.codex/prompts`. Pembersihan tersebut dibatasi pada nama file prompt Codex legacy yang ada dalam daftar putih OpenSpec, dan `openspec init` non-interaktif hanya menghapus file yang penggantinya, yaitu keterampilan `.codex/skills/openspec-*`, ada. `openspec update` non-interaktif membiarkan semua pembersihan legacy tidak tersentuh kecuali Anda meneruskan `--force`.
+
 ### Perintah tidak muncul setelah migrasi
 
-Mulai ulang IDE Anda. Keterampilan dideteksi saat startup. Jika mereka masih tidak muncul, jalankan `openspec update` dan periksa lokasi file di [Supported Tools](supported-tools.md).
+Mulai ulang IDE Anda. Keterampilan terdeteksi saat startup. Jika mereka masih tidak muncul, jalankan `openspec update` dan periksa lokasi file di [Alat yang Didukung](supported-tools.md).
 
 ### `project.md` lama saya tidak dimigrasikan
 
-Itu disengaja. OpenSpec tidak pernah menghapus `project.md` secara otomatis karena itu mungkin berisi konteks yang Anda tulis. Pindahkan bagian yang berguna ke dalam bagian `context:` dari `config.yaml`, lalu hapus sendiri. [Migration Guide](migration-guide.md#migrating-projectmd-to-configyaml) melalui hal ini, termasuk permintaan yang dapat Anda berikan kepada AI Anda untuk melakukan penyulingan.
+Itu disengaja. OpenSpec tidak pernah menghapus `project.md` secara otomatis karena mungkin memegang konteks yang Anda tulis. Pindahkan bagian yang berguna ke bagian `context:` di `config.yaml`, lalu hapus sendiri. [Panduan Migrasi](migration-guide.md#migrating-projectmd-to-configyaml) membahas ini, termasuk prompt yang dapat Anda berikan ke AI Anda untuk melakukan penyulingan.
 
-## Masih buntu?
+## Masih kesulitan?
 
 - **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
-- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
+- **Isu GitHub:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
 - **Dari terminal Anda:** `openspec feedback "what went wrong"` membuka isu untuk Anda.
 
-Ketika Anda melaporkan masalah, sertakan versi OpenSpec Anda (`openspec --version`), versi Node Anda (`node --version`), alat AI Anda, dan perintah serta output yang tepat. Hal ini membuat bantuan jauh lebih cepat.
+Saat Anda melaporkan masalah, sertakan versi OpenSpec Anda (`openspec --version`), versi Node Anda (`node --version`), alat AI Anda, serta perintah dan keluaran yang tepat. Hal ini membuat bantuan menjadi lebih cepat.

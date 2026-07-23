@@ -2,8 +2,8 @@
 
 import { Command } from 'commander';
 import env from 'dotenv';
-import { md5, NLogger, color, concurrency, mkdirp } from '@lzwme/fe-utils';
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, cpSync, rmSync, unlinkSync } from 'node:fs';
+import { md5, NLogger, color, concurrency, mkdirp, Limiter } from '@lzwme/fe-utils';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, statSync, rmSync, unlinkSync } from 'node:fs';
 import { join, dirname, relative, extname, sep, basename } from 'node:path';
 import build from './build';
 import { execSync } from 'node:child_process';
@@ -19,6 +19,170 @@ const RECORD_FILE = join(process.cwd(), './translate-records.json');
 const MAX_CHUNK_SIZE = Number(process.env.TRANSLATE_MAX_CHUNK_SIZE || 8000);
 // Translation records
 const translateRecords: { [filepath: string]: { srcMd5: string; } & { [targetpath: string]: string } } = existsSync(RECORD_FILE) ? JSON.parse(readFileSync(RECORD_FILE, 'utf-8')) : {};
+
+// ---- LLM API 客户端配置 ----
+/** 单组 LLM API 配置 */
+interface LLMClientConfig {
+  baseUrl: string;
+  apiKey: string;
+  model: string;
+  /** 该 key 允许的最大并发请求数 */
+  maxConcurrency: number;
+  /** 标签，用于日志区分 */
+  label?: string;
+}
+
+/** 解析多组 API key 配置（环境变量） */
+function parseMultiKeyConfigs(): LLMClientConfig[] {
+  const configs: LLMClientConfig[] = [];
+  const defaultBaseUrl = process.env.OPENAI_BASE_URL || 'http://localhost:11434/v1';
+  const defaultModel = process.env.TRANSLATE_OPENAI_MODEL || 'qwen3.5:latest';
+  const defaultConcurrency = Number(process.env.TRANSLATE_API_CONCURRENCY || '3');
+
+  // OPENAI_API_KEY_1, OPENAI_API_KEY_2, ... 每项支持逗号分隔多个 key
+  // 同一编号下的 key 共享 baseUrl/model/concurrency 配置
+  let idx = 1;
+  while (true) {
+    const keyRaw = process.env[`OPENAI_API_KEY_${idx}`];
+    if (!keyRaw) break;
+
+    const keyBaseUrl = process.env[`OPENAI_BASE_URL_${idx}`] || defaultBaseUrl;
+    const keyModel = process.env[`TRANSLATE_OPENAI_MODEL_${idx}`] || defaultModel;
+    const keyConcurrency = Number(process.env[`TRANSLATE_API_CONCURRENCY_${idx}`] || defaultConcurrency);
+
+    // 支持逗号分隔多个 key，共享同一组 baseUrl/model/concurrency
+    const keys = keyRaw.split(',').map(k => k.trim()).filter(Boolean);
+    for (let j = 0; j < keys.length; j++) {
+      const label = keys.length > 1 ? `key-${idx}-${j + 1}` : `key-${idx}`;
+      configs.push({ baseUrl: keyBaseUrl, apiKey: keys[j], model: keyModel, maxConcurrency: keyConcurrency, label });
+    }
+    idx++;
+  }
+
+  // 兼容：如果都没有，回退到默认的 OPENAI_API_KEY
+  if (configs.length === 0) {
+    const fallbackKey = process.env.OPENAI_API_KEY || '';
+    configs.push({ baseUrl: defaultBaseUrl, apiKey: fallbackKey, model: defaultModel, maxConcurrency: defaultConcurrency, label: 'default' });
+  }
+
+  return configs;
+}
+
+// ---- LLMClient：封装单组 API key + 并发控制 ----
+class LLMClient {
+  readonly config: LLMClientConfig;
+  private limiter: Limiter<any>;
+
+  constructor(config: LLMClientConfig) {
+    this.config = config;
+    this.limiter = new Limiter(config.maxConcurrency);
+  }
+
+  /** 当前队列中待处理 + 执行中的任务数 */
+  get load(): number {
+    return this.limiter.size;
+  }
+
+  /**
+   * 发送翻译请求（自动排队）
+   * @param content 待翻译文本
+   * @param systemPrompt 系统提示词
+   * @param timeoutMs 超时时间
+   */
+  req(content: string, systemPrompt: string, timeoutMs = 300_000): Promise<string> {
+    return this.limiter.queue(async () => {
+      const { baseUrl, apiKey, model } = this.config;
+
+      const body = {
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content },
+        ],
+        temperature: 0.3,
+      };
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+      try {
+        const response = await fetch(`${baseUrl}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify(body),
+          signal: controller.signal,
+        });
+
+        if (response.ok) {
+          const json = await response.json();
+          return json.choices[0].message.content.trim();
+        }
+
+        const text = await response.text();
+        throw new Error(`API error ${response.status}: ${text}`);
+      } finally {
+        clearTimeout(timer);
+      }
+    });
+  }
+
+  dispose() {
+    this.limiter.dispose();
+  }
+}
+
+// ---- 翻译任务调度器 ----
+class TranslateScheduler {
+  private clients: LLMClient[];
+
+  constructor(clients: LLMClient[]) {
+    this.clients = clients;
+    logger.log(`Scheduler initialized with ${color.yellow(clients.length)} API client(s), total concurrency: ${color.yellow(clients.reduce((s, c) => s + c.config.maxConcurrency, 0))}`);
+    for (const c of clients) {
+      logger.log(`  [${color.cyan(c.config.label || '?')}] ${c.config.baseUrl} (concurrency=${c.config.maxConcurrency})`);
+    }
+  }
+
+  /** 获取总并发能力 */
+  get totalCapacity(): number {
+    return this.clients.reduce((s, c) => s + c.config.maxConcurrency, 0);
+  }
+
+  /**
+   * 选择一个客户端来执行任务。
+   * 策略：优先选择负载最低的客户端（load / maxConcurrency 比值最小）
+   */
+  private pickClient(): LLMClient {
+    let best = this.clients[0];
+    let bestRatio = Infinity;
+    for (const c of this.clients) {
+      const ratio = c.load / c.config.maxConcurrency;
+      if (ratio < bestRatio) {
+        bestRatio = ratio;
+        best = c;
+      }
+    }
+    return best;
+  }
+
+  /**
+   * 分发单个翻译请求到负载最低的 client
+   */
+  dispatch(content: string, systemPrompt: string, timeoutMs?: number): Promise<string> {
+    const client = this.pickClient();
+    return client.req(content, systemPrompt, timeoutMs);
+  }
+
+  dispose() {
+    for (const c of this.clients) c.dispose();
+  }
+}
+
+/** 全局调度器实例（在 main 中初始化） */
+let scheduler: TranslateScheduler | null = null;
 
 // 语言代码到语言名称的映射
 const LANGUAGE_NAMES: Record<string, { native: string; english: string }> = {
@@ -85,21 +249,38 @@ const SUPPORTED_LANGUAGES = Object.keys(LANGUAGE_NAMES)
 
 program
   .name('translate-docs')
-  .description('Translate documentation files using LLM')
+  .description('Translate documentation files using LLM (supports multiple API keys for higher throughput)')
   .version('1.0.0')
   .requiredOption('-p, --path <path>', 'Path to file or directory to translate', 'docs/en')
   .option('-s, --source-lang <lang>', 'Source language (default: en)', 'en')
   .option('-t, --target-lang <lang>', 'Target language (e.g., zh-CN, ja, es, all)', 'all')
-  .option('--timeout <ms>', 'Timeout in milliseconds. default: 300_000')
-  .option('-c, --concurrency <thread>', 'Concurrency. default: 1', process.env.TRANSLATE_CONCURRENCY || '3')
-  .option('-u, --base-url <url>', 'LLM base URL', process.env.OPENAI_BASE_URL || 'http://localhost:11434/v1')
-  .option('-m, --model <model>', 'LLM model', process.env.TRANSLATE_OPENAI_MODEL || 'qwen3.5:latest')
-  .option('-k, --api-key <key>', 'API key', process.env.OPENAI_API_KEY || '')
+  .option('--timeout <ms>', 'Timeout per request in milliseconds. default: 300_000')
   .option('-B, --build', 'Build docs after translation', false)
   .option('-S, --sync', 'Sync docs from hermes-agent repository before translating', false)
   .option('-D, --debug', 'Debug mode')
   .addHelpText('after', `
 Supported languages: ${SUPPORTED_LANGUAGES.join(', ')}
+
+Environment variables for multi-key configuration:
+  OPENAI_BASE_URL          - Default LLM API base URL
+  TRANSLATE_OPENAI_MODEL   - Default model name
+  TRANSLATE_API_CONCURRENCY - Concurrency per API key (default: 3)
+  TRANSLATE_MAX_CHUNK_SIZE - Max characters per chunk (default: 8000)
+  TRANSLATE_MAX_RETRIES    - Max retries on failure (default: 3)
+
+  Single key (backward compatible):
+    OPENAI_API_KEY         - API key
+
+  Multiple keys (increases total RPM capacity):
+    OPENAI_API_KEY_1       - API key(s), comma-separated for multiple keys
+    OPENAI_API_KEY_2       - Second group
+    ... (OPENAI_API_KEY_N)
+    OPENAI_BASE_URL_1      - Optional: custom base URL for group 1
+    TRANSLATE_OPENAI_MODEL_1     - Optional: custom model for group 1
+    TRANSLATE_API_CONCURRENCY_1  - Optional: custom concurrency for group 1
+
+    Keys within the same group share baseUrl/model/concurrency.
+    Example: OPENAI_API_KEY_1=sk-a,sk-b,sk-c
 
 Examples:
   bun translate.ts -p docs/en -t zh-CN       # English to Chinese
@@ -219,11 +400,11 @@ function splitByParagraph(text: string): string[] {
 }
 
 // ---- Translation via API ----
-async function translateSingleChunk(content: string, sourceLang: string, targetLang: string): Promise<string> {
+function buildSystemPrompt(sourceLang: string, targetLang: string): string {
   const sourceLangDisplay = getLanguageDisplayName(sourceLang, true)
   const targetLangDisplay = getLanguageDisplayName(targetLang)
 
-  const systemPrompt = `You are a professional technical documentation translator.
+  return `You are a professional technical documentation translator.
 
 ## Task
 Translate the following markdown documentation from **${sourceLangDisplay}** to **${targetLangDisplay}**.
@@ -243,70 +424,45 @@ Translate the following markdown documentation from **${sourceLangDisplay}** to 
 7. **Output format**: Output ONLY the translated markdown content, nothing else.
 
 ## Text to translate:`
+}
 
-  const MAX_RETRIES = Number(process.env.TRANSLATE_MAX_RETRIES) || 3
-  const BASE_DELAY_MS = 1000
+/** 单次翻译请求（带重试），通过调度器分发 */
+async function translateSingleChunk(content: string, sourceLang: string, targetLang: string, id = ''): Promise<string> {
+  const systemPrompt = buildSystemPrompt(sourceLang, targetLang);
+  const MAX_RETRIES = Number(process.env.TRANSLATE_MAX_RETRIES) || 3;
+  const BASE_DELAY_MS = 1000;
+  const timeoutMs = Number(options.timeout) || 300_000;
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    const body = {
-      model: options.model,
-      messages: [
-        { role: 'system', content: systemPrompt },
-        { role: 'user', content },
-      ],
-      temperature: 0.3,
-    };
-    logger.debug('body:', body)
-
     try {
-      const response = await fetch(`${options.baseUrl}/chat/completions`, {
-        method: 'POST',
-        verbose: options.debug,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${options.apiKey}`,
-        },
-        body: JSON.stringify(body),
-      })
-
-      if (response.ok) {
-        const json = await response.json()
-        return json.choices[0].message.content.trim()
-      }
-
-      if (response.status === 429 && attempt < MAX_RETRIES) {
-        const delay = Math.min(BASE_DELAY_MS * Math.pow(2, attempt - 1), 60_000)
-        const jitter = Math.random() * 1000
-        const totalDelay = delay + jitter
-        logger.log(`  Rate limited (429), retrying in ${Math.round(totalDelay)}ms (attempt ${attempt}/${MAX_RETRIES})...`)
-        await new Promise(resolve => setTimeout(resolve, totalDelay))
-        continue
-      }
-
-      const text = await response.text()
-      throw new Error(`API error ${response.status}: ${text}`)
-    } catch (err) {
-      // 网络连接错误（如 socket 关闭）也视为临时故障进行重试
-      if (attempt < MAX_RETRIES && err instanceof Error && (
+      return await scheduler!.dispatch(content, systemPrompt, timeoutMs);
+    } catch (err: any) {
+      const is429 = err.message?.includes('API error 429') || err.message?.includes('status 429');
+      const isNetworkErr = err instanceof Error && (
         err.message.includes('socket connection was closed') ||
         err.message.includes('ECONNRESET') ||
         err.message.includes('ETIMEDOUT') ||
-        err.message.includes('fetch failed')
-      )) {
-        const delay = Math.min(BASE_DELAY_MS * Math.pow(2, attempt - 1), 60_000)
-        const jitter = Math.random() * 1000
-        const totalDelay = delay + jitter
-        logger.log(`  Connection error (${err.message}), retrying in ${Math.round(totalDelay)}ms (attempt ${attempt}/${MAX_RETRIES})...`)
-        await new Promise(resolve => setTimeout(resolve, totalDelay))
-        continue
+        err.message.includes('fetch failed') ||
+        err.name === 'AbortError'
+      );
+
+      if ((is429 || isNetworkErr) && attempt < MAX_RETRIES) {
+        const delay = Math.min(BASE_DELAY_MS * Math.pow(2, attempt - 1), 60_000);
+        const jitter = Math.random() * 1000;
+        const totalDelay = delay + jitter;
+        const reason = is429 ? 'Rate limited (429)' : `Connection error (${err.message})`;
+        logger.log(`  ${reason}, retrying in ${Math.round(totalDelay)}ms (attempt ${attempt}/${MAX_RETRIES})... ${color.gray(id)}`);
+        await new Promise(resolve => setTimeout(resolve, totalDelay));
+        continue;
       }
-      throw err
+      throw err;
     }
   }
 
-  throw new Error('Exceeded maximum retry attempts due to rate limiting')
+  throw new Error('Exceeded maximum retry attempts due to rate limiting');
 }
 
+/** 翻译文本（自动分段 + 并行执行各分段） */
 async function translateText(text: string, sourceLang: string, targetLang: string, id = ''): Promise<string> {
   // 如果文本长度超过阈值，先分段
   if (text.length > MAX_CHUNK_SIZE) {
@@ -325,31 +481,32 @@ async function translateText(text: string, sourceLang: string, targetLang: strin
       }
     }
 
-    const total = finalChunks.length
+    const total = finalChunks.length;
     if (total >= 3 && finalChunks[total - 1].length + finalChunks[total - 2].length < MAX_CHUNK_SIZE) {
-      finalChunks[total - 2] += finalChunks[total - 1]
-      finalChunks.pop()
+      finalChunks[total - 2] += finalChunks[total - 1];
+      finalChunks.pop();
     }
 
-    logger.log(`  Split into ${finalChunks.length} chunks`, finalChunks.map(c => c.length));
+    logger.log(`  Split into ${finalChunks.length} chunks, translating in parallel...`, finalChunks.map(c => c.length));
 
-    // 逐个翻译各块
-    const translatedChunks: string[] = [];
-    for (let i = 0; i < finalChunks.length; i++) {
-      const chunk = finalChunks[i];
-      let t = Date.now();
-      logger.log(`  [${color.cyan(sourceLang)}->${color.green(targetLang)}]Translating chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars)... ${color.gray(id)}`);
+    // 并行翻译各块（结果保持顺序）
+    const translatedResults = await Promise.all(
+      finalChunks.map((chunk, i) => {
+        const chunkId = `${id}#chunk${i + 1}/${finalChunks.length}`;
+        let t = Date.now();
+        logger.log(`  [${color.cyan(sourceLang)}->${color.green(targetLang)}]Translating chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars)... ${color.gray(chunkId)}`);
+        return translateSingleChunk(chunk, sourceLang, targetLang, chunkId)
+          .then(translated => {
+            logger.log(`  -> [${color.cyan(sourceLang)}->${color.green(targetLang)}]Translated chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars) in ${color.magenta(Date.now() - t)}ms ${color.gray(chunkId)}`);
+            return translated;
+          });
+      })
+    );
 
-      const translated = await translateSingleChunk(chunk, sourceLang, targetLang);
-      translatedChunks.push(translated);
-      logger.log(`  -> [${color.cyan(sourceLang)}->${color.green(targetLang)}]Translated chunk ${i + 1}/${finalChunks.length} (${color.green(chunk.length)} chars) in ${color.magenta(Date.now() - t)}ms ${color.gray(id)}`);
-    }
-
-    // 拼接翻译结果
-    return translatedChunks.join('\n\n');
+    return translatedResults.join('\n\n');
   }
 
-  return translateSingleChunk(text, sourceLang, targetLang);
+  return translateSingleChunk(text, sourceLang, targetLang, id);
 }
 
 // ---- File processing ----
@@ -440,7 +597,7 @@ async function syncDocs() {
   console.log()
   for (const srcFile of srcFiles) {
     let destFile = srcFile.replace(sourceDocsDir, targetDocsDir)
-    let content = readFileSync(srcFile, 'utf8').replaceAll('](docs/', '](').replace('README.md', 'index.md')
+    let content = readFileSync(srcFile, 'utf8').replaceAll('](docs/', '](').replaceAll('README.md', 'index.md')
     mkdirp(dirname(destFile));
     // 如果是 README.md 文件，则写入 index.md
     if (basename(srcFile) === 'README.md') {
@@ -516,10 +673,14 @@ function cleanupOrphanFiles() {
 }
 
 async function main(opts = options) {
-  const { path: inputPath, sourceLang, targetLang, concurrency: threads = 1, sync } = opts;
+  const { path: inputPath, sourceLang, targetLang, sync } = opts;
 
   // 前置：同步文档
   if (sync) await syncDocs();
+
+  // 初始化 LLM 调度器（多 API key 支持）
+  const clientConfigs = parseMultiKeyConfigs();
+  scheduler = new TranslateScheduler(clientConfigs.map(c => new LLMClient(c)));
 
   // 验证语言代码
   if (!LANGUAGE_NAMES[sourceLang]) {
@@ -556,7 +717,7 @@ async function main(opts = options) {
 
   if (stat.isFile()) {
     if (!['.md', '.json'].includes(extname(inputPath))) {
-      logger.error('Input file must be a .md file');
+      logger.error('Input file must be a .md or .json file');
       process.exit(1);
     }
     filesToTranslate = [inputPath];
@@ -565,12 +726,13 @@ async function main(opts = options) {
   }
 
   logger.log(`Found ${color.yellow(filesToTranslate.length)} files to translate`);
-  logger.log(`Use Model: ${color.green(opts.model)}`);
+  logger.log(`Scheduler capacity: ${color.green(scheduler.totalCapacity)} concurrent requests`);
 
+  // 收集所有待翻译任务
   const tasks: (() => Promise<void>)[] = [];
 
   if (targetLang === 'all') {
-    // 扁平化：收集 文件数 × 语言数 的所有任务对，最大化并发
+    // 扁平化：收集 文件数 × 语言数 的所有任务对
     const targetLangs = Object.keys(LANGUAGE_NAMES).filter(l => l !== sourceLang);
     logger.log(`Target languages: ${color.yellow(targetLangs.length)} → total tasks: ${color.yellow(filesToTranslate.length * targetLangs.length)}`);
 
@@ -592,12 +754,17 @@ async function main(opts = options) {
     }
   }
 
-  await concurrency(tasks, Number(threads));
+  // 使用调度器的总并发能力执行所有任务
+  const totalConcurrency = scheduler.totalCapacity;
+  await concurrency(tasks, totalConcurrency);
 
   logger.log(color.greenBright('Translation completed!'));
 
   // 以 docs/en/ 为基准，清理多语言目录中的孤儿文件
   cleanupOrphanFiles();
+
+  // 清理调度器
+  scheduler.dispose();
 
   if (opts.build) await build();
 }

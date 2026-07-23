@@ -1,59 +1,59 @@
-# Starten
+# Aan de slag
 
-Deze handleiding legt uit hoe OpenSpec werkt nadat u het heeft geïnstalleerd en geïnitialiseerd. Voor installatie-instructies, zie de [hoofd README](../index.md#quick-start) of de [Installatiehandleiding](installation.md). Nieuw in het gehele documentatiepakket? De [documentatie homepage](index.md) geeft alles weer.
+Deze gids legt uit hoe OpenSpec werkt nadat je het hebt geïnstalleerd en geïnitialiseerd. Voor installatie-instructies, zie de [hoofd-README](../index.md#quick-start) of de [Installatiegids](installation.md). Nieuw bij de hele documentatieset? De [documentatie-startpagina](index.md) brengt alles in kaart.
 
-> **Waar typ ik deze commando's?** Op twee plaatsen, en ze door elkaar halen is de meest voorkomende vroege valkuil.
+> **Waar typ ik deze commando's?** Twee plaatsen, en door elkaar halen is de meest voorkomende vroege struikelblok.
 >
-> - `openspec ...` commando's (zoals `openspec init`) draaien in uw **terminal**.
-> - `/opsx:...` commando's (zoals `/opsx:propose`) draaien in het chatvenster van uw **AI-assistent**, hetzelfde venster waar u hem vraagt code te schrijven.
+> - `openspec ...` commando's (zoals `openspec init`) draaien in je **terminal**.
+> - `/opsx:...` commando's (zoals `/opsx:propose`) draaien in de **chat van je AI-assistent**, hetzelfde vak waarin je het zou vragen om code te schrijven.
 >
-> Er is geen aparte "interactieve modus" om mee te beginnen. U typt simpelweg het slash-commando in de chat en uw assistent neemt het vanaf daar over. Volledige uitleg: [How Commands Work](how-commands-work.md).
+> Er is geen aparte "interactieve modus" om te starten. Je typt gewoon het slash-commando in de chat en je assistent neemt het van daar over. Volledige uitleg: [Hoe commando's werken](how-commands-work.md).
 
-## Uw Eerste Vijf Minuten
+## Je eerste vijf minuten
 
-De gehele lus, met elke stap gelabeld door waar deze plaatsvindt:
+De hele lus, met elke stap gelabeld waar deze plaatsvindt:
 
 ```text
 TERMINAL   $ npm install -g @fission-ai/openspec@latest
 TERMINAL   $ cd your-project && openspec init
-AI CHAT      /opsx:explore                    (optioneel: eerst nadenken)
-AI CHAT      /opsx:propose add-dark-mode      (AI stelt het plan op; u beoordeelt dit)
+AI CHAT      /opsx:explore                    (optioneel: denk er eerst goed over na)
+AI CHAT      /opsx:propose add-dark-mode      (AI stelt het plan op; jij beoordeelt het)
 AI CHAT      /opsx:apply                      (AI bouwt het)
-AI CHAT      /opsx:archive                    (specs zijn bijgewerkt, wijziging is gearchiveerd)
+AI CHAT      /opsx:archive                    (specs bijgewerkt, wijziging gearchiveerd)
 ```
 
-Twee terminalstappen om op te zetten, daarna werkt u in de chat. De rest van deze handleiding ontrafelt wat elke stap doet en wat u zult zien.
+Twee terminalstappen om in te stellen, daarna leef je in de chat. De rest van deze gids pakt uit wat elke stap doet en wat je zult zien.
 
-> **Niet zeker wat u moet bouwen? Begin met `/opsx:explore`.** Dit is een denkpartner zonder risico die uw codebase leest, opties afweegt en een vage idee omzet in een concreet plan, allemaal voordat er enig artefact of code bestaat. Wanneer het beeld duidelijk is, wordt overgedragen aan `/opsx:propose`. Dit is de beste gewoonte voor het werken met een AI die anders zelfverzekerd de verkeerde dingen zou bouwen. Zie de [Explore guide](explore.md).
+> **Weet je nog niet wat je moet bouwen? Begin met `/opsx:explore`.** Het is een denkpartner zonder risico die je codebase leest, opties afweegt, en een vaag idee scherpt tot een concreet plan, alle voordat er een artefact of code bestaat. Wanneer het beeld duidelijk is, geeft het door aan `/opsx:propose`. Dit is de beste gewoonte om met een AI te werken die anders met vertrouwen het verkeerde zou bouwen. Zie de [Explore-gids](explore.md).
 
-## Hoe Het Werkt
+## Hoe het werkt
 
-OpenSpec helpt u en uw AI-coderingassistent om overeenstemming te komen over wat er gebouwd moet worden, voordat er enige code is geschreven.
+OpenSpec helpt jou en je AI-codeerassistent om het eens te worden over wat er gebouwd moet worden voordat er code wordt geschreven.
 
-**Standaard snelle route (core profiel):**
+**Standaard snelle pad (kernprofiel):**
 
 ```text
 /opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
    (optioneel)
 ```
 
-Begin met `/opsx:explore` wanneer u uitfiguren wat te doen, of spring direct naar `/opsx:propose` als u het al weet. Explore staat in het standaardprofiel, dus het is er altijd als u het nodig heeft.
+Begin met `/opsx:explore` wanneer je uitzoekt wat je moet doen, of spring direct naar `/opsx:propose` wanneer je het al weet. Explore staat in het standaardprofiel, dus het is er altijd wanneer je het wilt.
 
-**Uitgebreide route (custom workflow selectie):**
+**Uitgebreid pad (aangepaste workflow-selectie):**
 
 ```text
-/opsx:new ──► /opsx:ff of /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-Het standaard globale profiel is `core`, wat `propose`, `explore`, `apply`, `sync` en `archive` omvat. U kunt de uitgebreide workflowcommando's inschakelen met `openspec config profile` en vervolgens `openspec update`.
+Het standaard globale profiel is `core`, dat `propose`, `explore`, `apply`, `sync`, en `archive` bevat. Je kunt de uitgebreide workflow-commando's inschakelen met `openspec config profile` en daarna `openspec update`.
 
-## Wat OpenSpec Creëert
+## Wat OpenSpec creëert
 
-Na het uitvoeren van `openspec init` heeft uw project deze structuur:
+Na het uitvoeren van `openspec init` heeft je project deze structuur:
 
 ```
 openspec/
-├── specs/              # Waarheidsbron (het gedrag van uw systeem)
+├── specs/              # Bron van waarheid (gedrag van je systeem)
 │   └── <domain>/
 │       └── spec.md
 ├── changes/            # Voorgestelde updates (één map per wijziging)
@@ -61,28 +61,28 @@ openspec/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Delta specs (wat verandert)
+│       └── specs/      # Delta-specs (wat verandert)
 │           └── <domain>/
 │               └── spec.md
 └── config.yaml         # Projectconfiguratie (optioneel)
 ```
 
-**Twee belangrijke mappen:**
+**Twee belangrijkste mappen:**
 
-- **`specs/`** - De waarheidsbron. Deze specs beschrijven hoe uw systeem momenteel functioneert. Georganiseerd per domein (bijv. `specs/auth/`, `specs/payments/`).
+- **`specs/`** - De bron van waarheid. Deze specs beschrijven hoe je systeem zich momenteel gedraagt. Georganiseerd per domein (bijv. `specs/auth/`, `specs/payments/`).
 
-- **`changes/`** - Voorgestelde wijzigingen. Elke wijziging krijgt zijn eigen map met alle gerelateerde artefacten. Wanneer een wijziging is voltooid, worden de specs samengevoegd in de hoofdmap `specs/`.
+- **`changes/`** - Voorgestelde wijzigingen. Elke wijziging krijgt een eigen map met alle gerelateerde artefacten. Wanneer een wijziging voltooid is, worden de specs samengevoegd met de hoofdmap `specs/`.
 
-## Artefacten Begrijpen
+## Artefacten begrijpen
 
 Elke wijzigingsmap bevat artefacten die het werk begeleiden:
 
 | Artefact | Doel |
 |----------|---------|
-| `proposal.md` | De "waarom" en "wat" - legt intentie, scope en aanpak vast |
-| `specs/` | Delta specs die AANGEVOEGDE/GEMODIFICEERDE/VERWIJDERDE vereisten tonen |
-| `design.md` | De "hoe" - technische aanpak en architectuurbeslissingen |
-| `tasks.md` | Implementatielijst met checkboxes |
+| `proposal.md` | Het "waarom" en "wat" - legt intentie, reikwijdte en aanpak vast |
+| `specs/` | Delta-specs die TOEGEVOEGD/GEMODIFICEERD/VERWIJDERD-vereisten tonen |
+| `design.md` | Het "hoe" - technische aanpak en architectuurbeslissingen |
+| `tasks.md` | Implementatie-checklist met selectievakjes |
 
 **Artefacten bouwen op elkaar voort:**
 
@@ -90,97 +90,97 @@ Elke wijzigingsmap bevat artefacten die het werk begeleiden:
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            update terwijl u leert
+            bijwerken terwijl je leert
 ```
 
-U kunt altijd teruggaan en eerdere artefacten verfijnen naarmate u meer leert tijdens de implementatie.
+Je kunt altijd teruggaan en eerdere artefacten verfijnen naarmate je meer leert tijdens de implementatie.
 
-## Hoe Delta Specs Werken
+## Hoe delta-specs werken
 
-Delta specs zijn het sleutelconcept in OpenSpec. Ze tonen wat er verandert ten opzichte van uw huidige specs.
+Delta-specs zijn het sleutelconcept in OpenSpec. Ze tonen wat er verandert ten opzichte van je huidige specs.
 
-### Het Formaat
+### Het formaat
 
-Delta specs gebruiken secties om het type wijziging aan te geven:
+Delta-specs gebruiken secties om het type wijziging aan te geven:
 
 ```markdown
 # Delta voor Auth
 
-## ADDED Requirements
+## TOEGEVOEGD Vereisten
 
-### Requirement: Two-Factor Authentication
+### Vereiste: Tweefactorauthenticatie
 Het systeem MOET een tweede factor vereisen tijdens het inloggen.
 
 #### Scenario: OTP vereist
-- GIVEN een gebruiker met 2FA ingeschakeld
-- WHEN de gebruiker geldige gegevens indient
-- THEN wordt er een OTP-uitdaging gepresenteerd
+- GEGEVEN een gebruiker met 2FA ingeschakeld
+- WANNEER de gebruiker geldige inloggegevens indient
+- DAN wordt een OTP-uitdaging gepresenteerd
 
-## MODIFIED Requirements
+## GEMODIFICEERD Vereisten
 
-### Requirement: Session Timeout
-Het systeem MOET sessies na 30 minuten inactiviteit laten verlopen.
-(Voorheen: 60 minuten)
+### Vereiste: Sessietimeout
+Het systeem ZAL sessies laten verlopen na 30 minuten inactiviteit.
+(Eerder: 60 minuten)
 
-#### Scenario: Inactieve timeout
-- GIVEN een geauthenticeerde sessie
-- WHEN 30 minuten voorbijgaan zonder activiteit
-- THEN wordt de sessie ongeldig gemaakt
+#### Scenario: Inactiviteitstimeout
+- GEGEVEN een geauthenticeerde sessie
+- WANNEER 30 minuten verstrijken zonder activiteit
+- DAN wordt de sessie ongeldig gemaakt
 
-## REMOVED Requirements
+## VERWIJDERD Vereisten
 
-### Requirement: Remember Me
-(Verouderd ten gunste van 2FA)
+### Vereiste: Onthoud mij
+(Vervallen ten gunste van 2FA)
 ```
 
-### Wat Gebeurt Er Bij Archivering
+### Wat er gebeurt bij archiveren
 
-Wanneer u een wijziging archiveert:
+Wanneer je een wijziging archiveert:
 
-1. **ADDED** vereisten worden toegevoegd aan de hoofdspec
-2. **MODIFIED** vereisten vervangen de bestaande versie
-3. **REMOVED** vereisten worden verwijderd uit de hoofdspec
+1. **TOEGEVOEGD**-vereisten worden toegevoegd aan de hoofdspec
+2. **GEMODIFICEERD**-vereisten vervangen de bestaande versie
+3. **VERWIJDERD**-vereisten worden verwijderd uit de hoofdspec
 
-De wijzigingsmap wordt verplaatst naar `openspec/changes/archive/` voor auditgeschiedenis.
+De wijzigingsmap verplaatst naar `openspec/changes/archive/` voor auditgeschiedenis.
 
-## Voorbeeld: Uw Eerste Wijziging
+## Voorbeeld: Je eerste wijziging
 
-Laten we kijken hoe u dark mode aan een applicatie toevoegt.
+Laten we het toevoegen van donkere modus aan een applicatie doorlopen.
 
-### 1. De Wijziging Starten (Standaard)
+### 1. Start de wijziging (Standaard)
 
 ```text
-U: /opsx:propose add-dark-mode
+Jij: /opsx:propose add-dark-mode
 
-AI:  Heeft openspec/changes/add-dark-mode/ aangemaakt
+AI:  Aangemaakt openspec/changes/add-dark-mode/
      ✓ proposal.md — waarom we dit doen, wat er verandert
      ✓ specs/       — vereisten en scenario's
      ✓ design.md    — technische aanpak
-     ✓ tasks.md     — implementatielijst
+     ✓ tasks.md     — implementatie-checklist
      Klaar voor implementatie!
 ```
 
-Als u het uitgebreide workflowprofiel heeft ingeschakeld, kunt u dit ook in twee stappen doen: `/opsx:new` dan `/opsx:ff` (of `/opsx:continue` incrementeel).
+Als je het uitgebreide workflow-profiel hebt ingeschakeld, kun je dit ook in twee stappen doen: `/opsx:new` en dan `/opsx:ff` (of `/opsx:continue` incrementeel).
 
-### 2. Wat Er Ontstaat
+### 2. Wat er wordt aangemaakt
 
 **proposal.md** - Legt de intentie vast:
 
 ```markdown
-# Proposal: Add Dark Mode
+# Voorstel: Donkere modus toevoegen
 
-## Intent
-Gebruikers hebben een dark mode optie gevraagd om oogbelasting te verminderen
-tijdens nachtgebruik.
+## Intentie
+Gebruikers hebben een donkere modus-optie gevraagd om vermoeide ogen
+tijdens gebruik in de nacht te verminderen.
 
-## Scope
-- Thematische schakelaar toevoegen in instellingen
-- Ondersteuning voor systeemvoorkeurdetectie
+## Reikwijdte
+- Themaknop toevoegen in instellingen
+- Ondersteuning voor detectie van systeemvoorkeur
 - Voorkeur opslaan in localStorage
 
 ## Aanpak
 Gebruik CSS custom properties voor theming met een React context
-voor staatbeheer.
+voor statusbeheer.
 ```
 
 **specs/ui/spec.md** - Delta die nieuwe vereisten toont:
@@ -188,100 +188,102 @@ voor staatbeheer.
 ```markdown
 # Delta voor UI
 
-## ADDED Requirements
+## TOEGEVOEGD Vereisten
 
-### Requirement: Theme Selectie
-Het systeem MOET gebruikers in staat stellen te kiezen tussen lichte en donkere thema's.
+### Vereiste: Thema-selectie
+Het systeem ZAL gebruikers toestaan te kiezen tussen lichte en donkere thema's.
 
 #### Scenario: Handmatige schakelaar
-- GIVEN een gebruiker op welke pagina dan ook is
-- WHEN de gebruiker op de themaschakelaar klikt
-- THEN wisselt het thema onmiddellijk
-- EN wordt de voorkeur behouden over sessies
+- GEGEVEN een gebruiker op een willekeurige pagina
+- WANNEER de gebruiker op de themaknop klikt
+- DAN wisselt het thema onmiddellijk
+- EN blijft de voorkeur bestaan over sessies heen
 
 #### Scenario: Systeemvoorkeur
-- GIVEN een gebruiker zonder opgeslagen voorkeur
-- WHEN de applicatie laadt
-- THEN wordt het door systeemvoorkeurs kleurenschema gebruikt
+- GEGEVEN een gebruiker zonder opgeslagen voorkeur
+- WANNEER de applicatie laadt
+- DAN wordt het voorkeurenschema van het systeem gebruikt
 ```
 
-**tasks.md** - Implementatielijst:
+**tasks.md** - Implementatie-checklist:
 
 ```markdown
-# Tasks
+# Taken
 
-## 1. Thematische Infrastructuur
-- [ ] 1.1 Create ThemeContext met light/dark state
-- [ ] 1.2 Add CSS custom properties voor kleuren
-- [ ] 1.3 Implement localStorage persistence
+## 1. Thema-infrastructuur
+- [ ] 1.1 ThemeContext aanmaken met licht/donker-status
+- [ ] 1.2 CSS custom properties voor kleuren toevoegen
+- [ ] 1.3 localStorage-persistentie implementeren
 
-## 2. UI Componenten
-- [ ] 2.1 Create ThemeToggle component
-- [ ] 2.2 Voeg schakelaar toe aan de instellingenpagina
-- [ ] 2.3 Update Header om snelle schakelaar op te nemen
+## 2. UI-componenten
+- [ ] 2.1 ThemeToggle-component aanmaken
+- [ ] 2.2 Schakelaar toevoegen aan instellingenpagina
+- [ ] 2.3 Header bijwerken om snelle schakelaar op te nemen
 
 ## 3. Styling
-- [ ] 3.1 Definieer donker thema kleurenpalet
-- [ ] 3.2 Update componenten om CSS variabelen te gebruiken
+- [ ] 3.1 Kleurenpalet voor donker thema definiëren
+- [ ] 3.2 Componenten bijwerken om CSS-variabelen te gebruiken
 ```
 
 ### 3. Implementeren
 
 ```
-U: /opsx:apply
+Jij: /opsx:apply
 
-AI:  Werkt door de taken...
-     ✓ 1.1 Created ThemeContext with light/dark state
-     ✓ 1.2 Added CSS custom properties to globals.css
-     ✓ 1.3 Implemented localStorage persistence
-     ✓ 2.1 Created ThemeToggle component
+AI:  Taken verwerken...
+     ✓ 1.1 ThemeContext aangemaakt met licht/donker-status
+     ✓ 1.2 CSS custom properties toegevoegd aan globals.css
+     ✓ 1.3 localStorage-persistentie geïmplementeerd
+     ✓ 2.1 ThemeToggle-component aangemaakt
      ...
      Alle taken voltooid!
 ```
 
-Tijdens de implementatie, als u ontdekt dat het ontwerp aangepast moet worden, update dan gewoon het artefact en ga verder.
+Tijdens de implementatie, als je ontdekt dat het ontwerp aanpassing nodig heeft, werk je gewoon het artefact bij en ga je door.
 
 ### 4. Archiveren
 
 ```
-U: /opsx:archive
+Jij: /opsx:archive
 
-AI:  Archiveert add-dark-mode...
-     ✓ Merged specs into openspec/specs/ui/spec.md
-     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
+AI:  add-dark-mode archiveren...
+     ✓ Specs samengevoegd in openspec/specs/ui/spec.md
+     ✓ Verplaatst naar openspec/changes/archive/2025-01-24-add-dark-mode/
      Klaar! Klaar voor de volgende functie.
 ```
 
-Uw delta specs zijn nu onderdeel van de hoofdspecs en documenteren hoe uw systeem werkt.
+Je delta-specs zijn nu onderdeel van de hoofdspecs, die documenteren hoe je systeem werkt.
 
-## Verifiëren en Beoordelen
+## Verifiëren en beoordelen
 
-Gebruik de CLI om naar uw wijzigingen te kijken:
+Gebruik de CLI om je wijzigingen te controleren:
 
 ```bash
-# Lijst actieve wijzigingen
+# Actieve wijzigingen weergeven
 openspec list
 
-# Bekijk wijzigingsdetails
+# Wijzigingsdetails weergeven
 openspec show add-dark-mode
 
-# Valideer spec-opmaakking
+# Spec-formaat valideren
 openspec validate add-dark-mode
 
 # Interactief dashboard
 openspec view
 ```
 
-## Volgende Stappen
+## Volgende stappen
 
-- [Explore First](explore.md) - Gebruik `/opsx:explore` om een idee te overwegen voordat u het commit.
-- [Using OpenSpec in an Existing Project](existing-projects.md) - Begin met een grote brownfield codebase.
-- [Editing & Iterating on a Change](editing-changes.md) - Update artefacten, ga terug, herstel handmatige wijzigingen.
-- [Core Concepts at a Glance](overview.md) - Het gehele mentale model op één pagina.
-- [Examples & Recipes](examples.md) - Echte wijzigingen, van begin tot eind.
-- [Workflows](workflows.md) - Veelvoorkomende patronen en wanneer u elk commando moet gebruiken.
-- [Commands](commands.md) - Volledige referentie voor alle slash commands.
-- [Concepts](concepts.md) - Dieper begrip van specs, wijzigingen en schema's.
-- [Customization](customization.md) - Laat OpenSpec werken naar uw manier.
-- [Stores](stores-beta/user-guide.md) - Planning die repos of teams overspant? Houd het in zijn eigen repo (beta).
-- [FAQ](faq.md) en [Troubleshooting](troubleshooting.md) - Wanneer u vastzit.
+- [Eerst exploreren](explore.md) - Gebruik `/opsx:explore` om een idee door te nemen voordat je je eraan bindt
+- [Een wijziging beoordelen](reviewing-changes.md) - Wat je moet controleren in het plan dat de AI opstelt, voordat er code komt
+- [Goede specs schrijven](writing-specs.md) - Hoe een sterke vereiste en scenario eruitzien
+- [OpenSpec gebruiken in een bestaand project](existing-projects.md) - Begin in een grote brownfield-codebase
+- [Een wijziging bewerken & itereren](editing-changes.md) - Artefacten bijwerken, teruggaan, handmatige bewerkingen afstemmen
+- [Kernconcepten in één oogopslag](overview.md) - Het hele mentale model op één pagina
+- [Voorbeelden & Recepten](examples.md) - Echte wijzigingen, van begin tot eind
+- [Workflows](workflows.md) - Veelvoorkomende patronen en wanneer elk commando te gebruiken
+- [Commando's](commands.md) - Volledige referentie voor alle slash-commando's
+- [Concepten](concepts.md) - Dieper begrip van specs, wijzigingen, en schema's
+- [Aanpassing](customization.md) - Laat OpenSpec op jouw manier werken
+- [Stores](stores-beta/user-guide.md) - Planning die repos of teams omvat? Bewaar het in een eigen repo (bèta)
+- [FAQ](faq.md) en [Probleemoplossing](troubleshooting.md) - Wanneer je vastloopt

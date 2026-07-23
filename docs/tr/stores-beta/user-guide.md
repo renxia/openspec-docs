@@ -1,58 +1,57 @@
-# Stores: Kendi Repo'su Olan Planlama
+# Stores: Kendi Deposunda Planlama
 
-> **Beta.** Stores, referanslar, çalışma bağlamı (working context) ve iş setleri (worksets) yeni eklenmiştir. Komut adları, bayraklar (flags), dosya formatları ve JSON çıktısı sürümler arasında değişebilir. Aşağıdaki her bir deneme mevcut derlemeye karşı çalıştırılmıştır, ancak yükseltme yaptıktan sonra bu rehberi tekrar okuyun.
+> **Beta.** Stores, references, working context ve workset'ler yeni özelliklerdir. Komut adları, bayraklar, dosya formatları ve JSON çıktısı yayınlar arasında hala değişiklik gösterebilir. Aşağıdaki tüm adım adım açıklamalar mevcut derleme üzerinde çalıştırılmıştır, ancak yükseltme yaptıktan sonra bu kılavuzu tekrar okumanızı öneririz.
 
-## Bu Sorunu Çözmesi
+## Çözdüğü sorun
 
-OpenSpec normalde tek bir kod deposu (repo) içinde bulunur: o deponun yanında bulunan bir `openspec/` klasörü, ilgili repo için spesifikasyonları ve değişiklikleri içerir.
+OpenSpec normalde tek bir repo içinde yer alır: kodunuzun yanında bulunan, bu repo için spesifikasyonları ve değişiklikleri barındıran bir `openspec/` klasörü.
 
-Bu durum, planlamanız birden fazla depoyu kapsadığında yetersiz kalır:
+Planlama çalışmalarınız tek bir repodan daha büyük olduğu anda bu durum artık uygun olmaz:
+- Çalışmalarınız birden fazla repoyu kapsıyor: tek bir özellik API sunucusunu, web uygulamasını ve ortak bir kütüphaneyi etkiliyor. Plan hangi reponun `openspec/` klasöründe yer almalı?
+- Ekibiniz kod oluşturulmadan önce planlama yapıyor ya da *bu* repoda hiç kod haline gelmeyecek şeyler planlıyor.
+- Gereksinimler bir ekibe ait, diğer ekipler tarafından kullanılıyor. Wiki sürümü zamanla tutarsız hale geliyor, ayrıca coding agent'ınız zaten onu okuyamıyor.
 
-- Çalışmanız birkaç depoyu kapsar — bir özellik API sunucusunu, web uygulamasını ve paylaşılan bir kütüphaneyi etkiliyor olabilir. Plan hangi `openspec/` klasöründe yer alacak?
-- Ekibiniz koddan önce planlama yapar veya bu repo'da asla kod haline gelmeyecek şeyleri planlar.
-- Gereksinimler bir ekip tarafından sahiplenir ve diğer ekipler tarafından tüketilir. Wiki sürümü değişir, ancak kodlama aracınız bunu okuyamaz.
+**Store** bu soruna cevaptır: tüm amacı planlama olan bağımsız bir repodur. Daha önce bildiğiniz `openspec/` yapısına sahiptir — spesifikasyonlar ve değişiklikler — ek olarak küçük bir kimlik dosyası da bulunur. Makinenize bir kez isimle kaydettikten sonra, tüm standart OpenSpec komutları herhangi bir yerden bu repoda çalışabilir.
 
-Bir **store**, bunun cevaptır: Planlamanın tek görevi olan bağımsız bir depodur (standalone repo). Zaten bildiğiniz gibi spesifikasyonlar ve değişiklikleri içeren `openspec/` yapısına sahiptir — buna küçük bir kimlik dosyası eklenmiştir. Bunu makinenizde bir kez, adıyla kaydedersiniz ve böylece her normal OpenSpec komutu herhangi bir yerden bunda çalışabilir.
-
-## The shape
+## Yapı
 
 ```
-            team-plans  (a store: planning in its own repo)
-            ├── .openspec-store/store.yaml     identity: "I am team-plans"
+            team-plans  (bir depo: kendi deposunda planlama)
+            ├── .openspec-store/store.yaml     kimlik: "Ben team-plans'im"
             └── openspec/
-                ├── specs/      what is true
-                └── changes/    what is in motion
+                ├── specs/      doğru olanlar
+                └── changes/    devam edenler
                       ▲
-                      │ registered on each machine by name;
-                      │ shared by pushing/cloning like any repo
+                      │ her makinede ada göre kayıtlıdır;
+                      │ herhangi bir depo gibi itme/klonlama yoluyla paylaşılır
         ┌─────────────┼─────────────┐
         │             │             │
     web-app       api-server     mobile-app
    (code repo)   (code repo)    (code repo)
 ```
 
-İki kural bunu basitleştirir:
+İki kural bunu basit tutar:
 
-1. **Bir store sadece bir git repo'sudur.** Kendiniz commit eder, push, pull ve inceleme yaparsınız. OpenSpec kendi başına hiçbir şeyi klonlamaz, senkronize etmez veya push etmez.
-2. **Makine değil, deklarasyonlar.** Repolar, stores ile nasıl ilişkili olduklarını *deklare edebilirler* (aşağıda gösterildiği gibi). Bu deklarasyonlar, OpenSpec'in size ne söyleyebileceğini değiştirir — asla komutlarınızın nerede çalıştığını değil.
+1. **Bir depo sadece bir git deposudur.** Kendiniz commit atar, itir, çekersiniz ve incelersiniz. OpenSpec hiçbir zaman kendi başına hiçbir şeyi klonlamaz, senkronize etmez veya itmez.
+2. **Bildirimler, makineler değil.** Depolar, depolar ile ilişkilerini *bildirebilir* (aşağıda gösterilmiştir). Bildirimler, OpenSpec'ın size ne söyleyebileceğini değiştirir — asla komutlarınızın nerede çalıştığını değiştirmez.
 
-## İlk store'unuza beş dakika
+## İlk deponuza beş dakika
 
-Sıfırdan çalışan, store kapsamlı bir değişikliğe ulaşmanızı sağlayan iki komut vardır:
+İki komut sizi hiçbir şeyden çalışan, depo kapsamlı bir değişikliğe kadar götürür:
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans
 ```
 
 ```
-Store ready: team-plans
-Location: /Users/you/openspec/team-plans
-OpenSpec root: ready
-Registry: registered
+Depo hazır: team-plans
+Konum: /Users/you/openspec/team-plans
+OpenSpec kökü: hazır
+Kayıt: kayıtlı
 
-Next: run normal OpenSpec commands against this store, for example:
+Sonraki adım: bu depoya karşı normal OpenSpec komutlarını çalıştırın, örneğin:
   openspec new change <change-id> --store team-plans
-Share this store by committing and pushing it like any Git repo.
+Bu depoyu herhangi bir Git deposu gibi commit atıp iterek paylaşın.
 ```
 
 ```bash
@@ -60,19 +59,19 @@ openspec new change add-login --store team-plans
 ```
 
 ```
-Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
-Created change 'add-login' at /Users/you/openspec/team-plans/openspec/changes/add-login/
-Schema: spec-driven
-Next: openspec status --change add-login --store team-plans
+Kullanılan OpenSpec kökü: team-plans (/Users/you/openspec/team-plans)
+'add-login' değişikliği /Users/you/openspec/team-plans/openspec/changes/add-login/ konumunda oluşturuldu
+Şema: spec-driven
+Sonraki adım: openspec status --change add-login --store team-plans
 ```
 
-Bu tüm modeli oluşturur. Buradan itibaren yaşam döngüsü tam olarak bildiğiniz gibidir — `status`, `instructions`, `validate`, `archive` — her komutta `--store team-plans` ile birlikte ve basılan her ipucu sizin için bayrağı taşır. `Using OpenSpec root:` satırı daima bir komutun nerede çalıştığını söyler.
+İşte tüm model. Buradan itibaren yaşam döngüsü tam olarak bildiğiniz gibidir — `status`, `instructions`, `validate`, `archive` — her komutta `--store team-plans` bayrağıyla birlikte, ve yazdırılan her ipucu sizin için bu bayrağı taşır. `Using OpenSpec root:` satırı her zaman bir komutun nerede çalıştığını size söyler.
 
-## Hikaye: Bir ekip, bir planlama deposu
+## Hikaye: bir takım, bir planlama deposu
 
-Bir ekip, gereksinimlerini kod depolarına dağıtmak yerine `team-plans` içinde tutar.
+Bir takım, spec'lerini ve değişikliklerini kod depolarına dağıtmak yerine `team-plans` deposunda tutar.
 
-**İlk gün (kurulumu yapan kim olursa):**
+**İlk gün (kurulumu yapan kişi):**
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans \
@@ -80,32 +79,32 @@ openspec store setup team-plans --path ~/openspec/team-plans \
 git -C ~/openspec/team-plans push -u origin main
 ```
 
-`--remote` parametresini geçirmek, klon URL'sini store'un kendi kimlik dosyası (`.openspec-store/store.yaml`) içine ilk commit ile kaydeder. Her gelecekteki klonlama, nereden geldiğini bilerek doğar; bu sayede sağlık kontrolleri ve hata mesajları, henüz sahip olmayan ekip arkadaşları için eksiksiz, yapıştırılabilir bir çözüm gösterebilir.
+`--remote` bayrağını geçmek, klon URL'sini deponun kendi kimlik dosyasına (`.openspec-store/store.yaml`), ilk commit içine kaydeder. Gelecekteki her klon, nereden geldiğini bilerek doğar, böylece sağlık kontrolleri ve hata mesajları, henüz sahip olmayan takım arkadaşları için tam, yapıştırılabilir bir çözüm yazdırabilir.
 
-**Her ekip arkadaşı (makine başına bir kez):**
+**Her takım arkadaşı (makine başına bir kez):**
 
 ```bash
 git clone git@github.com:acme/team-plans.git ~/openspec/team-plans
 openspec store register ~/openspec/team-plans
 ```
 
-Bundan sonra herkes, ismine göre aynı planlama deposunda çalışır:
+O andan itibaren herkes aynı planlama deposunda ada göre çalışır:
 
 ```bash
 openspec status --store team-plans --change add-login
 openspec show add-login --store team-plans
 ```
 
-**İş paylaşımı kasıtlı olarak git'tir.** Oluşturduğunuz bir değişiklik, siz commit edip push yapana kadar sadece sizin checkout'ınızda bulunur — bu da kodla aynıdır. Planlar, bir store sıradan bir depo olduğu için dallar, pull request'ler ve inceleme kazanır.
+**İş paylaşımı kasıtlı olarak git'tir.** Oluşturduğunuz bir değişiklik, commit atıp itene kadar sadece sizin çektiğiniz kopyada vardır — kod ile aynı şekilde. Planlar ücretsiz olarak dallar, çekme istekleri ve inceleme alır, çünkü bir depo sıradan bir depodur.
 
-**Ekibin kod depolarını bağlamak.** Planlaması tamamen dışarıya aktarılmış olan bir kod deposu, `openspec/config.yaml` dosyasında tam olarak tek bir satıra ihtiyaç duyar:
+**Takımın kod depolarını bağlama.** Planlaması tamamen dışa aktarılmış bir kod deposu, `openspec/config.yaml` içinde tam olarak bir satıra ihtiyaç duyar:
 
 ```yaml
 # web-app/openspec/config.yaml
 store: team-plans
 ```
 
-Şimdi `web-app` içinde çalıştırılan her OpenSpec komutu, hiçbir bayrak kullanmadan `team-plans` üzerinde hareket eder:
+Artık `web-app` içinde çalıştırılan her OpenSpec komutu, hiç bayrak kullanmadan `team-plans` üzerinde çalışır:
 
 ```bash
 cd ~/src/web-app
@@ -117,44 +116,52 @@ Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
 ...
 ```
 
-Bu işaretçi bir yedek, asla bir geçersiz kılma değildir: açıkça belirtilen `--store` her zaman kazanır ve eğer depo kendi planlama klasörlerini büyütürse, onlar kazanır (eski işaretçiyi kaldırma uyarısıyla birlikte).
+Bu işaretçi bir yedek olasılıktır, asla bir geçersiz kılma değildir: açıkça belirtilmiş bir `--store` her zaman kazanır, ve eğer depo kendi gerçek planlama klasörlerini geliştirirse, bunlar kazanır (eski işaretçiyi kaldırma uyarısıyla birlikte).
 
-## Hikaye: Ekip sınırlarını aşan gereksinimler
+**Makinenizdeki her depo için tek bir varsayılan.** Aynı depoya planlayan birçok kod deposu üzerinde çalışıyorsanız, her depoya `store:` satırı eklemek yerine global olarak bir kez ayarlayın:
 
-Bir platform ekibi gereksinimleri sahiplenir. Ürün ekipleri, kendi depolarında ve kendi tasarımlarıyla bunlara karşı çalışır. Bir referans, kimsenin işini hareket ettirmeden bu ilişkiyi tanımlar.
+```bash
+openspec config set defaultStore team-plans
+```
+
+Artık bir planlama kökü dışında çalıştırılan ve `--store` veya proje işaretçisi olmayan her komut, `team-plans` olarak çözülür. Öncelik listesinin en altında yer alır, bu nedenle `--store`, yerel bir kök ve projenin `store:` işaretçisi hala kazanır. Kök başlığı ve JSON `root` bloğu, depo kimliği ile birlikte `source: "global_default"` olarak raporlar, böylece her zaman makine genelindeki varsayılanı bir deponun kendi işaretçisinden ayırt edebilirsiniz. `openspec config unset defaultStore` komutuyla temizleyin. Kimlik kayıtlı değilse, komutlar hata verir ve kayıt etmenizi veya eski varsayılanı temizlemenizi söyler.
+
+## Hikaye: takım sınırlarını aşan gereksinimler
+
+Bir platform takımı gereksinimlere sahiptir. Ürün takımları, kendi depolarında, kendi tasarımlarıyla bu gereksinimlere göre inşa eder. Bir referans, hiç kimsenin işini taşımadan bu ilişkiyi tanımlar.
 
 ```
-   platform-reqs (store)                 api-server (code repo)
-   owned by the platform team            owned by a product team
+   platform-reqs (depo)                 api-server (kod deposu)
+   platform takımı tarafından sahiplenilir            bir ürün takımı tarafından sahiplenilir
    ┌──────────────────────────┐          ┌──────────────────────────┐
    │ openspec/specs/          │ ◀────────│ openspec/config.yaml     │
-   │   payments/spec.md       │ reads    │   references:            │
+   │   payments/spec.md       │ okur    │   referanslar:            │
    │   auth/spec.md           │          │     - platform-reqs      │
    │                          │          │ openspec/specs/          │
-   │ openspec/changes/        │          │   (their own designs)    │
+   │ openspec/changes/        │          │   (kendi tasarımları)    │
    │   platform work          │          │ openspec/changes/        │
-   │                          │          │   (their own work)       │
-   │                          │          │          └──────────────────────────┘
+   │                          │          │   (kendi işleri)       │
+   │                          │          └──────────────────────────┘
    └──────────────────────────┘
 ```
 
-**Ürün ekibi, kendi deposundaki `openspec/config.yaml` dosyasında neye dayandığını deklar eder:**
+**Ürün takımı, neyi temel aldığını** kendi deposunun `openspec/config.yaml` dosyasında bildirir:
 
 ```yaml
 references:
   - platform-reqs
 ```
 
-Referanslar salt okunur bağlamdır. Depo kendi `openspec/` kökünü korur; iş orada kalır. Ne değişir? O repodaki `openspec instructions`, şimdi referans verilen store'un spec'lerinin bir dizinini içerir — her biri tek satırlık bir özet ve tam çekme komutu (`openspec show <spec-id> --type spec --store platform-reqs`). Bir `api-server` içinde çalışan bir ajan, yukarı akış (upstream) ödeme gereksinimlerini bulabilir, bunları alıntılayabilir ve kendi deposunun kökünde düşük seviyeli tasarımını yazabilir — kimsenin bağlamı yapıştırmasına gerek kalmadan.
+Referanslar salt okunur bağlamdır. Depo kendi `openspec/` kökünü korur; iş orada kalır. Değişen şey: o depodaki `openspec instructions` komutu artık referans verilen deponun spec'lerinin bir dizinini içerir — her biri tek satırlık bir özet ve tam getirme komutuyla birlikte (`openspec show <spec-id> --type spec --store platform-reqs`). `api-server` içinde çalışan bir ajan, üst düzey ödeme gereksinimlerini bulabilir, onları alıntılayabilir ve düşük seviye tasarımını deponun kendi köküne yazabilir — hiç kimsenin bağlamı etrafa yapıştırmasına gerek kalmadan.
 
-Bir referans klon kaynağını taşıyabilir, böylece henüz store'a sahip olmayan ekip arkadaşları ölü bir uç yerine eksiksiz bir çözüm alır:
+Bir referans kendi klon kaynağını taşıyabilir, böylece depoyu henüz sahip olmayan takım arkadaşları için bir çıkmaz sokak yerine tam bir çözüm sağlanır:
 
 ```yaml
 references:
   - { id: platform-reqs, remote: "git@github.com:acme/platform-reqs.git" }
 ```
 
-**Plan ve kodu birlikte açmak istediğinizde bir workset oluşturun.** Bu kişiseldir ve açıktır: her kişi kendi makinesinde gerçekten çalıştığı klasörleri seçer. Bu yerel checkout yollarıyla ilgili hiçbir şey paylaşılan planlama deposuna commit edilmez.
+**Planı ve kodu birlikte açık tutmak istediğinizde bir workset (çalışma kümesi) oluşturun.** Bu kişisel ve açıktır: her kişi makinesinde gerçekten çalıştığı klasörleri seçer. Bu yerel çekme kopyası yollarıyla ilgili hiçbir şey, paylaşılan planlama deposuna commit edilmez.
 
 ```bash
 openspec workset create platform \
@@ -165,46 +172,46 @@ openspec workset create platform \
 
 ## Her zaman sorabileceğiniz iki soru
 
-**"Kurulumum sağlıklı mı?"** — `openspec doctor`, mevcut kökü ve referans verilen stores'ları salt okunur olarak kontrol eder, her bulgu için yapıştırılabilir bir çözüm sunar:
+**"Kurulumum sağlıklı mı?"** — `openspec doctor` komutu, salt okunur olarak mevcut kökü ve referans verilen depoları kontrol eder, her bulgu için yapıştırılabilir bir çözüm sunar:
 
 ```
-Doctor
+Doktor
 
-Root
-  Location: /Users/you/src/api-server
-  OpenSpec root: ok
+Kök
+  Konum: /Users/you/src/api-server
+  OpenSpec kökü: tamam
 
-References
-  - platform-reqs: ok (/Users/you/openspec/platform-reqs)
-  - design-system: Referenced store 'design-system' is not registered on this machine.
-    Fix: git clone -- git@github.com:acme/design-system.git '/Users/you/openspec/design-system' && openspec store register '/Users/you/openspec/design-system' --id design-system
-
-```
-
-**"Ne ile çalışıyorum?"** — `openspec context`, OpenSpec deklarasyonlarından çalışma setini toplar: kök ve referans verdiği stores'lar.
+Referanslar
+  - platform-reqs: tamam (/Users/you/openspec/platform-reqs)
+  - design-system: Referans verilen 'design-system' deposu bu makinede kayıtlı değil.
+    Çözüm: git clone -- git@github.com:acme/design-system.git '/Users/you/openspec/design-system' && openspec store register '/Users/you/openspec/design-system' --id design-system
 
 ```
-Working context for api-server (/Users/you/src/api-server)
 
-OpenSpec root
+**"Ne ile çalışıyorum?"** — `openspec context` komutu, OpenSpec bildirimlerinden çalışma kümesini bir araya getirir: kök ve referans verdiği depolar.
+
+```
+api-server için çalışma bağlamı (/Users/you/src/api-server)
+
+OpenSpec kökü
   api-server  /Users/you/src/api-server
 
-Referenced stores
+Referans verilen depolar
   platform-reqs  /Users/you/openspec/platform-reqs
-    Fetch: openspec show <spec-id> --type spec --store platform-reqs
+    Getir: openspec show <spec-id> --type spec --store platform-reqs
 ```
 
-Her ikisi de ajanlar için `--json` destekler. `openspec context --code-workspace <path>`, tüm seti içeren bir VS Code çalışma alanı dosyası yazar — bu komutun yaptığı tek yazma işlemidir.
+Her ikisi de ajanlar için `--json` bayrağını destekler. `openspec context --code-workspace <yol>` komutu ek olarak tüm seti içeren bir VS Code çalışma alanı dosyası yazar — bu komutun yaptığı tek yazma işlemidir.
 
-## Worksetler: Birlikte çalıştığınız klasörleri yeniden açın
+## Workset'ler: birlikte çalıştığınız klasörleri yeniden açın
 
-Yukarıdakilerin hepsinden ayrı olarak: Çoğu kişi her oturumda aynı birkaç klasörü birlikte açar — planlama deposu artı iki veya üç kod deposu. Bir **workset**, tam olarak bunu temsil eden kişisel, isimlendirilmiş bir görünümdür ve seçtiğiniz araçta tek bir komutla yeniden açılır.
+Yukarıdakilerin ayrıldığı bir konu: çoğu kişi her oturumda aynı birkaç klasörü birlikte açar — planlama deposu artı iki veya üç kod deposu. Bir **workset (çalışma kümesi)**, tam olarak bunun kişisel, adlandırılmış bir görünümüdür, seçtiğiniz araçla tek bir komutla yeniden açılır.
 
 ```
   workset "platform"                 openspec workset open platform
   ├── team-plans   ~/openspec/team-plans         │
   ├── api-server   ~/src/api-server              ▼
-  └── web-app      ~/src/web-app       all three open in your tool
+  └── web-app      ~/src/web-app       tümü araçta açılır
 ```
 
 ```bash
@@ -215,52 +222,58 @@ openspec workset list
 ```
 
 ```
-platform  (opens in VS Code)
+platform  (VS Code'da açılır)
   team-plans  /Users/you/openspec/team-plans
   api-server  /Users/you/src/api-server
 ```
 
-`openspec workset open platform` daha sonra kaydedilmiş aracı başlatır: editörler (VS Code, Cursor) her üye ile tek bir pencere açar ve geri döner. İlk üye ana olandır. Aracı istediğiniz zaman `--tool <id>` ile geçersiz kılabilirsiniz.
+`openspec workset open platform` komutu daha sonra kaydedilmiş aracı başlatır: editörler (VS Code, Cursor) tüm üyeleri içeren tek bir pencere açar ve döner. İlk üye birincildir. Araç istediğiniz zaman `--tool <kimlik>` ile geçersiz kılın.
 
-Worksetler kasıtlı olarak *paylaşılan durum değildir*. Makinenizde yaşarlar, asla commit edilmezler ve iş hakkında herhangi bir iddia taşımazlar — sadece neyi birlikte açmayı sevdiğinizi kaydederler. Birini kaldırmak, üye klasörlerine dokunmaz. Yeni araçlar yapılandırmadır, kod değil: çalışma alanı dosyası veya per-folder attach bayrakları aracılığıyla başlatılan her şey, genel yapılandırma (`openspec config edit`) içindeki `openers` anahtarı altında eklenebilir.
+Workset'ler kasıtlı olarak *paylaşılan durum* değildir. Makinenizde yaşar, asla commit edilmez ve iş hakkında hiçbir iddiada bulunmaz — sadece birlikte açmayı sevdiğiniz şeyleri kaydeder. Birini kaldırmak hiçbir zaman üye klasörlerine dokunmaz. Yeni araçlar yapılandırma, kod değildir: bir çalışma alanı dosyası veya klasör başına ekleme bayraklarıyla başlatılan her şey, global yapılandırmada (`openspec config edit`) `openers` anahtarı altına eklenebilir.
 
-## Komutların nerede hareket edeceğini nasıl belirlediği
+## Komutların nerede çalışacağını nasıl belirlediği
 
-Her normal komut kökünü aynı şekilde çözer, bu sırayla:
+Her normal komut, kökünü aynı şekilde, bu sırayla çözer:
 
 ```
-1. --store <id>          bunu açıkça siz söylediniz        → o store
-2. nearest openspec/     burada gerçek bir planlama kökü var → bu depo
-   (cwd'den yukarı doğru ilerleyerek)
-3. store: pointer        config.yaml bir store deklar ediyor  → o store
-4. none of the above     bu makinada kayıtlı store'lar yok?    → seçim ipucuyla hata
-                         stores registered?         → hiçbir store kayıtlı değil mi? → mevcut
-                                                          dizin (klasik davranış)
+1. --store <kimlik>          açıkça belirttiniz        → o depo
+2. en yakın openspec/     burada gerçek bir planlama kökü     → bu depo
+   (cwd'den yukarı doğru yürüyerek)
+3. store: işaretçisi        config.yaml bir depo bildirir  → o depo
+4. defaultStore          global yapılandırma makine genelinde  → o depo
+                         varsayılan ayarlar
+5. yukarıdakilerin hiçbiri     bu makinede kayıtlı depolar var mı?  → seçim ipucuyla hata
+                         makinede kayıtlı depo yok?         → mevcut
+                                                          klasör
+                                                          (klasik davranış)
 ```
 
-`Using OpenSpec root:` satırı (ve `--json` çıktısındaki `root` bloğu), hangi durumun içinde olduğunuzu söyler.
+`Using OpenSpec root:` satırı (ve `--json` çıktısındaki `root` bloğu) hangi durumda olduğunuzu size söyler.
 
 ## Bilinen sınırlamalar
 
-- **Beta şekli.** Bu sayfadaki her şey sürümler arasında değişebilir — isimler, bayraklar, dosya formatları, JSON anahtarları.
-- **Makine başına bir checkout.** Aynı ID altında ikinci bir checkout kaydetmek, önce `store unregister` ile ipucu vererek başarısız olur.
-- **Asla senkronizasyon yok — tasarım gereği.** OpenSpec asla klonlamaz, çekmez veya push etmez. Eski bir checkout, *siz* çekene kadar eski spec'leri gösterir; referanslar disktaki her şeyden canlı olarak dizinlenir.
-- **Bazı komutlar yerinde kalır.** `view`, `templates`, `schemas` ve kullanımdan kaldırılmış isim formları (`openspec change show`, vb.) yalnızca mevcut klasör üzerinde hareket eder — `--store` gerektirmez.
-- **Makineye özgü durum, makineye özgüdür.** Store kayıt defteri ve worksetler yerel ayarlardır. Makinenizin düzeni hakkında hiçbir şey paylaşılan planlamaya commit edilmez.
-- **Worksetler için iki başlatma stili.** Bir çalışma alanı dosyası veya per-folder attach bayrakları ile başlatılamayan bir araç, açıcı (opener) olarak eklenemez.
-- **Ajan JSON'unda bilinen bir casing ayrımı var** (store-family anahtarları snake_case, workflow-family camelCase). Bu durum [agent contract](../agent-contract.md)'te belgelenmiştir; bunu tek birleştirmek, sürüm odaklı bir sürüme ertelenmiştir.
+- **Beta dönemi şekli.** Bu sayıdaki her şey yayınlar arasında değişebilir — isimler, bayraklar, dosya formatları, JSON anahtarları.
+- **Makine başına depo kimliği başına tek bir çekme kopyası.** Aynı kimlik altında ikinci bir çekme kopyasını kaydetmek, önce `store unregister` komutunu kullanmanız için bir ipucuyla başarısız olur.
+- **Asla senkronizasyon yok — tasarım gereği.** OpenSpec hiçbir zaman klonlamaz, çekmez veya itmez. Eski bir çekme kopyası, *siz* çekene kadar eski spec'leri gösterir; referanslar, diskte ne varsa canlı olarak dizinlenir.
+- **Boş planlama klasörleri eksik olabilir.** Yeni bir depoda Git'te henüz `openspec/changes/`, `openspec/specs/` veya `openspec/changes/archive/` olmayabilir. Bu beta süresince kabul edilir; bu klasörler normal komutlar dosyalarını oluşturduğunda ortaya çıkar.
+- **İşaretçi depolar işaretçi olarak kalır.** Sadece `openspec/config.yaml` içinde `store: <kimlik>` bildiren bir yapılandırma deposu, kaydedilecek bir depo çekme kopyası yerine dışa aktarılmış planlama olarak değerlendirilir. Kasıtlı olarak bu depoyu yerel bir depo köküne dönüştürmek istiyorsanız önce `store:` satırını kaldırın.
+- **Bazı komutlar oldukları yerde kalır.** `view`, `templates`, `schemas` ve kullanımdan kalkmış isimli formlar (`openspec change show`, ...) sadece mevcut dizinde çalışır — `--store` bayrağı yoktur.
+- **Makine başına durum, o makineye özeldir.** Depo kayıt defteri ve workset'ler yerel ayarlardır. Makinenizin düzeniyle ilgili hiçbir şey asla paylaşılan planlamaya commit edilmez.
+- **Workset'ler için iki başlatma stili var.** Bir çalışma alanı dosyası veya klasör başına ekleme bayraklarıyla başlatılamayan bir araç, bir açıcı olarak eklenemez.
+- **Ajan JSON'unda bilinen bir büyük/küçük harf ayrımı vardır** (depo ailesi anahtarları snake_case, iş akışı ailesi camelCase). [Ajan sözleşmesinde](../agent-contract.md) belgelenmiştir; birleştirilmesi sürümlü bir yayına ertelenmiştir.
 
-## Her şey nerede bulunur
+## Neler nerede saklanır
 
-| Ne | Nerede | Paylaşılan mı? |
+| Nesne | Konum | Paylaşılıyor mu? |
 |---|---|---|
-| Bir store'un planlaması | `<store>/openspec/` (specs, changes) | Evet — commit edin ve push yapın |
-| Bir store'un kimliği | `<store>/.openspec-store/store.yaml` | Evet — store ile birlikte commit edilir |
-| Store kayıt defteri | `<data dir>/openspec/stores/registry.yaml` | Hayır — bu makineye özeldir |
-| Worksetler | `<data dir>/openspec/worksets/` | Hayır — bu makineye özeldir |
+| Mağazanın planlaması | `<store>/openspec/` (specs, changes) | Evet — commit edip push yapın |
+| Mağazanın kimliği | `<store>/.openspec-store/store.yaml` | Evet — mağaza ile birlikte commit edilir |
+| Mağaza kayıt defteri | `<data dir>/openspec/stores/registry.yaml` | Hayır — yalnızca bu makineye özeldir |
+| Worksets | `<data dir>/openspec/worksets/` | Hayır — yalnızca bu makineye özeldir |
 
-`<data dir>`, macOS ve Linux'ta `~/.local/share/openspec` (veya ayarlanmışsa `$XDG_DATA_HOME/openspec`), Windows'ta ise `%LOCALAPPDATA%\openspec`'tir.
+`<data dir>`, macOS ve Linux'ta `~/.local/share/openspec` (ayarlanmışsa `$XDG_DATA_HOME/openspec`) ve Windows'ta `%LOCALAPPDATA%\openspec` olarak tanımlanır.
+
 ## Referans
 
-Bu sayfadaki her komut için kesin bayraklar ve JSON şekilleri:
+Bu sayfadaki her komut için tam bayraklar ve JSON şemaları:
 [CLI reference](../cli.md) (Stores, Doctor, Working context, Personal worksets) ve [agent contract](../agent-contract.md).

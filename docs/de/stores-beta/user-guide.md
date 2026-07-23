@@ -1,58 +1,54 @@
-# Stores: Plan in Its Own Repo
+# Stores: Planung in einem eigenen Repo
+> **Beta.** Stores, Referenzen, Arbeitskontexte und Worksets sind neu. Befehlsnamen, Flags, Dateiformate und JSON-Ausgaben können sich zwischen Releases noch ändern. Alle nachfolgenden Schritt-für-Schritt-Anleitungen wurden mit dem aktuellen Build durchgeführt – lesen Sie diese Anleitung nach einem Upgrade aber erneut.
 
-> **Beta.** Stores, references, working context und worksets sind neu. Befehlsnamen, Flags, Dateiformate und JSON-Ausgaben können zwischen den Releases noch Änderungen erfahren. Jeder Durchlauf unten wurde gegen den aktuellen Build getestet, aber lesen Sie diese Anleitung nach dem Upgrade erneut durch.
+## Das damit gelöste Problem
+OpenSpec liegt normalerweise in einem einzelnen Code-Repo: einem `openspec/`-Ordner neben Ihrem Code, der Spezifikationen und Änderungen für dieses Repo enthält.
+Das funktioniert nicht mehr, sobald Ihre Planung über ein einzelnes Repo hinausgeht:
+- Ihre Arbeit erstreckt sich über mehrere Repos: Ein einzelnes Feature betrifft den API-Server, die Webanwendung und eine gemeinsame Bibliothek. In wessen `openspec/`-Ordner soll der Plan dann abgelegt werden?
+- Ihr Team erstellt Pläne, bevor Code existiert, oder plant Dinge, die nie zu Code in *diesem* Repo werden.
+- Anforderungen werden von einem Team verwaltet und von anderen genutzt. Die Wiki-Version weicht im Laufe der Zeit ab, und Ihr Coding-Agent kann sie ohnehin nicht lesen.
 
-## Das Problem, das dies löst
-
-OpenSpec befindet sich normalerweise in einem Code-Repo: einem `openspec/`-Ordner neben Ihrem Code, der die Spezifikationen und Änderungen für dieses Repo enthält.
-
-Das reicht nicht aus, sobald Ihre Planung größer ist als ein Repo:
-
-*   Ihre Arbeit erstreckt sich über mehrere Repos – eine Funktion betrifft den API server, die Web App und eine Shared Library. In welchem `openspec/`-Ordner befindet sich der Plan?
-*   Ihr Team plant, bevor der Code existiert, oder plant Dinge, die in *diesem* Repo nie zum Code werden.
-*   Anforderungen werden von einem Team besessen und von anderen konsumiert. Die Wiki-Version driftet, und Ihr Coding Agent kann sie ohnehin nicht lesen.
-
-Ein **Store** ist die Antwort: ein unabhängiges Repo, dessen gesamte Aufgabe die Planung ist. Es hat dieselbe `openspec/`-Struktur wie Sie es bereits kennen – Spezifikationen und Änderungen – plus eine kleine Identitätsdatei. Sie registrieren es einmal auf Ihrem Rechner anhand des Namens, und dann kann jeder normale OpenSpec Befehl darin von überall ausgeführt werden.
+Ein **Store** ist die Lösung: ein eigenständiges Repo, dessen einziger Zweck die Planung ist. Es weist die gleiche `openspec/`-Struktur auf, die Sie bereits kennen – Spezifikationen und Änderungen – sowie eine kleine Identitätsdatei. Sie registrieren es einmal unter einem Namen auf Ihrem Rechner, und anschließend können alle normalen OpenSpec-Befehle von überall darin arbeiten.
 
 ## Die Struktur
 
 ```
-            team-plans  (ein Speicher: Planung in einem eigenen Repo)
+            team-plans  (ein Store: Planung in einem eigenen Repository)
             ├── .openspec-store/store.yaml     identity: "I am team-plans"
             └── openspec/
-                ├── specs/      what is true
-                └── changes/    what is in motion
+                ├── specs/      was gilt
+                └── changes/    was sich in Bewegung befindet
                       ▲
-                      │ registered on each machine by name;
-                      │ shared by pushing/cloning like any repo
+                      │ pro Maschine per Name registriert;
+                      │ wird per Push/Clone wie jedes andere Repository geteilt
         ┌─────────────┼─────────────┐
         │             │             │
     web-app       api-server     mobile-app
-   (code repo)   (code repo)    (code repo)
+   (Code-Repository)   (Code-Repository)    (Code-Repository)
 ```
 
 Zwei Regeln halten dies einfach:
 
-1. **Ein Speicher ist einfach ein Git-Repo.** Sie committen, pushen, pullen und überprüfen es selbst. OpenSpec klont, synchronisiert oder pusht von selbst nichts.
-2. **Deklarationen, keine Maschinerie.** Repos können *deklarieren*, wie sie sich zu Speichern verhalten (siehe unten). Deklarationen ändern, was OpenSpec Ihnen sagen kann – niemals wo Ihre Befehle wirken.
+1. **Ein Store ist lediglich ein Git-Repository.** Sie committen, pushen, pullen und überprüfen es selbst. OpenSpec klont, synchronisiert oder pusht niemals eigenständig etwas.
+2. **Deklarationen, keine Mechanik.** Repositories können *deklarieren*, wie sie sich zu Stores verhalten (unten gezeigt). Deklarationen ändern, was OpenSpec Ihnen mitteilen kann — niemals, wo Ihre Befehle wirken.
 
-## Fünf Minuten bis zum ersten Speicher
+## Fünf Minuten bis zu Ihrem ersten Store
 
-Zwei Befehle bringen Sie von nichts zu einer funktionierenden, speicherbezogenen Änderung:
+Zwei Befehle bringen Sie von nichts zu einer funktionierenden, store-scoped Änderung:
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans
 ```
 
 ```
-Store ready: team-plans
-Location: /Users/you/openspec/team-plans
-OpenSpec root: ready
-Registry: registered
+Store bereit: team-plans
+Speicherort: /Users/you/openspec/team-plans
+OpenSpec-Root: bereit
+Registrierung: registriert
 
-Next: run normal OpenSpec commands against this store, for example:
+Nächster Schritt: Führen Sie normale OpenSpec-Befehle für diesen Store aus, beispielsweise:
   openspec new change <change-id> --store team-plans
-Share this store by committing and pushing it like any Git repo.
+Teilen Sie diesen Store, indem Sie ihn wie jedes andere Git-Repository committen und pushen.
 ```
 
 ```bash
@@ -60,19 +56,19 @@ openspec new change add-login --store team-plans
 ```
 
 ```
-Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
-Created change 'add-login' at /Users/you/openspec/team-plans/openspec/changes/add-login/
+Verwende OpenSpec-Root: team-plans (/Users/you/openspec/team-plans)
+Change 'add-login' erstellt unter /Users/you/openspec/team-plans/openspec/changes/add-login/
 Schema: spec-driven
-Next: openspec status --change add-login --store team-plans
+Nächster Schritt: openspec status --change add-login --store team-plans
 ```
 
-Das ist das ganze Modell. Von hier an ist der Lebenszyklus genau das, was Sie kennen – `status`, `instructions`, `validate`, `archive` – mit `--store team-plans` bei jedem Befehl, und jeder angezeigte Hinweis trägt die Kennzeichnung für Sie. Die Zeile `Using OpenSpec root:` sagt Ihnen immer, wo ein Befehl wirkt.
+Das ist das gesamte Modell. Ab hier entspricht der Lebenszyklus genau dem, was Sie kennen — `status`, `instructions`, `validate`, `archive` — mit `--store team-plans` bei jedem Befehl, und jeder ausgegebene Hinweis enthält das Flag für Sie. Die Zeile `Using OpenSpec root:` zeigt Ihnen immer, wo ein Befehl wirkt.
 
-## Geschichte: Ein Team, ein Planungsrepo
+## Geschichte: Ein Team, ein Planungs-Repository
 
-Ein Team speichert seine Spezifikationen und Änderungen in `team-plans` anstatt sie über Code-Repos zu verteilen.
+Ein Team verwaltet seine Spezifikationen und Änderungen in `team-plans`, statt sie über Code-Repositories zu verteilen.
 
-**Tag eins (wer es eingerichtet hat):**
+**Tag eins (wer auch immer die Einrichtung vornimmt):**
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans \
@@ -80,7 +76,7 @@ openspec store setup team-plans --path ~/openspec/team-plans \
 git -C ~/openspec/team-plans push -u origin main
 ```
 
-Das Übergeben von `--remote` speichert die Klon-URL in der Identitätsdatei des Speichers selbst (`.openspec-store/store.yaml`) im ersten Commit. Jeder zukünftige Klon wird also wissen, woher er stammt, sodass Gesundheitsprüfungen und Fehlermeldungen eine vollständige, kopierbare Korrektur für Teammitglieder ausgeben können, die sie noch nicht haben.
+Durch Angabe von `--remote` wird die Clone-URL in der eigenen Identitätsdatei des Stores (`.openspec-store/store.yaml`) im initialen Commit gespeichert. Jeder zukünftige Clone weiß von Anfang an, woher er stammt, sodass Integritätsprüfungen und Fehlermeldungen eine vollständige, kopierbare Lösung für Teammitglieder anzeigen können, die den Store noch nicht haben.
 
 **Jedes Teammitglied (einmal pro Maschine):**
 
@@ -89,23 +85,23 @@ git clone git@github.com:acme/team-plans.git ~/openspec/team-plans
 openspec store register ~/openspec/team-plans
 ```
 
-Von da an arbeitet jeder im selben Planungsrepo unter dem Namen:
+Ab dann arbeitet jeder im selben Planungs-Repository per Name:
 
 ```bash
 openspec status --store team-plans --change add-login
 openspec show add-login --store team-plans
 ```
 
-**Arbeit teilen ist Git, und das ist beabsichtigt.** Eine von Ihnen erstellte Änderung existiert nur in Ihrem Checkout, bis Sie sie committen und pushen – genau wie Code. Pläne erhalten Branches, Pull Requests und Überprüfungen kostenlos, weil ein Speicher ein gewöhnliches Repo ist.
+**Das Teilen von Arbeit erfolgt bewusst über Git.** Eine von Ihnen erstellte Änderung existiert nur in Ihrem Checkout, bis Sie sie committen und pushen — genau wie bei Code. Pläne erhalten kostenlos Branches, Pull Requests und Überprüfungen, da ein Store ein gewöhnliches Repository ist.
 
-**Verbinden der Code-Repos des Teams.** Ein Code-Repo, dessen Planung vollständig externisiert wurde, benötigt genau eine Zeile in `openspec/config.yaml`:
+**Verbinden der Code-Repositories des Teams.** Ein Code-Repository, dessen Planung vollständig ausgelagert ist, benötigt genau eine Zeile in `openspec/config.yaml`:
 
 ```yaml
 # web-app/openspec/config.yaml
 store: team-plans
 ```
 
-Nun wirkt jeder OpenSpec-Befehl innerhalb von `web-app` auf `team-plans` ohne jegliche Flags:
+Ab jetzt wirkt jeder OpenSpec-Befehl, der innerhalb von `web-app` ausgeführt wird, ohne weitere Flags auf `team-plans`:
 
 ```bash
 cd ~/src/web-app
@@ -113,48 +109,56 @@ openspec status --change add-login
 ```
 
 ```
-Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
+Verwende OpenSpec-Root: team-plans (/Users/you/openspec/team-plans)
 ...
 ```
 
-Der Zeiger ist ein Fallback, niemals eine Überschreibung: Ein explizites `--store` gewinnt immer, und wenn das Repo eigene Planungsordner wächst, gewinnen diese (mit einer Warnung, den veralteten Zeiger zu entfernen).
+Der Zeiger ist ein Fallback, niemals eine Überschreibung: Ein explizites `--store` hat immer Vorrang, und falls das Repository eigene echte Planungsordner erhält, haben diese Vorrang (mit einer Warnung, den veralteten Zeiger zu entfernen).
+
+**Ein Standard für jedes Repository auf Ihrem Rechner.** Wenn Sie über viele Code-Repositories hinweg arbeiten, die alle in denselben Store planen, setzen Sie ihn einmal global, statt die Zeile `store:` zu jedem Repository hinzuzufügen:
+
+```bash
+openspec config set defaultStore team-plans
+```
+
+Ab jetzt wird jeder Befehl, der außerhalb einer Planungs-Root ausgeführt wird — und ohne `--store` und ohne Projektzeiger — auf `team-plans` aufgelöst. Er steht am unteren Ende der Prioritätsliste, sodass `--store`, eine lokale Root und ein projektweiter `store:`-Zeiger immer noch Vorrang haben. Das Root-Banner und der JSON-`root`-Block geben `source: "global_default"` zusammen mit der Store-ID aus, sodass Sie immer einen rechnerweiten Standard von dem Zeiger eines eigenen Repositorys unterscheiden können. Löschen Sie ihn mit `openspec config unset defaultStore`. Wenn die ID nicht registriert ist, geben Befehle einen Fehler aus und fordern Sie auf, ihn zu registrieren oder den veralteten Standard zu löschen.
 
 ## Geschichte: Anforderungen, die Teamgrenzen überschreiten
 
-Ein Plattformteam besitzt die Anforderungen. Produktteams bauen darauf auf, in ihren eigenen Repos mit ihren eigenen Designs. Eine Referenz beschreibt dieses Verhältnis, ohne dass jemand Arbeit verschieben muss.
+Ein Plattform-Team verwaltet die Anforderungen. Produktteams bauen darauf auf, in ihren eigenen Repositories, mit ihren eigenen Entwürfen. Eine Referenz beschreibt diese Beziehung, ohne die Arbeit von jemandem zu verschieben.
 
 ```
-   platform-reqs (store)                 api-server (code repo)
-   owned by the platform team            owned by a product team
+   platform-reqs (Store)                 api-server (Code-Repository)
+   im Besitz des Plattform-Teams            im Besitz eines Produktteams
    ┌──────────────────────────┐          ┌──────────────────────────┐
    │ openspec/specs/          │ ◀────────│ openspec/config.yaml     │
-   │   payments/spec.md       │ reads    │   references:            │
+   │   payments/spec.md       │ liest    │   references:            │
    │   auth/spec.md           │          │     - platform-reqs      │
    │                          │          │ openspec/specs/          │
-   │ openspec/changes/        │          │   (their own designs)    │
+   │ openspec/changes/        │          │   (ihre eigenen Entwürfe)    │
    │   platform work          │          │ openspec/changes/        │
-   │                          │          │   (their own work)       │
+   │                          │          │   (ihre eigene Arbeit)       │
    │                          │          └──────────────────────────┘
    └──────────────────────────┘
 ```
 
-**Das Produktteam deklariert, worauf es sich stützt**, in der `openspec/config.yaml` seines Repos:
+**Das Produktteam deklariert, worauf es zurückgreift,** in der `openspec/config.yaml` seines Repositorys:
 
 ```yaml
 references:
   - platform-reqs
 ```
 
-Referenzen sind nur lesbarer Kontext. Das Repo behält seinen eigenen `openspec/`-Root; die Arbeit bleibt dort. Was sich ändert: `openspec instructions` in diesem Repo umfasst nun ein Verzeichnis der Spezifikationen des referenzierten Speichers – jede mit einer einzeiligen Zusammenfassung und dem genauen Abrufbefehl (`openspec show <spec-id> --type spec --store platform-reqs`). Ein Agent, der in `api-server` arbeitet, kann die upstream Payment-Anforderungen finden, sie zitieren und sein Low-Level-Design im eigenen Root des Repos schreiben – ohne dass jemand Kontext einfügen muss.
+Referenzen sind schreibgeschützter Kontext. Das Repository behält seine eigene `openspec/`-Root; die Arbeit verbleibt dort. Was sich ändert: `openspec instructions` in diesem Repository enthält nun einen Index der Spezifikationen des referenzierten Stores — jede mit einer einzeiligen Zusammenfassung und dem exakten Abrufbefehl (`openspec show <spec-id> --type spec --store platform-reqs`). Ein Agent, der in `api-server` arbeitet, kann die vorgelagerten Zahlungsanforderungen finden, sie zitieren und sein detailliertes Design in der eigenen Root des Repositorys schreiben — ohne dass jemand Kontext hin- und herkopieren muss.
 
-Eine Referenz kann ihre Klonquelle tragen, sodass Teammitglieder, die den Speicher noch nicht haben, eine vollständige Korrektur anstelle einer Sackgasse erhalten:
+Eine Referenz kann ihre Clone-Quelle enthalten, sodass Teammitglieder, die den Store noch nicht haben, eine vollständige Lösung statt einer Sackgasse erhalten:
 
 ```yaml
 references:
   - { id: platform-reqs, remote: "git@github.com:acme/platform-reqs.git" }
 ```
 
-**Wenn Sie Plan und Code zusammen haben möchten, erstellen Sie ein Workset.** Dies ist persönlich und explizit: Jede Person wählt die Ordner aus, mit denen sie tatsächlich auf ihrer Maschine arbeitet. Nichts über diese lokalen Checkout-Pfade wird in das gemeinsame Planungsrepo committet.
+**Wenn Sie Planung und Code gemeinsam geöffnet haben möchten, erstellen Sie einen Workset.** Dies ist persönlich und explizit: Jede Person wählt die Ordner aus, mit denen sie tatsächlich auf ihrem Rechner arbeitet. Nichts von diesen lokalen Checkout-Pfaden wird an das gemeinsame Planungs-Repository committet.
 
 ```bash
 openspec workset create platform \
@@ -165,104 +169,107 @@ openspec workset create platform \
 
 ## Zwei Fragen, die Sie immer stellen können
 
-**„Ist mein Setup gesund?“** — `openspec doctor` prüft den aktuellen Root und seine referenzierten Speicher, nur lesbar, mit einer kopierbaren Korrektur pro Fund:
+**"Ist meine Einrichtung intakt?"** — `openspec doctor` überprüft die aktuelle Root und ihre referenzierten Stores, schreibgeschützt, mit einer kopierbaren Lösung pro Befund:
 
 ```
 Doctor
 
 Root
-  Location: /Users/you/src/api-server
-  OpenSpec root: ok
+  Speicherort: /Users/you/src/api-server
+  OpenSpec-Root: ok
 
-References
+Referenzen
   - platform-reqs: ok (/Users/you/openspec/platform-reqs)
-  - design-system: Der referenzierte Speicher 'design-system' ist auf dieser Maschine nicht registriert.
-    Fix: git clone -- git@github.com:acme/design-system.git '/Users/you/openspec/design-system' && openspec store register '/Users/you/openspec/design-system' --id design-system
-
+  - design-system: Der referenzierte Store 'design-system' ist auf diesem Rechner nicht registriert.
+    Lösung: git clone -- git@github.com:acme/design-system.git '/Users/you/openspec/design-system' && openspec store register '/Users/you/openspec/design-system' --id design-system
 ```
 
-**„Womit arbeite ich?“** — `openspec context` setzt das Arbeitsset aus den OpenSpec-Deklarationen zusammen: dem Root und den von ihm referenzierten Speichern.
+**"Womit arbeite ich?"** — `openspec context` stellt den Arbeitsbereich aus OpenSpec-Deklarationen zusammen: die Root und die von ihr referenzierten Stores.
 
 ```
-Working context for api-server (/Users/you/src/api-server)
+Arbeitskontext für api-server (/Users/you/src/api-server)
 
-OpenSpec root
+OpenSpec-Root
   api-server  /Users/you/src/api-server
 
-Referenzierte Speicher
+Referenzierte Stores
   platform-reqs  /Users/you/openspec/platform-reqs
-    Fetch: openspec show <spec-id> --type spec --store platform-reqs
+    Abrufen: openspec show <spec-id> --type spec --store platform-reqs
 ```
 
-Beides unterstützt `--json` für Agents. `openspec context --code-workspace <path>` schreibt zusätzlich eine VS Code Workspace Datei, die das gesamte Set enthält – dies ist der einzige Schreibvorgang dieses Befehls.
+Beide unterstützen `--json` für Agents. `openspec context --code-workspace <pfad>` schreibt zusätzlich eine VS-Code-Arbeitsbereichsdatei, die den gesamten Satz enthält — dies ist der einzige Schreibvorgang, den dieser Befehl durchführt.
 
-## Worksets: Öffnen Sie die Ordner, an denen Sie zusammenarbeiten
+## Worksets: Öffnen Sie die Ordner wieder, an denen Sie gemeinsam arbeiten
 
-Unabhängig von allem oben Genannten: Die meisten Leute öffnen bei jeder Sitzung dieselben wenigen Ordner – das Planungsrepo plus zwei oder drei Code-Repos. Ein **Workset** ist eine persönliche, benannte Ansicht genau davon, die mit einem Befehl in Ihrem Tool der Wahl neu geöffnet wird.
+Abgesehen von allem oben: Die meisten Personen öffnen bei jeder Sitzung die gleichen wenigen Ordner gemeinsam — das Planungs-Repository plus zwei oder drei Code-Repositories. Ein **Workset** ist eine persönliche, benannte Ansicht genau davon, die mit einem einzigen Befehl in Ihrem bevorzugten Tool wieder geöffnet wird.
 
 ```
-  workset "platform"                 openspec workset open platform
+  Workset "platform"                 openspec workset open platform
   ├── team-plans   ~/openspec/team-plans         │
   ├── api-server   ~/src/api-server              ▼
-  └── web-app      ~/src/web-app       all three open in your tool
+  └── web-app      ~/src/web-app       alle drei werden in Ihrem Tool geöffnet
 ```
 
 ```bash
 openspec workset create platform \
   --member ~/openspec/team-plans --member ~/src/api-server \
-  --member ~/src/web-app
+  --tool code
 openspec workset list
 ```
 
 ```
-platform  (opens in VS Code)
+platform  (wird in VS Code geöffnet)
   team-plans  /Users/you/openspec/team-plans
   api-server  /Users/you/src/api-server
 ```
 
-`openspec workset open platform` startet dann das gespeicherte Tool: Editoren (VS Code, Cursor) öffnen ein Fenster mit jedem Mitglied und kehren zurück. Das erste Mitglied ist das primäre. Überschreiben Sie das Tool jederzeit mit `--tool <id>`.
+`openspec workset open platform` startet dann das gespeicherte Tool: Editoren (VS Code, Cursor) öffnen ein Fenster mit allen Mitgliedern und kehren zurück. Das erste Mitglied ist das primäre. Überschreiben Sie das Tool jederzeit mit `--tool <id>`.
 
-Worksets sind absichtlich *kein* geteilter Zustand. Sie leben auf Ihrer Maschine, werden niemals committet und geben keine Versprechen über die Arbeit – sie protokollieren nur, was Ihnen zusammen offen gefällt. Das Entfernen eines Mitglieds berührt die Mitgliederordner nie. Neue Tools sind Konfiguration, kein Code: Alles, was über eine Workspace-Datei oder per-Ordner-Attach-Flags gestartet wird, kann unter dem Schlüssel `openers` in der globalen Konfig (`openspec config edit`) hinzugefügt werden.
+Worksets sind bewusst *kein* geteilter Zustand. Sie liegen auf Ihrem Rechner, werden niemals committet und machen keine Aussagen über die Arbeit — sie zeichnen nur auf, was Sie gemeinsam geöffnet haben möchten. Das Entfernen eines Worksets berührt nie die Mitgliedsordner. Neue Tools sind Konfiguration, kein Code: Alles, was über eine Arbeitsbereichsdatei oder pro Ordner angehängte Flags gestartet wird, kann unter dem Schlüssel `openers` in der globalen Konfiguration (`openspec config edit`) hinzugefügt werden.
 
 ## Wie Befehle entscheiden, wo sie wirken
 
-Jeder normale Befehl löst seinen Root auf dieselbe Weise auf, und zwar in dieser Reihenfolge:
+Jeder normale Befehl löst seine Root auf die gleiche Weise in dieser Reihenfolge auf:
 
 ```
-1. --store <id>          Sie haben es explizit gesagt        → dieser Speicher
-2. nearest openspec/     Ein echter Planungs-Root hier      → dieses Repo
-   (aufsteigend vom cwd)
-3. store: pointer        config.yaml deklariert einen Speicher  → dieser Speicher
-4. keines davon         Speicher registriert auf dieser     → Fehler mit einem
-                         Maschine?                        Auswahlhinweis
-                         keine Speicher registriert?         → das aktuelle
+1. --store <id>          Sie haben es explizit angegeben        → dieser Store
+2. nächstes openspec/     eine echte Planungs-Root hier     → dieses Repository
+   (vom aktuellen Arbeitsverzeichnis aus aufwärts suchen)
+3. store:-Zeiger        config.yaml deklariert einen Store  → dieser Store
+4. defaultStore          globale Konfiguration setzt einen Rechnerstandard  → dieser Store
+                         Standard
+5. keines der oben Genannten  Stores auf diesem Rechner registriert?     → Fehler mit einem
+                         Auswahlhinweis
+                         keine Stores registriert?         → das aktuelle
                                                           Verzeichnis
-                                                          (klasssisches Verhalten)
+                                                          (klassisches Verhalten)
 ```
 
-Die Zeile `Using OpenSpec root:` (und der `root`-Block in der `--json`-Ausgabe) sagt Ihnen, in welchem Fall Sie sich befinden.
+Die Zeile `Using OpenSpec root:` (und der `root`-Block in der `--json`-Ausgabe) zeigt Ihnen, um welchen Fall es sich handelt.
 
 ## Bekannte Einschränkungen
 
-- **Beta-Form.** Alles auf dieser Seite kann zwischen Releases geändert werden – Namen, Flags, Dateiformate, JSON-Schlüssel.
-- **Ein Checkout pro Speicher-ID pro Maschine.** Die Registrierung eines zweiten Checkouts unter derselben ID schlägt fehl mit einem Hinweis, zuerst `store unregister` auszuführen.
-- **Nie synchronisieren — das ist die Designabsicht.** OpenSpec klont, pullt oder pusht nie. Ein veralteter Checkout zeigt veraltete Spezifikationen an, bis *Sie* gepullt haben; Referenzen werden live von dem indexiert, was auf der Festplatte ist.
-- **Einige Befehle bleiben dort, wo sie sind.** `view`, `templates`, `schemas` und die veralteten Nomenformen (`openspec change show`, ...) wirken nur auf das aktuelle Verzeichnis – kein `--store`.
-- **Der Zustand pro Maschine ist pro Maschine.** Das Speicherregister und Worksets sind lokale Einstellungen. Nichts über Ihr Layout wird jemals in die gemeinsame Planung committet.
-- **Zwei Startstile für Worksets.** Ein Tool, das nicht mit einer Workspace-Datei oder per-Ordner-Attach-Flags gestartet werden kann, kann als Opener hinzugefügt werden.
-- **Agent JSON hat einen bekannten Casing Split** (store-family Schlüssel sind snake_case, workflow-family camelCase). Dokumentiert in [agent contract](../agent-contract.md); die Vereinheitlichung ist auf ein versioniertes Release verschoben.
+- **Beta-Status.** Alle Inhalte auf dieser Seite können zwischen Releases geändert werden — Namen, Flags, Dateiformate, JSON-Schlüssel.
+- **Ein Checkout pro Store-ID pro Rechner.** Die Registrierung eines zweiten Checkouts unter derselben ID schlägt fehl mit dem Hinweis, zuerst `store unregister` auszuführen.
+- **Keine Synchronisation, jemals — per Design.** OpenSpec klont, pullt oder pusht niemals. Ein veralteter Checkout zeigt veraltete Spezifikationen an, bis *Sie* pullen; Referenzen werden live aus dem Inhalt auf dem Datenträger indexiert.
+- **Leere Planungsordner können fehlen.** Ein neuer Store hat diese Ordner unter Umständen noch nicht in Git: `openspec/changes/`, `openspec/specs/` oder `openspec/changes/archive/`. Dies wird während der Beta akzeptiert; die Ordner erscheinen, sobald normale Befehle Dateien darin erstellen.
+- **Zeiger-Repositories bleiben Zeiger-Repositories.** Ein reines Konfigurations-Repository, dessen `openspec/config.yaml` `store: <id>` deklariert, wird als ausgelagerte Planung behandelt, nicht als Store-Checkout zum Registrieren. Entfernen Sie zuerst die Zeile `store:`, wenn Sie dieses Repository absichtlich in eine lokale Store-Root umwandeln möchten.
+- **Einige Befehle verbleiben an ihrem Ort.** `view`, `templates`, `schemas` und die veralteten Substantiv-Formen (`openspec change show`, ...) wirken nur auf das aktuelle Verzeichnis — kein `--store`.
+- **Rechnerbezogener Zustand ist rechnerbezogen.** Die Store-Registrierung und Worksets sind lokale Einstellungen. Nichts über die Anordnung Ihres Rechners wird jemals an die gemeinsame Planung committet.
+- **Zwei Startarten für Worksets.** Ein Tool, das nicht mit einer Arbeitsbereichsdatei oder pro Ordner angehängten Flags gestartet werden kann, kann nicht als Öffner hinzugefügt werden.
+- **Agent-JSON weist eine bekannte Trennungsregel für Groß-/Kleinschreibung auf** (Schlüssel der Store-Familie sind snake_case, der Workflow-Familie camelCase). Dies ist im [Agentenvertrag](../agent-contract.md) dokumentiert; die Vereinheitlichung wird auf ein versioniertes Release verschoben.
 
-## Wo Dinge existieren
+## Speicherorte von Komponenten
 
 | Was | Wo | Geteilt? |
 |---|---|---|
-| Die Planung eines Speichers | `<store>/openspec/` (specs, changes) | Ja — committen und pushen Sie es |
-| Die Identität eines Speichers | `<store>/.openspec-store/store.yaml` | Ja — zusammen mit dem Speicher committet |
-| Das Speicherregister | `<data dir>/openspec/stores/registry.yaml` | Nein — nur diese Maschine |
-| Worksets | `<data dir>/openspec/worksets/` | Nein — nur diese Maschine |
+| Planung eines Stores | `<store>/openspec/` (Spezifikationen, Änderungen) | Ja — committen und pushen |
+| Identität eines Stores | `<store>/.openspec-store/store.yaml` | Ja — zusammen mit dem Store committet |
+| Store-Registry | `<data dir>/openspec/stores/registry.yaml` | Nein — nur auf diesem Rechner |
+| Worksets | `<data dir>/openspec/worksets/` | Nein — nur auf diesem Rechner |
 
-`<data dir>` ist `~/.local/share/openspec` auf macOS und Linux (oder `$XDG_DATA_HOME/openspec`, wenn es gesetzt ist) und `%LOCALAPPDATA%\openspec` unter Windows.
+`<data dir>` ist `~/.local/share/openspec` unter macOS und Linux (oder `$XDG_DATA_HOME/openspec`, falls gesetzt) sowie `%LOCALAPPDATA%\openspec` unter Windows.
+
 ## Referenz
 
-Genaue Flags und JSON-Formen für jeden Befehl auf dieser Seite:
-[CLI reference](../cli.md) (Stores, Doctor, Working context, Personal worksets) und der [agent contract](../agent-contract.md).
+Genaue Flags und JSON-Strukturen für alle auf dieser Seite aufgeführten Befehle: [CLI-Referenz](../cli.md) (Stores, Doctor, Working context, Personal worksets) und der [agent contract](../agent-contract.md).

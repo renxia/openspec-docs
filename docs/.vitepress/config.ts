@@ -618,14 +618,16 @@ export default defineConfig({
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
   lastUpdated: true,
+  metaChunk: true,
 
   // 子目录部署配置
   base: '/docs/openspec/',
+  outDir: '../dist/docs/openspec',
 
   // SEO: 基础 URL 和规范链接
   head: [
     // 基础 meta
-    ['meta', { name: 'keywords', content: 'openspec, documentation, docs' }],
+    ['meta', { name: 'keywords', content: 'openspec中文文档, openspec, documentation, docs' }],
     // Open Graph
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: SITE_TITLE }],

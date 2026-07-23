@@ -3,129 +3,136 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "Specificatiegestuurd Ontwikkelen voor AI Assistenten"
-  tagline: Een lichtgewicht specificatie voor het bouwen en beheren van AI assistentprojecten.
+  text: "Specificatiegedreven ontwikkeling voor AI-assistenten"
+  tagline: Een lichtgewicht specificatie voor het bouwen en beheren van AI-assistentenprojecten.
   actions:
     - theme: brand
-      text: Beginnen
+      text: Aan de slag
       link: ./getting-started
     - theme: alt
-      text: Home
+      text: Start
       link: /
 
 features:
-  - title: Spec-First Workflow
-    details: Definieer vereisten voordat u code schrijft.
-  - title: AI-Native Design
-    details: Gebouwd voor Claude Code, Cursor, Windsurf en meer.
-  - title: Multi-Language
-    details: Documentatie beschikbaar in meerdere talen.
+  - title: Specificatie-eerst werkwijze
+    details: Definieer vereisten voordat je code schrijft.
+  - title: AI-native ontwerp
+    details: Ontwikkeld voor Claude Code, Cursor, Windsurf en meer.
+  - title: Meertalig
+    details: Documentatie beschikbaar in verschillende talen.
 ---
 
-# OpenSpec Documentatie
+# OpenSpec-documentatie
 
-Welkom. Dit is de thuispagina van alles over OpenSpec.
+Welkom. Dit is de centrale plek voor alles wat met OpenSpec te maken heeft.
 
-OpenSpec helpt u en uw AI coderingassistent **akkoord te gaan over wat er gebouwd moet worden voordat er enige code is geschreven.** U beschrijft de wijziging, de AI stelt een korte specificatie en een taaklijst op, jullie kijken beiden naar hetzelfde plan, en dan gebeurt het werk. Geen meer ontdekken halverwege dat de AI iets verkeerd heeft gebouwd.
+OpenSpec helpt jou en je AI-coderingassistent **overeenstemming te bereiken over wat er gebouwd moet worden voordat er überhaupt code wordt geschreven.** Je beschrijft de wijziging, de AI stelt een korte specificatie en een takenlijst op, jullie kijken samen naar hetzelfde plan en daarna gaat het werk van start. Geen verrassingen meer halverwege dat de AI het verkeerde ding heeft gebouwd.
 
-Als u niets anders leest, lees dan deze twee pagina's:
+Als je niets anders leest, lees dan deze twee pagina's:
 
-1. [Getting Started](getting-started.md): installeer, initialiseer en stuur uw eerste wijziging.
-2. [How Commands Work](how-commands-work.md): waar u daadwerkelijk `/opsx:propose` typt (hint: in uw AI chat, niet in de terminal). Dit is een valkuil voor bijna iedereen.
+1. [Aan de slag](getting-started.md): installeer, initialiseer en lever je eerste wijziging.
+2. [Hoe opdrachten werken](how-commands-work.md): waar je daadwerkelijk `/opsx:propose` intypt (tip: in je AI-chat, niet in de terminal). Dit zorgt bij bijna iedereen een keer voor verwarring.
 
-Die tweede pagina is belangrijker dan het lijkt. OpenSpec heeft twee helften: een command-line tool die u in uw terminal uitvoert, en slash commands die u aan uw AI assistent geeft. Weten welke wat is, bespaart u de meest voorkomende verwarring.
+Die tweede pagina is belangrijker dan het lijkt. OpenSpec bestaat uit twee onderdelen: een opdrachtregelgereedschap dat je in je terminal uitvoert, en slashopdrachten die je aan je AI-assistent geeft. Weten wat het verschil is, bespaart je de meest voorkomende verwarring.
 
-> **De beste gewoonte om eerst op te bouwen: als u niet zeker weet wat u moet bouwen, begin dan met `/opsx:explore`.** Het is een denkpartner zonder risico die uw code leest, opties afweegt en een vage gedachte omzet in een concreet plan voordat er enig artefact of code bestaat. De gids [Explore First](explore.md) onderbouwt dit.
+> **De beste gewoonte om eerst te ontwikkelen: als je niet zeker weet wat je moet bouwen, begin dan met `/opsx:explore`.** Het is een risicoloze denkpartner die je code leest, opties afweegt en een vaag idee aanscherpt tot een concreet plan voordat er enig artefact of code bestaat. De [Eerst verkennen](explore.md)-gids legt uit waarom dit werkt.
 
-## Kies uw pad
+## Kies je pad
 
-**Ik ben compleet nieuw.** Begin met [Getting Started](getting-started.md), en blader daarna door de [Core Concepts at a Glance](overview.md). Als iets mysterieus aanvoelt, zijn de [FAQ](faq.md) en [Glossary](glossary.md) in de buurt.
+**Ik ben helemaal nieuw.** Begin met [Aan de slag](getting-started.md), blader daarna door [Kernconcepten in een oogopslag](overview.md). Wanneer iets onduidelijk is, vind je het [FAQ](faq.md) en [Woordenlijst](glossary.md) vlakbij.
 
-**Ik heb een probleem, maar geen plan.** Dit is het veelvoorkomende geval, en het heeft een specifieke oplossing: [Explore First](explore.md). Gebruik `/opsx:explore` om er met de AI over na te denken voordat u zich ergens aan bindt.
+**Ik heb een probleem maar geen plan.** Dit is de meest voorkomende situatie, en er is een specifiek antwoord voor: [Eerst verkennen](explore.md). Gebruik `/opsx:explore` om het met de AI te doordenken voordat je je op iets vastlegt.
 
-**Ik heb een grote bestaande codebase.** U documenteert niet alles. [Using OpenSpec in an Existing Project](existing-projects.md) toont hoe u kunt beginnen met echte, brownfield code zonder het oceaan op te koken.
+**Ik heb een grote bestaande codebase.** Je hoeft niet de hele codebase te documenteren. [OpenSpec gebruiken in een bestaand project](existing-projects.md) toont hoe je begint met echte, brownfield-code zonder de zee te koken.
 
-**Ik wil gewoon dat het werkt.** [Install](installation.md), voer `openspec init` uit, en lees dan [How Commands Work](how-commands-work.md) zodat uw eerste slash command op de juiste plek terechtkomt.
+**Ik wil het gewoon laten werken.** [Installeer](installation.md), voer `openspec init` uit, en lees daarna [Hoe opdrachten werken](how-commands-work.md) zodat je eerste slashopdracht op de juiste plek landt.
 
-**Ik leer door voorbeelden.** De pagina [Examples & Recipes](examples.md) leidt u door echte wijzigingen van begin tot eind: een kleine functie, een bugfix, een refactor, een exploratie.
+**Ik leer aan de hand van voorbeelden.** De pagina [Voorbeelden & Recepten](examples.md) behandelt echte wijzigingen van begin tot eind: een kleine functie, een bugfix, een refactor, een verkenning.
 
-**Ik kom uit het oude workflow.** De [Migration Guide](migration-guide.md) legt uit wat er is veranderd en waarom, en belooft dat uw bestaande werk veilig is.
+**De AI heeft zojuist een plan opgesteld — wat nu?** Lees het. [Een wijziging beoordelen](reviewing-changes.md) laat de twee-minutencontrole zien die een verkeerde bocht opvangt terwijl dit nog weinig moeite kost, en [Goede specificaties schrijven](writing-specs.md) behandelt waar een plan dat het waard is om goed te keuren, uit bestaat.
 
-**Ik wil het aanpassen aan het proces van mijn team.** [Customization](customization.md) behandelt projectconfiguratie, aangepaste schemas en gedeelde context.
+**Ik werk in een team.** [OpenSpec in een team](team-workflow.md) laat zien hoe een wijziging wordt toegewezen aan een branch en een pull request, en hoe teamleden een plan beoordelen voordat er code wordt geschreven.
 
-**Iets is kapot.** [Troubleshooting](troubleshooting.md) verzamelt de fouten die mensen daadwerkelijk tegenkomen, inclusief oplossingen.
+**Ik kom uit de oude werkwijze.** De [Migratiegids](migration-guide.md) legt uit wat er is veranderd en waarom, en belooft dat je bestaande werk veilig is.
 
-## De hele kaart
+**Ik wil het aanpassen aan het werkproces van mijn team.** [Aanpassing](customization.md) behandelt projectconfiguratie, aangepaste schema's en gedeelde context.
+
+**Er gaat iets mis.** [Problemen oplossen](troubleshooting.md) verzamelt de fouten die mensen daadwerkelijk tegenkomen, met oplossingen.
+
+## De volledige overzichtskaart
 
 ### Begin hier
 
-| Doc | Wat het u geeft |
+| Document | Wat geeft het je? |
 |-----|-------------------|
-| [Getting Started](getting-started.md) | Installeer, initialiseer en voer uw eerste wijziging van begin tot eind uit |
-| [Explore First](explore.md) | Gebruik `/opsx:explore` om een idee te overwegen voordat u zich committeert |
-| [How Commands Work](how-commands-work.md) | Waar slash commands worden uitgevoerd, wat "interactive mode" betekent, terminal versus chat |
-| [Core Concepts at a Glance](overview.md) | Het gehele mentale model op één pagina: specificaties, wijzigingen, deltas, archief |
-| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix en hoe u kunt verifiëren dat het werkte |
+| [Aan de slag](getting-started.md) | Installeer, initialiseer en voer je eerste wijziging volledig uit |
+| [Eerst verkennen](explore.md) | Gebruik `/opsx:explore` om een idee te doordenken voordat je je erop vastlegt |
+| [Hoe opdrachten werken](how-commands-work.md) | Waar slashopdrachten worden uitgevoerd, wat "interactieve modus" betekent, terminal versus chat |
+| [Kernconcepten in een oogopslag](overview.md) | Het volledige mentale model op één pagina: specificaties, wijzigingen, delta's, archief |
+| [Installatie](installation.md) | npm, pnpm, yarn, bun, Nix en hoe je controleert of het werkt |
 
-### Gebruik dagelijks
+### Dagelijks gebruik
 
-| Doc | Wat het u geeft |
+| Document | Wat geeft het je? |
 |-----|-------------------|
-| [Workflows](workflows.md) | Veelvoorkomende patronen en wanneer u naar elke command moet grijpen |
-| [Examples & Recipes](examples.md) | Volledige doortochten van echte wijzigingen, kopieerbaar |
-| [Using OpenSpec in an Existing Project](existing-projects.md) | Het adopteren van OpenSpec op een grote brownfield codebase |
-| [Editing & Iterating on a Change](editing-changes.md) | Artefacten bijwerken, teruggaan, handmatige wijzigingen reconciliëren |
-| [Commands](commands.md) | Referentie voor elke `/opsx:*` slash command |
-| [CLI](cli.md) | Referentie voor elke `openspec` terminal command |
+| [Werkwijzen](workflows.md) | Veelvoorkomende patronen en wanneer je welke opdracht gebruikt |
+| [Voorbeelden & Recepten](examples.md) | Volledige uitleg van echte wijzigingen, klaar om te kopiëren en plakken |
+| [Goede specificaties schrijven](writing-specs.md) | Hoe een sterke vereiste en scenario eruitzien, en hoe je een wijziging de juiste omvang geeft |
+| [Een wijziging beoordelen](reviewing-changes.md) | De twee-minutencontrole van een opgesteld plan voordat er code wordt geschreven |
+| [OpenSpec in een team](team-workflow.md) | Hoe wijzigingen passen bij branches, pull requests en beoordeling |
+| [OpenSpec gebruiken in een bestaand project](existing-projects.md) | OpenSpec adopteren op een grote, bestaande codebase |
+| [Een wijziging bewerken en herhalen](editing-changes.md) | Artefacten bijwerken, teruggaan, handmatige bewerkingen verenigen |
+| [Opdrachten](commands.md) | Naslagwerk voor elke `/opsx:*`-slashopdracht |
+| [CLI](cli.md) | Naslagwerk voor elke `openspec`-terminalopdracht |
 
-### Begrijp het diepgaand
+### Diepgaand begrijpen
 
-| Doc | Wat het u geeft |
+| Document | Wat geeft het je? |
 |-----|-------------------|
-| [Concepts](concepts.md) | De uitgebreide uitleg van specificaties, wijzigingen, artefacten, schemas en archief |
-| [OPSX Workflow](opsx.md) | Waarom de workflow vloeiend is in plaats van fasegebonden, plus een architectuur deep dive |
-| [Glossary](glossary.md) | Elke term gedefinieerd op één plek |
+| [Concepten](concepts.md) | De lange uitleg van specificaties, wijzigingen, artefacten, schema's en archief |
+| [OPSX-werkwijze](opsx.md) | Waarom de werkwijze flexibel is in plaats van gefaseerd, plus een diepgaande architectuuranalyse |
+| [Woordenlijst](glossary.md) | Elke term op één plek gedefinieerd |
 
-### Maak het van u
+### Maak het je eigen
 
-| Doc | Wat het u geeft |
+| Document | Wat geeft het je? |
 |-----|-------------------|
-| [Customization](customization.md) | Projectconfiguratie, aangepaste schemas en gedeelde context |
-| [Multi-Language](multi-language.md) | Artefacten genereren in talen anders dan Engels |
-| [Supported Tools](supported-tools.md) | De 25+ AI tools waarmee OpenSpec integreert, en waar de bestanden terechtkomen |
+| [Aanpassing](customization.md) | Projectconfiguratie, aangepaste schema's, gedeelde context |
+| [Meertalig](multi-language.md) | Genereer artefacten in andere talen dan Engels |
+| [Ondersteunde gereedschappen](supported-tools.md) | De 25+ AI-gereedschappen waarmee OpenSpec integreert, en waar bestanden terechtkomen |
 
-### Als u hulp nodig heeft
+### Wanneer je hulp nodig hebt
 
-| Doc | Wat het u geeft |
+| Document | Wat geeft het je? |
 |-----|-------------------|
-| [FAQ](faq.md) | Snelle antwoorden op de vragen die mensen het meest stellen |
-| [Troubleshooting](troubleshooting.md) | Concrete oplossingen voor concrete fouten |
-| [Migration Guide](migration-guide.md) | Overstappen van de legacy workflow naar OPSX |
+| [Veelgestelde vragen](faq.md) | Snelle antwoorden op de meest gestelde vragen |
+| [Problemen oplossen](troubleshooting.md) | Concrete oplossingen voor concrete fouten |
+| [Migratiegids](migration-guide.md) | Overstappen van de verouderde werkwijze naar OPSX |
 
-### Coördineren over repos (beta)
+### Coördineren over repositories heen (bèta)
 
-| Doc | Wat het u geeft |
+| Document | Wat geeft het je? |
 |-----|-------------------|
-| [Stores: User Guide](stores-beta/user-guide.md) | Plan in zijn eigen repo wanneer uw werk meerdere repos of teams omvat |
-| [Agent Contract](agent-contract.md) | De machineleesbare CLI oppervlakken die agents aansturen |
+| [Stores: Gebruikershandleiding](stores-beta/user-guide.md) | Maak een plan in een eigen repository als je werk over repositories of teams heen gaat |
+| [Agentcontract](agent-contract.md) | De machine-leesbare CLI-oppervlakken die agents aansturen |
 
 ## De dertig seconden versie
 
 ```text
 1. Install        npm install -g @fission-ai/openspec@latest
 2. Initialize     cd your-project && openspec init
-3. Explore        (in uw AI chat)  /opsx:explore           ← optioneel, maar een geweldige gewoonte
-4. Propose        (in uw AI chat)  /opsx:propose add-dark-mode
-5. Build          (in uw AI chat)  /opsx:apply
-6. Archive        (in uw AI chat)  /opsx:archive
+3. Explore        (in your AI chat)  /opsx:explore           ← optional, but a great habit
+4. Propose        (in your AI chat)  /opsx:propose add-dark-mode
+5. Build          (in your AI chat)  /opsx:apply
+6. Archive        (in your AI chat)  /opsx:archive
 ```
 
-Stappen 1 en 2 gebeuren in uw terminal. De rest gebeurt in de chat van uw AI assistent. Dat onderscheid is het enige wat de moeite waard is om te onthouden, en [How Commands Work](how-commands-work.md) legt precies uit waarom. Stap 3 is optioneel, maar beginnen met `/opsx:explore` als u twijfelt is de gewoonte die het meest de moeite waard is om aan te nemen.
+Stappen 1 en 2 gebeuren in je terminal. De rest gebeurt in de chat van je AI-assistent. Die splitsing is het enige waard om te onthouden, en [Hoe opdrachten werken](how-commands-work.md) legt precies uit waarom. Stap 3 is optioneel, maar beginnen met `/opsx:explore` als je niet zeker weet, is de gewoonte die het meest waard is om te ontwikkelen.
 
-## Waar else hulp krijgen
+## Waar je nog meer hulp kunt krijgen
 
 - **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) voor vragen, ideeën en hulp.
-- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) voor bugs en feature requests.
-- **`openspec feedback "uw bericht"`** stuurt feedback rechtstreeks van uw terminal (het opent een GitHub issue).
+- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) voor bugs en functieverzoeken.
+- **`openspec feedback "je bericht"`** verzendt feedback direct vanuit je terminal (het opent een GitHub-issue).
 
-Vond u iets in deze documentatie dat fout, verouderd of verwarrend is? Dat is een bug. Open een issue of een PR. Documentatieverbeteringen zijn een van de meest waardevolle bijdragen die u kunt leveren.
+Heb je iets in deze documentatie gevonden dat fout is, verouderd of verwarrend? Dat is een bug. Open een issue of een PR. Verbeteringen aan de documentatie behoren tot de meest waardevolle bijdragen die je kunt doen.

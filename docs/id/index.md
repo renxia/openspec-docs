@@ -4,128 +4,134 @@ layout: home
 hero:
   name: "OpenSpec"
   text: "Pengembangan Berbasis Spesifikasi untuk Asisten AI"
-  tagline: Spek ringan untuk membangun dan mengelola proyek asisten AI.
+  tagline: Spesifikasi ringan untuk membangun dan mengelola proyek asisten AI.
   actions:
     - theme: brand
-      text: Mulai Sekarang
+      text: Mulai
       link: ./getting-started
     - theme: alt
       text: Beranda
       link: /
-
 features:
-  - title: Alur Kerja Spec-First
+  - title: Alur Kerja Spesifikasi Terlebih Dahulu
     details: Tentukan persyaratan sebelum menulis kode.
-  - title: Desain AI-Native
-    details: Dibangun untuk Claude Code, Cursor, Windsurf, dan lainnya.
+  - title: Desain Native AI
+    details: Dibangun untuk Claude Code, Cursor, Windsurf, dan banyak lagi.
   - title: Multi-Bahasa
     details: Dokumentasi tersedia dalam berbagai bahasa.
 ---
 
 # Dokumentasi OpenSpec
 
-Selamat datang. Ini adalah pusat dari segala hal tentang OpenSpec.
+Selamat datang. Ini adalah rumah untuk segala hal tentang OpenSpec.
 
-OpenSpec membantu Anda dan asisten pengkodean AI Anda **sepakat tentang apa yang akan dibangun sebelum kode apa pun ditulis.** Anda mendeskripsikan perubahannya, AI membuat draf spek singkat dan daftar tugas, Anda berdua melihat rencana yang sama, dan kemudian pekerjaan dilakukan. Tidak ada lagi penemuan di tengah jalan bahwa AI telah membangun hal yang salah.
+OpenSpec membantu Anda dan asisten coding AI Anda **sepakat tentang apa yang akan dibangun sebelum ada kode yang ditulis.** Anda menjelaskan perubahan yang diinginkan, AI membuat draf spesifikasi singkat dan daftar tugas, Anda berdua melihat rencana yang sama, kemudian pekerjaan dimulai. Tidak ada lagi penemuan di tengah jalan bahwa AI telah membangun hal yang salah.
 
-Jika Anda tidak membaca hal lain, bacalah dua halaman ini:
+Jika Anda tidak bisa membaca yang lain, baca dua halaman ini:
 
-1. [Getting Started](getting-started.md): instalasi, inisialisasi, dan kirim perubahan pertama Anda.
-2. [How Commands Work](how-commands-work.md): tempat Anda benar-benar mengetik `/opsx:propose` (petunjuk: di obrolan AI Anda, bukan terminal). Ini menjebak hampir semua orang sekali.
+1. [Memulai](getting-started.md): instal, inisialisasi, dan rilis perubahan pertama Anda.
+2. [Cara Perintah Bekerja](how-commands-work.md): tempat Anda benar-benar mengetik `/opsx:propose` (petunjuk: di chat AI Anda, bukan di terminal). Ini membuat hampir semua orang tersandung setidaknya sekali.
 
-Yang kedua lebih penting daripada kelihatannya. OpenSpec memiliki dua bagian: alat baris perintah yang Anda jalankan di terminal, dan perintah slash yang Anda berikan kepada asisten AI Anda. Mengetahui mana yang mana menghemat kebingungan paling umum.
+Yang kedua itu lebih penting daripada yang terlihat. OpenSpec memiliki dua bagian: alat baris perintah yang Anda jalankan di terminal, dan perintah slash yang Anda berikan ke asisten AI Anda. Mengetahui mana yang mana akan menyelamatkan Anda dari kebingungan yang paling umum terjadi.
 
-> **Kebiasaan terbaik untuk dibangun pertama: ketika Anda tidak yakin apa yang akan dibangun, mulailah dengan `/opsx:explore`.** Ini adalah mitra berpikir tanpa risiko yang membaca kode Anda, menimbang opsi, dan mempertajam ide samar menjadi rencana konkret sebelum ada artefak atau kode yang ada. Panduan [Explore First](explore.md) menyampaikannya.
+> **Kebiasaan terbaik yang harus dibangun terlebih dahulu: ketika Anda tidak yakin harus membangun apa, mulailah dengan `/opsx:explore`.** Ini adalah mitra berpikir tanpa risiko yang membaca kode Anda, menimbang pilihan, dan mengasah ide yang kabur menjadi rencana konkret sebelum ada artefak atau kode yang dibuat. Panduan [Jelajahi Terlebih Dahulu](explore.md) menjelaskan mengapa.
 
 ## Pilih jalur Anda
 
-**Saya benar-benar baru.** Mulailah dengan [Getting Started](getting-started.md), lalu baca sekilas [Core Concepts at a Glance](overview.md). Jika sesuatu terasa misterius, [FAQ](faq.md) dan [Glossary](glossary.md) ada di dekatnya.
+**Saya sama sekali baru.** Mulailah dengan [Memulai](getting-started.md), kemudian lihat sekilas [Konsep Inti dalam Sekilas](overview.md). Ketika ada yang terasa misterius, [FAQ](faq.md) dan [Glosarium](glossary.md) ada di dekat Anda.
 
-**Saya punya masalah tetapi belum punya rencana.** Ini adalah kasus yang umum, dan ini memiliki jawaban khusus: [Explore First](explore.md). Gunakan `/opsx:explore` untuk memikirkannya bersama AI sebelum berkomitmen pada apa pun.
+**Saya punya masalah tapi tidak punya rencana.** Ini adalah kasus yang umum, dan ada jawaban khusus untuknya: [Jelajahi Terlebih Dahulu](explore.md). Gunakan `/opsx:explore` untuk memikirkan masalah itu bersama AI sebelum berkomitmen pada apapun.
 
-**Saya memiliki basis kode besar yang sudah ada.** Anda tidak mendokumentasikan semuanya. [Using OpenSpec in an Existing Project](existing-projects.md) menunjukkan cara memulai pada kode *brownfield* yang nyata tanpa membuat masalah terlalu rumit.
+**Saya punya basis kode besar yang sudah ada.** Anda tidak perlu mendokumentasikan semuanya. [Menggunakan OpenSpec di Proyek yang Sudah Ada](existing-projects.md) menunjukkan cara memulai dengan kode brownfield yang nyata tanpa harus mengerjakan seluruhnya sekaligus yang membutuhkan usaha besar.
 
-**Saya hanya ingin membuatnya berfungsi.** [Install](installation.md), jalankan `openspec init`, lalu baca [How Commands Work](how-commands-work.md) agar perintah slash pertama Anda mendarat di tempat yang benar.
+**Saya hanya ingin membuatnya berjalan.** [Instal](installation.md), jalankan `openspec init`, kemudian baca [Cara Perintah Bekerja](how-commands-work.md) agar perintah slash pertama Anda masuk ke tempat yang benar.
 
-**Saya belajar dari contoh.** Halaman [Examples & Recipes](examples.md) memandu melalui perubahan nyata dari awal hingga akhir: fitur kecil, perbaikan bug, refactoring, eksplorasi.
+**Saya belajar dengan contoh.** Halaman [Contoh & Resep](examples.md) memandu perubahan nyata dari awal sampai akhir: fitur kecil, perbaikan bug, refaktor, dan eksplorasi.
 
-**Saya datang dari alur kerja lama.** [Migration Guide](migration-guide.md) menjelaskan apa yang berubah dan mengapa, serta menjanjikan bahwa pekerjaan Anda yang sudah ada aman.
+**AI baru saja membuat draf rencana — sekarang apa?** Baca rencana tersebut. [Meninjau Perubahan](reviewing-changes.md) menunjukkan tinjauan dua menit yang bisa menangkap kesalahan arah ketika biayanya masih murah, dan [Menulis Spesifikasi yang Baik](writing-specs.md) membahas apa yang membuat rencana layak disetujui.
 
-**Saya ingin menyesuaikannya dengan proses tim saya.** [Customization](customization.md) mencakup konfigurasi proyek, skema kustom, dan konteks bersama.
+**Saya bekerja di tim.** [OpenSpec di Tim](team-workflow.md) menunjukkan bagaimana perubahan dipetakan ke cabang dan pull request, serta bagaimana anggota tim meninjau rencana sebelum kode ditulis.
 
-**Ada yang rusak.** [Troubleshooting](troubleshooting.md) mengumpulkan kegagalan yang benar-benar dialami orang, lengkap dengan perbaikannya.
+**Saya datang dari alur kerja lama.** [Panduan Migrasi](migration-guide.md) menjelaskan apa yang berubah dan mengapa, serta menjamin bahwa pekerjaan Anda yang sudah ada tetap aman.
 
-## Peta keseluruhan
+**Saya ingin menyesuaikannya dengan proses tim saya.** [Kustomisasi](customization.md) membahas konfigurasi proyek, skema kustom, dan konteks bersama.
 
-### Mulai di sini
+**Ada yang rusak.** [Pemecahan Masalah](troubleshooting.md) mengumpulkan kesalahan yang benar-benar dihadapi orang-orang, beserta perbaikannya.
 
-| Doc | Apa yang diberikannya kepada Anda |
-|-----|-------------------|
-| [Getting Started](getting-started.md) | Instalasi, inisialisasi, dan jalankan perubahan pertama Anda dari awal hingga akhir |
-| [Explore First](explore.md) | Gunakan `/opsx:explore` untuk memikirkan ide sebelum Anda berkomitmen |
-| [How Commands Work](how-commands-work.md) | Di mana perintah slash berjalan, apa arti "mode interaktif", terminal vs obrolan |
-| [Core Concepts at a Glance](overview.md) | Seluruh model mental dalam satu halaman: spek, perubahan, delta, arsip |
-| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix, dan cara memverifikasi bahwa itu berhasil |
+## Peta lengkap
+
+### Mulai dari sini
+
+| Dokumen | Apa yang Anda dapatkan |
+|---------|------------------------|
+| [Memulai](getting-started.md) | Instal, inisialisasi, dan jalankan perubahan pertama Anda dari awal sampai akhir |
+| [Jelajahi Terlebih Dahulu](explore.md) | Gunakan `/opsx:explore` untuk memikirkan sebuah ide sebelum Anda berkomitmen |
+| [Cara Perintah Bekerja](how-commands-work.md) | Tempat perintah slash dijalankan, arti dari "mode interaktif", perbandingan terminal dan chat |
+| [Konsep Inti dalam Sekilas](overview.md) | Seluruh model mental dalam satu halaman: spesifikasi, perubahan, delta, arsip |
+| [Instalasi](installation.md) | npm, pnpm, yarn, bun, Nix, dan cara memverifikasi bahwa instalasi berhasil |
 
 ### Gunakan sehari-hari
 
-| Doc | Apa yang diberikannya kepada Anda |
-|-----|-------------------|
-| [Workflows](workflows.md) | Pola umum dan kapan harus menggunakan setiap perintah |
-| [Examples & Recipes](examples.md) | Panduan lengkap perubahan nyata, siap disalin-tempel |
-| [Using OpenSpec in an Existing Project](existing-projects.md) | Mengadopsi OpenSpec pada basis kode *brownfield* yang besar |
-| [Editing & Iterating on a Change](editing-changes.md) | Perbarui artefak, kembali, rekonsiliasi pengeditan manual |
-| [Commands](commands.md) | Referensi untuk setiap perintah slash `/opsx:*` |
+| Dokumen | Apa yang Anda dapatkan |
+|---------|------------------------|
+| [Alur Kerja](workflows.md) | Pola umum dan kapan menggunakan setiap perintah |
+| [Contoh & Resep](examples.md) | Panduan lengkap perubahan nyata, bisa disalin dan ditempel |
+| [Menulis Spesifikasi yang Baik](writing-specs.md) | Bentuk dari persyaratan dan skenario yang kuat, serta cara menentukan ukuran perubahan yang tepat |
+| [Meninjau Perubahan](reviewing-changes.md) | Tinjauan dua menit terhadap rencana draf sebelum ada kode yang ditulis |
+| [OpenSpec di Tim](team-workflow.md) | Bagaimana perubahan sesuai dengan cabang, pull request, dan proses peninjauan |
+| [Menggunakan OpenSpec di Proyek yang Sudah Ada](existing-projects.md) | Mengadopsi OpenSpec pada basis kode brownfield yang besar |
+| [Mengedit & Mengulangi Perubahan](editing-changes.md) | Memperbarui artefak, kembali ke tahap sebelumnya, menyesuaikan edit manual |
+| [Perintah](commands.md) | Referensi untuk setiap perintah slash `/opsx:*` |
 | [CLI](cli.md) | Referensi untuk setiap perintah terminal `openspec` |
 
-### Pahami secara mendalam
+### Pahami lebih dalam
 
-| Doc | Apa yang diberikannya kepada Anda |
-|-----|-------------------|
-| [Concepts](concepts.md) | Penjelasan panjang tentang spek, perubahan, artefak, skema, dan arsip |
-| [OPSX Workflow](opsx.md) | Mengapa alur kerja itu cair daripada terkunci fase, ditambah pendalaman arsitektur |
-| [Glossary](glossary.md) | Setiap istilah yang didefinisikan di satu tempat |
+| Dokumen | Apa yang Anda dapatkan |
+|---------|------------------------|
+| [Konsep](concepts.md) | Penjelasan panjang tentang spesifikasi, perubahan, artefak, skema, dan arsip |
+| [Alur Kerja OPSX](opsx.md) | Mengapa alur kerja ini fleksibel bukan fase yang dikunci, serta penjelasan arsitektur yang mendalam |
+| [Glosarium](glossary.md) | Setiap istilah didefinisikan di satu tempat |
 
-### Jadikan milik Anda
+### Sesuaikan dengan kebutuhan Anda
 
-| Doc | Apa yang diberikannya kepada Anda |
-|-----|-------------------|
-| [Customization](customization.md) | Konfigurasi proyek, skema kustom, konteks bersama |
-| [Multi-Language](multi-language.md) | Menghasilkan artefak dalam bahasa selain Inggris |
-| [Supported Tools](supported-tools.md) | 25+ alat AI yang diintegrasikan dengan OpenSpec, dan tempat berkas mendarat |
+| Dokumen | Apa yang Anda dapatkan |
+|---------|------------------------|
+| [Kustomisasi](customization.md) | Konfigurasi proyek, skema kustom, konteks bersama |
+| [Multi-Bahasa](multi-language.md) | Hasilkan artefak dalam bahasa selain Inggris |
+| [Alat yang Didukung](supported-tools.md) | Lebih dari 25 alat AI yang terintegrasi dengan OpenSpec, dan tempat file disimpan |
 
-### Saat Anda membutuhkan bantuan
+### Ketika Anda membutuhkan bantuan
 
-| Doc | Apa yang diberikannya kepada Anda |
-|-----|-------------------|
-| [FAQ](faq.md) | Jawaban cepat untuk pertanyaan yang paling sering diajukan orang |
-| [Troubleshooting](troubleshooting.md) | Perbaikan konkret untuk kegagalan yang nyata |
-| [Migration Guide](migration-guide.md) | Pindah dari alur kerja lama ke OPSX |
+| Dokumen | Apa yang Anda dapatkan |
+|---------|------------------------|
+| [FAQ](faq.md) | Jawaban cepat untuk pertanyaan yang paling banyak diajukan |
+| [Pemecahan Masalah](troubleshooting.md) | Perbaikan konkret untuk kesalahan konkret |
+| [Panduan Migrasi](migration-guide.md) | Beralih dari alur kerja lama ke OPSX |
 
-### Koordinasi antar repos (beta)
+### Koordinasi di seluruh repo (beta)
 
-| Doc | Apa yang diberikannya kepada Anda |
-|-----|-------------------|
-| [Stores: User Guide](stores-beta/user-guide.md) | Rencana di repo sendiri ketika pekerjaan Anda mencakup beberapa repos atau tim |
-| [Agent Contract](agent-contract.md) | Permukaan CLI yang dapat dibaca mesin yang dikendalikan agen |
+| Dokumen | Apa yang Anda dapatkan |
+|---------|------------------------|
+| [Stores: Panduan Pengguna](stores-beta/user-guide.md) | Buat rencana di repo sendiri ketika pekerjaan Anda mencakup banyak repo atau tim |
+| [Kontrak Agen](agent-contract.md) | Antarmuka CLI yang dapat dibaca mesin yang diakses oleh agen |
 
 ## Versi tiga puluh detik
 
 ```text
-1. Install        npm install -g @fission-ai/openspec@latest
-2. Initialize     cd your-project && openspec init
-3. Explore        (di obrolan AI Anda)  /opsx:explore           ← opsional, tetapi kebiasaan yang bagus
-4. Propose        (di obrolan AI Anda)  /opsx:propose add-dark-mode
-5. Build          (di obrolan AI Anda)  /opsx:apply
-6. Archive        (di obrolan AI Anda)  /opsx:archive
+1. Instal        npm install -g @fission-ai/openspec@latest
+2. Inisialisasi     cd your-project && openspec init
+3. Jelajahi        (di chat AI Anda)  /opsx:explore           ← opsional, tetapi kebiasaan yang sangat bagus
+4. Ajukan        (di chat AI Anda)  /opsx:propose add-dark-mode
+5. Bangun        (di chat AI Anda)  /opsx:apply
+6. Arsipkan        (di chat AI Anda)  /opsx:archive
 ```
 
-Langkah 1 dan 2 terjadi di terminal Anda. Sisanya terjadi di obrolan asisten AI Anda. Perpecahan inilah yang layak diingat, dan [How Commands Work](how-commands-work.md) menjelaskan mengapa secara tepat. Langkah 3 opsional, tetapi memulai dengan `/opsx:explore` ketika Anda tidak yakin adalah kebiasaan yang paling berharga untuk dibentuk.
+Langkah 1 dan 2 dilakukan di terminal Anda. Sisanya dilakukan di chat asisten AI Anda. Pemisahan itu adalah satu hal yang layak dihafal, dan [Cara Perintah Bekerja](how-commands-work.md) menjelaskan mengapa secara tepat. Langkah 3 adalah opsional, tetapi memulai dengan `/opsx:explore` ketika Anda tidak yakin adalah kebiasaan yang paling layak dibentuk.
 
-## Di mana lagi mencari bantuan
+## Tempat lain untuk mendapatkan bantuan
 
 - **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) untuk pertanyaan, ide, dan bantuan.
-- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) untuk bug dan permintaan fitur.
-- **`openspec feedback "pesan Anda"`** mengirimkan umpan balik langsung dari terminal Anda (ini membuka isu GitHub).
+- **Isu GitHub:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) untuk bug dan permintaan fitur.
+- **`openspec feedback "pesan Anda"`** mengirimkan umpan balik langsung dari terminal Anda (ini akan membuka isu GitHub).
 
-Menemukan sesuatu di dokumentasi ini yang salah, usang, atau membingungkan? Itu adalah bug. Buka isu atau PR. Peningkatan dokumentasi adalah beberapa kontribusi paling berharga yang dapat Anda buat.
+Menemukan sesuatu di dokumen ini yang salah, usang, atau membingungkan? Itu adalah bug. Buka isu atau PR. Peningkatan dokumentasi adalah salah satu kontribusi yang paling berharga yang dapat Anda berikan.

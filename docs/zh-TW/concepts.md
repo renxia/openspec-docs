@@ -1,31 +1,31 @@
 # 概念
 
-本指南解釋 OpenSpec 的核心思想及其相互關聯的方式。有關實際使用，請參閱 [Getting Started](getting-started.md) 和 [Workflows](workflows.md)。
+本指南說明 OpenSpec 的核心概念，以及各概念之間的關聯。實際使用方式請參閱 [入門指南](getting-started.md) 與 [工作流程](workflows.md)。
 
-## 設計理念
+## 理念
 
-OpenSpec 基於以下四個原則構建：
+OpenSpec 圍繞以下四項原則建構：
 
 ```
-fluid not rigid         — 沒有階段門檻，專注於有意義的工作
-iterative not waterfall — 在建構的過程中學習，隨時優化
-easy not complex        — 輕量級設定，極簡流程
-brownfield-first        — 與現有程式碼庫協作，而不僅限於全新專案 (greenfield)
+靈活而非僵化         — 無階段關卡，專注於合理的工作事項
+迭代而非瀑布式         — 建置過程中持續學習，逐步優化
+簡易而非複雜         — 輕量級設定，減少繁文縟節
+棕地優先         — 適用於現有程式碼庫，不限於從零開始的綠地專案
 ```
 
-### 這些原則為何重要
+### 為何這些原則至關重要
 
-**流動而非僵化。** 傳統的規範系統會將你鎖定在特定的階段：先規劃，然後實作，最後完成。OpenSpec 更具彈性——你可以按照對你的工作而言有意義的任何順序來創建工件 (artifacts)。
+**靈活而非僵化。** 傳統規格系統會將工作侷限在固定階段：先規劃、再實作、最後完成。OpenSpec 更具彈性——你可以根據工作需求，以任何合理的順序建立產出物。
 
-**迭代式而非瀑布式。** 需求會改變。理解也會加深。一開始看似良好的方法，在看到程式碼庫後可能不成立。OpenSpec 擁抱這種現實。
+**迭代而非瀑布式。** 需求會不斷變動，認知也會逐步深化。起初看似可行的方案，在深入瞭解程式碼庫後可能不再適用。OpenSpec 擁抱這種現實。
 
-**簡單而非複雜。** 有些規範框架需要大量的設定、僵化的格式或重量級的流程。OpenSpec 不會干擾你。只需幾秒鐘即可初始化，立即開始工作，只有在需要時才進行客製化。
+**簡易而非複雜。** 部分規格框架需要繁雜的設定、僵化的格式，或沉重的流程。OpenSpec 不會干擾你的工作流程，幾秒即可完成初始化，立刻就能開始工作，僅在需要時進行自訂。
 
-**先考慮現有基礎 (Brownfield-first)。** 大多數的軟體工作並非從零開始——而是修改現有的系統。OpenSpec 基於 delta 的方法，讓你可以輕鬆地規範對現有行為的更改，而不僅是描述新系統。
+**棕地優先。** 大部分軟體工作並非從零開始建置，而是修改現有系統。OpenSpec 採用基於差異的方法，能輕鬆規格化現有行為的變更，而不僅僅是描述新系統。
 
-## 概覽 (The Big Picture)
+## 整體架構
 
-OpenSpec 將您的工作分為兩個主要領域：
+OpenSpec 將你的工作分為兩個主要區域：
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -34,257 +34,257 @@ OpenSpec 將您的工作分為兩個主要領域：
 │   ┌─────────────────────┐      ┌───────────────────────────────┐   │
 │   │       specs/        │      │         changes/              │   │
 │   │                     │      │                               │   │
-│   │  Source of truth    │◄─────│  Proposed modifications       │   │
-│   │  How your system    │ merge│  Each change = one folder     │   │
-│   │  currently works    │      │  Contains artifacts + deltas  │   │
+│   │  唯一的真實來源      │◄─────│  建議的修改內容               │   │
+│   │  描述系統目前的運作  │ 合併 │  每個變更 = 一個資料夾        │   │
+│   │                     │      │  包含產出文件 + 增量規格      │   │
 │   │                     │      │                               │   │
 │   └─────────────────────┘      └───────────────────────────────┘   │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs (規格)** 是唯一真相源 — 它描述了您的系統目前如何運作。
+**Specs（規格文件）** 是唯一的真實來源——描述你系統目前的運作方式。
 
-**Changes (變更)** 是建議的修改 — 在您準備好合併之前，它們會存在於單獨的資料夾中。
+**Changes（變更提案）** 是建議的修改內容——在你準備合併之前，它們會存放在獨立的資料夾中。
 
-這種分離至關重要。您可以同時處理多個變更而不會產生衝突。在變更影響主規格之前，您可以先審查該變更。當您歸檔一個變更時，它的 delta（差異）就會乾淨地合併到唯一真相源中。
+這種分離設計是核心要點：你可以同時進行多個變更提案而不會產生衝突；可以在變更影響主規格文件之前先行審查；當歸檔變更時，其增量內容會乾淨地合併進真實來源中。
 
-## Specs (規格)
+## Specs
 
-Specs 使用結構化的需求和情境來描述您的系統行為。
+Specs（規格文件）透過結構化的需求與場景描述系統的運作行為。
 
-### 結構 (Structure)
+### 結構
 
 ```
 openspec/specs/
 ├── auth/
-│   └── spec.md           # 身份驗證行為
+│   └── spec.md           # 驗證行為
 ├── payments/
-│   └── spec.md           # 付款處理
+│   └── spec.md           # 支付流程處理
 ├── notifications/
 │   └── spec.md           # 通知系統
 └── ui/
-    └── spec.md           # UI 行為和主題
+    └── spec.md           # UI 行為與主題
 ```
 
-請根據領域（domain）來組織規格 — 這些是對您的系統有意義的邏輯分組。常見模式包括：
+依領域組織規格文件——也就是對你的系統而言有意義的邏輯分組。常見模式：
 
-- **按功能區域 (By feature area)**：`auth/`, `payments/`, `search/`
-- **按元件 (By component)**：`api/`, `frontend/`, `workers/`
-- **按邊界上下文 (By bounded context)**：`ordering/`, `fulfillment/`, `inventory/`
+- **依功能領域劃分**：`auth/`、`payments/`、`search/`
+- **依元件劃分**：`api/`、`frontend/`、`workers/`
+- **依界限上下文劃分**：`ordering/`、`fulfillment/`、`inventory/`
 
-### 規格格式 (Spec Format)
+### 規格格式
 
-一個 spec 包含需求，每個需求都附帶情境（scenarios）：
+一份規格文件包含需求，每個需求下又有對應的場景：
 
 ```markdown
-# Auth Specification (身份驗證規格)
+# 驗證規格書
 
-## Purpose (目的)
-應用程式的身份驗證和會話管理。
+## 目的
+應用程式的驗證與工作階段管理功能。
 
-## Requirements (需求)
+## 需求
 
-### Requirement: User Authentication (使用者身份驗證)
-系統必須在成功登入後發出 JWT token。
+### 需求：使用者驗證
+系統應在使用者成功登入時核發 JWT 權杖。
 
-#### Scenario: Valid credentials (有效憑證)
-- GIVEN a user with valid credentials (給定一個具有有效憑證的使用者)
-- WHEN the user submits login form (當使用者提交登入表單時)
-- THEN a JWT token is returned (則會返回一個 JWT token)
-- AND the user is redirected to dashboard (並且使用者被導向到儀表板)
+#### 場景：憑證有效
+- GIVEN 一位持有有效憑證的使用者
+- WHEN 使用者提交登入表單
+- THEN 返回 JWT 權杖
+- AND 使用者被重新導向至儀表板
 
-#### Scenario: Invalid credentials (無效憑證)
-- GIVEN invalid credentials (給定無效的憑證)
-- WHEN the user submits login form (當使用者提交登入表單時)
-- THEN an error message is displayed (則會顯示一個錯誤訊息)
-- AND no token is issued (並且不會發出任何 token)
+#### 場景：憑證無效
+- GIVEN 無效憑證
+- WHEN 使用者提交登入表單
+- THEN 顯示錯誤訊息
+- AND 不核發任何權杖
 
-### Requirement: Session Expiration (會話過期)
-系統必須在 30 分鐘不活動後使會話失效。
+### 需求：工作階段逾期
+系統必須在 30 分鐘無活動後使工作階段失效。
 
-#### Scenario: Idle timeout (閒置超時)
-- GIVEN an authenticated session (給定一個已驗證的會話)
-- WHEN 30 minutes pass without activity (當經過 30 分鐘沒有活動時)
-- THEN the session is invalidated (則該會話被使失效)
-- AND the user must re-authenticate (並且使用者必須重新進行身份驗證)
+#### 場景：閒置逾時
+- GIVEN 已驗證的工作階段
+- WHEN 經過 30 分鐘無任何活動
+- THEN 工作階段失效
+- AND 使用者必須重新驗證
 ```
 
 **關鍵元素：**
 
-| Element (元素) | Purpose (目的) |
+| 元素 | 用途 |
 |---------|---------|
-| `## Purpose` | 對此規格領域的高層次描述 |
+| `## Purpose` | 本規格領域的高階說明 |
 | `### Requirement:` | 系統必須具備的特定行為 |
-| `#### Scenario:` | 需求實際運作的一個具體範例 |
-| SHALL/MUST/SHOULD | RFC 2119 關鍵字，指示需求的強度 |
+| `#### Scenario:` | 需求在實際運作中的具體範例 |
+| SHALL/MUST/SHOULD | RFC 2119 關鍵字，用於標示需求的強制程度 |
 
-### 為何這樣建構規格 (Why Structure Specs This Way)
+### 為何採用此規格結構
 
-**需求是「What」（要做什麼）** — 它陳述了系統應該做的事情，而無需指定實作細節。
+**需求是「做什麼」**——說明系統應該達成什麼目標，但不指定實作方式。
 
-**情境是「When」（何時發生）** — 它提供了可以被驗證的具體範例。好的情境：
-- 是可測試的（您可以為它們編寫自動化測試）
-- 涵蓋了正常路徑和邊緣案例
-- 使用 Given/When/Then 或類似結構化的格式
+**場景是「何時發生」**——提供可驗證的具體範例。優質的場景：
+- 可進行測試（你可以為其編寫自動化測試）
+- 同時涵蓋正常流程與邊界情況
+- 使用 Given/When/Then 或類似的結構化格式
 
-**RFC 2119 關鍵字** (SHALL, MUST, SHOULD, MAY) 用於傳達意圖：
-- **MUST/SHALL** — 絕對要求
-- **SHOULD** — 建議，但存在例外情況
-- **MAY** — 可選的
+**RFC 2119 關鍵字**（SHALL、MUST、SHOULD、MAY）用於傳達需求強度：
+- **MUST/SHALL** — 強制性要求
+- **SHOULD** — 建議遵循，但允許例外
+- **MAY** — 可選項目
 
-### 什麼是規格（Spec）(What a Spec Is - and Is Not)
+### 規格文件的定位（能做與不能做的事）
 
-一個 spec 是一個**行為合約 (behavior contract)**，而不是一份實作計畫。
+規格文件是**行為契約**，而非實作計畫。
 
-好的規格內容：
-- 用使用者或下游系統可以觀察到的行為
-- 輸入、輸出和錯誤條件
-- 外部限制（安全性、隱私密、可靠性、相容性）
-- 可以被測試或明確驗證的情境
+優質規格文件的內容應包含：
+- 使用者或下游系統依賴的可觀察行為
+- 輸入、輸出與錯誤條件
+- 外部限制（安全性、隱私性、可靠性、相容性）
+- 可進行測試或明確驗證的場景
 
-規格中應避免的內容：
+規格文件中應避免出現：
 - 內部類別/函式名稱
-- 函式庫或框架選擇
-- 逐步的實作細節
-- 詳細的執行計畫（這些屬於 `design.md` 或 `tasks.md`）
+- 程式庫或框架的選擇
+- 逐步實作細節
+- 詳細執行計畫（這類內容應放在 `design.md` 或 `tasks.md` 中）
 
-快速測試：
-- 如果實作可以改變而不會改變外部可見的行為，那麼它可能不應包含在規格中。
+快速驗證原則：
+- 如果實作方式變更不會影響外部可見行為，那麼這類內容大概率不屬於規格文件。
 
-### 保持輕量化：漸進式嚴謹性 (Progressive Rigor)
+### 保持輕量：漸進式嚴格度
 
-OpenSpec 旨在避免官僚主義。請使用仍能使變更可驗證的最輕量級別。
+OpenSpec 旨在避免官僚流程，請使用能確保變更可驗證的最低強度等級。
 
-**Lite spec（預設）:**
-- 簡短的、以行為為先導向的需求
-- 清晰的範圍和非目標 (non-goals)
-- 少數具體的接受檢查點 (acceptance checks)
+**輕量規格（預設）：**
+- 簡短的行為導向需求
+- 清楚的範圍與非目標
+- 數項具體的驗收標準
 
-**Full spec（用於高風險情況）:**
-- 跨團隊或跨儲存庫的變更
-- API/合約變更、遷移、安全/隱私密考量
-- 存在歧義可能導致昂貴重工的變更
+**完整規格（適用於高風險場景）：**
+- 跨團隊或跨程式庫的變更
+- API/介面合約變更、遷移、安全性/隱私性相關變更
+- 模糊性可能導致高成本返工的變更
 
-大多數變更都應該保持在 Lite 模式。
+大部分變更應使用輕量模式即可。
 
-### 人類與代理 (Agent) 的協作
+### 人機協作模式
 
-在許多團隊中，人類負責探索，而代理（agent）則負責起草文檔。預期的流程是：
+在多數團隊中，人類負責探索方向，AI 代理負責起草產出文件，預期的流程如下：
 
-1. 人類提供意圖、上下文和限制。
-2. 代理將此內容轉換為以行為為先導向的需求和情境。
-3. 代理將實作細節保留在 `design.md` 和 `tasks.md` 中，而不是 `spec.md`。
-4. 驗證確認結構和清晰度後進行實作。
+1. 人類提供意圖、上下文與限制條件。
+2. AI 代理將其轉換為行為導向的需求與場景。
+3. AI 代理將實作細節保留在 `design.md` 與 `tasks.md` 中，而非 `spec.md`。
+4. 在實作前透過驗證確認文件的結構與清晰度。
 
-這確保了規格對人類來說是可讀的，對代理來說是一致的。
+這樣能確保規格文件對人類而言易於閱讀，對 AI 代理而言則保持一致。
 
-## Changes (變更)
+## 變更提案
 
-一個 Change 是對您系統的建議修改，它被打包成一個包含所有必要資訊以理解和實作該變更的資料夾。
+變更提案是對系統的建議修改內容，被封裝成一個資料夾，內含理解與實作該變更所需的所有文件。
 
-### 變更結構 (Change Structure)
+### 變更結構
 
 ```
 openspec/changes/add-dark-mode/
-├── proposal.md           # 原因和內容
-├── design.md             # 如何做（技術方法）
+├── proposal.md           # 原因與內容
+├── design.md             # 實作方式（技術方案）
 ├── tasks.md              # 實作檢查清單
-├── .openspec.yaml        # 變更元數據（可選）
-└── specs/                # Delta specs (差異規格)
+├── .openspec.yaml        # 變更中繼資料（選填）：schema、建立時間、跳過規格檢查
+└── specs/                # 增量規格
     └── ui/
-        └── spec.md       # ui/spec.md 中發生了什麼變化
+        └── spec.md       # ui/spec.md 的變更內容
 ```
 
-每個變更都是自包含的。它包含：
-- **Artifacts (文檔)** — 捕捉意圖、設計和任務的文件
-- **Delta specs (差異規格)** — 關於所新增、修改或移除內容的規格
-- **Metadata (元數據)** — 此特定變更的可選配置
+每個變更都是獨立的，包含以下內容：
+- **Artifacts（產出文件）**：記錄意圖、設計與任務的文件
+- **Delta specs（增量規格）**：描述新增、修改或刪除內容的規格文件
+- **Metadata（中繼資料）**：針對此特定變更的選填配置
 
-### 為何變更是資料夾 (Why Changes Are Folders)
+### 為何將變更封裝為資料夾
 
-將變更打包成一個資料夾有幾個好處：
+將變更封裝為資料夾有以下好處：
 
-1. **一體化。** 提案、設計、任務和規格都存在於同一個地方。無需在不同的位置尋找。
-2. **並行工作。** 多個變更可以同時存在而不會相互衝突。當 `fix-auth-bug` 正在進行時，也可以著手處理 `add-dark-mode`。
-3. **清晰的歷史記錄。** 當被歸檔後，變更會移動到 `changes/archive/`，並保留其完整的上下文。您可以回顧並了解不僅僅是「什麼改變了」，還有「為什麼改變」。
-4. **易於審查。** 變更資料夾很容易進行審查 — 打開它，閱讀提案，檢查設計，查看規格差異 (spec deltas)。
+1. **所有內容集中存放**：提案、設計、任務與規格文件都在同一個位置，無需在多個地方搜尋。
+2. **支援平行作業**：多個變更可同時存在而不會產生衝突，例如在進行 `add-dark-mode` 的同時，也可以推進 `fix-auth-bug` 的變更。
+3. **完整的歷史紀錄**：歸檔時變更會連同完整上下文一起移至 `changes/archive/`，往後查詢時不僅能知道改了什麼，還能理解背後的緣由。
+4. **便於審查**：變更資料夾易於審閱——打開資料夾、閱讀提案、查看設計、確認規格增量即可。
 
-## Artifacts (文檔)
+## 產出文件
 
-Artifacts 是指導工作的變更內部的文件。
+Artifacts（產出文件）是變更中用於引導工作的各類文件。
 
-### 文檔流程 (The Artifact Flow)
+### 產出文件流程
 
 ```
 proposal ──────► specs ──────► design ──────► tasks ──────► implement
     │               │             │              │
-   why            what           how          steps
- + scope        changes       approach      to take
+   原因            內容           方式           步驟
+  + 範圍         變更內容        方案           執行
 ```
 
-Artifacts 是相互依賴的。每個 artifact 都為下一個提供了上下文。
+各產出文件層層遞進，每一份文件都為下一份提供上下文。
 
-### 文檔類型 (Artifact Types)
+### 產出文件類型
 
-#### Proposal (`proposal.md`)
+#### 提案（`proposal.md`）
 
-提案捕捉高層次的**意圖、範圍和方法**。
+提案在高階層面記錄**意圖**、**範圍**與**方案**。
 
 ```markdown
-# Proposal: Add Dark Mode (提案：新增深色模式)
+# 提案：新增深色模式
 
-## Intent (意圖)
-使用者要求提供深色模式選項，以減少夜間使用時的眼睛疲勞，並匹配系統偏好設定。
+## 意圖
+使用者請求新增深色模式選項，以減少夜間使用時的視覺疲勞，並符合系統偏好設定。
 
-## Scope (範圍)
-包含的內容 (In scope):
-- 設定中的主題切換開關
-- 系統偏好的偵測
-- 將偏好儲存到 localStorage 中
+## 範圍
+範圍內：
+- 設定頁面中的主題切換開關
+- 系統偏好偵測
+- 將偏好設定儲存至 localStorage
 
-不包含的內容 (Out of scope):
-- 客製化顏色主題（未來工作）
-- 按頁面設定的主題覆蓋
+範圍外：
+- 自訂色彩主題（後續功能）
+- 單頁面主題覆蓋設定
 
-## Approach (方法)
-使用 CSS custom properties 進行主題化，並搭配 React context 進行狀態管理。在首次載入時偵測系統偏好，允許手動覆蓋。
+## 方案
+使用 CSS 自訂屬性實現主題切換，搭配 React Context 進行狀態管理。首次載入時偵測系統偏好，同時允許使用者手動覆蓋。
 ```
 
-**何時更新提案：**
-- 範圍的變更（縮小或擴大）
-- 意圖的澄清（對問題有更好的理解）
-- 方法論發生根本性轉變
+**提案更新時機：**
+- 範圍發生調整（縮小或擴大）
+- 意圖更加明確（對問題有更深入的理解）
+- 方案發生根本性調整
 
-#### Specs (規格)
+#### 規格文件（`specs/` 中的增量規格）
 
-Delta specs (差異規格，位於 `specs/` 中) 描述了相對於現有規格**「什麼正在改變」**。請參閱下方的 [Delta Specs](#delta-specs)。
+增量規格描述相對於目前規格的**變更內容**，詳見下方的 [增量規格](#delta-specs) 小節。
 
-#### Design (`design.md`)
+#### 設計文件（`design.md`）
 
-設計捕捉**技術方法和架構決策**。
+設計文件記錄**技術方案**與**架構決策**。
 
 ````markdown
-# Design: Add Dark Mode (設計：新增深色模式)
+# 設計：新增深色模式
 
-## Technical Approach (技術方法)
-透過 React Context 管理主題狀態，以避免 prop drilling（屬性傳遞）。CSS custom properties 使得無需切換類別即可實現運行時切換。
+## 技術方案
+主題狀態透過 React Context 管理，避免屬性透傳。CSS 自訂屬性支援執行時切換，無需切換 class。
 
-## Architecture Decisions (架構決策)
+## 架構決策
 
-### Decision: Context over Redux (Context 優於 Redux)
-使用 React Context 來管理主題狀態，因為：
-- 簡單的二元狀態（淺色/深色）
-- 沒有複雜的狀態轉換
-- 有助於避免引入 Redux 依賴
+### 決策：採用 Context 而非 Redux
+選擇 React Context 管理主題狀態的原因：
+- 僅需處理二元狀態（淺色/深色）
+- 無複雜的狀態流轉
+- 避免引入 Redux 依賴
 
-### Decision: CSS Custom Properties (CSS 自定義屬性)
-使用 CSS variables 而非 CSS-in-JS，因為：
-- 與現有的樣式表相容
-- 無運行時開銷
-- 是瀏覽器原生的解決方案
+### 決策：採用 CSS 自訂屬性
+選擇 CSS 變數而非 CSS-in-JS 的原因：
+- 可與現有樣式表協同運作
+- 無執行時開銷
+- 瀏覽器原生支援的方案
 
-## Data Flow (資料流)
+## 資料流
 ```
 ThemeProvider (context)
        │
@@ -295,113 +295,113 @@ ThemeToggle ◄──► localStorage
 CSS Variables (applied to :root)
 ```
 
-## File Changes (檔案變更)
-- `src/contexts/ThemeContext.tsx` (新增)
-- `src/components/ThemeToggle.tsx` (新增)
-- `src/styles/globals.css` (修改)
+## 檔案變更
+- `src/contexts/ThemeContext.tsx` (new)
+- `src/components/ThemeToggle.tsx` (new)
+- `src/styles/globals.css` (modified)
 ````
 
-**何時更新設計：**
-- 實作發現方法論不可行
-- 發現更好的解決方案
-- 依賴項或限制發生變化
+**設計文件更新時機：**
+- 實作過程中發現方案不可行
+- 發現更優的解決方案
+- 依賴或限制條件發生變化
 
-#### Tasks (`tasks.md`)
+#### 任務清單（`tasks.md`）
 
-Tasks 是**實作檢查清單** — 帶有勾選框的具體步驟。
-
-```markdown
-# Tasks (任務)
-
-## 1. Theme Infrastructure (主題基礎架構)
-- [ ] 1.1 Create ThemeContext with light/dark state (建立包含淺色/深色狀態的主題 Context)
-- [ ] 1.2 Add CSS custom properties for colors (新增顏色用的 CSS 自定義屬性)
-- [ ] 1.3 Implement localStorage persistence (實作 localStorage 持久化)
-- [ ] 1.4 Add system preference detection (新增系統偏好偵測)
-
-## 2. UI Components (UI 元件)
-- [ ] 2.1 Create ThemeToggle component (建立主題切換元件)
-- [ ] 2.2 Add toggle to settings page (在設定頁面中加入切換開關)
-- [ ] 2.3 Update Header to include quick toggle (更新標頭以包含快速切換功能)
-
-## 3. Styling (樣式設計)
-- [ ] 3.1 Define dark theme color palette (定義深色主題的顏色調色板)
-- [ ] 3.2 Update components to use CSS variables (更新元件以使用 CSS 變數)
-- [ ] 3.3 Test contrast ratios for accessibility (測試可存取性對比度)
-```
-
-**任務最佳實踐：**
-- 將相關任務分組到標題下
-- 使用層級化的編號（1.1, 1.2 等）
-- 保持任務足夠小，可以在一次工作階段完成
-- 完成後勾選任務
-
-## Delta Specs (差異規格)
-
-Delta specs 是讓 OpenSpec 適用於現有系統開發 (brownfield development) 的關鍵概念。它們描述**「什麼正在改變」**，而不是重述整個規格。
-
-### 格式 (The Format)
+任務清單是**實作檢查清單**，包含帶有核取方塊的具體步驟。
 
 ```markdown
-# Delta for Auth (身份驗證的差異規格)
+# 任務清單
 
-## ADDED Requirements (新增的需求)
+## 1. 主題基礎設施
+- [ ] 1.1 建立具備淺色/深色狀態的 ThemeContext
+- [ ] 1.2 新增用於色彩的 CSS 自訂屬性
+- [ ] 1.3 實作 localStorage 持久化儲存
+- [ ] 1.4 新增系統偏好偵測功能
 
-### Requirement: Two-Factor Authentication (雙因素身份驗證)
-系統必須支援基於 TOTP 的雙因素身份驗證。
+## 2. UI 元件
+- [ ] 2.1 建立 ThemeToggle 元件
+- [ ] 2.2 在設定頁面新增切換開關
+- [ ] 2.3 更新 Header 以加入快速切換功能
 
-#### Scenario: 2FA enrollment (2FA 註冊)
-- GIVEN a user without 2FA enabled (給定一個未啟用 2FA 的使用者)
-- WHEN the user enables 2FA in settings (當使用者在設定中啟用 2FA 時)
-- THEN a QR code is displayed for authenticator app setup (則會顯示用於認證器應用程式的 QR code)
-- AND the user must verify with a code before activation (並且使用者必須使用代碼進行驗證才能激活)
-
-#### Scenario: 2FA login (2FA 登入)
-- GIVEN a user with 2FA enabled (給定一個已啟用 2FA 的使用者)
-- WHEN the user submits valid credentials (當使用者提交有效的憑證時)
-- THEN an OTP challenge is presented (則會呈現一個 OTP 挑戰)
-- AND login completes only after valid OTP (並且只有在有效的 OTP 後登入才會完成)
-
-## MODIFIED Requirements (修改的需求)
-
-### Requirement: Session Expiration (會話過期)
-系統必須在 15 分鐘不活動後使會話失效。
-(先前：30 分鐘)
-
-#### Scenario: Idle timeout (閒置超時)
-- GIVEN an authenticated session (給定一個已驗證的會話)
-- WHEN 15 minutes pass without activity (當經過 15 分鐘沒有活動時)
-- THEN the session is invalidated (則該會話被使失效)
-
-## REMOVED Requirements (移除的需求)
-
-### Requirement: Remember Me (記住我)
-(已棄用，改為使用 2FA。使用者應在每次會話中重新進行身份驗證。)
+## 3. 樣式設計
+- [ ] 3.1 定義深色主題色彩組合
+- [ ] 3.2 更新元件以使用 CSS 變數
+- [ ] 3.3 測試無障礙對比度
 ```
 
-### Delta Sections (差異區塊)
+**任務清單最佳實踐：**
+- 將相關任務歸類在同一標題下
+- 使用階層式編號（如 1.1、1.2）
+- 任務粒度足夠小，可在單次工作週期內完成
+- 完成任務後立即勾選核取方塊
 
-| Section (區塊) | Meaning (意義) | What Happens on Archive (歸檔時發生什麼) |
+## 增量規格
+
+增量規格是 OpenSpec 適用於棕地開發（既有系統開發）的核心概念，它描述**變更內容**，而非重述整個規格文件。
+
+### 格式
+
+```markdown
+# 驗證模組增量規格
+
+## 新增需求
+
+### 需求：雙因素驗證
+系統必須支援基於 TOTP 的雙因素驗證。
+
+#### 場景：啟用雙因素驗證
+- GIVEN 未啟用雙因素驗證的使用者
+- WHEN 使用者在設定中啟用雙因素驗證
+- THEN 顯示用於驗證器應用程式設定的 QR Code
+- AND 使用者必須在啟用前輸入驗證碼完成驗證
+
+#### 場景：雙因素驗證登入
+- GIVEN 已啟用雙因素驗證的使用者
+- WHEN 使用者提交有效憑證
+- THEN 顯示一次性密碼挑戰
+- AND 僅在驗證通過一次性密碼後完成登入
+
+## 修改需求
+
+### 需求：工作階段逾期
+系統必須在 15 分鐘無活動後使工作階段失效。
+（先前為 30 分鐘）
+
+#### 場景：閒置逾時
+- GIVEN 已驗證的工作階段
+- WHEN 經過 15 分鐘無任何活動
+- THEN 工作階段失效
+
+## 刪除需求
+
+### 需求：記住我的登入狀態
+（因雙因素驗證功能上線而棄用。使用者應每次工作階段都重新驗證。）
+```
+
+### 增量區段說明
+
+| 區段 | 含義 | 歸檔時處理方式 |
 |---------|---------|------------------------|
-| `## ADDED Requirements` | 新的行為 | 追加到主規格中 |
-| `## MODIFIED Requirements` | 已更改的行為 | 取代現有的需求 |
-| `## REMOVED Requirements` | 已棄用的行為 | 從主規格中刪除 |
+| `## ADDED Requirements` | 新增行為 | 追加至主規格文件 |
+| `## MODIFIED Requirements` | 變更行為 | 取代既有需求 |
+| `## REMOVED Requirements` | 棄用行為 | 從主規格文件中刪除 |
 
-### 為何使用差異 (Deltas) 而非完整規格 (Why Deltas Instead of Full Specs)
+### 為何採用增量規格而非完整規格
 
-**清晰度。** 差異規格清楚地顯示了「什麼正在改變」。閱讀一份完整的規格，您必須在腦海中將其與當前版本進行比對。
+**清晰明確**：增量規格直接標示變更內容，若閱讀完整規格則需要自行與目前版本比對差異。
 
-**避免衝突。** 兩個變更可以觸及相同的規格文件而不會產生衝突，只要它們修改的是不同的需求即可。
+**避免衝突**：只要兩個變更修改的是不同需求，就可以同時修改同一份規格文件而不會產生衝突。
 
-**審查效率。** 審閱者會看到變更本身，而不是未改變的上下文。專注於重要的部分。
+**提升審查效率**：審查者只需關注變更內容，無需閱讀未修改的上下文，能專注在重點上。
 
-**適用於現有系統 (Brownfield fit)。** 大多數工作都是對現有行為進行修改。差異規格使修改成為一級公民 (first-class)，而非事後補救。
+**適合棕地開發**：大部分開發工作都是修改既有行為，增量規格能讓修改成為一等公民，而非事後補充的內容。
 
-## 架構定義 (Schemas)
+## 結構描述（Schemas）
 
-架構定義用於定義工作流程的產物類型及其依賴關係。
+結構描述用於定義工作流程中的產出物類型及其依賴關係。
 
-### 架構運作方式
+### 結構描述運作方式
 
 ```yaml
 # openspec/schemas/spec-driven/schema.yaml
@@ -409,69 +409,69 @@ name: spec-driven
 artifacts:
   - id: proposal
     generates: proposal.md
-    requires: []              # 沒有依賴，可以最先創建
+    requires: []              # 無依賴項，可優先建立
 
   - id: specs
     generates: specs/**/*.md
-    requires: [proposal]      # 需在 proposal 之後才能創建
+    requires: [proposal]      # 建立前需要提案（proposal）
 
   - id: design
     generates: design.md
-    requires: [proposal]      # 可以與 specs 並行創建
+    requires: [proposal]      # 可與規格書（specs）並行建立
 
   - id: tasks
     generates: tasks.md
-    requires: [specs, design] # 需先有 specs 和 design
+    requires: [specs, design] # 建立前需要規格書（specs）與設計（design）兩者
 ```
 
-**產物構成了一個依賴圖：**
+**產出物會形成依賴圖：**
 
 ```
                     proposal
-                   (根節點)
+                   (root node)
                        │
          ┌─────────────┴─────────────┐
          │                           │
          ▼                           ▼
       specs                       design
-   (需要:                  (需要:
+   (requires:                  (requires:
     proposal)                   proposal)
          │                           │
          └─────────────┬─────────────┘
                        │
                        ▼
                     tasks
-                (需要:
+                (requires:
                 specs, design)
 ```
 
-**依賴關係是賦能者，而非門檻。** 它顯示的是什麼是有可能被創建的，而不是你必須下一步創建什麼。如果你不需要設計，你可以跳過它。你可以在設計之前或之後創建 specs — 兩者都只依賴 proposal。
+**依賴關係是「使能條件」，而非「強制門檻」。** 它們顯示的是「可以建立什麼產出物」，而非「下一步必須建立什麼」。如果不需要設計（design），你可以跳過它；你可以在設計之前或之後建立規格書（specs）——兩者都僅依賴提案（proposal）。
 
-### 內建架構定義 (Built-in Schemas)
+### 內建結構描述
 
-**spec-driven** (預設值)
+**spec-driven**（預設）
 
-這是用於規格驅動開發的標準工作流程：
+適用於規格驅動開發的標準工作流程：
 
 ```
 proposal → specs → design → tasks → implement
 ```
 
-適用於：大多數需要先就規格達成一致再進行實作的功能性工作。
+適用場景：大多數功能開發工作，你希望在實作前先確認規格書（specs）。
 
-### 自定義架構定義 (Custom Schemas)
+### 自訂結構描述
 
-為您的團隊工作流程創建自定義架構定義：
+可為團隊的工作流程建立自訂結構描述：
 
 ```bash
-# 從零開始創建
+# 從頭建立
 openspec schema init research-first
 
-# 或從現有的架構定義複製一份
+# 或基於現有結構描述衍生
 openspec schema fork spec-driven research-first
 ```
 
-**範例自定義架構定義：**
+**自訂結構描述範例：**
 
 ```yaml
 # openspec/schemas/research-first/schema.yaml
@@ -483,23 +483,23 @@ artifacts:
 
   - id: proposal
     generates: proposal.md
-    requires: [research]   # 提案基於研究結果
+    requires: [research]   # 提案（proposal）基於研究結果擬定
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # 跳過 specs/design，直接進入任務階段
+    requires: [proposal]   # 跳過規格書（specs）/設計（design），直接進入任務（tasks）階段
 ```
 
-請參閱 [Customization](customization.md) 以獲取有關創建和使用自定義架構定義的完整詳情。
+如需建立與使用自訂結構描述的完整說明，請參閱 [自訂功能](customization.md)。
 
-## 歸檔 (Archive)
+## 封存
 
-歸檔是通過將變更的增量規格（delta specs）合併到主規格中，並保留該變更以供歷史追溯來完成一個變更的過程。
+封存操作會將變更的差分規格書（delta specs）合併至主規格書，並保留該變更的歷史記錄，從而完成整個變更流程。
 
-### 歸檔時會發生什麼事
+### 封存時的處理流程
 
 ```
-歸檔前：
+封存前：
 
 openspec/
 ├── specs/
@@ -508,22 +508,22 @@ openspec/
 └── changes/                         │
     └── add-2fa/                     │
         ├── proposal.md              │
-        ├── design.md                │ 合併 (merge)
+        ├── design.md                │ 合併
         ├── tasks.md                 │
         └── specs/                   │
             └── auth/                │
                 └── spec.md ─────────┘
 
 
-歸檔後：
+封存後：
 
 openspec/
 ├── specs/
 │   └── auth/
-│       └── spec.md        # 現在已包含 2FA 的要求事項
+│       └── spec.md        # 現已包含雙重驗證需求
 └── changes/
     └── archive/
-        └── 2025-01-24-add-2fa/    # 保留於歷史記錄
+        └── 2025-01-24-add-2fa/    # 保留於歷史記錄中
             ├── proposal.md
             ├── design.md
             ├── tasks.md
@@ -532,87 +532,87 @@ openspec/
                     └── spec.md
 ```
 
-### 歸檔流程
+### 封存流程
 
-1. **合併增量。** 將每個增量規格（delta spec）區塊（ADDED/MODIFIED/REMOVED）應用到對應的主規格上。
-2. **移至歸檔。** 變更資料夾會移動到 `changes/archive/`，並加上日期前綴以保持時間順序。
-3. **保留上下文。** 所有產物都會完整地保存在歸檔中。您隨時都可以回溯了解決策的依據。
+1. **合併差分內容。** 每個差分規格書的區段（ADDED/MODIFIED/REMOVED）會套用至對應的主規格書。
+2. **移至封存目錄。** 變更資料夾會移至 `changes/archive/`，並加上日期前綴以便依時間順序排序。
+3. **保留上下文。** 所有產出物都會完整保存在封存區中，你隨時可以回溯查看某次變更的緣由。
 
-### 為什麼歸檔很重要
+### 封存的重要性
 
-**乾淨的狀態。** 活動中的變更（`changes/`）只顯示進行中的工作。已完成的工作會被移開。
+**整潔的狀態。** 進行中的變更（`changes/`）只顯示尚未完成的工作，已完成的變更會被移出，不會干擾當前進度。
 
-**審計軌跡 (Audit trail)。** 歸檔保留了每個變更的完整上下文——不僅僅是「什麼改變了」，還有解釋原因的提案、說明方法的設計，以及所完成工作的任務。
+**審計軌跡。** 封存區保留了每一次變更的完整上下文——不僅包含變更內容本身，還包含說明變更原因的提案、說明實作方式的設計，以及記錄已完成工作的任務清單。
 
-**規格演進。** 隨著變更被歸檔，規格會有機地成長。每一次歸檔都會合併其增量，從而逐步構建起一份全面的規範。
+**規格書的演化。** 隨著變更陸續被封存，規格書會自然成長。每一次封存都會合併對應的差分內容，逐步累積成一份完整的系統規格書。
 
-## 各部分如何協作 (How It All Fits Together)
+## 整體運作架構
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              OPENSPEC 工作流程                                   │
+│                              OPENSPEC 流程                                   │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. 開始 (START)  │  /opsx:propose (core) 或 /opsx:new (expanded)           │
-│   │     變更 (CHANGE) │                                                         │
+│   │  1. 開始變更   │  /opsx:propose (核心) 或 /opsx:new (擴展流程)           │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. 創建 (CREATE) │  /opsx:ff 或 /opsx:continue (expanded workflow)         │
-│   │     產物 (ARTIFACTS) │  根據架構定義（schema dependencies）創建 proposal → specs → design → tasks │
-│   │                │                                                         │
+│   │  2. 建立產出物 │  /opsx:ff 或 /opsx:continue (擴展工作流程)               │
+│   │                │  依序建立提案 → 規格書 → 設計 → 任務清單                │
+│   │                │  （依據結構描述的依賴關係）                             │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  3. 實作 (IMPLEMENT) │  /opsx:apply                                            │
-│   │     任務 (TASKS)  │  完成任務，並勾選它們                  │
-│   │                │◄──── 根據學習情況更新產物                      │
+│   │  3. 實作任務   │  /opsx:apply                                            │
+│   │                │  依序完成任務，並逐項勾選完成                            │
+│   │                │◄──── 學習過程中同步更新產出物                          │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. 驗證 (VERIFY) │  /opsx:verify (可選)                                │
-│   │     工作 (WORK)   │  檢查實作是否符合規格                         │
+│   │  4. 驗證成果   │  /opsx:verify (可選)                                    │
+│   │                │  確認實作內容與規格書一致                               │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. 歸檔 (ARCHIVE) │────►│  增量規格合併到主規格中                   │    │
-│   │     變更 (CHANGE) │     │  變更資料夾移動到 archive/             │    │
-│   └────────────────┘     │  規格現已成為最新的真實來源 (source of truth)   │    │
+│   │  5. 封存變更   │────►│  差分規格書合併至主規格書                     │    │
+│   │                │     │  變更資料夾移至封存目錄                       │    │
+│   └────────────────┘     │  規格書即為更新後的唯一可信來源               │    │
+│                          └──────────────────────────────────────────────┘    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**良性循環：**
+**正向循環：**
 
-1. 規格描述當前的行為。
-2. 變更提出修改建議（以增量形式）。
-3. 實作使這些變更成為現實。
-4. 歸檔將增量合併到規格中。
-5. 規格現在描述了新的行為。
-6. 下一次變更會基於更新後的規格進行構建。
+1. 規格書描述當前系統行為
+2. 變更以差分形式提出修改方案
+3. 實作讓變更落地
+4. 封存將差分內容合併至規格書
+5. 規格書此時描述的是更新後的系統行為
+6. 下一次變更以更新後的規格書為基礎進行
 
-## 詞彙表 (Glossary)
+## 術語表
 
 | 術語 | 定義 |
-|------|------------|
-| **Artifact** | 變更中的一個文件（提案、設計、任務或增量規格） |
-| **Archive** | 完成變更並將其增量合併到主規格的過程 |
-| **Change** | 一個對系統的建議修改，以包含產物的資料夾形式呈現 |
-| **Delta spec** | 相對於當前規格所描述變更（ADDED/MODIFIED/REMOVED）的規格 |
-| **Domain** | 規格的一個邏輯分組（例如：`auth/`、`payments/`） |
-| **Requirement** | 系統必須具備的一個特定行為 |
-| **Scenario** | 對於某一要求的具體範例，通常以 Given/When/Then 格式呈現 |
-| **Schema** | 產物類型及其依賴關係的定義 |
-| **Spec** | 用於描述系統行為的規格，包含要求事項和情境 (scenarios) |
-| **Source of truth** | `openspec/specs/` 目錄，包含當前已同意的行為規範 |
+|------|------|
+| **產出物（Artifact）** | 變更內包含的文件，類型包含提案、設計、任務清單或差分規格書 |
+| **封存（Archive）** | 完成變更並將其差分內容合併至主規格書的流程 |
+| **變更（Change）** | 對系統提出的修改方案，以包含產出物的資料夾形式封裝 |
+| **差分規格書（Delta spec）** | 描述相對於當前規格書之變更內容（ADDED/MODIFIED/REMOVED）的規格書 |
+| **領域（Domain）** | 規格書的邏輯分組（例如 `auth/`、`payments/`） |
+| **需求（Requirement）** | 系統必須滿足的特定行為 |
+| **場景（Scenario）** | 需求的具體範例，通常採用 Given/When/Then 格式編寫 |
+| **結構描述（Schema）** | 產出物類型及其依賴關係的定義 |
+| **規格書（Spec）** | 描述系統行為的規格文件，包含需求與場景 |
+| **唯一可信來源（Source of truth）** | 儲存當前全體同意的系統行為的 `openspec/specs/` 目錄 |
 
-## 下一步驟 (Next Steps)
+## 後續步驟
 
-- [Getting Started](getting-started.md) - 實際操作的第一步
-- [Workflows](workflows.md) - 常見模式和何時使用它們
-- [Commands](commands.md) - 完整的指令參考
-- [Customization](customization.md) - 創建自定義架構定義並配置您的專案
+- [入門指南](getting-started.md) - 實用的第一步操作
+- [工作流程](workflows.md) - 常見模式與適用場景
+- [指令參考](commands.md) - 完整指令清單
+- [自訂功能](customization.md) - 建立自訂結構描述與配置專案

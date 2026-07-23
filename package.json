@@ -11,10 +11,10 @@
   },
   "devDependencies": {
     "@lzwme/fe-utils": "^1.9.2",
-    "@types/node": "^25.6.0",
-    "commander": "^14.0.3",
+    "@types/node": "^26.1.1",
+    "commander": "^15.0.0",
     "dotenv": "^17.4.2",
-    "tsx": "^4.19.0",
-    "vitepress": "^1.6.0"
+    "tsx": "^4.23.1",
+    "vitepress": "^2.0.0-alpha.18"
   }
 }

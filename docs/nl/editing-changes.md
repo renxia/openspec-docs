@@ -1,89 +1,91 @@
-# Het bewerken en itereren op een wijziging
+# Bewerken & Itereren op een Wijziging
 
-**Elk artefact in een wijziging is simpelweg een Markdown-bestand dat u op elk moment kunt bewerken.** Er is geen vergrendelde "planfase", geen goedkeuringspoort, en er is geen speciale bewerkmodus om te betreden. Wilt u het voorstel aanpassen nadat u bent begonnen met bouwen? Open `proposal.md` en pas deze aan. Realiseert u dat het ontwerp fout is halverwege de implementatie? Fix `design.md` en ga door. Dat is het volledige antwoord, en dit is bewust zo ontworpen.
+**Elk artefact in een wijziging is gewoon een Markdown-bestand dat je op elk moment kunt bewerken.** Er is geen vergrendelde 'planningsfase', geen goedkeuringspoort, geen speciale bewerkingsmodus om in te gaan. Wil je het voorstel aanpassen nadat je bent begonnen met bouwen? Open `proposal.md` en pas het aan. Merk je dat het ontwerp halverwege de implementatie fout is? Herstel `design.md` en ga door. Dat is het hele antwoord, en het is opzettelijk zo.
 
-Deze pagina is voor het moment waarop u denkt: "wacht, kan ik teruggaan en dat veranderen?" Ja. Zo werkt het, voor elk gebruikelijk geval.
+Deze pagina is voor het moment dat je denkt 'wacht, kan ik teruggaan en dat aanpassen?' Ja. Hier is hoe, voor elke veelvoorkomende situatie.
 
-## Twee manieren om iets te bewerken
+## Twee manieren om alles te bewerken
 
-U heeft altijd beide opties:
+Je hebt altijd beide:
 
-1. **Bewerk het bestand direct.** Artefacten zijn platte Markdown in `openspec/changes/<name>/`. Open `proposal.md`, `design.md`, `tasks.md` of een delta spec onder `specs/` in uw editor en pas deze aan. Niets anders is vereist.
+1. **Bewerk het bestand direct.** Artefacten zijn eenvoudige Markdown in `openspec/changes/<name>/`. Open `proposal.md`, `design.md`, `tasks.md`, of een delta-specificatie onder `specs/` in je editor en pas het aan. Niets anders is nodig.
 
-2. **Vraag uw AI om het te herzien.** Geef in de chat gewoon aan wat u wilt: "Pas het voorstel aan om de caching-ideeën te schrappen en een rate-limit sectie toe te voegen," of "het ontwerp moet een wachtrij gebruiken, geen polling." De AI bewerkt het artefact voor u, waarbij hij de rest van de wijziging als context gebruikt.
+2. **Vraag je AI om het te herzien.** In de chat zeg je gewoon wat je wilt: "Update the proposal to drop the caching idea and add a rate-limit section," of "the design should use a queue, not polling." De AI bewerkt het artefact voor jou, met de rest van de wijziging als context.
 
-Gebruik degene die past bij het moment. Een kleine formulering aanpassen? Bewerk het bestand. Een substantiële heroverweging? Laat de AI reviseren met volledige context.
+Gebruik wat het beste past bij het moment. Kleine aanpassing van de woorden? Bewerk het bestand. Fundamentele herziening? Laat de AI herzien met volledige context.
 
-## "Hoe update ik het voorstel (of de specificaties) nadat ik ben begonnen?"
+## "Hoe update ik het voorstel (of specificaties) nadat ik ben begonnen?"
 
-Update het dan. Dezelfde wijziging, verfijnd.
+Update het gewoon. Dezelfde wijziging, verfijnd.
 
-Als u de uitgebreide commando's gebruikt, is de natuurlijke flow: bewerk het artefact, voer vervolgens `/opsx:continue` uit om verder te gaan vanaf de nieuwe staat, of `/opsx:apply` om door te gaan met implementeren tegen het bijgewerkte plan. Als u de standaard `core` commando's gebruikt, bewerk dan het artefact en voer `/opsx:apply` uit; dit leest de huidige bestanden, dus het bouwt tegen wat de artefacten nu zeggen.
+Als je de uitgebreide opdrachten gebruikt, is de natuurlijke flow: bewerk het artefact, voer daarna `/opsx:continue` uit om op te pakken vanaf de nieuwe staat, of `/opsx:apply` om door te gaan met implementeren tegen de bijgewerkte planning. Als je de standaard `core`-opdrachten gebruikt, bewerk je het artefact en voer je `/opsx:apply` uit; het leest de huidige bestanden, dus het bouwt tegen wat de artefacten nu zeggen.
 
-Het mentale model: artefacten zijn het levende plan, geen ondertekend contract. De AI werkt altijd vanuit hun huidige inhoud, dus ze bewerken ze om de voortgang te sturen.
+Het mentale model: artefacten zijn de actuele planning, geen ondertekend contract. De AI werkt altijd vanuit hun huidige inhoud, dus bewerken ervan stuurt het werk.
 
 ```text
-U: Ik wil de aanpak van deze wijziging veranderen.
+You: I want to change the approach in this change.
 
-U: [bewerk design.md, of vertel de AI:]
-     Pas design.md aan om een achtergrondtaak in plaats van een synchrone oproep te gebruiken.
+You: [edit design.md, or tell the AI:]
+     Update design.md to use a background job instead of a synchronous call.
 
-AI:  design.md is bijgewerkt. De taallijst past nog steeds; wilt u dat ik doorga met toepassen?
+AI:  Updated design.md. The task list still fits; want me to continue applying?
 
-U: /opsx:apply
+You: /opsx:apply
 ```
 
-Dit beantwoordt een zeer veelgestelde vraag: er is geen afzonderlijk "voorstel updaten" commando, omdat dit niet nodig is. Het bestand is de waarheidbron, en het bewerken ervan (met de hand of via de AI) is de update.
+Dit beantwoordt een veelvoorkomende vraag: er is geen aparte 'update voorstel'-opdracht omdat je die niet nodig hebt. Het bestand is de bron van waarheid, en het bewerken ervan (met de hand of via de AI) is de update.
 
-## "Hoe ga ik terug om te beoordelen nadat ik heb geïmplementeerd?"
+## "Hoe ga ik terug naar reviewen na implementatie?"
 
-U hoeft er niet "terug te gaan", want u bent nooit weggegaan. De workflow is vloeiend: beoordelen, bewerken en implementatie zijn geen opeenvolgende fasen waarin u vastzit.
+Je hoeft niet 'terug te gaan', want je bent nooit weggegaan. De werkflow is vloeiend: reviewen, bewerken en implementatie zijn geen opeenvolgende fasen waarin je gevangen zit.
 
-Concreet, na enig werk met `/opsx:apply`:
+Concreet, na enige `/opsx:apply` werk:
 
-- Wilt u het plan opnieuw bekijken? Open de artefacten en lees ze door, of voer `openspec show <change>` uit in uw terminal voor een geconsolideerd overzicht.
-- Heeft u iets gevonden om te veranderen? Bewerk het artefact (of vraag de AI dit te doen), en ga verder.
-- Wilt u een gestructureerde controle dat de code overeenkomt met het plan? Voer `/opsx:verify` uit (uitgebreid commando). Dit rapporteert volledigheid, correctheid en coherentie zonder iets te blokkeren. Zie [Workflows: Verify](workflows.md#verify-check-your-work).
+- Wil je het plan opnieuw bekijken? Open de artefacten en lees ze, of voer `openspec show <change>` uit in je terminal voor een geconsolideerd overzicht.
+- Iets gevonden om te veranderen? Bewerk het artefact (of vraag de AI ernaar), ga dan verder.
+- Wil je een gestructureerde controle of de code overeenkomt met het plan? Voer `/opsx:verify` uit (uitgebreide opdracht). Het rapporteert volledigheid, correctheid en samenhang zonder iets te blokkeren. Zie [Werkflows: Verifiëren](workflows.md#verify-check-your-work).
 
-Er is geen "beoordelingsfase" om naar terug te keren, want beoordelen is iets wat u op elk moment kunt doen, inclusief na de implementatie.
+Er is geen 'reviewfase' om naar terug te keren, want reviewen is iets wat je op elk moment kunt doen, ook na implementatie.
 
-## "Ik heb de code met de hand bewerkt. Hoe breng ik dit in overeenstemming met OpenSpec?"
+## "Ik heb de code handmatig bewerkt. Hoe breng ik die in overeenstemming met OpenSpec?"
 
-Dit gebeurt voortdurend en dat is prima. U heeft iets in uw editor aangepast, en nu komen de code en de artefacten niet overeen. Breng ze weer in sync in welke richting dan ook waar is:
+Dit gebeurt constant en dat is prima. Je hebt iets aangepast in je editor, en nu zijn de code en de artefacten het oneens. Breng ze weer in sync in de richting die juist is:
 
-- **De code is nu correct, de specificatie is verouderd.** Update de delta spec (en taken, indien relevant) om het gedrag te beschrijven dat u daadwerkelijk hebt geleverd. De specificatie moet overeenkomen met de realiteit voordat u archiveert, want archiveren mergt de specificatie in uw waarheidbron.
-- **De specificatie is correct, de code is afgewandeld.** Blijf bouwen of repareren totdat de code overeenkomt met de specificatie.
+- **De code is nu correct, de specificatie is verouderd.** Update de delta-specificatie (en taken, indien relevant) om het gedrag te beschrijven dat je daadwerkelijk hebt uitgerold. De specificatie moet overeenkomen met de werkelijkheid voordat je archiveert, omdat archivering de specificatie samenvoegt met je bron van waarheid.
+- **De specificatie is correct, de code is afgedreven.** Blijf bouwen of repareren tot de code overeenkomt met de specificatie.
 
-Een snelle manier om mismatches te tonen is `/opsx:verify`: het leest uw artefacten en uw code en vertelt u waar ze van elkaar afwijken. Behandel de output als een takenlijst voor reconciliatie, en archiveer pas wanneer ze overeenkomen.
+Een snelle manier om afwijkingen te vinden is `/opsx:verify`: het leest je artefacten en je code en vertelt je waar ze afwijken. Behandel de uitvoer als een takenlijst voor reconciliatie, en archiveer zodra ze overeenkomen.
 
-Het principe: bij archivering worden uw specificaties de officiële waarheid. Dus voordat u archiveert, maak de specificaties eerlijk over wat de code doet. Handmatige bewerkingen zijn welkom; laat ze alleen niet stilletjes van de sync afwijken.
+Het principe: op het moment van archivering worden je specificaties de officiële waarheid. Dus voordat je archiveert, zorg dat de specificaties eerlijk zijn over wat de code doet. Handmatige bewerkingen zijn welkom; laat ze alleen niet stilaan de specificatie uit sync brengen.
 
-## Het verfijnen van een voorstel waar u niet tevreden mee bent
+## Een voorstel verfijnen waar je niet tevreden over bent
 
-Als een gegenereerd voorstel tekortschiet, heeft u drie goede opties:
+Als een gegenereerd voorstel niet goed zit, heb je drie goede opties:
 
-- **Itereer op dezelfde plek.** Vertel de AI wat er mis is ("de scope is te breed, schrap de adminfuncties") en laat deze reviseren. Het goedkoopst en meestal het juiste.
-- **Eerst verkennen, dan opnieuw voorstellen.** Als het probleem is dat het idee zelf onduidelijk is, stap dan terug naar `/opsx:explore`, denk erover na, en laat een scherpere voorstel daaruit komen. Zie [Explore First](explore.md).
-- **Begin opnieuw.** Als de intentie fundamenteel is veranderd, kan een nieuwe wijziging duidelijker zijn dan het pleisteren van de oude.
+- **Itereer ter plaatse.** Vertel de AI wat er mis is ("the scope is too broad, drop the admin features") en laat het herzien. Goedkoopst en meestal juist.
+- **Verken eerst, en stel daarna opnieuw voor.** Als het probleem is dat het idee zelf onduidelijk is, stap terug naar `/opsx:explore`, denk het na en laat een scherper voorstel daaruit voortkomen. Zie [Eerst Verken](explore.md).
+- **Begin opnieuw.** Als de intentie fundamenteel is veranderd, kan een nieuwe wijziging duidelijker zijn dan het oude patchen.
 
-Die laatste optie heeft zijn eigen beslissingsgids, zo meteen.
+Die laatste optie heeft zijn eigen beslissingsgids, hierna.
 
-## Wanneer updaten versus een nieuwe wijziging starten
+## Wanneer updaten vs. een nieuwe wijziging starten
 
-Korte versie: **update wanneer het hetzelfde werk is dat verfijnd is; start nieuw wanneer de intentie fundamenteel is veranderd of de scope is geëxplodeerd in ander werk.**
+Korte versie: **updaten als het hetzelfde verfijnde werk is; een nieuwe starten als de intentie fundamenteel is veranderd of de scope is geëxplodeerd in ander werk.**
 
-- Zelfde doel, betere aanpak? Update.
-- Scope vernauwen (nu de MVP leveren, meer later)? Update, archiveer dan, en daarna een nieuwe wijziging voor fase twee.
-- Het probleem zelf is veranderd ("dark mode toevoegen" is geworden "een volledig themasysteem bouwen")? Nieuwe wijziging.
+- Zelfde doel, betere aanpak? Updaten.
+- Scope verkleinen (de MVP nu uitrollen, meer later)? Updaten, dan archiveren, dan een nieuwe wijziging voor fase twee.
+- Het probleem zelf is veranderd ("add dark mode" werd "build a full theming system")? Nieuwe wijziging.
 
-Er is een volledige flowchart en werkende voorbeelden in [Workflows: When to Update vs Start Fresh](workflows.md#when-to-update-vs-start-fresh) en een diepere behandeling in [OPSX: When to Update vs. Start Fresh](opsx.md#when-to-update-vs-start-fresh).
+Er is een volledig stroomdiagram en uitgewerkte voorbeelden in [Werkflows: Wanneer Updaten vs. Opnieuw Beginnen](workflows.md#when-to-update-vs-start-fresh) en een diepere behandeling in [OPSX: Wanneer Updaten vs. Opnieuw Beginnen](opsx.md#when-to-update-vs-start-fresh).
 
 ## Een opmerking over taken
 
-`tasks.md` is een levende checklist, geen bevroren plan. Naarmate u implementeert, kunt u taken toevoegen die u ontdekt heeft, die onnodig bleken te verwijderen, of ze herschikken. De AI vinkt items af zodra deze worden voltooid tijdens `/opsx:apply`, en hij hervat bij de eerste niet-gevinkte taak als u later terugkomt. Het bewerken van de lijst onderweg is verwacht.
+`tasks.md` is een levende checklist, geen bevroren planning. Tijdens het implementeren kun je taken toevoegen die je ontdekt, verwijdert die zich als onnodig blijken, of herschikken. De AI vinkt items af terwijl het ze voltooit tijdens `/opsx:apply`, en het hervat vanaf de eerste onvinkte taak als je later terugkomt. Bewerken van de lijst tijdens de vlucht is verwacht.
 
-## Waar te gaan
-- [Workflows](workflows.md) - patronen, plus de beslissingsgids over updaten versus nieuw starten
-- [Explore First](explore.md) - de plek om naar terug te keren als een idee heroverwogen moet worden
-- [Commands](commands.md) - `/opsx:continue`, `/opsx:apply` en `/opsx:verify` in detail
-- [Concepts: Artifacts](concepts.md#artifacts) - waar elk artefact voor dient
+## Vervolgrichtingen
+
+- [Werkflows](workflows.md) - patronen, plus de update-vs-nieuw beslissingsgids
+- [Een Wijziging Reviewen](reviewing-changes.md) - de twee-minuten beoordeling op een plan voordat je het bouwt
+- [Eerst Verken](explore.md) - de plaats om naar terug te stappen wanneer een idee opnieuw moet worden doordacht
+- [Opdrachten](commands.md) - `/opsx:continue`, `/opsx:apply`, en `/opsx:verify` in detail
+- [Concepten: Artefacten](concepts.md#artifacts) - waarvoor elk artefact dient

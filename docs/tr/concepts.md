@@ -1,31 +1,31 @@
 # Kavramlar
 
-Bu rehber, OpenSpec'in temel fikirlerini ve bunların nasıl bir araya girdiğini açıklamaktadır. Pratik kullanım için lütfen [Başlangıç Rehberi](getting-started.md) ve [İş Akışları](workflows.md)'ne bakın.
+Bu kılavuz, OpenSpec'in arkasındaki temel fikirleri ve bunların nasıl bir arada çalıştığını açıklar. Pratik kullanım için [Başlarken](getting-started.md) ve [İş Akışları](workflows.md) belgelerine bakın.
 
 ## Felsefe
 
-OpenSpec dört ilke üzerine kurulmuştur:
+OpenSpec dört ilke etrafında inşa edilmiştir:
 
 ```
-fluid not rigid         — no phase gates, work on what makes sense
-iterative not waterfall — learn as you build, refine as you go
-easy not complex        — lightweight setup, minimal ceremony
-brownfield-first        — works with existing codebases, not just greenfield
+akışkan, katı değil        — faz kapıları yok, mantıklı olan üzerinde çalışın
+iteratif, şelale değil — yaparken öğrenin, ilerlerken iyileştirin
+kolay, karmaşık değil       — hafif kurulum, minimum formalite
+brownfield öncelikli        — sadece greenfield projeler değil, mevcut kod tabanlarıyla da çalışır
 ```
 
-### Bu İlkeler Neden Önemli
+### Bu İlkelerin Neden Önemli Olduğu
 
-**Fluid not rigid.** Geleneksel spesifikasyon sistemleri sizi aşamalara kilitler: önce planlarsınız, sonra uygularsınız ve bitti. OpenSpec daha esnektir — işiniz için mantıklı olan herhangi bir sırayla çıktı oluşturabilirsiniz.
+**Akışkan, katı değil.** Geleneksel spec sistemleri sizi belirli fazlara hapseder: önce planlama yaparsınız, sonra uygulama gerçekleştirirsiniz, sonra iş tamamlanır. OpenSpec daha esnektir — çalışmanız için mantıklı olan herhangi bir sırayla artifact'lar oluşturabilirsiniz.
 
-**Iterative not waterfall.** Gereksinimler değişir. Anlayış derinleşir. Başlangıçta iyi bir yaklaşım gibi görünen şey, kod tabanını gördükten sonra geçerli olmayabilir. OpenSpec bu gerçeği benimser.
+**İteratif, şelale değil.** Gereksinimler değişir. Anlayışınız derinleşir. Başlangıçta iyi bir yaklaşım gibi görünen şey, kod tabanını inceledikten sonra geçerliliğini yitirebilir. OpenSpec bu gerçeği benimser.
 
-**Easy not complex.** Bazı spesifikasyon çerçeveleri kapsamlı kurulumlar, katı formatlar veya ağır süreçler gerektirir. OpenSpec yolunuza engel olmaz. Saniyeler içinde başlatın, hemen çalışmaya başlayın, yalnızca ihtiyacınız olursa özelleştirin.
+**Kolay, karmaşık değil.** Bazı spec çerçeveleri kapsamlı kurulum, katı formatlar veya ağır süreçler gerektirir. OpenSpec işinize karışmaz. Saniyeler içinde başlatın, hemen çalışmaya başlayın, yalnızca ihtiyacınız olduğunda özelleştirin.
 
-**Brownfield-first.** Yazılım işlerinin çoğu sıfırdan inşa etmek değildir — mevcut sistemleri değiştirmektir. OpenSpec'in delta tabanlı yaklaşımı, sadece yeni sistemler tanımlamak yerine mevcut davranışlara değişiklik belirtmeyi kolaylaştırır.
+**Brownfield öncelikli.** Çoğu yazılım çalışması sıfırdan yapılmaz — mevcut sistemleri değiştirmektir. OpenSpec'in delta tabanlı yaklaşımı, yalnızca yeni sistemleri tanımlamakla kalmayıp mevcut davranışlardaki değişiklikleri belirtmeyi kolaylaştırır.
 
-## Genel Bakış
+## Genel Resim
 
-OpenSpec, işinizi iki ana alana göre düzenler:
+OpenSpec çalışmalarınızı iki ana alana düzenler:
 
 ```
 ┌────────────────────────────────────────────────────────────────────┐
@@ -34,259 +34,260 @@ OpenSpec, işinizi iki ana alana göre düzenler:
 │   ┌─────────────────────┐      ┌───────────────────────────────┐   │
 │   │       specs/        │      │         changes/              │   │
 │   │                     │      │                               │   │
-│   │  Gerçeğin Kaynağı    │◄─────│  Önerilen Değişiklikler       │   │
-│   │  Sisteminizin       │ merge│  Her değişiklik = bir klasör     │   │
-│   │  şu anda nasıl çalıştığı │      │  Artifacts + deltas          │   │
+│   │  Source of truth    │◄─────│  Proposed modifications       │   │
+│   │  How your system    │ merge│  Each change = one folder     │   │
+│   │  currently works    │      │  Contains artifacts + deltas  │   │
 │   │                     │      │                               │   │
 │   └─────────────────────┘      └───────────────────────────────┘   │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
 ```
 
-**Specs**, gerçeğin kaynağıdır — sisteminizin şu anda nasıl davrandığını tanımlarlar.
+**Specs** (Özellik Tanımları) tek gerçek kaynaktır — sisteminizin mevcut çalışma şeklini tanımlarlar.
+**Changes** (Değişiklikler) önerilen modifikasyonlardır — birleştirmeye hazır olana kadar ayrı klasörlerde bulunur.
 
-**Changes (Değişiklikler)** ise önerilen modifikasyonlardır — bunları birleştirmeye hazır olana kadar ayrı klasörlerde tutulurlar.
+Bu ayrım çok önemlidir. Birden fazla değişiklik üzerinde çakışma olmadan paralel olarak çalışabilirsiniz. Ana spec'lere etkisi olmadan önce bir değişikliği inceleyebilirsiniz. Bir değişikliği arşivlediğinizde ise deltaları tek gerçek kaynağa sorunsuz bir şekilde birleştirilir.
 
-Bu ayrım çok önemlidir. Çatışma olmadan birden fazla değişiklik üzerinde çalışabilirsiniz. Ana specs'leri etkilemeden bir değişikliği inceleyebilirsiniz. Ve bir değişikliği arşivlediğinizde, deltaları gerçeğin kaynağına temiz bir şekilde birleşir.
+## Specs
 
-## Specs (Özellikler)
-
-Specs, sisteminizin davranışını yapılandırılmış gereksinimler ve senaryolar kullanarak tanımlar.
+Spec'ler, yapılandırılmış gereksinimler ve senaryolar kullanarak sisteminizin davranışını tanımlar.
 
 ### Yapı
+
 ```
 openspec/specs/
 ├── auth/
-│   └── spec.md           # Kimlik doğrulama davranışı
+│   └── spec.md           # Authentication behavior
 ├── payments/
-│   └── spec.md           # Ödeme işleme
+│   └── spec.md           # Payment processing
 ├── notifications/
-│   └── spec.md           # Bildirim sistemi
+│   └── spec.md           # Notification system
 └── ui/
-    └── spec.md           # UI davranışı ve temalar
+    └── spec.md           # UI behavior and themes
 ```
 
-Specs'leri, sisteminiz için mantıklı olan gruplamalara göre alanlara (domain) göre düzenleyin. Yaygın kalıplar:
+Spec'leri alan (domain) bazında düzenleyin — sisteminiz için mantıklı gruplamalar. Yaygın kalıplar:
 
 - **Özellik alanına göre**: `auth/`, `payments/`, `search/`
 - **Bileşene göre**: `api/`, `frontend/`, `workers/`
-- **Sınırlı bağlama (bounded context) göre**: `ordering/`, `fulfillment/`, `inventory/`
+- **Sınırlı bağlama göre**: `ordering/`, `fulfillment/`, `inventory/`
 
 ### Spec Formatı
 
-Bir spec, gereksinimleri içerir ve her bir gereksinimin senaryoları vardır:
+Bir spec, gereksinimleri içerir ve her gereksinimin birden fazla senaryosu vardır:
 
 ```markdown
-# Auth Specification (Kimlik Doğrulama Özelliği)
+# Auth Specification
 
-## Amaç
-Uygulama için kimlik doğrulama ve oturum yönetimi.
+## Purpose
+Authentication and session management for the application.
 
-## Gereksinimler
+## Requirements
 
-### Requirement: Kullanıcı Kimlik Doğrulaması
-Sistem, başarılı bir giriş sonrasında bir JWT tokenı vermELİDİR (SHALL).
+### Requirement: User Authentication
+The system SHALL issue a JWT token upon successful login.
 
-#### Scenario: Geçerli kimlik bilgileri
-- GIVEN geçerli kimlik bilgilere sahip bir kullanıcı
-- WHEN kullanıcı giriş formunu gönderir
-- THEN bir JWT tokenı döndürülür
-- AND kullanıcı kontrol paneline yönlendirilir
+#### Scenario: Valid credentials
+- GIVEN a user with valid credentials
+- WHEN the user submits login form
+- THEN a JWT token is returned
+- AND the user is redirected to dashboard
 
-#### Scenario: Geçersiz kimlik bilgileri
-- GIVEN geçersiz kimlik bilgileri
-- WHEN kullanıcı giriş formunu gönderir
-- THEN bir hata mesajı gösterilir
-- AND herhangi bir token verilmez
+#### Scenario: Invalid credentials
+- GIVEN invalid credentials
+- WHEN the user submits login form
+- THEN an error message is displayed
+- AND no token is issued
 
-### Requirement: Oturum Süresi Dolması
-Sistem, 30 dakikalık hareketsizlikten sonra oturumları sona erdirmELİDİR (MUST).
+### Requirement: Session Expiration
+The system MUST expire sessions after 30 minutes of inactivity.
 
-#### Scenario: Boşta kalma zaman aşımı
-- GIVEN kimlik doğrulanmış bir oturum
-- WHEN 30 dakika boyunca aktivite olmazsa
-- THEN oturum geçersiz kılınır
-- AND kullanıcı yeniden kimlik doğrulaması yapmalıdır
+#### Scenario: Idle timeout
+- GIVEN an authenticated session
+- WHEN 30 minutes pass without activity
+- THEN the session is invalidated
+- AND the user must re-authenticate
 ```
 
-**Temel öğeler:**
+**Temel elemanlar:**
 
-| Element | Amaç |
+| Eleman | Amaç |
 |---------|---------|
-| `## Purpose` | Bu spec'in alanına dair üst düzey açıklama |
+| `## Purpose` | Bu spec'ın alanına ilişkin yüksek seviyeli açıklama |
 | `### Requirement:` | Sistemin sahip olması gereken belirli bir davranış |
-| `#### Scenario:` | Gereksinimin somut bir örneği |
+| `#### Scenario:` | Gereksinimin gerçek dünyadaki somut çalıştırma örneği |
 | SHALL/MUST/SHOULD | Gereksinim gücünü belirten RFC 2119 anahtar kelimeleri |
 
-### Neden Specs'leri Bu Şekilde Yapılandırmak?
+### Neden Spec'leri Bu Şekilde Yapılandırıyoruz
 
-**Gereksinimler "ne"dir** — bunlar, uygulamayı belirtmeden ne yapması gerektiğini ifade eder.
+**Gereksinimler "ne" kısmıdır** — uygulama detaylarını belirtmeden sistemin ne yapması gerektiğini ifade ederler.
 
-**Senaryolar "ne zaman"dır** — Bunlar doğrulanabilen somut örneklerdir. İyi senaryolar:
+**Senaryolar "ne zaman" kısmıdır** — doğrulanabilir somut örnekler sunarlar. İyi senaryolar:
 - Test edilebilir (onlar için otomatik bir test yazabilirsiniz)
-- Hem mutlu yolu hem de uç durumları kapsar
+- Hem doğru yolu hem de kenar durumları kapsar
 - Given/When/Then veya benzeri yapılandırılmış format kullanır
 
-**RFC 2119 anahtar kelimeleri** (SHALL, MUST, SHOULD, MAY) niyeti iletir:
-- **MUST/SHALL** — mutlak gereklilik
-- **SHOULD** — tavsiye edilir, ancak istisnaları vardır
+**RFC 2119 anahtar kelimeleri** (SHALL, MUST, SHOULD, MAY) niyeti ifade eder:
+- **MUST/SHALL** — mutlak gereksinim
+- **SHOULD** — önerilir, ancak istisnalar vardır
 - **MAY** — isteğe bağlı
 
-### Bir Spec Nedir (ve Ne Değildir)?
+### Bir Spec Nedir (Ve Nedir)
 
-Bir spec, bir uygulama planı değil, bir **davranış sözleşmesidir**.
+Bir spec, bir **davranış sözleşmesidir**, uygulama planı değildir.
 
 İyi spec içeriği:
-- Kullanıcıların veya alıcı sistemlerin bağımlı olduğu gözlemlenebilir davranışlar
+- Kullanıcıların veya alt sistemlerin güvendiği gözlemlenebilir davranış
 - Girdiler, çıktılar ve hata koşulları
 - Harici kısıtlamalar (güvenlik, gizlilik, güvenilirlik, uyumluluk)
-- Test edilebilen veya açıkça doğrulanabilen senaryolar
+- Test edilebilir veya açıkça doğrulanabilir senaryolar
 
-Specs'lerde kaçınılması gerekenler:
+Spec'lerden kaçınılması gerekenler:
 - Dahili sınıf/fonksiyon adları
-- Kütüphane veya çerçeve seçimleri
-- Adım adım uygulama ayrıntıları
-- Detaylı yürütme planları (bunlar `design.md` veya `tasks.md` içinde yer almalıdır)
+- Kütüphane veya framework seçimleri
+- Adım adım uygulama detayları
+- Detaylı çalıştırma planları (bunlar `design.md` veya `tasks.md` içinde yer alır)
 
-Hızlı bir test:
-- Eğer uygulamanın değişmesi, dışarıdan görünen davranışı değiştirmeden yapabiliyorsa, muhtemelen spec'e ait değildir.
+Hızlı test:
+- Uygulama, dışarıdan görülen davranışı değiştirmeden değişebiliyorsa, muhtemelen spec içinde yer almamalıdır.
 
-### Hafif Tutun: Aşamalı Titizlik (Progressive Rigor)
+### Hafif Tutun: Artan Sıkılık (Progressive Rigor)
 
-OpenSpec bürokrasiyi önlemeyi amaçlar. Değişikliği doğrulanabilir kılan en hafif seviyeyi kullanın.
+OpenSpec, bürokrasiden kaçınmayı hedefler. Değişikliği hala doğrulanabilir kılan en hafif seviyeyi kullanın.
 
 **Hafif spec (varsayılan):**
 - Kısa, davranış odaklı gereksinimler
-- Açık kapsam ve hedef dışı konular
+- Net kapsam ve hedefler dışındakiler
 - Birkaç somut kabul kontrolü
 
 **Tam spec (daha yüksek risk için):**
-- Çapraz ekip veya çapraz depo değişiklikleri
+- Ekipler arası veya depolar arası değişiklikler
 - API/sözleşme değişiklikleri, geçişler, güvenlik/gizlilik endişeleri
-- Belirsizliğin pahalı yeniden işe neden olma ihtimali olan değişiklikler
+- Belirsizliğin pahalı yeniden çalışmaya neden olabileceği değişiklikler
 
 Çoğu değişiklik Hafif modda kalmalıdır.
 
-### İnsan + Agent İşbirliği
+### İnsan + Ajan (Agent) İşbirliği
 
-Birçok ekipte insanlar keşfeder ve agent'lar (yapay zeka) artifact'ları taslak haline getirir. Amaçlanan döngü şudur:
+Birçok ekipte, insanlar keşif yapar ve ajanlar (agent) eserlerin taslaklarını çıkarır. İstenen döngü şöyledir:
 
-1. İnsan niyeti, bağlam ve kısıtlamaları sağlar.
-2. Agent bunu davranış odaklı gereksinimlere ve senaryolara dönüştürür.
-3. Agent uygulama ayrıntılarını `spec.md` yerine `design.md` ve `tasks.md` içinde tutar.
-4. Doğrulama, uygulamadan önce yapının ve netliğin onaylanmasını sağlar.
+1. İnsan niyet, bağlam ve kısıtlamaları sağlar.
+2. Ajan bunu davranış odaklı gereksinimlere ve senaryolara dönüştürür.
+3. Ajan uygulama detaylarını `spec.md` yerine `design.md` ve `tasks.md` içinde tutar.
+4. Uygulamadan önce doğrulama, yapıyı ve netliği onaylar.
 
-Bu, specs'lerin insanlar için okunabilir olmasını ve agent'lar için tutarlı olmasını sağlar.
+Bu, spec'leri insanlar için okunabilir ve ajanlar için tutarlı tutar.
 
-## Changes (Değişiklikler)
+## Değişiklikler (Changes)
 
-Bir değişiklik, sisteminize yapılan önerilen bir modifikasyondur; bunu anlamak ve uygulamak için gereken her şeyle paketlenmiş bir klasördür.
+Bir değişiklik (change), sisteminize yapılan önerilen bir modifikasyondur, anlaşılması ve uygulanması için gereken her şeyi içeren bir klasör olarak paketlenir.
 
 ### Değişiklik Yapısı
 
 ```
 openspec/changes/add-dark-mode/
-├── proposal.md           # Neden ve ne
-├── design.md             # Nasıl (teknik yaklaşım)
-├── tasks.md              # Uygulama kontrol listesi
-├── .openspec.yaml        # Değişiklik meta verisi (isteğe bağlı)
-└── specs/                # Delta specs'leri
+├── proposal.md           # Why and what
+├── design.md             # How (technical approach)
+├── tasks.md              # Implementation checklist
+├── .openspec.yaml        # Change metadata (optional): schema, created, skip_specs
+└── specs/                # Delta specs
     └── ui/
-        └── spec.md       # ui/spec.md'de ne değişiyor
+        └── spec.md       # What's changing in ui/spec.md
 ```
 
-Her değişiklik kendi içinde tamamlanmış durumdadır. Şunları içerir:
-- **Artifacts (Eserler)** — Niyeti, tasarımı ve görevleri yakalayan belgeler
-- **Delta specs** — Ne eklendiğinin, değiştirildiğinin veya kaldırıldığının spesifikasyonları
-- **Metadata** — Bu özel değişiklik için isteğe bağlı yapılandırma
+Her değişiklik kendi kendine yeterlidir. Şunları içerir:
+- **Eserler (Artifacts)** — niyet, tasarım ve görevleri yakalayan belgeler
+- **Delta Spec'ler** — eklenen, değiştirilen veya kaldırılan özellikler için özellik tanımları
+- **Meta Veriler** — bu belirli değişiklik için isteğe bağlı yapılandırma
 
-### Değişikliklerin Klasör Olmasının Nedeni
+### Neden Değişiklikler Klasör Olarak Paketleniyor
 
 Bir değişikliği klasör olarak paketlemenin birkaç faydası vardır:
 
-1. **Her şey bir arada.** Proposal (Öneri), design (Tasarım), tasks (Görevler) ve specs (Spesifikasyonlar) tek bir yerde bulunur. Farklı yerlerde arama yapmaya gerek kalmaz.
+1. **Her şey bir arada.** Öneri, tasarım, görevler ve spec'ler tek bir yerde bulunur. Farklı konumlarda arama yapma derdiniz olmaz.
+2. **Paralel çalışma.** Birden fazla değişiklik aynı anda çakışma olmadan bulunabilir. `fix-auth-bug` değişikliği de aynı şekilde devam ederken `add-dark-mode` üzerinde çalışabilirsiniz.
+3. **Temiz geçmiş.** Arşivlendiğinde, değişiklikler tüm bağlamları korunarak `changes/archive/` klasörüne taşınır. Sadece neyin değiştiğini değil, neden değiştiğini de geriye dönük olarak anlayabilirsiniz.
+4. **İnceleme dostu.** Bir değişiklik klasörü incelenmesi kolaydır — klasörü açın, öneriyi okuyun, tasarımı kontrol edin, spec deltalarını görün.
 
-2. **Paralel çalışma.** Birden fazla değişiklik aynı anda çatışma olmadan var olabilir. `add-dark-mode` üzerinde çalışırken `fix-auth-bug` da devam edebilir.
+## Eserler (Artifacts)
 
-3. **Temiz geçmiş.** Arşivlendiğinde, değişiklikler tam bağlamları korunarak `changes/archive/` konumuna taşınır. Geriye dönüp neyin değiştiğini değil, neden değiştiğini anlayabilirsiniz.
+Eserler (Artifacts), değişiklik içinde çalışmayı yönlendiren belgelerdir.
 
-4. **İncelemeye uygun.** Bir değişiklik klasörü incelemek kolaydır — açın, öneriyi okuyun, tasarımı kontrol edin, spec deltalarını görün.
-
-## Artifacts (Eserler)
-
-Artifact'lar, işi yönlendiren bir değişikliğin içindeki belgelerdir.
-
-### Artifact Akışı
+### Eser Akışı
 
 ```
 proposal ──────► specs ──────► design ──────► tasks ──────► implement
     │               │             │              │
-   neden            ne           nasıl          atılması gereken adımlar
- + kapsam        değişiklikler       yaklaşım      yapılacaklar
+   why            what           how          steps
+ + scope        changes       approach      to take
 ```
 
-Artifact'lar birbirinin üzerine inşa edilir. Her artifact, bir sonrakine bağlam sağlar.
+Eserler birbirini tamamlar. Her eser bir sonraki için bağlam sağlar.
 
-### Artifact Türleri
+### Eser Türleri
 
-#### Proposal (`proposal.md`)
+#### Öneri (`proposal.md`)
 
-Proposal, **niyeti**, **kapsamı** ve **yaklaşımı** üst düzeyde yakalar.
+Öneri, yüksek seviyede **niyet**, **kapsam** ve **yaklaşımı** yakalar.
 
 ```markdown
-# Proposal: Add Dark Mode (Koyu Mod Ekleme Önerisi)
+# Proposal: Add Dark Mode
 
-## Niyet (Intent)
-Kullanıcılar, gece kullanımı sırasında göz yorgunluğunu azaltmak ve sistem tercihlerini karşılamak için koyu mod seçeneği talep etti.
+## Intent
+Users have requested a dark mode option to reduce eye strain
+during nighttime usage and match system preferences.
 
-## Kapsam (Scope)
-Kapsam dahilinde:
-- Ayarlar içinde tema değiştirme düğmesi
-- Sistem tercihinin tespiti
-- Tercihi localStorage'da saklama
+## Scope
+In scope:
+- Theme toggle in settings
+- System preference detection
+- Persist preference in localStorage
 
-Kapsam dışında:
-- Özel renk temaları (gelecekteki işler)
-- Sayfa bazlı tema geçersiz kılmaları
+Out of scope:
+- Custom color themes (future work)
+- Per-page theme overrides
 
-## Yaklaşım (Approach)
-Durum yönetimi için bir React context kullanarak CSS özel özelliklerini temalandırmada kullanmak. İlk yüklemede sistem tercihini tespit etmek ve manuel geçersiz kılmaya izin vermek.
+## Approach
+Use CSS custom properties for theming with a React context
+for state management. Detect system preference on first load,
+allow manual override.
 ```
 
-**Proposal'ı ne zaman güncellemeli:**
+**Öneriyi ne zaman güncellemelisiniz:**
 - Kapsam değişiklikleri (daraltma veya genişletme)
-- Niyetin netleşmesi (sorunun daha iyi anlaşılması)
-- Yaklaşımın temelden değişmesi
+- Niyet netleştiğinde (soruna daha iyi anladığımızda)
+- Yaklaşım temel olarak değiştiğinde
 
-#### Specs (Delta specs in `specs/`)
+#### Spec'ler (`specs/` klasöründeki delta spec'ler)
 
-Delta specs, mevcut specs'lere göre **neyin değiştiğini** tanımlar. Aşağıdaki [Delta Specs](#delta-specs)'e bakın.
+Delta spec'ler, mevcut spec'lere göre **neyin değiştiğini** tanımlar. Aşağıdaki [Delta Spec'ler](#delta-specs) bölümüne bakın.
 
-#### Design (`design.md`)
+#### Tasarım (`design.md`)
 
-Design, **teknik yaklaşımı** ve **mimari kararları** yakalar.
+Tasarım, **teknik yaklaşımı** ve **mimari kararları** yakalar.
 
 ````markdown
-# Design: Add Dark Mode (Koyu Mod Ekleme Tasarımı)
+# Design: Add Dark Mode
 
-## Teknik Yaklaşım
-Prop drilling'i önlemek için tema durumu React Context üzerinden yönetilecektir. CSS özel özellikleri, sınıf değiştirme olmadan çalışma zamanında geçiş yapmayı sağlar.
+## Technical Approach
+Theme state managed via React Context to avoid prop drilling.
+CSS custom properties enable runtime switching without class toggling.
 
-## Mimari Kararlar
+## Architecture Decisions
 
-### Decision: Context over Redux (Redux yerine Context kullanımı)
-Tema durumu için React Context kullanılması çünkü:
-- Basit ikili durum (açık/koyu)
-- Karmaşık durum geçişleri yok
-- Redux bağımlılığı eklemekten kaçınılır
+### Decision: Context over Redux
+Using React Context for theme state because:
+- Simple binary state (light/dark)
+- No complex state transitions
+- Avoids adding Redux dependency
 
-### Decision: CSS Custom Properties (CSS Özel Özellikleri)
-CSS-in-JS yerine CSS değişkenlerinin kullanılması çünkü:
-- Mevcut stil sayfasıyla çalışır
-- Çalışma zamanı yükü yoktur
-- Tarayıcı yerel çözümü
+### Decision: CSS Custom Properties
+Using CSS variables instead of CSS-in-JS because:
+- Works with existing stylesheet
+- No runtime overhead
+- Browser-native solution
 
-## Veri Akışı
+## Data Flow
 ```
 ThemeProvider (context)
        │
@@ -294,115 +295,116 @@ ThemeProvider (context)
 ThemeToggle ◄──► localStorage
        │
        ▼
-CSS Variables (root'a uygulananlar)
+CSS Variables (applied to :root)
 ```
 
-## Dosya Değişiklikleri
-- `src/contexts/ThemeContext.tsx` (yeni)
-- `src/components/ThemeToggle.tsx` (yeni)
-- `src/styles/globals.css` (değiştirildi)
+## File Changes
+- `src/contexts/ThemeContext.tsx` (new)
+- `src/components/ThemeToggle.tsx` (new)
+- `src/styles/globals.css` (modified)
 ````
 
-**Design'ı ne zaman güncellemeli:**
-- Uygulama, yaklaşımın işe yaramayacağını ortaya çıkarırsa
-- Daha iyi bir çözüm keşfedilirse
-- Bağımlılıklar veya kısıtlamalar değişirse
+**Tasarımı ne zaman güncellemelisiniz:**
+- Uygulama, yaklaşımın çalışmayacağını ortaya çıkardığında
+- Daha iyi bir çözüm bulunduğunda
+- Bağımlılıklar veya kısıtlamalar değiştiğinde
 
-#### Tasks (`tasks.md`)
+#### Görevler (`tasks.md`)
 
-Tasks, **uygulama kontrol listesidir** — onay kutucukları olan somut adımlar.
+Görevler, **uygulama kontrol listesidir** — onay kutuları olan somut adımlardır.
 
 ```markdown
-# Görevler (Tasks)
+# Tasks
 
-## 1. Tema Altyapısı
-- [ ] 1.1 light/dark durumu ile ThemeContext oluşturma
-- [ ] 1.2 Renkler için CSS özel özelliklerini ekleme
-- [ ] 1.3 localStorage kalıcılığını uygulama
-- [ ] 1.4 Sistem tercihini tespit etme
+## 1. Theme Infrastructure
+- [ ] 1.1 Create ThemeContext with light/dark state
+- [ ] 1.2 Add CSS custom properties for colors
+- [ ] 1.3 Implement localStorage persistence
+- [ ] 1.4 Add system preference detection
 
-## 2. UI Bileşenleri
-- [ ] 2.1 ThemeToggle bileşenini oluşturma
-- [ ] 2.2 Ayarlar sayfasına toggle ekleme
-- [ ] 2.3 Hızlı geçişi içerecek şekilde Başlık (Header) güncelleme
+## 2. UI Components
+- [ ] 2.1 Create ThemeToggle component
+- [ ] 2.2 Add toggle to settings page
+- [ ] 2.3 Update Header to include quick toggle
 
-## 3. Stil Oluşturma
-- [ ] 3.1 Koyu tema renk paletini tanımlama
-- [ ] 3.2 Bileşenleri CSS değişkenlerini kullanacak şekilde güncelleme
-- [ ] 3.3 Erişilebilirlik için kontrast oranlarını test etme
+## 3. Styling
+- [ ] 3.1 Define dark theme color palette
+- [ ] 3.2 Update components to use CSS variables
+- [ ] 3.3 Test contrast ratios for accessibility
 ```
 
 **Görev en iyi uygulamaları:**
 - İlgili görevleri başlıklar altında gruplayın
 - Hiyerarşik numaralandırma kullanın (1.1, 1.2 vb.)
-- Görevlerin tek bir oturumda tamamlanabilecek kadar küçük tutun
-- Tamamladıkça görevleri işaretleyin
+- Görevleri tek seansda tamamlanabilecek kadar küçük tutun
+- Görevleri tamamladıkça işaretleyin
 
-## Delta Specs (Değişim Spesifikasyonları)
+## Delta Spec'ler {#delta-specs}
 
-Delta specs, OpenSpec'in brownfield (mevcut sistem üzerine inşa etme) geliştirme için çalışmasını sağlayan temel kavramdır. Bunlar, tüm spec'i yeniden ifade etmek yerine **neyin değiştiğini** tanımlar.
+Delta spec'ler, OpenSpec'in mevcut sistem üzerinde geliştirme (brownfield development) yaparken çalışmasını sağlayan temel kavramdır. Tüm spec'i yeniden yazmak yerine **neyin değiştiğini** tanımlarlar.
 
 ### Format
+
 ```markdown
-# Delta for Auth (Kimlik Doğrulama Deltası)
+# Delta for Auth
 
-## ADDED Requirements (EKLENEN Gereksinimler)
+## ADDED Requirements
 
-### Requirement: İki Faktörlü Kimlik Doğrulama
-Sistem, TOTP tabanlı iki faktörlü kimlik doğrulamayı desteklemELİDİR.
+### Requirement: Two-Factor Authentication
+The system MUST support TOTP-based two-factor authentication.
 
-#### Scenario: 2FA kayıt
-- GIVEN 2FA'sı olmayan bir kullanıcı
-- WHEN kullanıcı ayarlardan 2FA'yı etkinleştirir
-- THEN doğrulayıcı uygulama için bir QR kodu gösterilir
-- AND kullanıcı aktivasyon öncesinde bir kodla doğrulamalıdır
+#### Scenario: 2FA enrollment
+- GIVEN a user without 2FA enabled
+- WHEN the user enables 2FA in settings
+- THEN a QR code is displayed for authenticator app setup
+- AND the user must verify with a code before activation
 
-#### Scenario: 2FA ile giriş
-- GIVEN 2FA'sı olan bir kullanıcı
-- WHEN kullanıcı geçerli kimlik bilgilerini gönderir
-- THEN bir OTP challenge (OTP zorlaması) sunulur
-- AND giriş, yalnızca geçerli OTP sonrası tamamlanır
+#### Scenario: 2FA login
+- GIVEN a user with 2FA enabled
+- WHEN the user submits valid credentials
+- THEN an OTP challenge is presented
+- AND login completes only after valid OTP
 
-## MODIFIED Requirements (DEĞİŞTİRİLEN Gereksinimler)
+## MODIFIED Requirements
 
-### Requirement: Oturum Süresi Dolması
-Sistem, 15 dakikalık hareketsizlikten sonra oturumları sona erdirmELİDİR.
-(Önceki hali: 30 dakika)
+### Requirement: Session Expiration
+The system MUST expire sessions after 15 minutes of inactivity.
+(Previously: 30 minutes)
 
-#### Scenario: Boşta kalma zaman aşımı
-- GIVEN kimlik doğrulanmış bir oturum
-- WHEN 15 dakika boyunca aktivite olmazsa
-- THEN oturum geçersiz kılınır
+#### Scenario: Idle timeout
+- GIVEN an authenticated session
+- WHEN 15 minutes pass without activity
+- THEN the session is invalidated
 
-## REMOVED Requirements (KALDIRILAN Gereksinimler)
+## REMOVED Requirements
 
-### Requirement: Beni Hatırla
-(2FA lehine kullanımdan kaldırıldı. Kullanıcılar her oturumda yeniden kimlik doğrulaması yapmalıdır.)
+### Requirement: Remember Me
+(Deprecated in favor of 2FA. Users should re-authenticate each session.)
 ```
 
 ### Delta Bölümleri
 
-| Section | Anlamı | Arşivlendiğinde Ne Olur |
+| Bölüm | Anlamı | Arşivlendiğinde Ne Olur |
 |---------|---------|------------------------|
-| `## ADDED Requirements` | Yeni davranış | Ana spec'e eklenir (Append) |
-| `## MODIFIED Requirements` | Değişen davranış | Mevcut gereksinimi değiştirir/yerine koyar |
+| `## ADDED Requirements` | Yeni davranış | Ana spec'e eklenir |
+| `## MODIFIED Requirements` | Değiştirilen davranış | Mevcut gereksinim ile değiştirilir |
 | `## REMOVED Requirements` | Kullanımdan kaldırılan davranış | Ana spec'ten silinir |
 
-### Tam Spec Yerine Delta Neden?
+### Neden Tam Spec Yerine Delta Kullanıyoruz
 
-**Netlik.** Bir delta, tam olarak neyin değiştiğini gösterir. Tüm bir spec'i okumak, onu mevcut versiyonla zihinsel olarak karşılaştırmayı gerektirirdi.
+**Netlik.** Bir delta, tam olarak neyin değiştiğini gösterir. Tam bir spec okuduğunuzda, mevcut sürüm ile zihinsel olarak karşılaştırma yapmanız gerekir.
 
-**Çatışma önleme.** İki değişiklik, farklı gereksinimleri değiştirdiği sürece aynı spec dosyasına dokunabilir ve çatışmazlar.
+**Çakışma önleme.** Farklı gereksinimleri değiştirdikleri sürece, iki değişiklik aynı spec dosyasına dokunabilir çakışma olmadan.
 
-**İnceleme verimliliği.** İncelemeciler değişimi görür, değişmeyen bağlamı değil. Önemli olana odaklanırlar.
+**İnceleme verimliliği.** İnceleyiciler değişikliği görür, değişmemiş bağlamı değil. Önemli olan şeye odaklanın.
 
-**Brownfield uyumu.** Çoğu iş mevcut davranışı değiştirmeyi içerir. Deltalar, modifikasyonları sonradan bir düşünce değil, birinci sınıf vatandaş yapar.
+**Mevcut sistem uyumu.** Çoğu iş mevcut davranışı değiştirir. Deltalar, modifikasyonları ikinci sınıf bir şey değil, birinci sınıf yapar.
 
-## Şemalar (Schemas)
+## Şemalar
 
-Şemalar, bir iş akışı için artefakt türlerini ve bunların bağımlılıklarını tanımlar.
+Şemalar, bir iş akışı için yapıt türlerini ve bunların bağımlılıklarını tanımlar.
 
-### Şemaların Çalışma Biçimi
+### Şemalar Nasıl Çalışır
 
 ```yaml
 # openspec/schemas/spec-driven/schema.yaml
@@ -410,22 +412,22 @@ name: spec-driven
 artifacts:
   - id: proposal
     generates: proposal.md
-    requires: []              # Bağımlılık yok, ilk oluşturabilir
+    requires: []              # Bağımlılığı yok, ilk olarak oluşturulabilir
 
   - id: specs
     generates: specs/**/*.md
-    requires: [proposal]      # Oluşturmadan önce proposal'a ihtiyacı var
+    requires: [proposal]      # Oluşturmadan önce teklif gerektirir
 
   - id: design
     generates: design.md
-    requires: [proposal]      # Specs ile paralel olarak oluşturulabilir
+    requires: [proposal]      # Teklif ile paralel olarak oluşturulabilir
 
   - id: tasks
     generates: tasks.md
-    requires: [specs, design] # Hem specs hem de design'a ihtiyaç duyar
+    requires: [specs, design] # Hem tasarım hem de teklif önce oluşturulmalıdır
 ```
 
-**Artefaktlar bir bağımlılık grafiği oluşturur:**
+**Yapıtlar bir bağımlılık grafiği oluşturur:**
 
 ```
                     proposal
@@ -446,9 +448,9 @@ artifacts:
                 specs, design)
 ```
 
-**Bağımlılıklar kapı değil, kolaylaştırıcıdır.** Bunlar neyin oluşturulabileceğini gösterir, bir sonraki adımda ne yapmanız gerektiğini göstermez. Eğer ihtiyacınız yoksa design'ı atlayabilirsiniz. Specs'i design'dan önce veya sonra oluşturabilirsiniz — her ikisi de sadece proposal'a bağlıdır.
+**Bağımlılıklar engelleyiciler değil, olanak sağlayıcılardır.** Sıradaki neyi oluşturmanız gerektiğini değil, neyin oluşturulabileceğini gösterirler. Gerekmiyorsa tasarımı atlayabilirsiniz. Tasarımdan önce veya sonra specs oluşturabilirsiniz — her ikisi de sadece teklife bağlıdır.
 
-### Yerleşik Şemalar (Built-in Schemas)
+### Dahili Şemalar
 
 **spec-driven** (varsayılan)
 
@@ -458,17 +460,17 @@ Spec-driven geliştirme için standart iş akışı:
 proposal → specs → design → tasks → implement
 ```
 
-En uygun olduğu yerler: Uygulama öncesinde spesifikasyonlar üzerinde anlaşmak istediğiniz çoğu özellik çalışması.
+En uygun olduğu durum: Uygulamadan önce spesifikasyonlarda anlaşmak istediğiniz çoğu özellik çalışması.
 
-### Özel Şemalar (Custom Schemas)
+### Özel Şemalar
 
 Ekibinizin iş akışı için özel şemalar oluşturun:
 
 ```bash
-# Sıfırdan oluşturma
+# Sıfırdan oluştur
 openspec schema init research-first
 
-# Veya mevcut birini çatallama (fork)
+# Veya mevcut birini çatallayın
 openspec schema fork spec-driven research-first
 ```
 
@@ -480,27 +482,27 @@ name: research-first
 artifacts:
   - id: research
     generates: research.md
-    requires: []           # Önce araştırma yapın
+    requires: []           # Önce araştırma yap
 
   - id: proposal
     generates: proposal.md
-    requires: [research]   # Proposal, araştırmayla bilgilendirilir
+    requires: [research]   # Teklif araştırma ile bilgilendirilir
 
   - id: tasks
     generates: tasks.md
-    requires: [proposal]   # Specs/design'ı atlayıp doğrudan görevlere geçin
+    requires: [proposal]   # Specs/tasarımı atla, doğrudan görevlere geç
 ```
 
-Özel şemaların oluşturulması ve kullanılmasıyla ilgili tüm ayrıntılar için [Customization](customization.md)'a bakın.
+Özel şemalar oluşturma ve kullanma hakkında tam bilgi için [Özelleştirme](customization.md) belgesine bakın.
 
-## Arşivleme (Archive)
+## Arşivleme
 
-Arşivleme, bir değişikliği ana spesifikasyonlara delta'larını birleştirerek tamamlar ve değişikliği tarihçe için korur.
+Arşivleme, değişikliğin delta spesifikasyonlarını ana spesifikasyonlarla birleştirerek değişikliği tamamlar ve geçmiş için saklar.
 
-### Arşivlediğinizde Ne Olur?
+### Arşivlediğinizde Ne Olur
 
 ```
-Arşivden önce:
+Arşivlemeden önce:
 
 openspec/
 ├── specs/
@@ -508,23 +510,23 @@ openspec/
 │       └── spec.md ◄────────────────┐
 └── changes/                         │
     └── add-2fa/                     │
-        ├── proposal.md              │
-        ├── design.md                │ merge
+        ├── proposal.md              │ birleştir
+        ├── design.md                │
         ├── tasks.md                 │
         └── specs/                   │
             └── auth/                │
                 └── spec.md ─────────┘
 
 
-Arşivden sonra:
+Arşivlemeden sonra:
 
 openspec/
 ├── specs/
 │   └── auth/
-│       └── spec.md        # Artık 2FA gereksinimlerini içeriyor
+│       └── spec.md        # Artık 2FA gereksinimlerini içerir
 └── changes/
     └── archive/
-        └── 2025-01-24-add-2fa/    # Tarihçe için korunur
+        └── 2025-01-24-add-2fa/    # Geçmiş için saklandı
             ├── proposal.md
             ├── design.md
             ├── tasks.md
@@ -535,88 +537,88 @@ openspec/
 
 ### Arşivleme Süreci
 
-1. **Delta'ları Birleştirme.** Her delta spesifikasyon bölümü (EKLEME/DEĞİŞTİRİLMİŞ/KALDIRILMIŞ), ilgili ana spesifikasyona uygulanır.
-
-2. **Arşive Taşıma.** Değişiklik klasörü, kronolojik sıralama için bir tarih öneki ile birlikte `changes/archive/` konumuna taşınır.
-
-3. **Bağlamı Koruma.** Tüm artefaktlar arşivde sağlam kalır. Bir değişikliğin neden yapıldığını anlamak için her zaman geriye bakabilirsiniz.
+1. **Deltaları birleştir.** Her delta spesifikasyon bölümü (EKLEDİ/DÜZENLEDİ/KALDIRDI) ilgili ana spesifikasyona uygulanır.
+2. **Arşive taşı.** Değişiklik klasörü kronolojik sıralama için tarih önekiyle birlikte `changes/archive/` klasörüne taşınır.
+3. **Bağlamı koru.** Tüm yapıtlar arşivde tamamen kalır. Bir değişikliğin neden yapıldığını anlamak için her zaman geri dönebilirsiniz.
 
 ### Arşivlemenin Önemi
 
-**Temiz Durum.** Aktif değişiklikler (`changes/`) yalnızca devam eden çalışmaları gösterir. Tamamlanan işler yer açar.
+**Temiz durum.** Aktif değişiklikler (`changes/`) yalnızca devam eden çalışmaları gösterir. Tamamlanan çalışmalar yoldan çıkarılır.
 
-**Denetim İzleri (Audit trail).** Arşiv, her değişikliğin tam bağlamını korur — sadece neyin değiştiğini değil, nedenini açıklayan proposal'ı, nasıl yapılacağını açıklayan design'ı ve yapılan işi gösteren görevleri.
+**Denetim izi.** Arşiv, her değişikliğin tam bağlamını korur — sadece neyin değiştiğini değil, nedenini açıklayan teklif, nasıl yapıldığını açıklayan tasarım ve yapılan işi gösteren görevleri de korur.
 
-**Spesifikasyon Evrimi.** Değişiklikler arşivlendikçe spesifikasyonlar organik olarak büyür. Her arşiv, delta'larını birleştirerek zaman içinde kapsamlı bir spesifikasyon oluşturur.
+**Spesifikasyon evrimi.** Spesifikasyonlar arşivlendikçe organik olarak büyür. Her arşivleme deltalarını birleştirerek zamanla kapsamlı bir spesifikasyon oluşturur.
 
-## Hepsi Nasıl Bir Arada?
+## Her Şeyin Nasıl Birlikte Çalıştığı
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
-│                              OPENSPEC AKIŞI                                   │
+│                              OPENSPEC AKIŞI                                  │
 │                                                                              │
 │   ┌────────────────┐                                                         │
-│   │  1. BAŞLATMA   │  /opsx:propose (core) veya /opsx:new (expanded)           │
-│   │     DEĞİŞİKLİK │                                                         │
+│   │  1. DEĞİŞİKLİĞİ│  /opsx:propose (çekirdek) veya /opsx:new (genişletilmiş)│
+│   │     BAŞLAT     │                                                         │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  2. OLUŞTURMA  │  /opsx:ff veya /opsx:continue (genişletilmiş iş akışı)     │
-│   │     ARTEFAKTLAR │  proposal → specs → design → tasks oluşturur              │
-│   │                │  (şema bağımlılıklarına göre)                         │
+│   │  2. YAPITLARI  │  /opsx:ff veya /opsx:continue (genişletilmiş iş akışı) │
+│   │     OLUŞTUR   │  Teklif → specs → tasarım → görevler oluşturur           │
+│   │                │  (şema bağımlılıklarına dayanarak)                      │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  3. UYGULAMA   │  /opsx:apply                                            │
-│   │     GÖREVLER  │  Görevler üzerinde çalışılır ve işaretlenir                  │
-│   │                │◄──── Öğrendikçe artefaktları Güncelleme                      │
+│   │  3. GÖREVLERİ  │  /opsx:apply                                            │
+│   │     UYGULA    │  Görevleri tamamlayın, işaretleyin                       │
+│   │                │◄──── Öğrendikçe yapıtları güncelleyin                  │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐                                                         │
-│   │  4. DOĞRULAMA  │  /opsx:verify (isteğe bağlı)                                │
-│   │     İŞLER      │  Uygulamanın spesifikasyonlarla eşleştiğini kontrol etme    │
+│   │  4. ÇALIŞMAYI  │  /opsx:verify (isteğe bağlı)                           │
+│   │     DOĞRULA   │  Uygulamanın spesifikasyonlarla eşleştiğini kontrol edin │
 │   └───────┬────────┘                                                         │
 │           │                                                                  │
 │           ▼                                                                  │
 │   ┌────────────────┐     ┌──────────────────────────────────────────────┐    │
-│   │  5. ARŞİVLEME  │────►│  Delta spesifikasyonların ana spesifikasyonlara birleşmesi │    │
-│   │     DEĞİŞİKLİK │     │  Değişiklik klasörü archive/ konumuna taşınır.       │    │
-│   └────────────────┘     │  Spesifikasyonlar artık güncel doğru kaynaktır.      │    │
+│   │  5. DEĞİŞİKLİĞİ│────►│  Delta spesifikasyonlar ana spesifikasyonlarla │    │
+│   │     ARŞİVLE   │     │  birleştirilir                                │    │
+│   │                │     │  Değişiklik klasörü arşive taşınır            │    │
+│   └────────────────┘     │  Spesifikasyonlar artık güncellenmiş doğru     │    │
+│                          │  kaynaktır                                    │    │
 │                          └──────────────────────────────────────────────┘    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**Erdemli Döngü (The virtuous cycle):**
+**Erdemli döngü:**
 
-1. Specs mevcut davranışı tanımlar.
-2. Değişiklikler modifikasyonları önerir (delta'lar olarak).
-3. Uygulama bu değişiklikleri gerçeğe dönüştürür.
-4. Arşivleme, delta'ları spesifikasyonlara birleştirir.
-5. Specs artık yeni davranışı tanımlar.
-6. Bir sonraki değişiklik güncellenmiş specs üzerine inşa edilir.
+1. Spesifikasyonlar mevcut davranışı tanımlar
+2. Değişiklikler değişiklikleri önerir (delta olarak)
+3. Uygulama değişiklikleri gerçekleştirir
+4. Arşivleme deltaları spesifikasyonlarla birleştirir
+5. Spesifikasyonlar artık yeni davranışı tanımlar
+6. Sonraki değişiklik güncellenmiş spesifikasyonlar üzerine inşa edilir
 
-## Sözlük (Glossary)
+## Sözlük
 
 | Terim | Tanım |
 |------|------------|
-| **Artifact** | Bir değişim içindeki belge (proposal, design, tasks veya delta specs). |
-| **Archive** | Bir değişikliği tamamlamak ve delta'larını ana spesifikasyonlara birleştirmek süreci. |
-| **Change** | Artefaktlarla paketlenmiş, sisteme önerilen bir değişiklik. |
-| **Delta spec** | Mevcut spesifikasyonlara göre değişiklikleri (EKLEME/DEĞİŞTİRİLMİŞ/KALDIRILMIŞ) tanımlayan bir spesifikasyon. |
-| **Domain** | Spesifikasyonlar için mantıksal bir gruplama (örneğin, `auth/`, `payments/`). |
-| **Requirement** | Sistemin sahip olması gereken belirli bir davranış. |
-| **Scenario** | Bir gereksinimin somut bir örneği, tipik olarak Given/When/Then formatında. |
-| **Schema** | Artefakt türlerinin ve bunların bağımlılıklarının tanımı. |
-| **Spec** | Sistem davranışını tanımlayan, gereksinimler ve senaryolar içeren bir spesifikasyon. |
-| **Source of truth** | Mevcut üzerinde anlaşılmış davranışı içeren `openspec/specs/` dizini. |
+| **Yapıt** | Bir değişiklik içindeki belge (teklif, tasarım, görevler veya delta spesifikasyonlar) |
+| **Arşivleme** | Bir değişikliği tamamlayıp deltalarını ana spesifikasyonlarla birleştirme süreci |
+| **Değişiklik** | Sisteme yapılan önerilen bir değişiklik, yapıtlarla birlikte paketlenmiş bir klasör olarak |
+| **Delta spesifikasyon** | Mevcut spesifikasyonlara göre değişiklikleri (EKLEDİ/DÜZENLEDİ/KALDIRDI) tanımlayan bir spesifikasyon |
+| **Etki alanı** | Spesifikasyonlar için mantıksal bir gruplama (örneğin `auth/`, `payments/`) |
+| **Gereksinim** | Sistemin sahip olması gereken belirli bir davranış |
+| **Senaryo** | Bir gereksinimin somut örneği, genellikle Given/When/Then formatında |
+| **Şema** | Yapıt türlerini ve bağımlılıklarını tanımlayan yapı |
+| **Spesifikasyon** | Sistem davranışını tanımlayan, gereksinimleri ve senaryoları içeren belge |
+| **Tek doğru kaynak** | Mevcut kabul edilmiş davranışı içeren `openspec/specs/` dizini |
 
-## Sonraki Adımlar (Next Steps)
+## Sonraki Adımlar
 
-- [Getting Started](getting-started.md) - Pratik ilk adımlar
-- [Workflows](workflows.md) - Yaygın desenler ve ne zaman hangisini kullanmalı
-- [Commands](commands.md) - Tam komut referansı
-- [Customization](customization.md) - Özel şemalar oluşturma ve projenizi yapılandırma
+- [Başlarken](getting-started.md) - Pratik ilk adımlar
+- [İş Akışları](workflows.md) - Yaygın kalıplar ve her birinin ne zaman kullanılacağı
+- [Komutlar](commands.md) - Tam komut referansı
+- [Özelleştirme](customization.md) - Özel şemalar oluşturun ve projenizi yapılandırın

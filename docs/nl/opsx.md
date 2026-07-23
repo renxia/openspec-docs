@@ -1,84 +1,81 @@
-# OPSX-workflow
+# OPSX-werkstroom
 
 > Feedback welkom op [Discord](https://discord.gg/YctCnvvshC).
 
 ## Wat is het?
 
-OPSX is nu de standaardworkflow voor OpenSpec.
+OPSX is nu de standaardwerkstroom voor OpenSpec.
 
-Het is een **vloeiende, iteratieve workflow** voor OpenSpec-wijzigingen. Geen rigide fasen meer — alleen acties die je op elk moment kunt uitvoeren.
+Het is een **vloeiende, iteratieve werkstroom** voor OpenSpec-wijzigingen. Geen starre fasen meer — gewoon acties die je op elk moment kunt ondernemen.
 
 ## Waarom dit bestaat
 
-De verouderde OpenSpec-werking werkt, maar is **vergrendeld**:
+De legacy OpenSpec-werkstroom werkt, maar is **beperkt**:
 
 - **Instructies zijn hardgecodeerd** — verborgen in TypeScript, je kunt ze niet aanpassen
-- **Alles-of-niets** — één grote opdracht maakt alles aan, je kunt individuele onderdelen niet testen
-- **Vaste structuur** — dezelfde werkwijze voor iedereen, geen maatwerk
-- **Zwarte doos** — wanneer de AI-output slecht is, kun je de prompts niet aanpassen
+- **Alles-of-niets** — één grote opdracht maakt alles, je kunt geen individuele onderdelen testen
+- **Vaste structuur** — dezelfde werkstroom voor iedereen, geen aanpassingsmogelijkheden
+- **Black box** — wanneer de AI-output slecht is, kun je de prompts niet aanpassen
 
-**OPSX opent het.** Nu kan iedereen:
+**OPSX opent het op.** Nu kan iedereen:
 
 1. **Experimenteren met instructies** — bewerk een sjabloon, kijk of de AI het beter doet
-2. **Granulair testen** — valideer de instructies van elk artefact afzonderlijk
-3. **Werkwijzen aanpassen** — definieer je eigen artefacten en afhankelijkheden
-4. **Snel itereren** — pas een sjabloon aan, test direct, geen herbouw
+2. **Gedetailleerd testen** — valideer de instructies van elk artefact onafhankelijk
+3. **Werkstromen aanpassen** — definieer je eigen artefacten en afhankelijkheden
+4. **Snel itereren** — verander een sjabloon, test direct, geen herbouw nodig
 
 ```
-Verouderde werkwijze:                 OPSX:
+Legacy-werkstroom:                      OPSX:
 ┌────────────────────────┐           ┌────────────────────────┐
-│  Hardgecodeerd in      │           │  schema.yaml           │◄── Dit bewerk je
-│  pakket (kan niet      │           │  templates/*.md        │◄── Of dit
-│  veranderen)           │           │        ↓               │
-│        ↓               │           │  Direct effect         │
-│  Wacht op nieuwe       │           │        ↓               │
-│  release               │           │  Test het zelf         │
-│        ↓               │           │                        │
-│  Hopen dat het beter   │           │                        │
-│  is                    │           │                        │
+│  Hardgecodeerd in package  │           │  schema.yaml           │◄── Jij bewerkt dit
+│  (kan niet aanpassen)        │           │  templates/*.md        │◄── Of dit
+│        ↓               │           │        ↓               │
+│  Wachten op nieuwe release  │           │  Direct effect        │
+│        ↓               │           │        ↓               │
+│  Hopelijk is het beter      │           │  Test het zelf      │
 └────────────────────────┘           └────────────────────────┘
 ```
 
 **Dit is voor iedereen:**
-- **Teams** — creëer werkwijzen die aansluiten bij hoe je daadwerkelijk werkt
-- **Geavanceerde gebruikers** — pas prompts aan voor betere AI-output voor jouw codebase
-- **OpenSpec-bijdragers** — experimenteer met nieuwe benaderingen zonder releases
+- **Teams** — maak werkstromen die aansluiten bij hoe je daadwerkelijk werkt
+- **Power users** — pas prompts aan om betere AI-output voor je codebase te krijgen
+- **OpenSpec bijdragers** — experimenteer met nieuwe benaderingen zonder releases
 
 We zijn allemaal nog aan het leren wat het beste werkt. OPSX laat ons samen leren.
 
 ## De gebruikerservaring
 
-**Het probleem met lineaire werkwijzen:**
-Je bent "in de planningsfase", dan "in de implementatiefase", dan "klaar". Maar echt werk werkt niet zo. Je implementeert iets, realiseert dat je ontwerp verkeerd was, moet specificaties bijwerken, en gaat door met implementeren. Lineaire fases staan haaks op hoe werk daadwerkelijk verloopt.
+**Het probleem met lineaire werkstromen:**
+Je bent "in de planningsfase", dan "in de implementatiefase", dan "klaar". Maar echt werk werkt niet zo. Je implementeert iets, realiseert je dat je ontwerp fout was, moet je specificaties bijwerken, ga je door met implementeren. Lineaire fasen vechten tegen hoe werk daadwerkelijk verloopt.
 
-**OPSX-benadering:**
-- **Acties, geen fases** — creëer, implementeer, werk bij, archiveer — doe ze op elk moment
-- **Afhankelijkheden zijn ontsluiters** — ze tonen wat mogelijk is, niet wat als volgende vereist is
+**OPSX-aanpak:**
+- **Acties, geen fasen** — maak, implementeer, update, archiveer — doe er een van op elk moment
+- **Afhankelijkheden zijn mogelijkmakers** — ze tonen wat mogelijk is, niet wat de volgende vereiste is
 
 ```
-  voorstel ──→ specificaties ──→ ontwerp ──→ taken ──→ implementatie
+  voorstel ──→ specificaties ──→ ontwerp ──→ taken ──→ implementeer
 ```
 
 ## Installatie
 
 ```bash
-# Zorg dat openspec is geïnstalleerd — vaardigheden worden automatisch gegenereerd
+# Zorg ervoor dat je openspec geïnstalleerd hebt — skills worden automatisch gegenereerd
 openspec init
 ```
 
-Dit maakt vaardigheden aan in `.claude/skills/` (of equivalent) die AI-codingassistenten automatisch detecteren.
+Dit maakt skills aan in `.claude/skills/` (of equivalent) die AI-code-assistenten automatisch detecteren.
 
-Standaard gebruikt OpenSpec het `core` werkwijzeprofiel (`propose`, `explore`, `apply`, `sync`, `archive`). Als je de uitgebreide werkwijzeopdrachten wilt (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`), configureer ze met `openspec config profile` en pas toe met `openspec update`.
+Standaard gebruikt OpenSpec het `core` werkstroomprofiel (`propose`, `explore`, `apply`, `sync`, `archive`). Als je de uitgebreide werkstroomopdrachten wilt (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`), configureer ze met `openspec config profile` en pas toe met `openspec update`.
 
-Tijdens de installatie wordt je gevraagd een **projectconfiguratie** aan te maken (`openspec/config.yaml`). Dit is optioneel maar aanbevolen.
+Tijdens de installatie wordt je gevraagd een **projectconfig** (`openspec/config.yaml`) te maken. Dit is optioneel maar aanbevolen.
 
 ## Projectconfiguratie
 
-Met de projectconfiguratie kun je standaardwaarden instellen en projectspecifieke context injecteren in alle artefacten.
+Projectconfig laat je standaardwaarden instellen en projectspecifieke context injecteren in alle artefacten.
 
-### Configuratie aanmaken
+### Config aanmaken
 
-Configuratie wordt aangemaakt tijdens `openspec init`, of handmatig:
+Config wordt aangemaakt tijdens `openspec init`, of handmatig:
 
 ```yaml
 # openspec/config.yaml
@@ -86,45 +83,45 @@ schema: spec-driven
 
 context: |
   Tech stack: TypeScript, React, Node.js
-  API-conventies: RESTful, JSON-responsen
+  API-conventies: RESTful, JSON-responses
   Testen: Vitest voor unit tests, Playwright voor e2e
-  Stijl: ESLint met Prettier, strikte TypeScript
+  Stijl: ESLint met Prettier, strikt TypeScript
 
 rules:
   proposal:
-    - Inclusief terugvalplan
+    - Neem een terugdraaiplan op
     - Identificeer betrokken teams
   specs:
     - Gebruik Given/When/Then-formaat voor scenario's
   design:
-    - Inclusief sequentiediagrammen voor complexe stromen
+    - Neem sequentiediagrammen op voor complexe stromen
 ```
 
-### Configuratievelden
+### Config-velden
 
 | Veld | Type | Beschrijving |
-|------|------|--------------|
+|------|------|-------------|
 | `schema` | string | Standaardschema voor nieuwe wijzigingen (bijv. `spec-driven`) |
 | `context` | string | Projectcontext die in alle artefactinstructies wordt geïnjecteerd |
-| `rules` | object | Regels per artefact, sleutel op artefact-ID |
+| `rules` | object | Regels per artefact, gebaseerd op artefact-ID |
 
 ### Hoe het werkt
 
-**Schemavoorrang** (hoogste naar laagste):
+**Schemaprioriteit** (hoogste naar laagste):
 1. CLI-vlag (`--schema <naam>`)
 2. Wijzigingsmetadata (`.openspec.yaml` in wijzigingsmap)
-3. Projectconfiguratie (`openspec/config.yaml`)
+3. Projectconfig (`openspec/config.yaml`)
 4. Standaard (`spec-driven`)
 
 **Contextinjectie:**
-- Context wordt voorafgeplakt aan elke artefactinstructie
-- Omhuld door `<context>...</context>` tags
-- Helpt AI de conventies van je project te begrijpen
+- Context wordt vooraan elk artefact's instructies geplakt
+- Ingesloten in `<context>...</context>`-tags
+- Helpt de AI om de conventies van je project te begrijpen
 
 **Regelinjectie:**
 - Regels worden alleen geïnjecteerd voor overeenkomende artefacten
-- Omhuld door `<rules>...</rules>` tags
-- Verschijnen na de context, vóór het sjabloon
+- Ingesloten in `<rules>...</rules>`-tags
+- Worden na de context, voor het sjabloon weergegeven
 
 ### Artefact-ID's per schema
 
@@ -132,45 +129,46 @@ rules:
 - `proposal` — Wijzigingsvoorstel
 - `specs` — Specificaties
 - `design` — Technisch ontwerp
-- `taken` — Implementatietaken
+- `tasks` — Implementatietaken
 
-### Configuratievalidatie
+### Config-validatie
 
 - Onbekende artefact-ID's in `rules` genereren waarschuwingen
 - Schemanamen worden gevalideerd tegen beschikbare schema's
 - Context heeft een limiet van 50KB
 - Ongeldige YAML wordt gerapporteerd met regelnummers
 
-### Probleemoplossing
+### Problemen oplossen
 
-**"Onbekend artefact-ID in regels: X"**
+**"Onbekende artefact-ID in regels: X"**
 - Controleer of artefact-ID's overeenkomen met je schema (zie lijst hierboven)
-- Voer `openspec schemas --json` uit om artefact-ID's per schema te bekijken
+- Voer `openspec schemas --json` uit om artefact-ID's voor elk schema te zien
 
-**Configuratie wordt niet toegepast:**
-- Zorg dat het bestand op `openspec/config.yaml` staat (niet `.yml`)
-- Controleer YAML-syntax met een validator
-- Configuratieveranderingen worden direct van kracht (geen herstart nodig)
+**Config wordt niet toegepast:**
+- Zorg dat het bestand zich op `openspec/config.yaml` bevindt (niet `.yml`)
+- Controleer de YAML-syntaxis met een validator
+- Config-wijzigingen zijn direct van kracht (geen herstart nodig)
 
 **Context te groot:**
 - Context is beperkt tot 50KB
-- Vat samen of verwijs naar externe documenten
+- Vat in plaats daarvan samen of link naar externe documentatie
 
 ## Opdrachten
 
 | Opdracht | Wat het doet |
 |----------|--------------|
-| `/opsx:propose` | Maak een wijziging en genereer planningsartefacten in één stap (standaard snelle route) |
-| `/opsx:explore` | Denk ideeën door, onderzoek problemen, verhelder vereisten |
-| `/opsx:new` | Start een nieuw wijzigingsskelet (uitgebreide werkwijze) |
-| `/opsx:continue` | Maak het volgende artefact aan (uitgebreide werkwijze) |
-| `/opsx:ff` | Snel vooruit met planningsartefacten (uitgebreide werkwijze) |
-| `/opsx:apply` | Implementeer taken, werk artefacten bij waar nodig |
-| `/opsx:verify` | Valideer implementatie tegen artefacten (uitgebreide werkwijze) |
-| `/opsx:sync` | Synchroniseer delta-specificaties naar hoofd (standaard werkwijze, optioneel) |
-| `/opsx:archive` | Archiveer wanneer klaar |
-| `/opsx:bulk-archive` | Archiveer meerdere voltooide wijzigingen (uitgebreide werkwijze) |
-| `/opsx:onboard` | Begeleide doorloop van een eind-tot-eind-wijziging (uitgebreide werkwijze) |
+| `/opsx:propose` | Maak een wijziging en genereer planartefacten in één stap (standaard snelle route) |
+| `/opsx:explore` | Denk ideeën uit, onderzoek problemen, verduidelijk vereisten |
+| `/opsx:new` | Start een nieuw wijzigingskader (uitgebreide werkstroom) |
+| `/opsx:continue` | Maak het volgende artefact (uitgebreide werkstroom) |
+| `/opsx:ff` | Snel-doorlopen van planartefacten (uitgebreide werkstroom) |
+| `/opsx:apply` | Implementeer taken, werk artefacten bij indien nodig |
+| `/opsx:update` | Herschrijf de planartefacten van een wijziging en houd ze coherent |
+| `/opsx:verify` | Valideer implementatie tegen artefacten (uitgebreide werkstroom) |
+| `/opsx:sync` | Sync delta-specificaties naar main (standaard werkstroom, optioneel) |
+| `/opsx:archive` | Archiveer als je klaar bent |
+| `/opsx:bulk-archive` | Archiveer meerdere voltooide wijzigingen (uitgebreide werkstroom) |
+| `/opsx:onboard` | Begeleide doorloop van een end-to-end wijziging (uitgebreide werkstroom) |
 
 ## Gebruik
 
@@ -178,88 +176,94 @@ rules:
 ```
 /opsx:explore
 ```
-Denk ideeën door, onderzoek problemen, vergelijk opties. Geen structuur vereist - gewoon een denkpartner. Wanneer inzichten kristalliseren, ga dan over naar `/opsx:propose` (standaard) of `/opsx:new`/`/opsx:ff` (uitgebreid).
+Denk ideeën uit, onderzoek problemen, vergelijk opties. Geen structuur vereist - gewoon een denkpartner. Wanneer inzichten kristalliseren, ga je over naar `/opsx:propose` (standaard) of `/opsx:new`/`/opsx:ff` (uitgebreid).
 
 ### Start een nieuwe wijziging
 ```
 /opsx:propose
 ```
-Maakt de wijziging aan en genereert de planningsartefacten die nodig zijn vóór implementatie.
+Maakt de wijziging en genereert planartefacten die nodig zijn vóór implementatie.
 
-Als je uitgebreide werkwijzen hebt ingeschakeld, kun je in plaats daarvan gebruiken:
+Als je uitgebreide werkstromen hebt ingeschakeld, kun je in plaats daarvan gebruiken:
 
 ```text
-/opsx:new        # alleen skelet
-/opsx:continue   # maak één artefact tegelijk aan
-/opsx:ff         # maak alle planningsartefacten in één keer aan
+/opsx:new        # alleen kader
+/opsx:continue   # maak één artefact tegelijk
+/opsx:ff         # maak alle planartefacten in één keer
 ```
 
 ### Artefacten aanmaken
 ```
 /opsx:continue
 ```
-Toont wat klaar is om aan te maken op basis van afhankelijkheden, en maakt dan één artefact aan. Gebruik herhaaldelijk om je wijziging stapsgewijs op te bouwen.
+Toont wat klaar is om te maken op basis van afhankelijkheden, en maakt daarna één artefact. Gebruik herhaaldelijk om je wijziging stap voor stap op te bouwen.
 
 ```
 /opsx:ff add-dark-mode
 ```
-Maakt alle planningsartefacten in één keer aan. Gebruik wanneer je een duidelijk beeld hebt van wat je bouwt.
+Maakt alle planartefacten in één keer. Gebruik dit als je een duidelijk beeld hebt van wat je bouwt.
 
-### Implementeren (het flexibele deel)
+### Implementeer (het vloeibare deel)
 ```
 /opsx:apply
 ```
-Werkt taken af, vinkt ze af terwijl je bezig bent. Als je met meerdere wijzigingen tegelijk werkt, kun je `/opsx:apply <naam>` uitvoeren; anders moet het uit de conversatie afleiden en je vragen te kiezen als het het niet kan bepalen.
+Werkt taken af, vinkt ze af terwijl je gaat. Als je met meerdere wijzigingen bezig bent, kun je `/opsx:apply <naam>` uitvoeren; anders zou het uit het gesprek moeten afleiden en je vragen om te kiezen als het niet kan zien wat je bedoelt.
+
+### Een wijziging bijwerken
+```
+/opsx:update add-dark-mode - we're storing the theme in a cookie now
+```
+Herschrijft de bestaande planartefacten van de wijziging en houdt ze coherent - in elke richting (een ontwerpwijziging kan terugwerken naar het voorstel). Alleen planartefacten: het bewerkt nooit code, en het maakt nooit ontbrekende artefacten (dat is `/opsx:continue`). Elke bewerking wordt eerst met je bevestigd. Als de wijziging al was geïmplementeerd, beveelt het `/opsx:apply` aan zodat de code opdraait met het herziene plan. Als je herziening de *intentie* van de wijziging verandert, begin dan opnieuw - zie [Wanneer updaten vs. opnieuw beginnen](#when-to-update-vs-start-fresh).
 
 ### Afronden
 ```
-/opsx:archive   # Verplaats naar archief wanneer klaar (vraagt om specificaties te synchroniseren indien nodig)
+/opsx:archive   # Verplaats naar archief als je klaar bent (vraagt om specificaties te synchroniseren indien nodig)
 ```
 
-## Wanneer bijwerken versus opnieuw beginnen
+## Wanneer updaten vs. opnieuw beginnen
 
-Je kunt altijd je voorstel of specificaties bewerken vóór implementatie. Maar wanneer wordt verfijnen "dit is ander werk"?
+Je kunt je voorstel of specificaties altijd bewerken vóór implementatie. Maar wanneer wordt verfijnen "dit is ander werk"?
 
 ### Wat een voorstel vastlegt
 
 Een voorstel definieert drie dingen:
 1. **Intentie** — Welk probleem los je op?
-2. **Bereik** — Wat valt binnen/buiten de scope?
+2. **Scope** — Wat valt binnen/buiten de grenzen?
 3. **Aanpak** — Hoe ga je het oplossen?
 
-De vraag is: wat is veranderd, en hoeveel?
+De vraag is: wat is er veranderd, en hoeveel?
 
-### Werk de bestaande wijziging bij wanneer:
+### Update de bestaande wijziging wanneer:
 
 **Zelfde intentie, verfijnde uitvoering**
 - Je ontdekt randgevallen die je niet had overwogen
-- De aanpak heeft aanpassing nodig maar het doel is ongewijzigd
-- Implementatie onthult dat het ontwerp licht afweek
+- De aanpak hoeft aanpassing maar het doel is ongewijzigd
+- Implementatie onthult dat het ontwerp iets scheef was
 
-**Bereik versmalt**
-- Je realiseert dat het volledige bereik te groot is, wilt eerst een MVP opleveren
-- "Voeg donkere modus toe" → "Voeg donkere modus-schakelaar toe (systeemvoorkeur in v2)"
+**Scope versmalt**
+- Je realiseert je dat de volledige scope te groot is, wil je eerst de MVP uitbrengen
+- "Donkere modus toevoegen" → "Donkere modus toggel toevoegen (systeemvoorkeur in v2)"
 
-**Leergestuurde correcties**
+**Leer gedreven correcties**
 - Codebase is niet gestructureerd zoals je dacht
-- Een afhankelijkheid werkt niet als verwacht
-- "Gebruik CSS-variabelen" → "Gebruik in plaats daarvan Tailwind's dark: prefix"
+- Een afhankelijkheid werkt niet zoals verwacht
+- "Gebruik CSS-variabelen" → "Gebruik in plaats daarvan Tailwind's dark:-voorvoegsel"
 
 ### Start een nieuwe wijziging wanneer:
 
 **Intentie fundamenteel veranderd**
 - Het probleem zelf is nu anders
-- "Voeg donkere modus toe" → "Voeg uitgebreid themasysteem toe met aangepaste kleuren, lettertypen, afstanden"
+- "Donkere modus toevoegen" → "Uitgebreid themasysteem toevoegen met aangepaste kleuren, lettertypes, tussenruimte"
 
-**Bereik explodeerde**
-- Wijziging is zo gegroeid dat het in wezen ander werk is
-- Origineel voorstel zou na updates onherkenbaar zijn
-- "Herstel loginbug" → "Herschrijf authenticatiesysteem"
+**Scope explodeerde**
+- Wijziging groeide zo veel dat het in wezen ander werk is
+- Origineel voorstel zou na updates niet meer herkenbaar zijn
+- "Loginbug fixen" → "Auth-systeem herschrijven"
 
-**Origineel is voltooiibaar**
+**Origineel is af te ronden**
 - De originele wijziging kan als "klaar" worden gemarkeerd
-- Nieuw werk staat op zichzelf, geen verfijning
-- Voltooi "Voeg donkere modus MVP toe" → Archiveer → Nieuwe wijziging "Verbeter donkere modus"
+- Nieuw werk staat op zich, het is geen verfijning
+- Rond "Donkere modus MVP" af → Archiveer → Nieuwe wijziging "Donkere modus uitbreiden"
 
 ### De vuistregels
 
@@ -271,55 +275,54 @@ De vraag is: wat is veranderd, en hoeveel?
                     ┌──────────────────┼──────────────────┐
                     │                  │                  │
                     ▼                  ▼                  ▼
-             Zelfde intentie?   >50% overlap?     Kan origineel
-             Zelfde probleem?   Zelfde bereik?    "klaar" zijn zonder
-                    │                  │          deze veranderingen?
+             Zelfde intentie?      >50% overlap?      Kan origineel
+             Zelfde probleem?     Zelfde scope?        "klaar" zijn zonder
+                    │                  │          deze wijzigingen?
                     │                  │                  │
           ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
           │                 │  │             │   │               │
-         JA                NEE JA           NEE NEE             JA
+         JA               NEE JA           NEE  NEE              JA
           │                 │  │             │   │               │
           ▼                 ▼  ▼             ▼   ▼               ▼
-       BIJWERKEN        NIEUW BIJWERKEN   NIEUW BIJWERKEN     NIEUW
+       UPDATE            NIEUW  UPDATE       NIEUW  UPDATE          NIEUW
 ```
 
-| Test | Bijwerken | Nieuwe wijziging |
-|------|-----------|------------------|
+| Test | Update | Nieuwe wijziging |
+|------|--------|------------------|
 | **Identiteit** | "Hetzelfde, verfijnd" | "Ander werk" |
-| **Bereikoverlap** | >50% overlapt | <50% overlapt |
-| **Voltooiing** | Kan niet "klaar" zijn zonder veranderingen | Kan origineel afmaken, nieuw werk staat op zichzelf |
-| **Verhaal** | Bijwerkingsketen vertelt coherent verhaal | Patches zouden meer verwarren dan verhelderen |
+| **Scope-overlap** | >50% overlap | <50% overlap |
+| **Afronding** | Kan niet "klaar" zijn zonder wijzigingen | Kan origineel afronden, nieuw werk staat op zich |
+| **Verhaal** | Updateketen vertelt coherent verhaal | Patches zouden meer verwarren dan verduidelijken |
 
 ### Het principe
 
-> **Bijwerken behoudt context. Nieuwe wijziging biedt helderheid.**
+> **Update behoudt context. Nieuwe wijziging biedt duidelijkheid.**
 >
-> Kies bijwerken wanneer de geschiedenis van je denkproces waardevol is.
->
-> Kies nieuw wanneer opnieuw beginnen duidelijker zou zijn dan bijwerken.
+> Kies voor update wanneer de geschiedenis van je denken waardevol is.
+> Kies voor nieuw wanneer opnieuw beginnen duidelijker is dan patchen.
 
-Denk aan het als git-branches:
-- Blijf committen terwijl je aan dezelfde functionaliteit werkt
+Zie het als git-branches:
+- Blijf committen terwijl je aan dezelfde functie werkt
 - Start een nieuwe branch wanneer het echt nieuw werk is
-- Soms merge je een gedeeltelijke functionaliteit en begin je fris voor fase 2
+- Soms merge je een gedeeltelijke functie en begin je opnieuw voor fase 2
 
 ## Wat is er anders?
 
-| | Verouderd (`/openspec:proposal`) | OPSX (`/opsx:*`) |
+|  | Legacy (`/openspec:proposal`) | OPSX (`/opsx:*`) |
 |---|---|---|
-| **Structuur** | Eén groot voorsteldocument | Discrete artefacten met afhankelijkheden |
-| **Workflow** | Lineaire fasen: plan → implementeren → archiveren | Vloeiende acties — doe op elk moment alles |
-| **Iteratie** | Ongemakkelijk om terug te gaan | Werk artefacten bij naarmate je leert |
-| **Aanpassing** | Vaste structuur | Schema-gestuurd (definieer je eigen artefacten) |
+| **Structuur** | Eén groot voorstel document | Discrete artefacten met afhankelijkheden |
+| **Werkstroom** | Lineaire fasen: plan → implementeer → archiveer | Vloeibare acties — doe alles op elk moment |
+| **Iteratie** | Onhandig om terug te gaan | Update artefacten terwijl je leert |
+| **Aanpassing** | Vaste structuur | Schema-gedreven (definieer je eigen artefacten) |
 
-**Het belangrijkste inzicht:** werk is niet lineair. OPSX doet alsof dat niet zo is.
+**Het belangrijkste inzicht:** werk is niet lineair. OPSX stopt met doen alsof het wel zo is.
 
-## Diepgaande Architectuuranalyse
+## Architecture Deep Dive
 
-Dit gedeelte legt uit hoe OPSX onder de motorkap werkt en hoe het zich verhoudt tot de verouderde werkstroom.
-Voorbeelden in dit gedeelte maken gebruik van de uitgebreide commandoset (`new`, `continue`, etc.); standaard `core`-gebruikers kunnen dezelfde stroom toewijzen aan `propose → apply → sync → archive`.
+Deze sectie legt uit hoe OPSX onder de motorkap werkt en hoe het zich verhoudt tot de legacy workflow.
+Voorbeelden in deze sectie gebruiken de uitgebreide commandoset (`new`, `continue`, etc.); standaard `core`-gebruikers kunnen dezelfde flow toewijzen aan `propose → apply → sync → archive`.
 
-### Filosofie: Fasen versus Acties
+### Filosofie: Fases vs Acties
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -340,7 +343,6 @@ Voorbeelden in dit gedeelte maken gebruik van de uitgebreide commandoset (`new`,
 │   • Phase gates enforce linear progression                                  │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
-
 
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                            OPSX WORKFLOW                                     │
@@ -363,9 +365,9 @@ Voorbeelden in dit gedeelte maken gebruik van de uitgebreide commandoset (`new`,
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Componentarchitectuur
+### Component Architectuur
 
-**Verouderde werkstroom** maakt gebruik van vastgelegde sjablonen in TypeScript:
+**Legacy workflow** gebruikt hardcoded templates in TypeScript:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -386,7 +388,7 @@ Voorbeelden in dit gedeelte maken gebruik van de uitgebreide commandoset (`new`,
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**OPSX** maakt gebruik van externe schema's en een afhankelijkheidsgrafeen-engine:
+**OPSX** gebruikt externe schema's en een dependency graph engine:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -423,9 +425,9 @@ Voorbeelden in dit gedeelte maken gebruik van de uitgebreide commandoset (`new`,
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Afhankelijkheidsgrafeenmodel
+### Dependency Graph Model
 
-Artefacten vormen een gericht acyclisch graaf (DAG). Afhankelijkheden zijn **enablers**, geen poorten:
+Artifacts vormen een directed acyclic graph (DAG). Dependencies zijn **inschakelaars**, geen poorten:
 
 ```
                               proposal
@@ -453,7 +455,7 @@ Artefacten vormen een gericht acyclisch graaf (DAG). Afhankelijkheden zijn **ena
                           └──────────────┘
 ```
 
-**Toestandsovergangen:**
+**Statusovergangen:**
 
 ```
    BLOCKED ────────────────► READY ────────────────► DONE
@@ -464,7 +466,7 @@ Artefacten vormen een gericht acyclisch graaf (DAG). Afhankelijkheden zijn **ena
 
 ### Informatiestroom
 
-**Verouderde werkstroom** — agent ontvangt statische instructies:
+**Legacy workflow** — agent ontvangt statische instructies:
 
 ```
   User: "/openspec:proposal"
@@ -523,23 +525,23 @@ Artefacten vormen een gericht acyclisch graaf (DAG). Afhankelijkheden zijn **ena
 
 ### Iteratiemodel
 
-**Verouderde werkstroom** — onhandig om te itereren:
+**Legacy workflow** — onhandig om te itereren:
 
 ```
   ┌─────────┐     ┌─────────┐     ┌─────────┐
   │/proposal│ ──► │ /apply  │ ──► │/archive │
   └─────────┘     └─────────┘     └─────────┘
        │               │
-       │               ├── "Wait, the design is wrong"
+       │               ├── "Wacht, het ontwerp is fout"
        │               │
-       │               ├── Options:
-       │               │   • Edit files manually (breaks context)
-       │               │   • Abandon and start over
-       │               │   • Push through and fix later
+       │               ├── Opties:
+       │               │   • Bewerk bestanden handmatig (breekt context)
+       │               │   • Verwerp en begin opnieuw
+       │               │   • Druk door en repareer later
        │               │
-       │               └── No official "go back" mechanism
+       │               └── Geen officiële "ga terug"-mechanisme
        │
-       └── Creates ALL artifacts at once
+       └── Creëert ALLE artefacten in één keer
 ```
 
 **OPSX** — natuurlijke iteratie:
@@ -547,40 +549,40 @@ Artefacten vormen een gericht acyclisch graaf (DAG). Afhankelijkheden zijn **ena
 ```
   /opsx:new ───► /opsx:continue ───► /opsx:apply ───► /opsx:archive
       │                │                  │
-      │                │                  ├── "The design is wrong"
+      │                │                  ├── "Het ontwerp is fout"
       │                │                  │
       │                │                  ▼
-      │                │            Just edit design.md
-      │                │            and continue!
+      │                │            Bewerk gewoon design.md
+      │                │            en ga door!
       │                │                  │
       │                │                  ▼
-      │                │         /opsx:apply picks up
-      │                │         where you left off
+      │                │         /opsx:apply hervat
+      │                │         waar je gebleven was
       │                │
-      │                └── Creates ONE artifact, shows what's unlocked
+      │                └── Creëert ÉÉN artefact, laat zien wat vrijgegeven is
       │
-      └── Scaffolds change, waits for direction
+      └── Creëert basisstructuur voor wijziging, wacht op richting
 ```
 
 ### Aangepaste Schema's
 
-Maak aangepaste werkstromen met behulp van de schema-beheercommando's:
+Maak aangepaste workflows met behulp van de schema-beheeropdrachten:
 
 ```bash
-# Create a new schema from scratch (interactive)
+# Maak een nieuw schema vanaf nul (interactief)
 openspec schema init my-workflow
 
-# Or fork an existing schema as a starting point
+# Of fork een bestaand schema als uitgangspunt
 openspec schema fork spec-driven my-workflow
 
-# Validate your schema structure
+# Valideer uw schemastructuur
 openspec schema validate my-workflow
 
-# See where a schema resolves from (useful for debugging)
+# Zie waar een schema vandaan wordt opgelost (nuttig voor foutopsporing)
 openspec schema which my-workflow
 ```
 
-Schema's worden opgeslagen in `openspec/schemas/` (projectlokaal, versiebeheerd) of `~/.local/share/openspec/schemas/` (gebruikersglobaal).
+Schema's worden opgeslagen in `openspec/schemas/` (project-lokaal, versiebeheer) of `~/.local/share/openspec/schemas/` (gebruikers-globaal).
 
 **Schemastructuur:**
 ```
@@ -596,68 +598,67 @@ openspec/schemas/research-first/
 ```yaml
 name: research-first
 artifacts:
-  - id: research        # Added before proposal
+  - id: research        # Toegevoegd voor proposal
     generates: research.md
     requires: []
 
   - id: proposal
     generates: proposal.md
-    requires: [research]  # Now depends on research
+    requires: [research]  # Hangt nu af van research
 
   - id: tasks
     generates: tasks.md
     requires: [proposal]
 ```
 
-**Afhankelijkheidsgrafeen:**
+**Afhankelijkheidsgrafiek:**
 ```
    research ──► proposal ──► tasks
 ```
 
 ### Samenvatting
 
-| Aspect | Legacy | OPSX |
+| Aspect | Verouderd | OPSX |
 |--------|----------|------|
-| **Sjablonen** | Vastgelegde TypeScript | Externe YAML + Markdown |
-| **Afhankelijkheden** | Geen (alles tegelijk) | DAG met topologische sortering |
-| **Toestand** | Fase-gebaseerd mentaal model | Bestandssysteem aanwezigheid |
-| **Aanpasbaarheid** | Bron bewerken, herbouwen | schema.yaml aanmaken |
-| **Iteratie** | Fase-vergrendeld | Vloeiend, alles bewerkbaar |
-| **Editorondersteuning** | Toolspecifieke configurator/adapters | Enkele vaardighedenmap |
-
+| **Sjablonen** | Hardcoded TypeScript | Externe YAML + Markdown |
+| **Afhankelijkheden** | Geen (allemaal tegelijk) | DAG met topologische sortering |
+| **Status** | Op fasen gebaseerd mentaal model | Aanwezigheid in bestandssysteem |
+| **Aanpassing** | Bewerk bron, herbouw | Maak schema.yaml |
+| **Iteratie** | Fasevergrendeld | Vloeiend, bewerk alles |
+| **Editorondersteuning** | Tool-specifieke configurator/adapters | Enkele skills-map |
 ## Schema's
 
 Schema's definiëren welke artefacten bestaan en hun afhankelijkheden. Momenteel beschikbaar:
 
-- **spec-gestuurd** (standaard): voorstel → specificaties → ontwerp → taken
+- **spec-driven** (standaard): proposal → specs → design → tasks
 
 ```bash
-# List available schemas
+# Lijst beschikbare schema's
 openspec schemas
 
-# See all schemas with their resolution sources
+# Bekijk alle schema's met hun resolutiebronnen
 openspec schema which --all
 
-# Create a new schema interactively
+# Maak een nieuw schema interactief
 openspec schema init my-workflow
 
-# Fork an existing schema for customization
+# Fork een bestaand schema voor aanpassing
 openspec schema fork spec-driven my-workflow
 
-# Validate schema structure before use
+# Valideer schemastructuur voor gebruik
 openspec schema validate my-workflow
 ```
 
 ## Tips
 
-- Gebruik `/opsx:explore` om een idee door te denken voordat je een wijziging doorvoert
-- `/opsx:ff` wanneer je weet wat je wilt, `/opsx:continue` wanneer je aan het verkennen bent
-- Tijdens `/opsx:apply`, als er iets mis is — repareer het artefact en ga dan verder
-- Taken volgen de voortgang via selectievakjes in `tasks.md`
+- Gebruik `/opsx:explore` om een idee te doordenken voordat je je vastlegt op een wijziging
+- `/opsx:ff` als je weet wat je wilt, `/opsx:continue` tijdens het verkennen
+- Tijdens `/opsx:apply`, als er iets mis is — herstel het artefact, ga dan verder
+- Taken bijhouden van de voortgang via selectievakjes in `tasks.md`
 - Controleer de status op elk moment: `openspec status --change "name"`
 
 ## Feedback
 
-Dit is ruw. Dat is met opzet — we leren wat werkt.
+Dit is ruw. Dat is opzettelijk — we leren wat werkt.
 
-Heb je een bug gevonden? Heb je ideeën? Doe mee op [Discord](https://discord.gg/YctCnvvshC) of open een issue op [GitHub](https://github.com/Fission-AI/openspec/issues).
+Een bug gevonden? Ideeën? Doe mee met ons op [Discord](https://discord.gg/YctCnvvshC) of open een issue op [GitHub](https://github.com/Fission-AI/openspec/issues).

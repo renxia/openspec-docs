@@ -1,20 +1,20 @@
-# OPSX'ye Geçiş
+# OPSX'e Geçiş
 
-Bu kılavuz, eski OpenSpec iş akışından OPSX'ye geçiş yapmanıza yardımcı olur. Geiş süreci sorunsuz olacak şekilde tasarlanmıştır—mevcut çalışmalarınız korunur ve yeni sistem daha fazla esneklik sunar.
+Bu kılavuz, eski OpenSpec iş akışından OPSX'e geçiş yapmanıza yardımcı olur. Geçiş sorunsuz olacak şekilde tasarlanmıştır—mevcut çalışmalarınız korunur ve yeni sistem daha fazla esneklik sunar.
 
-## Neler Değişiyor?
+## Ne Değişiyor?
 
-OPSX, eski aşama-kilitli iş akışını akıcı, eylem tabanlı bir yaklaşımla değiştirir. İşte temel değişim:
+OPSX, eski aşamalı kilitli iş akışını akışkan, eylem temelli bir yaklaşımla değiştirir. İşte temel değişiklik:
 
-| Yön | Eski Sistem | OPSX |
+| Yön | Eski Sürüm | OPSX |
 |--------|--------|------|
-| **Komutlar** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | Varsayılan: `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, `/opsx:archive` (genişletilmiş iş akış komutları isteğe bağlı) |
-| **İş Akışı** | Tüm çıktıları bir anda oluştur | Aşamalı veya bir anda oluştur—sizin seçiminiz |
-| **Geri Dönme** | Hantal aşama kapıları | Doğal—herhangi bir çıktıyı istediğiniz zaman güncelleyin |
-| **Özelleştirme** | Sabit yapı | Şema odaklı, tamamen özelleştirilebilir |
-| **Yapılandırma** | İşaretleyicilerle `CLAUDE.md` + `project.md` | `openspec/config.yaml` içinde temiz yapılandırma |
+| **Komutlar** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | Varsayılan: `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, `/opsx:archive` (genişletilmiş iş akışı komutları isteğe bağlıdır) |
+| **İş Akışı** | Tüm yapıtları bir kerede oluştur | Kademeli olarak veya bir kerede oluştur—tercih sizin |
+| **Geri Dönüş** | Garip aşama geçitleri | Doğal—istediğiniz zaman herhangi bir yapıtı güncelleyin |
+| **Özelleştirme** | Sabit yapı | Şema temelli, tamamen özelleştirilebilir |
+| **Yapılandırma** | `CLAUDE.md` (işaretçilerle) + `project.md` | `openspec/config.yaml` içinde temiz yapılandırma |
 
-**Felsefe değişikliği:** İş doğrusal değildir. OPSX bunu yapma iddiasını bırakır.
+**Felsefe değişikliği:** İş doğrusal değildir. OPSX, öyle olduğu iddiasında bulunmayı bırakır.
 
 ---
 
@@ -22,87 +22,88 @@ OPSX, eski aşama-kilitli iş akışını akıcı, eylem tabanlı bir yaklaşım
 
 ### Mevcut Çalışmalarınız Güvende
 
-Geçiş süreci, koruma odaklı olarak tasarlanmıştır:
+Geçiş süreci, mevcut içeriklerin korunması göz önünde bulundurularak tasarlanmıştır:
 
-- **`openspec/changes/` içindeki aktif değişiklikler** — Tamamen korunur. OPSX komutlarıyla bunlara devam edebilirsiniz.
-- **Arşivlenmiş değişiklikler** — Değiştirilmez. Geçmişiniz bozulmadan kalır.
-- **`openspec/specs/` içindeki ana spesifikasyonlar** — Değiştirilmez. Bunlar doğruluk kaynağınızdır.
-- **CLAUDE.md, AGENTS.md vb. içindeki içerikleriniz** — Korunur. Yalnızca OpenSpec işaret blokları kaldırılır; yazdığınız her şey kalır.
+- **`openspec/changes/` dizinindeki aktif değişiklikler** — Tamamen korunur. OPSX komutları ile üzerlerinde çalışmaya devam edebilirsiniz.
+- **Arşivlenmiş değişiklikler** — Dokunulmaz. Geçmişiniz tamamen korunur.
+- **`openspec/specs/` dizinindeki ana spesifikasyonlar** — Dokunulmaz. Bunlar doğru kaynaklarınızdır.
+- **CLAUDE.md, AGENTS.md vb. dosyalardaki içerikleriniz** — Korunur. Sadece OpenSpec işaretleyici blokları kaldırılır; yazdığınız her şey kalır.
 
-### Neler Kaldırılır
+### Neler Kaldırılıyor
 
-Yalnızca değiştirilen OpenSpec tarafından yönetilen dosyalar:
+Sadece yerini alan OpenSpec tarafından yönetilen dosyalar kaldırılır:
 
 | Ne | Neden |
-|------|-----|
-| Eski eğik çizgi komut dizinleri/dosyaları | Yeni beceriler sistemiyle değiştirildi |
-| `openspec/AGENTS.md` | Kullanımdan kaldırılmış iş akışı tetikleyicisi |
-| `CLAUDE.md`, `AGENTS.md` vb. içindeki OpenSpec işaretleri | Artık gerekli değil |
+|----|-------|
+| Eski eğik çizgi komut dizinleri/dosyaları | Yeni beceri (skills) sistemi ile değiştirildi |
+| `openspec/AGENTS.md` | Artık kullanılmayan iş akışı tetikleyicisi |
+| CLAUDE.md, AGENTS.md vb. dosyalardaki OpenSpec işaretleyicileri | Artık gerekli değil |
 
-**Araca göre eski komut konumları** (örnekler—aracınız farklı olabilir):
+**Araçlara göre eski komut konumları** (örnekler—kullandığınız araç farklı olabilir):
 
 - Claude Code: `.claude/commands/openspec/`
 - Cursor: `.cursor/commands/openspec-*.md`
 - Windsurf: `.windsurf/workflows/openspec-*.md`
 - Cline: `.clinerules/workflows/openspec-*.md`
 - Roo: `.roo/commands/openspec-*.md`
-- GitHub Copilot: `.github/prompts/openspec-*.prompt.md` (Yalnızca IDE uzantıları; Copilot CLI'da desteklenmez)
-- Ve diğerleri (Augment, Continue, Amazon Q vb.)
+- GitHub Copilot: `.github/prompts/openspec-*.prompt.md` (sadece IDE eklentileri; Copilot CLI'de desteklenmez)
+- Codex: OpenSpec artık `.codex/skills/openspec-*` kullanır; eski temizlik sadece `$CODEX_HOME/prompts` veya `~/.codex/prompts` dizinindeki OpenSpec'ın izin verilen listesindeki eski Codex istem dosyalarını hedefler ve sadece yerini alan beceri dosyaları mevcut olduktan sonra bunları kaldırır.
+- Diğer araçlar (Augment, Continue, Amazon Q vb.)
 
-Geçiş, yapılandırdığınız araçları algılar ve eski dosyalarını temizler.
+Geçiş süreci, yapılandırdığınız araçları tespit eder ve bu araçların eski dosyalarını temizler.
 
-Kaldırma listesi uzun görünebilir, ancak bunların tümü OpenSpec'in başlangıçta oluşturduğu dosyalardır. Sizin kendi içeriğiniz asla silinmez.
+Kaldırılacak dosyalar listesi uzun görünebilir, ancak bunların hepsi OpenSpec tarafından başlangıçta oluşturulan dosyalardır. Kendi içerikleriniz asla silinmez.
 
-### Dikkat Etmeniz Gerekenler
+### Dikkatinize Sunulması Gerekenler
 
-Bir dosya manuel geçiş gerektirir:
+Bir dosya için elle geçiş yapmanız gerekir:
 
-**`openspec/project.md`** — Bu dosya, yazdığınız proje bağlamını içerebileceğinden otomatik olarak silinmez. Şunları yapmanız gerekir:
+**`openspec/project.md`** — Bu dosya otomatik olarak silinmez çünkü yazdığınız proje bağlamı içerebilir. Şunları yapmanız gerekir:
 
-1. İçeriğini inceleyin
-2. Yararlı bağlamı `openspec/config.yaml` dosyasına taşıyın (aşağıdaki yönergeye bakın)
+1. İçeriğini gözden geçirin
+2. Yararlı bağlamı `openspec/config.yaml` dosyasına taşıyın (aşağıdaki yönlere bakın)
 3. Hazır olduğunuzda dosyayı silin
 
 **Bu değişikliği neden yaptık:**
 
-Eski `project.md` pasifti—yapay zeka ajanları onu okuyabilir, okumayabilir veya okuduklarını unutabilir. Güvenilirliğin tutarsız olduğunu tespit ettik.
+Eski `project.md` pasifti—ajanlar onu okurdu, okumuyordu, okuduğunu unutuyordu. Güvenilirliğin düzensiz olduğunu gördük.
 
-Yeni `config.yaml` bağlamı, **her OpenSpec planlama istemine aktif olarak enjekte edilir**. Bu, proje sözleşmelerinizin, teknoloji yığınınızın ve kurallarınızın yapay zeka ürünler oluştururken her zaman mevcut olduğu anlamına gelir. Daha yüksek güvenilirlik.
+Yeni `config.yaml` bağlamı **her OpenSpec planlama isteğine aktif olarak eklenir**. Bu, proje kurallarınız, teknoloji yığınız ve kurallarınızın AI artıfact'ları oluştururken her zaman mevcut olması anlamına gelir. Daha yüksek güvenilirlik.
 
-**Taviz:**
+**Uzlaşı:**
 
-Bağlam her isteme enjekte edildiğinden, özlü olmak isteyeceksiniz. Gerçekten önemli olana odaklanın:
-- Teknoloji yığını ve temel sözleşmeler
-- Yapay zekanın bilmesi gereken bariz olmayan kısıtlamalar
-- Daha önce sıkça göz ardı edilen kurallar
+Bağlam her isteğe eklendiği için öz olmalısınız. Gerçekten önemli olanlara odaklanın:
+- Teknoloji yığını ve temel kurallar
+- AI'nın bilmesi gereken açık olmayan kısıtlamalar
+- Daha önce sık sık göz ardı edilen kurallar
 
-Mükemmel olmaya çalışmayın. Burada neyin en iyi işe yaradığını hâlâ öğreniyoruz ve deneylerimizle bağlam enjeksiyonunun nasıl çalıştığını geliştirmeye devam edeceğiz.
+Mükemmel olmasından endişe etmeyin. Burada neyin en iyi çalıştığını öğreniyoruz ve deneyimlerimizde bağlam ekleme yöntemini iyileştireceğiz.
 
 ---
 
-## Geçişi Çalıştırmak
+## Geçişi Çalıştırma
 
-Hem `openspec init` hem de `openspec update` eski dosyaları algılar ve sizi aynı temizleme sürecinden geçirir. Durumunuza uygun olanı kullanın:
+Hem `openspec init` hem de `openspec update` komutları eski dosyaları tespit eder ve sizi aynı temizlik sürecinden yönlendirir. Durumunuza uygun olanı kullanın:
 
 - Yeni kurulumlar varsayılan olarak `core` profilini kullanır (`propose`, `explore`, `apply`, `sync`, `archive`).
-- Geçiş yapılan kurulumlar, gerektiğinde `custom` profili yazarak daha önce yüklediğiniz iş akışlarını korur.
+- Geçiş yapılmış kurulumlar, gerektiğinde `custom` profili yazarak daha önce kurduğunuz iş akışlarını korur.
 
 ### `openspec init` Kullanımı
 
-Yeni araçlar eklemek veya hangi araçların kurulduğunu yeniden yapılandırmak istiyorsanız bunu çalıştırın:
+Yeni araçlar eklemek veya kurulu araçları yeniden yapılandırmak istiyorsanız bunu çalıştırın:
 
 ```bash
 openspec init
 ```
 
-init komutu eski dosyaları algılar ve temizlikte size rehberlik eder:
+Init komutu eski dosyaları tespit eder ve sizi temizlik sürecinden yönlendirir:
 
 ```
-Yeni OpenSpec'e yükseltme
+Yeni OpenSpec sürümüne yükseltiliyor
 
-OpenSpec artık kodlama ajanları arasında ortaya çıkan standart olan
-yapay zeka becerilerini kullanır. Bu, her şeyi önceki gibi çalışır
-tutarken kurulumunuzu basitleştirir.
+OpenSpec artık kod yazma ajanları arasında ortaklaşa kullanılan standart olan
+ajan becerilerini (skills) kullanır. Bu, kurulumunuzu basitleştirirken her şeyi
+eskisi gibi çalışır durumda tutar.
 
 Kaldırılacak dosyalar
 Korunacak kullanıcı içeriği yok:
@@ -110,72 +111,73 @@ Korunacak kullanıcı içeriği yok:
   • openspec/AGENTS.md
 
 Güncellenecek dosyalar
-OpenSpec işaretleri kaldırılacak, içeriğiniz korunacak:
+OpenSpec işaretleyicileri kaldırılacak, içeriğiniz korunacak:
   • CLAUDE.md
   • AGENTS.md
 
-Dikkatinizi gerektirenler
+Dikkatinize sunulması gerekenler
   • openspec/project.md
     Bu dosyayı silmeyeceğiz. Yararlı proje bağlamı içerebilir.
 
-    Yeni openspec/config.yaml dosyasında planlama bağlamı için bir
-    "context:" bölümü vardır. Bu, her OpenSpec istemine dahil edilir
-    ve eski project.md yaklaşımından daha güvenilir çalışır.
+    Yeni openspec/config.yaml dosyasında planlama bağlamı için bir "context:" bölümü bulunur.
+    Bu, eski project.md yaklaşımından daha güvenilir çalışır ve her OpenSpec isteğine dahil edilir.
 
-    project.md'yi inceleyin, yararlı içeriği config.yaml'nin context
-    bölümüne taşıyın, ardından hazır olduğunuzda dosyayı silin.
+    project.md dosyasını gözden geçirin, yararlı içeriği config.yaml'ın context bölümüne taşıyın,
+    ardından hazır olduğunuzda dosyayı silin.
 
-? Eski dosyalar yükseltip temizlensin mi? (E/h)
+? Eski dosyaları yükselt ve temizle? (E/h)
 ```
 
-**Evet dediğinizde ne olur:**
+**Evet derseniz ne olur:**
 
 1. Eski eğik çizgi komut dizinleri kaldırılır
-2. `CLAUDE.md`, `AGENTS.md` vb. dosyalardan OpenSpec işaretleri çıkarılır (içeriğiniz kalır)
-3. `openspec/AGENTS.md` silinir
-4. Yeni beceriler `.claude/skills/` dizinine yüklenir
-5. `openspec/config.yaml` varsayılan bir şemayla oluşturulur
+2. `CLAUDE.md`, `AGENTS.md` vb. dosyalardaki OpenSpec işaretleyicileri temizlenir (içeriğiniz kalır)
+3. `openspec/AGENTS.md` dosyası silinir
+4. Yeni beceriler `.claude/skills/` dizinine kurulur
+5. Varsayılan şema ile `openspec/config.yaml` dosyası oluşturulur
 
 ### `openspec update` Kullanımı
 
-Yalnızca geçiş yapmak ve mevcut araçlarınızı en son sürüme yenilemek istiyorsanız bunu çalıştırın:
+Sadece geçiş yapmak ve mevcut araçlarınızı en son sürüme yenilemek istiyorsanız bunu çalıştırın:
 
 ```bash
 openspec update
 ```
 
-update komutu da eski kalıntıları algılar ve temizler, ardından oluşturulan becerileri/komutları mevcut profil ve teslim ayarlarınıza uyacak şekilde yeniler.
+Update komutu da eski artıfact'ları tespit eder ve temizler, ardından mevcut profiliniz ve teslimat ayarlarınızla eşleşmesi için oluşturulan becerileri/komutları yeniler.
 
-### İnteraktif Olmayan / CI Ortamları
+### Etkileşimsiz / CI Ortamları
 
-Betik tabanlı geçişler için:
+Komut dosyası ile yapılan geçişler için:
 
 ```bash
 openspec init --force --tools claude
 ```
 
-`--force` bayrağı istemleri atlar ve temizliği otomatik olarak kabul eder.
+`--force` bayrağı, istekleri atlar ve temizliği otomatik olarak kabul eder.
+
+Bu, küresel Codex istem dizinindeki OpenSpec tarafından yönetilen Codex istem dosyalarının temizliğini de içerir. Temizlik sadece OpenSpec'ın izin verilen listesindeki eski Codex istem dosya adlarını hedefler, sadece yerini alan `.codex/skills/openspec-*` becerileri mevcut olduktan sonra bunları kaldırır ve diğer tüm dosyaları korur.
 
 ---
 
-## project.md'yi config.yaml'ye Geçirmek
+## project.md'den config.yaml'a Geçiş
 
-Eski `openspec/project.md`, proje bağlamı için serbest biçimli bir markdown dosyasıydı. Yeni `openspec/config.yaml` yapılandırılmıştır ve—kritik olarak—**her planlama istemine enjekte edilir**, böylece sözleşmeleriniz yapay zeka çalışırken her zaman mevcut olur.
+Eski `openspec/project.md` proje bağlamı için serbest biçimli bir markdown dosyasıydı. Yeni `openspec/config.yaml` yapılandırılmıştır ve—kritik olarak—**her planlama isteğine eklenir** böylece AI çalışırken kurallarınız her zaman mevcut olur.
 
 ### Önce (project.md)
 
 ```markdown
-# Proje Bağlamı
+# Project Context
 
-Bu, React ve Node.js kullanan bir TypeScript monorepo'sudur.
-Testler için Jest kullanıyoruz ve katı ESLint kurallarına uyuyoruz.
-API'miz RESTful ve docs/api.md'de belgelenmiştir.
+This is a TypeScript monorepo using React and Node.js.
+We use Jest for testing and follow strict ESLint rules.
+Our API is RESTful and documented in docs/api.md.
 
-## Sözleşmeler
+## Conventions
 
-- Tüm genel API'ler geriye dönük uyumluluğu korumalıdır
-- Yeni özellikler test içermelidir
-- Spesifikasyonlar için Verilen/Olduğunda/O zaman biçimini kullanın
+- All public APIs must maintain backwards compatibility
+- New features should include tests
+- Use Given/When/Then format for specifications
 ```
 
 ### Sonra (config.yaml)
@@ -184,49 +186,49 @@ API'miz RESTful ve docs/api.md'de belgelenmiştir.
 schema: spec-driven
 
 context: |
-  Teknoloji yığını: TypeScript, React, Node.js
-  Test: Jest ve React Testing Library
-  API: RESTful, docs/api.md'de belgelenmiştir
-  Tüm genel API'ler için geriye dönük uyumluluğu koruyoruz
+  Tech stack: TypeScript, React, Node.js
+  Testing: Jest with React Testing Library
+  API: RESTful, documented in docs/api.md
+  We maintain backwards compatibility for all public APIs
 
 rules:
   proposal:
-    - Riskli değişiklikler için geri alma planı ekleyin
+    - Include rollback plan for risky changes
   specs:
-    - Senaryolar için Verilen/Olduğunda/O zaman biçimini kullanın
-    - Yeni icat etmeden önce mevcut desenlere referans verin
+    - Use Given/When/Then format for scenarios
+    - Reference existing patterns before inventing new ones
   design:
-    - Karmaşık akışlar için sıra diyagramları ekleyin
+    - Include sequence diagrams for complex flows
 ```
 
-### Temel Farklar
+### Temel Farklılıklar
 
 | project.md | config.yaml |
 |------------|-------------|
 | Serbest biçimli markdown | Yapılandırılmış YAML |
-| Tek bir metin bloğu | Ayrı bağlam ve ürüne özel kurallar |
-| Ne zaman kullanıldığı belirsiz | Bağlam TÜM ürünlerde görünür; kurallar yalnızca eşleşen ürünlerde görünür |
-| Şema seçimi yok | Açık `schema:` alanı varsayılan iş akışını belirler |
+| Tek bir metin parçası | Ayrı bağlam ve her artıfact için özel kurallar |
+| Ne zaman kullanıldığı belirsiz | Bağlam TÜM artıfact'larda görünür; kurallar sadece eşleşen artıfact'larda görünür |
+| Şema seçimi yok | Açık `schema:` alanı varsayılan iş akışını ayarlar |
 
-### Ne Tutulmalı, Ne Bırakılmalı
+### Neyi Saklamak, Neyi Çıkarmak Gerekiyor
 
-Geçiş yaparken seçici olun. Kendinize şunu sorun: "Yapay zekanın bunu *her* planlama istemi için mi bilmesi gerekiyor?"
+Geçiş yaparken seçici olun. Kendinize şu soruyu sorun: "AI bunu *her* planlama isteği için gerektiriyor mu?"
 
-**`context:` için iyi adaylar**
-- Teknoloji yığını (diller, çerçeveler, veritabanları)
-- Temel mimari desenler (monorepo, mikro hizmetler vb.)
-- Bariz olmayan kısıtlamalar ("X kütüphanesini kullanamayız çünkü...")
-- Sıkça göz ardı edilen kritik sözleşmeler
+**`context:` bölümü için iyi adaylar**
+- Teknoloji yığını (diller, framework'ler, veritabanları)
+- Temel mimari kalıplar (monorepo, mikroservisler vb.)
+- Açık olmayan kısıtlamalar ("X kütüphanesini kullanamayız çünkü...")
+- Sık sık göz ardı edilen kritik kurallar
 
-**Bunun yerine `rules:`'a taşıyın**
-- Ürüne özel biçimlendirme ("spesifikasyonlarda Verilen/Olduğunda/O zaman kullanın")
-- İnceleme kriterleri ("öneriler geri alma planı içermelidir")
-- Bunlar yalnızca eşleşen ürün için görünür, diğer istemleri daha hafif tutar
+**Bunlar yerine `rules:` bölümüne taşıyın**
+- Artıfact'a özel biçimlendirme ("spesifikasyonlarda Given/When/Then formatını kullan")
+- İnceleme kriterleri ("teklifler geri dönüş planları içermelidir")
+- Bunlar sadece eşleşen artıfact için görünür, diğer istekleri daha hafif tutar
 
-**Tamamen bırakın**
-- Yapay zekanın zaten bildiği genel en iyi uygulamalar
+**Tamamen dışında bırakın**
+- AI'nın zaten bildiği genel en iyi uygulamalar
 - Özetlenebilecek ayrıntılı açıklamalar
-- Mevcut çalışmayı etkilemeyen tarihsel bağlam
+- Mevcut çalışmayı etkilemeyen geçmiş bağlamı
 
 ### Geçiş Adımları
 
@@ -235,44 +237,44 @@ Geçiş yaparken seçici olun. Kendinize şunu sorun: "Yapay zekanın bunu *her*
    schema: spec-driven
    ```
 
-2. **Bağlamınızı ekleyin** (özlü olun—bu her isteme gider):
+2. **Bağlamınızı ekleyin** (öz olun—bu her isteğe dahil edilir):
    ```yaml
    context: |
-     Proje arka planınız buraya gelir.
-     Yapay zekanın gerçekten bilmesi gereken şeye odaklanın.
+     Your project background goes here.
+     Focus on what the AI genuinely needs to know.
    ```
 
-3. **Ürüne özel kurallar ekleyin** (isteğe bağlı):
+3. **Her artıfact için kurallar ekleyin** (isteğe bağlı):
    ```yaml
    rules:
      proposal:
-       - Öneriye özel yönergeniz
+       - Your proposal-specific guidance
      specs:
-       - Spesifikasyon yazma kurallarınız
+       - Your spec-writing rules
    ```
 
-4. **project.md'yi silin** yararlı her şeyi taşıdıktan sonra.
+4. **project.md'yi silin**, tüm yararlı içerikleri taşıdıktan sonra.
 
-**Çok fazla düşünmeyin.** Temellerle başlayın ve yineleyin. Yapay zekanın önemli bir şeyi kaçırdığını fark ederseniz ekleyin. Bağlam hantal geliyorsa kısaltın. Bu yaşayan bir belgedir.
+**Bunu çok düşünmeyin.** Temel şeylerle başlayın ve yineleyin. AI'nin önemli bir şeyi kaçırdığını fark ederseniz ekleyin. Bağlam şişkin görünüyorsa kısaltın. Bu bir canlı belgedir.
 
-### Yardım mı Lazım? Bu İstemi Kullanın
+### Yardım mı Gerekiyor? Bu İstemi Kullanın
 
-project.md'nizi nasıl damıtacağınızdan emin değilseniz, yapay zeka asistanınıza sorun:
+project.md içeriğinizi nasıl özetteleceğinizden emin değilseniz, AI asistanınıza sorun:
 
 ```
-OpenSpec'in eski project.md formatından yeni config.yaml formatına geçiş yapıyorum.
+I'm migrating from OpenSpec's old project.md to the new config.yaml format.
 
-İşte mevcut project.md'm:
-[project.md içeriğinizi yapıştırın]
+Here's my current project.md:
+[paste your project.md content]
 
-Lütfen şunları içeren bir config.yaml oluşturmama yardımcı olun:
-1. Özlü bir `context:` bölümü (bu her planlama istemine enjekte edilir, bu yüzden kısa tutun—teknoloji yığınına, temel kısıtlamalara ve sıkça göz ardı edilen sözleşmelere odaklanın)
-2. Herhangi bir içerik ürüne özelse `rules:` (örneğin, "Verilen/Olduğunda/O zaman kullanın" spesifikasyon kurallarına aittir, genel bağlama değil)
+Please help me create a config.yaml with:
+1. A concise `context:` section (this gets injected into every planning request, so keep it tight—focus on tech stack, key constraints, and conventions that often get ignored)
+2. `rules:` for specific artifacts if any content is artifact-specific (e.g., "use Given/When/Then" belongs in specs rules, not global context)
 
-Yapay zeka modellerinin zaten bildiği genel şeyleri bırakın. Özlülük konusunda acımasız olun.
+Leave out anything generic that AI models already know. Be ruthless about brevity.
 ```
 
-Yapay zeka, neyin temel olduğunu neyin kısaltılabileceğini belirlemenize yardımcı olacaktır.
+AI size temel olanı ve kısaltılabilecek olanı belirlemenize yardımcı olacaktır.
 
 ---
 
@@ -283,30 +285,30 @@ Komut kullanılabilirliği profile bağlıdır:
 **Varsayılan (`core` profili):**
 
 | Komut | Amaç |
-|---------|---------|
-| `/opsx:propose` | Bir değişiklik oluşturun ve planlama ürünlerini tek adımda üretin |
-| `/opsx:explore` | Yapı olmadan fikirleri düşünün |
-| `/opsx:apply` | tasks.md'deki görevleri uygulayın |
-| `/opsx:archive` | Değişikliği sonlandırın ve arşivleyin |
+|-------|------|
+| `/opsx:propose` | Tek adımda bir değişiklik oluştur ve planlama artıfact'larını üret |
+| `/opsx:explore` | Yapılandırılmamış bir şekilde fikirleri düşün |
+| `/opsx:apply` | tasks.md dosyasındaki görevleri uygula |
+| `/opsx:archive` | Değişikliği sonlandır ve arşivle |
 
 **Genişletilmiş iş akışı (özel seçim):**
 
 | Komut | Amaç |
-|---------|---------|
-| `/opsx:new` | Yeni bir değişiklik iskelesi başlatın |
-| `/opsx:continue` | Bir sonraki ürünü oluşturun (seferde bir tane) |
-| `/opsx:ff` | Hızlı ileri—planlama ürünlerini bir anda oluşturun |
-| `/opsx:verify` | Uygulamanın spesifikasyonlara uygunluğunu doğrulayın |
-| `/opsx:sync` | Delta spesifikasyonlarını ana spesifikasyonlarla birleştirin |
-| `/opsx:bulk-archive` | Birden fazla değişikliği bir anda arşivleyin |
-| `/opsx:onboard` | Yönlendirmeli uçtan uca katılım iş akışı |
+|-------|------|
+| `/opsx:new` | Yeni bir değişiklik iskeleti oluştur |
+| `/opsx:continue` | Sonraki artıfact'ı oluştur (tek seferde bir tane) |
+| `/opsx:ff` | Hızlı ilerleme—planlama artıfact'larını tek seferde oluştur |
+| `/opsx:verify` | Uygulamanın spesifikasyonlarla eşleştiğini doğrula |
+| `/opsx:sync` | Delta spesifikasyonları ana spesifikasyonlarla birleştir |
+| `/opsx:bulk-archive` | Birden fazla değişikliği tek seferde arşivle |
+| `/opsx:onboard` | Rehberli uçtan uca kurulum iş akışı |
 
-Genişletilmiş komutları `openspec config profile` ile etkinleştirin, ardından `openspec update` çalıştırın.
+Genişletilmiş komutları etkinleştirmek için `openspec config profile` komutunu çalıştırın, ardından `openspec update` komutunu çalıştırın.
 
-### Eski Komutlardan Komut Eşleme
+### Eski Sistemden Komut Eşleştirme
 
-| Eski | OPSX Karşılığı |
-|--------|-----------------|
+| Eski Sistem | OPSX Eşdeğeri |
+|------------|---------------|
 | `/openspec:proposal` | `/opsx:propose` (varsayılan) veya `/opsx:new` ardından `/opsx:ff` (genişletilmiş) |
 | `/openspec:apply` | `/opsx:apply` |
 | `/openspec:archive` | `/opsx:archive` |
@@ -315,62 +317,62 @@ Genişletilmiş komutları `openspec config profile` ile etkinleştirin, ardınd
 
 Bu yetenekler genişletilmiş iş akışı komut setinin bir parçasıdır.
 
-**Ayrıntılı ürün oluşturma:**
+**Ayrıntılı artıfact oluşturma:**
 ```
 /opsx:continue
 ```
-Bağımlılıklara göre seferde bir ürün oluşturur. Her adımı incelemek istediğinizde bunu kullanın.
+Bağımlılıklara göre tek seferde bir artıfact oluşturur. Her adımı gözden geçirmek istediğinizde bunu kullanın.
 
 **Keşif modu:**
 ```
 /opsx:explore
 ```
-Bir değişikliğe karar vermeden önce bir partnerle fikirleri düşünün.
+Bir değişikliğe başlamadan önce fikirleri bir ortağıyla birlikte düşünün.
 
 ---
 
-## Yeni Mimarının Anlaşılması
+## Yeni Mimariyi Anlamak
 
-### Faz Kilitliden Akıcıya
+### Kilitli Aşamalardan Esnek Yapıya
 
-Eski iş akışı doğrusal ilerlemeye zorluyordu:
+Eski iş akışı doğrusal ilerlemeyi zorunlu kılıyordu:
 
 ```
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│   PLANLAMA   │ ───► │ UYGULAMA     │ ───► │  ARŞİVLEME   │
-│    FAZI      │      │    FAZI      │      │    FAZI      │
+│  PLANLAMA    │ ───► │ UYGULAMA     │ ───► │  ARŞİVLEME  │
+│   AŞAMASI    │      │  AŞAMASI     │      │   AŞAMASI    │
 └──────────────┘      └──────────────┘      └──────────────┘
 
 Uygulama aşamasındayken tasarımın yanlış olduğunu fark ederseniz?
-Çok kötü. Faz kapıları kolayca geri dönmenize izin vermez.
+Çok kötü. Aşama geçitleri kolayca geri dönmenize izin vermez.
 ```
 
-OPSX fazlar yerine eylemler kullanır:
+OPSX aşamalar yerine eylemler kullanır:
 
 ```
          ┌───────────────────────────────────────────────┐
-         │           EYLEMLER (fazlar değil)             │
+         │           EYLEMLER (aşamalar değil)           │
          │                                               │
          │     new ◄──► continue ◄──► apply ◄──► archive │
          │      │          │           │             │   │
          │      └──────────┴───────────┴─────────────┘   │
-         │                herhangi bir sıra              │
+         │               istediğiniz sırayla            │
          └───────────────────────────────────────────────┘
 ```
 
 ### Bağımlılık Grafiği
 
-Yapıtlar yönlü bir grafik oluşturur. Bağımlılıklar kapılar değil, etkinleştiricilerdir:
+Artıfact'lar yönlü bir grafik oluşturur. Bağımlılıklar geçitler değil, olanak sağlayıcılardır:
 
 ```
                         proposal
-                     (kök düğüm)
+                       (kök düğüm)
                             │
               ┌─────────────┴─────────────┐
               │                           │
               ▼                           ▼
            specs                       design
-        (gerekli:                   (gerekli:
+        (gerekli:                    (gerekli:
          proposal)                   proposal)
               │                           │
               └─────────────┬─────────────┘
@@ -381,11 +383,11 @@ Yapıtlar yönlü bir grafik oluşturur. Bağımlılıklar kapılar değil, etki
                      specs, design)
 ```
 
-`/opsx:continue` komutunu çalıştırdığınızda, neyin hazır olduğunu kontrol eder ve bir sonraki yapıtı sunar. Ayrıca hazır birden fazla yapıtı herhangi bir sırada oluşturabilirsiniz.
+`/opsx:continue` komutunu çalıştırdığınızda, hazır olanları kontrol eder ve sonraki artıfact'ı sunar. Ayrıca hazır olan birden fazla artıfact'ı istediğiniz sırayla oluşturabilirsiniz.
 
-### Beceriler vs Komutlar
+### Beceriler (Skills) vs Komutlar
 
-Eski sistem, araca özgü komut dosyaları kullanıyordu:
+Eski sistem araç özel komut dosyaları kullanıyordu:
 
 ```
 .claude/commands/openspec/
@@ -394,7 +396,7 @@ Eski sistem, araca özgü komut dosyaları kullanıyordu:
 └── archive.md
 ```
 
-OPSX, ortaya çıkan **beceriler** standardını kullanır:
+OPSX ortaya çıkan **beceri (skills)** standardını kullanır:
 
 ```
 .claude/skills/
@@ -405,11 +407,11 @@ OPSX, ortaya çıkan **beceriler** standardını kullanır:
 └── ...
 ```
 
-Beceriler, birden fazla AI kodlama aracı tarafından tanınır ve daha zengin meta veriler sağlar.
+Beceriler birden fazla AI kod yazma aracı tarafından tanınır ve daha zengin meta veriler sağlar.
 
----
+Codex için OPSX sadece beceri tabanlıdır. OpenSpec artık Codex özel istem dosyaları oluşturmaz; bunun yerine oluşturulan `.codex/skills/openspec-*` dizinlerini kullanın.
 
-## Mevcut Değişikliklere Devam Etme
+## Mevcut Değişikliklere Devam Et
 
 Devam eden değişiklikleriniz OPSX komutlarıyla sorunsuz çalışır.
 
@@ -419,7 +421,7 @@ Devam eden değişiklikleriniz OPSX komutlarıyla sorunsuz çalışır.
 /opsx:apply add-my-feature
 ```
 
-OPSX mevcut yapıtları okur ve kaldığınız yerden devam eder.
+OPSX mevcut yapıtları okur ve bıraktığınız yerden devam eder.
 
 **Mevcut bir değişikliğe daha fazla yapıt eklemek mi istiyorsunuz?**
 
@@ -427,7 +429,7 @@ OPSX mevcut yapıtları okur ve kaldığınız yerden devam eder.
 /opsx:continue add-my-feature
 ```
 
-Zaten var olana dayanarak neyin oluşturulmaya hazır olduğunu gösterir.
+Mevcut olanlara dayanarak oluşturulmaya hazır olanları gösterir.
 
 **Durumu görmek mi istiyorsunuz?**
 
@@ -445,41 +447,41 @@ openspec status --change add-my-feature
 # Gerekli: Yeni değişiklikler için varsayılan şema
 schema: spec-driven
 
-# İsteğe bağlı: Proje bağlamı (maks. 50KB)
+# İsteğe bağlı: Proje bağlamı (en fazla 50KB)
 # TÜM yapıt talimatlarına eklenir
 context: |
-  Projenizin arka planı, teknoloji yığını,
-  kuralları ve kısıtlamaları.
+  Proje arka planınız, teknoloji yığınız,
+  kurallarınız ve kısıtlarınız.
 
-# İsteğe bağlı: Yapıta özel kurallar
-# Yalnızca eşleşen yapıtlara eklenir
+# İsteğe bağlı: Yapıt başına kurallar
+# Sadece eşleşen yapıtlara eklenir
 rules:
   proposal:
-    - Geri alma planı dahil et
+    - Geri dönüş planı ekle
   specs:
-    - Given/When/Then biçimini kullan
+    - Given/When/Then formatını kullan
   design:
-    - Yedek stratejileri belgele
+    - Yedek stratejilerini belgele
   tasks:
-    - Maksimum 2 saatlik parçalara böl
+    - En fazla 2 saatlik parçalara böl
 ```
 
 ### Şema Çözümleme
 
-Hangi şemanın kullanılacağını belirlerken OPSX sırayla kontrol eder:
+Hangi şemanın kullanılacağı belirlenirken OPSX sırayla kontrol eder:
 
-1. **CLI bayrağı**: `--schema <name>` (en yüksek öncelik)
-2. **Değişiklik meta verileri**: Değişiklik dizinindeki `.openspec.yaml`
+1. **CLI bayrağı**: `--schema <ad>` (en yüksek öncelik)
+2. **Değişiklik meta verisi**: Değişiklik dizinindeki `.openspec.yaml`
 3. **Proje yapılandırması**: `openspec/config.yaml`
 4. **Varsayılan**: `spec-driven`
 
 ### Mevcut Şemalar
 
 | Şema | Yapıtlar | En İyi Kullanım Alanı |
-|------|----------|-----------------------|
+|--------|-----------|----------|
 | `spec-driven` | proposal → specs → design → tasks | Çoğu proje |
 
-Mevcut tüm şemaları listele:
+Tüm mevcut şemaları listele:
 
 ```bash
 openspec schemas
@@ -493,13 +495,13 @@ Kendi iş akışınızı oluşturun:
 openspec schema init my-workflow
 ```
 
-Veya mevcut birini çatallayın:
+Ya da mevcut birini çatallayın:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-Ayrıntılar için bkz. [Özelleştirme](customization.md).
+Ayrıntılar için [Özelleştirme](customization.md) belgesine bakın.
 
 ---
 
@@ -507,7 +509,7 @@ Ayrıntılar için bkz. [Özelleştirme](customization.md).
 
 ### "Etkileşimli olmayan modda eski dosyalar algılandı"
 
-Bir CI veya etkileşimli olmayan ortamda çalışıyorsunuz. Şunu kullanın:
+CI veya etkileşimli olmayan bir ortamda çalışıyorsunuz. Şunu kullanın:
 
 ```bash
 openspec init --force
@@ -519,11 +521,11 @@ IDE'nizi yeniden başlatın. Beceriler başlangıçta algılanır.
 
 ### "Kurallarda bilinmeyen yapıt kimliği"
 
-`rules:` anahtarlarınızın şemanızın yapıt kimlikleriyle eşleştiğinden emin olun:
+`rules:` anahtarlarının şemanızın yapıt kimlikleriyle eşleştiğinden emin olun:
 
 - **spec-driven**: `proposal`, `specs`, `design`, `tasks`
 
-Geçerli yapıt kimliklerini görmek için bunu çalıştırın:
+Geçerli yapıt kimliklerini görmek için şunu çalıştırın:
 
 ```bash
 openspec schemas --json
@@ -533,15 +535,15 @@ openspec schemas --json
 
 1. Dosyanın `openspec/config.yaml` konumunda olduğundan emin olun (`.yml` değil)
 2. YAML sözdizimini doğrulayın
-3. Yapılandırma değişiklikleri hemen geçerlidir—yeniden başlatma gerekmez
+3. Yapılandırma değişiklikleri hemen etkili olur—yeniden başlatmaya gerek yoktur
 
-### project.md taşınmadı
+### project.md geçiş yapılmadı
 
-Sistem, özel içeriğiniz olabileceğinden kasıtlı olarak `project.md` dosyasını korur. Manuel olarak inceleyin, yararlı kısımları `config.yaml` dosyasına taşıyın, ardından silin.
+Sistem, özelleştirilmiş içeriğiniz içerebileceği için `project.md` dosyasını kasıtlı olarak korur. Manuel olarak gözden geçirin, yararlı kısımları `config.yaml`'a taşıyın, ardından silin.
 
-### Nelerin temizleneceğini görmek mi istiyorsunuz?
+### Temizlenecekleri görmek mi istiyorsunuz?
 
-`init` komutunu çalıştırın ve temizleme istemini reddedin—herhangi bir değişiklik yapılmadan tam algılama özetini göreceksiniz.
+Init komutunu çalıştırın ve temizleme istemini reddedin—hiçbir değişiklik yapılmadan tam algılama özetini göreceksiniz.
 
 ---
 
@@ -552,39 +554,39 @@ Sistem, özel içeriğiniz olabileceğinden kasıtlı olarak `project.md` dosyas
 ```
 project/
 ├── openspec/
-│   ├── specs/                    # Değişmedi
-│   ├── changes/                  # Değişmedi
-│   │   └── archive/              # Değişmedi
+│   ├── specs/                    # Değiştirilmedi
+│   ├── changes/                  # Değiştirilmedi
+│   │   └── archive/              # Değiştirilmedi
 │   └── config.yaml               # YENİ: Proje yapılandırması
 ├── .claude/
 │   └── skills/                   # YENİ: OPSX becerileri
-│       ├── openspec-propose/     # varsayılan temel profil
+│       ├── openspec-propose/     # varsayılan çekirdek profil
 │       ├── openspec-explore/
 │       ├── openspec-apply-change/
 │       ├── openspec-sync-specs/
-│       └── ...                   # genişletilmiş profil new/continue/ff/vb. ekler
-├── CLAUDE.md                     # OpenSpec işaretleri kaldırıldı, içeriğiniz korundu
-└── AGENTS.md                     # OpenSpec işaretleri kaldırıldı, içeriğiniz korundu
+│       └── ...                   # genişletilmiş profil new/continue/ff vb. komutları ekler
+├── CLAUDE.md                     # OpenSpec işaretçileri kaldırıldı, içeriğiniz korundu
+└── AGENTS.md                     # OpenSpec işaretçileri kaldırıldı, içeriğiniz korundu
 ```
 
 ### Kaldırılanlar
 
 - `.claude/commands/openspec/` — `.claude/skills/` ile değiştirildi
-- `openspec/AGENTS.md` — kullanımdan kaldırıldı
-- `openspec/project.md` — `config.yaml` dosyasına taşıyın, ardından silin
-- `CLAUDE.md`, `AGENTS.md` vb. dosyalardaki OpenSpec işaret blokları
+- `openspec/AGENTS.md` — kullanım dışı
+- `openspec/project.md` — `config.yaml`'a geçirin, ardından silin
+- `CLAUDE.md`, `AGENTS.md` vb. dosyalardaki OpenSpec işaretçi blokları
 
 ### Komut Hızlı Referansı
 
 ```text
-/opsx:propose      Hızlıca başla (varsayılan temel profil)
+/opsx:propose      Hızlı başla (varsayılan çekirdek profil)
 /opsx:apply        Görevleri uygula
 /opsx:archive      Bitir ve arşivle
 
-# Genişletilmiş iş akışı (etkinleştirilmişse):
-/opsx:new          Bir değişiklik iskeleti oluştur
+# Genişletilmiş iş akışı (etkinse):
+/opsx:new          Bir değişikliğin iskeletini oluştur
 /opsx:continue     Sonraki yapıtı oluştur
-/opsx:ff           Planlama yapıtları oluştur
+/opsx:ff           Planlama yapıtlarını oluştur
 ```
 
 ---
@@ -592,5 +594,5 @@ project/
 ## Yardım Alma
 
 - **Discord**: [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
-- **GitHub Sorunları**: [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
-- **Belgeler**: Tam OPSX referansı için [docs/opsx.md](opsx.md)
+- **GitHub Issues**: [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
+- **Dokümantasyon**: Tam OPSX referansı için [docs/opsx.md](opsx.md)

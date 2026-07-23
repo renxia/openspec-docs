@@ -1,20 +1,20 @@
-# 스토어: 자체 리포지토리에서 계획하기
+# Stores: 자체 저장소에서 계획하기
 
-> **베타.** 스토어(Stores), 참조(references), 작업 컨텍스트(working context), 워크셋(worksets)이 새로 추가되었습니다. 명령어 이름, 플래그, 파일 형식 및 JSON 출력은 릴리스 간에 계속 변경될 수 있습니다. 아래의 모든 워크스루(walkthrough)는 현재 빌드를 기준으로 실행되었지만, 업그레이드 후에는 이 가이드를 다시 읽어보십시오.
+> **Beta.** Stores, references, working context, worksets는 새로운 기능입니다. 명령어 이름, 플래그, 파일 형식, JSON 출력은 릴리스 간에 변경될 수 있습니다. 아래의 모든 예시는 현재 빌드에서 실행되었지만, 업그레이드한 후에는 이 가이드를 다시 읽어주세요.
 
-## 이것이 해결하는 문제
+## 해결하는 문제
 
-OpenSpec은 일반적으로 하나의 코드 리포지토리 내부에 존재합니다. 즉, 해당 리포지토리 옆에 있는 `openspec/` 폴더 안에 사양서(specs)와 변경 사항을 보관합니다.
+OpenSpec은 일반적으로 단일 코드 저장소 내에 존재합니다: 코드 옆에 위치한 `openspec/` 폴더로, 해당 저장소의 명세(specs)와 변경 사항(changes)을 보관합니다.
 
-하지만 계획 범위가 단일 리포지토리를 넘어설 때 이 방식으로는 한계가 있습니다.
+계획이 하나의 저장소보다 커지는 순간 더 이상 이 구조는 적합하지 않게 됩니다:
 
-- 작업이 여러 리포지토리에 걸쳐 진행됩니다. 예를 들어, 하나의 기능이 API 서버, 웹 앱 및 공유 라이브러리 모두에 영향을 미칩니다. 그렇다면 그 계획은 어느 `openspec/` 폴더 안에 존재해야 할까요?
-- 팀이 코드가 존재하기 전에 계획을 세우거나, *이* 리포지토리에는 구현되지 않을 계획들을 세울 수 있습니다.
-- 요구사항이 한 팀에 의해 소유되고 다른 팀에서 소비됩니다. 위키 버전은 계속 변하지만, 코딩 에이전트는 이를 읽을 수 없습니다.
+- 작업이 여러 저장소에 걸쳐 있는 경우 — 하나의 기능이 API 서버, 웹 앱, 공유 라이브러리에 모두 영향을 미치는 경우가 있습니다. 이때 계획은 어느 저장소의 `openspec/` 폴더에 저장해야 할까요?
+- 팀에서 코드가 존재하기 전에 계획을 수립하거나, 이 저장소에 코드로 구현되지 않을 항목을 계획하는 경우도 있습니다.
+- 요구 사항이 한 팀에서 관리하고 다른 팀에서 사용하는 경우도 있습니다. 위키 버전은 시간이 지나면서 내용이 달라지기 쉽고, 코딩 에이전트가 위키 내용을 읽을 수도 없습니다.
 
-**스토어(store)**가 해답입니다. 스토어는 오직 계획만을 목적으로 하는 독립적인 리포지토리입니다. 이는 여러분이 이미 알고 있는 것과 같은 `openspec/` 형태(사양서와 변경 사항)를 가지고 있으며, 작은 식별 파일 하나가 추가된 형태입니다. 사용자는 자신의 머신에 한 번 등록하고, 이후 모든 일반 OpenSpec 명령어를 어디에서든 사용할 수 있습니다.
+**스토어(store)** 가 이 문제의 해결책입니다: 계획 수립만을 목적으로 하는 독립형 저장소입니다. 기존에 사용하던 것과 동일한 `openspec/` 구조(명세와 변경 사항)를 가지며, 여기에 작은 식별 파일이 추가됩니다. 한 번 이름으로 기기에 등록하면, 어디서든 일반적인 OpenSpec 명령어로 이 스토어에서 작업할 수 있습니다.
 
-## The shape
+## 구조
 
 ```
             team-plans  (a store: planning in its own repo)
@@ -31,14 +31,14 @@ OpenSpec은 일반적으로 하나의 코드 리포지토리 내부에 존재합
    (code repo)   (code repo)    (code repo)
 ```
 
-이 두 가지 규칙이 이를 단순하게 유지합니다.
+이 구조를 간단하게 유지하는 두 가지 규칙:
 
-1. **스토어는 단지 git 저장소입니다.** 스스로 커밋하고, 푸시하고, 풀링하며 검토합니다. OpenSpec은 자체적으로 클론하거나 동기화하거나 푸시하는 작업을 하지 않습니다.
-2. **장치가 아닌 선언(Declarations)에 중점을 둡니다.** 저장소는 스토어와 어떻게 관련되는지를 *선언*할 수 있습니다 (아래 참조). 이 선언은 OpenSpec이 무엇을 알려줄 수 있는지 변화시키지만, 사용자의 명령이 어디에서 작동하는지는 결코 바꾸지 않습니다.
+1. **스토어는 그저 git 저장소일 뿐입니다.** 직접 커밋, 푸시, 풀, 리뷰하세요. OpenSpec은 자체적으로 아무것도 클론, 동기화, 푸시하지 않습니다.
+2. **선언일 뿐, 기계가 아닙니다.** 저장소는 스토어와의 관계를 *선언*할 수 있습니다(아래 참조). 선언은 OpenSpec이 알려줄 수 있는 내용을 변경할 뿐, 명령어가 작동하는 위치를 변경하지는 않습니다.
 
-## 첫 번째 스토어까지 5분
+## 첫 번째 스토어를 5분 만에 만들기
 
-두 가지 명령어만으로 아무것도 없는 상태에서 작동하는, 스토어 범위의 변경 사항을 만들 수 있습니다:
+두 개의 명령어로 아무것도 없는 상태에서 작동하는 스토어 범위 변경을 만들 수 있습니다:
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans
@@ -66,13 +66,13 @@ Schema: spec-driven
 Next: openspec status --change add-login --store team-plans
 ```
 
-이것이 전체 모델입니다. 여기서부터 라이프사이클은 `status`, `instructions`, `validate`, `archive` 등 사용자가 알고 있는 그대로이며, 모든 명령어에 `--store team-plans`를 추가하고, 출력되는 모든 힌트는 이를 위한 플래그를 담고 있습니다. `Using OpenSpec root:` 줄은 항상 명령어가 어디에서 작동하는지를 알려줍니다.
+이것이 전체 모델입니다. 이후 라이프사이클은 여러분이 알고 있는 것과 정확히 같습니다 — `status`, `instructions`, `validate`, `archive` — 각 명령어에 `--store team-plans`를 추가하면 되고, 출력되는 모든 힌트에 해당 플래그가 포함됩니다. `Using OpenSpec root:` 줄은 항상 명령어가 작동하는 위치를 알려줍니다.
 
-## 시나리오: 한 팀, 하나의 계획 저장소
+## 이야기: 한 팀, 하나의 계획 저장소
 
-팀은 자신의 스펙과 변경 사항을 코드 저장소에 분산시키는 대신 `team-plans`에 보관합니다.
+팀은 스펙과 변경 사항을 코드 저장소에 흩어놓는 대신 `team-plans`에 보관합니다.
 
-**첫날 (설정하는 사람이):**
+**첫 날(설정하는 사람):**
 
 ```bash
 openspec store setup team-plans --path ~/openspec/team-plans \
@@ -80,23 +80,23 @@ openspec store setup team-plans --path ~/openspec/team-plans \
 git -C ~/openspec/team-plans push -u origin main
 ```
 
-`--remote`를 전달하면 초기 커밋에 스토어 자체의 식별 파일(`.openspec-store/store.yaml`) 내부에 클론 URL이 기록됩니다. 모든 미래의 클론은 어디에서 왔는지 아는 상태로 태어나므로, 건강 검진 및 오류 메시지는 아직 해당 정보를 가지고 있지 않은 팀원을 위해 완전하고 복사 가능한 수정 사항을 출력할 수 있습니다.
+`--remote`을 전달하면 스토어 자체의 식별 파일(`.openspec-store/store.yaml`)에 클론 URL이 초기 커밋에 기록됩니다. 이후 모든 클론은 출처를 알고 있으므로, 아직 스토어를 가지고 있지 않은 팀원을 위해 상태 확인과 오류 메시지에 완전한 복사 가능한 수정 방법을 출력할 수 있습니다.
 
-**모든 팀원 (기기당 한 번):**
+**모든 팀원(머신당 한 번):**
 
 ```bash
 git clone git@github.com:acme/team-plans.git ~/openspec/team-plans
 openspec store register ~/openspec/team-plans
 ```
 
-이후부터 모두는 이름으로 동일한 계획 저장소에서 작업합니다:
+그 이후로 모든 팀원은 이름으로 동일한 계획 저장소에서 작업합니다:
 
 ```bash
 openspec status --store team-plans --change add-login
 openspec show add-login --store team-plans
 ```
 
-**작업 공유는 의도적으로 Git을 사용합니다.** 당신이 생성하는 변경 사항은 커밋하고 푸시하기 전까지는 당신의 체크아웃에만 존재하며, 이는 코드와 같습니다. 계획은 스토어가 일반적인 저장소이기 때문에 브랜치, 풀 리퀘스트 및 검토를 무료로 얻습니다.
+**의도적으로 작업 공유는 git으로 합니다.** 여러분이 생성한 변경 사항은 커밋하고 푸시할 때까지 체크아웃에만 존재합니다 — 코드와 같습니다. 계획은 스토어가 일반적인 저장소이기 때문에 별도의 비용 없이 브랜치, 풀 리퀘스트, 리뷰를 받을 수 있습니다.
 
 **팀의 코드 저장소 연결하기.** 계획이 완전히 외부화된 코드 저장소는 `openspec/config.yaml`에 정확히 한 줄만 필요합니다:
 
@@ -105,7 +105,7 @@ openspec show add-login --store team-plans
 store: team-plans
 ```
 
-이제 `web-app` 내부에서 실행되는 모든 OpenSpec 명령어는 플래그 없이도 `--store`를 통해 `team-plans`에 대해 작동합니다:
+이제 `web-app` 내부에서 실행되는 모든 OpenSpec 명령어는 플래그 없이 `team-plans`에서 작동합니다:
 
 ```bash
 cd ~/src/web-app
@@ -117,11 +117,19 @@ Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
 ...
 ```
 
-포인터는 대체 수단일 뿐, 절대적인 우위가 아닙니다. 명시적인 `--store`가 항상 우선하며, 만약 저장소가 자체적으로 실제 계획 폴더를 갖게 된다면 그것이 우선합니다 (오래된 포인터를 제거하라는 경고와 함께).
+이 포인터는 대체일 뿐, 우선하지 않습니다: 명시적인 `--store`가 항상 우선하고, 저장소에 자체적인 실제 계획 폴더가 생기면 해당 폴더가 우선합니다(오래된 포인터를 제거하라는 경고와 함께).
 
-## 시나리오: 팀 경계를 넘는 요구사항
+**머신의 모든 저장소에 대한 기본값 하나.** 여러 코드 저장소에서 모두 동일한 스토어에 계획을 세우는 경우, 각 저장소에 `store:` 줄을 추가하는 대신 전역으로 한 번만 설정하세요:
 
-플랫폼 팀이 요구사항을 소유합니다. 제품 팀은 자신의 디자인과 자신의 저장소에서 이를 기반으로 구축합니다. 참조(reference)는 누구의 작업도 이동시키지 않으면서 그 관계를 설명합니다.
+```bash
+openspec config set defaultStore team-plans
+```
+
+이제 계획 루트 외부에서 실행되는 모든 명령어 — `--store`도 없고 프로젝트 포인터도 없는 경우 — 는 `team-plans`로 확인됩니다. 이는 우선순위 목록의 맨 아래에 위치하므로, `--store`, 로컬 루트, 프로젝트 `store:` 포인터가 모두 우선합니다. 루트 배너와 JSON `root` 블록은 스토어 ID와 함께 `source: "global_default"`를 보고하므로, 전역 기본값과 저장소 자체 포인터를 항상 구분할 수 있습니다. `openspec config unset defaultStore`로 지울 수 있습니다. ID가 등록되지 않은 경우 명령어가 오류를 발생시키고 등록하거나 오래된 기본값을 지우라고 알려줍니다.
+
+## 이야기: 팀 경계를 넘는 요구사항
+
+플랫폼 팀이 요구사항을 소유합니다. 제품 팀은 자체 저장소에서 자체 디자인으로 해당 요구사항을 기반으로 구축합니다. 참조는 아무도 작업을 옮기지 않고 해당 관계를 설명합니다.
 
 ```
    platform-reqs (store)                 api-server (code repo)
@@ -134,27 +142,27 @@ Using OpenSpec root: team-plans (/Users/you/openspec/team-plans)
    │ openspec/changes/        │          │   (their own designs)    │
    │   platform work          │          │ openspec/changes/        │
    │                          │          │   (their own work)       │
-   │                          │          │          └──────────────────────────┘
+   │                          │          └──────────────────────────┘
    └──────────────────────────┘
 ```
 
-**제품 팀은 자신의 저장소 `openspec/config.yaml`에 무엇을 참조하는지 선언합니다:**
+**제품 팀은 자체 저장소의 `openspec/config.yaml`에서 사용하는 것을 선언합니다:**
 
 ```yaml
 references:
   - platform-reqs
 ```
 
-참조는 읽기 전용 컨텍스트입니다. 저장소는 자체적인 `openspec/` 루트를 유지하며, 작업은 그곳에 머무릅니다. 변경되는 것은 해당 저장소의 `openspec instructions`가 이제 참조된 스토어의 스펙 인덱스를 포함한다는 점입니다. 각 스펙은 한 줄 요약과 정확한 가져오기 명령어(`openspec show <spec-id> --type spec --store platform-reqs`)를 가집니다. `api-server`에서 작업하는 에이전트는 상위 결제 요구사항을 찾고, 이를 인용하며, 자신의 로우레벨 디자인을 저장소 자체의 루트에 작성할 수 있습니다 — 아무도 컨텍스트를 복사 붙여넣기 할 필요 없이요.
+참조는 읽기 전용 컨텍스트입니다. 저장소는 자체 `openspec/` 루트를 유지합니다. 작업은 해당 루트에 그대로 있습니다. 변경되는 점: 해당 저장소의 `openspec instructions`에 이제 참조된 스토어의 스펙 색인이 포함됩니다 — 각 스펙은 한 줄 요약과 정확한 가져오기 명령어(`openspec show <spec-id> --type spec --store platform-reqs`)가 함께 있습니다. `api-server`에서 작업하는 에이전트는 업스트림 결제 요구사항을 찾아 인용하고, 저장소 자체 루트에 저수준 디자인을 작성할 수 있습니다 — 누군가 컨텍스트를 붙여넣을 필요 없이.
 
-참조는 클론 소스를 가질 수 있으므로, 아직 스토어를 가지고 있지 않은 팀원들에게 막다른 길 대신 완전한 수정 사항을 제공합니다:
+참조는 클론 소스를 포함할 수 있으므로, 아직 스토어를 가지고 있지 않은 팀원은 막다른 골목 대신 완전한 수정 방법을 얻을 수 있습니다:
 
 ```yaml
 references:
   - { id: platform-reqs, remote: "git@github.com:acme/platform-reqs.git" }
 ```
 
-**계획과 코드를 함께 열고 싶다면, 워크셋(workset)을 만드세요.** 이것은 개인적이고 명시적인 것입니다: 각 사람은 자신의 기기에서 실제로 작업하는 폴더를 선택합니다. 이러한 로컬 체크아웃 경로는 공유 계획 저장소에 커밋되지 않습니다.
+**계획과 코드를 함께 열고 싶을 때는 워크셋을 만드세요.** 이것은 개인적이고 명시적입니다: 각 사람은 자신의 머신에서 실제로 작업하는 폴더를 선택합니다. 해당 로컬 체크아웃 경로에 대한 내용은 공유 계획 저장소에 커밋되지 않습니다.
 
 ```bash
 openspec workset create platform \
@@ -163,9 +171,9 @@ openspec workset create platform \
   --member ~/src/web-app
 ```
 
-## 항상 던질 수 있는 두 가지 질문
+## 항상 물어볼 수 있는 두 가지 질문
 
-**"내 설정이 건강한가요?"** — `openspec doctor`는 현재 루트와 참조된 스토어를 읽기 전용으로 확인하며, 각 발견 사항에 대해 복사 가능한 수정 사항을 제공합니다:
+**"내 설정이 정상인가요?"** — `openspec doctor`는 현재 루트와 참조된 스토어를 읽기 전용으로 확인하고, 각 발견 사항마다 복사 가능한 수정 방법을 출력합니다:
 
 ```
 Doctor
@@ -181,7 +189,7 @@ References
 
 ```
 
-**"나는 무엇을 가지고 작업하고 있나요?"** — `openspec context`는 OpenSpec 선언으로부터 워킹셋(working set)을 조립합니다: 루트와 그것이 참조하는 스토어들.
+**"내가 작업하고 있는 것이 무엇인가요?"** — `openspec context`는 OpenSpec 선언으로부터 작업 세트를 구성합니다: 루트와 참조된 스토어입니다.
 
 ```
 Working context for api-server (/Users/you/src/api-server)
@@ -194,11 +202,11 @@ Referenced stores
     Fetch: openspec show <spec-id> --type spec --store platform-reqs
 ```
 
-두 명령어 모두 에이전트를 위해 `--json`을 지원합니다. `openspec context --code-workspace <path>`는 전체 세트(the whole set)를 포함하는 VS Code 워크스페이스 파일을 추가로 작성하며, 이 명령어가 수행하는 유일한 쓰기 작업입니다.
+둘 다 에이전트를 위해 `--json`을 지원합니다. `openspec context --code-workspace <path>`는 전체 세트가 포함된 VS Code 워크스페이스 파일을 추가로 작성합니다 — 이 명령어가 수행하는 유일한 쓰기 작업입니다.
 
-## 워크셋: 함께 작업하는 폴더 다시 열기
+## 워크셋: 함께 작업하는 폴더를 다시 열기
 
-위의 모든 내용과 별개로, 대부분의 사람들은 매번 세션마다 같은 몇 개의 폴더를 엽니다 — 계획 저장소와 두세 개의 코드 저장소입니다. **워크셋(workset)**은 이 모든 것의 개인적이고 명명된 보기이며, 원하는 도구에서 한 명령어로 다시 열립니다.
+위의 모든 것과 별개로, 대부분의 사람은 매 세션마다 동일한 몇 개의 폴더를 함께 엽니다 — 계획 저장소와 2~3개의 코드 저장소입니다. **워크셋**은 정확히 그것에 대한 개인적이고 이름이 지정된 보기로, 선택한 도구에서 한 명령어로 다시 열 수 있습니다.
 
 ```
   workset "platform"                 openspec workset open platform
@@ -220,47 +228,53 @@ platform  (opens in VS Code)
   api-server  /Users/you/src/api-server
 ```
 
-`openspec workset open platform`은 저장된 도구를 실행합니다: 에디터들 (VS Code, Cursor)은 모든 멤버를 포함하는 하나의 창을 열고 반환합니다. 첫 번째 멤버가 주(primary)입니다. 언제든지 `--tool <id>`로 도구를 재정의할 수 있습니다.
+`openspec workset open platform`이 저장된 도구를 실행합니다: 편집기(VS Code, Cursor)는 모든 멤버가 포함된 창을 하나 열고 반환합니다. 첫 번째 멤버가 기본입니다. `--tool <id>`로 언제든 도구를 재정의할 수 있습니다.
 
-워크셋은 의도적으로 공유 상태가 *아닙니다*. 그것들은 당신의 기기에 존재하며, 절대 커밋되지 않으며, 작업에 대해 어떠한 주장도 하지 않습니다 — 단지 당신이 무엇을 함께 열기를 좋아하는지만 기록합니다. 하나를 제거해도 멤버 폴더는 건드리지 않습니다. 새로운 도구는 코드가 아닌 설정입니다: 워크스페이스 파일을 통해 실행되거나 폴더별 첨부 플래그로 실행될 수 있는 모든 것은 전역 설정(`openspec config edit`)의 `openers` 키 아래에 추가할 수 있습니다.
+워크셋은 의도적으로 *공유 상태가 아닙니다*. 머신에만 존재하며, 커밋되지 않고 작업에 대한 주장을 하지 않습니다 — 함께 열고 싶은 것만 기록할 뿐입니다. 워크셋을 제거해도 멤버 폴더에는 영향을 미치지 않습니다. 새 도구는 구성일 뿐 코드가 아닙니다: 워크스페이스 파일이나 폴더별 연결 플래그를 통해 실행되는 모든 것은 전역 구성의 `openers` 키 아래에 추가할 수 있습니다(`openspec config edit`).
 
-## 명령어가 어디에서 작동할지 결정하는 방법
+## 명령어가 작동할 위치를 결정하는 방법
 
-모든 일반 명령어는 다음 순서대로 루트를 동일하게 해결합니다:
+모든 일반 명령어는 다음과 같은 순서로 루트를 확인합니다:
 
 ```
-1. --store <id>          당신이 명시적으로 지시함        → 해당 스토어
-2. nearest openspec/     여기에 실제 계획 루트가 있음    → 이 저장소
-   (cwd에서 위로 올라가며)
-3. store: pointer        config.yaml에 스토어가 선언됨  → 해당 스토어
-4. none of the above     기기에 등록된 스토어가 없음?    → 선택 힌트와 함께 오류
-                         스토어가 등록되지 않음?         → 현재 디렉토리
-                                                          (클래식 동작)
+1. --store <id>          you said so explicitly        → that store
+2. nearest openspec/     a real planning root here     → this repo
+   (walking up from cwd)
+3. store: pointer        config.yaml declares a store  → that store
+4. defaultStore          global config sets a machine  → that store
+                         default
+5. none of the above     stores registered on this     → error with a
+                         machine?                        selection hint
+                         no stores registered?         → the current
+                                                          directory
+                                                          (classic behavior)
 ```
 
-`Using OpenSpec root:` 줄 (및 `--json` 출력의 `root` 블록)은 당신이 어떤 경우에 있는지 알려줍니다.
+`Using OpenSpec root:` 줄(및 `--json` 출력의 `root` 블록)은 어떤 경우에 해당하는지 알려줍니다.
 
 ## 알려진 제한 사항
 
-- **베타 형태.** 이 페이지의 모든 내용은 출시 버전에 따라 변경될 수 있습니다 — 이름, 플래그, 파일 형식, JSON 키 등.
-- **기기당 스토어 ID당 하나의 체크아웃.** 동일한 ID 아래에 두 번째 체크아웃을 등록하면 `store unregister`를 먼저 하라는 힌트와 함께 실패합니다.
-- **절대 동기화 없음 — 설계상 그렇습니다.** OpenSpec은 클론하거나 풀링하거나 푸시하지 않습니다. 오래된 체크아웃은 *당신이* 풀링할 때까지 오래된 스펙을 보여줍니다; 참조는 디스크에 있는 것에 대해 실시간으로 인덱싱됩니다.
-- **일부 명령어는 제자리에 머무릅니다.** `view`, `templates`, `schemas` 및 사용 중단된 명사형(`openspec change show`, ...)은 현재 디렉토리에서만 작동하며 `--store`를 사용하지 않습니다.
-- **기기별 상태는 기기마다 다릅니다.** 스토어 레지스트리와 워크셋은 로컬 설정입니다. 당신의 기기 레이아웃에 대한 어떤 것도 공유 계획에 커밋되지 않습니다.
-- **워크셋에 대한 두 가지 실행 스타일.** 워크스페이스 파일이나 폴더별 첨부 플래그로 실행될 수 없는 도구는 오프너(opener)로 추가될 수 없습니다.
-- **에이전트 JSON은 알려진 대소문자 분할을 가집니다** (store-family 키는 snake_case, workflow-family는 camelCase). [agent contract](../agent-contract.md)에 문서화되어 있으며, 이를 통일하는 것은 버전이 지정된 출시로 미뤄졌습니다.
+- **베타 버전 형태.** 이 페이지의 모든 내용은 릴리스 간에 변경될 수 있습니다 — 이름, 플래그, 파일 형식, JSON 키.
+- **머신당 스토어 ID별로 하나의 체크아웃만 허용.** 동일한 ID로 두 번째 체크아웃을 등록하려고 하면 먼저 `store unregister`를 실행하라는 힌트와 함께 실패합니다.
+- **설계상 동기화는 영원히 없습니다.** OpenSpec은 클론, 풀, 푸시를 절대 하지 않습니다. 오래된 체크아웃은 *여러분이* 풀할 때까지 오래된 스펙을 표시합니다. 참조는 디스크에 있는 내용을 기반으로 라이브로 색인화됩니다.
+- **빈 계획 폴더는 없을 수 있습니다.** 새 스토어는 아직 Git에 `openspec/changes/`, `openspec/specs/`, `openspec/changes/archive/`가 없을 수 있습니다. 베타 기간 동안 이는 허용됩니다. 일반 명령어가 해당 폴더에 파일을 생성하면 폴더가 나타납니다.
+- **포인터 저장소는 포인터로 유지됩니다.** `openspec/config.yaml`에 `store: <id>`를 선언한 구성 전용 저장소는 등록할 스토어 체크아웃이 아니라 외부화된 계획으로 처리됩니다. 의도적으로 해당 저장소를 로컬 스토어 루트로 변환하려면 먼저 `store:` 줄을 제거하세요.
+- **일부 명령어는 현재 위치에서 작동합니다.** `view`, `templates`, `schemas`, 그리고 더 이상 사용되지 않는 명사 형태(`openspec change show` 등)는 현재 디렉터리에서만 작동합니다 — `--store`를 사용할 수 없습니다.
+- **머신별 상태는 머신에만 적용됩니다.** 스토어 레지스트리와 워크셋은 로컬 설정입니다. 머신의 레이아웃에 대한 내용은 공유 계획에 절대 커밋되지 않습니다.
+- **워크셋의 두 가지 실행 스타일.** 워크스페이스 파일이나 폴더별 연결 플래그로 실행할 수 없는 도구는 열기 도구로 추가할 수 없습니다.
+- **에이전트 JSON에는 알려진 대소문자 구분이 있습니다** (스토어 패밀리 키는 snake_case, 워크플로우 패밀리는 camelCase). [에이전트 계약](../agent-contract.md)에 문서화되어 있습니다. 통합은 버전이 지정된 릴리스로 미뤄져 있습니다.
 
-## 항목의 위치
+## 항목 저장 위치
 
-| What | Where | Shared? |
+| 항목 | 위치 | 공유 여부? |
 |---|---|---|
-| A store's planning | `<store>/openspec/` (specs, changes) | Yes — commit and push it |
-| A store's identity | `<store>/.openspec-store/store.yaml` | Yes — committed with the store |
-| The store registry | `<data dir>/openspec/stores/registry.yaml` | No — this machine only |
-| Worksets | `<data dir>/openspec/worksets/` | No — this machine only |
+| 스토어 계획 | `<store>/openspec/` (스펙, 변경 사항) | 예 — 커밋 후 푸시하세요 |
+| 스토어 식별 정보 | `<store>/.openspec-store/store.yaml` | 예 — 스토어와 함께 커밋됩니다 |
+| 스토어 레지스트리 | `<data dir>/openspec/stores/registry.yaml` | 아니요 — 현재 기기에서만 사용 |
+| 워크셋 | `<data dir>/openspec/worksets/` | 아니요 — 현재 기기에서만 사용 |
 
-`<data dir>`는 macOS 및 Linux의 경우 `~/.local/share/openspec` (또는 설정된 `$XDG_DATA_HOME/openspec`), Windows에서는 `%LOCALAPPDATA%\openspec`입니다.
-## Reference
+`<data dir>`는 macOS와 Linux의 경우 `~/.local/share/openspec` (혹은 `$XDG_DATA_HOME` 환경 변수가 설정된 경우 `$XDG_DATA_HOME/openspec`), Windows의 경우 `%LOCALAPPDATA%\openspec` 입니다.
 
-이 페이지에 있는 모든 명령어에 대한 정확한 플래그 및 JSON 형태:
-[CLI reference](../cli.md) (Stores, Doctor, Working context, Personal worksets)와 [agent contract](../agent-contract.md).
+## 참고
+
+이 페이지의 모든 명령어에 대한 정확한 플래그와 JSON 형식: [CLI 참고 문서](../cli.md) (스토어, Doctor, 작업 컨텍스트, 개인 워크셋) 및 [에이전트 계약](../agent-contract.md).

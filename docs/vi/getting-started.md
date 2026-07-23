@@ -1,67 +1,67 @@
-# Bắt Đầu
+# Bắt đầu sử dụng
 
-Hướng dẫn này giải thích cách OpenSpec hoạt động sau khi bạn đã cài đặt và khởi tạo nó. Để biết hướng dẫn cài đặt, hãy xem [main README](../index.md#quick-start) hoặc [Installation guide](installation.md). Mới làm quen với bộ tài liệu này? [Trang chủ tài liệu](index.md) cung cấp cái nhìn tổng quan về mọi thứ.
+Hướng dẫn này giải thích cách hoạt động của OpenSpec sau khi bạn đã cài đặt và khởi tạo nó. Để xem hướng dẫn cài đặt, hãy tham khảo [README chính](../index.md#quick-start) hoặc [Hướng dẫn cài đặt](installation.md). Bạn mới làm quen với toàn bộ bộ tài liệu? [Trang chủ tài liệu](index.md) sẽ giúp bạn định vị tất cả nội dung.
 
-> **Tôi gõ các lệnh này ở đâu?** Có hai nơi, và nhầm lẫn chúng là lỗi phổ biến nhất khi mới bắt đầu.
+> **Bạn nhập các lệnh này ở đâu?** Có hai nơi, và nhầm lẫn giữa hai nơi này là lỗi phổ biến nhất khi mới bắt đầu.
 >
-> - Các lệnh `openspec ...` (như `openspec init`) chạy trong **terminal**.
-> - Các lệnh `/opsx:...` (như `/opsx:propose`) chạy trong **trò chuyện của trợ lý AI**, hộp tương tự nơi bạn yêu cầu nó viết code.
+> - Các lệnh `openspec ...` (như `openspec init`) chạy trên **terminal** của bạn.
+> - Các lệnh `/opsx:...` (như `/opsx:propose`) chạy trên **khung chat của trợ lý AI**, chính là nơi bạn thường yêu cầu AI viết mã.
 >
-> Không có "chế độ tương tác" riêng để bắt đầu. Bạn chỉ cần gõ lệnh dấu gạch chéo trong cuộc trò chuyện và trợ lý của bạn sẽ tiếp tục từ đó. Giải thích đầy đủ: [How Commands Work](how-commands-work.md).
+> Không có chế độ "tương tác riêng" nào cần khởi động. Bạn chỉ cần nhập lệnh slash vào chat, trợ lý AI của bạn sẽ xử lý phần còn lại. Giải thích đầy đủ: [Cách hoạt động của lệnh](how-commands-work.md).
 
-## Năm Phút Đầu Tiên Của Bạn
+## Năm phút đầu tiên của bạn
 
-Toàn bộ vòng lặp, với mỗi bước được đánh dấu nơi nó diễn ra:
+Toàn bộ quy trình, với mỗi bước được ghi rõ nơi thực hiện:
 
 ```text
 TERMINAL   $ npm install -g @fission-ai/openspec@latest
 TERMINAL   $ cd your-project && openspec init
-AI CHAT      /opsx:explore                    (tùy chọn: suy nghĩ trước)
-AI CHAT      /opsx:propose add-dark-mode      (AI phác thảo kế hoạch; bạn xem xét nó)
-AI CHAT      /opsx:apply                      (AI xây dựng nó)
-AI CHAT      /opsx:archive                    (các đặc tả đã được cập nhật, thay đổi được lưu trữ)
+AI CHAT      /opsx:explore                    (tùy chọn: suy nghĩ kỹ trước khi thực hiện)
+AI CHAT      /opsx:propose add-dark-mode      (AI soạn thảo kế hoạch; bạn xem xét lại)
+AI CHAT      /opsx:apply                      (AI xây dựng tính năng)
+AI CHAT      /opsx:archive                    (cập nhật specs, lưu trữ thay đổi)
 ```
 
-Hai bước terminal để thiết lập, sau đó bạn làm việc trong chat. Phần còn lại của hướng dẫn này sẽ giải thích chi tiết từng bước thực hiện gì và những gì bạn sẽ thấy.
+Hai bước trên terminal để thiết lập, sau đó bạn sẽ làm việc chủ yếu trên chat. Phần còn lại của hướng dẫn này sẽ giải thích chi tiết chức năng của từng bước và những gì bạn sẽ thấy.
 
-> **Chưa biết xây dựng cái gì? Hãy bắt đầu với `/opsx:explore`.** Đây là một đối tác tư duy không rủi ro, nó đọc codebase của bạn, cân nhắc các lựa chọn và biến một ý tưởng mơ hồ thành một kế hoạch cụ thể, tất cả trước khi bất kỳ sản phẩm hoặc code nào tồn tại. Khi bức tranh đã rõ ràng, nó chuyển giao cho `/opsx:propose`. Đây là thói quen tốt nhất để làm việc với AI mà nếu không có nó sẽ tự tin xây dựng sai thứ. Xem [Explore guide](explore.md).
+> **Chưa chắc chắn nên xây dựng gì? Hãy bắt đầu với `/opsx:explore`.** Đây là một đối tác suy nghĩ không rủi ro, đọc mã nguồn của bạn, cân nhắc các lựa chọn và biến ý tưởng mơ hồ thành kế hoạch cụ thể, tất cả trước khi bất kỳ tài liệu hay mã nào được tạo ra. Khi bức tranh đã rõ ràng, nó sẽ chuyển sang `/opsx:propose`. Đây là thói quen tốt nhất khi làm việc với AI, nếu không AI sẽ tự tin xây dựng ra thứ không đúng yêu cầu. Xem thêm [Hướng dẫn khám phá](explore.md).
 
-## Cách Hoạt Động
+## Cách hoạt động
 
-OpenSpec giúp bạn và trợ lý lập trình AI của mình thống nhất về những gì cần xây dựng trước khi bất kỳ code nào được viết.
+OpenSpec giúp bạn và trợ lý lập trình AI của bạn thống nhất những gì cần xây dựng trước khi viết bất kỳ dòng mã nào.
 
-**Lộ trình nhanh mặc định (hồ sơ cốt lõi):**
+**Đường dẫn nhanh mặc định (hồ sơ cốt lõi):**
 
 ```text
 /opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
    (tùy chọn)
 ```
 
-Bắt đầu bằng `/opsx:explore` khi bạn đang tìm hiểu xem cần làm gì, hoặc nhảy thẳng đến `/opsx:propose` khi bạn đã biết. Explore nằm trong hồ sơ mặc định, vì vậy nó luôn có sẵn khi bạn muốn sử dụng.
+Bắt đầu với `/opsx:explore` khi bạn đang tìm ra việc cần làm, hoặc nhảy thẳng đến `/opsx:propose` khi bạn đã biết rõ yêu cầu. Explore có trong hồ sơ mặc định, nên luôn sẵn sàng khi bạn cần.
 
-**Lộ trình mở rộng (chọn quy trình tùy chỉnh):**
+**Đường dẫn mở rộng (lựa chọn quy trình làm việc tùy chỉnh):**
 
 ```text
 /opsx:new ──► /opsx:ff hoặc /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-Hồ sơ toàn cục mặc định là `core`, bao gồm `propose`, `explore`, `apply`, `sync` và `archive`. Bạn có thể bật các lệnh quy trình mở rộng bằng `openspec config profile` và sau đó là `openspec update`.
+Hồ sơ toàn cục mặc định là `core`, bao gồm các lệnh `propose`, `explore`, `apply`, `sync` và `archive`. Bạn có thể kích hoạt các lệnh quy trình làm việc mở rộng bằng lệnh `openspec config profile` sau đó chạy `openspec update`.
 
-## OpenSpec Tạo Ra Gì
+## Những gì OpenSpec tạo ra
 
-Sau khi chạy `openspec init`, dự án của bạn có cấu trúc này:
+Sau khi chạy lệnh `openspec init`, dự án của bạn sẽ có cấu trúc như sau:
 
 ```
 openspec/
-├── specs/              # Nguồn sự thật (hành vi hệ thống của bạn)
+├── specs/              # Nguồn dữ liệu chính xác (hành vi của hệ thống bạn)
 │   └── <domain>/
 │       └── spec.md
-├── changes/            # Các cập nhật được đề xuất (một thư mục cho mỗi thay đổi)
+├── changes/            # Các bản cập nhật đề xuất (mỗi thay đổi có một thư mục riêng)
 │   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Delta specs (những gì đang thay đổi)
+│       └── specs/      # Specs delta (những gì đang thay đổi)
 │           └── <domain>/
 │               └── spec.md
 └── config.yaml         # Cấu hình dự án (tùy chọn)
@@ -69,140 +69,138 @@ openspec/
 
 **Hai thư mục chính:**
 
-- **`specs/`** - Nguồn sự thật. Các đặc tả này mô tả cách hệ thống của bạn hoạt động hiện tại. Được tổ chức theo miền (ví dụ: `specs/auth/`, `specs/payments/`).
+- **`specs/`** - Nguồn dữ liệu chính xác. Các specs này mô tả cách hệ thống của bạn hoạt động hiện tại. Được tổ chức theo lĩnh vực (ví dụ: `specs/auth/`, `specs/payments/`).
+- **`changes/`** - Các sửa đổi đề xuất. Mỗi thay đổi sẽ có thư mục riêng chứa tất cả tài liệu liên quan. Khi một thay đổi hoàn thành, các specs của nó sẽ được hợp nhất vào thư mục `specs/` chính.
 
-- **`changes/`** - Các sửa đổi được đề xuất. Mỗi thay đổi có một thư mục riêng với tất cả các tài sản liên quan. Khi một thay đổi hoàn thành, các đặc tả của nó sẽ hợp nhất vào thư mục `specs/` chính.
+## Hiểu về các tài liệu liên quan
 
-## Hiểu Về Tài Sản (Artifacts)
+Mỗi thư mục thay đổi chứa các tài liệu liên quan hướng dẫn quá trình thực hiện:
 
-Mỗi thư mục thay đổi chứa các tài sản hướng dẫn công việc:
-
-| Tài Sản | Mục Đích |
+| Tài liệu liên quan | Mục đích |
 |----------|---------|
-| `proposal.md` | "Tại sao" và "cái gì" - ghi lại ý định, phạm vi và cách tiếp cận |
-| `specs/` | Delta specs hiển thị các yêu cầu ĐƯỢC THÊM/ĐƯỢC SỬA ĐỔI/BỊ XÓA |
-| `design.md` | "Làm thế nào" - phương pháp kỹ thuật và quyết định kiến trúc |
-| `tasks.md` | Danh sách kiểm tra triển khai với các hộp đánh dấu |
+| `proposal.md` | "Tại sao" và "làm gì" - ghi lại mục tiêu, phạm vi và phương pháp tiếp cận |
+| `specs/` | Specs delta hiển thị các yêu cầu ĐƯỢC THÊM / ĐƯỢC SỬA ĐỔI / ĐƯỢC XÓA |
+| `design.md` | "Làm thế nào" - phương pháp tiếp cận kỹ thuật và các quyết định kiến trúc |
+| `tasks.md` | Danh sách kiểm tra triển khai có các hộp kiểm |
 
-**Các tài sản xây dựng lẫn nhau:**
+**Các tài liệu liên quan được xây dựng dựa trên lẫn nhau:**
 
 ```
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            cập nhật khi bạn học hỏi
+            cập nhật khi bạn tìm hiểu thêm
 ```
 
-Bạn luôn có thể quay lại và tinh chỉnh các tài sản trước đó khi bạn tìm hiểu thêm trong quá trình triển khai.
+Bạn luôn có thể quay lại và tinh chỉnh các tài liệu liên quan trước đó khi tìm hiểu thêm trong quá trình triển khai.
 
-## Delta Specs Hoạt Động Như Thế Nào
+## Cách hoạt động của Specs Delta
 
-Delta specs là khái niệm quan trọng trong OpenSpec. Chúng cho biết những gì đang thay đổi so với các đặc tả hiện tại của bạn.
+Specs delta là khái niệm cốt lõi trong OpenSpec. Chúng hiển thị những gì đang thay đổi so với specs hiện tại của bạn.
 
-### Định Dạng
+### Định dạng
 
-Delta specs sử dụng các phần để chỉ ra loại thay đổi:
+Specs delta sử dụng các phần để chỉ định loại thay đổi:
 
 ```markdown
-# Delta cho Auth
+# Delta for Auth
 
-## Yêu Cầu ĐƯỢC THÊM
+## ADDED Requirements
 
-### Yêu cầu: Xác thực hai yếu tố
-Hệ thống PHẢI yêu cầu một yếu tố thứ hai trong quá trình đăng nhập.
+### Requirement: Two-Factor Authentication
+Hệ thống PHẢI yêu cầu yếu tố thứ hai trong quá trình đăng nhập.
 
-#### Kịch bản: OTP được yêu cầu
-- CHO một người dùng đã bật 2FA
-- KHI người dùng gửi thông tin xác thực hợp lệ
-- THÌ sẽ hiển thị thử thách OTP
+#### Scenario: OTP required
+- GIVEN một người dùng đã bật 2FA
+- WHEN người dùng gửi thông tin đăng nhập hợp lệ
+- THEN thử thách OTP sẽ được hiển thị
 
-## Yêu Cầu ĐƯỢC SỬA ĐỔI
+## MODIFIED Requirements
 
-### Yêu cầu: Hết hạn phiên
-Hệ thống NÊN hết hạn các phiên sau 30 phút không hoạt động.
+### Requirement: Session Timeout
+Hệ thống SHALL hết hạn phiên đăng nhập sau 30 phút không hoạt động.
 (Trước đây: 60 phút)
 
-#### Kịch bản: Hết thời gian chờ nhàn rỗi
-- CHO một phiên đã được xác thực
-- KHI 30 phút trôi qua mà không có hoạt động nào
-- THÌ phiên đó sẽ bị vô hiệu hóa
+#### Scenario: Idle timeout
+- GIVEN một phiên đăng nhập đã được xác thực
+- WHEN 30 phút trôi qua mà không có hoạt động nào
+- THEN phiên đăng nhập bị vô hiệu hóa
 
-## Yêu Cầu BỊ XÓA
+## REMOVED Requirements
 
-### Yêu cầu: Ghi nhớ tôi
-(Đã lỗi thời thay thế bằng 2FA)
+### Requirement: Remember Me
+(Đã ngừng sử dụng, thay thế bằng xác thực hai yếu tố)
 ```
 
-### Điều Gì Xảy Ra Khi Lưu Trữ (Archive)
+### Điều gì xảy ra khi lưu trữ (archive)
 
 Khi bạn lưu trữ một thay đổi:
+1. Các yêu cầu **ĐƯỢC THÊM** được thêm vào cuối spec chính
+2. Các yêu cầu **ĐƯỢC SỬA ĐỔI** thay thế phiên bản hiện tại
+3. Các yêu cầu **ĐƯỢC XÓA** bị xóa khỏi spec chính
 
-1. Các yêu cầu **ADDED** được thêm vào đặc tả chính
-2. Các yêu cầu **MODIFIED** thay thế phiên bản hiện có
-3. Các yêu cầu **REMOVED** bị xóa khỏi đặc tả chính
+Thư mục thay đổi sẽ được di chuyển đến `openspec/changes/archive/` để lưu trữ lịch sử kiểm toán.
 
-Thư mục thay đổi được chuyển đến `openspec/changes/archive/` để lưu trữ lịch sử kiểm toán.
+## Ví dụ: Thay đổi đầu tiên của bạn
 
-## Ví Dụ: Thay Đổi Đầu Tiên Của Bạn
+Chúng ta hãy cùng thực hiện thêm chế độ tối cho một ứng dụng.
 
-Hãy cùng xem qua việc thêm chế độ tối (dark mode) vào một ứng dụng.
-
-### 1. Bắt Đầu Thay Đổi (Mặc Định)
+### 1. Bắt đầu thay đổi (mặc định)
 
 ```text
 Bạn: /opsx:propose add-dark-mode
 
 AI:  Đã tạo openspec/changes/add-dark-mode/
-     ✓ proposal.md — lý do chúng ta làm điều này, những gì đang thay đổi
-     ✓ specs/       — các yêu cầu và kịch bản
-     ✓ design.md    — phương pháp kỹ thuật
+     ✓ proposal.md — lý do thực hiện, những gì thay đổi
+     ✓ specs/       — yêu cầu và kịch bản
+     ✓ design.md    — phương pháp tiếp cận kỹ thuật
      ✓ tasks.md     — danh sách kiểm tra triển khai
      Sẵn sàng để triển khai!
 ```
 
-Nếu bạn đã bật hồ sơ quy trình mở rộng, bạn cũng có thể thực hiện điều này trong hai bước: `/opsx:new` sau đó `/opsx:ff` (hoặc `/opsx:continue` tăng dần).
+Nếu bạn đã kích hoạt hồ sơ quy trình làm việc mở rộng, bạn cũng có thể thực hiện thay đổi này qua hai bước: chạy `/opsx:new` trước, sau đó chạy `/opsx:ff` (hoặc `/opsx:continue` để thực hiện từng bước).
 
-### 2. Những Gì Được Tạo Ra
+### 2. Những gì được tạo ra
 
-**proposal.md** - Ghi lại ý định:
+**proposal.md** - Ghi lại mục tiêu của thay đổi:
 
 ```markdown
-# Proposal: Thêm Chế Độ Tối
+# Proposal: Add Dark Mode
 
-## Ý Định
-Người dùng đã yêu cầu tùy chọn chế độ tối để giảm mỏi mắt
-trong quá trình sử dụng ban đêm.
+## Intent
+Người dùng đã yêu cầu thêm tùy chọn chế độ tối để giảm mỏi mắt
+khi sử dụng vào ban đêm.
 
-## Phạm Vi
-- Thêm nút chuyển đổi chủ đề trong cài đặt
-- Hỗ trợ phát hiện sở thích hệ thống
-- Lưu trữ sở thích trong localStorage
+## Scope
+- Thêm nút chuyển đổi chủ đề trong phần cài đặt
+- Hỗ trợ phát hiện tùy chọn giao diện của hệ thống
+- Lưu trữ tùy chọn trong localStorage
 
-## Cách Tiếp Cận
-Sử dụng các thuộc tính tùy chỉnh CSS cho việc tạo chủ đề với một ngữ cảnh React
-cho quản lý trạng thái.
+## Approach
+Sử dụng CSS custom properties cho chủ đề giao diện, kết hợp với React context
+để quản lý trạng thái.
 ```
 
-**specs/ui/spec.md** - Delta hiển thị các yêu cầu mới:
+**specs/ui/spec.md** - Specs delta hiển thị các yêu cầu mới:
 
 ```markdown
-# Delta cho UI
+# Delta for UI
 
-## Yêu Cầu ĐƯỢC THÊM
+## ADDED Requirements
 
-### Yêu cầu: Chọn Chủ Đề
-Hệ thống NÊN cho phép người dùng chọn giữa chủ đề sáng và tối.
+### Requirement: Theme Selection
+Hệ thống SHALL cho phép người dùng lựa chọn giữa chủ đề sáng và tối.
 
-#### Kịch bản: Chuyển đổi thủ công
-- CHO một người dùng trên bất kỳ trang nào
-- KHI người dùng nhấp vào nút chuyển đổi chủ đề
-- THÌ chủ đề sẽ thay đổi ngay lập tức
-- VÀ sở thích được duy trì qua các phiên
+#### Scenario: Manual toggle
+- GIVEN người dùng đang ở bất kỳ trang nào
+- WHEN người dùng nhấp vào nút chuyển đổi chủ đề
+- THEN chủ đề sẽ chuyển đổi ngay lập tức
+- AND tùy chọn được lưu lại giữa các phiên sử dụng
 
-#### Kịch bản: Sở thích hệ thống
-- CHO một người dùng không có sở thích đã lưu
-- KHI ứng dụng tải
-- THÌ sơ đồ màu sắc ưu tiên của hệ thống sẽ được sử dụng
+#### Scenario: System preference
+- GIVEN người dùng không có tùy chọn đã lưu nào
+- WHEN ứng dụng được tải
+- THEN bảng màu ưa thích của hệ thống được sử dụng
 ```
 
 **tasks.md** - Danh sách kiểm tra triển khai:
@@ -210,51 +208,51 @@ Hệ thống NÊN cho phép người dùng chọn giữa chủ đề sáng và t
 ```markdown
 # Tasks
 
-## 1. Cơ Sở Hạ Tầng Chủ Đề
+## 1. Hạ tầng chủ đề
 - [ ] 1.1 Tạo ThemeContext với trạng thái sáng/tối
-- [ ] 1.2 Thêm các thuộc tính tùy chỉnh CSS cho màu sắc
-- [ ] 1.3 Triển khai lưu trữ localStorage
+- [ ] 1.2 Thêm CSS custom properties cho màu sắc
+- [ ] 1.3 Triển khai lưu trữ lâu dài trong localStorage
 
-## 2. Thành Phần UI
+## 2. Thành phần giao diện
 - [ ] 2.1 Tạo thành phần ThemeToggle
 - [ ] 2.2 Thêm nút chuyển đổi vào trang cài đặt
-- [ ] 2.3 Cập nhật Header để bao gồm nút chuyển đổi nhanh
+- [ ] 2.3 Cập nhật Header để thêm nút chuyển đổi nhanh
 
-## 3. Định Dạng
+## 3. Định dạng giao diện
 - [ ] 3.1 Xác định bảng màu chủ đề tối
-- [ ] 3.2 Cập nhật các thành phần để sử dụng biến CSS
+- [ ] 3.2 Cập nhật các thành phần để sử dụng CSS variables
 ```
 
-### 3. Triển Khai
+### 3. Triển khai
 
 ```
 Bạn: /opsx:apply
 
-AI:  Đang xử lý các tác vụ...
+AI:  Đang thực hiện các nhiệm vụ...
      ✓ 1.1 Đã tạo ThemeContext với trạng thái sáng/tối
-     ✓ 1.2 Đã thêm các thuộc tính tùy chỉnh CSS vào globals.css
-     ✓ 1.3 Đã triển khai lưu trữ localStorage
+     ✓ 1.2 Đã thêm CSS custom properties vào globals.css
+     ✓ 1.3 Đã triển khai lưu trữ lâu dài trong localStorage
      ✓ 2.1 Đã tạo thành phần ThemeToggle
      ...
-     Tất cả các tác vụ đã hoàn thành!
+     Tất cả nhiệm vụ đã hoàn thành!
 ```
 
-Trong quá trình triển khai, nếu bạn phát hiện ra thiết kế cần điều chỉnh, chỉ cần cập nhật tài sản và tiếp tục.
+Trong quá trình triển khai, nếu bạn phát hiện thiết kế cần điều chỉnh, chỉ cần cập nhật tài liệu liên quan và tiếp tục.
 
-### 4. Lưu Trữ (Archive)
+### 4. Lưu trữ
 
 ```
 Bạn: /opsx:archive
 
 AI:  Đang lưu trữ add-dark-mode...
-     ✓ Đã hợp nhất các đặc tả vào openspec/specs/ui/spec.md
+     ✓ Đã hợp nhất specs vào openspec/specs/ui/spec.md
      ✓ Đã di chuyển đến openspec/changes/archive/2025-01-24-add-dark-mode/
      Hoàn thành! Sẵn sàng cho tính năng tiếp theo.
 ```
 
-Delta specs của bạn giờ đã là một phần của các đặc tả chính, ghi lại cách hệ thống của bạn hoạt động.
+Các specs delta của bạn hiện là một phần của specs chính, ghi lại cách hoạt động của hệ thống bạn.
 
-## Xác Minh và Xem Xét
+## Kiểm tra và xem xét
 
 Sử dụng CLI để kiểm tra các thay đổi của bạn:
 
@@ -265,23 +263,25 @@ openspec list
 # Xem chi tiết thay đổi
 openspec show add-dark-mode
 
-# Xác thực định dạng đặc tả
+# Kiểm tra định dạng spec
 openspec validate add-dark-mode
 
 # Bảng điều khiển tương tác
 openspec view
 ```
 
-## Các Bước Tiếp Theo
+## Các bước tiếp theo
 
-- [Explore First](explore.md) - Sử dụng `/opsx:explore` để suy nghĩ về một ý tưởng trước khi bạn cam kết
-- [Using OpenSpec in an Existing Project](existing-projects.md) - Bắt đầu với codebase brownfield lớn
-- [Editing & Iterating on a Change](editing-changes.md) - Cập nhật tài sản, quay lại, hòa giải các chỉnh sửa thủ công
-- [Core Concepts at a Glance](overview.md) - Toàn bộ mô hình tư duy trên một trang
-- [Examples & Recipes](examples.md) - Các thay đổi thực tế, từ đầu đến cuối
-- [Workflows](workflows.md) - Các mẫu phổ biến và khi nào nên sử dụng từng lệnh
-- [Commands](commands.md) - Tài liệu tham khảo đầy đủ cho tất cả các lệnh dấu gạch chéo
-- [Concepts](concepts.md) - Hiểu sâu hơn về specs, changes và schemas
-- [Customization](customization.md) - Làm cho OpenSpec phù hợp với bạn
-- [Stores](stores-beta/user-guide.md) - Lập kế hoạch trải rộng qua các repo hoặc nhóm? Hãy giữ nó trong repo riêng (beta)
-- [FAQ](faq.md) và [Troubleshooting](troubleshooting.md) - Khi bạn gặp khó khăn
+- [Khám phá trước](explore.md) - Sử dụng `/opsx:explore` để suy nghĩ kỹ ý tưởng trước khi cam kết thực hiện
+- [Xem xét thay đổi](reviewing-changes.md) - Những điểm cần kiểm tra trong kế hoạch do AI soạn thảo, trước khi viết bất kỳ mã nào
+- [Viết specs chất lượng](writing-specs.md) - Mẫu yêu cầu và kịch bản tốt trông như thế nào
+- [Sử dụng OpenSpec trong dự án hiện có](existing-projects.md) - Bắt đầu với mã nguồn lớn thuộc dự án brownfield
+- [Chỉnh sửa và lặp lại thay đổi](editing-changes.md) - Cập nhật tài liệu liên quan, quay lại các bước trước, đối chiếu các chỉnh sửa thủ công
+- [Các khái niệm cốt lõi tổng quan](overview.md) - Toàn bộ mô hình tư duy trên một trang
+- [Ví dụ và mẫu thực tế](examples.md) - Các thay đổi thực tế, từ đầu đến cuối
+- [Quy trình làm việc](workflows.md) - Các mẫu phổ biến và thời điểm sử dụng từng lệnh
+- [Lệnh](commands.md) - Tài liệu tham khảo đầy đủ cho tất cả lệnh slash
+- [Khái niệm](concepts.md) - Hiểu sâu hơn về specs, thay đổi và schemas
+- [Tùy chỉnh](customization.md) - Điều chỉnh OpenSpec phù hợp với nhu cầu của bạn
+- [Stores](stores-beta/user-guide.md) - Kế hoạch trải rộng qua nhiều repos hoặc nhóm? Lưu trữ chúng trong repo riêng (beta)
+- [Câu hỏi thường gặp](faq.md) và [Xử lý sự cố](troubleshooting.md) - Khi bạn gặp khó khăn

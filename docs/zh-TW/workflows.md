@@ -1,12 +1,12 @@
 # 工作流程
 
-本指南涵蓋了 OpenSpec 的常見工作流程模式，以及何時應使用這些模式。有關基本設置，請參閱 [Getting Started](getting-started.md)。有關命令參考，請參閱 [Commands](commands.md)。
+本指南說明 OpenSpec 常見的工作流程模式，以及各模式的適用時機。基礎設定請參閱 [入門指南](getting-started.md)，指令參考請參閱 [指令](commands.md)。
 
-## 設計理念：行動而非階段
+## 核心原則：行動，而非階段
 
-傳統的工作流程會迫使您經歷一系列的階段：規劃、然後實施，最後完成。但實際工作並不會如此整齊地放入方框中。
+傳統工作流程強制你依序走完各個階段：先規劃、再實作、最後完成。但實際工作往往無法 neatly 歸入這些固定的階段範疇。
 
-OPSX 採取了不同的方法：
+OPSX 採取不同的做法：
 
 ```text
 Traditional (phase-locked):
@@ -23,16 +23,16 @@ OPSX (fluid actions):
 
 **核心原則：**
 
-- **行動而非階段** - 命令是您可以執行的事物，而不是您被困住的某個階段
-- **依賴項是賦能者 (enablers)** - 它們顯示了哪些事情是可行的，而不是下一步必須完成的事務
+- **行動，而非階段** - 指令是可以執行的動作，而非讓你卡住的固定階段
+- **相依性是輔助條件** - 相依性顯示的是可行選項，而非下一步的必要條件
 
-> **自定義：** OPSX 工作流程由定義工件序列的 schemas 驅動。請參閱 [Customization](customization.md) 以了解創建自定義 schemas 的詳細資訊。
+> **自訂：** OPSX 工作流程由定義產物序列的 schema 驅動。建立自訂 schema 的詳細說明請參閱 [自訂](customization.md)。
 
-## 兩種模式 (Two Modes)
+## 兩種模式
 
-### 預設快速路徑（`core` 設定檔）(Default Quick Path (`core` profile))
+### 預設快速路徑（`core` 設定檔）
 
-新安裝會預設使用 `core`，它提供了以下功能：
+新安裝預設使用 `core` 設定檔，提供以下功能：
 - `/opsx:explore`
 - `/opsx:propose`
 - `/opsx:apply`
@@ -43,44 +43,44 @@ OPSX (fluid actions):
 
 ```text
 /opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
-  (可選)
+  (optional)
 ```
 
-#### 從探索開始（值得養成的好習慣）(Start by exploring (the habit worth forming))
+#### 從探索開始（值得養成的習慣）
 
-`/opsx:explore` 是預設設定檔的一部分，而非進階附加功能。當您有問題但尚未有計畫時，就應該使用它，而這在大多數情況下都是如此。
+`/opsx:explore` 是預設設定檔的一部分，並非進階附加功能。每當你遇到問題但還沒有明確方案時，這就是首選操作——搭配 AI 助手時，這種情況幾乎是常態。
 
 ```text
 You: /opsx:explore
 
-AI:  您想探索什麼？
+AI:  你想探索什麼呢？
 
-You: 我們的搜尋結果感覺很陳舊。我不確定是快取、索引還是查詢本身的問題。
+You: 我們的搜尋結果感覺過時了，我不確定是快取、索引還是查詢本身的問題。
 
-AI:  讓我查看一下... [閱讀搜尋服務和快取層]
-     問題出在索引：它只會夜間重建，因此編輯內容不會直到隔天才顯示。有兩種選擇：寫入時重建（簡單，負載較高）或短 TTL 快取失效（涉及更多組件，負載較低）。鑑於您的寫入量不高，寫入時重建是更乾淨的解決方案。是否要限定範圍？
+AI:  我來看看……[讀取搜尋服務與快取層]
+     問題出在索引：它只會在夜間重建，所以修改內容要到隔天才會顯示。有兩個解決方案：寫入時重建索引（實現簡單，但負載較高），或是設定短 TTL 的快取失效機制（元件較多，負載較低）。考慮到你的寫入量很低，寫入時重建是更乾淨的修復方案。要限定範圍嗎？
 
-You: 是。
+You: 好。
 
 You: /opsx:propose rebuild-search-index-on-write
 ```
 
-探索功能不會產生任何產物（artifacts）也不會編寫程式碼。這是一場免費、零風險的對話，它能將一個模糊的擔憂轉化為一個精確的變更，從而使後續的提案更加銳利。是否已經清楚自己想要什麼？請跳過此步驟，直接前往 `/opsx:propose`。完整指南：[Explore First](explore.md)。
+探索操作不會產生任何產物，也不會編寫任何程式碼。這是一場零成本、無風險的對話，能將模糊的擔憂轉化為明確的變更方案，因此後續提出的提案也會更精準。如果你已經完全清楚自己想要什麼，可以跳過這一步，直接使用 `/opsx:propose`。完整指南：[先探索](explore.md)。
 
-### 擴展/完整工作流程（自訂選擇）(Expanded/Full Workflow (custom selection))
+### 擴充/完整工作流（自訂選擇）
 
-如果您需要明確的腳架和建構指令（`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`），請使用以下指令啟用它們：
+如果你想要使用明確的脚手架與建置指令（`/opsx:new`、`/opsx:continue`、`/opsx:ff`、`/opsx:verify`、`/opsx:bulk-archive`、`/opsx:onboard`），請執行以下指令啟用：
 
 ```bash
 openspec config profile
 openspec update
 ```
 
-## 工作流程模式（擴展模式）(Workflow Patterns (Expanded Mode))
+## 工作流模式（擴充模式）
 
-### 快速功能 (Quick Feature)
+### 快速功能開發
 
-當您知道想建構什麼，只需要執行時：
+當你已經清楚要開發什麼，只需要執行操作時：
 
 ```text
 /opsx:new ──► /opsx:ff ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
@@ -92,36 +92,36 @@ openspec update
 You: /opsx:new add-logout-button
 
 AI:  已建立 openspec/changes/add-logout-button/
-     準備創建：proposal
+     準備建立：提案
 
 You: /opsx:ff
 
-AI:  正在創建所有規劃產物...
+AI:  正在建立所有規劃產物……
      ✓ proposal.md
      ✓ specs/
      ✓ design.md
      ✓ tasks.md
-     準備實作！
+     準備好進行實作！
 
 You: /opsx:apply
 
-AI:  正在處理任務...
-     ✓ 已在標頭中新增登出按鈕
-     ✓ 已實作會話狀態清除
+AI:  正在處理任務……
+     ✓ 已於頁首新增登出按鈕
+     ✓ 已實作工作階段清除邏輯
      ✓ 已新增確認對話框
-     所有任務均已完成！
+     所有任務完成！
 
 You: /opsx:archive
 
-AI:  ✓ 已合併規格 (specs)
-     ✓ 已歸檔變更
+AI:  ✓ 已合併規格文件
+     ✓ 已封存變更
 ```
 
-**適用情境：** 小型到中型功能、錯誤修復、直接的變更。
+**適用場景：** 中小型功能、錯誤修復、單純的變更。
 
-### 探索性工作流 (Exploratory)
+### 探索式開發
 
-當需求不清楚或您需要先進行調查時：
+當需求不明確，或是需要先進行調查時：
 
 ```text
 /opsx:explore ──► /opsx:new ──► /opsx:continue ──► ... ──► /opsx:apply
@@ -132,49 +132,49 @@ AI:  ✓ 已合併規格 (specs)
 ```text
 You: /opsx:explore
 
-AI:  您想探索什麼？
+AI:  你想探索什麼呢？
 
-You: 我想改善頁面載入效能，但我不知道瓶頸在哪裡。
+You: 我想提升頁面載入效能，但還不確定瓶頸在哪裡。
 
-AI:  讓我協助調查...
-     [分析套件大小、識別慢速查詢、審查元件渲染模式]
+AI:  我來幫你調查……
+     [分析打包後檔案大小、找出緩慢查詢、審閱元件渲染模式]
 
-     我發現了三個主要瓶頸：
-     1. 未優化的超大圖片
-     2. ProductList 中的同步資料擷取 (Synchronous data fetching)
-     3. 來自 Context 變更的重新渲染 (Re-renders from context changes)
+     我發現三個主要瓶頸：
+     1. 未優化的大型圖片
+     2. ProductList 元件中的同步資料抓取
+     3. 上下文變更導致的重複渲染
 
-     您希望先解決哪一個？
+     你想先處理哪一個？
 
-You: 我們來處理資料擷取問題。
+You: 先處理資料抓取的問題吧。
 
 You: /opsx:new optimize-product-list-fetching
 
-AI:  已建立變更。準備創建：proposal
+AI:  已建立變更方案，準備建立：提案
 
 You: /opsx:continue
 
-AI:  根據我們的探索結果正在創建提案...
+AI:  根據我們的探索結果建立提案……
      [撰寫納入調查洞察的提案]
 
-     準備創建：specs, design
-     您接下來想做什麼？
+     準備建立：規格文件、設計文件
+     接下來要進行哪一步？
 
 You: /opsx:continue
 
-AI:  正在創建 specs...
+AI:  正在建立規格文件……
 ```
 
-**適用情境：** 效能優化、除錯 (debugging)、架構決策、不明確的需求。
+**適用場景：** 效能優化、除錯、架構決策、需求不明確的專案。
 
-### 並行變更 (Parallel Changes)
+### 平行變更
 
-同時處理多個變更：
+同時處理多個變更方案：
 
 ```text
-Change A: /opsx:new ──► /opsx:ff ──► /opsx:apply (進行中)
+Change A: /opsx:new ──► /opsx:ff ──► /opsx:apply (in progress)
                                          │
-                                    情境切換 (context switch)
+                                    context switch
                                          │
 Change B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 ```
@@ -182,7 +182,7 @@ Change B: /opsx:new ──► /opsx:ff ──────► /opsx:apply
 **對話範例：**
 
 ```text
-You: 我正在處理 add-dark-mode，但被拉去修了一個 Bug
+You: 我本來在處理 add-dark-mode，但臨時被叫去修一個錯誤
 
 You: /opsx:new fix-login-redirect
 
@@ -190,281 +190,282 @@ AI:  已建立 openspec/changes/fix-login-redirect/
 
 You: /opsx:ff
 
-AI:  ✓ 已創建規劃產物
+AI:  ✓ 已建立規劃產物
 
 You: /opsx:apply
 
-AI:  正在處理 fix-login-redirect...
-     [實作該修復]
-     所有任務均已完成！
+AI:  正在處理 fix-login-redirect……
+     [實作修復方案]
+     所有任務完成！
 
 You: /opsx:archive
 
-AI:  ✓ 已歸檔 fix-login-redirect
+AI:  ✓ 已封存 fix-login-redirect
 
-You: 我們回到 dark mode 吧
+You: 回到深色模式的開發吧
 
 You: /opsx:apply add-dark-mode
 
-AI:  恢復 add-dark-mode...
-     從第 2.3 任務開始：更新標頭 (Update Header)...
+AI:  繼續 add-dark-mode 的開發……
+     從任務 2.3 繼續：更新頁首……
 ```
 
-**適用情境：** 並行工作流、緊急中斷、團隊協作。
+**適用場景：** 平行工作流、緊急插單、團隊協作。
 
-當您有多個已完成的變更時，請使用 `/opsx:bulk-archive`：
+當你有多個已完成的變更方案時，可以使用 `/opsx:bulk-archive`：
 
 ```text
 You: /opsx:bulk-archive
 
-AI:  找到 3 個已完成的變更：
-     - add-dark-mode (所有任務均已完成)
-     - fix-login-redirect (所有任務均已完成)
-     - update-footer (所有任務均已完成)
+AI:  找到 3 個已完成的變更方案：
+     - add-dark-mode（所有任務完成）
+     - fix-login-redirect（所有任務完成）
+     - update-footer（所有任務完成）
 
-     正在檢查規格衝突...
-     ⚠ add-dark-mode 和 update-footer 都觸及 specs/ui/
+     正在檢查規格文件衝突……
+     ⚠ add-dark-mode 與 update-footer 都修改了 specs/ui/
 
-     正在檢查程式碼庫以解決...
-     兩個變更都已實作。將依時間順序進行應用。
+     正在檢查程式碼庫以解決衝突……
+     兩個變更方案都已實作，將依時間順序合併。
 
-     是否歸檔這 3 個變更？
+     要封存全部 3 個變更方案嗎？
 
-You: 是
+You: 好
 
-AI:  ✓ 已歸檔 add-dark-mode
-     ✓ 已歸檔 fix-login-redirect
-     ✓ 已歸檔 update-footer
-     規格按順序合併：add-dark-mode → update-footer
+AI:  ✓ 已封存 add-dark-mode
+     ✓ 已封存 fix-login-redirect
+     ✓ 已封存 update-footer
+     規格文件依序合併：add-dark-mode → update-footer
 ```
 
-Bulk archive 會偵測到多個變更觸及相同的規格，並透過檢查實際已實作的內容來解決衝突。
+批量封存功能會偵測多個變更方案是否修改了相同規格文件，並透過檢查實際實作內容來解決衝突。
 
-### 完成一個變更 (Completing a Change)
+### 完成變更方案
 
-推薦的完成流程：
+建議的完成流程：
 
 ```text
 /opsx:apply ──► /opsx:verify ──► /opsx:archive
                     │                 │
-              驗證實現 (validates)          提示同步 (prompts to sync)
-              實作內容 (implementation)     如果需要
+              validates          prompts to sync
+              implementation     if needed
 ```
 
-#### 驗證：檢查您的工作 (Verify: Check Your Work)
+#### 驗證：檢查你的實作
 
-`/opsx:verify` 會根據三個維度來驗證實作與您的產物是否一致：
+`/opsx:verify` 會從三個維度驗證實作內容與產物是否一致：
 
 ```text
 You: /opsx:verify
 
-AI:  正在驗證 add-auth...
+AI:  正在驗證 add-auth……
 
-     完整性 (COMPLETENESS)
-     ✓ tasks.md 中的所有 12 個任務均已檢查
-     ✓ 所有規格中的要求都對應有程式碼
-     ⚠ 未測試 "閒置後會話逾時" 的情境
+     完整性
+     ✓ tasks.md 中的 12 個任務皆已標記完成
+     ✓ 規格文件中的所有需求都有對應的程式碼
+     ⚠ 「閒置後工作階段逾時」情境尚未測試
 
-     正確性 (CORRECTNESS)
-     ✓ 實作符合規格意圖
-     ✓ 已處理來自情境的邊緣案例
-     ✓ 錯誤狀態符合規格定義
+     正確性
+     ✓ 實作內容符合規格文件意圖
+     ✓ 已處理情境中的邊界條件
+     ✓ 錯誤狀態符合規格文件定義
 
-     連貫性 (COHERENCE)
-     ✓ 設計決策體現於程式碼結構中
-     ✓ 名稱慣例與 design.md 一致
-     ⚠ 設計提到 "事件驅動" (event-driven)，但實作使用了輪詢 (polling)
+     一致性
+     ✓ 設計決策反映在程式碼結構中
+     ✓ 命名規範與 design.md 一致
+     ⚠ 設計文件中提到「事件驅動」，但實作使用輪詢機制
 
-     摘要 (SUMMARY)
+     總結
      ─────────────────────────────
-     關鍵問題：0
-     警告：2
-     準備歸檔：是（帶有警告）
+     嚴重問題：0 個
+     警告：2 個
+     可封存：是（帶有警告）
 
      建議：
-     1. 為會話逾時情境新增測試
-     2. 考慮重構為事件驅動，或更新 design.md
+     1. 為「閒置後工作階段逾時」情境新增測試
+     2. 考慮依設計重構為事件驅動架構，或是更新 design.md
 ```
 
-**Verify 檢查的內容：**
+**驗證功能會檢查以下項目：**
 
-| 維度 | 驗證項目 |
+| 維度 | 驗證內容 |
 |-----------|------------------|
-| 完整性 (Completeness) | 所有任務已完成、所有要求均已實作、情境已覆蓋 |
-| 正確性 (Correctness) | 實作符合規格意圖、已處理邊緣案例 |
-| 連貫性 (Coherence) | 設計決策體現於程式碼中、模式一致 |
+| 完整性 | 所有任務完成、所有需求已實作、所有情境已涵蓋 |
+| 正確性 | 實作內容符合規格意圖、邊界條件已處理 |
+| 一致性 | 設計決策反映在程式碼中、模式保持一致 |
 
-Verify 不會阻擋歸檔，但它會顯示出您可能需要先解決的問題。
+驗證不會阻擋封存流程，但會凸顯你可能希望優先處理的問題。
 
-#### 歸檔：完成變更 (Archive: Finalize the Change)
+#### 封存：完成變更方案
 
-`/opsx:archive` 會完成該變更並將其移至歸檔：
+`/opsx:archive` 會完成變更方案並將其移至封存區：
 
 ```text
 You: /opsx:archive
 
-AI:  正在歸檔 add-auth...
+AI:  正在封存 add-auth……
 
-     產物狀態 (Artifact status):
+     產物狀態：
      ✓ proposal.md 存在
      ✓ specs/ 存在
      ✓ design.md 存在
-     ✓ tasks.md 存在（12/12 個任務已完成）
+     ✓ tasks.md 存在（12/12 個任務完成）
 
-     規格差異 (Delta specs)：尚未同步到主程式碼庫
-     → 您想現在就同步嗎？
+     增量規格文件：尚未同步至主分支
+     → 要現在同步嗎？
 
-You: 是
+You: 好
 
-AI:  ✓ 已將規格同步至 openspec/specs/auth/spec.md
+AI:  ✓ 已將規格文件同步至 openspec/specs/auth/spec.md
      ✓ 已移至 openspec/changes/archive/2025-01-24-add-auth/
 
-     變更已成功歸檔。
+     變更方案已成功封存。
 ```
 
-Archive 會提示如果規格尚未同步。它不會因為任務未完成而阻擋，但會發出警告。
+如果規格文件尚未同步，封存流程會發出提示。它不會因為任務未完成而阻擋流程，但會發出警告。
 
-## 何時使用何種模式 (When to Use What)
+## 使用場景指南
 
-### `/opsx:ff` 與 `/opsx:continue` 的區別
+### `/opsx:ff` 與 `/opsx:continue` 的差異
 
-| 情境 | 使用方法 |
+| 情境 | 適用指令 |
 |-----------|-----|
-| 需求明確，準備好建構 | `/opsx:ff` |
-| 正在探索，想審查每個步驟 | `/opsx:continue` |
-| 在規格之前想迭代提案 | `/opsx:continue` |
+| 需求明確，準備好開始實作 | `/opsx:ff` |
+| 處於探索階段，希望逐步審查每個步驟 | `/opsx:continue` |
+| 希望在生成規格文件前反覆修改提案 | `/opsx:continue` |
 | 時間緊迫，需要快速推進 | `/opsx:ff` |
-| 變更複雜，想要掌控權 | `/opsx:continue` |
+| 變更方案複雜，需要全程掌控 | `/opsx:continue` |
 
-**經驗法則：** 如果您可以事先描述完整的範圍，請使用 `/opsx:ff`。如果您是在過程中逐步弄清楚，請使用 `/opsx:continue`。
+**經驗法則：** 如果你可以提前描述完整的範圍，請使用 `/opsx:ff`。如果你是在執行過程中逐步釐清範圍，請使用 `/opsx:continue`。
 
-### 何時更新現有變更 vs 從零開始 (When to Update vs Start Fresh)
+### 何時更新現有變更方案，何時重新開始
 
-一個常見的問題：何時可以更新現有的變更，何時應該從新的一開始？
+常見問題：什麼時候可以更新現有的變更方案，什麼時候應該重新建立一個新的？
 
-**當滿足以下條件時，請更新現有的變更：**
+**適合更新現有變更方案的場景：**
+- 意圖相同，僅優化執行方式
+- 範圍縮小（先交付最小可行產品 MVP，其餘部分後續處理）
+- 基於學習進行的修正（程式碼庫與預期不符）
+- 基於實作發現調整設計
 
-- 意圖相同，執行方式已精煉
-- 範圍縮小（先做 MVP，後續再處理其餘部分）
-- 基於學習的修正（程式碼庫並非您預期的樣子）
-- 基於實作發現的設計調整
-
-**當滿足以下條件時，請從新的一開始：**
-
-- 意圖發生根本性改變
-- 範圍擴大到完全不同的工作
-- 原本變更可以獨立地被標記為「完成」
-- 修補程式碼會造成混淆而非澄清
+**適合重新建立新變更方案的場景：**
+- 核心意圖發生根本變化
+- 範圍大幅擴展至完全不同的工作內容
+- 原始變更方案可以單獨標記為「完成」
+- 修補程式會造成更多混淆而非釐清問題
 
 ```text
                      ┌─────────────────────────────────────┐
-                     │     這是同一項工作嗎？ (Is this the same work?)  │
+                     │     Is this the same work?          │
                      └──────────────┬──────────────────────┘
                                     │
                  ┌──────────────────┼──────────────────┐
                  │                  │                  │
                  ▼                  ▼                  ▼
-          意圖相同?      >50% 重疊度?      原變更是否可以在沒有這些變更的情況下被「完成」？
+          Same intent?      >50% overlap?      Can original
+          Same problem?     Same scope?        be "done" without
+                 │                  │          these changes?
                  │                  │                  │
        ┌────────┴────────┐  ┌──────┴──────┐   ┌───────┴───────┐
        │                 │  │             │   │               │
-      是 (YES)          否 (NO) 是 (YES)     否 (NO)  否 (NO)
+      YES               NO YES           NO  NO              YES
        │                 │  │             │   │               │
        ▼                 ▼  ▼             ▼   ▼               ▼
-    更新 (UPDATE)      新的一 (NEW)  更新 (UPDATE)  新的一 (NEW)  更新 (UPDATE)  新的一 (NEW)
+    UPDATE            NEW  UPDATE       NEW  UPDATE          NEW
 ```
 
-**範例：「新增暗色模式」**
+**範例：「新增深色模式」**
+- 「還需要支援自訂主題」→ 新變更方案（範圍大幅擴展）
+- 「系統偏好偵測比預期更困難」→ 更新現有方案（意圖相同）
+- 「先推出切換開關，後續再加偏好設定」→ 先更新現有方案並封存，再建立新變更方案
 
-- 「還需要支援自訂主題」→ 新的變更（範圍擴大）
-- 「偵測系統偏好比預期的要難得多」→ 更新（意圖相同）
-- 「先發布切換開關，稍後再增加偏好設定」→ 先更新再歸檔，然後再創建一個新的變更
+## 最佳實踐
 
-## 最佳實務 (Best Practices)
+### 保持變更方案聚焦
 
-### 使變更集中化 (Keep Changes Focused)
+每個變更方案只包含一個邏輯工作單元。如果你正在進行「新增功能 X 同時重構 Y」的任務，建議拆分為兩個獨立的變更方案。
 
-每個變更應是一個邏輯單元的工作。如果您正在做「新增功能 X 並重構 Y」，請考慮兩個獨立的變更。
+**為什麼這麼重要：**
+- 更容易審查與理解
+- 封存歷史更清晰
+- 可獨立交付
+- 需要時更易回滾
 
-**為什麼這很重要：**
-- 更容易審查和理解
-- 歸檔歷史更乾淨
-- 可以獨立發布
-- 如果需要，回溯 (rollback) 更簡單
+### 需求不明確時使用 `/opsx:explore`
 
-### 對於不明確的需求使用 `/opsx:explore`
-
-在承諾任何變更之前，先探索問題空間：
+在確定變更方案前，先探索問題領域：
 
 ```text
 You: /opsx:explore
 
-AI:  您想探索什麼？
+AI:  你想探索什麼呢？
 
-You: 我們應該如何處理 API 的速率限制 (rate limiting)？
+You: 我們的 API 該如何處理速率限制？
 
-AI:  讓我調查一下您的當前設定和選項...
-     [研究程式碼庫，考慮模式]
+AI:  我來調查你目前的設定與可行方案……
+     [研究程式碼庫、考慮常見模式]
 
-     我看到了三種可以採取的途徑：
-     1. 基於中介軟體 (Middleware-based)（簡單，按端點）
-     2. 支援 Redis（可擴展，共享狀態）
-     3. 每位使用者一個 Token Bucket（公平，複雜）
+     我發現三個可行方案：
+     1. 基於中介軟體（實現簡單，按端點設定）
+     2. 基於 Redis（可擴展，共享狀態）
+     3. 每位使用者一個權杖桶（公平，但實現複雜）
 
-     您目前的技術堆棧建議 #1 或 #2。您的規模如何？
+     你目前的技術堆疊建議選擇方案 1 或 2，你的服務規模如何？
 ```
 
-探索能讓您在創建產物之前就釐清思緒。
+探索操作能讓你在建立產物前釐清思路。
 
-### 歸檔前進行驗證 (Verify Before Archiving)
+### 封存前先驗證
 
-使用 `/opsx:verify` 來檢查實作是否與產物一致：
+使用 `/opsx:verify` 檢查實作內容與產物是否一致：
 
 ```text
 You: /opsx:verify
 
-AI:  正在驗證 add-dark-mode...
+AI:  正在驗證 add-dark-mode……
 
-     ✓ tasks.md 中的所有任務均已檢查
-     ✓ 規格中的要求都對應有程式碼
-     ✓ 設計決策體現於實作中
+     ✓ tasks.md 中的所有任務皆已標記完成
+     ✓ 規格文件中的所有需求都有對應的程式碼
+     ✓ 設計決策已反映在實作內容中
 
-     準備歸檔！
+     可以封存了！
 ```
 
-在您完成變更之前，就可捕獲不一致之處。
+在結束變更方案前找出不一致之處。
 
-### 清晰地命名變更 (Name Changes Clearly)
+### 明確命名變更方案
 
-好的名稱能讓 `openspec list` 變得有用：
+好的名稱能讓 `openspec list` 指令更有用：
 
-```text
-良好範例:                          應避免:
-add-dark-mode                  feature-1
-fix-login-redirect             update
-optimize-product-query         changes
-implement-2fa                  wip
-```
+| 好的範例 | 應避免的範例 |
+|-------|--------|
+| add-dark-mode | feature-1 |
+| fix-login-redirect | update |
+| optimize-product-query | changes |
+| implement-2fa | wip |
 
 ## 命令快速參考
 
-如需完整的命令細節和選項，請參閱[Commands](commands.md)。
+完整命令詳細資訊與選項請參閱 [Commands](commands.md)。
 
-| Command | 用途 | 使用時機 |
+| 命令 | 用途 | 適用時機 |
 |---------|---------|-------------|
-| `/opsx:propose` | 建立變更和規劃工件 | 快速預設路徑（`core` 設定） |
-| `/opsx:explore` | 與 AI 一起思考想法 | 當不確定時從此開始：需求不明確、調查、比較選項 |
-| `/opsx:new` | 開始一個變更骨架 | 進階模式，需要明確控制工件 |
-| `/opsx:continue` | 建立下一個工件 | 進階模式，逐步創建工件 |
-| `/opsx:ff` | 建立所有規劃工件 | 進階模式，範圍清晰 |
-| `/opsx:apply` | 實作任務 | 準備好編寫程式碼時 |
-| `/opsx:verify` | 驗證實作 | 進階模式，在歸檔之前進行 |
-| `/opsx:sync` | 合併變更規格 | 進階模式，可選 |
-| `/opsx:archive` | 完成此變更 | 所有工作完成後 |
-| `/opsx:bulk-archive` | 歸檔多個變更 | 進階模式，平行工作時 |
+| `/opsx:propose` | 建立變更與規劃產出物 | 快速預設路徑（`core` 設定檔） |
+| `/opsx:explore` | 與 AI 共同構思想法 | 不確定時從這裡開始：需求不明、需要調查、比較方案時適用 |
+| `/opsx:new` | 啟動變更骨架 | 擴充模式，明確產出物控制 |
+| `/opsx:continue` | 建立下一個產出物 | 擴充模式，逐步建立產出物 |
+| `/opsx:ff` | 建立所有規劃產出物 | 擴充模式，範圍明確時適用 |
+| `/opsx:apply` | 實作任務 | 準備好撰寫程式碼時適用 |
+| `/opsx:verify` | 驗證實作結果 | 擴充模式，封存前使用 |
+| `/opsx:sync` | 合併增量規格 | 擴充模式，選用功能 |
+| `/opsx:archive` | 完成變更 | 所有工作完成時適用 |
+| `/opsx:bulk-archive` | 封存多個變更 | 擴充模式，平行工作時適用 |
 
 ## 後續步驟
 
-- [Commands](commands.md) - 完整的命令參考及選項
-- [Concepts](concepts.md) - 深入探討規格、工件和模式
+- [撰寫優質規格](writing-specs.md) - 說明強健的需求與場景應具備的條件，以及如何為變更選擇合適的大小
+- [審閱變更](reviewing-changes.md) - 在撰寫任何程式碼前，對草擬的計畫進行兩分鐘快速檢閱
+- [團隊使用 OpenSpec](team-workflow.md) - 說明變更如何對應分支與 Pull Request
+- [Commands](commands.md) - 完整命令參考與選項說明
+- [Concepts](concepts.md) - 深入探討規格、產出物與結構描述
 - [Customization](customization.md) - 建立自訂工作流程

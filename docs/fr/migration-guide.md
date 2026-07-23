@@ -1,20 +1,20 @@
-# Migrer vers OPSX
+# Migration vers OPSX
 
-Ce guide vous aide à effectuer la transition depuis l'ancien flux de travail OpenSpec vers OPSX. La migration est conçue pour être fluide — votre travail existant est préservé, et le nouveau système offre plus de flexibilité.
+Ce guide vous aide à passer de l'ancien workflow OpenSpec à OPSX. La migration est conçue pour être fluide : votre travail existant est préservé, et le nouveau système offre plus de flexibilité.
 
 ## Qu'est-ce qui change ?
 
-OPSX remplace l'ancien flux de travail verrouillé par phase par une approche fluide, basée sur les actions. Voici le changement clé :
+OPSX remplace l'ancien workflow verrouillé par phases par une approche fluide basée sur les actions. Voici le changement clé :
 
-| Aspect | Ancien système | OPSX |
-|--------|----------------|------|
-| **Commandes** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | Par défaut : `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, `/opsx:archive` (commandes de flux de travail étendues en option) |
-| **Flux de travail** | Créer tous les artefacts en une fois | Créer de manière incrémentale ou en une fois — à votre choix |
-| **Retour en arrière** | Portes de phase rigides | Naturel — mettre à jour n'importe quel artefact à tout moment |
-| **Personnalisation** | Structure fixe | Piloté par schéma, entièrement modifiable |
+| Critère | Ancien système | OPSX |
+|--------|--------|------|
+| **Commandes** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | Par défaut : `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, `/opsx:archive` (commandes de workflow étendu facultatives) |
+| **Workflow** | Créer tous les artefacts en une seule fois | Créer de manière incrémentale ou en une seule fois : vous choisissez |
+| **Retour en arrière** | Portes de phase contraignantes | Naturel : mettez à jour n'importe quel artefact à tout moment |
+| **Personnalisation** | Structure fixe | Pilotée par schéma, entièrement hackable |
 | **Configuration** | `CLAUDE.md` avec marqueurs + `project.md` | Configuration propre dans `openspec/config.yaml` |
 
-**Le changement de philosophie :** Le travail n'est pas linéaire. OPSX cesse de prétendre le contraire.
+**Le changement de philosophie :** Le travail n'est pas linéaire. OPSX arrête de prétendre le contraire.
 
 ---
 
@@ -22,36 +22,37 @@ OPSX remplace l'ancien flux de travail verrouillé par phase par une approche fl
 
 ### Votre travail existant est préservé
 
-Le processus de migration a été conçu avec la préservation à l'esprit :
+Le processus de migration est conçu pour préserver vos données :
 
-- **Modifications actives dans `openspec/changes/`** — Complètement préservées. Vous pouvez continuer à les gérer avec les commandes OPSX.
+- **Modifications actives dans `openspec/changes/`** — Entièrement préservées. Vous pouvez les poursuivre avec les commandes OPSX.
 - **Modifications archivées** — Intactes. Votre historique reste préservé.
 - **Spécifications principales dans `openspec/specs/`** — Intactes. Ce sont vos sources de vérité.
-- **Votre contenu dans CLAUDE.md, AGENTS.md, etc.** — Préservé. Seuls les blocs de marqueurs OpenSpec sont supprimés ; tout ce que vous avez écrit reste en place.
+- **Votre contenu dans CLAUDE.md, AGENTS.md, etc.** — Préservé. Seuls les blocs de marqueurs OpenSpec sont supprimés ; tout ce que vous avez écrit reste.
 
 ### Ce qui est supprimé
 
-Seuls les fichiers gérés par OpenSpec qui sont remplacés :
+Seuls les fichiers gérés par OpenSpec en cours de remplacement sont supprimés :
 
-| Quoi | Pourquoi |
-|------|----------|
+| Ce qui est supprimé | Pourquoi |
+|---------------------|----------|
 | Répertoires/fichiers de commandes slash hérités | Remplacés par le nouveau système de compétences |
 | `openspec/AGENTS.md` | Déclencheur de workflow obsolète |
-| Marqueurs OpenSpec dans `CLAUDE.md`, `AGENTS.md`, etc. | Plus nécessaires |
+| Marqueurs OpenSpec dans `CLAUDE.md`, `AGENTS.md`, etc. | Ne sont plus nécessaires |
 
 **Emplacements des commandes héritées par outil** (exemples — votre outil peut varier) :
 
 - Claude Code : `.claude/commands/openspec/`
 - Cursor : `.cursor/commands/openspec-*.md`
 - Windsurf : `.windsurf/workflows/openspec-*.md`
-- Cline : `.clinerules/workflows/openspec-*.md`
+- Cline : `.cinerules/workflows/openspec-*.md`
 - Roo : `.roo/commands/openspec-*.md`
-- GitHub Copilot : `.github/prompts/openspec-*.prompt.md` (extensions IDE uniquement ; non pris en charge dans Copilot CLI)
+- GitHub Copilot : `.github/prompts/openspec-*.prompt.md` (extensions IDE uniquement ; non pris en charge dans l'interface CLI de Copilot)
+- Codex : OpenSpec utilise désormais `.codex/skills/openspec-*` ; le nettoyage des fichiers hérités ne cible que les noms de fichiers de prompts autorisés par OpenSpec dans `$CODEX_HOME/prompts` ou `~/.codex/prompts`, et ne les supprime que lorsque les compétences de remplacement existent.
 - Et d'autres (Augment, Continue, Amazon Q, etc.)
 
 La migration détecte les outils que vous avez configurés et nettoie leurs fichiers hérités.
 
-La liste de suppression peut sembler longue, mais ce sont tous des fichiers qu'OpenSpec a créés à l'origine. Votre propre contenu n'est jamais supprimé.
+La liste des suppressions peut sembler longue, mais il s'agit de fichiers qui ont tous été créés à l'origine par OpenSpec. Votre propre contenu n'est jamais supprimé.
 
 ### Ce qui nécessite votre attention
 
@@ -61,48 +62,46 @@ Un fichier nécessite une migration manuelle :
 
 1. Examiner son contenu
 2. Déplacer le contexte utile vers `openspec/config.yaml` (voir les conseils ci-dessous)
-3. Supprimer le fichier lorsque vous êtes prêt
+3. Supprimer le fichier une fois que c'est fait
 
-**Pourquoi nous avons apporté ce changement :**
+**Pourquoi nous avons fait ce changement :**
 
-L'ancien `project.md` était passif — les agents pouvaient le lire ou non, et pouvaient oublier ce qu'ils avaient lu. Nous avons constaté que la fiabilité était inégale.
+L'ancien `project.md` était passif : les agents pouvaient le lire, ne pas le lire, ou oublier ce qu'ils avaient lu. Nous avons constaté que la fiabilité était inconstante.
 
-Le nouveau contexte de `config.yaml` est **activement injecté dans chaque requête de planification OpenSpec**. Cela signifie que vos conventions de projet, votre pile technologique et vos règles sont toujours présentes lorsque l'IA crée des artefacts. Fiabilité accrue.
+Le contexte du nouveau `config.yaml` est **activement injecté dans chaque demande de planification OpenSpec**. Cela signifie que vos conventions de projet, votre stack technique et vos règles sont toujours présentes lorsque l'IA crée des artefacts. Fiabilité accrue.
 
 **Le compromis :**
 
-Étant donné que le contexte est injecté dans chaque requête, vous voudrez être concis. Concentrez-vous sur ce qui compte vraiment :
-- Pile technologique et conventions clés
+Comme le contexte est injecté dans chaque demande, vous devrez être concis. Concentrez-vous sur ce qui compte vraiment :
+- Stack technique et conventions clés
 - Contraintes non évidentes que l'IA doit connaître
 - Règles qui étaient souvent ignorées auparavant
 
-Ne vous inquiétez pas de le rendre parfait. Nous apprenons encore ce qui fonctionne le mieux ici, et nous améliorerons le fonctionnement de l'injection de contexte au fur et à mesure de nos expérimentations.
+Ne vous inquiétez pas de faire quelque chose de parfait. Nous apprenons encore ce qui fonctionne le mieux ici, et nous améliorerons le fonctionnement de l'injection de contexte au fil de nos expérimentations.
 
 ---
 
-## Exécution de la migration
+## Exécuter la migration
 
-Les commandes `openspec init` et `openspec update` détectent les fichiers hérités et vous guident à travers le même processus de nettoyage. Utilisez celle qui correspond à votre situation :
+Les commandes `openspec init` et `openspec update` détectent toutes deux les fichiers hérités et vous guident dans le même processus de nettoyage. Utilisez celle qui correspond à votre situation :
 
 - Les nouvelles installations utilisent par défaut le profil `core` (`propose`, `explore`, `apply`, `sync`, `archive`).
 - Les installations migrées préservent vos workflows précédemment installés en écrivant un profil `custom` si nécessaire.
 
-### Utilisation de `openspec init`
+### Utiliser `openspec init`
 
-Exécutez cette commande si vous souhaitez ajouter de nouveaux outils ou reconfigurer les outils mis en place :
+Exécutez cette commande si vous souhaitez ajouter de nouveaux outils ou reconfigurer les outils déjà configurés :
 
 ```bash
 openspec init
 ```
 
-La commande init détecte les fichiers hérités et vous guide à travers le nettoyage :
+La commande init détecte les fichiers hérités et vous guide dans le nettoyage :
 
 ```
 Mise à niveau vers le nouveau OpenSpec
 
-OpenSpec utilise désormais les compétences d'agent, le standard émergent pour
-les agents de codage. Cela simplifie votre configuration tout en maintenant
-le fonctionnement comme avant.
+OpenSpec utilise désormais les compétences d'agents, la norme émergente parmi les agents de codage. Cela simplifie votre configuration tout en conservant le fonctionnement de l'ensemble des fonctionnalités comme avant.
 
 Fichiers à supprimer
 Aucun contenu utilisateur à préserver :
@@ -116,35 +115,32 @@ Les marqueurs OpenSpec seront supprimés, votre contenu préservé :
 
 Nécessite votre attention
   • openspec/project.md
-    Nous ne supprimerons pas ce fichier. Il peut contenir un contexte de projet utile.
+    Nous ne supprimerons pas ce fichier. Il peut contenir du contexte de projet utile.
 
-    Le nouveau openspec/config.yaml possède une section "context:" pour le
-    contexte de planification. Celle-ci est incluse dans chaque requête OpenSpec
-    et fonctionne de manière plus fiable que l'ancienne approche project.md.
+    Le nouveau fichier openspec/config.yaml dispose d'une section « context: » pour le contexte de planification. Celle-ci est incluse dans chaque demande OpenSpec et fonctionne de manière plus fiable que l'ancienne approche avec project.md.
 
-    Examinez project.md, déplacez tout contenu utile vers la section context
-    de config.yaml, puis supprimez le fichier lorsque vous êtes prêt.
+    Examinez project.md, déplacez tout contenu utile vers la section context de config.yaml, puis supprimez le fichier une fois que c'est fait.
 
 ? Mettre à niveau et nettoyer les fichiers hérités ? (Y/n)
 ```
 
-**Ce qui se passe lorsque vous dites oui :**
+**Ce qui se passe lorsque vous répondez oui :**
 
 1. Les répertoires de commandes slash hérités sont supprimés
 2. Les marqueurs OpenSpec sont retirés de `CLAUDE.md`, `AGENTS.md`, etc. (votre contenu reste)
 3. `openspec/AGENTS.md` est supprimé
-4. De nouvelles compétences sont installées dans `.claude/skills/`
+4. Les nouvelles compétences sont installées dans `.claude/skills/`
 5. `openspec/config.yaml` est créé avec un schéma par défaut
 
-### Utilisation de `openspec update`
+### Utiliser `openspec update`
 
-Exécutez cette commande si vous souhaitez simplement migrer et actualiser vos outils existants vers la dernière version :
+Exécutez cette commande si vous souhaitez simplement migrer et mettre à jour vos outils existants vers la dernière version :
 
 ```bash
 openspec update
 ```
 
-La commande update détecte et nettoie également les artefacts hérités, puis actualise les compétences/commandes générées pour correspondre à votre profil et vos paramètres de livraison actuels.
+La commande de mise à jour détecte et nettoie également les artefacts hérités, puis actualise les compétences/commandes générées pour correspondre à votre profil actuel et à vos paramètres de livraison.
 
 ### Environnements non interactifs / CI
 
@@ -154,28 +150,30 @@ Pour les migrations scriptées :
 openspec init --force --tools claude
 ```
 
-Le drapeau `--force` ignore les invites et accepte automatiquement le nettoyage.
+L'option `--force` ignore les invites et accepte automatiquement le nettoyage.
+
+Cela inclut le nettoyage des fichiers de prompts Codex gérés par OpenSpec dans le répertoire global de prompts Codex. Le nettoyage ne cible que les noms de fichiers de prompts Codex hérités autorisés par OpenSpec, ne les supprime que lorsque les compétences de remplacement `.codex/skills/openspec-*` existent, et préserve tous les autres fichiers.
 
 ---
 
-## Migration de project.md vers config.yaml
+## Migrer project.md vers config.yaml
 
-L'ancien `openspec/project.md` était un fichier markdown libre pour le contexte du projet. Le nouveau `openspec/config.yaml` est structuré et — surtout — **injecté dans chaque requête de planification** afin que vos conventions soient toujours présentes lorsque l'IA travaille.
+L'ancien fichier `openspec/project.md` était un fichier markdown libre pour le contexte de projet. Le nouveau `openspec/config.yaml` est structuré et, surtout, **injecté dans chaque demande de planification** afin que vos conventions soient toujours présentes lorsque l'IA travaille.
 
 ### Avant (project.md)
 
 ```markdown
-# Contexte du projet
+# Project Context
 
-Ceci est un monorepo TypeScript utilisant React et Node.js.
-Nous utilisons Jest pour les tests et suivons des règles ESLint strictes.
-Notre API est RESTful et documentée dans docs/api.md.
+This is a TypeScript monorepo using React and Node.js.
+We use Jest for testing and follow strict ESLint rules.
+Our API is RESTful and documented in docs/api.md.
 
 ## Conventions
 
-- Toutes les API publiques doivent maintenir la rétrocompatibilité
-- Les nouvelles fonctionnalités doivent inclure des tests
-- Utiliser le format Given/When/Then pour les spécifications
+- All public APIs must maintain backwards compatibility
+- New features should include tests
+- Use Given/When/Then format for specifications
 ```
 
 ### Après (config.yaml)
@@ -184,19 +182,19 @@ Notre API est RESTful et documentée dans docs/api.md.
 schema: spec-driven
 
 context: |
-  Pile technologique : TypeScript, React, Node.js
-  Tests : Jest avec React Testing Library
-  API : RESTful, documentée dans docs/api.md
-  Nous maintenons la rétrocompatibilité pour toutes les API publiques
+  Tech stack: TypeScript, React, Node.js
+  Testing: Jest with React Testing Library
+  API: RESTful, documented in docs/api.md
+  We maintain backwards compatibility for all public APIs
 
 rules:
   proposal:
-    - Inclure un plan de rollback pour les modifications risquées
+    - Include rollback plan for risky changes
   specs:
-    - Utiliser le format Given/When/Then pour les scénarios
-    - Référencer les modèles existants avant d'en inventer de nouveaux
+    - Use Given/When/Then format for scenarios
+    - Reference existing patterns before inventing new ones
   design:
-    - Inclure des diagrammes de séquence pour les flux complexes
+    - Include sequence diagrams for complex flows
 ```
 
 ### Différences clés
@@ -204,45 +202,45 @@ rules:
 | project.md | config.yaml |
 |------------|-------------|
 | Markdown libre | YAML structuré |
-| Un bloc de texte | Contexte et règles par artefact séparés |
-| Moment d'utilisation peu clair | Le contexte apparaît dans TOUS les artefacts ; les règles n'apparaissent que dans les artefacts correspondants |
-| Aucune sélection de schéma | Le champ explicite `schema:` définit le workflow par défaut |
+| Un seul bloc de texte | Contexte séparé et règles par artefact |
+| Utilisation peu claire | Le contexte apparaît dans TOUS les artefacts ; les règles n'apparaissent que pour les artefacts correspondants |
+| Pas de sélection de schéma | Le champ explicite `schema:` définit le workflow par défaut |
 
-### Quoi conserver, quoi abandonner
+### Ce qu'il faut conserver, ce qu'il faut supprimer
 
-Lors de la migration, soyez sélectif. Demandez-vous : « L'IA a-t-elle besoin de ceci pour *chaque* requête de planification ? »
+Lors de la migration, soyez sélectif. Posez-vous la question : « L'IA a-t-elle besoin de cela pour *chaque* demande de planification ? »
 
 **Bons candidats pour `context:`**
-- Pile technologique (langages, frameworks, bases de données)
+- Stack technique (langages, frameworks, bases de données)
 - Modèles architecturaux clés (monorepo, microservices, etc.)
 - Contraintes non évidentes (« nous ne pouvons pas utiliser la bibliothèque X parce que... »)
-- Conventions critiques souvent ignorées
+- Conventions critiques qui sont souvent ignorées
 
-**À déplacer vers `rules:` à la place**
-- Formatage spécifique aux artefacts (« utiliser Given/When/Then dans les specs »)
-- Critères de revue (« les propositions doivent inclure des plans de rollback »)
-- Ceux-ci n'apparaissent que pour l'artefact correspondant, allégeant les autres requêtes
+**À déplacer plutôt dans `rules:`**
+- Formatage spécifique à un artefact (« utiliser le format Given/When/Then dans les spécifications »)
+- Critères de revue (« les propositions doivent inclure des plans de retour en arrière »)
+- Celles-ci n'apparaissent que pour l'artefact correspondant, ce qui allège les autres demandes
 
-**À omettre entièrement**
+**À exclure complètement**
 - Bonnes pratiques générales que l'IA connaît déjà
 - Explications verbeuses qui pourraient être résumées
 - Contexte historique qui n'affecte pas le travail actuel
 
 ### Étapes de migration
 
-1. **Créer config.yaml** (si pas déjà créé par init) :
+1. **Créez config.yaml** (s'il n'a pas déjà été créé par init) :
    ```yaml
    schema: spec-driven
    ```
 
-2. **Ajouter votre contexte** (soyez concis — ceci est inclus dans chaque requête) :
+2. **Ajoutez votre contexte** (soyez concis — cela est injecté dans chaque demande) :
    ```yaml
    context: |
-     Le contexte de votre projet va ici.
-     Concentrez-vous sur ce que l'IA a réellement besoin de savoir.
+     Votre contexte de projet ici.
+     Concentrez-vous sur ce que l'IA a vraiment besoin de savoir.
    ```
 
-3. **Ajouter des règles par artefact** (optionnel) :
+3. **Ajoutez des règles par artefact** (facultatif) :
    ```yaml
    rules:
      proposal:
@@ -251,25 +249,25 @@ Lors de la migration, soyez sélectif. Demandez-vous : « L'IA a-t-elle besoin d
        - Vos règles de rédaction de spécifications
    ```
 
-4. **Supprimer project.md** une fois que vous avez déplacé tout le contenu utile.
+4. **Supprimez project.md** une fois que vous avez déplacé tout ce qui est utile.
 
-**Ne réfléchissez pas trop.** Commencez par l'essentiel et itérez. Si vous remarquez que l'IA manque quelque chose d'important, ajoutez-le. Si le contexte semble trop volumineux, réduisez-le. C'est un document évolutif.
+**Ne vous creusez pas la tête.** Commencez par l'essentiel et améliorez au fur et à mesure. Si vous remarquez que l'IA oublie quelque chose d'important, ajoutez-le. Si le contexte semble trop volumineux, réduisez-le. C'est un document vivant.
 
-### Besoin d'aide ? Utilisez cette invite
+### Besoin d'aide ? Utilisez ce prompt
 
-Si vous ne savez pas comment condenser votre project.md, demandez à votre assistant IA :
+Si vous ne savez pas comment résumer votre project.md, demandez à votre assistant IA :
 
 ```
-Je migre de l'ancien project.md d'OpenSpec vers le nouveau format config.yaml.
+I'm migrating from OpenSpec's old project.md to the new config.yaml format.
 
-Voici mon project.md actuel :
-[collez le contenu de votre project.md]
+Here's my current project.md:
+[paste your project.md content]
 
-Veuillez m'aider à créer un config.yaml avec :
-1. Une section `context:` concise (celle-ci est injectée dans chaque requête de planification, donc restez concis — concentrez-vous sur la pile technologique, les contraintes clés et les conventions souvent ignorées)
-2. Des `rules:` pour des artefacts spécifiques si le contenu est spécifique à un artefact (par ex., « utiliser Given/When/Then » appartient aux règles de specs, pas au contexte global)
+Please help me create a config.yaml with:
+1. A concise `context:` section (this gets injected into every planning request, so keep it tight—focus on tech stack, key constraints, and conventions that often get ignored)
+2. `rules:` for specific artifacts if any content is artifact-specific (e.g., "use Given/When/Then" belongs in specs rules, not global context)
 
-Omettez tout ce qui est générique que les modèles d'IA connaissent déjà. Soyez impitoyable sur la concision.
+Leave out anything generic that AI models already know. Be ruthless about brevity.
 ```
 
 L'IA vous aidera à identifier ce qui est essentiel par rapport à ce qui peut être supprimé.
@@ -280,31 +278,33 @@ L'IA vous aidera à identifier ce qui est essentiel par rapport à ce qui peut �
 
 La disponibilité des commandes dépend du profil :
 
-**Par défaut (profil `core`) : | Commande | But |
-|---------|------|
+**Profil par défaut (`core`) :**
+
+| Commande | Objectif |
+|----------|----------|
 | `/opsx:propose` | Créer une modification et générer des artefacts de planification en une seule étape |
 | `/opsx:explore` | Réfléchir à des idées sans structure |
-| `/opsx:apply` | Implémenter les tâches de tasks.md |
+| `/opsx:apply` | Mettre en œuvre les tâches de tasks.md |
 | `/opsx:archive` | Finaliser et archiver la modification |
 
 **Workflow étendu (sélection personnalisée) :**
 
-| Commande | But |
-|---------|------|
-| `/opsx:new` | Démarrer une nouvelle structure de modification |
-| `/opsx:continue` | Créer l'artefact suivant (un à la fois) |
-| `/opsx:ff` | Avance rapide — créer les artefacts de planification en une fois |
+| Commande | Objectif |
+|----------|----------|
+| `/opsx:new` | Démarrer un nouveau squelette de modification |
+| `/opsx:continue` | Créer l'artefact suivant (un par un) |
+| `/opsx:ff` | Avance rapide — créer tous les artefacts de planification d'un coup |
 | `/opsx:verify` | Valider que l'implémentation correspond aux spécifications |
 | `/opsx:sync` | Fusionner les spécifications delta dans les spécifications principales |
-| `/opsx:bulk-archive` | Archiver plusieurs modifications en une fois |
-| `/opsx:onboard` | Workflow d'intégration guidé de bout en bout |
+| `/opsx:bulk-archive` | Archiver plusieurs modifications à la fois |
+| `/opsx:onboard` | Workflow d'onboarding guidé de bout en bout |
 
 Activez les commandes étendues avec `openspec config profile`, puis exécutez `openspec update`.
 
-### Correspondance des commandes depuis l'héritage
+### Correspondance des commandes héritées
 
-| Héritage | Équivalent OPSX |
-|----------|-----------------|
+| Hérité | Équivalent OPSX |
+|--------|-----------------|
 | `/openspec:proposal` | `/opsx:propose` (par défaut) ou `/opsx:new` puis `/opsx:ff` (étendu) |
 | `/openspec:apply` | `/opsx:apply` |
 | `/openspec:archive` | `/opsx:archive` |
@@ -313,11 +313,11 @@ Activez les commandes étendues avec `openspec config profile`, puis exécutez `
 
 Ces fonctionnalités font partie de l'ensemble de commandes du workflow étendu.
 
-**Création granulaire d'artefacts :**
+**Création d'artefacts granulaire :**
 ```
 /opsx:continue
 ```
-Crée un artefact à la fois en fonction des dépendances. Utilisez ceci lorsque vous souhaitez examiner chaque étape.
+Crée un artefact à la fois en fonction des dépendances. Utilisez cette commande lorsque vous souhaitez examiner chaque étape.
 
 **Mode exploration :**
 ```
@@ -329,61 +329,61 @@ Réfléchissez à des idées avec un partenaire avant de vous engager dans une m
 
 ## Comprendre la nouvelle architecture
 
-### Du verrouillé par phase au fluide
+### D'un workflow verrouillé par phases à un workflow fluide
 
-Le workflow legacy imposait une progression linéaire :
+L'ancien workflow imposait une progression linéaire :
 
 ```
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
-│   PLANNING   │ ───► │ IMPLEMENTING │ ───► │   ARCHIVING  │
+│  PLANIFICATION│ ───► │ IMPLÉMENTATION│ ───► │  ARCHIVAGE   │
 │    PHASE     │      │    PHASE     │      │    PHASE     │
 └──────────────┘      └──────────────┘      └──────────────┘
 
-Si vous êtes en implémentation et réalisez que la conception est fausse ?
-Tant pis. Les portes de phase ne permettent pas de revenir facilement en arrière.
+Si vous êtes en phase d'implémentation et vous rendez compte que la conception est erronée ?
+Dommage. Les portes de phase ne vous permettent pas de revenir en arrière facilement.
 ```
 
 OPSX utilise des actions, pas des phases :
 
 ```
          ┌───────────────────────────────────────────────┐
-         │           ACTIONS (not phases)                │
+         │           ACTIONS (pas des phases)            │
          │                                               │
          │     new ◄──► continue ◄──► apply ◄──► archive │
          │      │          │           │             │   │
          │      └──────────┴───────────┴─────────────┘   │
-         │                    any order                  │
+         │               dans n'importe quel ordre       │
          └───────────────────────────────────────────────┘
 ```
 
-### Graphe de dépendances
+### Graphe des dépendances
 
-Les artefacts forment un graphe dirigé. Les dépendances sont des facilitateurs, pas des portes :
+Les artefacts forment un graphe orienté. Les dépendances sont des activateurs, pas des portes :
 
 ```
                         proposal
-                       (root node)
+                       (nœud racine)
                             │
               ┌─────────────┴─────────────┐
               │                           │
               ▼                           ▼
            specs                       design
-        (requires:                  (requires:
+        (nécessite :                (nécessite :
          proposal)                   proposal)
               │                           │
               └─────────────┬─────────────┘
                             │
                             ▼
                          tasks
-                     (requires:
+                     (nécessite :
                      specs, design)
 ```
 
-Lorsque vous exécutez `/opsx:continue`, il vérifie ce qui est prêt et propose l'artefact suivant. Vous pouvez également créer plusieurs artefacts prêts dans n'importe quel ordre.
+Lorsque vous exécutez `/opsx:continue`, la commande vérifie ce qui est prêt et vous propose l'artefact suivant. Vous pouvez également créer plusieurs artefacts prêts dans n'importe quel ordre.
 
 ### Compétences vs Commandes
 
-Le système legacy utilisait des fichiers de commande spécifiques à l'outil :
+L'ancien système utilisait des fichiers de commandes spécifiques à chaque outil :
 
 ```
 .claude/commands/openspec/
@@ -392,7 +392,7 @@ Le système legacy utilisait des fichiers de commande spécifiques à l'outil :
 └── archive.md
 ```
 
-OPSX utilise le standard émergent des **compétences** :
+OPSX utilise la norme émergente des **compétences** :
 
 ```
 .claude/skills/
@@ -403,23 +403,23 @@ OPSX utilise le standard émergent des **compétences** :
 └── ...
 ```
 
-Les compétences sont reconnues par plusieurs outils de codage IA et fournissent des métadonnées plus riches.
+Les compétences sont reconnues par de nombreux outils de codage IA et fournissent des métadonnées plus riches.
 
----
+Codex est exclusivement basé sur les compétences dans OPSX. OpenSpec ne génère plus de fichiers de prompts personnalisés pour Codex ; utilisez plutôt les répertoires `.codex/skills/openspec-*` générés.
 
-## Continuer les modifications existantes
+## Poursuivre des modifications existantes
 
-Vos modifications en cours fonctionnent de manière transparente avec les commandes OPSX.
+Vos modifications en cours fonctionnent parfaitement avec les commandes OPSX.
 
-**Vous avez une modification active du workflow legacy ?**
+**Vous avez une modification active issue de l'ancien workflow ?**
 
 ```
 /opsx:apply add-my-feature
 ```
 
-OPSX lit les artefacts existants et reprend là où vous vous êtes arrêté.
+OPSX lit les artefacts existants et reprend là où vous vous étiez arrêté.
 
-**Vous souhaitez ajouter plus d'artefacts à une modification existante ?**
+**Vous voulez ajouter d'autres artefacts à une modification existante ?**
 
 ```
 /opsx:continue add-my-feature
@@ -427,7 +427,7 @@ OPSX lit les artefacts existants et reprend là où vous vous êtes arrêté.
 
 Affiche ce qui est prêt à être créé en fonction de ce qui existe déjà.
 
-**Besoin de voir le statut ?**
+**Vous avez besoin de consulter l'état ?**
 
 ```bash
 openspec status --change add-my-feature
@@ -437,37 +437,37 @@ openspec status --change add-my-feature
 
 ## Le nouveau système de configuration
 
-### Structure de config.yaml
+### Structure de `config.yaml`
 
 ```yaml
-# Required: Default schema for new changes
+# Obligatoire : Schéma par défaut pour les nouvelles modifications
 schema: spec-driven
 
-# Optional: Project context (max 50KB)
-# Injected into ALL artifact instructions
+# Facultatif : Contexte du projet (50 Ko maximum)
+# Injecté dans TOUTES les instructions des artefacts
 context: |
-  Your project background, tech stack,
-  conventions, and constraints.
+  Contexte de votre projet, pile technologique,
+  conventions et contraintes.
 
-# Optional: Per-artifact rules
-# Only injected into matching artifacts
+# Facultatif : Règles par artefact
+# Injectées uniquement dans les artefacts correspondants
 rules:
   proposal:
-    - Include rollback plan
+    - Inclure un plan de retour en arrière
   specs:
-    - Use Given/When/Then format
+    - Utiliser le format Given/When/Then
   design:
-    - Document fallback strategies
+    - Documenter les stratégies de secours
   tasks:
-    - Break into 2-hour maximum chunks
+    - Découper en blocs d'une durée maximale de 2 heures
 ```
 
 ### Résolution du schéma
 
-Pour déterminer quel schéma utiliser, OPSX vérifie dans l'ordre :
+Pour déterminer quel schéma utiliser, OPSX vérifie dans l'ordre suivant :
 
-1. **Drapeau CLI** : `--schema <name>` (priorité la plus élevée)
-2. **Métadonnées de modification** : `.openspec.yaml` dans le répertoire de la modification
+1. **Indicateur CLI** : `--schema <nom>` (priorité la plus élevée)
+2. **Métadonnées de la modification** : `.openspec.yaml` dans le répertoire de la modification
 3. **Configuration du projet** : `openspec/config.yaml`
 4. **Par défaut** : `spec-driven`
 
@@ -491,21 +491,21 @@ Créez votre propre workflow :
 openspec schema init my-workflow
 ```
 
-Ou bifurquez-en un existant :
+Ou dupliquez un schéma existant :
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-Voir [Personnalisation](customization.md) pour les détails.
+Consultez [Personnalisation](customization.md) pour plus de détails.
 
 ---
 
 ## Dépannage
 
-### "Legacy files detected in non-interactive mode"
+### « Fichiers hérités détectés en mode non interactif »
 
-Vous exécutez dans un environnement CI ou non interactif. Utilisez :
+Vous exécutez l'outil dans un environnement CI ou non interactif. Utilisez :
 
 ```bash
 openspec init --force
@@ -515,13 +515,12 @@ openspec init --force
 
 Redémarrez votre IDE. Les compétences sont détectées au démarrage.
 
-### "Unknown artifact ID in rules"
+### « ID d'artefact inconnu dans les règles »
 
-Vérifiez que vos clés `rules:` correspondent aux identifiants d'artefact de votre schéma :
-
+Vérifiez que les clés de votre `rules:` correspondent aux ID d'artefacts de votre schéma :
 - **spec-driven** : `proposal`, `specs`, `design`, `tasks`
 
-Exécutez ceci pour voir les identifiants d'artefact valides :
+Exécutez cette commande pour afficher les ID d'artefacts valides :
 
 ```bash
 openspec schemas --json
@@ -529,60 +528,60 @@ openspec schemas --json
 
 ### La configuration n'est pas appliquée
 
-1. Assurez-vous que le fichier est à `openspec/config.yaml` (pas `.yml`)
+1. Vérifiez que le fichier se trouve bien à l'emplacement `openspec/config.yaml` (et non `.yml`)
 2. Validez la syntaxe YAML
-3. Les modifications de configuration prennent effet immédiatement — aucun redémarrage nécessaire
+3. Les modifications de configuration prennent effet immédiatement, aucun redémarrage n'est nécessaire
 
-### project.md non migré
+### Le fichier `project.md` n'a pas été migré
 
-Le système conserve intentionnellement `project.md` car il peut contenir votre contenu personnalisé. Révisez-le manuellement, déplacez les parties utiles vers `config.yaml`, puis supprimez-le.
+Le système préserve intentionnellement `project.md` car il peut contenir votre contenu personnalisé. Vérifiez-le manuellement, déplacez les parties utiles vers `config.yaml`, puis supprimez-le.
 
 ### Vous voulez voir ce qui serait nettoyé ?
 
-Exécutez init et refusez l'invite de nettoyage — vous verrez le résumé complet de détection sans qu'aucune modification ne soit apportée.
+Exécutez la commande `init` et refusez l'invite de nettoyage : vous verrez le résumé complet de la détection sans qu'aucune modification ne soit apportée.
 
 ---
 
 ## Référence rapide
 
-### Fichiers après la migration
+### Fichiers après migration
 
 ```
 project/
 ├── openspec/
-│   ├── specs/                    # Unchanged
-│   ├── changes/                  # Unchanged
-│   │   └── archive/              # Unchanged
-│   └── config.yaml               # NEW: Project configuration
+│   ├── specs/                    # Inchangé
+│   ├── changes/                  # Inchangé
+│   │   └── archive/              # Inchangé
+│   └── config.yaml               # NOUVEAU : Configuration du projet
 ├── .claude/
-│   └── skills/                   # NEW: OPSX skills
-│       ├── openspec-propose/     # default core profile
+│   └── skills/                   # NOUVEAU : Compétences OPSX
+│       ├── openspec-propose/     # profil core par défaut
 │       ├── openspec-explore/
 │       ├── openspec-apply-change/
 │       ├── openspec-sync-specs/
-│       └── ...                   # expanded profile adds new/continue/ff/etc.
-├── CLAUDE.md                     # OpenSpec markers removed, your content preserved
-└── AGENTS.md                     # OpenSpec markers removed, your content preserved
+│       └── ...                   # le profil étendu ajoute new/continue/ff/etc.
+├── CLAUDE.md                     # Marqueurs OpenSpec supprimés, votre contenu préservé
+└── AGENTS.md                     # Marqueurs OpenSpec supprimés, votre contenu préservé
 ```
 
-### Ce qui a disparu
+### Ce qui a été supprimé
 
 - `.claude/commands/openspec/` — remplacé par `.claude/skills/`
 - `openspec/AGENTS.md` — obsolète
 - `openspec/project.md` — migrer vers `config.yaml`, puis supprimer
 - Blocs de marqueurs OpenSpec dans `CLAUDE.md`, `AGENTS.md`, etc.
 
-### Tableau de commandes
+### Aide-mémoire des commandes
 
 ```text
-/opsx:propose      Start quickly (default core profile)
-/opsx:apply        Implement tasks
-/opsx:archive      Finish and archive
+/opsx:propose      Démarrer rapidement (profil core par défaut)
+/opsx:apply        Implémenter les tâches
+/opsx:archive      Terminer et archiver
 
-# Expanded workflow (if enabled):
-/opsx:new          Scaffold a change
-/opsx:continue     Create next artifact
-/opsx:ff           Create planning artifacts
+# Workflow étendu (si activé) :
+/opsx:new          Générer le squelette d'une modification
+/opsx:continue     Créer l'artefact suivant
+/opsx:ff           Créer les artefacts de planification
 ```
 
 ---
@@ -591,4 +590,4 @@ project/
 
 - **Discord** : [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
 - **GitHub Issues** : [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
-- **Documentation** : [docs/opsx.md](opsx.md) pour la référence OPSX complète
+- **Documentation** : [docs/opsx.md](opsx.md) pour la référence complète d'OPSX

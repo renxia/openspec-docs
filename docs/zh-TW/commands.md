@@ -1,703 +1,754 @@
 # 命令
 
-這是 OpenSpec 斜線命令的參考資料。這些命令會在您的 AI 編碼助理聊天介面中呼叫（例如：Claude Code、Cursor、Windsurf）。
+這是 OpenSpec 斜線命令的參考文件。這些命令會在您的 AI 編程助手的聊天介面（例如 Claude Code、Cursor、Windsurf）中調用。
 
-有關工作流程模式和何時使用每個命令，請參閱 [Workflows](workflows.md)。有關 CLI 命令，請參閱 [CLI](cli.md)。
+如需了解工作流程模式以及各命令的使用時機，請參閱[工作流程](workflows.md)。如需了解 CLI 命令，請參閱[CLI](cli.md)。
 
 ## 快速參考
 
 ### 預設快速路徑（`core` 設定檔）
 
-| Command | Purpose |
+| 命令 | 用途 |
 |---------|---------|
-| `/opsx:propose` | 在單一步驟中建立變更並生成規劃工件 |
-| `/opsx:explore` | 在提交變更之前思考想法 |
-| `/opsx:apply` | 實作來自該變更的任務 |
-| `/opsx:sync` | 將 delta specs 合併到主 spec 中 |
-| `/opsx:archive` | 存檔已完成的變更 |
+| `/opsx:propose` | 建立變更並一步生成規劃產物 |
+| `/opsx:explore` | 在確認要進行變更前先構思想法 |
+| `/opsx:apply` | 實作變更中的任務 |
+| `/opsx:update` | 修訂變更的規劃產物並保持其一致性 |
+| `/opsx:sync` | 將增量規格合併至主規格 |
+| `/opsx:archive` | 封存已完成的變更 |
 
-### 進階工作流程命令（自訂工作流程選擇）
+### 擴展工作流程命令（自訂工作流程選擇）
 
-| Command | Purpose |
+| 命令 | 用途 |
 |---------|---------|
-| `/opsx:new` | 開始一個新的變更骨架 |
-| `/opsx:continue` | 根據依賴項建立下一個工件 |
-| `/opsx:ff` | 快轉 (Fast-forward)：一次性建立所有規劃工件 |
-| `/opsx:verify` | 驗證實作是否符合工件要求 |
-| `/opsx:bulk-archive` | 一次性存檔多個變更 |
-| `/opsx:onboard` | 完整工作流程的引導式教學 |
+| `/opsx:new` | 啟動新的變更脚手架 |
+| `/opsx:continue` | 根據相依性建立下一個產物 |
+| `/opsx:ff` | 快速前進：一次建立所有規劃產物 |
+| `/opsx:verify` | 驗證實作內容與產物一致 |
+| `/opsx:bulk-archive` | 一次封存多個變更 |
+| `/opsx:onboard` | 透過引導式教程走完整個工作流程
 
-預設的全域設定檔是 `core`。若要啟用進階工作流程命令，請執行 `openspec config profile`，選擇工作流程後，再在您的專案中執行 `openspec update`。
+預設全域設定檔為 `core`。若要啟用擴展工作流程命令，請在您的專案中執行 `openspec config profile`，選擇工作流程，接著執行 `openspec update`。
 
-## 命令參考資料
+## 命令參考
 
 ### `/opsx:propose`
 
-一次性地建立新的變更並生成規劃工件。這是 `core` 設定檔中的預設啟動命令。
+一次性建立新變更並生成規劃產物。這是 `core` 設定檔中的預設起始指令。
 
-**語法:**
+**語法：**
 ```text
 /opsx:propose [change-name-or-description]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-name-or-description` | 否 | 使用 kebab-case 的名稱或純語言的變更描述 |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name-or-description` | 否 | kebab-case 格式的名稱或自然語言變更描述 |
 
-**功能說明:**
+**功能說明：**
 - 建立 `openspec/changes/<change-name>/` 目錄
-- 生成實施前所需的工件（針對 `spec-driven`：提案、規格、設計、任務）
-- 當變更準備好進行 `/opsx:apply` 時會停止
+- 生成實作前所需的產物（`spec-driven` 模式下包含：提案、規格、設計、任務）
+- 當變更準備好執行 `/opsx:apply` 時停止
 
-**範例:**
+**範例：**
 ```text
 You: /opsx:propose add-dark-mode
 
-AI:  已建立 openspec/changes/add-dark-mode/
+AI:  Created openspec/changes/add-dark-mode/
      ✓ proposal.md
      ✓ specs/ui/spec.md
      ✓ design.md
      ✓ tasks.md
-     準備好進行實施。請執行 /opsx:apply。
+     Ready for implementation. Run /opsx:apply.
 ```
 
-**提示:**
-- 適用於最快速的端到端流程
-- 如果您需要逐步控制工件，請啟用擴展工作流程並使用 `/opsx:new` + `/opsx:continue`
+**提示：**
+- 適用於需要最快完成端到端流程的場景
+- 若需要逐步控制產物生成，可啟用擴展工作流，並使用 `/opsx:new` + `/opsx:continue`
 
 ---
 
 ### `/opsx:explore`
 
-> **不確定時從這裡開始。** Explore 是一個零風險的思考夥伴：它會閱讀您的程式碼庫，比較不同的選項，並在任何變更存在之前將模糊的想法精煉成具體的計畫。它包含在預設設定檔中。有關完整的案例和更多範例，請參閱 [Explore First](explore.md) 指南。
+> **當你沒有明確方向時，從這裡開始。** Explore 是一個無風險的思考夥伴：它會讀取你的程式碼庫、比較不同選項，並在建立任何變更之前，將模糊的想法梳理成具體的計畫。它內建於預設設定檔中。完整案例與更多範例請參閱 [探索優先](explore.md) 指南。
 
-在承諾進行任何變更之前，先思考想法、調查問題並澄清需求。
+在確立變更之前，思考構想、調查問題、釐清需求。
 
-**語法:**
+**語法：**
 ```
 /opsx:explore [topic]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `topic` | 否 | 您想要探索或調查的內容 |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `topic` | 否 | 你想探索或調查的主題 |
 
-**功能說明:**
-- 開啟一個無需特定結構的探索性對話
+**功能說明：**
+- 開啟無結構限制的探索性對話
 - 調查程式碼庫以回答問題
-- 比較不同的選項和方法
-- 創建視覺圖表以澄清思考
-- 當洞察力成形時，可以轉移到 `/opsx:propose` (預設) 或 `/opsx:new` (擴展工作流程)
+- 比較不同選項與做法
+- 生成視覺化圖表以釐清思路
+- 當思路清晰時，可切換至 `/opsx:propose`（預設）或 `/opsx:new`（擴展工作流）
 
-**範例:**
+**範例：**
 ```text
 You: /opsx:explore
 
-AI:  您想探索什麼？
+AI:  What would you like to explore?
 
-You: 我們應該如何為行動應用程式處理身份驗證？
+You: How should we handle authentication for the mobile app?
 
-AI:  讓我調查您目前的認證設定...
-     [分析程式碼庫]
+AI:  Let me investigate your current auth setup...
+     [Analyzes codebase]
 
-     我看到您對網站應用程式使用的是基於 Session 的認證。
-     對於行動裝置，我們有三個主要選項：
+     I see you're using session-based auth for the web app.
+     For mobile, we have three main options:
 
-     1. JWT tokens (無狀態, 可離線使用)
-     2. OAuth2 (如果您需要第三方登入)
-     3. 擴展現有的 Session (更簡單, 但需要連線)
+     1. JWT tokens (stateless, works offline)
+     2. OAuth2 (if you need third-party login)
+     3. Extend current sessions (simpler, but requires connectivity)
 
-     您的 API 已配置 CORS。哪個方向讓您感興趣？
+     Your API already has CORS configured. Which direction interests you?
 
-You: 我們選擇 JWT。我們可以為此開始一個變更嗎？
+You: Let's go with JWT. Can we start a change for that?
 
-AI:  準備好了。請執行 /opsx:propose add-jwt-auth 來開始。
+AI:  Ready when you are. Run /opsx:propose add-jwt-auth to begin.
 ```
 
-**提示:**
-- 當需求不清楚或需要調查時使用
-- 探索過程中不會創建任何工件
-- 在決定之前比較多種方法的好用
-- 可以閱讀檔案並搜索程式碼庫
+**提示：**
+- 適用於需求不明確、需要進一步調查的場景
+- 探索過程中不會產生任何產物
+- 適合在做出決定前比較多種做法
+- 可讀取檔案並搜尋程式碼庫
 
 ---
 
 ### `/opsx:new`
 
-啟動一個新的變更骨架。會建立變更資料夾，並等待您使用 `/opsx:continue` 或 `/opsx:ff` 來生成工件。
+建立新變更的基礎框架。會建立變更資料夾，並等待你使用 `/opsx:continue` 或 `/opsx:ff` 生成產物。此指令屬於擴展工作流套件（未包含在預設 `core` 設定檔中）。
 
-此命令屬於擴展工作流程集（不包含在預設 `core` 設定檔中）。
-
-**語法:**
+**語法：**
 ```
 /opsx:new [change-name] [--schema <schema-name>]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-name` | 否 | 變更資料夾的名稱（如果未提供，會提示輸入） |
-| `--schema` | 否 | 要使用的工作流程 schema (預設: 從 config 或 `spec-driven`) |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name` | 否 | 變更資料夾的名稱（未提供時會提示輸入） |
+| `--schema` | 否 | 要使用的工作流 schema（預設值來自配置或 `spec-driven`） |
 
-**功能說明:**
+**功能說明：**
 - 建立 `openspec/changes/<change-name>/` 目錄
-- 在變更資料夾中創建 `.openspec.yaml` 中繼資料檔案
-- 顯示第一個準備好創建的工件範本
-- 如果未提供，會提示輸入變更名稱和 schema
+- 在變更資料夾中建立 `.openspec.yaml` 元數據檔案
+- 顯示第一個待建立的產物範本
+- 未提供時提示輸入變更名稱與 schema
 
-**它會創建什麼:**
+**建立內容：**
 ```
 openspec/changes/<change-name>/
-└── .openspec.yaml    # 變更中繼資料 (schema, 建立日期)
+└── .openspec.yaml    # 變更元數據（schema、建立日期）
 ```
 
-**範例:**
+**範例：**
 ```
 You: /opsx:new add-dark-mode
 
-AI:  已建立 openspec/changes/add-dark-mode/
+AI:  Created openspec/changes/add-dark-mode/
      Schema: spec-driven
 
-     準備創建：proposal
-     使用 /opsx:continue 來創建，或使用 /opsx:ff 來創建所有工件。
+     Ready to create: proposal
+     Use /opsx:continue to create it, or /opsx:ff to create all artifacts.
 ```
 
-**提示:**
-- 使用描述性的名稱：`add-feature`, `fix-bug`, `refactor-module`
-- 避免使用 `update`, `changes`, `wip` 等通用名稱
-- Schema 也可以在專案設定檔 (`openspec/config.yaml`) 中設置
+**提示：**
+- 使用描述性名稱，例如 `add-feature`、`fix-bug`、`refactor-module`
+- 避免使用 `update`、`changes`、`wip` 這類籠統的名稱
+- Schema 也可在專案配置檔（`openspec/config.yaml`）中設定
 
 ---
 
 ### `/opsx:continue`
 
-創建依賴鏈中的下一個工件。一次性地創建一個工件以實現增量進度。
+依賴鏈中的下一個產物。一次建立一個產物，實現漸進式推進。
 
-**語法:**
+**語法：**
 ```
 /opsx:continue [change-name]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-name` | 否 | 要繼續的變更（如果未提供，則從上下文推斷） |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name` | 否 | 要繼續的變更名稱（未提供時會從上下文推斷） |
 
-**功能說明:**
-- 查詢工件依賴圖
-- 顯示哪些工件已準備好 vs. 已被阻擋
-- 創建第一個準備好的工件
-- 閱讀依賴檔案以獲取上下文
-- 顯示創建後可用的內容
+**功能說明：**
+- 查詢產物依賴圖
+- 顯示哪些產物已就緒、哪些被阻擋
+- 建立第一個已就緒的產物
+- 讀取依賴檔案以獲取上下文
+- 顯示建立後可使用的產物
 
-**範例:**
+**範例：**
 ```
 You: /opsx:continue
 
-AI:  變更：add-dark-mode
+AI:  Change: add-dark-mode
 
-     工件狀態：
-     ✓ proposal    (已完成)
-     ◆ specs       (準備就緒)
-     ◆ design      (準備就緒)
-     ○ tasks       (被阻擋 - 需要: specs)
+     Artifact status:
+     ✓ proposal    (done)
+     ◆ specs       (ready)
+     ◆ design      (ready)
+     ○ tasks       (blocked - needs: specs)
 
-     正在創建 specs...
+     Creating specs...
 
-     [閱讀 proposal.md，根據需求創建 specs]
+     [Reads proposal.md, creates specs based on requirements]
 
-     ✓ 已創建 openspec/changes/add-dark-mode/specs/ui/spec.md
+     ✓ Created openspec/changes/add-dark-mode/specs/ui/spec.md
 
-     現在可用：tasks
-     請執行 /opsx:continue 以創建下一個工件。
+     Now available: tasks
+     Run /opsx:continue to create the next artifact.
 ```
 
-**提示:**
-- 當您想審查每個工件後再繼續時使用
-- 對於需要控制的複雜變更很有幫助
-- 多個工件可能會同時準備好
-- 在繼續之前可以編輯已創建的工件
+**提示：**
+- 適用於希望在繼續之前審查每個產物的場景
+- 適合需要掌控流程的複雜變更
+- 可能同時有多個產物進入就緒狀態
+- 在繼續之前，你可以編輯已建立的產物
 
 ---
 
 ### `/opsx:ff`
 
-快速推進工件創建。一次性地創建所有規劃工件。
+快速跳過產物建立環節，一次建立所有規劃產物。
 
-**語法:**
+**語法：**
 ```
 /opsx:ff [change-name]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-name` | 否 | 要快速推進的變更（如果未提供，則從上下文推斷） |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name` | 否 | 要快速推進的變更名稱（未提供時會從上下文推斷） |
 
-**功能說明:**
-- 按依賴順序創建所有工件
-- 通過待辦清單追蹤進度
-- 當所有 `apply-required` 工件完成時停止
-- 在創建下一個工件之前閱讀每個依賴項
+**功能說明：**
+- 依照依賴順序建立所有產物
+- 透過待辦清單追蹤進度
+- 當所有需要 `apply` 的產物都建立完成時停止
+- 建立下一個產物前，會先讀取對應的依賴內容
 
-**範例:**
+**範例：**
 ```
 You: /opsx:ff add-dark-mode
 
-AI:  正在快速推進 add-dark-mode...
+AI:  Fast-forwarding add-dark-mode...
 
-     ✓ 創建 proposal.md
-     ✓ 創建 specs/ui/spec.md
-     ✓ 創建 design.md
-     ✓ 創建 tasks.md
+     ✓ Creating proposal.md
+     ✓ Creating specs/ui/spec.md
+     ✓ Creating design.md
+     ✓ Creating tasks.md
 
-     所有規劃工件均已完成！
-     準備好進行實施。請執行 /opsx:apply 來開始。
+     All planning artifacts complete!
+     Ready for implementation. Run /opsx:apply to begin.
 ```
 
-**提示:**
-- 當您對自己正在構建的內容有清晰的了解時使用
-- 對於簡單的變更來說比 `/opsx:continue` 更快
-- 您仍然可以在之後編輯工件
-- 適用於小型到中型特徵
+**提示：**
+- 適用於你對要開發的內容有明確規劃的場景
+- 對於簡單的變更，比 `/opsx:continue` 更高效
+- 建立完成後仍可編輯產物
+- 適合中小型功能開發
 
 ---
 
 ### `/opsx:apply`
 
-實施來自該變更的任務。會依序處理任務清單，編寫程式碼並勾選項目。
+執行變更中的任務。按照任務清單逐步編寫程式碼並標記完成項目。
 
-**語法:**
+**語法：**
 ```
 /opsx:apply [change-name]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-name` | 否 | 要實施的變更（如果未提供，則從上下文推斷） |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name` | 否 | 要執行的變更名稱（未提供時會從上下文推斷） |
 
-**功能說明:**
-- 閱讀 `tasks.md` 並識別未完成的任務
-- 一個一個地處理任務
-- 根據需要編寫程式碼、創建檔案、運行測試
-- 使用勾選框 `[x]` 標記任務已完成
+**功能說明：**
+- 讀取 `tasks.md` 並找出未完成的任務
+- 逐個處理任務
+- 視需要編寫程式碼、建立檔案、執行測試
+- 使用勾選框 `[x]` 標記任務完成
 
-**範例:**
+**範例：**
 ```
 You: /opsx:apply
 
-AI:  正在實施 add-dark-mode...
+AI:  Implementing add-dark-mode...
 
-     閱讀 tasks.md：
-     - [ ] 1.1 創建 ThemeContext
-     - [ ] 1.2 添加 CSS 自定義屬性
-     - [ ] 1.3 實現 localStorage 持久化
+     Reading tasks.md:
+     - [ ] 1.1 Create ThemeContext
+     - [ ] 1.2 Add CSS custom properties
+     - [ ] 1.3 Implement localStorage persistence
 
-     正在處理 1.1: 創建 ThemeContext...
-     [創建 src/context/ThemeContext.tsx]
+     Working on 1.1: Create ThemeContext...
+     [Creates src/context/ThemeContext.tsx]
 
-     ✓ 1.1 已完成
+     ✓ 1.1 Complete
 
-     正在處理 1.2: 添加 CSS 自定義屬性...
-     [更新 src/styles/globals.css]
+     Working on 1.2: Add CSS custom properties...
+     [Updates src/styles/globals.css]
 
-     ✓ 1.2 已完成
+     ✓ 1.2 Complete
      ...
 ```
 
-**提示:**
-- 如果中斷，可以從上次停止的地方恢復
-- 通過指定變更名稱來用於平行變更
+**提示：**
+- 若執行中斷，可從中斷處繼續
+- 透過指定變更名稱，可平行處理多個變更
 - 完成狀態會記錄在 `tasks.md` 的勾選框中
+
+---
+
+### `/opsx:update`
+
+修訂變更的既有規劃產物，並確保所有產物之間的一致性。僅處理規劃產物，不會修改程式碼。
+
+**語法：**
+
+```text
+/opsx:update [change-name]
+```
+
+**參數：**
+
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name` | 否 | 要修訂的變更名稱（未提供時會從上下文推斷） |
+
+**功能說明：**
+
+- 透過 `openspec status --change <name> --json` 讀取變更的產物
+- 套用你指定的修訂內容；若未明確指定修訂內容，則檢查產物之間的矛盾之處
+- 協調其他既有產物的內容（例如修改設計可能會反向影響提案內容）
+- 每次寫入前都會逐一與你確認每個編輯內容
+- 結束時會建議下一步操作：若產物缺失則執行 `/opsx:continue`、若要將修訂後的計畫落地為程式碼則執行 `/opsx:apply`、若全部完成則執行 `/opsx:archive`
+
+**範例：**
+
+```text
+You: /opsx:update add-dark-mode - we're storing the theme in a cookie now, not localStorage
+
+AI:  Reading add-dark-mode artifacts...
+
+     The design references localStorage in two places; tasks 1.3 covers
+     localStorage persistence; the proposal doesn't mention storage.
+
+     Proposed revisions:
+     1. design.md - swap localStorage decision for cookie storage
+     2. tasks.md - reword task 1.3 to cookie persistence
+
+     Apply revision 1? (design.md)
+```
+
+**提示：**
+
+- 不會建立遺漏的產物，此功能由 `/opsx:continue` 提供
+- 若變更已經實作完成，請後續執行 `/opsx:apply` 確保程式碼與修訂後的計畫一致
+- 若你的修訂內容改變了變更的*核心目的*，建議重新建立一個新變更（詳見 [何時修訂 vs. 重新開始](opsx.md#when-to-update-vs-start-fresh)）
 
 ---
 
 ### `/opsx:verify`
 
-驗證實施結果是否符合您的變更工件。檢查完整性、正確性和一致性。
+驗證實作內容與變更產物是否一致。檢查完整性、正確性與連貫性。
 
-**語法:**
+**語法：**
 ```
 /opsx:verify [change-name]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-name` | 否 | 要驗證的變更（如果未提供，則從上下文推斷） |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name` | 否 | 要驗證的變更名稱（未提供時會從上下文推斷） |
 
-**功能說明:**
-- 檢查實施的三個維度品質
-- 在程式碼庫中搜索實施證據
-- 報告分類為 CRITICAL、WARNING 或 SUGGESTION 的問題
-- 不會阻止歸檔，但會顯示出問題
+**功能說明：**
+- 從三個維度檢查實作品質
+- 搜尋程式碼庫中的實作證據
+- 將問題歸類為「嚴重（CRITICAL）」、「警告（WARNING）」或「建議（SUGGESTION）」後回報
+- 不會阻擋歸檔操作，但會列出發現的問題
 
-**驗證維度:**
+**驗證維度：**
 
 | 維度 | 驗證內容 |
-|---|---|
-| **完整性 (Completeness)** | 所有任務均已完成，所有需求均已實施，場景情況均已覆蓋 |
-| **正確性 (Correctness)** | 實施結果符合規格意圖，邊緣案例均已處理 |
-| **一致性 (Coherence)** | 設計決策體現於程式碼中，模式保持一致 |
+|-----------|-------------------|
+| **Completeness** | 所有任務已完成、所有需求已實作、所有場景已覆蓋 |
+| **Correctness** | 實作內容符合規格意圖、邊界情況已處理 |
+| **Coherence** | 設計決策已反映在程式碼中、模式保持一致 |
 
-**範例:**
+**範例：**
 ```
 You: /opsx:verify
 
-AI:  正在驗證 add-dark-mode...
+AI:  Verifying add-dark-mode...
 
-     完整性 (COMPLETENESS)
-     ✓ tasks.md 中的 8 個任務均已勾選
-     ✓ specs 中的所有需求都有對應的程式碼
-     ⚠ 場景「系統偏好偵測」沒有測試覆蓋率
+     COMPLETENESS
+     ✓ All 8 tasks in tasks.md are checked
+     ✓ All requirements in specs have corresponding code
+     ⚠ Scenario "System preference detection" has no test coverage
 
-     正確性 (CORRECTNESS)
-     ✓ 實施結果符合規格意圖
-     ✓ 場景中的邊緣案例都已處理
-     ✓ 錯誤狀態與規格定義一致
+     CORRECTNESS
+     ✓ Implementation matches spec intent
+     ✓ Edge cases from scenarios are handled
+     ✓ Error states match spec definitions
 
-     一致性 (COHERENCE)
-     ✓ 設計決策體現於程式碼結構中
-     ✓ 名稱慣例與 design.md 一致
-     ⚠ 設計提到「CSS variables」，但實施卻使用了 Tailwind classes
+     COHERENCE
+     ✓ Design decisions reflected in code structure
+     ✓ Naming conventions consistent with design.md
+     ⚠ Design mentions "CSS variables" but implementation uses Tailwind classes
 
-     摘要 (SUMMARY)
+     SUMMARY
      ─────────────────────────────
-     嚴重問題：0
-     警告：2
-     準備好歸檔：是 (包含警告)
+     Critical issues: 0
+     Warnings: 2
+     Ready to archive: Yes (with warnings)
 
-     建議事項：
-     1. 為系統偏好偵測添加測試
-     2. 更新 design.md 以反映 Tailwind 的使用，或重構以使用 CSS variables
+     Recommendations:
+     1. Add test for system preference detection
+     2. Update design.md to reflect Tailwind usage, or refactor to use CSS variables
 ```
 
-**提示:**
-- 在歸檔之前運行，以便及早地發現不匹配的地方
-- 警告不會阻止歸檔，但會指出潛在問題
-- 對於提交前審查 AI 的工作很有幫助
-- 可以揭示工件與實施之間的漂移情況
+**提示：**
+- 在歸檔前執行，及早發現不一致之處
+- 警告不會阻擋歸檔，但代表可能存在潛在問題
+- 適合在提交前審查 AI 的實作內容
+- 可發現產物與實作之間的偏差
 
 ---
 
 ### `/opsx:sync`
 
-**可選命令。** 將變更中的 delta specs 合併到主規格中。歸檔時如果需要會提示同步，因此您通常不需要手動運行此命令。
+**可選指令。** 將變更中的差異規格合併到主規格中。歸檔時若需要同步會自動提示，因此通常不需要手動執行此指令。
 
-**語法:**
+**語法：**
 ```
 /opsx:sync [change-name]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-name` | 否 | 要同步的變更（如果未提供，則從上下文推斷） |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name` | 否 | 要同步的變更名稱（未提供時會從上下文推斷） |
 
-**功能說明:**
-- 閱讀變更資料夾中的 delta specs
-- 解析 ADDED/MODIFIED/REMOVED/RENAMED 部分
+**功能說明：**
+- 讀取變更資料夾中的差異規格
+- 解析「新增（ADDED）/修改（MODIFIED）/移除（REMOVED）/重新命名（RENAMED）」章節
 - 將變更合併到主 `openspec/specs/` 目錄中
-- 保留未提及的現有內容
-- 不會歸檔該變更（保持活動狀態）
+- 保留差異規格中未提及的既有內容
+- 不會歸檔變更（變更仍處於啟用狀態）
 
-**範例:**
+**範例：**
 ```text
 You: /opsx:sync
 
-AI:  正在同步 add-dark-mode 的 delta specs...
+AI:  Syncing add-dark-mode delta specs...
 
-     閱讀：openspec/changes/add-dark-mode/specs/ui/spec.md
-     目標： openspec/specs/ui/spec.md
+     Reading: openspec/changes/add-dark-mode/specs/ui/spec.md
+     Target:  openspec/specs/ui/spec.md
 
-     待應用的變更：
-     ✓ ADDED: Theme Selection requirement (2 個場景)
-     ✓ ADDED: Accessibility requirement (1 個場景)
+     Changes to apply:
+     ✓ ADDED: Theme Selection requirement (2 scenarios)
+     ✓ ADDED: Accessibility requirement (1 scenario)
 
-     正在合併...
-     ✓ openspec/specs/ui/spec.md 已更新
+     Merging...
+     ✓ openspec/specs/ui/spec.md updated
 
-     變更保持活動狀態。準備好完成時，請運行 /opsx:archive。
+     Change remains active. Run /opsx:archive when ready to complete.
 ```
 
-**何時手動使用:**
+**手動執行時機：**
 
-| 情境 | 是否需要同步？ |
-|---|---|
-| 長期變更，在歸檔前想讓規格進入主文件 | 是 |
-| 多個平行變更需要更新基礎規格 | 是 |
-| 想單獨預覽/審查合併結果 | 是 |
-| 快速變更，直接進行歸檔 | 否 (archive 會處理) |
+| 場景 | 是否需要同步？ |
+|----------|-----------|
+| 長期執行的變更，希望在歸檔前將規格合併到主規格 | 是 |
+| 多個平行變更需要使用更新後的基礎規格 | 是 |
+| 希望單獨預覽/審查合併內容 | 是 |
+| 快速變更，直接歸檔即可 | 否（歸檔指令會自動處理）|
 
-**提示:**
-- Sync 是智能的，不是複製貼上
-- 可以向現有的需求添加場景而無需重複內容
-- 同步後變更仍保持活動狀態（未被歸檔）
-- 大多數使用者都不會需要直接呼叫此命令——如果需要，archive 會提示
+**提示：**
+- 同步功能是智慧合併，而非單純的複製貼上
+- 可在現有需求中新增場景，不會產生重複內容
+- 同步後變更仍處於啟用狀態（不會自動歸檔）
+- 大多數用戶不需要直接呼叫此指令，歸檔時若需要同步會自動提示
 
 ---
 
 ### `/opsx:archive`
 
-歸檔一個已完成的變更。最終確定該變更並將其移動到歸檔資料夾。
+歸檔已完成的變更。最終確立變更狀態，並將其移動到歸檔資料夾。
 
-**語法:**
+**語法：**
 ```
 /opsx:archive [change-name]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-name` | 否 | 要歸檔的變更（如果未提供，則從上下文推斷） |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-name` | 否 | 要歸檔的變更名稱（未提供時會從上下文推斷） |
 
-**功能說明:**
-- 檢查工件完成狀態
-- 檢查任務完成情況（若不完整會發出警告）
-- 如果尚未同步 delta specs，會提供同步選項
+**功能說明：**
+- 檢查產物完成狀態
+- 檢查任務完成情況（若有未完成任務會發出警告）
+- 若差異規格尚未同步，會提示是否要同步
 - 將變更資料夾移動到 `openspec/changes/archive/YYYY-MM-DD-<name>/`
-- 保留所有工件以供審計追蹤
+- 保留所有產物以供審計追溯
 
-**範例:**
+**範例：**
 ```text
 You: /opsx:archive
 
-AI:  正在歸檔 add-dark-mode...
+AI:  Archiving add-dark-mode...
 
-     工件狀態：
-     ✓ proposal.md 存在
-     ✓ specs/ 存在
-     ✓ design.md 存在
-     ✓ tasks.md 存在 (8/8 任務已完成)
+     Artifact status:
+     ✓ proposal.md exists
+     ✓ specs/ exists
+     ✓ design.md exists
+     ✓ tasks.md exists (8/8 tasks complete)
 
-     Delta specs：尚未同步
-     → 現在同步嗎？(建議)
+     Delta specs: Not yet synced
+     → Sync now? (recommended)
 
-You: 是
+You: Yes
 
-AI:  ✓ 已將規格同步到 openspec/specs/ui/spec.md
-     ✓ 已移動至 openspec/changes/archive/2025-01-24-add-dark-mode/
+AI:  ✓ Synced specs to openspec/specs/ui/spec.md
+     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
 
-     變更已成功歸檔。
+     Change archived successfully.
 ```
 
-**提示:**
-- 歸檔不會因為任務未完成而阻止，但會發出警告
-- Delta specs 可以在歸檔期間或之前同步
-- 已歸檔的變更將被保留用於歷史記錄
-- 請先運行 `/opsx:verify` 以及早地發現問題
+**提示：**
+- 歸檔不會因未完成任務而阻擋，但會發出警告
+- 差異規格可在歸檔時同步，也可提前同步
+- 已歸檔的變更會被保留以供歷史查閱
+- 先執行 `/opsx:verify` 以發現潛在問題
 
 ---
 
 ### `/opsx:bulk-archive`
 
-一次性歸檔多個已完成的變更。處理不同變更之間的規格衝突。
+一次性歸檔多個已完成的變更。可處理變更之間的規格衝突。
 
-**語法:**
+**語法：**
 ```
 /opsx:bulk-archive [change-names...]
 ```
 
-**參數:**
-| 參數 | 是否必需 | 描述 |
-|---|---|---|
-| `change-names` | 否 | 要歸檔的特定變更（如果未提供，會提示選擇） |
+**參數：**
+| 參數 | 必填 | 說明 |
+|----------|----------|-------------|
+| `change-names` | 否 | 要歸檔的變更名稱（未提供時會提示選擇） |
 
-**功能說明:**
+**功能說明：**
 - 列出所有已完成的變更
-- 在歸檔前驗證每個變更
-- 检测不同變更之間的規格衝突
-- 通過檢查實際實施內容來解決衝突
-- 按時間順序進行歸檔
+- 歸檔前驗證每個變更的狀態
+- 偵測變更之間的規格衝突
+- 透過檢查實際實作內容解決衝突
+- 依照建立時間順序歸檔
 
-**範例:**
+**範例：**
 ```
 You: /opsx:bulk-archive
 
-AI:  找到 3 個已完成的變更：
-     - add-dark-mode (8/8 任務已完成)
-     - fix-login-bug (3/3 任務已完成)
-     - update-footer (2/2 任務已完成)
+AI:  Found 3 completed changes:
+     - add-dark-mode (8/8 tasks complete)
+     - fix-login-bug (3/3 tasks complete)
+     - update-footer (2/2 tasks complete)
 
-     正在檢查規格衝突...
-     ⚠ add-dark-mode 和 update-footer 都涉及 specs/ui/
+     Checking for spec conflicts...
+     ⚠ add-dark-mode and update-footer both touch specs/ui/
 
-     正在檢查程式碼庫以解決...
-     兩個變更都已實施。將按時間順序合併：
-     1. add-dark-mode (創建於 Jan 20)
-     2. update-footer (創建於 Jan 22)
+     Inspecting codebase to resolve...
+     Both changes are implemented. Will merge in chronological order:
+     1. add-dark-mode (created Jan 20)
+     2. update-footer (created Jan 22)
 
-     是否歸檔所有 3 個變更？
+     Archive all 3 changes?
 
-You: 是
+You: Yes
 
-AI:  ✓ 已歸檔 add-dark-mode
-     ✓ 已歸檔 fix-login-bug
-     ✓ 已歸檔 update-footer
-     規格已合併：add-dark-mode → update-footer
+AI:  ✓ Archived add-dark-mode
+     ✓ Archived fix-login-bug
+     ✓ Archived update-footer
+     Specs merged: add-dark-mode → update-footer
 ```
 
-**提示:**
-- 適用於平行工作流
-- 衝突解決是基於代理的（檢查程式碼庫）
-- 變更會按創建順序進行歸檔
-- 在覆蓋規格內容之前會發出提示
+**提示：**
+- 適合平行處理的多個工作流
+- 衝突解決為自主執行（會檢查程式碼庫）
+- 變更依照建立時間順序歸檔
+- 覆寫規格內容前會發出提示
 
 ---
 
 ### `/opsx:onboard`
 
-透過完整的 OpenSpec 工作流程進行引導式上線。這是一個使用您實際程式碼庫的互動式教程。
+透過完整的 OpenSpec 工作流進行引導式入門。使用你的實際程式碼庫進行互動式教學。
 
-**語法:**
+**語法：**
 ```
 /opsx:onboard
 ```
 
-**功能說明:**
-- 帶有旁白的完整工作流程循環
-- 掃描您的程式碼庫以尋找真正的改進機會
-- 創建一個包含真實工件的實際變更
-- 實施實際的工作（小型、安全的變更）
+**功能說明：**
+- 搭配講解走訪完整的工作流循環
+- 掃描你的程式碼庫，找出實際可改進的地方
+- 建立包含真實產物的實際變更
+- 實作實際工作（小型、安全的變更）
 - 歸檔已完成的變更
-- 在每個步驟發生時進行解釋
+- 在執行每一步時同步進行說明
 
-**階段:**
-1. 歡迎和程式碼庫分析
-2. 尋找改進機會
-3. 創建變更 (`/opsx:new`)
-4. 編寫提案
-5. 創建規格
-6. 編寫設計
-7. 創建任務
-8. 實施任務 (`/opsx:apply`)
-9. 驗證實施結果
+**流程階段：**
+1. 歡迎與程式碼庫分析
+2. 尋找可改進的機會
+3. 建立變更（`/opsx:new`）
+4. 撰寫提案
+5. 建立規格
+6. 撰寫設計文件
+7. 建立任務
+8. 實作任務（`/opsx:apply`）
+9. 驗證實作內容
 10. 歸檔變更
-11. 總結和下一步行動
+11. 總結與後續步驟
 
-**範例:**
+**範例：**
 ```
 You: /opsx:onboard
 
-AI:  歡迎使用 OpenSpec！
+AI:  Welcome to OpenSpec!
 
-     我將帶您走過完整的流程，並使用您的實際程式碼庫。
-     我們將找到一個小的改進點，為其創建一個適當的變更，
-     實施它，然後歸檔它。
+     I'll walk you through the complete workflow using your actual codebase.
+     We'll find something small to improve, create a proper change for it,
+     implement it, and archive it.
 
-     讓我掃描您的程式碼庫以尋找機會...
+     Let me scan your codebase for opportunities...
 
-     [分析程式碼庫]
+     [Analyzes codebase]
 
-     我找到了幾個可以進行的工作：
-     1. 為聯絡表單添加輸入驗證
-     2. 改進認證流程中的錯誤訊息
-     3. 為異步按鈕添加載入狀態
+     I found a few things we could work on:
+     1. Add input validation to the contact form
+     2. Improve error messages in the auth flow
+     3. Add loading states to async buttons
 
-     哪個讓您感興趣？(或建議其他內容)
+     Which interests you? (or suggest something else)
 ```
 
-**提示:**
-- 最適合學習工作流程的新使用者
-- 使用真實程式碼，而非玩具範例
-- 會創建一個您可以保留或丟棄的實際變更
-- 完成所需時間為 15-30 分鐘
+**提示：**
+- 適合正在學習工作流的新手用戶
+- 使用真實程式碼，而非範例程式碼
+- 會建立一個真實的變更，你可以選擇保留或丟棄
+- 完成整個流程約需 15 至 30 分鐘
 
-## AI 工具的命令語法
+## 各 AI 工具的指令語法
 
-不同的 AI 工具使用略有差異的命令語法。請使用與您的工具相符的格式：
+不同 AI 工具使用的指令語法略有差異，請選擇符合您所用工具的格式：
 
-| Tool | Syntax Example |
+| 工具 | 語法範例 |
 |------|----------------|
-| Claude Code | `/opsx:propose`, `/opsx:apply` |
-| Cursor | `/opsx-propose`, `/opsx-apply` |
-| Windsurf | `/opsx-propose`, `/opsx-apply` |
-| Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
-| Kimi CLI | Skill-based invocations such as `/skill:openspec-propose`, `/skill:openspec-apply-change` (no generated `opsx-*` command files) |
-| Trae | Skill-based invocations such as `/openspec-propose`, `/openspec-apply-change` (no generated `opsx-*` command files) |
+| Claude Code | `/opsx:propose`、`/opsx:apply` |
+| Cursor | `/opsx-propose`、`/opsx-apply` |
+| Windsurf | `/opsx-propose`、`/opsx-apply` |
+| Copilot (IDE) | `/opsx-propose`、`/opsx-apply` |
+| CodeArts | 以技能為基礎的調用方式，例如 `/openspec-propose`、`/openspec-apply-change`（不會生成 `opsx-*` 指令檔案） |
+| Codex | 從 `.codex/skills/openspec-*` 進行以技能為基礎的調用（不會生成 `opsx-*` 提示檔案） |
+| Oh My Pi | `/opsx-propose`、`/opsx-apply` |
+| Kimi Code | 以技能為基礎的調用方式，例如 `/skill:openspec-propose`、`/skill:openspec-apply-change`（不會生成 `opsx-*` 指令檔案） |
+| Trae | `/opsx-propose`、`/opsx-apply` |
 
-儘管跨工具的意圖是相同的，但命令呈現方式可能因整合而異。
+各工具的指令核心意圖一致，但指令的呈現方式會因整合方式而有所不同。
 
-> **備註：** GitHub Copilot 的命令（`.github/prompts/*.prompt.md`）僅在 IDE 擴充功能（VS Code, JetBrains, Visual Studio）中可用。GitHub Copilot CLI 目前不支援自定義提示文件 — 請參閱 [Supported Tools](supported-tools.md) 以了解詳情和解決方案。
+> **注意：** GitHub Copilot 指令（`.github/prompts/*.prompt.md`）僅適用於 IDE 擴充功能（VS Code、JetBrains、Visual Studio）。GitHub Copilot CLI 目前不支援自訂提示檔案，詳細資訊與解決方案請參閱[支援的工具](supported-tools.md)。
 
 ---
 
-## 舊版命令 (Legacy Commands)
+## 舊版指令
 
-這些命令使用了較舊的「一攬子」工作流程。它們仍然有效，但建議使用 OPSX 命令。
+這些指令使用較舊的「一次性處理」工作流程，目前仍可使用，但建議改用 OPSX 指令。
 
-| Command | What it does |
+| 指令 | 功能說明 |
 |---------|--------------|
-| `/openspec:proposal` | 一次性創建所有產物（提案、規格、設計、任務） |
-| `/openspec:apply` | 實施變更 |
-| `/openspec:archive` | 歸檔變更 |
+| `/openspec:proposal` | 一次性建立所有產出物（提案、規格、設計、任務） |
+| `/openspec:apply` | 實作變更 |
+| `/openspec:archive` | 封存變更 |
 
-**何時使用舊版命令：**
-- 使用舊工作流程的現有專案
-- 不需要增量產物創建的簡單變更
-- 偏好「全有或全無」的方法
+**舊版指令適用場景：**
+- 現有專案使用舊版工作流程
+- 簡單變更，不需要逐步建立產出物
+- 偏好全有或全無的處理方式
 
-**遷移到 OPSX：**
-可以使用 OPSX 命令來繼續進行舊版變更。其產物結構是相容的。
+**遷移至 OPSX：**
+舊版變更可使用 OPSX 指令延續處理，兩者的產出物結構相容。
 
 ---
 
-## 故障排除 (Troubleshooting)
+## 疑難排解
 
-### 「找不到變更」(Change not found)
+### 找不到變更
 
-命令無法識別應處理哪個變更。
+指令無法識別要處理的變更。
 
 **解決方案：**
 - 明確指定變更名稱：`/opsx:apply add-dark-mode`
 - 檢查變更資料夾是否存在：`openspec list`
-- 確認您位於正確的專案目錄中
+- 確認您位於正確的專案目錄
 
-### 「沒有準備好的產物」(No artifacts ready)
+### 無可用的產出物
 
-所有產物都已完成或被缺失的依賴項所阻擋。
-
-**解決方案：**
-- 執行 `openspec status --change <name>` 以查看何處存在阻塞
-- 檢查所需的產物是否存在
-- 先創建缺失的依賴產物
-
-### 「找不到 Schema」(Schema not found)
-
-指定的 Schema 不存在。
+所有產出物要麼已完成，要麼因缺少相依性而被阻擋。
 
 **解決方案：**
-- 列出可用的 Schema：`openspec schemas`
-- 檢查 Schema 名稱拼寫是否正確
-- 如果是自定義 Schema，請創建它：`openspec schema init <name>`
+- 執行 `openspec status --change <name>` 查看阻擋原因
+- 檢查必要的產出物是否存在
+- 先建立缺少的相依性產出物
 
-### 命令未被識別 (Commands not recognized)
+### 找不到綱要
 
-AI 工具不認識 OpenSpec 命令。
+指定的綱要不存在。
 
 **解決方案：**
-- 確保已初始化 OpenSpec：`openspec init`
-- 重新生成技能（skills）：`openspec update`
+- 列出可用綱要：`openspec schemas`
+- 檢查綱要名稱拼寫是否正確
+- 若為自訂綱要請建立：`openspec schema init <name>`
+
+### 無法辨識指令
+
+AI 工具無法辨識 OpenSpec 指令。
+
+**解決方案：**
+- 確認已初始化 OpenSpec：`openspec init`
+- 重新生成技能：`openspec update`
 - 檢查 `.claude/skills/` 目錄是否存在（適用於 Claude Code）
-- 重啟 AI 工具以載入新的技能
+- 重新啟動 AI 工具以載入新技能
 
-### 產物未正確生成 (Artifacts not generating properly)
+### 產出物生成異常
 
-AI 生成了不完整或不正確的產物。
+AI 生成的產出物不完整或不符合預期。
 
 **解決方案：**
-- 在 `openspec/config.yaml` 中添加專案上下文
-- 為特定指導提供單一產物的規則
-- 在變更描述中提供更多細節
-- 使用 `/opsx:continue` 而非 `/opsx:ff` 以獲得更多的控制權限
+- 在 `openspec/config.yaml` 中加入專案上下文
+- 為特定產出物加入專屬規則以提供明確指引
+- 在變更描述中提供更詳細的資訊
+- 使用 `/opsx:continue` 替代 `/opsx:ff` 以獲取更細緻的控制
 
 ---
 
-## 後續步驟 (Next Steps)
+## 後續步驟
 
-- [Workflows](workflows.md) - 常見模式和何時使用每個命令
-- [CLI](cli.md) - 用於管理和驗證的終端機命令
-- [Customization](customization.md) - 創建自定義 Schema 和工作流程
+- [工作流程](workflows.md) - 常見模式及各指令的適用場景
+- [命令列介面](cli.md) - 用於管理與驗證的終端機指令
+- [自訂](customization.md) - 建立自訂綱要與工作流程

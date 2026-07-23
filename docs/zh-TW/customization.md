@@ -1,22 +1,22 @@
-# 自訂功能
+# 自訂
 
-OpenSpec 提供三個層級的自訂功能：
+OpenSpec 提供三種自訂層級：
 
-| 層級 | 功能說明 | 適用對象 |
-|------|----------|----------|
-| **專案配置** | 設定預設值、注入上下文/規則 | 大多數團隊 |
-| **自訂架構** | 定義您自己的工作流程產出物 | 擁有獨特流程的團隊 |
-| **全域覆寫** | 在所有專案間共享架構 | 進階使用者 |
+| 層級 | 作用 | 適用場景 |
+|-------|--------------|----------|
+| **專案配置** | 設定預設值、注入上下文與規則 | 大多數團隊 |
+| **自訂架構** | 定義屬於自己的工作流產出物 | 有獨特流程的團隊 |
+| **全域覆蓋** | 在所有專案間共享架構 | 進階使用者 |
 
 ---
 
 ## 專案配置
 
-`openspec/config.yaml` 檔案是為您的團隊自訂 OpenSpec 最簡便的方式。它讓您可以：
+`openspec/config.yaml` 檔案是為團隊自訂 OpenSpec 最簡單的方式，可讓你：
 
-- **設定預設架構** - 在每個指令中省略 `--schema` 參數
-- **注入專案上下文** - AI 能看到您的技術堆疊、慣例等
-- **新增每個產出物的規則** - 為特定產出物設定自訂規則
+- **設定預設架構** - 無需在每個指令都加上 `--schema` 參數
+- **注入專案上下文** - AI 可識別你的技術棧、規範等資訊
+- **為個別產出物新增規則** - 為特定產出物設定自訂規則
 
 ### 快速設定
 
@@ -24,68 +24,68 @@ OpenSpec 提供三個層級的自訂功能：
 openspec init
 ```
 
-此指令會引導您以互動方式建立配置檔案。或者手動建立：
+此指令會引導你互動式建立配置，也可以手動建立：
 
 ```yaml
 # openspec/config.yaml
 schema: spec-driven
 
 context: |
-  技術堆疊：TypeScript, React, Node.js, PostgreSQL
-  API 風格：RESTful，文件記錄於 docs/api.md
-  測試：Jest + React Testing Library
-  我們重視所有公開 API 的向後相容性
+  Tech stack: TypeScript, React, Node.js, PostgreSQL
+  API style: RESTful, documented in docs/api.md
+  Testing: Jest + React Testing Library
+  We value backwards compatibility for all public APIs
 
 rules:
   proposal:
-    - 包含回滾計畫
-    - 識別受影響的團隊
+    - Include rollback plan
+    - Identify affected teams
   specs:
-    - 使用 Given/When/Then 格式
-    - 在發明新模式之前，先參考現有模式
+    - Use Given/When/Then format
+    - Reference existing patterns before inventing new ones
 ```
 
-### 運作原理
+### 運作方式
 
 **預設架構：**
 
 ```bash
-# 沒有配置時
+# 無配置時
 openspec new change my-feature --schema spec-driven
 
-# 有配置時 - 架構自動套用
+# 加入配置後 - 架構會自動套用
 openspec new change my-feature
 ```
 
 **上下文與規則注入：**
 
-在生成任何產出物時，您的上下文和規則會被注入到 AI 的提示中：
+生成任何產出物時，你的上下文與規則會被注入到 AI 提示詞中：
 
 ```xml
 <context>
-技術堆疊：TypeScript, React, Node.js, PostgreSQL
+Tech stack: TypeScript, React, Node.js, PostgreSQL
 ...
 </context>
 
 <rules>
-- 包含回滾計畫
-- 識別受影響的團隊
+- Include rollback plan
+- Identify affected teams
 </rules>
 
 <template>
-[架構內建的範本]
+[架構內建範本]
 </template>
 ```
 
 - **上下文** 會出現在所有產出物中
-- **規則** 僅出現在對應的產出物中
+- **規則** 僅會出現在對應的產出物中
 
 ### 架構解析順序
 
-當 OpenSpec 需要一個架構時，它會按以下順序檢查：
+當 OpenSpec 需要載入架構時，會依以下順序檢查：
 
-1. CLI 旗標：`--schema <name>`
-2. 變更元資料（變更資料夾中的 `.openspec.yaml`）
+1. CLI 參數：`--schema <name>`
+2. 變更中繼資料（變更資料夾內的 `.openspec.yaml`）
 3. 專案配置（`openspec/config.yaml`）
 4. 預設值（`spec-driven`）
 
@@ -93,7 +93,7 @@ openspec new change my-feature
 
 ## 自訂架構
 
-當專案配置無法滿足需求時，您可以建立自己的架構，打造完全自訂的工作流程。自訂架構存放在您專案的 `openspec/schemas/` 目錄中，並與您的程式碼一起進行版本控制。
+當專案配置無法滿足需求時，你可以建立完全自訂工作流的專屬架構。自訂架構會儲存在專案的 `openspec/schemas/` 目錄下，並與程式碼一起納入版本控制。
 
 ```text
 your-project/
@@ -103,81 +103,81 @@ your-project/
 │   │   └── my-workflow/
 │   │       ├── schema.yaml
 │   │       └── templates/
-│   └── changes/           # 您的變更
+│   └── changes/           # 你的變更
 └── src/
 ```
 
-### 複製現有架構
+### 複用既有架構
 
-最快的自訂方式是複製一個內建架構：
+自訂架構最快的方式是複用內建架構進行修改：
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-這會將整個 `spec-driven` 架構複製到 `openspec/schemas/my-workflow/`，您可以在那裡自由編輯。
+這會將完整的 `spec-driven` 架構複製到 `openspec/schemas/my-workflow/` 目錄，你可以在該目錄下自由編輯。
 
-**您會得到：**
+**你會得到：**
 
 ```text
 openspec/schemas/my-workflow/
-├── schema.yaml           # 工作流程定義
+├── schema.yaml           # 工作流定義
 └── templates/
     ├── proposal.md       # 提案產出物的範本
-    ├── spec.md           # 規格的範本
-    ├── design.md         # 設計的範本
-    └── tasks.md          # 任務的範本
+    ├── spec.md           # 規格書範本
+    ├── design.md         # 設計文件範本
+    └── tasks.md          # 任務清單範本
 ```
 
-現在您可以編輯 `schema.yaml` 來更改工作流程，或編輯範本來更改 AI 生成的內容。
+現在你可以編輯 `schema.yaml` 來修改工作流，或是編輯範本檔案來調整 AI 生成的內容。
 
-### 從頭建立架構
+### 從零建立架構
 
-若要建立一個全新的工作流程：
+若需要全新的工作流，可執行：
 
 ```bash
-# 互動式
+# 互動模式
 openspec schema init research-first
 
-# 非互動式
+# 非互動模式
 openspec schema init rapid \
-  --description "快速迭代工作流程" \
+  --description "Rapid iteration workflow" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
 ### 架構結構
 
-一個架構定義了您工作流程中的產出物以及它們之間的相依關係：
+架構用於定義工作流中的產出物，以及它們之間的相依關係：
 
 ```yaml
 # openspec/schemas/my-workflow/schema.yaml
 name: my-workflow
 version: 1
-description: 我的團隊的自訂工作流程
+description: My team's custom workflow
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: 初始提案文件
+    description: Initial proposal document
     template: proposal.md
     instruction: |
-      建立一份提案，說明為何需要此變更。
-      著重於問題本身，而非解決方案。
+      Create a proposal that explains WHY this change is needed.
+      Focus on the problem, not the solution.
     requires: []
 
   - id: design
     generates: design.md
-    description: 技術設計
+    description: Technical design
     template: design.md
     instruction: |
-      建立一份設計文件，說明如何實作。
+      Create a design document explaining HOW to implement.
     requires:
-      - proposal    # 在提案存在之前無法建立設計
+      - proposal    # 必須先有提案才能建立設計
 
   - id: tasks
     generates: tasks.md
-    description: 實作檢查清單
+    description: Implementation checklist
     template: tasks.md
     requires:
       - design
@@ -190,54 +190,54 @@ apply:
 **關鍵欄位：**
 
 | 欄位 | 用途 |
-|------|------|
-| `id` | 唯一識別碼，用於指令和規則 |
-| `generates` | 輸出檔名（支援 glob 模式，如 `specs/**/*.md`） |
-| `template` | `templates/` 目錄中的範本檔案 |
-| `instruction` | AI 建立此產出物的指令 |
-| `requires` | 相依性 - 哪些產出物必須先存在 |
+|-------|---------|
+| `id` | 唯一識別符，用於指令與規則中 |
+| `generates` | 輸出檔名（支援萬用字元，例如 `specs/**/*.md`） |
+| `template` | `templates/` 目錄下的範本檔案 |
+| `instruction` | 建立此產出物時給 AI 的指令 |
+| `requires` | 相依關係 - 哪些產出物必須先存在 |
 
 ### 範本
 
-範本是引導 AI 的 Markdown 檔案。在建立該產出物時，它們會被注入到提示中。
+範本是引導 AI 的 Markdown 檔案，在建立對應產出物時會被注入到提示詞中。
 
 ```markdown
 <!-- templates/proposal.md -->
-## 為何
+## Why
 
-<!-- 說明此變更的動機。這解決了什麼問題？ -->
+<!-- 說明這項變更的動機，它解決了什麼問題？ -->
 
-## 變更內容
+## What Changes
 
-<!-- 描述將會發生什麼變化。具體說明新功能或修改。 -->
+<!-- 描述會進行哪些變更，具體說明新增的功能或修改內容。 -->
 
-## 影響
+## Impact
 
-<!-- 受影響的程式碼、API、相依性、系統 -->
+<!-- 受影響的程式碼、API、相依套件、系統 -->
 ```
 
-範本可以包含：
-- AI 應填寫的章節標題
-- 帶有 AI 指導方針的 HTML 註解
-- 展示預期結構的範例格式
+範本可包含：
+- AI 需要填寫的區塊標題
+- 給 AI 的引導性 HTML 註解
+- 顯示預期結構的範例格式
 
-### 驗證您的架構
+### 驗證你的架構
 
-在使用自訂架構之前，請先驗證它：
+使用自訂架構前，請先進行驗證：
 
 ```bash
 openspec schema validate my-workflow
 ```
 
-這會檢查：
+驗證會檢查以下項目：
 - `schema.yaml` 語法是否正確
-- 所有引用的範本是否存在
-- 沒有循環相依性
+- 所有參照的範本是否存在
+- 是否存在循環相依
 - 產出物 ID 是否有效
 
-### 使用您的自訂架構
+### 使用你的自訂架構
 
-建立完成後，使用您的架構：
+架構建立完成後，可透過以下方式使用：
 
 ```bash
 # 在指令中指定
@@ -249,7 +249,7 @@ schema: my-workflow
 
 ### 除錯架構解析
 
-不確定正在使用哪個架構？使用以下指令檢查：
+不確定目前使用的是哪個架構？可執行以下指令檢查：
 
 ```bash
 # 查看特定架構的解析來源
@@ -259,7 +259,7 @@ openspec schema which my-workflow
 openspec schema which --all
 ```
 
-輸出會顯示它是來自您的專案、使用者目錄還是套件：
+執行結果會顯示架構來源是專案、使用者目錄還是套件本身：
 
 ```text
 Schema: my-workflow
@@ -269,35 +269,35 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 ---
 
-> **注意：** OpenSpec 也支援使用者層級的架構，位於 `~/.local/share/openspec/schemas/`，可在不同專案間共享，但建議使用專案層級的架構（`openspec/schemas/`），因為它們會與您的程式碼一起進行版本控制。
+> **注意：** OpenSpec 同時支援使用者層級的架構，存放於 `~/.local/share/openspec/schemas/` 目錄，可跨專案共享；但建議使用 `openspec/schemas/` 下的專案層級架構，此類架構會與程式碼一起納入版本控制。
 
 ---
 
 ## 範例
 
-### 快速迭代工作流程
+### 快速迭代工作流
 
-適用於快速迭代的最小化工作流程：
+適合快速迭代的最小工作流：
 
 ```yaml
 # openspec/schemas/rapid/schema.yaml
 name: rapid
 version: 1
-description: 以最小開銷進行快速迭代
+description: Fast iteration with minimal overhead
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: 快速提案
+    description: Quick proposal
     template: proposal.md
     instruction: |
-      為此變更建立一份簡要提案。
-      著重於內容和原因，跳過詳細規格。
+      Create a brief proposal for this change.
+      Focus on what and why, skip detailed specs.
     requires: []
 
   - id: tasks
     generates: tasks.md
-    description: 實作檢查清單
+    description: Implementation checklist
     template: tasks.md
     requires: [proposal]
 
@@ -306,51 +306,53 @@ apply:
   tracks: tasks.md
 ```
 
-### 新增審查產出物
+### 新增審閱產出物
 
-複製預設架構並新增一個審查步驟：
+複用預設架構並新增審閱步驟：
 
 ```bash
 openspec schema fork spec-driven with-review
 ```
 
-然後編輯 `schema.yaml` 以新增：
+接著編輯 `schema.yaml` 並新增以下內容：
 
 ```yaml
   - id: review
     generates: review.md
-    description: 實作前審查檢查清單
+    description: Pre-implementation review checklist
     template: review.md
     instruction: |
-      根據設計建立一份審查檢查清單。
-      包含安全性、效能和測試方面的考量。
+      Create a review checklist based on the design.
+      Include security, performance, and testing considerations.
     requires:
       - design
 
   - id: tasks
-    # ... 現有的任務配置 ...
+    # ... 既有任務配置 ...
     requires:
       - specs
       - design
-      - review    # 現在任務也需要審查
+      - review    # 現在任務也需先完成審閱
 ```
 
 ---
 
 ## 社群架構
 
-OpenSpec 也支援透過獨立儲存庫發佈的社群維護架構。這些架構提供了將 OpenSpec 與其他工具或系統整合的特定工作流程，類似於 [github/spec-kit 的社群擴充目錄](https://github.com/github/spec-kit/tree/main/extensions) 為 spec-kit 提供的功能。
+OpenSpec 同時支援由社群維護、透過獨立倉庫分發的架構。這類架構提供帶有明確設計理念的工作流，可將 OpenSpec 與其他工具或系統整合，運作方式類似 [github/spec-kit 社群擴充目錄](https://github.com/github/spec-kit/tree/main/extensions) 為 spec-kit 提供的功能。
 
-社群架構並未內建於 OpenSpec 核心中 — 它們位於各自的儲存庫中，並有自己的發佈節奏。要使用它，請將架構套件複製到您專案的 `openspec/schemas/<schema-name>/` 目錄中（每個儲存庫的 README 都有安裝說明）。
+社群架構不會內嵌到 OpenSpec 核心中，而是各自存放在獨立倉庫，有各自的發佈節奏。要使用某個社群架構時，請將對應的架構包複製到專案的 `openspec/schemas/<schema-name>/` 目錄下（各倉庫的 README 都有安裝說明）。
 
-| 架構 | 維護者 | 儲存庫 | 描述 |
-|------|--------|--------|------|
-| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | 將 OpenSpec 的產出物治理與 [obra/superpowers](https://github.com/obra/superpowers) 的執行技能（腦力激盪、撰寫計畫、透過子代理進行 TDD、程式碼審查、完成）整合。新增了一個以證據為先的 `retrospective` 產出物，填補了 Superpowers 原生未涵蓋的空白。 |
+| 架構名稱 | 維護者 | 倉庫 | 說明 |
+|--------|-----------|-----------|-------------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | 整合 OpenSpec 的產出物治理機制與 [obra/superpowers](https://github.com/obra/superpowers) 的執行技能（腦力激盪、撰寫計畫、透過子代理執行 TDD、程式碼審閱、任務收尾）。新增了以證據為優先的 `retrospective` 產出物，補足了 Superpowers 原生未涵蓋的缺口。 |
+| `nanopm` | @nmrtn | [nmrtn/nanopm](https://github.com/nmrtn/nanopm/tree/main/openspec-schema) | 以產品經理為核心的工作流。在實作流程上游執行 [nanopm](https://github.com/nmrtn/nanopm) 的規劃管線（稽核 → 策略 → 路線圖 → 產品需求文件），將產品規劃銜接至 OpenSpec 的規格驅動工程工作流。若存在 `.nanopm/` 目錄，則產出物會從中讀取資料：提案來源為稽核結果、設計來源為策略文件、任務來源為產品需求文件拆解。 |
+| `e2e-runbooks` | @Lukk17 | [Lukk17/openspec-schemas](https://github.com/Lukk17/openspec-schemas/tree/master/openspec/schemas/e2e-runbooks) | 功能層級的端對端測試執行手冊。每個功能都會有一份不可變的規格書、一份不可變的任務範本，以及每次執行對應的一筆帶時間戳的執行記錄。斷言僅使用可觀察的行為（HTTP 狀態碼、回應內容、持久化狀態，絕不使用日誌子字串）；每次執行會記錄開始/結束時間（UTC）、執行時間，以及最佳估算的 LLM 權杖耗用量。 |
 
-> 想貢獻一個社群架構嗎？請開啟一個 issue 並附上您的儲存庫連結，或提交一個 PR 在此表格中新增一行。
+> 想要貢獻社群架構？請開啟一個 issue 並附上你的倉庫連結，或是提交 PR 並在表格中新增一筆你的架構資料。
 
 ---
 
-## 另請參閱
+## 相關連結
 
-- [CLI 參考：架構指令](cli.md#schema-commands) - 完整的指令文件
+- [CLI 參考：架構指令](cli.md#schema-commands) - 完整指令文件

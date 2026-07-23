@@ -3,129 +3,136 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "Specification-Driven Development for AI Assistants"
-  tagline: Ein leichtgewichtiges Spec zum Bauen und Verwalten von KI-Assistenten-Projekten.
+  text: "Spezifikationsgesteuerte Entwicklung für KI-Assistenten"
+  tagline: Eine leichtgewichtige Spezifikation für die Erstellung und Verwaltung von KI-Assistenten-Projekten.
   actions:
     - theme: brand
-      text: Loslegen
+      text: Erste Schritte
       link: ./getting-started
     - theme: alt
       text: Startseite
       link: /
 
 features:
-  - title: Spec-First Workflow
-    details: Anforderungen definieren, bevor Code geschrieben wird.
-  - title: AI-Native Design
-    details: Entwickelt für Claude Code, Cursor, Windsurf und mehr.
-  - title: Multi-Language
-    details: Dokumentation in mehreren Sprachen verfügbar.
+  - title: Spezifikationsgesteuerter Workflow
+    details: Definiere Anforderungen, bevor du Code schreibst.
+  - title: KI-Natives Design
+    details: Entwickelt für Claude Code, Cursor, Windsurf und weitere Tools.
+  - title: Mehrsprachigkeit
+    details: Dokumentation ist in mehreren Sprachen verfügbar.
 ---
 
-# OpenSpec Dokumentation
+# OpenSpec-Dokumentation
 
-Willkommen. Dies ist die Startseite für alles rund um OpenSpec.
+Willkommen. Dies ist die zentrale Anlaufstelle für alles rund um OpenSpec.
 
-OpenSpec hilft Ihnen und Ihrem KI-Codierungsassistenten, **sich darauf zu einigen, was gebaut werden soll, bevor irgendein Code geschrieben wird.** Sie beschreiben die Änderung, die KI entwirft eine kurze Spezifikation und eine Aufgabenliste, beide schauen sich denselben Plan an, und dann findet die Arbeit statt. Nie wieder das Entdecken auf halbem Weg, dass die KI etwas Falsches erstellt hat.
+OpenSpec hilft dir und deinem KI-Code-Assistenten, **sich darauf zu einigen, was gebaut werden soll, bevor auch nur eine Zeile Code geschrieben wird.** Du beschreibst die Änderung, die KI erstellt einen kurzen Standard und eine Aufgabenliste, ihr beide schaut euch denselben Plan an und dann wird die Arbeit erledigt. Keine bösen Überraschungen mehr, wenn ihr erst zur Hälfte fertig seid und feststellt, dass die KI das Falsche gebaut hat.
 
-Wenn Sie nichts anderes lesen, lesen Sie diese beiden Seiten:
+Wenn du sonst nichts liest, lies diese beiden Seiten:
 
-1. [Getting Started](getting-started.md): Installieren, initialisieren und Ihre erste Änderung veröffentlichen.
-2. [How Commands Work](how-commands-work.md): Wo Sie tatsächlich `/opsx:propose` eingeben (Tipp: in Ihrem KI-Chat, nicht im Terminal). Das verunsichert fast jeden einmal.
+1. [Erste Schritte](getting-started.md): Installieren, initialisieren und deine erste Änderung veröffentlichen.
+2. [Funktionsweise von Befehlen](how-commands-work.md): Wo du tatsächlich `/opsx:propose` eingibst (Tipp: in deinem KI-Chat, nicht im Terminal). Das verwirrt fast jeden einmal.
 
-Dieses zweite ist wichtiger, als es scheint. OpenSpec hat zwei Hälften: ein Kommandozeilen-Tool, das Sie in Ihrem Terminal ausführen, und Slash-Befehle, die Sie Ihrem KI-Assistenten geben. Zu wissen, welches was ist, erspart Ihnen den häufigsten Moment der Verwirrung.
+Die zweite Seite ist wichtiger, als es scheint. OpenSpec besteht aus zwei Teilen: einem Kommandozeilen-Tool, das du in deinem Terminal ausführst, und Schrägstrich-Befehlen, die du an deinen KI-Assistenten gibst. Wenn du weißt, was was ist, sparst du dir die häufigste Verwirrung.
 
-> **Die beste Gewohnheit, zuerst zu entwickeln: Wenn Sie sich nicht sicher sind, was gebaut werden soll, beginnen Sie mit `/opsx:explore`.** Es ist ein Denkpartner ohne Risiko, der Ihren Code liest, Optionen abwägt und eine vage Idee in einen konkreten Plan verwandelt, bevor irgendein Artefakt oder Code existiert. Der Leitfaden [Explore First](explore.md) belegt dies.
+> **Die beste Gewohnheit, die du dir zuerst aneignen solltest: Wenn du nicht weißt, was du bauen sollst, fange mit `/opsx:explore` an.** Es ist ein risikofreier Denkpartner, der deinen Code liest, Optionen abwägt und eine vage Idee zu einem konkreten Plan verfeinert, bevor irgendwelche Artefakte oder Code existieren. Der Leitfaden [Zuerst erkunden](explore.md) erklärt die Vorteile.
 
-## Wählen Sie Ihren Weg
+## Wähle deinen Pfad
 
-**Ich bin ganz neu.** Beginnen Sie mit [Getting Started](getting-started.md) und werfen Sie dann einen Blick auf die [Core Concepts at a Glance](overview.md). Wenn etwas mysteriös erscheint, sind [FAQ](faq.md) und [Glossary](glossary.md) in der Nähe.
+**Ich bin neu hier.** Fang mit [Erste Schritte](getting-started.md) an, lies dann kurz die [Grundkonzepte auf einen Blick](overview.md). Wenn etwas unklar ist, findest du in der [FAQ](faq.md) und dem [Glossar](glossary.md) schnell Antworten.
 
-**Ich habe ein Problem, aber keinen Plan.** Das ist der häufige Fall, und er hat eine spezielle Antwort: [Explore First](explore.md). Nutzen Sie `/opsx:explore`, um es mit der KI durchzudenken, bevor Sie sich festlegen.
+**Ich habe ein Problem, aber keinen Plan.** Das ist der häufigste Fall, und dafür gibt es eine eigene Anleitung: [Zuerst erkunden](explore.md). Nutze `/opsx:explore`, um die Sache gemeinsam mit der KI durchzudenken, bevor du dich auf etwas festlegst.
 
-**Ich habe eine große bestehende Codebasis.** Sie dokumentieren sie nicht alle. [Using OpenSpec in an Existing Project](existing-projects.md) zeigt, wie man bei echter Brownfield-Code beginnt, ohne das ganze Ozean zu kochen.
+**Ich habe eine große bestehende Codebasis.** Du musst nicht alles dokumentieren. [OpenSpec in einem bestehenden Projekt verwenden](existing-projects.md) zeigt, wie du mit echtem, gewachsenem Code anfängst, ohne das gesamte Projekt auf einmal umkrempeln zu müssen.
 
-**Ich möchte es einfach zum Laufen bringen.** [Install](installation.md), führen Sie `openspec init` aus und lesen Sie dann [How Commands Work](how-commands-work.md), damit Ihr erster Slash-Befehl am richtigen Ort landet.
+**Ich möchte es nur zum Laufen bringen.** [Installieren](installation.md), führe `openspec init` aus und lies dann [Funktionsweise von Befehlen](how-commands-work.md), damit dein erster Schrägstrich-Befehl an der richtigen Stelle ankommt.
 
-**Ich lerne durch Beispiele.** Die Seite [Examples & Recipes](examples.md) führt Sie durch echte Änderungen von Anfang bis Ende: eine kleine Funktion, eine Fehlerbehebung, ein Refactoring, eine Erkundung.
+**Ich lerne anhand von Beispielen.** Die Seite [Beispiele & Rezepte](examples.md) führt dich durch echte Änderungen von Anfang bis Ende: eine kleine Funktion, ein Bugfix, ein Refactoring, eine Erkundung.
 
-**Ich komme aus dem alten Workflow.** Der [Migration Guide](migration-guide.md) erklärt, was sich geändert hat und warum, und verspricht, dass Ihre bestehende Arbeit sicher ist.
+**Die KI hat gerade einen Entwurf für einen Plan erstellt – was jetzt?** Lies ihn durch. [Eine Änderung prüfen](reviewing-changes.md) zeigt die zweiminütige Prüfung, die eine Fehlentscheidung abfängt, solange sie noch kostengünstig zu beheben ist, und [Gute Standards schreiben](writing-specs.md) erklärt, woraus ein genehmigungswürdiger Plan besteht.
 
-**Ich möchte es an den Prozess meines Teams anpassen.** [Customization](customization.md) behandelt die Projektkonfiguration, benutzerdefinierte Schemata und geteilten Kontext.
+**Ich arbeite in einem Team.** [OpenSpec im Team](team-workflow.md) zeigt, wie eine Änderung einem Branch und einem Pull Request zugeordnet wird und wie Teammitglieder einen Plan prüfen, bevor der Code geschrieben wird.
 
-**Etwas ist kaputt.** [Troubleshooting](troubleshooting.md) sammelt die Fehler, auf die die Leute tatsächlich stoßen, zusammen mit Lösungen.
+**Ich komme vom alten Workflow.** Der [Migrationsleitfaden](migration-guide.md) erklärt, was sich geändert hat und warum, und versichert, dass deine bestehende Arbeit sicher ist.
 
-## Die ganze Karte
+**Ich möchte es an den Prozess meines Teams anpassen.** [Anpassung](customization.md) behandelt Projektkonfiguration, benutzerdefinierte Schemata und gemeinsamen Kontext.
 
-### Hier anfangen
+**Etwas funktioniert nicht.** [Fehlerbehebung](troubleshooting.md) sammelt die Fehler, die tatsächlich auftreten, mit passenden Lösungen.
 
-| Doc | Was es Ihnen gibt |
+## Die gesamte Übersicht
+
+### Hier starten
+
+| Doc | Was du damit bekommst |
 |-----|-------------------|
-| [Getting Started](getting-started.md) | Installation, Initialisierung und Ausführung Ihrer ersten Änderung von Anfang bis Ende |
-| [Explore First](explore.md) | `/opsx:explore` verwenden, um eine Idee zu durchdenken, bevor Sie sich festlegen |
-| [How Commands Work](how-commands-work.md) | Wo Slash-Befehle ausgeführt werden, was „interaktiver Modus“ bedeutet, Terminal vs Chat |
-| [Core Concepts at a Glance](overview.md) | Das gesamte mentale Modell auf einer Seite: Specs, Änderungen, Deltas, Archiv |
-| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix und wie man überprüft, ob es funktioniert hat |
+| [Erste Schritte](getting-started.md) | Installieren, initialisieren und deine erste Änderung vollständig durchführen |
+| [Zuerst erkunden](explore.md) | Nutze `/opsx:explore`, um eine Idee durchzudenken, bevor du dich festlegst |
+| [Funktionsweise von Befehlen](how-commands-work.md) | Wo Schrägstrich-Befehle ausgeführt werden, was "interaktiver Modus" bedeutet, Terminal vs. Chat |
+| [Grundkonzepte auf einen Blick](overview.md) | Das gesamte mentale Modell auf einer Seite: Standards, Änderungen, Deltas, Archiv |
+| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix und wie du überprüfst, ob die Installation funktioniert hat |
 
-### Tagtäglich nutzen
+### Tägliche Nutzung
 
-| Doc | Was es Ihnen gibt |
+| Doc | Was du damit bekommst |
 |-----|-------------------|
-| [Workflows](workflows.md) | Häufige Muster und wann Sie welchen Befehl verwenden sollten |
-| [Examples & Recipes](examples.md) | Volle Durchführungen echter Änderungen, kopierbar |
-| [Using OpenSpec in an Existing Project](existing-projects.md) | Die Einführung von OpenSpec bei einer großen Brownfield-Codebasis |
-| [Editing & Iterating on a Change](editing-changes.md) | Artefakte aktualisieren, zurückgehen, manuelle Bearbeitungen rekonsolidieren |
-| [Commands](commands.md) | Referenz für jeden `/opsx:*` Slash-Befehl |
-| [CLI](cli.md) | Referenz für jeden `openspec`-Terminalbefehl |
+| [Workflows](workflows.md) | Häufige Muster und wann du welchen Befehl nutzen solltest |
+| [Beispiele & Rezepte](examples.md) | Vollständige Anleitungen für echte Änderungen, zum Kopieren und Einfügen |
+| [Gute Standards schreiben](writing-specs.md) | Wie eine starke Anforderung und ein Szenario aussehen und wie du die Größe einer Änderung richtig wählst |
+| [Eine Änderung prüfen](reviewing-changes.md) | Die zweiminütige Prüfung eines Entwurfsplans, bevor auch nur Code geschrieben wird |
+| [OpenSpec im Team](team-workflow.md) | Wie Änderungen zu Branches, Pull Requests und Prüfungen passen |
+| [OpenSpec in einem bestehenden Projekt verwenden](existing-projects.md) | Einführung von OpenSpec in einem großen, gewachsenen Codebasis |
+| [Eine Änderung bearbeiten und iterieren](editing-changes.md) | Artefakte aktualisieren, zurückgehen, manuelle Bearbeitungen abgleichen |
+| [Befehle](commands.md) | Referenz für alle `/opsx:*` Schrägstrich-Befehle |
+| [CLI](cli.md) | Referenz für alle `openspec` Terminal-Befehle |
 
-### Es tiefgehend verstehen
+### Tiefer verstehen
 
-| Doc | Was es Ihnen gibt |
+| Doc | Was du damit bekommst |
 |-----|-------------------|
-| [Concepts](concepts.md) | Die ausführliche Erklärung von Specs, Änderungen, Artefakten, Schemata und Archiv |
-| [OPSX Workflow](opsx.md) | Warum der Workflow fließend statt phasenfest ist, plus ein Architektur-Deep-Dive |
-| [Glossary](glossary.md) | Jeder Begriff an einem Ort definiert |
+| [Konzepte](concepts.md) | Die ausführliche Erklärung von Standards, Änderungen, Artefakten, Schemata und Archiv |
+| [OPSX-Workflow](opsx.md) | Warum der Workflow flüssig statt phasenfixiert ist, plus ein Architektur-Deep-Dive |
+| [Glossar](glossary.md) | Alle Begriffe an einem Ort definiert |
 
-### Es zu Ihrem machen
+### An deine Bedürfnisse anpassen
 
-| Doc | Was es Ihnen gibt |
+| Doc | Was du damit bekommst |
 |-----|-------------------|
-| [Customization](customization.md) | Projektkonfiguration, benutzerdefinierte Schemata, geteilter Kontext |
-| [Multi-Language](multi-language.md) | Generierung von Artefakten in Sprachen außer Englisch |
-| [Supported Tools](supported-tools.md) | Die 25+ KI-Tools, mit denen OpenSpec integriert ist, und wo die Dateien landen |
+| [Anpassung](customization.md) | Projektkonfiguration, benutzerdefinierte Schemata, gemeinsamer Kontext |
+| [Mehrsprachigkeit](multi-language.md) | Artefakte in anderen Sprachen als Englisch generieren |
+| [Unterstützte Tools](supported-tools.md) | Die über 25 KI-Tools, mit denen OpenSpec integriert, und wo Dateien abgelegt werden |
 
-### Wenn Sie Hilfe benötigen
+### Wenn du Hilfe brauchst
 
-| Doc | Was es Ihnen gibt |
+| Doc | Was du damit bekommst |
 |-----|-------------------|
-| [FAQ](faq.md) | Schnelle Antworten auf die häufigsten Fragen der Leute |
-| [Troubleshooting](troubleshooting.md) | Konkrete Lösungen für konkrete Fehler |
-| [Migration Guide](migration-guide.md) | Der Umstieg vom Legacy-Workflow auf OPSX |
+| [FAQ](faq.md) | Schnelle Antworten auf die häufigsten Fragen |
+| [Fehlerbehebung](troubleshooting.md) | Konkrete Lösungen für konkrete Fehler |
+| [Migrationsleitfaden](migration-guide.md) | Umstellung vom alten Workflow auf OPSX |
 
-### Über Repos koordinieren (beta)
+### Koordination über Repos hinweg (Beta)
 
-| Doc | Was es Ihnen gibt |
+| Doc | Was du damit bekommst |
 |-----|-------------------|
-| [Stores: User Guide](stores-beta/user-guide.md) | Planung in einem eigenen Repo, wenn Ihre Arbeit mehrere Repos oder Teams umfasst |
-| [Agent Contract](agent-contract.md) | Die maschinenlesbaren CLI-Oberflächen, die von Agenten gesteuert werden |
+| [Stores: Benutzerhandbuch](stores-beta/user-guide.md) | Plane in einem eigenen Repo, wenn deine Arbeit sich über mehrere Repos oder Teams erstreckt |
+| [Agentenvertrag](agent-contract.md) | Die maschinenlesbaren CLI-Oberflächen, die Agenten steuern |
 
-## Die dreißig-sekunden-Version
+## Die 30-Sekunden-Version
 
 ```text
-1. Install        npm install -g @fission-ai/openspec@latest
-2. Initialize     cd your-project && openspec init
-3. Explore        (in Ihrem KI-Chat)  /opsx:explore           ← optional, aber eine tolle Gewohnheit
-4. Propose        (in Ihrem KI-Chat)  /opsx:propose add-dark-mode
-5. Build          (in Ihrem KI-Chat)  /opsx:apply
-6. Archive        (in Ihrem KI-Chat)  /opsx:archive
+1. Installieren        npm install -g @fission-ai/openspec@latest
+2. Initialisieren     cd your-project && openspec init
+3. Erkunden        (in deinem KI-Chat)  /opsx:explore           ← optional, aber eine sehr gute Gewohnheit
+4. Vorschlagen        (in deinem KI-Chat)  /opsx:propose add-dark-mode
+5. Anwenden          (in deinem KI-Chat)  /opsx:apply
+6. Archivieren        (in deinem KI-Chat)  /opsx:archive
 ```
 
-Schritte 1 und 2 finden in Ihrem Terminal statt. Der Rest findet im Chat Ihres KI-Assistenten statt. Dieser Split ist das Einzige, was es wert ist, sich zu merken, und [How Commands Work](how-commands-work.md) erklärt genau, warum. Schritt 3 ist optional, aber mit `/opsx:explore` zu beginnen, wenn Sie unsicher sind, ist die Gewohnheit, die am meisten nützlich ist.
+Die Schritte 1 und 2 erfolgen in deinem Terminal. Der Rest läuft im Chat deines KI-Assistenten ab. Diese Aufteilung ist die einzige Sache, die es sich zu merken lohnt, und [Funktionsweise von Befehlen](how-commands-work.md) erklärt genau, warum das so ist. Schritt 3 ist optional, aber wenn du unsicher bist, mit `/opsx:explore` anzufangen, ist die Gewohnheit, die sich am meisten lohnt.
 
-## Wo sonst Hilfe finden?
+## Weitere Hilfsmöglichkeiten
 
-- **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) für Fragen, Ideen und Hilfe.
-- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) für Bugs und Feature Requests.
-- **`openspec feedback "Ihre Nachricht"`** sendet Feedback direkt von Ihrem Terminal (es öffnet ein GitHub Issue).
+- **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) für Fragen, Ideen und Unterstützung.
+- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) für Fehler und Funktionsanfragen.
+- **`openspec feedback "your message"`** sendet Feedback direkt von deinem Terminal aus (es öffnet ein GitHub-Issue).
 
-Haben Sie etwas in dieser Dokumentation gefunden, das falsch, veraltet oder verwirrend ist? Das ist ein Bug. Erstellen Sie ein Issue oder einen PR. Verbesserungen der Dokumentation sind einige der wertvollsten Beiträge, die Sie leisten können.
+Hast du in dieser Dokumentation etwas gefunden, das falsch, veraltet oder verwirrend ist? Das ist ein Fehler. Öffne ein Issue oder einen PR. Verbesserungen an der Dokumentation gehören zu den wertvollsten Beiträgen, die du leisten kannst.

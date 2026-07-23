@@ -1,159 +1,162 @@
-# Hoe Commando's Werken
+# Hoe commando's werken
 
-**Het ene dat je moet weten: OpenSpec heeft twee soorten commando's, en ze draaien op twee verschillende plaatsen.**
+**Het enige dat u moet weten: OpenSpec heeft twee soorten commando's, en deze worden op twee verschillende plaatsen uitgevoerd.**
 
-- `openspec ...` commando's draaien in je **terminal**. (Voorbeeld: `openspec init`.)
-- `/opsx:...` commando's draaien in de **chat van je AI-assistent**. (Voorbeeld: `/opsx:propose`.)
+- `openspec ...`-commando's worden uitgevoerd in uw **terminal**. (Voorbeeld: `openspec init`.)
+- `/opsx:...`-commando's worden uitgevoerd in de **chat van uw AI-assistent**. (Voorbeeld: `/opsx:propose`.)
 
-Als je ooit `/opsx:propose` in je terminal typt en er niets gebeurt, dan is dit het antwoord. Je praat met de verkeerde helft van OpenSpec. Slash commando's zijn geen terminalcommando's. Ze zijn instructies die je geeft aan je AI-coderingassistent, in hetzelfde chatvenster waar je normaal gespreek zou "voeg een login formulier toe".
+Als u ooit `/opsx:propose` in uw terminal typt en er gebeurt niets, dan is deze pagina de reden. U praat met de verkeerde helft van OpenSpec. Slash-commando's zijn geen terminalcommando's. Het zijn instructies die u aan uw AI-codeerassistent geeft, in dezelfde chatbox waar u normaal gesproken "voeg een login-formulier toe" zou typen.
 
-Dit ene onderscheid is het meest voorkomende struikelblok voor nieuwe gebruikers, dus laten we dit kristalhelder maken.
+Die ene onderscheid is de meest voorkomende struikelblok voor nieuwe gebruikers, dus laten we het helder maken.
 
 ## De twee helften
 
-OpenSpec is één project dat twee hoeden draagt.
+OpenSpec is één project dat twee petjes draagt.
 
-**De CLI (terminalhelft).** Een programma genaamd `openspec` dat je installeert en uitvoert vanuit je shell. Het zet je project op, lijstt en valideert wijzigingen, toont een dashboard en archiveert afgerond werk. Je typt deze in iTerm, de VS Code terminal, PowerShell, overal waar je `git` of `npm` zou draaien.
+**De CLI (terminalhelft).** Een programma genaamd `openspec` dat u installeert en uitvoert vanuit uw shell. Het stelt uw project in, geeft wijzigingen weer en valideert deze, toont een dashboard en archiveert voltooide werkzaamheden. U typt deze in iTerm, de VS Code-terminal, PowerShell, overal waar u `git` of `npm` zou uitvoeren.
 
 ```bash
-openspec init        # stel OpenSpec op in dit project
-openspec list        # zie actieve wijzigingen
+openspec init        # stel OpenSpec in voor dit project
+openspec list        # bekijk actieve wijzigingen
 openspec view        # open het interactieve dashboard
 ```
 
-**De slash commando's (chathelft).** Korte commando's zoals `/opsx:propose` en `/opsx:apply` die je typt in je AI-assistent. Deze vertellen de AI om het OpenSpec workflow te volgen: een voorstel opstellen, specificaties schrijven, bouwen vanuit de taaklijst, archiveren wanneer klaar. Je typt deze in Claude Code, Cursor, Windsurf, Copilot of welke assistent dan ook je gebruikt.
+**De slash-commando's (chathelft).** Korte commando's zoals `/opsx:propose` en `/opsx:apply` die u in uw AI-assistent typt. Deze vertellen de AI om de OpenSpec-workflow te volgen: een voorstel opstellen, specificaties schrijven, bouwen vanuit de takenlijst, archiveren wanneer klaar. U typt deze in Claude Code, Cursor, Windsurf, Copilot, of welke assistent u ook gebruikt.
 
 ```text
-/opsx:propose add-dark-mode    (getypt in je AI chat)
-/opsx:apply                    (getypt in je AI chat)
-/opsx:archive                  (getypt in je AI chat)
+/opsx:propose add-dark-mode    (getypt in uw AI-chat)
+/opsx:apply                    (getypt in uw AI-chat)
+/opsx:archive                  (getypt in uw AI-chat)
 ```
 
 Hier is het mentale model in één plaatje:
 
 ```text
-        JOU TERMINAL                         DE CHAT VAN JE AI-ASSISTENT
+        UW TERMINAL                         DE CHAT VAN UW AI-ASSISTENT
    ┌──────────────────────┐               ┌──────────────────────────────┐
-   │  $ openspec init     │   installeert    │  /opsx:propose add-dark-mode  │
+   │  $ openspec init     │   installeert │  /opsx:propose add-dark-mode  │
    │  $ openspec list     │  ──────────►  │  /opsx:apply                  │
-   │  $ openspec view     │   commando's    │  /opsx:archive                │
+   │  $ openspec view     │   commando's  │  /opsx:archive                │
    └──────────────────────┘    & skills   └──────────────────────────────┘
-        draai openspec hier                       draai /opsx:* hier
+        voer openspec hier uit                   voer /opsx:* hier uit
 ```
 
-Merk de pijl op. Het uitvoeren van `openspec init` in je terminal is wat de slash commando's *installeert* in je AI-tool. De terminalhelft zet de chathelft op. Daarna gebeurt het dagelijkse werk grotendeels in de chat.
+Merk de pijl op. Het uitvoeren van `openspec init` in uw terminal is wat de slash-commando's in uw AI-tool *installeert*. De terminalhelft stelt de chathelft in. Daarna gebeurt het dagelijks besturen meestal in de chat.
 
-## "Hoe begin ik de interactieve modus?"
+## "Hoe start ik de interactieve modus?"
 
-**Er is geen aparte interactieve modus om te starten.** Deze vraag komt vaak voor, dus hij verdient een duidelijke antwoord.
+**Er is geen aparte interactieve modus om te starten.** Deze vraag komt vaak voor, dus het verdient een duidelijk antwoord.
 
-Je gaat niet in een speciale OpenSpec-modus. Je opent gewoon je AI-coderingassistent zoals je dat altijd doet en typt een slash commando in de chat. Het slash commando *is* hoe je "OpenSpec ingaat". Je assistent herkent het, laadt de bijbehorende OpenSpec skill en begint met het volgen van het workflow.
+U hoeft geen speciale OpenSpec-modus te openen. U opent gewoon uw AI-codeerassistent zoals u dat altijd doet, en typt een slash-commando in de chat. Het slash-commando *is* hoe u OpenSpec "opent". Uw assistent herkent het, laadt de bijbehorende OpenSpec-skill en begint de workflow te volgen.
 
-Dus de echte instructies zijn:
+Dus de werkelijke instructies zijn:
 
-1. Open je AI-coderingassistent (Claude Code, Cursor, Windsurf, enz.) in je project.
-2. Typ `/opsx:propose` in de chat ervan, op dezelfde plek als je elke andere aanvraagteintypt.
-3. Kijk naar de autocomplete: als OpenSpec is geïnstalleerd, zie je `/opsx:propose`, `/opsx:apply` en vrienden verschijnen terwijl je de slash typt.
+1. Open uw AI-codeerassistent (Claude Code, Cursor, Windsurf, enzovoort) in uw project.
+2. Typ `/opsx:propose` in de chat, dezelfde plaats waar u andere verzoeken typt.
+3. Kijk naar de automatische aanvulling: als OpenSpec is geïnstalleerd, zult u `/opsx:propose`, `/opsx:apply` en andere zien verschijnen terwijl u de slash typt.
 
-Dat is het. Geen modus om in te schakelen, geen daemon om op te starten, geen apart venster.
+Dat is het. Geen modus om te wisselen, geen daemon om te starten, geen apart venster.
 
-Eén ding dat daadwerkelijk interactief is, leeft in de terminal: `openspec view`. Het opent een dashboard voor het bekijken van je specificaties en wijzigingen. Maar dit is een weergave, niet het middel waarmee je proposeert en bouwt. Het bouwen gebeurt via slash commando's in de chat.
+Eén ding dat *echt* interactief is, bevindt zich in de terminal: `openspec view`. Het opent een dashboard om door uw specificaties en wijzigingen te bladeren. Maar dat is een viewer, niet hetgene waarmee u voorstellen doet en bouwt. Het bouwen gebeurt via slash-commando's in de chat.
 
 ## Waarom deze splitsing bestaat
 
-Het is de moeite waard om te begrijpen, want het verklaart waarom OpenSpec met 25+ verschillende AI-tools werkt.
+Het is de moeite waard om te begrijpen, omdat het uitlegt waarom OpenSpec met meer dan 25 verschillende AI-tools werkt.
 
-De CLI is de **motor**. Hij kent de regels: hoe een wijzigingsmap eruitziet, welke artefacten afhankelijk zijn van welke, hoe je een delta spec in je waarheidbron merget. Het is overal hetzelfde.
+De CLI is de **motor**. Het kent de regels: hoe een wijzigingsmap eruit ziet, welke artefacten van welke afhankelijk zijn, hoe een deltaspecificatie samen te voegen met uw bron van waarheid. Het is overal hetzelfde.
 
-De slash commando's zijn het **stuurwiel**, en elke AI-tool heeft een iets ander stuurwiel. Claude Code noemt ze commando's. Cursor en Windsurf hebben hun eigen formaten. Sommige tools noemen ze skills. Wanneer je `openspec init` uitvoert, genereert OpenSpec het juiste soort bestand voor elke tool die je hebt geselecteerd, zodat dezelfde `/opsx:propose`-intentie werkt, ongeacht welke assistent je verkiest.
+De slash-commando's zijn het **stuurwiel**, en elke AI-tool heeft een iets andere. Claude Code noemt ze commando's. Cursor en Windsurf hebben hun eigen formaten. Sommige tools noemen ze skills. Wanneer u `openspec init` uitvoert, genereert OpenSpec het juiste type bestand voor elke tool die u heeft geselecteerd, zodat dezelfde `/opsx:propose`-intentie werkt, ongeacht welke assistent u prefereert.
 
-De kracht van dit ontwerp: je leert de workflow één keer en draagt deze over naar verschillende tools. Het nadeel: de exacte syntax van een commando kan licht verschillen tussen tools, wat het volgende gedeelte betreft.
+De kracht van dit ontwerp: u leert de workflow één keer en kunt hem over tools heen meenemen. De afweging: de exacte syntaxis van een commando kan enigszins verschillen tussen tools, wat het volgende onderdeel is.
 
-## Syntax van de slash commando's per tool
+## Slash-commandosyntaxis per tool
 
-De intentie is overal identiek. De interpunctie verschilt. Gebruik het formaat dat overeenkomt met je assistent.
+De intentie is overal identiek. De interpunctie verschilt. Gebruik de vorm die overeenkomt met uw assistent.
 
-| Tool | Hoe je het typt |
+| Tool | Hoe u het typt |
 |------|-----------------|
 | Claude Code | `/opsx:propose`, `/opsx:apply` |
 | Cursor | `/opsx-propose`, `/opsx-apply` |
 | Windsurf | `/opsx-propose`, `/opsx-apply` |
 | GitHub Copilot (IDE) | `/opsx-propose`, `/opsx-apply` |
+| CodeArts | skill-stijl, bijv. `/openspec-propose` |
+| Codex | skill-stijl via `.codex/skills/openspec-*` |
+| Oh My Pi | `/opsx-propose`, `/opsx-apply` |
 | Kimi CLI | skill-stijl, bijv. `/skill:openspec-propose` |
-| Trae | skill-stijl, bijv. `/openspec-propose` |
+| Trae | `/opsx-propose`, `/opsx-apply` |
 
-De meeste tools gebruiken of het colon formaat (`/opsx:propose`) of het dash formaat (`/opsx-propose`). Een paar tools tonen OpenSpec als genaamde skills in plaats van slash commando's; voor die roep je de skill op met naam. De volledige lijst per tool, inclusief precies welke bestanden waar worden geschreven, staat in [Supported Tools](supported-tools.md).
+De meeste tools gebruiken ofwel de dubbelepuntvorm (`/opsx:propose`) of de streepjesvorm (`/opsx-propose`). Enkele tools presenteren OpenSpec als benoemde skills in plaats van slash-commando's; voor die roept u de skill op naam op. De volledige per-tool-lijst, inclusief precies welke bestanden waar worden weggeschreven, staat in [Supported Tools](supported-tools.md).
 
-Als je twijfelt, typ dan een slash in je AI chat en kijk naar de autocomplete. Je tool zal je het verwachte formaat laten zien.
+Bij twijfel, typ een slash in uw AI-chat en kijk naar de automatische aanvulling. Uw tool zal u de vorm tonen die het verwacht.
 
-## Hoe de commando's er zijn gekomen: skills en commands
+## Hoe de commando's daar kwamen: skills en commando's
 
-Wanneer je `openspec init` (of `openspec update`) uitvoert, schrijft OpenSpec kleine bestanden in je project zodat je AI-tool de workflow kan vinden. Afhankelijk van je tool en instellingen zijn dit **skills**, **commands** of beide.
+Wanneer u `openspec init` (of `openspec update`) uitvoert, schrijft OpenSpec kleine bestanden in uw project zodat uw AI-tool de workflow kan vinden. Afhankelijk van uw tool en instellingen zijn dit **skills**, **commands**, of beide.
 
-- **Skills** leven op plekken zoals `.claude/skills/openspec-*/SKILL.md`. Ze zijn de opkomende cross-tool standaard: een map met instructies die je assistent automatisch detecteert.
-- **Commands** leven op plekken zoals `.claude/commands/opsx/<id>.md`. Dit zijn de oudere per-tool slash commando's bestanden.
+- **Skills** bevinden zich op plaatsen zoals `.claude/skills/openspec-*/SKILL.md`. Zij zijn de opkomende cross-toolstandaard: een map met instructies die uw assistent automatisch detecteert.
+- **Commands** bevinden zich op plaatsen zoals `.claude/commands/opsx/<id>.md`. Het zijn de oudere per-tool slash-commandobestanden. Codex krijgt geen gegenereerde commandobestanden; gebruik `.codex/skills/openspec-*`.
 
-Je hoeft niet te weten welke je tool gebruikt. Je typt gewoon het slash commando en het werkt. Maar weten dat deze bestanden bestaan helpt als er iets misgaat: als je commando's verdwijnen, betekent dit meestal dat deze bestanden ontbreken of verouderd zijn, en `openspec update` genereert ze opnieuw.
+U hoeft u geen zorgen te maken welke uw tool gebruikt. U typt gewoon het slash-commando en het werkt. Maar weten dat deze bestanden bestaan helpt wanneer er iets misgaat: als uw commando's verdwijnen, betekent dit meestal dat deze bestanden ontbreken of verouderd zijn, en `openspec update` regenereert ze.
 
-Zie [Supported Tools](supported-tools.md) voor de exacte paden per tool, en [Migration Guide](migration-guide.md) voor hoe skills het oudere commando-alleen benadering hebben vervangen.
+Zie [Supported Tools](supported-tools.md) voor de exacte paden per tool, en [Migration Guide](migration-guide.md) voor hoe skills de oudere command-only aanpak hebben vervangen.
 
 ## Bevestigen dat het is geïnstalleerd
 
-Snelle controles, snelst eerst:
+Snelle controles, snelste eerst:
 
-1. **Typ een slash in je AI chat.** Begin met typen `/opsx` en kijk naar de autocomplete suggesties. Als ze verschijnen, ben je klaar.
-2. **Zoek naar de bestanden.** Voor Claude Code controleer je of `.claude/skills/` `openspec-*` mappen bevat. Andere tools gebruiken hun eigen mappen ([Supported Tools](supported-tools.md) vermeldt deze).
-3. **Voer de setup opnieuw uit.** Voer vanuit de root van je project `openspec update` uit. Dit genereert de skill- en commando'bestanden voor alle tools die je hebt geconfigureerd.
-4. **Start je assistent opnieuw op.** Veel tools scannen naar skills en commando's bij het opstarten, dus een nieuw venster kan de ontbrekende stap zijn.
+1. **Typ een slash in uw AI-chat.** Begin met het typen van `/opsx` en kijk naar suggesties voor automatische aanvulling. Als ze verschijnen, bent u klaar.
+2. **Zoek naar de bestanden.** Voor Claude Code, controleer of `.claude/skills/` `openspec-*` mappen bevat. Andere tools gebruiken hun eigen mappen ([Supported Tools](supported-tools.md) geeft ze weer).
+3. **Voer de installatie opnieuw uit.** Vanuit de hoofdmap van uw project, voer `openspec update` uit. Dit regenereert de skill- en commandobestanden voor de tools die u heeft geconfigureerd.
+4. **Herstart uw assistent.** Veel tools scannen bij het opstarten naar skills en commando's, dus een nieuw venster kan de ontbrekende stap zijn.
 
-## Welke commando's heb ik inmiddels?
+## Welke commando's heb ik eigenlijk?
 
-Standaard installeert OpenSpec de **core** set van slash commando's:
+Standaard installeert OpenSpec de **kern**set van slash-commando's:
 
-- `/opsx:explore`: denk door een idee met de AI voordat je een wijziging vastlegt (een geweldige eerste stap als je onzeker bent)
-- `/opsx:propose`: creëer een wijziging en stel alle planningsartefacten in één keer op
-- `/opsx:apply`: bouw de wijziging door het afwerken van de taaklijst
-- `/opsx:sync`: merge de spec-updates van een wijziging naar je hoofdspecs (meestal automatisch)
+- `/opsx:explore`: denk met de AI na over een idee voordat u zich vastlegt op een wijziging (geweldige eerste stap als u het niet zeker weet)
+- `/opsx:propose`: maak een wijziging en stel al zijn planningartefacten in één stap op
+- `/opsx:apply`: bouw de wijziging door zijn takenlijst af te werken
+- `/opsx:sync`: voeg de specificatie-updates van een wijziging samen met uw hoofdspecificaties (meestal automatisch)
 - `/opsx:archive`: voltooi een wijziging en archiveer deze
 
-Een goed standaardritme: `explore` wanneer je uitvindt wat je moet doen, dan `propose`, `apply`, `archive`. De [Explore First](explore.md) gids legt uit waarom die openingsstap loont.
+Een goed standaardritme: `explore` wanneer u uitzoekt wat u moet doen, daarna `propose`, `apply`, `archive`. De [Explore First](explore.md)-gids legt uit waarom die openingsstap zichzelf uitbetaalt.
 
-Er is ook een **uitgebreide** set voor mensen die fijnere controle willen (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`). Je schakelt deze in met `openspec config profile` en past deze toe met `openspec update`.
+Er is ook een **uitgebreide** set voor mensen die meer controle willen (`/opsx:new`, `/opsx:continue`, `/opsx:ff`, `/opsx:verify`, `/opsx:bulk-archive`, `/opsx:onboard`). U schakelt deze in met `openspec config profile`, en past deze vervolgens toe met `openspec update`.
 
-Nieuw in dit alles? `/opsx:onboard` (in de uitgebreide set) begeleidt je door een volledige wijziging op je eigen codebase, waarbij elke stap wordt verteld. Het is de vriendelijkste mogelijke introductie.
+Nieuw in dit alles? `/opsx:onboard` (in de uitgebreide set) leidt u door een volledige wijziging op uw eigen codebase, waarbij elke stap wordt uitgelegd. Het is de vriendelijkst mogelijke introductie.
 
-Voor wat elk commando doet in detail, zie [Commands](commands.md). Voor wanneer je welke moet gebruiken, zie [Workflows](workflows.md).
+Voor wat elk commando in detail doet, zie [Commands](commands.md). Voor wanneer u welk commando moet gebruiken, zie [Workflows](workflows.md).
 
-## Een schone eerste draai
+## Een schone eerste uitvoer
 
-Om het samen te vatten, hier is de volledige sequentie met elke stap gelabeld door waar deze plaatsvindt.
+Alles samengevat, hier is de hele reeks met elke stap gelabeld waar deze plaatsvindt.
 
 ```text
 TERMINAL   $ npm install -g @fission-ai/openspec@latest
 TERMINAL   $ cd your-project
 TERMINAL   $ openspec init
-              (installeert slash commando's in je AI tool)
+              (installeert slash-commando's in uw AI-tool)
 
 AI CHAT      /opsx:explore
-              (optioneel: denk eerst het idee door met de AI)
+              (optioneel: denk eerst met de AI na over het idee)
 
 AI CHAT      /opsx:propose add-dark-mode
               (AI stelt voorstel, specificaties, ontwerp en taken op)
 
 AI CHAT      /opsx:apply
-              (AI bouwt het, vinkt taken af)
+              (AI bouwt het, taken worden afgevinkt)
 
 AI CHAT      /opsx:archive
-              (wijziging wordt gemerged in je specs en gearchiveerd)
+              (wijziging wordt samengevoegd met uw specificaties en gearchiveerd)
 ```
 
-Twee terminalstappen om op te zetten. Daarna leef je in de chat. Dat is het ritme.
+Twee terminalstappen om in te stellen. Daarna leeft u in de chat. Dat is het ritme.
 
 ## Gerelateerd
 
-- [Getting Started](getting-started.md): de volledige walkthrough van de eerste wijziging
-- [Commands](commands.md): elk slash commando in detail
+- [Getting Started](getting-started.md): de volledige eerste-wijziging-walkthrough
+- [Commands](commands.md): elk slash-commando in detail
 - [CLI](cli.md): elk terminalcommando in detail
-- [Supported Tools](supported-tools.md): syntax en bestandslocaties per tool
+- [Supported Tools](supported-tools.md): syntaxis en bestandslocaties per tool
 - [FAQ](faq.md): meer snelle antwoorden
 - [Troubleshooting](troubleshooting.md): oplossingen wanneer commando's niet verschijnen

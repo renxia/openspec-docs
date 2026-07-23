@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: "OpenSpec"
-  text: "AI 助理的規格化開發"
-  tagline: 用於建構和管理 AI 助理專案的輕量級規範。
+  text: "AI 助理的規格驅動開發"
+  tagline: 一個輕量級規格，用於建構與管理 AI 助理專案。
   actions:
     - theme: brand
       text: 開始使用
@@ -14,118 +14,124 @@ hero:
       link: /
 
 features:
-  - title: 規格優先的工作流程 (Spec-First Workflow)
-    details: 在編寫程式碼之前定義需求。
-  - title: AI 原生設計 (AI-Native Design)
-    details: 為 Claude Code, Cursor, Windsurf 等工具而建構。
-  - title: 多語言支援 (Multi-Language)
-    details: 文件提供多種語言。
+  - title: 規格優先工作流程
+    details: 在撰寫程式碼之前先定義需求。
+  - title: AI 原生設計
+    details: 為 Claude Code、Cursor、Windsurf 等工具打造。
+  - title: 多語言支援
+    details: 提供多語言版本的文件。
 ---
 
-# OpenSpec 文件說明
+# OpenSpec 文件
 
-歡迎您。這是所有關於 OpenSpec 的資訊中心。
+歡迎來到 OpenSpec 的官方文件中心。
 
-OpenSpec 幫助您和您的 AI 編碼助理**在編寫任何程式碼之前就達成共識要做什麼**。您描述變更，AI 撰寫一份簡短的規格書和任務清單，雙方審閱同一份計畫，然後工作便可開始。再也不必在過程中發現 AI 做了錯誤的東西。
+OpenSpec 能幫助你與你的 AI 編程助理**在撰寫任何程式碼之前，先就「要建置什麼」達成共識**。你描述需求變更，AI 會起草一份簡短的規格書與任務清單，你們雙方共同審閱同一份計畫，之後再開始執行工作。再也不會有做到一半才發現 AI 建置出錯誤東西的情況發生。
 
-如果您只閱讀這兩頁：
+如果只打算讀兩頁，優先閱讀這兩份文件：
+1. [開始使用](getting-started.md)：安裝、初始化，並上線你的第一個變更。
+2. [指令運作方式](how-commands-work.md)：你實際輸入 `/opsx:propose` 的位置（提示：是在你的 AI 聊天視窗，而不是終端機）。幾乎每個新手都會在這裡卡關一次。
 
-1. [Getting Started](getting-started.md)：安裝、初始化並發布您的第一個變更。
-2. [How Commands Work](how-commands-work.md)：您實際輸入 `/opsx:propose` 的地方（提示：在 AI 聊天中，而不是在終端機）。這幾乎會讓所有人感到困惑一次。
+第二份文件的重要性遠超乎表面。OpenSpec 有兩大組成部分：一個是在終端機執行的命令列工具，另一個是傳送給 AI 助理的斜線指令。搞懂兩者的差異，能幫你避開最常見的困惑時刻。
 
-第二點比看起來更重要。OpenSpec 有兩個部分：一個您在終端機執行的指令列工具 (command line tool)，以及一套您提供給 AI 助理的斜線指令 (slash commands)。了解哪一個是什麼，可以避免最常見的混淆情況。
+> **最優先養成的好習慣：當你不確定要建置什麼時，先輸入 `/opsx:explore`。** 這是一個零風險的思考夥伴，會閱讀你的程式碼、權衡各種選項，在產出任何文件或程式碼之前，就把模糊的想法打磨成具體的計畫。[先探索](explore.md) 指南會詳細說明原因。
 
-> **第一個應該養成的好習慣：當您不確定要做什麼時，請從 `/opsx:explore` 開始。** 這是一個零風險的思考夥伴，它會閱讀您的程式碼、權衡選項，並在任何產物或程式碼存在之前，將模糊的想法磨練成具體的計畫。[Explore First](explore.md) 指南提供了論證基礎。
+## 選擇適合你的路徑
 
-## 選擇您的路徑
+**我是完全的新手。** 先閱讀[開始使用](getting-started.md)，再快速瀏覽[核心概念一覽](overview.md)。遇到看不懂的地方，可以隨時查閱[常見問題](faq.md)與[術語表](glossary.md)。
 
-**我完全新手。** 從 [Getting Started](getting-started.md) 開始，然後瀏覽一下 [Core Concepts at a Glance](overview.md)。當您感到困惑時，[FAQ](faq.md) 和 [Glossary](glossary.md) 就在附近。
+**我有問題但還沒有具體計畫。** 這是常見的情況，有專門的解法：[先探索](explore.md)。在投入任何實作之前，先用 `/opsx:explore` 和 AI 一起把問題想清楚。
 
-**我有問題但沒有計畫。** 這是常見的情況，並有專門的解答：[Explore First](explore.md)。使用 `/opsx:explore` 與 AI 一起思考，而不是倉促承諾任何事情。
+**我有一個龐大的現有程式碼庫。** 你不需要把所有東西都文件化。[在現有專案中使用 OpenSpec](existing-projects.md) 會說明如何在真實的舊有程式碼上開始導入，不用大動干戈。
 
-**我有一個大型現有的程式碼庫 (codebase)。** 您不需要都做文件記錄。[Using OpenSpec in an Existing Project](existing-projects.md) 說明如何在不「把海洋煮沸」的情況下，對真實的、已存在的專案進行開端採用。
+**我只要先讓它跑起來。** 先[安裝](installation.md)，執行 `openspec init`，再閱讀[指令運作方式](how-commands-work.md)，確保你的第一個斜線指令輸入到正確的位置。
 
-**我只想讓它跑起來。** [Install](installation.md)，運行 `openspec init`，然後閱讀 [How Commands Work](how-commands-work.md)，確保您的第一個斜線指令出現在正確的地方。
+**我透過範例學習。** [範例與實用技巧](examples.md) 頁面會從頭到尾走一遍真實的變更流程：小型功能、錯誤修復、重構、探索任務。
 
-**我透過範例學習。** [Examples & Recipes](examples.md) 頁面會完整地帶領您完成從頭到尾的真實變更：一個小型功能、一個錯誤修復、一次重構，或是一次探索。
+**AI 剛起草了一份計畫——接下來要做什麼？** 先讀它。[審閱變更](reviewing-changes.md) 說明如何在兩分鐘內快速檢查，在成本還很低的時候抓出錯誤方向，而[撰寫優質規格書](writing-specs.md) 則說明一份值得批准的計畫該包含什麼內容。
 
-**我來自舊的工作流程。** [Migration Guide](migration-guide.md) 解釋了哪些地方發生了變化以及原因，並保證您的現有工作是安全的。
+**我在團隊中工作。** [團隊中的 OpenSpec](team-workflow.md) 說明變更如何對應到分支與提取要求，以及團隊成員如何在程式碼撰寫前審閱計畫。
 
-**我想讓它符合我的團隊流程。** [Customization](customization.md) 涵蓋專案配置、自定義 Schema 和共享上下文。
+**我原本使用舊的工作流程。** [移轉指南](migration-guide.md) 會說明改了什麼、為什麼改，並保證你現有的工作都不會受影響。
 
-**某個東西壞了。** [Troubleshooting](troubleshooting.md) 收集了人們實際遇到的故障，並提供了修復方法。
+**我想調整它以符合團隊的流程。** [自訂設定](customization.md) 涵蓋專案設定、自訂結構描述，以及共享上下文。
 
-## 完整地圖 (The whole map)
+**遇到問題了。** [疑難排解](troubleshooting.md) 整理了大家實際遇到的錯誤，並提供修復方法。
+
+## 完整文件地圖
 
 ### 從這裡開始
 
-| 文件 | 它能給您什麼？ |
+| 文件 | 內容說明 |
 |-----|-------------------|
-| [Getting Started](getting-started.md) | 安裝、初始化並端到端執行您的第一個變更 |
-| [Explore First](explore.md) | 使用 `/opsx:explore` 在承諾之前思考一個想法 |
-| [How Commands Work](how-commands-work.md) | 斜線指令在哪裡運行，什麼是「互動模式」，終端機與聊天室的區別 |
-| [Core Concepts at a Glance](overview.md) | 一頁式的心智模型：規格、變更、差量 (deltas)、歸檔 (archive) |
-| [Installation](installation.md) | npm, pnpm, yarn, bun, Nix 以及如何驗證它是否正常運作 |
+| [開始使用](getting-started.md) | 安裝、初始化，並從頭到尾執行你的第一個變更 |
+| [先探索](explore.md) | 在投入實作前，用 `/opsx:explore` 把想法想清楚 |
+| [指令運作方式](how-commands-work.md) | 斜線指令的執行位置、「互動模式」的意義，以及終端機與聊天的差異 |
+| [核心概念一覽](overview.md) | 一整頁的完整心智模型：規格書、變更、差異、封存 |
+| [安裝](installation.md) | 支援 npm、pnpm、yarn、bun、Nix，以及如何驗證安裝成功 |
 
 ### 日常使用
 
-| 文件 | 它能給您什麼？ |
+| 文件 | 內容說明 |
 |-----|-------------------|
-| [Workflows](workflows.md) | 常見的模式以及何時該使用哪個指令 |
-| [Examples & Recipes](examples.md) | 完整的真實變更流程，可複製貼上 |
-| [Using OpenSpec in an Existing Project](existing-projects.md) | 在大型現有程式碼庫上採用 OpenSpec |
-| [Editing & Iterating on a Change](editing-changes.md) | 更新產物、回溯、協調手動編輯的變更 |
-| [Commands](commands.md) | 所有 `/opsx:*` 斜線指令的參考資料 |
-| [CLI](cli.md) | 所有 `openspec` 終端機指令的參考資料 |
+| [工作流程](workflows.md) | 常見模式，以及何時該使用哪個指令 |
+| [範例與實用技巧](examples.md) | 真實變更的完整逐步解說，可直接複製貼上使用 |
+| [撰寫優質規格書](writing-specs.md) | 強健的需求與場景長什麼樣子，以及如何調整變更的合適大小 |
+| [審閱變更](reviewing-changes.md) | 在撰寫任何程式碼前，對起草的計畫進行兩分鐘快速檢查 |
+| [團隊中的 OpenSpec](team-workflow.md) | 變更如何對應到分支、提取要求與審核流程 |
+| [在現有專案中使用 OpenSpec](existing-projects.md) | 在大型舊有程式碼庫中導入 OpenSpec 的方法 |
+| [編輯與反覆調整變更](editing-changes.md) | 更新產出物、退回修改、協調手動編輯的內容 |
+| [指令](commands.md) | 所有 `/opsx:*` 斜線指令的參考文件 |
+| [CLI](cli.md) | 所有 `openspec` 終端機指令的參考文件 |
 
 ### 深入理解
 
-| 文件 | 它能給您什麼？ |
+| 文件 | 內容說明 |
 |-----|-------------------|
-| [Concepts](concepts.md) | 對規格、變更、產物 (artifacts)、Schema 和歸檔的長篇解釋 |
-| [OPSX Workflow](opsx.md) | 為什麼這個工作流程是流動而非階段鎖定的，以及架構深度解析 |
-| [Glossary](glossary.md) | 所有術語的定義集中地 |
+| [概念](concepts.md) | 關於規格書、變更、產出物、結構描述、封存的長篇解說 |
+| [OPSX 工作流程](opsx.md) | 說明工作流程為何是流動式而非階段鎖定式，以及架構深度解析 |
+| [術語表](glossary.md) | 所有術語的集中定義 |
 
-### 使它屬於您自己
+### 自訂調整
 
-| 文件 | 它能給您什麼？ |
+| 文件 | 內容說明 |
 |-----|-------------------|
-| [Customization](customization.md) | 專案配置、自定義 Schema 和共享上下文 |
-| [Multi-Language](multi-language.md) | 生成非英文語言的產物 |
-| [Supported Tools](supported-tools.md) | OpenSpec 集成的 25+ 種 AI 工具，以及檔案存放的位置 |
+| [自訂設定](customization.md) | 專案設定、自訂結構描述、共享上下文 |
+| [多語言支援](multi-language.md) | 產生非英語的產出物 |
+| [支援工具](supported-tools.md) | OpenSpec 整合的 25 種以上 AI 工具，以及檔案儲存位置 |
 
-### 需要幫助時
+### 需要協助時
 
-| 文件 | 它能給您什麼？ |
+| 文件 | 內容說明 |
 |-----|-------------------|
-| [FAQ](faq.md) | 對人們最常問問題的快速解答 |
-| [Troubleshooting](troubleshooting.md) | 對具體故障的具體修復方案 |
-| [Migration Guide](migration-guide.md) | 從舊版工作流程遷移到 OPSX |
+| [常見問題](faq.md) | 大家最常提問的問題的快速解答 |
+| [疑難排解](troubleshooting.md) | 具體錯誤對應的具體修復方法 |
+| [移轉指南](migration-guide.md) | 從舊版工作流程移轉到 OPSX 的說明 |
 
-### 跨 Repo 協調 (Beta)
+### 跨儲存庫協作（beta 版）
 
-| 文件 | 它能給您什麼？ |
+| 文件 | 內容說明 |
 |-----|-------------------|
-| [Stores: User Guide](stores-beta/user-guide.md) | 當您的工作跨越多個 Repo 或團隊時的規劃指南 |
-| [Agent Contract](agent-contract.md) | 機器可讀取的 CLI 介面所驅動的代理 (agents) 合約 |
+| [Stores：使用者指南](stores-beta/user-guide.md) | 當你的工作橫跨多個儲存庫或團隊時，將計畫放在獨立的儲存庫中 |
+| [代理程式合約](agent-contract.md) | 代理程式驅動的機器可讀 CLI 介面 |
 
-## 三十秒速覽
+## 三十秒快速版
 
 ```text
-1. Install        npm install -g @fission-ai/openspec@latest
-2. Initialize     cd your-project && openspec init
-3. Explore        (in your AI chat)  /opsx:explore           ← 可選，但是一個很好的習慣
-4. Propose        (in your AI chat)  /opsx:propose add-dark-mode
-5. Build          (in your AI chat)  /opsx:apply
-6. Archive        (in your AI chat)  /opsx:archive
+1. 安裝        npm install -g @fission-ai/openspec@latest
+2. 初始化     cd your-project && openspec init
+3. 探索        (在你的 AI 聊天視窗)  /opsx:explore           ← 選用，但是非常值得養成的好習慣
+4. 提案        (在你的 AI 聊天視窗)  /opsx:propose add-dark-mode
+5. 建置        (在你的 AI 聊天視窗)  /opsx:apply
+6. 封存        (在你的 AI 聊天視窗)  /opsx:archive
 ```
 
-步驟 1 和 2 在您的終端機上完成。其餘的步驟在您的 AI 助理聊天室中完成。這是一個值得記住的分界點，而 [How Commands Work](how-commands-work.md) 會詳細解釋原因。步驟 3 是可選的，但當您不確定時從 `/opsx:explore` 開始是最有價值養成的一個習慣。
+第 1 和 2 步在你的終端機執行，其餘步驟在你的 AI 助理聊天視窗執行。這個區分是唯一值得記住的要點，[指令運作方式](how-commands-work.md) 會詳細說明原因。第 3 步是選用的，但當你不確定時先輸入 `/opsx:explore`，是最值得養成的好習慣。
 
-## 其他尋求幫助的地方
+## 其他協助管道
 
-- **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) 用於提問、分享想法和尋求協助。
-- **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) 用於報告錯誤和功能請求。
-- **`openspec feedback "your message"`** 可直接從您的終端機發送回饋（它會開啟一個 GitHub issue）。
+- **Discord：** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC) 用於提問、分享想法與尋求協助。
+- **GitHub Issues：** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues) 用於回報錯誤與功能需求。
+- 執行 `openspec feedback "你的訊息"` 可直接從終端機傳送反饋（會自動開啟一個 GitHub Issue）。
 
-在這些文件中發現任何不正確、過時或令人困惑的地方嗎？這就是一個 Bug。請開立一個 Issue 或 PR。文件改進是您可以做出的最有價值貢獻之一。
+如果在這些文件中發現錯誤、過時或令人困惑的內容，那就是一個 bug。請開啟 Issue 或 PR。文件改進是你所能做出的最有價值的貢獻之一。

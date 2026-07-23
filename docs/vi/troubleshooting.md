@@ -1,166 +1,168 @@
-# Khắc phục sự cố (Troubleshooting)
+# Khắc phục sự cố
 
-Những giải pháp cụ thể cho các vấn đề cụ thể. Mỗi mục đều nêu tên một triệu chứng, giải thích nguyên nhân có khả năng xảy ra trong một câu và đưa ra cách khắc phục. Nếu bạn không tìm thấy vấn đề của mình ở đây, [FAQ](faq.md) có thể giúp ích, còn [Discord](https://discord.gg/YctCnvvshC) chắc chắn sẽ giúp được.
+Các giải pháp khắc phục cụ thể cho các vấn đề cụ thể. Mỗi mục nêu ra triệu chứng, giải thích nguyên nhân có thể trong một câu và đưa ra cách khắc phục cho bạn. Nếu bạn không thấy vấn đề của mình ở đây, tài liệu [FAQ](faq.md) có thể giúp ích, và cộng đồng [Discord](https://discord.gg/YctCnvvshC) chắc chắn sẽ hỗ trợ.
 
-## Cài đặt và thiết lập (Installation and setup)
+## Cài đặt và thiết lập
 
 ### `openspec: command not found`
 
-CLI chưa được cài đặt, hoặc shell của bạn không tìm thấy nó. Hãy cài đặt nó toàn cục (globally) và kiểm tra:
+CLI chưa được cài đặt, hoặc shell của bạn không tìm thấy nó. Hãy cài đặt toàn cục và kiểm tra:
 
 ```bash
 npm install -g @fission-ai/openspec@latest
 openspec --version
 ```
 
-Nếu nó đã được cài đặt nhưng vẫn không tìm thấy, thì thư mục bin npm toàn cục của bạn có lẽ chưa nằm trong `PATH`. Chạy `npm bin -g` để xem các binary toàn cục nằm ở đâu và đảm bảo rằng đường dẫn đó có trong profile shell của bạn.
+Nếu đã cài đặt nhưng vẫn không tìm thấy, có thể thư mục bin npm toàn cục của bạn không nằm trong `PATH` của hệ thống. Chạy lệnh `npm bin -g` để xem vị trí lưu trữ các tệp nhị phân toàn cục, và đảm bảo đường dẫn đó đã được thêm vào tệp cấu hình shell của bạn.
 
 ### "Requires Node.js 20.19.0 or higher"
 
-OpenSpec chạy trên Node 20.19.0+. Hãy kiểm tra phiên bản của bạn và nâng cấp nếu cần:
+OpenSpec chạy trên Node phiên bản 20.19.0 trở lên. Kiểm tra phiên bản của bạn và nâng cấp nếu cần:
 
 ```bash
 node --version
 ```
 
-Nếu bạn sử dụng bun để cài đặt OpenSpec, hãy lưu ý rằng OpenSpec vẫn *chạy* trên Node, vì vậy bạn cần có sẵn Node 20.19.0+ trong `PATH` bất kể thế nào. Xem [Installation](installation.md).
+Nếu bạn dùng bun để cài đặt OpenSpec, lưu ý rằng OpenSpec vẫn *chạy* trên Node, vì vậy bạn vẫn cần có Node 20.19.0 trở lên có sẵn trong `PATH` bất kể công cụ cài đặt. Xem thêm tài liệu [Installation](installation.md).
 
-### `openspec init` không cấu hình công cụ AI của tôi
+### `openspec init` didn't configure my AI tool
 
-Init sẽ hỏi những công cụ nào cần được thiết lập. Nếu bạn bỏ qua công cụ của mình hoặc muốn thêm một công cụ khác, chỉ cần chạy lại nó, hoặc sử dụng dạng không tương tác (non-interactive):
+Lệnh init sẽ hỏi bạn muốn thiết lập những công cụ nào. Nếu bạn bỏ qua công cụ của mình hoặc muốn thêm công cụ khác, chỉ cần chạy lệnh này lại, hoặc dùng phiên bản không tương tác:
 
 ```bash
 openspec init --tools claude,cursor
 ```
 
-Danh sách đầy đủ các ID công cụ nằm trong [Supported Tools](supported-tools.md). Sử dụng `--tools all` cho tất cả, `--tools none` để bỏ qua thiết lập công cụ.
+Danh sách đầy đủ ID công cụ được liệt kê trong tài liệu [Supported Tools](supported-tools.md). Dùng `--tools all` để thiết lập tất cả công cụ, `--tools none` để bỏ qua toàn bộ thiết lập công cụ.
 
-## Các lệnh không hiển thị (Commands don't show up)
+## Các lệnh không hiển thị
 
-Nếu `/opsx:propose` (hoặc công cụ tương đương của bạn) không xuất hiện hoặc không làm gì cả, hãy xem qua danh sách này. Chúng được sắp xếp theo thứ tự kiểm tra nhanh nhất trước.
+Nếu lệnh `/opsx:propose` (hoặc lệnh tương ứng của công cụ bạn dùng) không xuất hiện hoặc không hoạt động, hãy kiểm tra theo danh sách dưới đây. Các mục được sắp xếp theo thứ tự kiểm tra nhanh nhất trước.
 
-1. **Bạn có thể đang ở sai nơi.** Các lệnh slash (slash commands) phải được sử dụng trong cửa sổ chat của trợ lý AI, chứ không phải trong terminal. Nếu bạn gõ `/opsx:propose` vào shell, đó là vấn đề. Xem [How Commands Work](how-commands-work.md).
+1. **Bạn có thể đang ở sai nơi.** Các lệnh slash được dùng trong cửa sổ trò chuyện của trợ lý AI, không phải trong terminal. Nếu bạn gõ `/opsx:propose` vào shell, đó chính là nguyên nhân của vấn đề. Xem thêm tài liệu [How Commands Work](how-commands-work.md).
 
-2. **Tạo lại các tệp tin.** Từ thư mục gốc dự án của bạn:
+2. **Tạo lại các tệp.** Từ thư mục gốc của dự án của bạn:
 
    ```bash
    openspec update
    ```
 
-   Thao tác này sẽ ghi đè (rewrites) các tệp kỹ năng (skill) và lệnh cho mọi công cụ mà bạn đã cấu hình.
+   Lệnh này sẽ ghi đè các tệp kỹ năng và lệnh cho tất cả các công cụ bạn đã cấu hình.
 
-3. **Khởi động lại trợ lý của bạn.** Hầu hết các công cụ đều quét tìm kiếm các kỹ năng và lệnh khi khởi động. Một cửa sổ mới thường sẽ thực hiện việc này.
+3. **Khởi động lại trợ lý của bạn.** Hầu hết các công cụ sẽ quét tìm kỹ năng và lệnh khi khởi động. Mở một cửa sổ mới thường sẽ giải quyết được vấn đề.
 
-4. **Xác nhận rằng các tệp tin tồn tại.** Đối với Claude Code, hãy kiểm tra xem `.claude/skills/` có chứa các thư mục `openspec-*` hay không. Các công cụ khác sử dụng các thư mục riêng của chúng, tất cả đều được liệt kê trong [Supported Tools](supported-tools.md).
+4. **Xác nhận các tệp tồn tại.** Đối với Claude Code, hãy kiểm tra thư mục `.claude/skills/` có chứa các thư mục `openspec-*` hay không. Các công cụ khác sử dụng thư mục riêng, tất cả đều được liệt kê trong tài liệu [Supported Tools](supported-tools.md).
 
-5. **Xác nhận rằng bạn đã khởi tạo dự án này.** Kỹ năng (Skills) được viết theo từng dự án. Nếu bạn clone một repo hoặc chuyển đổi thư mục, hãy chạy `openspec init` (hoặc `openspec update`) tại đó.
+5. **Kiểm tra xem bạn đã khởi tạo dự án này chưa.** Các kỹ năng được ghi theo từng dự án. Nếu bạn vừa nhân bản một kho lưu trữ hoặc vừa chuyển sang thư mục khác, hãy chạy lệnh `openspec init` (hoặc `openspec update`) ở thư mục dự án đó.
 
-6. **Xác nhận công cụ của bạn hỗ trợ các tệp lệnh.** Một vài công cụ (Kimi CLI, Trae, ForgeCode, Mistral Vibe) không tạo ra các tệp lệnh `opsx-*`; chúng sử dụng việc gọi dựa trên kỹ năng (skill-based invocations) thay vào đó. Các dạng thức khác nhau cho từng công cụ: xem [Supported Tools](supported-tools.md) và [How Commands Work](how-commands-work.md#slash-command-syntax-by-tool).
+6. **Xác nhận công cụ của bạn hỗ trợ tệp lệnh.** Codex và một số công cụ khác (CodeArts, Kimi CLI, ForgeCode, Mistral Vibe) không được tạo tệp lệnh `opsx-*`; thay vào đó chúng sử dụng cách gọi dựa trên kỹ năng. Đối với Codex, hãy kiểm tra thư mục `.codex/skills/openspec-*`. Cú pháp lệnh khác nhau tùy theo công cụ: xem thêm tài liệu [Supported Tools](supported-tools.md) và [How Commands Work](how-commands-work.md#slash-command-syntax-by-tool).
 
-## Làm việc với các thay đổi (Working with changes)
+## Làm việc với các thay đổi
 
-### "Change not found" (Không tìm thấy thay đổi)
+### "Change not found"
 
-Lệnh không thể cho biết bạn muốn nói về thay đổi nào. Hãy đặt tên nó một cách rõ ràng, hoặc kiểm tra những gì đang tồn tại:
+Lệnh không thể xác định bạn đang đề cập đến thay đổi nào. Hãy đặt tên rõ ràng cho thay đổi, hoặc kiểm tra các thay đổi hiện có:
 
 ```bash
-openspec list                    # xem các thay đổi đang hoạt động
-/opsx:apply add-dark-mode        # đặt tên thay đổi trong chat
+openspec list                    # see active changes
+/opsx:apply add-dark-mode        # name the change in chat
 ```
 
-Hãy xác nhận thêm rằng bạn đang ở đúng thư mục dự án.
+Đồng thời hãy xác nhận bạn đang ở trong thư mục dự án chính xác.
 
-### "No artifacts ready" (Không có artifact nào sẵn sàng)
+### "No artifacts ready"
 
-Mọi artifact đều đã được tạo hoặc đang bị chặn chờ một dependency. Hãy xem cái gì đang chặn:
+Mỗi artifact đều đã được tạo hoặc bị chặn do chờ phụ thuộc. Hãy kiểm tra thứ gì đang chặn:
 
 ```bash
 openspec status --change <name>
 ```
 
-Sau đó hãy tạo dependency còn thiếu trước. Hãy nhớ thứ tự: đề xuất (proposal) cho phép các spec và thiết kế; spec và thiết kế cùng nhau cho phép các tác vụ (tasks).
+Sau đó hãy tạo phụ thuộc còn thiếu trước. Ghi nhớ thứ tự: proposal cho phép tạo specs và design; specs và design cùng nhau cho phép tạo tasks.
 
-### `openspec validate` báo cáo cảnh báo hoặc lỗi
+### `openspec validate` reports warnings or errors
 
-Validation kiểm tra các spec và thay đổi của bạn để tìm các vấn đề cấu trúc. Hãy đọc thông báo: nó nêu tên tệp và vấn đề.
+Lệnh validate kiểm tra các specs và thay đổi của bạn xem có vấn đề về cấu trúc hay không. Đọc thông báo lỗi: nó sẽ nêu rõ tệp và vấn đề cụ thể.
 
 ```bash
-openspec validate <name>           # xác thực một mục
-openspec validate --all            # xác thực tất cả
-openspec validate --all --strict   # kiểm tra nghiêm ngặt hơn, tốt cho CI
+openspec validate <name>           # validate one item
+openspec validate --all            # validate everything
+openspec validate --all --strict   # stricter checks, good for CI
 ```
 
-Nguyên nhân phổ biến là thiếu một phần bắt buộc (ví dụ: spec không có kịch bản nào) hoặc tiêu đề delta bị lỗi. Hãy sửa tệp và chạy lại. [CLI reference](cli.md#openspec-validate) tài liệu hóa định dạng đầu ra.
+Nguyên nhân phổ biến là thiếu phần bắt buộc (ví dụ specs không có scenarios) hoặc tiêu đề delta bị định dạng sai. Sửa tệp và chạy lại lệnh. Tài liệu [CLI reference](cli.md#openspec-validate) ghi rõ định dạng đầu ra.
 
-### AI tạo ra các artifact không hoàn chỉnh hoặc sai
+### The AI created incomplete or wrong artifacts
 
-AI không có đủ ngữ cảnh (context). Một vài cách sau sẽ giúp ích:
+AI không có đủ ngữ cảnh. Một số tùy chọn sau có thể giúp:
 
-- Thêm ngữ cảnh dự án vào `openspec/config.yaml` để ngăn xếp (stack) và quy ước của bạn được đưa vào mọi yêu cầu. Xem [Customization](customization.md#project-configuration).
-- Thêm `rules:` cho từng artifact để hướng dẫn chỉ áp dụng cho, ví dụ, các spec.
-- Cung cấp mô tả chi tiết hơn khi bạn đề xuất (propose).
-- Sử dụng `/opsx:continue` mở rộng để tạo một artifact tại một thời điểm và xem xét từng cái, thay vì để `/opsx:ff` làm tất cả cùng một lúc.
+- Thêm ngữ cảnh dự án trong `openspec/config.yaml` để ngăn xếp và quy ước của dự án được đưa vào mọi yêu cầu. Xem thêm tài liệu [Customization](customization.md#project-configuration).
+- Thêm thuộc tính `rules:` cho từng artifact để đưa ra hướng dẫn chỉ áp dụng cho, ví dụ, specs.
+- Đưa ra mô tả chi tiết hơn khi bạn tạo proposal.
+- Dùng lệnh mở rộng `/opsx:continue` để tạo từng artifact một và xem xét từng cái, thay vì dùng `/opsx:ff` để tạo tất cả cùng lúc.
 
-### Archive không hoàn thành, hoặc cảnh báo về các tác vụ chưa hoàn thành
+### Archive won't finish, or warns about incomplete tasks
 
-Archive sẽ không *bị chặn* bởi các tác vụ chưa hoàn thành, nhưng nó cảnh báo bạn, bởi vì lưu trữ (archiving) thường có nghĩa là công việc đã hoàn thành. Nếu các tác vụ vẫn còn tồn tại một cách cố ý (bạn đang nộp một thay đổi một phần), hãy tiếp tục. Ngược lại, hãy hoàn thành các tác vụ trước. Archive cũng sẽ đề nghị đồng bộ hóa delta specs của bạn vào main specs nếu bạn chưa đồng bộ; hãy trả lời có trừ khi bạn có lý do không nên.
+Lệnh archive sẽ không *chặn* các tasks chưa hoàn thành, nhưng sẽ cảnh báo bạn, vì lưu trữ thường có nghĩa là công việc đã hoàn thành. Nếu các tasks còn lại là cố ý (bạn đang nộp một thay đổi một phần), hãy tiếp tục. Nếu không, hãy hoàn thành các tasks trước. Lệnh lưu trữ cũng sẽ đề nghị đồng bộ hóa các delta specs của bạn vào specs chính nếu bạn chưa đồng bộ; hãy đồng ý trừ khi bạn có lý do không nên làm vậy.
 
-## Cấu hình (Configuration)
+## Cấu hình
 
-### `config.yaml` của tôi không được áp dụng
+### My `config.yaml` isn't being applied
 
-Ba nghi phạm thông thường:
+Ba nguyên nhân phổ biến:
 
-1. **Tên tệp sai.** Nó phải là `openspec/config.yaml`, chứ không phải `.yml`.
-2. **YAML không hợp lệ.** Hãy chạy nó qua bất kỳ trình xác thực YAML nào; CLI cũng báo cáo các lỗi cú pháp cùng với số dòng.
-3. **Bạn mong đợi một lần khởi động lại.** Bạn không cần. Các thay đổi cấu hình có hiệu lực ngay lập tức.
+1. **Tên tệp sai.** Tên tệp phải là `openspec/config.yaml`, không phải `.yml`.
+2. **Tệp YAML không hợp lệ.** Chạy tệp qua bất kỳ công cụ kiểm tra tính hợp lệ YAML nào; CLI cũng sẽ báo cáo lỗi cú pháp kèm số dòng.
+3. **Bạn nghĩ cần khởi động lại.** Bạn không cần làm vậy. Các thay đổi cấu hình sẽ có hiệu lực ngay lập tức.
 
-### "Unknown artifact ID in rules: X" (ID artifact không xác định trong rules: X)
+### "Unknown artifact ID in rules: X"
 
-Một khóa dưới `rules:` không khớp với bất kỳ artifact nào trong schema của bạn. Đối với schema mặc định `spec-driven`, các ID hợp lệ là `proposal`, `specs`, `design`, `tasks`. Để xem các ID cho bất kỳ schema nào:
+Khóa trong phần `rules:` không khớp với bất kỳ artifact nào trong schema của bạn. Đối với schema mặc định `spec-driven`, các ID hợp lệ là `proposal`, `specs`, `design`, `tasks`. Để xem các ID của bất kỳ schema nào:
 
 ```bash
 openspec schemas --json
 ```
 
-### "Context too large" (Ngữ cảnh quá lớn)
+### "Context too large"
 
-Trường `context:` bị giới hạn ở mức 50KB, cố ý như vậy, vì nó được đưa vào mọi yêu cầu. Hãy tóm tắt nó, hoặc liên kết ra các tài liệu dài hơn thay vì dán chúng vào. Ngữ cảnh gọn gàng cũng tạo ra kết quả tốt hơn và nhanh hơn.
+Trường `context:` được giới hạn ở 50KB có chủ ý, vì nó được đưa vào mọi yêu cầu. Hãy tóm tắt nội dung, hoặc liên kết đến các tài liệu dài hơn thay vì dán toàn bộ nội dung vào. Ngữ cảnh ngắn gọn cũng giúp tạo ra kết quả tốt hơn, nhanh hơn.
 
-### "Schema not found" (Không tìm thấy schema)
+### "Schema not found"
 
-Tên schema bạn tham chiếu không tồn tại. Liệt kê những gì có sẵn và kiểm tra chính tả:
+Tên schema bạn tham chiếu không tồn tại. Liệt kê các schema có sẵn và kiểm tra chính tả:
 
 ```bash
-openspec schemas                    # liệt kê các schema có sẵn
-openspec schema which <name>        # xem một schema được giải quyết từ đâu
-openspec schema init <name>         # tạo một cái tùy chỉnh
+openspec schemas                    # list available schemas
+openspec schema which <name>        # see where a schema resolves from
+openspec schema init <name>         # create a custom one
 ```
 
-Xem [Customization](customization.md#custom-schemas).
+Xem thêm tài liệu [Customization](customization.md#custom-schemas).
 
-## Di chuyển đổi từ quy trình cũ (Migration from the legacy workflow)
+## Di chuyển từ quy trình làm việc cũ
 
-### "Legacy files detected in non-interactive mode" (Phát hiện tệp cũ ở chế độ không tương tác)
+### "Legacy files detected in non-interactive mode"
 
-Bạn đang trong CI hoặc một shell không tương tác, và OpenSpec đã tìm thấy các tệp cũ để dọn dẹp nhưng không thể nhắc bạn. Hãy phê duyệt tự động:
+Bạn đang ở trong môi trường CI hoặc shell không tương tác, và OpenSpec tìm thấy các tệp cũ cần dọn dẹp nhưng không thể hỏi bạn. Hãy phê duyệt tự động:
 
 ```bash
 openspec init --force
 ```
 
-### Các lệnh không xuất hiện sau khi di chuyển đổi
+Đối với Codex, OpenSpec có thể phát hiện các tệp nhắc cũ được quản lý trong `$CODEX_HOME/prompts` hoặc `~/.codex/prompts`. Việc dọn dẹp này chỉ giới hạn ở các tệp nhắc Codex cũ nằm trong danh sách cho phép của OpenSpec, và lệnh `openspec init` không tương tác chỉ xóa các tệp có tệp kỹ năng thay thế `.codex/skills/openspec-*` tương ứng. Lệnh `openspec update` không tương tác sẽ giữ nguyên tất cả việc dọn dẹp tệp cũ trừ khi bạn thêm tham số `--force`.
 
-Khởi động lại IDE của bạn. Kỹ năng được phát hiện khi khởi động. Nếu chúng vẫn không xuất hiện, hãy chạy `openspec update` và kiểm tra vị trí tệp trong [Supported Tools](supported-tools.md).
+### Commands didn't appear after migrating
 
-### `project.md` cũ của tôi đã không được di chuyển đổi
+Khởi động lại IDE của bạn. Các kỹ năng được phát hiện khi khởi động. Nếu chúng vẫn không xuất hiện, hãy chạy lệnh `openspec update` và kiểm tra vị trí các tệp trong tài liệu [Supported Tools](supported-tools.md).
 
-Điều đó là có chủ ý. OpenSpec không bao giờ tự động xóa `project.md` vì nó có thể chứa ngữ cảnh mà bạn đã viết. Hãy chuyển các phần hữu ích vào mục `context:` của `config.yaml`, sau đó tự mình xóa nó. [Migration Guide](migration-guide.md#migrating-projectmd-to-configyaml) hướng dẫn chi tiết về việc này, bao gồm cả một lời nhắc (prompt) bạn có thể đưa cho AI để chắt lọc.
+### My old `project.md` wasn't migrated
 
-## Vẫn bị mắc kẹt? (Still stuck?)
+Đó là hành vi cố ý. OpenSpec không bao giờ xóa tệp `project.md` tự động vì tệp này có thể chứa ngữ cảnh bạn đã viết. Hãy di chuyển các phần hữu ích vào phần `context:` của tệp `config.yaml`, sau đó tự xóa tệp này. [Hướng dẫn di chuyển](migration-guide.md#migrating-projectmd-to-configyaml) sẽ hướng dẫn bạn thực hiện việc này, kèm theo một lời nhắc bạn có thể đưa cho AI để thực hiện việc tóm tắt nội dung.
+
+## Vẫn gặp khó khăn?
 
 - **Discord:** [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
 - **GitHub Issues:** [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
-- **Từ terminal của bạn:** `openspec feedback "what went wrong"` sẽ mở một issue cho bạn.
+- **Từ terminal của bạn:** Chạy lệnh `openspec feedback "what went wrong"` sẽ tự động mở một vấn đề trên GitHub cho bạn.
 
-Khi báo cáo một vấn đề, hãy bao gồm phiên bản OpenSpec (`openspec --version`), phiên bản Node của bạn (`node --version`), công cụ AI và lệnh cùng đầu ra chính xác. Điều này giúp việc hỗ trợ nhanh hơn rất nhiều.
+Khi bạn báo cáo vấn đề, hãy cung cấp phiên bản OpenSpec của bạn (`openspec --version`), phiên bản Node (`node --version`), công cụ AI bạn dùng, cùng lệnh và đầu ra chính xác. Điều này giúp quá trình hỗ trợ diễn ra nhanh hơn rất nhiều.

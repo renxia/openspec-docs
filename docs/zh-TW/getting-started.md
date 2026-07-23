@@ -1,226 +1,226 @@
-# 入門指南
+# 快速開始
 
-本指南解釋了您安裝並初始化 OpenSpec 之後它的運作方式。有關安裝說明，請參閱 [主 README](../index.md#quick-start) 或 [安裝指南](installation.md)。對於整個文件集的新手？[文件總覽](index.md) 會為您梳理所有內容。
+本指南說明你在安裝並初始化 OpenSpec 後，該工具的使用方式。安裝說明可參閱[主要 README](../index.md#quick-start)或[安裝指南](installation.md)。剛接觸這份文件集？[文件首頁](index.md)會幫你梳理所有內容的對應關係。
 
-> **我在哪裡輸入這些指令？** 有兩個地方，混淆這兩者是初期的最常見失誤。
+> **這些指令要輸入在哪裡？** 只有兩個地方，搞混是新手最常遇到的初學者失誤。
 >
-> - `openspec ...` 指令（例如 `openspec init`）是在您的**終端機 (terminal)** 中執行的。
-> - `/opsx:...` 指令（例如 `/opsx:propose`）是在您的**AI 助理的聊天介面**中執行的，也就是您要求它編寫程式碼的同一個框體。
+> - `openspec ...` 系列指令（例如 `openspec init`）要在你的**終端機**執行。
+> - `/opsx:...` 系列指令（例如 `/opsx:propose`）要在你的**AI 助理的對話視窗**執行，也就是你通常會請它撰寫程式碼的那個輸入框。
 >
-> 沒有獨立的「互動模式」來啟動。您只需在聊天中輸入斜線指令，您的助理就會從那裡開始工作。完整解釋：[如何運作的指令](how-commands-work.md)。
+> 沒有額外的「互動模式」需要啟動，只要在對話視窗輸入斜線指令，你的助理就會接手後續流程。完整說明可參閱[指令運作方式](how-commands-work.md)。
 
-## 您的前五分鐘
+## 前五分鐘快速上手
 
-完整的流程，並標註每個步驟發生的位置：
+完整流程如下，每個步驟都標註了執行位置：
 
 ```text
 TERMINAL   $ npm install -g @fission-ai/openspec@latest
 TERMINAL   $ cd your-project && openspec init
-AI CHAT      /opsx:explore                    (可選：先思考一下)
-AI CHAT      /opsx:propose add-dark-mode      (AI 草擬計畫；您再審閱)
-AI CHAT      /opsx:apply                      (AI 進行建構)
-AI CHAT      /opsx:archive                    (規格已更新，變更已歸檔)
+AI CHAT      /opsx:explore                    (optional: think it through first)
+AI CHAT      /opsx:propose add-dark-mode      (AI drafts the plan; you review it)
+AI CHAT      /opsx:apply                      (AI builds it)
+AI CHAT      /opsx:archive                    (specs updated, change filed away)
 ```
 
-需要兩個終端機步驟來設定，之後您就在聊天介面中工作。本指南的其餘部分將詳細說明每個步驟的功能以及您會看到什麼。
+只要先在終端機完成兩個設定步驟，後續所有操作都會在對話視窗進行。本指南其餘部分會詳細說明每個步驟的用途與執行結果。
 
-> **還不確定要建構什麼？請從 `/opsx:explore` 開始。** 這是一個零風險的思考夥伴，它會閱讀您的程式碼庫、權衡選項，並在任何成品或程式碼存在之前，將一個模糊的想法塑造成具體的計畫。當畫面變得清晰後，它就會交接給 `/opsx:propose`。這是與 AI 合作的最佳習慣，因為否則該 AI 會自信地建構出錯誤的東西。請參閱 [探索指南](explore.md)。
+> **還不確定要開發什麼功能？先從 `/opsx:explore` 開始。** 這是一個零風險的思考夥伴，會讀取你的程式碼庫、權衡各種選項，把模糊的想法打磨成具體計畫，全程不會產生任何產出檔案或程式碼。當方向明確後，它會交接給 `/opsx:propose` 繼續執行。這是與 AI 協作時最重要的習慣，能避免 AI 自信滿滿地做出錯誤的產出。詳情可參閱[探索指南](explore.md)。
 
-## 原理運作方式
+## 運作原理
 
-OpenSpec 幫助您和您的 AI 編碼助理在編寫任何程式碼之前就達成共識，確定要建構什麼。
+OpenSpec 能協助你與 AI 程式開發助理在撰寫任何程式碼前，先確認要開發的內容。
 
-**預設快速路徑（核心配置）：**
+**預設快速路徑（核心設定檔）：**
 
 ```text
 /opsx:explore ──► /opsx:propose ──► /opsx:apply ──► /opsx:sync ──► /opsx:archive
-   (可選)
+   (optional)
 ```
 
-當您還在弄清楚該做什麼時，請從 `/opsx:explore` 開始；如果您已經知道，則可以直接跳到 `/opsx:propose`。探索功能包含在預設配置中，因此無論何時需要它，它都會在那裡。
+如果你還在釐清要做的內容，可以先從 `/opsx:explore` 開始；如果已經有明確方向，也可以直接跳過這一步使用 `/opsx:propose`。探索功能包含在預設設定檔中，隨時都可以使用。
 
-**擴展路徑（客製化工作流程選擇）：**
+**擴展路徑（自訂工作流程選擇）：**
 
 ```text
-/opsx:new ──► /opsx:ff 或 /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
+/opsx:new ──► /opsx:ff or /opsx:continue ──► /opsx:apply ──► /opsx:verify ──► /opsx:archive
 ```
 
-預設的全局配置是 `core`，它包含 `propose`、`explore`、`apply`、`sync` 和 `archive`。您可以使用 `openspec config profile` 並接著使用 `openspec update` 來啟用擴展工作流程指令。
+全域預設設定檔為 `core`，包含 `propose`、`explore`、`apply`、`sync` 和 `archive` 五個指令。你可以透過 `openspec config profile` 啟用擴展工作流程指令，再執行 `openspec update` 完成設定。
 
-## OpenSpec 創建了什麼？
+## OpenSpec 會建立的檔案結構
 
-運行 `openspec init` 後，您的專案結構如下：
+執行 `openspec init` 後，你的專案會產生以下結構：
 
 ```
 openspec/
-├── specs/              # 真實依據 (您系統的行為)
+├── specs/              # 系統行為的唯一依據
 │   └── <domain>/
 │       └── spec.md
-├── changes/            # 建議更新（每個變更一個資料夾）
+├── changes/            #  proposed 的更新內容（每個變更一個獨立資料夾）
 │   └── <change-name>/
 │       ├── proposal.md
 │       ├── design.md
 │       ├── tasks.md
-│       └── specs/      # Delta 規格 (正在改變的部分)
+│       └── specs/      # 差異規格文件（標註變更內容）
 │           └── <domain>/
 │               └── spec.md
-└── config.yaml         # 專案配置（可選）
+└── config.yaml         # 專案設定檔（選填）
 ```
 
-**兩個關鍵目錄：**
+**兩個核心資料夾：**
 
-- **`specs/`** - 真實依據。這些規格描述了您的系統當前如何運作。按領域分類（例如 `specs/auth/`、`specs/payments/`）。
+- **`specs/`** - 系統行為的唯一依據。這些規格文件描述你系統目前的運作方式，依功能領域組織（例如 `specs/auth/`、`specs/payments/`）。
+- **`changes/`** -  proposed 的修改內容。每個變更都會有獨立資料夾，存放所有相關產出檔案。當變更完成後，對應的規格文件會合併到主要的 `specs/` 目錄中。
 
-- **`changes/`** - 建議的修改。每個變更都會擁有自己的資料夾，包含所有相關的成品 (artifacts)。當一個變更完成時，它的規格就會合併到主 `specs/` 目錄中。
+## 產出檔案說明
 
-## 理解成品 (Artifacts)
+每個變更資料夾都會包含引導開發流程的產出檔案：
 
-每個變更資料夾都包含指導工作的成品：
+| 產出檔案 | 用途 |
+|----------|------|
+| `proposal.md` | 「為什麼做、做什麼」- 記錄目標、範圍與實作方向 |
+| `specs/` | 差異規格文件，標示新增/修改/移除的需求 |
+| `design.md` | 「怎麼做」- 技術方案與架構決策 |
+| `tasks.md` | 附有核取方塊的實作檢查清單 |
 
-| 成品 | 用途 |
-|----------|---------|
-| `proposal.md` | 「為什麼」和「是什麼」— 捕捉意圖、範圍和方法 |
-| `specs/` | Delta 規格，顯示新增/修改/移除的需求 |
-| `design.md` | 「如何做」— 技術方法和架構決策 |
-| `tasks.md` | 帶有勾選框的實作清單 |
+**產出檔案彼此層層關聯：**
 
-**成品之間是層層遞進的：**
-
-```
+```text
 proposal ──► specs ──► design ──► tasks ──► implement
    ▲           ▲          ▲                    │
    └───────────┴──────────┴────────────────────┘
-            隨著學習而更新
+            update as you learn
 ```
 
-您隨時都可以回溯並完善早期的成品，因為在實作過程中您可能會學到更多東西。
+在實作過程中如果學到更多資訊，你可以隨時回頭調整先前的產出檔案。
 
-## Delta 規格的運作方式
+## 差異規格文件的運作方式
 
-Delta 規格是 OpenSpec 的核心概念。它顯示了相對於當前規格的變化內容。
+差異規格文件是 OpenSpec 的核心概念，用來標示相對於現有規格的變更內容。
 
 ### 格式
 
-Delta 規格使用區塊來指示變更類型：
+差異規格文件使用不同區段標示變更類型：
 
 ```markdown
-# Auth 的 Delta
+# Delta for Auth
 
-## 新增的需求 (ADDED Requirements)
+## ADDED Requirements
 
-### Requirement: 雙因素認證 (Two-Factor Authentication)
-系統必須在登入時要求第二個驗證因子。
+### Requirement: Two-Factor Authentication
+The system MUST require a second factor during login.
 
-#### Scenario: OTP 要求
-- GIVEN 一位已啟用 2FA 的使用者
-- WHEN 使用者提交有效的憑證
-- THEN 會呈現一個 OTP 挑戰
+#### Scenario: OTP required
+- GIVEN a user with 2FA enabled
+- WHEN the user submits valid credentials
+- THEN an OTP challenge is presented
 
-## 修改的需求 (MODIFIED Requirements)
+## MODIFIED Requirements
 
-### Requirement: Session 超時
-系統應在一段時間不活躍後 30 分鐘內使 session 過期。
-(先前：60 分鐘)
+### Requirement: Session Timeout
+The system SHALL expire sessions after 30 minutes of inactivity.
+(Previously: 60 minutes)
 
-#### Scenario: 不活動超時
-- GIVEN 一個已認證的 session
-- WHEN 30 分鐘沒有活動發生
-- THEN session 將被失效化
+#### Scenario: Idle timeout
+- GIVEN an authenticated session
+- WHEN 30 minutes pass without activity
+- THEN the session is invalidated
 
-## 移除的需求 (REMOVED Requirements)
+## REMOVED Requirements
 
-### Requirement: 記住我 (Remember Me)
-(因導入 2FA 而棄用)
+### Requirement: Remember Me
+(Deprecated in favor of 2FA)
 ```
 
-### 歸檔時會發生什麼？
+### 封存時的處理流程
 
-當您歸檔一個變更時：
+當你封存一個變更時：
+1. **新增**的需求會附加到主要規格文件末尾
+2. **修改**的需求會取代現有版本
+3. **移除**的需求會從主要規格文件中刪除
 
-1. **ADDED** 的需求會被附加到主規格中。
-2. **MODIFIED** 的需求會取代現有的版本。
-3. **REMOVED** 的需求會從主規格中刪除。
+變更資料夾會移動到 `openspec/changes/archive/` 目錄，供稽核留存。
 
-該變更資料夾會移動到 `openspec/changes/archive/` 以供稽核歷史使用。
+## 範例：你的第一個變更
 
-## 範例：您的第一個變更
+我們以為應用程式新增深色模式為例，逐步說明流程。
 
-讓我們走一遍為應用程式新增深色模式的流程。
-
-### 1. 開始變更（預設）
+### 1. 啟動變更（預設方式）
 
 ```text
 You: /opsx:propose add-dark-mode
 
-AI:  已建立 openspec/changes/add-dark-mode/
-     ✓ proposal.md — 我們為何要做這件事、正在改變什麼
-     ✓ specs/       — 需求和情境
-     ✓ design.md    — 技術方法
-     ✓ tasks.md     — 實作清單
-     準備好進行實作！
+AI:  Created openspec/changes/add-dark-mode/
+     ✓ proposal.md — why we're doing this, what's changing
+     ✓ specs/       — requirements and scenarios
+     ✓ design.md    — technical approach
+     ✓ tasks.md     — implementation checklist
+     Ready for implementation!
 ```
 
-如果您啟用了擴展工作流程配置，您也可以將其作為兩個步驟完成：`/opsx:new` 然後 `/opsx:ff`（或漸進式的 `/opsx:continue`）。
+如果你已啟用擴展工作流程設定檔，也可以分兩步完成：先執行 `/opsx:new`，再執行 `/opsx:ff`（或逐步執行 `/opsx:continue`）。
 
-### 2. 會創建哪些內容？
+### 2. 會產生的檔案
 
-**proposal.md** - 捕捉意圖：
+**proposal.md** - 記錄目標：
 
 ```markdown
-# Proposal: 新增深色模式 (Add Dark Mode)
+# Proposal: Add Dark Mode
 
-## Intent (意圖)
-使用者要求提供深色模式選項，以減輕夜間使用的眼睛疲勞。
+## Intent
+Users have requested a dark mode option to reduce eye strain
+during nighttime usage.
 
-## Scope (範圍)
-- 在設定中新增主題切換開關
-- 支援系統偏好偵測
-- 將偏好儲存在 localStorage 中
+## Scope
+- Add theme toggle in settings
+- Support system preference detection
+- Persist preference in localStorage
 
-## Approach (方法)
-使用 CSS 自定義屬性來進行主題化，並搭配 React context 來管理狀態。
+## Approach
+Use CSS custom properties for theming with a React context
+for state management.
 ```
 
-**specs/ui/spec.md** - Delta 顯示新需求：
+**specs/ui/spec.md** - 標示新增需求的差異規格文件：
 
 ```markdown
-# UI 的 Delta
+# Delta for UI
 
-## 新增的需求 (ADDED Requirements)
+## ADDED Requirements
 
-### Requirement: 主題選擇 (Theme Selection)
-系統應允許使用者在淺色和深色主題之間進行選擇。
+### Requirement: Theme Selection
+The system SHALL allow users to choose between light and dark themes.
 
-#### Scenario: 手動切換 (Manual toggle)
-- GIVEN 一位處於任何頁面的使用者
-- WHEN 使用者點擊主題切換開關
-- THEN 主題會立即切換
-- AND 偏好會在不同 session 間保持一致
+#### Scenario: Manual toggle
+- GIVEN a user on any page
+- WHEN the user clicks the theme toggle
+- THEN the theme switches immediately
+- AND the preference persists across sessions
 
-#### Scenario: 系統偏好 (System preference)
-- GIVEN 一位沒有儲存偏好的使用者
-- WHEN 應用程式載入時
-- THEN 會使用系統偏好的配色方案
+#### Scenario: System preference
+- GIVEN a user with no saved preference
+- WHEN the application loads
+- THEN the system's preferred color scheme is used
 ```
 
-**tasks.md** - 實作清單：
+**tasks.md** - 實作檢查清單：
 
 ```markdown
-# Tasks (任務)
+# Tasks
 
-## 1. 主題基礎設施 (Theme Infrastructure)
-- [ ] 1.1 使用 light/dark 狀態創建 ThemeContext
-- [ ] 1.2 為顏色新增 CSS 自定義屬性
-- [ ] 1.3 實作 localStorage 持久化
+## 1. Theme Infrastructure
+- [ ] 1.1 Create ThemeContext with light/dark state
+- [ ] 1.2 Add CSS custom properties for colors
+- [ ] 1.3 Implement localStorage persistence
 
-## 2. UI 組件 (UI Components)
-- [ ] 2.1 創建 ThemeToggle 組件
-- [ ] 2.2 在設定頁中加入切換開關
-- [ ] 2.3 更新 Header 以包含快速切換功能
+## 2. UI Components
+- [ ] 2.1 Create ThemeToggle component
+- [ ] 2.2 Add toggle to settings page
+- [ ] 2.3 Update Header to include quick toggle
 
-## 3. 樣式設計 (Styling)
-- [ ] 3.1 定義深色主題配色方案
-- [ ] 3.2 更新組件以使用 CSS 變數
+## 3. Styling
+- [ ] 3.1 Define dark theme color palette
+- [ ] 3.2 Update components to use CSS variables
 ```
 
 ### 3. 實作
@@ -228,58 +228,60 @@ AI:  已建立 openspec/changes/add-dark-mode/
 ```
 You: /opsx:apply
 
-AI:  正在執行任務...
-     ✓ 1.1 已創建包含 light/dark 狀態的 ThemeContext
-     ✓ 1.2 已將 CSS 自定義屬性新增到 globals.css
-     ✓ 1.3 已實作 localStorage 持久化
-     ✓ 2.1 已創建 ThemeToggle 組件
+AI:  Working through tasks...
+     ✓ 1.1 Created ThemeContext with light/dark state
+     ✓ 1.2 Added CSS custom properties to globals.css
+     ✓ 1.3 Implemented localStorage persistence
+     ✓ 2.1 Created ThemeToggle component
      ...
-     所有任務均已完成！
+     All tasks complete!
 ```
 
-在實作過程中，如果您發現設計需要調整，只需更新該成品 (artifact) 並繼續即可。
+實作過程中如果發現設計需要調整，只要更新對應的產出檔案並繼續執行即可。
 
-### 4. 歸檔
+### 4. 封存
 
 ```
 You: /opsx:archive
 
-AI:  正在歸檔 add-dark-mode...
-     ✓ 已將規格合併到 openspec/specs/ui/spec.md
-     ✓ 已移動至 openspec/changes/archive/2025-01-24-add-dark-mode/
-     完成！準備好迎接下一個功能。
+AI:  Archiving add-dark-mode...
+     ✓ Merged specs into openspec/specs/ui/spec.md
+     ✓ Moved to openspec/changes/archive/2025-01-24-add-dark-mode/
+     Done! Ready for the next feature.
 ```
 
-您的 Delta 規格現在已成為主規格的一部分，記錄著您的系統運作方式。
+你的差異規格文件現在已納入主要規格文件，成為系統運作方式的正式文件。
 
-## 驗證與審閱
+## 驗證與審查
 
-使用 CLI 來檢查您的變更：
+使用 CLI 工具查看你的變更狀態：
 
 ```bash
-# 列出活躍的變更
+# 列出所有進行中的變更
 openspec list
 
-# 查看變更詳情
+# 查看變更詳細內容
 openspec show add-dark-mode
 
-# 驗證規格格式
+# 驗證規格文件格式是否正確
 openspec validate add-dark-mode
 
-# 互動式儀表板
+# 開啟互動式儀表板
 openspec view
 ```
 
-## 下一步驟
+## 後續步驟
 
-- [先進行探索 (Explore First)](explore.md) - 使用 `/opsx:explore` 在提交前思考一個想法。
-- [在現有專案中使用 OpenSpec](existing-projects.md) - 從大型的棕地 (brownfield) 程式碼庫開始工作。
-- [編輯與迭代變更 (Editing & Iterating on a Change)](editing-changes.md) - 更新成品，回溯並協調手動編輯。
-- [核心概念概覽 (Core Concepts at a Glance)](overview.md) - 在單頁上了解整個思維模型。
-- [範例與食譜 (Examples & Recipes)](examples.md) - 從頭到尾的真實變更案例。
-- [工作流程 (Workflows)](workflows.md) - 常見模式以及何時使用每個指令。
-- [指令 (Commands)](commands.md) - 所有斜線指令的完整參考資料。
-- [概念 (Concepts)](concepts.md) - 對規格、變更和 Schema 更深入的理解。
-- [客製化 (Customization)](customization.md) - 使 OpenSpec 符合您的工作方式。
-- [儲存庫 (Stores)](stores-beta/user-guide.md) - 規劃跨專案或團隊？請將其保留在自己的儲存庫中（Beta）。
-- [FAQ](faq.md) 和 [疑難排解 (Troubleshooting)](troubleshooting.md) - 當您遇到困難時。
+- [先探索再決定](explore.md) - 在確認開發方向前，先用 `/opsx:explore` 梳理想法
+- [審查變更內容](reviewing-changes.md) - AI 起草計畫後、撰寫程式碼前，需要檢查的事項
+- [撰寫優質規格文件](writing-specs.md) - 優良需求與情境的撰寫範例
+- [在現有專案中使用 OpenSpec](existing-projects.md) - 在大型舊有程式碼庫上開始使用
+- [編輯與迭代變更內容](editing-changes.md) - 更新產出檔案、回頭調整、整合手動修改
+- [核心概念一覽](overview.md) - 單頁梳理完整心智模型
+- [範例與實踐指南](examples.md) - 真實變更的完整流程
+- [工作流程](workflows.md) - 常見模式與各指令的使用時機
+- [指令清單](commands.md) - 所有斜線指令的完整參考文件
+- [概念說明](concepts.md) - 深入理解規格文件、變更與結構描述
+- [自訂設定](customization.md) - 讓 OpenSpec 符合你的使用習慣
+- [Stores（儲存庫）](stores-beta/user-guide.md) - 需要跨儲存庫或團隊的規劃？將內容存在獨立儲存庫即可（beta 版）
+- [常見問題](faq.md)與[疑難排解](troubleshooting.md) - 遇到問題時查閱

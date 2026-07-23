@@ -1,21 +1,21 @@
 # Personalização
 
-O OpenSpec oferece três níveis de personalização:
+O OpenSpec fornece três níveis de personalização:
 
-| Nível | O que faz | Ideal para |
-|-------|-----------|------------|
-| **Configuração do Projeto** | Define padrões, injeta contexto/regras | A maioria das equipes |
-| **Schemas Personalizados** | Define seus próprios artefatos de fluxo de trabalho | Equipes com processos únicos |
-| **Substituições Globais** | Compartilha schemas entre todos os projetos | Usuários avançados |
+| Nível | O que faz | Melhor para |
+|-------|-----------|-------------|
+| **Configuração do Projeto** | Definir padrões, injetar contexto/regras | Maioria das equipes |
+| **Esquemas Personalizados** | Definir seus próprios artefatos de fluxo de trabalho | Equipes com processos exclusivos |
+| **Substituições Globais** | Compartilhar esquemas em todos os projetos | Usuários avançados |
 
 ---
 
 ## Configuração do Projeto
 
-O arquivo `openspec/config.yaml` é a maneira mais fácil de personalizar o OpenSpec para sua equipe. Ele permite:
+O arquivo `openspec/config.yaml` é a maneira mais fácil de personalizar o OpenSpec para sua equipe. Ele permite que você:
 
-- **Definir um schema padrão** - Pule `--schema` em cada comando
-- **Injetar contexto do projeto** - A IA vê sua stack tecnológica, convenções, etc.
+- **Definir um esquema padrão** - Ignore `--schema` em todos os comandos
+- **Injetar contexto do projeto** - A IA vê sua pilha de tecnologia, convenções, etc.
 - **Adicionar regras por artefato** - Regras personalizadas para artefatos específicos
 
 ### Configuração Rápida
@@ -24,36 +24,36 @@ O arquivo `openspec/config.yaml` é a maneira mais fácil de personalizar o Open
 openspec init
 ```
 
-Isso o guia na criação de uma configuração interativamente. Ou crie uma manualmente:
+Isso guia você na criação de uma configuração interativamente. Ou crie uma manualmente:
 
 ```yaml
 # openspec/config.yaml
 schema: spec-driven
 
 context: |
-  Tech stack: TypeScript, React, Node.js, PostgreSQL
-  API style: RESTful, documented in docs/api.md
-  Testing: Jest + React Testing Library
-  We value backwards compatibility for all public APIs
+  Pilha de tecnologia: TypeScript, React, Node.js, PostgreSQL
+  Estilo de API: RESTful, documentado em docs/api.md
+  Testes: Jest + React Testing Library
+  Valorizamos a compatibilidade retroativa para todas as APIs públicas
 
 rules:
   proposal:
-    - Include rollback plan
-    - Identify affected teams
+    - Incluir plano de reversão
+    - Identificar equipes afetadas
   specs:
-    - Use Given/When/Then format
-    - Reference existing patterns before inventing new ones
+    - Usar formato Dado/Quando/Então
+    - Referenciar padrões existentes antes de inventar novos
 ```
 
 ### Como Funciona
 
-**Schema padrão:**
+**Esquema padrão:**
 
 ```bash
 # Sem configuração
 openspec new change my-feature --schema spec-driven
 
-# Com configuração - o schema é automático
+# Com configuração - o esquema é automático
 openspec new change my-feature
 ```
 
@@ -63,75 +63,75 @@ Ao gerar qualquer artefato, seu contexto e regras são injetados no prompt da IA
 
 ```xml
 <context>
-Tech stack: TypeScript, React, Node.js, PostgreSQL
+Pilha de tecnologia: TypeScript, React, Node.js, PostgreSQL
 ...
 </context>
 
 <rules>
-- Include rollback plan
-- Identify affected teams
+- Incluir plano de reversão
+- Identificar equipes afetadas
 </rules>
 
 <template>
-[Schema's built-in template]
+[Modelo embutido do esquema]
 </template>
 ```
 
 - **Contexto** aparece em TODOS os artefatos
-- **Regras** APENAS aparecem para o artefato correspondente
+- **Regras** aparecem APENAS para o artefato correspondente
 
-### Ordem de Resolução do Schema
+### Ordem de Resolução de Esquema
 
-Quando o OpenSpec precisa de um schema, ele verifica nesta ordem:
+Quando o OpenSpec precisa de um esquema, ele verifica nesta ordem:
 
-1. Flag da CLI: `--schema <nome>`
-2. Metadados da mudança (`.openspec.yaml` na pasta da mudança)
+1. Sinalizador CLI: `--schema <name>`
+2. Metadados da alteração (`.openspec.yaml` na pasta da alteração)
 3. Configuração do projeto (`openspec/config.yaml`)
 4. Padrão (`spec-driven`)
 
 ---
 
-## Schemas Personalizados
+## Esquemas Personalizados
 
-Quando a configuração do projeto não é suficiente, crie seu próprio schema com um fluxo de trabalho completamente personalizado. Schemas personalizados ficam no diretório `openspec/schemas/` do seu projeto e são versionados com seu código.
+Quando a configuração do projeto não for suficiente, crie seu próprio esquema com um fluxo de trabalho completamente personalizado. Os esquemas personalizados residem no diretório `openspec/schemas/` do seu projeto e são controlados por versão junto com seu código.
 
 ```text
-your-project/
+seu-projeto/
 ├── openspec/
 │   ├── config.yaml        # Configuração do projeto
-│   ├── schemas/           # Schemas personalizados ficam aqui
-│   │   └── my-workflow/
+│   ├── schemas/           # Esquemas personalizados residem aqui
+│   │   └── meu-fluxo/
 │   │       ├── schema.yaml
 │   │       └── templates/
-│   └── changes/           # Suas mudanças
+│   └── changes/           # Suas alterações
 └── src/
 ```
 
-### Fazer Fork de um Schema Existente
+### Bifurcar um Esquema Existente
 
-A maneira mais rápida de personalizar é fazer fork de um schema integrado:
+A maneira mais rápida de personalizar é bifurcar um esquema embutido:
 
 ```bash
-openspec schema fork spec-driven my-workflow
+openspec schema fork spec-driven meu-fluxo
 ```
 
-Isso copia todo o schema `spec-driven` para `openspec/schemas/my-workflow/` onde você pode editá-lo livremente.
+Isso copia todo o esquema `spec-driven` para `openspec/schemas/meu-fluxo/`, onde você pode editá-lo livremente.
 
 **O que você obtém:**
 
 ```text
-openspec/schemas/my-workflow/
+openspec/schemas/meu-fluxo/
 ├── schema.yaml           # Definição do fluxo de trabalho
 └── templates/
-    ├── proposal.md       # Template para o artefato de proposta
-    ├── spec.md           # Template para especificações
-    ├── design.md         # Template para design
-    └── tasks.md          # Template para tarefas
+    ├── proposal.md       # Modelo para artefato de proposta
+    ├── spec.md           # Modelo para especificações
+    ├── design.md         # Modelo para design
+    └── tasks.md          # Modelo para tarefas
 ```
 
-Agora edite `schema.yaml` para alterar o fluxo de trabalho, ou edite os templates para alterar o que a IA gera.
+Agora edite `schema.yaml` para alterar o fluxo de trabalho, ou edite os modelos para alterar o que a IA gera.
 
-### Criar um Schema do Zero
+### Criar um Esquema do Zero
 
 Para um fluxo de trabalho completamente novo:
 
@@ -141,43 +141,43 @@ openspec schema init research-first
 
 # Não interativo
 openspec schema init rapid \
-  --description "Rapid iteration workflow" \
+  --description "Fluxo de trabalho de iteração rápida" \
   --artifacts "proposal,tasks" \
   --default
 ```
 
-### Estrutura do Schema
+### Estrutura do Esquema
 
-Um schema define os artefatos do seu fluxo de trabalho e como eles dependem uns dos outros:
+Um esquema define os artefatos no seu fluxo de trabalho e como eles dependem uns dos outros:
 
 ```yaml
-# openspec/schemas/my-workflow/schema.yaml
-name: my-workflow
+# openspec/schemas/meu-fluxo/schema.yaml
+name: meu-fluxo
 version: 1
-description: My team's custom workflow
+description: Fluxo de trabalho personalizado da minha equipe
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Initial proposal document
+    description: Documento de proposta inicial
     template: proposal.md
     instruction: |
-      Create a proposal that explains WHY this change is needed.
-      Focus on the problem, not the solution.
+      Crie uma proposta que explique POR QUE esta alteração é necessária.
+      Concentre-se no problema, não na solução.
     requires: []
 
   - id: design
     generates: design.md
-    description: Technical design
+    description: Design técnico
     template: design.md
     instruction: |
-      Create a design document explaining HOW to implement.
+      Crie um documento de design explicando COMO implementar.
     requires:
-      - proposal    # Can't create design until proposal exists
+      - proposal    # Não é possível criar o design até que a proposta exista
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist
+    description: Lista de verificação de implementação
     template: tasks.md
     requires:
       - design
@@ -187,89 +187,89 @@ apply:
   tracks: tasks.md
 ```
 
-**Campos-chave:**
+**Campos principais:**
 
-| Campo | Finalidade |
-|-------|------------|
-| `id` | Identificador único, usado em comandos e regras |
-| `generates` | Nome do arquivo de suporte (suporta globs como `specs/**/*.md`) |
-| `template` | Arquivo de template no diretório `templates/` |
+| Campo | Propósito |
+|-------|-----------|
+| `id` | Identificador exclusivo, usado em comandos e regras |
+| `generates` | Nome do arquivo de saída (suporta globs como `specs/**/*.md`) |
+| `template` | Arquivo de modelo no diretório `templates/` |
 | `instruction` | Instruções da IA para criar este artefato |
 | `requires` | Dependências - quais artefatos devem existir primeiro |
 
-### Templates
+### Modelos
 
-Templates são arquivos markdown que guiam a IA. Eles são injetados no prompt ao criar aquele artefato.
+Os modelos são arquivos markdown que guiam a IA. Eles são injetados no prompt ao criar esse artefato.
 
 ```markdown
 <!-- templates/proposal.md -->
-## Why
+## Por quê
 
-<!-- Explain the motivation for this change. What problem does this solve? -->
+<!-- Explique a motivação para esta alteração. Que problema isso resolve? -->
 
-## What Changes
+## O que muda
 
-<!-- Describe what will change. Be specific about new capabilities or modifications. -->
+<!-- Descreva o que mudará. Seja específico sobre novas capacidades ou modificações. -->
 
-## Impact
+## Impacto
 
-<!-- Affected code, APIs, dependencies, systems -->
+<!-- Código afetado, APIs, dependências, sistemas -->
 ```
 
-Os templates podem incluir:
+Os modelos podem incluir:
 - Cabeçalhos de seção que a IA deve preencher
-- Comentários HTML com orientação para a IA
+- Comentários HTML com orientações para a IA
 - Formatos de exemplo mostrando a estrutura esperada
 
-### Validar Seu Schema
+### Validar Seu Esquema
 
-Antes de usar um schema personalizado, valide-o:
+Antes de usar um esquema personalizado, valide-o:
 
 ```bash
-openspec schema validate my-workflow
+openspec schema validate meu-fluxo
 ```
 
 Isso verifica:
 - A sintaxe de `schema.yaml` está correta
-- Todos os templates referenciados existem
-- Não há dependências circulares
-- Os IDs dos artefatos são válidos
+- Todos os modelos referenciados existem
+- Sem dependências circulares
+- Os IDs de artefato são válidos
 
-### Usar Seu Schema Personalizado
+### Usar Seu Esquema Personalizado
 
-Uma vez criado, use seu schema com:
+Uma vez criado, use seu esquema com:
 
 ```bash
-# Especifique no comando
-openspec new change feature --schema my-workflow
+# Especificar no comando
+openspec new change feature --schema meu-fluxo
 
-# Ou defina como padrão no config.yaml
-schema: my-workflow
+# Ou definir como padrão em config.yaml
+schema: meu-fluxo
 ```
 
-### Depurar a Resolução do Schema
+### Depurar a Resolução de Esquema
 
-Não tem certeza de qual schema está sendo usado? Verifique com:
+Não tem certeza de qual esquema está sendo usado? Verifique com:
 
 ```bash
-# Veja de onde um schema específico é resolvido
-openspec schema which my-workflow
+# Ver de onde um esquema específico é resolvido
+openspec schema which meu-fluxo
 
-# Liste todos os schemas disponíveis
+# Listar todos os esquemas disponíveis
 openspec schema which --all
 ```
 
-A saída mostra se é do seu projeto, diretório de usuário ou do pacote:
+A saída mostra se é do seu projeto, diretório do usuário ou do pacote:
 
 ```text
-Schema: my-workflow
-Source: project
-Path: /path/to/project/openspec/schemas/my-workflow
+Esquema: meu-fluxo
+Origem: project
+Caminho: /path/to/project/openspec/schemas/meu-fluxo
 ```
 
 ---
 
-> **Nota:** O OpenSpec também suporta schemas no nível do usuário em `~/.local/share/openspec/schemas/` para compartilhamento entre projetos, mas schemas no nível do projeto em `openspec/schemas/` são recomendados pois são versionados com seu código.
+> **Nota:** O OpenSpec também suporta esquemas em nível de usuário em `~/.local/share/openspec/schemas/` para compartilhamento entre projetos, mas esquemas em nível de projeto em `openspec/schemas/` são recomendados, pois são controlados por versão junto com seu código.
 
 ---
 
@@ -283,21 +283,21 @@ Um fluxo de trabalho mínimo para iterações rápidas:
 # openspec/schemas/rapid/schema.yaml
 name: rapid
 version: 1
-description: Fast iteration with minimal overhead
+description: Iteração rápida com sobrecarga mínima
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Quick proposal
+    description: Proposta rápida
     template: proposal.md
     instruction: |
-      Create a brief proposal for this change.
-      Focus on what and why, skip detailed specs.
+      Crie uma proposta breve para esta alteração.
+      Concentre-se no o quê e no porquê, pule as especificações detalhadas.
     requires: []
 
   - id: tasks
     generates: tasks.md
-    description: Implementation checklist
+    description: Lista de verificação de implementação
     template: tasks.md
     requires: [proposal]
 
@@ -308,49 +308,51 @@ apply:
 
 ### Adicionando um Artefato de Revisão
 
-Faça fork do padrão e adicione uma etapa de revisão:
+Bifurque o padrão e adicione uma etapa de revisão:
 
 ```bash
 openspec schema fork spec-driven with-review
 ```
 
-Então edite `schema.yaml` para adicionar:
+Depois edite `schema.yaml` para adicionar:
 
 ```yaml
   - id: review
     generates: review.md
-    description: Pre-implementation review checklist
+    description: Lista de verificação de revisão pré-implementação
     template: review.md
     instruction: |
-      Create a review checklist based on the design.
-      Include security, performance, and testing considerations.
+      Crie uma lista de verificação de revisão com base no design.
+      Inclua considerações de segurança, desempenho e testes.
     requires:
       - design
 
   - id: tasks
-    # ... existing tasks config ...
+    # ... configuração existente de tarefas ...
     requires:
       - specs
       - design
-      - review    # Now tasks require review too
+      - review    # Agora as tarefas também requerem revisão
 ```
 
 ---
 
-## Schemas da Comunidade
+## Esquemas da Comunidade
 
-O OpenSpec também suporta schemas mantidos pela comunidade distribuídos via repositórios independentes. Eles fornecem fluxos de trabalho opinativos que integram o OpenSpec com outras ferramentas ou sistemas, de forma semelhante ao [catálogo de extensões da comunidade do github/spec-kit](https://github.com/github/spec-kit/tree/main/extensions) para o spec-kit.
+O OpenSpec também suporta esquemas mantidos pela comunidade distribuídos via repositórios independentes. Estes fornecem fluxos de trabalho opinativos que integram o OpenSpec com outras ferramentas ou sistemas, semelhante a como o [catálogo de extensões comunitárias do github/spec-kit](https://github.com/github/spec-kit/tree/main/extensions) funciona para o spec-kit.
 
-Schemas da comunidade não são incorporados ao núcleo do OpenSpec — eles vivem em seus próprios repositórios com seu próprio ciclo de lançamento. Para usar um, copie o pacote do schema para o diretório `openspec/schemas/<nome-do-schema>/` do seu projeto (o README de cada repositório tem instruções de instalação).
+Esquemas da comunidade não são embutidos no núcleo do OpenSpec — eles residem em seus próprios repositórios com sua própria cadência de lançamento. Para usar um, copie o pacote de esquema para o diretório `openspec/schemas/<schema-name>/` do seu projeto (o README de cada repositório tem instruções de instalação).
 
-| Schema | Mantenedor | Repositório | Descrição |
-|--------|-----------|-------------|-----------|
-| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Integra a governança de artefatos do OpenSpec com as habilidades de execução do [obra/superpowers](https://github.com/obra/superpowers) (brainstorming, writing-plans, TDD via subagents, code review, finishing). Adiciona um artefato `retrospective` com foco em evidências, preenchendo uma lacuna que o Superpowers não cobre nativamente. |
+| Esquema | Mantenedor | Repositório | Descrição |
+|--------|-----------|-------------|-------------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Integra a governança de artefatos do OpenSpec com as habilidades de execução do [obra/superpowers](https://github.com/obra/superpowers) (brainstorming, writing-plans, TDD via subagentes, revisão de código, finalização). Adiciona um artefato `retrospective` baseado em evidências, preenchendo uma lacuna que o Superpowers não cobre nativamente. |
+| `nanopm` | @nmrtn | [nmrtn/nanopm](https://github.com/nmrtn/nanopm/tree/main/openspec-schema) | Fluxo de trabalho primeiro para PM. Executa o pipeline de planejamento do [nanopm](https://github.com/nmrtn/nanopm) (auditoria → estratégia → roadmap → PRD) a montante da implementação. Conecta o planejamento de produto ao fluxo de trabalho de engenharia orientado a especificações do OpenSpec. Os artefatos são lidos de `.nanopm/` se presente — a proposta usa a auditoria, o design usa a estratégia, e as tarefas usam a decomposição do PRD. |
+| `e2e-runbooks` | @Lukk17 | [Lukk17/openspec-schemas](https://github.com/Lukk17/openspec-schemas/tree/master/openspec/schemas/e2e-runbooks) | Runbooks de teste end-to-end em nível de capacidade. Cada capacidade recebe uma especificação imutável, um modelo de tarefas imutável e um registro de execução com data e hora por execução. As asserções são apenas comportamento observável (status HTTP, corpo da resposta, estado persistido — nunca substrings de log); cada execução registra UTC de início/fim, duração e consumo estimado de tokens LLM. |
 
-> Quer contribuir com um schema da comunidade? Abra uma issue com um link para seu repositório, ou envie um PR adicionando uma linha a esta tabela.
+> Quer contribuir com um esquema da comunidade? Abra uma issue com um link para seu repositório, ou envie um PR adicionando uma linha a esta tabela.
 
 ---
 
 ## Veja Também
 
-- [Referência da CLI: Comandos de Schema](cli.md#schema-commands) - Documentação completa dos comandos
+- [Referência da CLI: Comandos de Esquema](cli.md#schema-commands) - Documentação completa dos comandos

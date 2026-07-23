@@ -2,47 +2,47 @@
 
 OpenSpec biedt drie niveaus van aanpassing:
 
-| Niveau | Wat het doet | Het beste voor |
-|--------|--------------|----------------|
-| **Projectconfiguratie** | Standaarden instellen, context/regels injecteren | De meeste teams |
-| **Aangepaste Schema's** | Definieer je eigen workflowartefacten | Teams met unieke processen |
-| **Globale Overschrijvingen** | Schema's delen over alle projecten | Gevorderde gebruikers |
+| Niveau | Wat het doet | Geschikt voor |
+|-------|--------------|----------|
+| **Projectconfiguratie** | Standaardwaarden instellen, context/regels injecteren | De meeste teams |
+| **Aangepaste schema's** | Definieer uw eigen workflow-artefacten | Teams met unieke processen |
+| **Globale overschrijvingen** | Schema's delen over alle projecten | Gevorderde gebruikers |
 
 ---
 
 ## Projectconfiguratie
 
-Het bestand `openspec/config.yaml` is de eenvoudigste manier om OpenSpec voor je team aan te passen. Het stelt je in staat om:
+Het `openspec/config.yaml` bestand is de eenvoudigste manier om OpenSpec aan te passen voor uw team. Het stelt u in staat tot:
 
-- **Een standaardschema in te stellen** - Sla `--schema` over bij elk commando
-- **Projectcontext te injecteren** - AI ziet je techstack, conventies, etc.
-- **Regels per artefact toe te voegen** - Aangepaste regels voor specifieke artefacten
+- **Stel een standaardschema in** - Sla het `--schema` argument over bij elke opdracht
+- **Injecteer projectcontext** - De AI ziet uw techstack, conventies, enz.
+- **Voeg per-artefact regels toe** - Aangepaste regels voor specifieke artefacten
 
-### Snelle Setup
+### Snel opzetten
 
 ```bash
 openspec init
 ```
 
-Dit leidt je door het interactief aanmaken van een configuratie. Of maak er handmatig een:
+Dit begeleidt u bij het interactief maken van een configuratie. Of maak er een handmatig:
 
 ```yaml
 # openspec/config.yaml
 schema: spec-driven
 
 context: |
-  Tech stack: TypeScript, React, Node.js, PostgreSQL
+  Techstack: TypeScript, React, Node.js, PostgreSQL
   API-stijl: RESTful, gedocumenteerd in docs/api.md
   Testen: Jest + React Testing Library
-  We hechten waarde aan backwards compatibility voor alle openbare API's
+  Wij hechten waarde aan achterwaartse compatibiliteit voor alle openbare API's
 
 rules:
   proposal:
-    - Neem een terugvalplan op
-    - Identificeer beïnvloede teams
+    - Neem een terugdraaiplan op
+    - Identificeer getroffen teams
   specs:
     - Gebruik het Given/When/Then-formaat
-    - Verwijs naar bestaande patronen voordat je nieuwe bedenkt
+    - Verwijs naar bestaande patronen voordat u nieuwe uitvindt
 ```
 
 ### Hoe het werkt
@@ -57,19 +57,19 @@ openspec new change my-feature --schema spec-driven
 openspec new change my-feature
 ```
 
-**Context- en regelinjectie:**
+**Injectie van context en regels:**
 
-Bij het genereren van elk artefact worden je context en regels geïnjecteerd in de AI-prompt:
+Bij het genereren van een artefact worden uw context en regels geïnjecteerd in de AI-prompt:
 
 ```xml
 <context>
-Tech stack: TypeScript, React, Node.js, PostgreSQL
+Techstack: TypeScript, React, Node.js, PostgreSQL
 ...
 </context>
 
 <rules>
-- Neem een terugvalplan op
-- Identificeer beïnvloede teams
+- Neem een terugdraaiplan op
+- Identificeer getroffen teams
 </rules>
 
 <template>
@@ -80,7 +80,7 @@ Tech stack: TypeScript, React, Node.js, PostgreSQL
 - **Context** verschijnt in ALLE artefacten
 - **Regels** verschijnen ALLEEN voor het overeenkomende artefact
 
-### Schema-resolutievolgorde
+### Volgorde van schema-resolutie
 
 Wanneer OpenSpec een schema nodig heeft, controleert het in deze volgorde:
 
@@ -91,39 +91,39 @@ Wanneer OpenSpec een schema nodig heeft, controleert het in deze volgorde:
 
 ---
 
-## Aangepaste Schema's
+## Aangepaste schema's
 
-Wanneer projectconfiguratie niet voldoende is, maak je je eigen schema met een volledig aangepaste workflow. Aangepaste schema's bevinden zich in de map `openspec/schemas/` van je project en worden versiebeheerd met je code.
+Wanneer projectconfiguratie niet volstaat, maakt u uw eigen schema aan met een volledig aangepaste workflow. Aangepaste schema's bevinden zich in de `openspec/schemas/` map van uw project en worden versiebeheerd met uw code.
 
 ```text
 your-project/
 ├── openspec/
 │   ├── config.yaml        # Projectconfiguratie
-│   ├── schemas/           # Aangepaste schema's staan hier
+│   ├── schemas/           # Aangepaste schema's bevinden zich hier
 │   │   └── my-workflow/
 │   │       ├── schema.yaml
 │   │       └── templates/
-│   └── changes/           # Je wijzigingen
+│   └── changes/           # Uw wijzigingen
 └── src/
 ```
 
-### Fork een Bestaand Schema
+### Een bestaand schema forken
 
-De snelste manier om aan te passen is door een ingebouwd schema te forken:
+De snelste manier om aan te passen is om een ingebouwd schema te forken:
 
 ```bash
 openspec schema fork spec-driven my-workflow
 ```
 
-Dit kopieert het volledige `spec-driven`-schema naar `openspec/schemas/my-workflow/` waar je het vrij kunt bewerken.
+Dit kopieert het hele `spec-driven` schema naar `openspec/schemas/my-workflow/` waar u het vrij kunt bewerken.
 
-**Wat je krijgt:**
+**Wat u krijgt:**
 
 ```text
 openspec/schemas/my-workflow/
-├── schema.yaml           # Workflowdefinitie
+├── schema.yaml           # Workflow-definitie
 └── templates/
-    ├── proposal.md       # Sjabloon voor het proposal-artefact
+    ├── proposal.md       # Sjabloon voor voorstelartefact
     ├── spec.md           # Sjabloon voor specificaties
     ├── design.md         # Sjabloon voor ontwerp
     └── tasks.md          # Sjabloon voor taken
@@ -131,7 +131,7 @@ openspec/schemas/my-workflow/
 
 Bewerk nu `schema.yaml` om de workflow te wijzigen, of bewerk sjablonen om te veranderen wat de AI genereert.
 
-### Maak een Schema vanaf Nul
+### Een schema vanaf nul maken
 
 Voor een volledig nieuwe workflow:
 
@@ -146,24 +146,24 @@ openspec schema init rapid \
   --default
 ```
 
-### Schemastructuur
+### Schema-structuur
 
-Een schema definieert de artefacten in je workflow en hoe ze van elkaar afhankelijk zijn:
+Een schema definieert de artefacten in uw workflow en hoe ze van elkaar afhankelijk zijn:
 
 ```yaml
 # openspec/schemas/my-workflow/schema.yaml
 name: my-workflow
 version: 1
-description: De aangepaste workflow van mijn team
+description: Aangepaste workflow van mijn team
 
 artifacts:
   - id: proposal
     generates: proposal.md
-    description: Initiële voorsteldocument
+    description: Initiële voorstel document
     template: proposal.md
     instruction: |
-      Maak een voorstel dat uitlegt WAAROM deze wijziging nodig is.
-      Focus op het probleem, niet de oplossing.
+      Maak een voorstel dat UITLEGT WAAROM deze wijziging nodig is.
+      Focus op het probleem, niet op de oplossing.
     requires: []
 
   - id: design
@@ -171,7 +171,7 @@ artifacts:
     description: Technisch ontwerp
     template: design.md
     instruction: |
-      Maak een ontwerpdocument dat uitlegt HOE te implementeren.
+      Maak een ontwerpdocument dat UITLEGT HOE het te implementeren.
     requires:
       - proposal    # Kan geen ontwerp maken totdat het voorstel bestaat
 
@@ -190,16 +190,16 @@ apply:
 **Belangrijke velden:**
 
 | Veld | Doel |
-|------|------|
-| `id` | Unieke identifier, gebruikt in commando's en regels |
-| `generates` | Uitvoerbestandsnaam (ondersteunt globs zoals `specs/**/*.md`) |
-| `template` | Sjabloongebestand in de map `templates/` |
-| `instruction` | AI-instructies voor het aanmaken van dit artefact |
+|-------|---------|
+| `id` | Unieke identificatie, gebruikt in opdrachten en regels |
+| `generates` | Output-bestandsnaam (ondersteunt globs zoals `specs/**/*.md`) |
+| `template` | Sjabloonbestand in de `templates/` map |
+| `instruction` | AI-instructies voor het maken van dit artefact |
 | `requires` | Afhankelijkheden - welke artefacten eerst moeten bestaan |
 
 ### Sjablonen
 
-Sjablonen zijn markdownbestanden die de AI begeleiden. Ze worden geïnjecteerd in de prompt bij het aanmaken van dat artefact.
+Sjablonen zijn markdown-bestanden die de AI begeleiden. Ze worden geïnjecteerd in de prompt bij het maken van dat artefact.
 
 ```markdown
 <!-- templates/proposal.md -->
@@ -207,59 +207,59 @@ Sjablonen zijn markdownbestanden die de AI begeleiden. Ze worden geïnjecteerd i
 
 <!-- Leg de motivatie voor deze wijziging uit. Welk probleem lost dit op? -->
 
-## Wat Verandert
+## Wat verandert er
 
-<!-- Beschrijf wat er zal veranderen. Wees specifiek over nieuwe mogelijkheden of modificaties. -->
+<!-- Beschrijf wat er zal veranderen. Wees specifiek over nieuwe mogelijkheden of aanpassingen. -->
 
 ## Impact
 
-<!-- Beïnvloede code, API's, afhankelijkheden, systemen -->
+<!-- Getroffen code, API's, afhankelijkheden, systemen -->
 ```
 
 Sjablonen kunnen bevatten:
 - Sectiekoppen die de AI moet invullen
-- HTML-opmerkingen met begeleiding voor de AI
+- HTML-opmerkingen met richtlijnen voor de AI
 - Voorbeeldformaten die de verwachte structuur tonen
 
-### Valideer je Schema
+### Valideer uw schema
 
-Voordat je een aangepast schema gebruikt, valideer het:
+Voordat u een aangepast schema gebruikt, valideert u het:
 
 ```bash
 openspec schema validate my-workflow
 ```
 
 Dit controleert:
-- De syntaxis van `schema.yaml` is correct
+- De syntax van `schema.yaml` is correct
 - Alle gerefereerde sjablonen bestaan
 - Geen circulaire afhankelijkheden
 - Artefact-ID's zijn geldig
 
-### Gebruik je Aangepaste Schema
+### Gebruik uw aangepaste schema
 
-Eenmaal aangemaakt, gebruik je schema met:
+Eenmaal gemaakt, gebruikt u uw schema met:
 
 ```bash
-# Specificeer bij commando
+# Opgeven in opdracht
 openspec new change feature --schema my-workflow
 
-# Of stel in als standaard in config.yaml
+# Of instellen als standaard in config.yaml
 schema: my-workflow
 ```
 
-### Debug Schema-resolutie
+### Schema-resolutie debuggen
 
-Niet zeker welk schema wordt gebruikt? Controleer met:
+Niet zeker welk schema wordt gebruikt? Controleer het met:
 
 ```bash
-# Zie waar een specifiek schema vandaan komt
+# Zie waar een specifiek schema vandaan wordt opgelost
 openspec schema which my-workflow
 
-# Lijst alle beschikbare schema's
+# Toon alle beschikbare schema's
 openspec schema which --all
 ```
 
-Uitvoer toont of het uit je project, gebruikersmap of het pakket komt:
+De output toont of het uit uw project, gebruikersmap of het pakket komt:
 
 ```text
 Schema: my-workflow
@@ -269,13 +269,13 @@ Path: /path/to/project/openspec/schemas/my-workflow
 
 ---
 
-> **Opmerking:** OpenSpec ondersteunt ook schema's op gebruikersniveau in `~/.local/share/openspec/schemas/` om te delen over projecten, maar schema's op projectniveau in `openspec/schemas/` worden aanbevolen omdat ze versiebeheerd worden met je code.
+> **Opmerking:** OpenSpec ondersteunt ook gebruikersniveau-schema's in `~/.local/share/openspec/schemas/` voor delen over projecten heen, maar projectniveau-schema's in `openspec/schemas/` worden aanbevolen omdat ze versiebeheerd zijn met uw code.
 
 ---
 
 ## Voorbeelden
 
-### Snelle Iteratieworkflow
+### Snelle iteratieworkflow
 
 Een minimale workflow voor snelle iteraties:
 
@@ -306,7 +306,7 @@ apply:
   tracks: tasks.md
 ```
 
-### Een Review-Artefact Toevoegen
+### Een review-artefact toevoegen
 
 Fork de standaard en voeg een review-stap toe:
 
@@ -319,11 +319,11 @@ Bewerk vervolgens `schema.yaml` om toe te voegen:
 ```yaml
   - id: review
     generates: review.md
-    description: Pre-implementatie review-checklist
+    description: Pre-implementatiereview checklist
     template: review.md
     instruction: |
       Maak een review-checklist op basis van het ontwerp.
-      Neem beveiligings-, prestatie- en testoverwegingen op.
+      Neem veiligheid, prestaties en testoverwegingen op.
     requires:
       - design
 
@@ -337,20 +337,22 @@ Bewerk vervolgens `schema.yaml` om toe te voegen:
 
 ---
 
-## Communityschema's
+## Community-schema's
 
-OpenSpec ondersteunt ook door de community onderhouden schema's die worden gedistribueerd via afzonderlijke repositories. Deze bieden opiniërende workflows die OpenSpec integreren met andere tools of systemen, vergelijkbaar met hoe [github/spec-kit's community-uitbreidingscatalogus](https://github.com/github/spec-kit/tree/main/extensions) werkt voor spec-kit.
+OpenSpec ondersteunt ook door de community onderhouden schema's die via zelfstandige repositories worden verspreid. Deze bieden opinionated workflows die OpenSpec integreren met andere tools of systemen, vergelijkbaar met hoe [github/spec-kit's community extension catalog](https://github.com/github/spec-kit/tree/main/extensions) werkt voor spec-kit.
 
-Communityschema's zijn niet opgenomen in de OpenSpec-kern — ze bevinden zich in hun eigen repositories met hun eigen releasecyclus. Om er een te gebruiken, kopieer je de schemabundel naar de map `openspec/schemas/<schema-naam>/` van je project (elke repo heeft installatie-instructies in de README).
+Community-schema's worden niet geleverd in de OpenSpec-core — ze bevinden zich in hun eigen repositories met hun eigen releasecyclus. Om er een te gebruiken, kopieert u de schema-bundle naar de `openspec/schemas/<schema-name>/` map van uw project (elke repo's README bevat installatie-instructies).
 
 | Schema | Onderhouder | Repository | Beschrijving |
-|--------|------------|-----------|--------------|
-| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Integreert het artefactbeheer van OpenSpec met de uitvoeringsvaardigheden van [obra/superpowers](https://github.com/obra/superpowers) (brainstormen, plannen schrijven, TDD via subagents, code review, afronden). Voegt een bewijsgebaseerd `retrospective`-artefact toe dat een kloof vult die Superpowers niet van nature dekt. |
+|--------|-----------|-----------|-------------|
+| `superpowers-bridge` | @JiangWay | [JiangWay/openspec-schemas](https://github.com/JiangWay/openspec-schemas/tree/main/superpowers-bridge) | Integreert OpenSpec's artefactgovernance met de uitvoeringsvaardigheden van [obra/superpowers](https://github.com/obra/superpowers) (brainstormen, plannen schrijven, TDD via subagents, code review, afronden). Voegt een `retrospective`-artefact toe dat eerst bewijs vereist, waardoor een hiaat wordt opgevuld die Superpowers niet native dekt. |
+| `nanopm` | @nmrtn | [nmrtn/nanopm](https://github.com/nmrtn/nanopm/tree/main/openspec-schema) | PM-first workflow. Voert de planningspijplijn van [nanopm](https://github.com/nmrtn/nanopm) uit (audit → strategie → roadmap → PRD) stroomopwaarts van de implementatie. Verbindt productplanning met de spec-gedreven engineering workflow van OpenSpec. Artefacten lezen uit `.nanopm/` indien aanwezig — het voorstel haalt de audit, het ontwerp haalt de strategie en de taken halen de PRD-uitwerking. |
+| `e2e-runbooks` | @Lukk17 | [Lukk17/openspec-schemas](https://github.com/Lukk17/openspec-schemas/tree/master/openspec/schemas/e2e-runbooks) | Capability-level end-to-end test-runboeken. Elke capability krijgt een onveranderlijke specificatie, een onveranderlijk taken-sjabloon en een met tijdstempel voorzien uitvoeringsrecord per uitvoering. Assertions zijn alleen observeerbaar gedrag (HTTP-status, antwoordbody, persistentie-status — nooit log-substrings); elke uitvoering registreert start/eind UTC, duur en de beste schatting van LLM-tokenverbruik. |
 
-> Wil je een communityschema bijdragen? Open een issue met een link naar je repository, of dien een PR in met een rij aan deze tabel.
+> Wilt u een community-schema bijdragen? Open een issue met een link naar uw repository, of dien een PR in met een toegevoegde rij in deze tabel.
 
 ---
 
 ## Zie ook
 
-- [CLI-referentie: Schemacommando's](cli.md#schema-commands) - Volledige commandodocumentatie
+- [CLI Reference: Schema-opdrachten](cli.md#schema-commands) - Volledige opdrachtdocumentatie

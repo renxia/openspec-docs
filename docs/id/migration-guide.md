@@ -1,32 +1,30 @@
 # Migrasi ke OPSX
 
-Panduan ini membantu Anda beralih dari alur kerja OpenSpec lama ke OPSX. Migrasi dirancang agar lancar—pekerjaan Anda yang ada tetap terjaga, dan sistem baru menawarkan lebih banyak fleksibilitas.
+Panduan ini membantu Anda beralih dari alur kerja OpenSpec legacy ke OPSX. Migrasi ini dirancang untuk berjalan lancar—pekerjaan Anda yang ada tetap terjaga, dan sistem baru menawarkan fleksibilitas yang lebih besar.
 
 ## Apa yang Berubah?
 
-OPSX menggantikan alur kerja terkunci fase lama dengan pendekatan berbasis aksi yang mengalir. Berikut perubahan utamanya:
+OPSX menggantikan alur kerja berbasis fase yang lama dengan pendekatan yang lebih cair berbasis aksi. Perubahan kuncinya adalah sebagai berikut:
 
 | Aspek | Legacy | OPSX |
 |--------|--------|------|
-| **Perintah** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | Default: `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, `/opsx:archive` (perintah alur kerja yang diperluas opsional) |
+| **Perintah** | `/openspec:proposal`, `/openspec:apply`, `/openspec:archive` | Default: `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, `/opsx:archive` (perintah alur kerja tambahan opsional) |
 | **Alur Kerja** | Buat semua artefak sekaligus | Buat secara bertahap atau sekaligus—pilihan Anda |
-| **Kembali ke tahap sebelumnya** | Gerbang fase yang canggung | Alami—perbarui artefak kapan saja |
-| **Kustomisasi** | Struktur tetap | Didorong skema, sepenuhnya dapat diutak-atik |
+| **Kembali ke belakang** | Gerbang fase yang canggung | Alami—perbarui artefak kapan saja |
+| **Kustomisasi** | Struktur tetap | Berdasarkan skema, sepenuhnya dapat dihack |
 | **Konfigurasi** | `CLAUDE.md` dengan penanda + `project.md` | Konfigurasi bersih di `openspec/config.yaml` |
 
-**Perubahan filosofi:** Pekerjaan tidak linear. OPSX berhenti berpura-pura bahwa itu linear.
+**Perubahan filosofi:** Pekerjaan tidak bersifat linear. OPSX berhenti berpura-pura bahwa ia linear.
 
----
+## Sebelum Anda Mulai
 
-## Sebelum Memulai
+### Pekerjaan Anda yang Sudah Ada Aman
 
-### Pekerjaan Anda yang Ada Aman
-
-Proses migrasi dirancang dengan mempertahankan data:
+Proses migrasi dirancang dengan mempertimbangkan preservasi:
 
 - **Perubahan aktif di `openspec/changes/`** — Sepenuhnya dipertahankan. Anda dapat melanjutkannya dengan perintah OPSX.
-- **Perubahan yang diarsipkan** — Tidak tersentuh. Riwayat Anda tetap utuh.
-- **Spesifikasi utama di `openspec/specs/`** — Tidak tersentuh. Ini adalah sumber kebenaran Anda.
+- **Perubahan yang diarsipkan** — Tidak diubah. Riwayat Anda tetap utuh.
+- **Spesifikasi utama di `openspec/specs/`** — Tidak diubah. Ini adalah sumber kebenaran Anda.
 - **Konten Anda di CLAUDE.md, AGENTS.md, dll.** — Dipertahankan. Hanya blok penanda OpenSpec yang dihapus; semua yang Anda tulis tetap ada.
 
 ### Apa yang Dihapus
@@ -34,24 +32,25 @@ Proses migrasi dirancang dengan mempertahankan data:
 Hanya file yang dikelola OpenSpec yang sedang diganti:
 
 | Apa | Mengapa |
-|------|---------|
-| Direktori/file perintah slash lama | Diganti oleh sistem keterampilan baru |
-| `openspec/AGENTS.md` | Pemicu alur kerja yang sudah usang |
+|-----|---------|
+| Direktori/file perintah legacy | Diganti oleh sistem skill baru |
+| `openspec/AGENTS.md` | Pemicu alur kerja usang |
 | Penanda OpenSpec di `CLAUDE.md`, `AGENTS.md`, dll. | Tidak lagi diperlukan |
 
-**Lokasi perintah lama berdasarkan alat** (contoh—alat Anda mungkin berbeda):
+**Lokasi perintah legacy berdasarkan alat** (contoh—alat Anda mungkin berbeda):
 
 - Claude Code: `.claude/commands/openspec/`
 - Cursor: `.cursor/commands/openspec-*.md`
 - Windsurf: `.windsurf/workflows/openspec-*.md`
-- Cline: `.clinerules/workflows/openspec-*.md`
+- Cline: `.cinerules/workflows/openspec-*.md`
 - Roo: `.roo/commands/openspec-*.md`
 - GitHub Copilot: `.github/prompts/openspec-*.prompt.md` (hanya ekstensi IDE; tidak didukung di Copilot CLI)
+- Codex: OpenSpec sekarang menggunakan `.codex/skills/openspec-*`; pembersihan legacy hanya menargetkan nama file prompt OpenSpec yang diizinkan di `$CODEX_HOME/prompts` atau `~/.codex/prompts`, dan hanya menghapusnya setelah skill pengganti ada.
 - Dan lainnya (Augment, Continue, Amazon Q, dll.)
 
-Migrasi mendeteksi alat mana yang Anda konfigurasikan dan membersihkan file lamanya.
+Migrasi mendeteksi alat mana pun yang Anda konfigurasi dan membersihkan file legacy-nya.
 
-Daftar penghapusan mungkin terlihat panjang, tetapi ini semua adalah file yang awalnya dibuat oleh OpenSpec. Konten Anda sendiri tidak pernah dihapus.
+Daftar penghapusan mungkin terlihat panjang, tetapi semua ini adalah file yang awalnya dibuat oleh OpenSpec. Konten Anda sendiri tidak pernah dihapus.
 
 ### Apa yang Perlu Perhatian Anda
 
@@ -61,41 +60,41 @@ Satu file memerlukan migrasi manual:
 
 1. Tinjau isinya
 2. Pindahkan konteks yang berguna ke `openspec/config.yaml` (lihat panduan di bawah)
-3. Hapus file tersebut setelah siap
+3. Hapus file tersebut saat siap
 
 **Mengapa kami membuat perubahan ini:**
 
-`project.md` lama bersifat pasif—agen mungkin membacanya, mungkin tidak, mungkin lupa apa yang dibaca. Kami menemukan keandalannya tidak konsisten.
+`project.md` lama bersifat pasif—agen mungkin membacanya, mungkin tidak, mungkin lupa apa yang mereka baca. Kami menemukan keandalan tidak konsisten.
 
-Konteks `config.yaml` baru **disuntikkan secara aktif ke setiap permintaan perencanaan OpenSpec**. Ini berarti konvensi proyek, tumpukan teknologi, dan aturan Anda selalu ada saat AI membuat artefak. Keandalan lebih tinggi.
+Konteks `config.yaml` baru **secara aktif disuntikkan ke setiap permintaan perencanaan OpenSpec**. Artinya konvensi proyek, tumpukan teknologi, dan aturan Anda selalu ada ketika AI membuat artefak. Keandalan lebih tinggi.
 
-**Kompensasinya:**
+**Komprominya:**
 
-Karena konteks disuntikkan ke setiap permintaan, Anda akan ingin lebih ringkas. Fokus pada apa yang benar-benar penting:
+Karena konteks disuntikkan ke setiap permintaan, Anda ingin tetap ringkas. Fokus pada apa yang benar-benar penting:
 - Tumpukan teknologi dan konvensi utama
 - Batasan yang tidak jelas yang perlu diketahui AI
 - Aturan yang sering diabaikan sebelumnya
 
-Jangan khawatir untuk membuatnya sempurna. Kami masih belajar apa yang paling berhasil di sini, dan kami akan meningkatkan cara injeksi konteks bekerja saat kami bereksperimen.
+Jangan khawatir untuk membuatnya sempurna. Kami masih mempelajari apa yang terbaik di sini, dan kami akan meningkatkan cara injeksi konteks saat kami bereksperimen.
 
 ---
 
 ## Menjalankan Migrasi
 
-Baik `openspec init` maupun `openspec update` mendeteksi file lama dan memandu Anda melalui proses pembersihan yang sama. Gunakan mana yang sesuai dengan situasi Anda:
+Baik `openspec init` maupun `openspec update` mendeteksi file legacy dan memandu Anda melalui proses pembersihan yang sama. Gunakan yang sesuai dengan situasi Anda:
 
-- Instalasi baru secara default menggunakan profil `core` (`propose`, `explore`, `apply`, `sync`, `archive`).
-- Instalasi yang dimigrasi mempertahankan alur kerja yang sebelumnya diinstal dengan menulis profil `custom` saat diperlukan.
+- Instalasi baru default ke profil `core` (`propose`, `explore`, `apply`, `sync`, `archive`).
+- Instalasi yang dimigrasikan mempertahankan alur kerja yang sebelumnya diinstal dengan menulis profil `custom` saat diperlukan.
 
 ### Menggunakan `openspec init`
 
-Jalankan ini jika Anda ingin menambahkan alat baru atau mengonfigurasi ulang alat mana yang diatur:
+Jalankan ini jika Anda ingin menambahkan alat baru atau mengonfigurasi ulang alat mana pun yang disiapkan:
 
 ```bash
 openspec init
 ```
 
-Perintah init mendeteksi file lama dan memandu Anda melalui pembersihan:
+Perintah init mendeteksi file legacy dan memandu Anda melalui pembersihan:
 
 ```
 Upgrading to the new OpenSpec
@@ -128,41 +127,43 @@ Needs your attention
 ? Upgrade and clean up legacy files? (Y/n)
 ```
 
-**Apa yang terjadi saat Anda menjawab ya:**
+**Yang terjadi ketika Anda mengatakan ya:**
 
-1. Direktori perintah slash lama dihapus
-2. Penanda OpenSpec dihapus dari `CLAUDE.md`, `AGENTS.md`, dll. (konten Anda tetap ada)
+1. Direktori perintah slash legacy dihapus
+2. Penanda OpenSpec dihapus dari `CLAUDE.md`, `AGENTS.md`, dll. (konten Anda tetap)
 3. `openspec/AGENTS.md` dihapus
-4. Keterampilan baru diinstal di `.claude/skills/`
+4. Skill baru diinstal di `.claude/skills/`
 5. `openspec/config.yaml` dibuat dengan skema default
 
 ### Menggunakan `openspec update`
 
-Jalankan ini jika Anda hanya ingin memigrasi dan menyegarkan alat yang ada ke versi terbaru:
+Jalankan ini jika Anda hanya ingin memigrasikan dan menyegarkan alat yang ada ke versi terbaru:
 
 ```bash
 openspec update
 ```
 
-Perintah update juga mendeteksi dan membersihkan artefak lama, lalu menyegarkan keterampilan/perintah yang dihasilkan agar sesuai dengan profil dan pengaturan pengiriman Anda saat ini.
+Perintah update juga mendeteksi dan membersihkan artefak legacy, lalu menyegarkan skill/perintah yang dihasilkan agar sesuai dengan profil dan pengaturan pengiriman Anda saat ini.
 
 ### Lingkungan Non-Interaktif / CI
 
-Untuk migrasi yang dijalankan melalui skrip:
+Untuk migrasi yang discript:
 
 ```bash
 openspec init --force --tools claude
 ```
 
-Flag `--force` melewati prompt dan secara otomatis menerima pembersihan.
+Bendera `--force` melewati prompt dan secara otomatis menerima pembersihan.
+
+Ini termasuk pembersihan file prompt Codex yang dikelola OpenSpec di direktori prompt Codex global. Pembersihan hanya menargetkan nama file prompt Codex legacy OpenSpec yang diizinkan, menghapusnya hanya setelah skill `.codex/skills/openspec-*` pengganti ada, dan mempertahankan semua file lainnya.
 
 ---
 
-## Memigrasi project.md ke config.yaml
+## Memigrasikan project.md ke config.yaml
 
-`openspec/project.md` lama adalah file markdown bebas untuk konteks proyek. `openspec/config.yaml` baru terstruktur dan—yang paling kritis—**disuntikkan ke setiap permintaan perencanaan** sehingga konvensi Anda selalu ada saat AI bekerja.
+`openspec/project.md` lama adalah file markdown bebas untuk konteks proyek. `openspec/config.yaml` baru terstruktur dan—yang penting—**disuntikkan ke setiap permintaan perencanaan** sehingga konvensi Anda selalu ada ketika AI bekerja.
 
-### Sebelum (project.md)
+### Sebelumnya (project.md)
 
 ```markdown
 # Project Context
@@ -178,7 +179,7 @@ Our API is RESTful and documented in docs/api.md.
 - Use Given/When/Then format for specifications
 ```
 
-### Sesudah (config.yaml)
+### Sesudahnya (config.yaml)
 
 ```yaml
 schema: spec-driven
@@ -204,28 +205,28 @@ rules:
 | project.md | config.yaml |
 |------------|-------------|
 | Markdown bebas | YAML terstruktur |
-| Satu blok teks | Konteks terpisah dan aturan per artefak |
-| Tidak jelas kapan digunakan | Konteks muncul di SEMUA artefak; aturan hanya muncul di artefak yang cocok |
-| Tidak ada pemilihan skema | Field `schema:` eksplisit mengatur alur kerja default |
+| Satu gumpalan teks | Konteks terpisah dan aturan per-artefak |
+| Tidak jelas kapan digunakan | Konteks muncul di SEMUA artefak; aturan muncul hanya di artefak yang cocok |
+| Tidak ada pemilihan skema | Bidang `schema:` eksplisit menetapkan alur kerja default |
 
-### Apa yang Harus Dipertahankan, Apa yang Harus Dihapus
+### Apa yang Dipertahankan, Apa yang Dihapus
 
-Saat memigrasi, bersikap selektif. Tanyakan pada diri sendiri: "Apakah AI memerlukan ini untuk *setiap* permintaan perencanaan?"
+Saat memigrasikan, bersikap selektif. Tanyakan pada diri sendiri: "Apakah AI membutuhkan ini untuk *setiap* permintaan perencanaan?"
 
-**Kandidat yang baik untuk `context:`**
-- Tumpukan teknologi (bahasa, kerangka kerja, basis data)
-- Pola arsitektur utama (monorepo, microservices, dll.)
+**Kandidat baik untuk `context:`**
+- Tumpukan teknologi (bahasa, framework, database)
+- Pola arsitektur utama (monorepo, mikroservis, dll.)
 - Batasan yang tidak jelas ("kami tidak bisa menggunakan pustaka X karena...")
-- Konvensi kritis yang sering diabaikan
+- Konvensi penting yang sering diabaikan
 
 **Pindahkan ke `rules:` sebagai gantinya**
 - Pemformatan spesifik artefak ("gunakan Given/When/Then dalam spesifikasi")
-- Kriteria tinjauan ("proposal harus menyertakan rencana rollback")
-- Ini hanya muncul untuk artefak yang cocok, menjaga permintaan lain tetap ringan
+- Kriteria review ("proposal harus mencakup rencana rollback")
+- Ini hanya muncul untuk artefak yang cocok, membuat permintaan lainnya lebih ringan
 
-**Hilangkan sepenuhnya**
+**Biarkan sama sekali**
 - Praktik terbaik umum yang sudah diketahui AI
-- Penjelasan bertele-tele yang bisa diringkas
+- Penjelasan verbose yang dapat dirangkum
 - Konteks historis yang tidak memengaruhi pekerjaan saat ini
 
 ### Langkah Migrasi
@@ -235,105 +236,105 @@ Saat memigrasi, bersikap selektif. Tanyakan pada diri sendiri: "Apakah AI memerl
    schema: spec-driven
    ```
 
-2. **Tambahkan konteks Anda** (singkat—ini masuk ke setiap permintaan):
+2. **Tambahkan konteks Anda** (beri ringkas—ini masuk ke setiap permintaan):
    ```yaml
    context: |
-     Latar belakang proyek Anda ada di sini.
+     Latar belakang proyek Anda goes here.
      Fokus pada apa yang benar-benar perlu diketahui AI.
    ```
 
-3. **Tambahkan aturan per artefak** (opsional):
+3. **Tambahkan aturan per-artefak** (opsional):
    ```yaml
    rules:
      proposal:
-       - Panduan spesifik proposal Anda
+       - Panduan khusus proposal Anda
      specs:
        - Aturan penulisan spesifikasi Anda
    ```
 
 4. **Hapus project.md** setelah Anda memindahkan semua yang berguna.
 
-**Jangan terlalu berpikir keras.** Mulailah dengan hal-hal penting dan iterasi. Jika Anda melihat AI melewatkan sesuatu yang penting, tambahkan. Jika konteks terasa berlebihan, potong. Ini adalah dokumen hidup.
+**Jangan terlalu memikirkannya.** Mulai dengan yang penting dan iterasi. Jika Anda noticing AI melewatkan sesuatu yang penting, tambahkan. Jika konteks terasa membengkak, potong. Ini adalah dokumen yang hidup.
 
 ### Butuh Bantuan? Gunakan Prompt Ini
 
-Jika Anda tidak yakin bagaimana menyaring project.md Anda, minta asisten AI Anda:
+Jika Anda tidak yakin cara meringkas project.md Anda, tanyakan pada asisten AI Anda:
 
 ```
-Saya sedang memigrasi dari project.md lama OpenSpec ke format config.yaml baru.
+I'm migrating from OpenSpec's old project.md to the new config.yaml format.
 
-Ini project.md saya saat ini:
-[tempel konten project.md Anda]
+Here's my current project.md:
+[paste your project.md content]
 
-Tolong bantu saya membuat config.yaml dengan:
-1. Bagian `context:` yang ringkas (ini disuntikkan ke setiap permintaan perencanaan, jadi buat padat—fokus pada tumpukan teknologi, batasan utama, dan konvensi yang sering diabaikan)
-2. `rules:` untuk artefak spesifik jika ada konten yang spesifik artefak (misalnya, "gunakan Given/When/Then" masuk ke aturan spesifikasi, bukan konteks global)
+Please help me create a config.yaml with:
+1. A concise `context:` section (this gets injected into every planning request, so keep it tight—focus on tech stack, key constraints, and conventions that often get ignored)
+2. `rules:` for specific artifacts if any content is artifact-specific (e.g., "use Given/When/Then" belongs in specs rules, not global context)
 
-Hilangkan apa pun yang umum yang sudah diketahui model AI. Tegas tentang keringkasan.
+Leave out anything generic that AI models already know. Be ruthless about brevity.
 ```
 
-AI akan membantu Anda mengidentifikasi apa yang penting vs. apa yang bisa dipotong.
+AI akan membantu Anda mengidentifikasi apa yang penting vs apa yang dapat dipotong.
 
 ---
 
 ## Perintah Baru
 
-Ketersediaan perintah tergantung pada profil:
+Ketersediaan perintah tergantung profil:
 
 **Default (profil `core`):**
 
 | Perintah | Tujuan |
-|----------|--------|
-| `/opsx:propose` | Membuat perubahan dan menghasilkan artefak perencanaan dalam satu langkah |
-| `/opsx:explore` | Memikirkan ide tanpa struktur |
-| `/opsx:apply` | Mengimplementasikan tugas dari tasks.md |
-| `/opsx:archive` | Memfinalisasi dan mengarsipkan perubahan |
+|---------|--------|
+| `/opsx:propose` | Buat perubahan dan hasilkan artefak perencanaan dalam satu langkah |
+| `/opsx:explore` | Pikirkan ide tanpa struktur |
+| `/opsx:apply` | Implementasikan tugas dari tasks.md |
+| `/opsx:archive` | Finalisasi dan arsipkan perubahan |
 
-**Alur kerja yang diperluas (pilihan kustom):**
+**Alur kerja diperluas (pilihan kustom):**
 
 | Perintah | Tujuan |
-|----------|--------|
-| `/opsx:new` | Memulai kerangka perubahan baru |
-| `/opsx:continue` | Membuat artefak berikutnya (satu per satu) |
-| `/opsx:ff` | Fast-forward—membuat artefak perencanaan sekaligus |
-| `/opsx:verify` | Memvalidasi implementasi sesuai spesifikasi |
-| `/opsx:sync` | Menggabungkan spesifikasi delta ke spesifikasi utama |
-| `/opsx:bulk-archive` | Mengarsipkan beberapa perubahan sekaligus |
-| `/opsx:onboard` | Alur kerja orientasi ujung-ke-ujung terpandu |
+|---------|--------|
+| `/opsx:new` | Mulai kerangka perubahan baru |
+| `/opsx:continue` | Buat artefak berikutnya (satu per satu) |
+| `/opsx:ff` | Fast-forward—buat artefak perencanaan sekaligus |
+| `/opsx:verify` | Validasi implementasi sesuai spesifikasi |
+| `/opsx:sync` | Gabungkan spesifikasi delta ke spesifikasi utama |
+| `/opsx:bulk-archive` | Arsipkan beberapa perubahan sekaligus |
+| `/opsx:onboard` | Alur kerja onboarding ujung-ke-ujung yang dipandu |
 
-Aktifkan perintah yang diperluas dengan `openspec config profile`, lalu jalankan `openspec update`.
+Aktifkan perintah diperluas dengan `openspec config profile`, lalu jalankan `openspec update`.
 
-### Pemetaan Perintah dari Versi Lama
+### Pemetaan Perintah dari Legacy
 
-| Versi Lama | Setara OPSX |
-|------------|-------------|
+| Legacy | Ekuivalen OPSX |
+|--------|----------------|
 | `/openspec:proposal` | `/opsx:propose` (default) atau `/opsx:new` lalu `/opsx:ff` (diperluas) |
 | `/openspec:apply` | `/opsx:apply` |
 | `/openspec:archive` | `/opsx:archive` |
 
 ### Kemampuan Baru
 
-Kemampuan ini merupakan bagian dari set perintah alur kerja yang diperluas.
+Kemampuan ini adalah bagian dari set perintah alur kerja diperluas.
 
 **Pembuatan artefak granular:**
 ```
 /opsx:continue
 ```
-Membuat satu artefak pada satu waktu berdasarkan dependensi. Gunakan ini saat Anda ingin meninjau setiap langkah.
+Membuat satu artefak pada satu waktu berdasarkan dependensi. Gunakan ini ketika Anda ingin meninjau setiap langkah.
 
 **Mode eksplorasi:**
 ```
 /opsx:explore
 ```
-Memikirkan ide dengan mitra sebelum berkomitmen pada perubahan.
+Pikirkan ide dengan mitra sebelum berkomitmen pada perubahan.
 
 ---
 
 ## Memahami Arsitektur Baru
 
-### Dari Terkunci-Fase ke Fleksibel
+### Dari Terkunci Fase ke Cair
 
-Alur kerja lama memaksa progresi linear:
+Alur kerja legacy memaksa progresi linier:
 
 ```
 ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
@@ -341,11 +342,11 @@ Alur kerja lama memaksa progresi linear:
 │    PHASE     │      │    PHASE     │      │    PHASE     │
 └──────────────┘      └──────────────┘      └──────────────┘
 
-Jika Anda sedang dalam implementasi dan menyadari desainnya salah?
-Sayang sekali. Gerbang fase tidak memungkinkan Anda kembali dengan mudah.
+Jika Anda sedang mengimplementasi dan menyadari desainnya salah?
+Terlalu buruk. Gerbang fase tidak memudahkan Anda untuk kembali.
 ```
 
-OPSX menggunakan aksi, bukan fase:
+OPSX menggunakan tindakan, bukan fase:
 
 ```
          ┌───────────────────────────────────────────────┐
@@ -358,9 +359,9 @@ OPSX menggunakan aksi, bukan fase:
          └───────────────────────────────────────────────┘
 ```
 
-### Grafik Dependensi
+### Graf Dependensi
 
-Artefak membentuk grafik terarah. Dependensi adalah pengaktif, bukan gerbang:
+Artefak membentuk graf berarah. Dependensi adalah pembuka, bukan gerbang:
 
 ```
                         proposal
@@ -381,11 +382,11 @@ Artefak membentuk grafik terarah. Dependensi adalah pengaktif, bukan gerbang:
                      specs, design)
 ```
 
-Ketika Anda menjalankan `/opsx:continue`, ia memeriksa apa yang siap dan menawarkan artefak berikutnya. Anda juga dapat membuat beberapa artefak yang siap dalam urutan apa pun.
+Ketika Anda menjalankan `/opsx:continue`, itu memeriksa apa yang siap dan menawarkan artefak berikutnya. Anda juga dapat membuat beberapa artefak yang siap dalam urutan apa pun.
 
-### Keterampilan vs Perintah
+### Skill vs Perintah
 
-Sistem lama menggunakan file perintah khusus alat:
+Sistem legacy menggunakan file perintah khusus alat:
 
 ```
 .claude/commands/openspec/
@@ -394,7 +395,7 @@ Sistem lama menggunakan file perintah khusus alat:
 └── archive.md
 ```
 
-OPSX menggunakan standar **keterampilan** yang muncul:
+OPSX menggunakan standar **skill** yang muncul:
 
 ```
 .claude/skills/
@@ -405,21 +406,21 @@ OPSX menggunakan standar **keterampilan** yang muncul:
 └── ...
 ```
 
-Keterampilan diakui di berbagai alat pengkodean AI dan menyediakan metadata yang lebih kaya.
+Skill dikenali di beberapa alat coding AI dan menyediakan metadata yang lebih kaya.
 
----
+Codex hanya menggunakan skill di OPSX. OpenSpec tidak lagi menghasilkan file prompt kustom Codex; gunakan direktori `.codex/skills/openspec-*` yang dihasilkan sebagai gantinya.
 
 ## Melanjutkan Perubahan yang Ada
 
-Perubahan Anda yang sedang berlangsung berfungsi secara mulus dengan perintah OPSX.
+Perubahan yang sedang Anda kerjakan berfungsi dengan mulus bersama perintah OPSX.
 
-**Memiliki perubahan aktif dari alur kerja lama?**
+**Memiliki perubahan aktif dari alur kerja legacy?**
 
 ```
 /opsx:apply add-my-feature
 ```
 
-OPSX membaca artefak yang ada dan melanjutkan dari tempat Anda tinggalkan.
+OPSX membaca artefak yang ada dan melanjutkan dari tempat Anda berhenti.
 
 **Ingin menambahkan lebih banyak artefak ke perubahan yang ada?**
 
@@ -427,7 +428,7 @@ OPSX membaca artefak yang ada dan melanjutkan dari tempat Anda tinggalkan.
 /opsx:continue add-my-feature
 ```
 
-Menampilkan apa yang siap untuk dibuat berdasarkan apa yang sudah ada.
+Menampilkan apa yang siap dibuat berdasarkan apa yang sudah ada.
 
 **Perlu melihat status?**
 
@@ -442,33 +443,33 @@ openspec status --change add-my-feature
 ### Struktur config.yaml
 
 ```yaml
-# Required: Default schema for new changes
+# Diperlukan: Skema default untuk perubahan baru
 schema: spec-driven
 
-# Optional: Project context (max 50KB)
-# Injected into ALL artifact instructions
+# Opsional: Konteks proyek (maks 50KB)
+# Disisipkan ke dalam SEMUA instruksi artefak
 context: |
   Latar belakang proyek Anda, tumpukan teknologi,
   konvensi, dan batasan.
 
-# Optional: Per-artifact rules
-# Only injected into matching artifacts
+# Opsional: Aturan per-artifak
+# Hanya disisipkan ke artefak yang cocok
 rules:
   proposal:
     - Sertakan rencana rollback
   specs:
     - Gunakan format Given/When/Then
   design:
-    - Dokumentasikan strategi cadangan
+    - Dokumentasikan strategi fallback
   tasks:
-    - Pecah menjadi potongan maksimal 2 jam
+    - Pecah menjadi bagian maksimal 2 jam
 ```
 
 ### Resolusi Skema
 
-Ketika menentukan skema mana yang akan digunakan, OPSX memeriksa secara berurutan:
+Saat menentukan skema mana yang akan digunakan, OPSX memeriksa secara berurutan:
 
-1. **Bendera CLI**: `--schema <name>` (prioritas tertinggi)
+1. **Bendera CLI**: `--schema <nama>` (prioritas tertinggi)
 2. **Metadata perubahan**: `.openspec.yaml` di direktori perubahan
 3. **Konfigurasi proyek**: `openspec/config.yaml`
 4. **Default**: `spec-driven`
@@ -499,15 +500,15 @@ Atau fork yang sudah ada:
 openspec schema fork spec-driven my-workflow
 ```
 
-Lihat [Kustomisasi](customization.md) untuk detail.
+Lihat [Kustomisasi](customization.md) untuk detailnya.
 
 ---
 
 ## Pemecahan Masalah
 
-### "File lama terdeteksi dalam mode non-interaktif"
+### "Legacy files detected in non-interactive mode"
 
-Anda menjalankan dalam CI atau lingkungan non-interaktif. Gunakan:
+Anda sedang berjalan di lingkungan CI atau non-interaktif. Gunakan:
 
 ```bash
 openspec init --force
@@ -515,11 +516,11 @@ openspec init --force
 
 ### Perintah tidak muncul setelah migrasi
 
-Mulai ulang IDE Anda. Keterampilan terdeteksi saat startup.
+Mulai ulang IDE Anda. Keterampilan (skills) terdeteksi saat startup.
 
-### "ID artefak tidak dikenal dalam aturan"
+### "Unknown artifact ID in rules"
 
-Periksa bahwa kunci `rules:` Anda cocok dengan ID artefak skema Anda:
+Pastikan bahwa kunci `rules:` Anda sesuai dengan ID artefak skema Anda:
 
 - **spec-driven**: `proposal`, `specs`, `design`, `tasks`
 
@@ -535,9 +536,9 @@ openspec schemas --json
 2. Validasi sintaks YAML
 3. Perubahan konfigurasi berlaku segera—tidak perlu restart
 
-### project.md tidak dimigrasikan
+### project.md tidak dimigrasi
 
-Sistem sengaja mempertahankan `project.md` karena mungkin berisi konten kustom Anda. Tinjau secara manual, pindahkan bagian yang berguna ke `config.yaml`, lalu hapus.
+Sistem secara sengaja mempertahankan `project.md` karena mungkin berisi konten kustom Anda. Tinjau secara manual, pindahkan bagian yang berguna ke `config.yaml`, lalu hapus.
 
 ### Ingin melihat apa yang akan dibersihkan?
 
@@ -563,33 +564,33 @@ project/
 │       ├── openspec-apply-change/
 │       ├── openspec-sync-specs/
 │       └── ...                   # profil yang diperluas menambahkan new/continue/ff/dll.
-├── CLAUDE.md                     # Penanda OpenSpec dihapus, konten Anda dipertahankan
-└── AGENTS.md                     # Penanda OpenSpec dihapus, konten Anda dipertahankan
+├── CLAUDE.md                     # Penanda OpenSpec dihapus, konten Anda tetap
+└── AGENTS.md                     # Penanda OpenSpec dihapus, konten Anda tetap
 ```
 
-### Apa yang Hilang
+### Yang Hilang
 
 - `.claude/commands/openspec/` — digantikan oleh `.claude/skills/`
 - `openspec/AGENTS.md` — usang
 - `openspec/project.md` — migrasikan ke `config.yaml`, lalu hapus
 - Blok penanda OpenSpec di `CLAUDE.md`, `AGENTS.md`, dll.
 
-### Lembar Contek Perintah
+### Cheatsheet Perintah
 
 ```text
-/opsx:propose      Mulai dengan cepat (profil inti default)
+/opsx:propose      Mulai cepat (profil inti default)
 /opsx:apply        Implementasikan tugas
 /opsx:archive      Selesaikan dan arsipkan
 
 # Alur kerja yang diperluas (jika diaktifkan):
-/opsx:new          Scaffold perubahan
+/opsx:new          Siapkan struktur perubahan
 /opsx:continue     Buat artefak berikutnya
 /opsx:ff           Buat artefak perencanaan
 ```
 
 ---
 
-## Mendapatkan Bantuan
+## Memperoleh Bantuan
 
 - **Discord**: [discord.gg/YctCnvvshC](https://discord.gg/YctCnvvshC)
 - **GitHub Issues**: [github.com/Fission-AI/OpenSpec/issues](https://github.com/Fission-AI/OpenSpec/issues)
